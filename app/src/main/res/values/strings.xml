@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">青龙面板</string>
+    <string name="url_qinglong">https://github.com/whyour/qinglong</string>
+    <string name="url_gitee">null</string>
+    <string name="url_github">null</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

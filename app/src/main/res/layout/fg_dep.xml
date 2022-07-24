@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:clickable="true"
+        android:id="@+id/log_bar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/theme_color"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="8dp">
+
+        <ImageView
+            android:clickable="true"
+            android:id="@+id/log_nav"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/style_press_gray"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_menu" />
+
+        <ImageView
+            android:id="@+id/log_search"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/log_more"
+            android:background="@drawable/style_press_gray"
+            android:clickable="true"
+            android:src="@drawable/ic_search" />
+
+        <ImageView
+            android:id="@+id/log_more"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/style_press_gray"
+            android:clickable="true"
+            android:src="@drawable/ic_more_ver" />
+    </RelativeLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/log_swipe"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_gray">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/log_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</LinearLayout>

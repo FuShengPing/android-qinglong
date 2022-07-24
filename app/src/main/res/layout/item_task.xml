@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="5dp"
+    android:layout_marginTop="5dp"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingHorizontal="7dp"
+    android:paddingTop="7dp"
+    android:paddingBottom="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="5dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/task_check"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="0dp"
+            android:background="@drawable/style_check_box_blue"
+            android:button="@null"
+            android:gravity="center"
+            android:padding="0dp"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/task_pinned"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/ic_pinned"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/task_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="酷狗音乐"
+            android:textColor="@color/theme_color_shadow"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:id="@+id/task_action"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_start" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginBottom="7dp"
+        android:background="@color/divide_line" />
+
+    <LinearLayout
+        android:id="@+id/task_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="任务"
+                android:textColor="@color/text_color_49" />
+
+            <TextView
+                android:id="@+id/task_command"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="task LinYuanovo_scripts/hmdLY.js"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/text_color_49" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="状态"
+                android:textColor="@color/text_color_49" />
+
+            <TextView
+                android:id="@+id/task_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="空闲中"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/text_color_49" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="任务定时"
+                android:textColor="@color/text_color_49" />
+
+            <TextView
+                android:id="@+id/task_schedule"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0 0 0/4 * * *"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/text_color_49" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="最后运行时间"
+                android:textColor="@color/text_color_49" />
+
+            <TextView
+                android:id="@+id/task_last_execution_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="2022/6/21 16:00:00"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/text_color_49" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="最后运行时长"
+                android:textColor="@color/text_color_49" />
+
+            <TextView
+                android:id="@+id/task_last_running_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="5分24秒"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/text_color_49" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="下次运行时间"
+                android:textColor="@color/text_color_49" />
+
+            <TextView
+                android:id="@+id/task_next_execution_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="2022/6/21 20:00:00"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/text_color_49" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

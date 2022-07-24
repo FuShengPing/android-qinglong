@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="anim_activity_home_pop_menu" parent="android:Animation">
+        <item name="android:windowExitAnimation">@anim/activity_home_pop_menu_exit</item>
+        <item name="android:windowEnterAnimation">@anim/activity_home_pop_menu_enter</item>
+    </style>
+    <style name="anim_fg_task_pop_edit" parent="android:Animation">
+        <item name="android:windowExitAnimation">@anim/fg_task_pop_edit_exit</item>
+        <item name="android:windowEnterAnimation">@anim/fg_task_pop_edit_enter</item>
+    </style>
+</resources>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="5dp"
+    android:layout_marginTop="5dp"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingHorizontal="7dp"
+    android:paddingTop="7dp"
+    android:paddingBottom="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="5dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/env_check"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="0dp"
+            android:background="@drawable/style_check_box_blue"
+            android:button="@null"
+            android:gravity="center"
+            android:padding="0dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/env_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/theme_color_shadow"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:id="@+id/task_action"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_start" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginBottom="7dp"
+        android:background="@color/divide_line" />
+
+    <LinearLayout
+        android:id="@+id/env_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="值"
+                android:textColor="@color/text_color_49" />
+
+            <TextView
+                android:id="@+id/env_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/text_color_49" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="备注"
+                android:textColor="@color/text_color_49" />
+
+            <TextView
+                android:id="@+id/env_remark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="-"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/text_color_49" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="状态"
+                android:textColor="@color/text_color_49" />
+
+            <TextView
+                android:id="@+id/env_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="-"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/text_color_49" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="创建时间"
+                android:textColor="@color/text_color_49" />
+
+            <TextView
+                android:id="@+id/env_create_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="2022-07-05T15:00:50.175Z"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/text_color_49" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

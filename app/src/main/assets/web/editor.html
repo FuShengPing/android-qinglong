@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="codemirror.css">
+<link rel="stylesheet" href="solarized.css">
+<script src="codemirror.js"></script>
+<script src="python.js"></script>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    html {
+        height: 100%;
+    }
+
+    body {
+        height: 100%;
+    }
+
+    .CodeMirror {
+        height: 100%;
+        width: 100%;
+    }
+
+    .CodeMirror-scroll {
+        height: 100%;
+        overflow: hidden;
+        overflow-x: auto;
+    }
+
+
+</style>
+
+<body>
+<textarea id="code" name="code">加载中...</textarea>
+</body>
+<script>
+    var editor;
+
+     //初始化显示
+    init()
+    function init() {
+        editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            mode: {
+                name: "python",
+                version: 3,
+                singleLineStringErrors: false
+            },
+            theme: "solarized",//主题风格
+            lineNumbers: true,//显示行号
+            indentUnit: 4,
+            matchBrackets: true,
+            readOnly: true,//只读
+            lineWrapping: false,//换行
+        });
+    }
+
+    function getCode(){
+        return  editor.getValue()
+    }
+
+    //重置代码
+    function setCode(code){
+        document.getElementById("code").value = code;
+        editor.setValue(code)
+        editor.refresh()
+    }
+
+    //设置是否可用编辑
+    function setEditable(editable) {
+        editor.options.readOnly = !editable
+    }
+
+
+</script>
+
+</html>
