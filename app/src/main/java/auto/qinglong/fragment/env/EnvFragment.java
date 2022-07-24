@@ -286,6 +286,10 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
         });
     }
 
+    public void banEnvs(List<String> ids){
+
+    }
+
     public void showPopWindowMore() {
         if (popupWindowMore == null) {
             View view = LayoutInflater.from(getContext()).inflate(R.layout.pop_fg_env_more, null, false);
