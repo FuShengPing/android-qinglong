@@ -35,7 +35,7 @@ public class LogActivity extends BaseActivity {
         setContentView(R.layout.activity_log);
 
         logPath = getIntent().getStringExtra(ExtraPath);
-        logName = getIntent().getStringExtra(ExtraPath);
+        logName = getIntent().getStringExtra(ExtraName);
 
         layout_back = findViewById(R.id.bar_back);
         layout_tip = findViewById(R.id.log_name);
