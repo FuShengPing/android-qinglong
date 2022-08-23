@@ -11,7 +11,6 @@ import auto.qinglong.api.res.TasksRes;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.Header;
@@ -113,6 +112,7 @@ public interface QL {
     @GET
     Call<BaseRes> getLogDetail(@Url String url, @Header("Authorization") String authorization);
 
+    //保存脚本
     @PUT("api/scripts")
     Call<BaseRes> saveScript(@Header("Authorization") String authorization, @Body RequestBody body);
 }
