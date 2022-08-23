@@ -1,5 +1,6 @@
 package auto.qinglong.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -21,6 +22,7 @@ import auto.qinglong.fragment.log.LogFragment;
 import auto.qinglong.fragment.MenuClickInterface;
 import auto.qinglong.fragment.script.ScriptFragment;
 import auto.qinglong.fragment.task.TaskFragment;
+import auto.qinglong.tools.NetUnit;
 import auto.qinglong.tools.WindowUnit;
 
 public class HomeActivity extends BaseActivity {
@@ -150,6 +152,7 @@ public class HomeActivity extends BaseActivity {
     }
 
 
+    @SuppressLint("SetTextI18n")
     private void showPopWindowMenu() {
         if (popWindowMenu == null) {
             View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.pop_home_nav, null);
@@ -174,6 +177,12 @@ public class HomeActivity extends BaseActivity {
             TextView layout_address = view.findViewById(R.id.menu_info_address);
             layout_username.setText(AccountSP.getCurrentAccount().getUsername());
             layout_address.setText(AccountSP.getCurrentAccount().getAddress());
+            String ip = NetUnit.getIP();
+            if (ip != null) {
+                TextView layout_ip = view.findViewById(R.id.menu_info_inner_ip);
+                layout_ip.setText("本地：" + ip);
+                layout_ip.setVisibility(View.VISIBLE);
+            }
             //导航监听
             LinearLayout menu_task = view.findViewById(R.id.menu_task);
             LinearLayout menu_log = view.findViewById(R.id.menu_log);

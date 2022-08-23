@@ -32,10 +32,20 @@
             android:id="@+id/menu_info_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
             android:maxLines="1"
             android:text="127.0.0.1:5700"
             android:textColor="#FAFAFA"
             android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/menu_info_inner_ip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:textColor="#FAFAFA"
+            android:textSize="11sp"
+            android:visibility="gone" />
     </LinearLayout>
 
     <ScrollView

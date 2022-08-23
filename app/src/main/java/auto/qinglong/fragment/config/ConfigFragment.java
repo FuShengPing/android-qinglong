@@ -160,10 +160,10 @@ public class ConfigFragment extends BaseFragment implements FragmentInterFace {
     private void loadConfig() {
         ApiController.loadConfig(getClassName(), new ApiController.BaseCallback() {
             @Override
-            public void onSuccess(String data) {
-                if (!configContent.equals(data)) {
-                    configContent = data;
-                    WebJsManager.setCode(webView, data);
+            public void onSuccess(String msg) {
+                if (!configContent.equals(msg)) {
+                    configContent = msg;
+                    WebJsManager.setCode(webView, msg);
                     layout_edit.setVisibility(View.VISIBLE);
                 }
                 clearRefresh();
@@ -180,7 +180,7 @@ public class ConfigFragment extends BaseFragment implements FragmentInterFace {
     private void saveConfig(String content) {
         ApiController.saveConfig(getClassName(), content, new ApiController.BaseCallback() {
             @Override
-            public void onSuccess(String data) {
+            public void onSuccess(String msg) {
                 configContent = content;
                 ToastUnit.showShort(getContext(), "保存成功");
                 layout_edit_back.performClick();

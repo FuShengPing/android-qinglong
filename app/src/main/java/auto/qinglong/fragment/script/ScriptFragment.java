@@ -1,5 +1,6 @@
 package auto.qinglong.fragment.script;
 
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.List;
 import java.util.Objects;
@@ -42,6 +44,7 @@ public class ScriptFragment extends BaseFragment implements FragmentInterFace {
 
     private ImageView layout_menu;
     private SwipeRefreshLayout layout_swipe;
+    private TextView layout_dir;
     private RecyclerView layout_recyclerView;
 
     @Override
@@ -50,6 +53,7 @@ public class ScriptFragment extends BaseFragment implements FragmentInterFace {
         View view = inflater.inflate(R.layout.fg_script, null, false);
 
         layout_swipe = view.findViewById(R.id.script_swipe);
+        layout_dir = view.findViewById(R.id.script_dir_tip);
         layout_menu = view.findViewById(R.id.scrip_menu);
         layout_recyclerView = view.findViewById(R.id.script_recycler);
 
@@ -71,7 +75,7 @@ public class ScriptFragment extends BaseFragment implements FragmentInterFace {
             public void onEdit(Script script) {
                 if (script.getChildren() != null) {
                     canBack = true;
-                    scriptAdapter.setData(SortUnit.sortScript(script.getChildren()));
+                    setData(script.getChildren(), script.getTitle());
                 } else {
                     Intent intent = new Intent(getContext(), ScriptActivity.class);
                     intent.putExtra(ScriptActivity.EXTRA_URL, script.getUrl());
@@ -111,25 +115,29 @@ public class ScriptFragment extends BaseFragment implements FragmentInterFace {
         ApiController.getScripts(getClassName(), new ApiController.GetScriptsCallback() {
             @Override
             public void onSuccess(ScriptRes data) {
-                scriptAdapter.setData(SortUnit.sortScript(data.getData()));
+                setData(data.getData(), "");
                 oData = data.getData();
                 canBack = false;
                 isSuccess = true;
-                requestEnd();
+                if (layout_swipe.isRefreshing()) {
+                    layout_swipe.setRefreshing(false);
+                }
             }
 
             @Override
             public void onFailure(String msg) {
                 ToastUnit.showShort(requireContext(), "加载失败：" + msg);
-                requestEnd();
+                if (layout_swipe.isRefreshing()) {
+                    layout_swipe.setRefreshing(false);
+                }
             }
         });
     }
 
-    private void requestEnd() {
-        if (layout_swipe.isRefreshing()) {
-            layout_swipe.setRefreshing(false);
-        }
+    @SuppressLint("SetTextI18n")
+    private void setData(List<Script> data, String dir) {
+        scriptAdapter.setData(SortUnit.sortScript(data));
+        layout_dir.setText("/" + dir);
     }
 
     @Override
@@ -149,6 +157,7 @@ public class ScriptFragment extends BaseFragment implements FragmentInterFace {
     public boolean onBackPressed() {
         if (canBack) {
             scriptAdapter.setData(oData);
+            layout_dir.setText("/");
             canBack = false;
             return true;
         } else {

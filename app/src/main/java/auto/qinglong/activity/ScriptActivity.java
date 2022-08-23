@@ -176,10 +176,10 @@ public class ScriptActivity extends BaseActivity {
 
         ApiController.getScriptDetail(getClass().getName(), scriptPath, new ApiController.BaseCallback() {
             @Override
-            public void onSuccess(String data) {
-                if (!scriptContent.equals(data)) {
-                    scriptContent = data;
-                    WebJsManager.setCode(webView, data);
+            public void onSuccess(String msg) {
+                if (!scriptContent.equals(msg)) {
+                    scriptContent = msg;
+                    WebJsManager.setCode(webView, msg);
                 }
                 clearRefresh(true);
             }
@@ -195,7 +195,7 @@ public class ScriptActivity extends BaseActivity {
     private void saveScript(String content) {
         ApiController.saveScript(getClassName(), content, scriptName, scriptParent, new ApiController.BaseCallback() {
             @Override
-            public void onSuccess(String data) {
+            public void onSuccess(String msg) {
                 ToastUnit.showShort(getBaseContext(), "保存成功");
                 scriptContent = content;
                 layout_edit_back.performClick();

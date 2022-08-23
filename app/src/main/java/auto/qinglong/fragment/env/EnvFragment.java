@@ -40,6 +40,7 @@ import auto.qinglong.fragment.MenuClickInterface;
 import auto.qinglong.fragment.task.TaskFragment;
 import auto.qinglong.tools.CallManager;
 import auto.qinglong.tools.LogUnit;
+import auto.qinglong.tools.SortUnit;
 import auto.qinglong.tools.ToastUnit;
 import auto.qinglong.tools.WindowUnit;
 
@@ -167,10 +168,24 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
             }
         });
 
+        //搜索栏确定
+        layout_search_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String value = layout_search_value.getText().toString().trim();
+                if (!value.isEmpty()) {
+                    currentSearchValue = value;
+                    WindowUnit.hideKeyboard(layout_search_value);
+                    getEnvs(currentSearchValue, QueryType.OTHER);
+                }
+            }
+        });
+
         //搜索栏返回
         layout_search_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 showBar(BarType.NAV);
             }
         });
@@ -199,8 +214,8 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
                     return;
                 }
                 List<Environment> environments = envAdapter.getSelectedItems();
-                if(environments.size() == 0){
-                    ToastUnit.showShort(getContext(),"至少选择一项");
+                if (environments.size() == 0) {
+                    ToastUnit.showShort(getContext(), "至少选择一项");
                     return;
                 }
 
@@ -212,14 +227,56 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
             }
         });
 
+        //禁用
+        layout_actions_disable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (CallManager.isRequesting(getClassName())) {
+                    return;
+                }
+                List<Environment> environments = envAdapter.getSelectedItems();
+                if (environments.size() == 0) {
+                    ToastUnit.showShort(getContext(), "至少选择一项");
+                    return;
+                }
+
+                List<String> ids = new ArrayList<>();
+                for (Environment environment : environments) {
+                    ids.add(environment.get_id());
+                }
+                disableEnvs(ids);
+            }
+        });
+
+        //启用
+        layout_actions_enable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (CallManager.isRequesting(getClassName())) {
+                    return;
+                }
+                List<Environment> environments = envAdapter.getSelectedItems();
+                if (environments.size() == 0) {
+                    ToastUnit.showShort(getContext(), "至少选择一项");
+                    return;
+                }
+
+                List<String> ids = new ArrayList<>();
+                for (Environment environment : environments) {
+                    ids.add(environment.get_id());
+                }
+                enableEnvs(ids);
+            }
+        });
+
     }
 
     private void getEnvs(String searchValue, QueryType queryType) {
         ApiController.getEnvs(getClassName(), searchValue, new ApiController.GetEnvsCallback() {
             @Override
-            public void onSuccess(EnvRes data) {
+            public void onSuccess(EnvRes res) {
                 isSuccess = true;
-                envAdapter.setData(data.getData());
+                envAdapter.setData(res.getData());
                 if (queryType == QueryType.QUERY) {
                     ToastUnit.showShort(requireContext(), "加载成功");
                 }
@@ -273,7 +330,7 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
     public void deleteEnvs(List<String> ids) {
         ApiController.deleteEnvs(getClassName(), ids, new ApiController.BaseCallback() {
             @Override
-            public void onSuccess(String data) {
+            public void onSuccess(String msg) {
                 layout_actions_back.performClick();
                 ToastUnit.showShort(requireContext(), "删除成功");
                 getEnvs(currentSearchValue, QueryType.OTHER);
@@ -286,8 +343,37 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
         });
     }
 
-    public void banEnvs(List<String> ids){
+    public void enableEnvs(List<String> ids) {
+        ApiController.enableEnvs(getClassName(), ids, new ApiController.BaseCallback() {
+            @Override
+            public void onSuccess(String msg) {
+                layout_actions_back.performClick();
+                ToastUnit.showShort(requireContext(), "启用成功");
+                getEnvs(currentSearchValue, QueryType.OTHER);
+            }
 
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort(requireContext(), "启用失败：" + msg);
+            }
+        });
+
+    }
+
+    public void disableEnvs(List<String> ids) {
+        ApiController.disableEnvs(getClassName(), ids, new ApiController.BaseCallback() {
+            @Override
+            public void onSuccess(String msg) {
+                layout_actions_back.performClick();
+                ToastUnit.showShort(requireContext(), "禁用成功");
+                getEnvs(currentSearchValue, QueryType.OTHER);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort(requireContext(), "禁用失败");
+            }
+        });
     }
 
     public void showPopWindowMore() {

@@ -105,7 +105,6 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-
     @Override
     protected void initWindow() {
         WindowUnit.setStatusBarTextColor(this, false);

@@ -9,6 +9,7 @@ public class Environment {
     private String remarks;
     private String timestamp;
     private String value;
+    private int index = -1;
 
     public int getStatus() {
         return status;
@@ -72,5 +73,13 @@ public class Environment {
 
     public void setCreated(long created) {
         this.created = created;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 }

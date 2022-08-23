@@ -85,6 +85,14 @@ public interface QL {
     @HTTP(method = "DELETE", path = "api/envs", hasBody = true)
     Call<BaseRes> deleteEnvs(@Header("Authorization") String authorization, @Body RequestBody body);
 
+    //启用环境变量
+    @PUT("api/envs/enable")
+    Call<BaseRes> enableEnv(@Header("Authorization") String authorization, @Body RequestBody body);
+
+    //禁用环境变量
+    @PUT("api/envs/disable")
+    Call<BaseRes> disableEnv(@Header("Authorization") String authorization, @Body RequestBody body);
+
     //读取配置文件
     @GET("api/configs/config.sh")
     Call<BaseRes> getConfig(@Header("Authorization") String authorization);

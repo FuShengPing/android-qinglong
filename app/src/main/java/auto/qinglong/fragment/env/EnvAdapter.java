@@ -1,5 +1,6 @@
 package auto.qinglong.fragment.env;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +42,7 @@ public class EnvAdapter extends RecyclerView.Adapter<MyViewHolder> {
         return new MyViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Environment environment = this.data.get(position);
@@ -61,8 +63,10 @@ public class EnvAdapter extends RecyclerView.Adapter<MyViewHolder> {
         }
 
         if (environment.getStatus() == 0) {
+            holder.layout_status.setTextColor(context.getColor(R.color.theme_color_shadow));
             holder.layout_status.setText("已启用");
         } else {
+            holder.layout_status.setTextColor(context.getColor(R.color.text_color_red));
             holder.layout_status.setText("已禁用");
         }
 

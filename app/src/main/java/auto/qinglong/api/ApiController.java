@@ -533,7 +533,6 @@ public class ApiController {
         jsonObject.addProperty("schedule", task.getSchedule());
 
         String json = jsonObject.toString();
-        LogUnit.log(json);
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         Call<EditTaskRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
@@ -723,6 +722,100 @@ public class ApiController {
                 .build()
                 .create(QL.class)
                 .deleteEnvs(AccountSP.getCurrentAccount().getAuthorization(), body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+                BaseRes baseRes = response.body();
+                if (baseRes == null) {
+                    if (response.code() == 401) {
+                        callback.onFailure(RES_INVALID_AUTH);
+                    } else {
+                        callback.onFailure(RES_NO_BODY + response.code());
+                    }
+                } else {
+                    if (response.body().getCode() == 200) {
+                        callback.onSuccess(baseRes.getMessage());
+                    } else {
+                        callback.onFailure(baseRes.getMessage());
+                    }
+
+                }
+                CallManager.finishCall(requestId);
+            }
+
+            @Override
+            public void onFailure(Call<BaseRes> call, Throwable t) {
+                callback.onFailure(t.getLocalizedMessage());
+                CallManager.finishCall(requestId);
+            }
+        });
+
+        CallManager.addCall(call, requestId);
+
+    }
+
+    public static void enableEnvs(@NonNull String requestId, @NonNull List<String> envIds, @NonNull BaseCallback callback) {
+        JsonArray jsonArray = new JsonArray();
+        for (int i = 0; i < envIds.size(); i++) {
+            jsonArray.add(envIds.get(i));
+        }
+
+        String json = jsonArray.toString();
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(QL.class)
+                .enableEnv(AccountSP.getCurrentAccount().getAuthorization(), body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+                BaseRes baseRes = response.body();
+                if (baseRes == null) {
+                    if (response.code() == 401) {
+                        callback.onFailure(RES_INVALID_AUTH);
+                    } else {
+                        callback.onFailure(RES_NO_BODY + response.code());
+                    }
+                } else {
+                    if (response.body().getCode() == 200) {
+                        callback.onSuccess(baseRes.getMessage());
+                    } else {
+                        callback.onFailure(baseRes.getMessage());
+                    }
+
+                }
+                CallManager.finishCall(requestId);
+            }
+
+            @Override
+            public void onFailure(Call<BaseRes> call, Throwable t) {
+                callback.onFailure(t.getLocalizedMessage());
+                CallManager.finishCall(requestId);
+            }
+        });
+
+        CallManager.addCall(call, requestId);
+
+    }
+
+    public static void disableEnvs(@NonNull String requestId, @NonNull List<String> envIds, @NonNull BaseCallback callback) {
+        JsonArray jsonArray = new JsonArray();
+        for (int i = 0; i < envIds.size(); i++) {
+            jsonArray.add(envIds.get(i));
+        }
+
+        String json = jsonArray.toString();
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(QL.class)
+                .disableEnv(AccountSP.getCurrentAccount().getAuthorization(), body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -972,7 +1065,7 @@ public class ApiController {
     }
 
     public interface BaseCallback {
-        void onSuccess(String data);
+        void onSuccess(String msg);
 
         void onFailure(String msg);
     }

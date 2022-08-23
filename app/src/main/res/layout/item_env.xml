@@ -38,12 +38,6 @@
             android:textColor="@color/theme_color_shadow"
             android:textSize="17sp" />
 
-        <ImageView
-            android:id="@+id/task_action"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_start" />
     </LinearLayout>
 
     <View
