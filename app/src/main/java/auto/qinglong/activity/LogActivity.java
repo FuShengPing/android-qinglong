@@ -122,7 +122,7 @@ public class LogActivity extends BaseActivity {
             return;
         }
 
-        ApiController.loadLog(getClass().getName(), logPath, new ApiController.BaseCallback() {
+        ApiController.getLogDetail(getClass().getName(), logPath, new ApiController.BaseCallback() {
             @Override
             public void onSuccess(String msg) {
                 if (!logContent.equals(msg)) {

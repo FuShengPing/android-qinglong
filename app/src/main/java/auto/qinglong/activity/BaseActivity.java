@@ -11,7 +11,7 @@ import android.widget.PopupWindow;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
+//import com.bumptech.glide.Glide;
 
 import auto.qinglong.tools.CallManager;
 
@@ -63,8 +63,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         //停止Glide加载 防止界面销毁导致Glide异常
-        Glide.with(this.getBaseContext()).pauseRequests();
-        Glide.with(this).pauseRequests();
+//        Glide.with(this.getBaseContext()).pauseRequests();
+//        Glide.with(this).pauseRequests();
 
         super.onPause();
 
@@ -73,8 +73,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         // 重启Glide加载
-        Glide.with(this.getBaseContext()).resumeRequests();
-        Glide.with(this).resumeRequests();
+//        Glide.with(this.getBaseContext()).resumeRequests();
+//        Glide.with(this).resumeRequests();
         super.onResume();
 
     }

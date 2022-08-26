@@ -25,7 +25,6 @@ import auto.qinglong.fragment.MenuClickInterface;
 import auto.qinglong.tools.ToastUnit;
 import auto.qinglong.tools.WindowUnit;
 import auto.qinglong.tools.CallManager;
-import auto.qinglong.tools.web.JsInterface;
 import auto.qinglong.tools.web.WebJsManager;
 
 public class ConfigFragment extends BaseFragment implements FragmentInterFace {
@@ -158,7 +157,7 @@ public class ConfigFragment extends BaseFragment implements FragmentInterFace {
     }
 
     private void loadConfig() {
-        ApiController.loadConfig(getClassName(), new ApiController.BaseCallback() {
+        ApiController.getConfigDetail(getClassName(), new ApiController.BaseCallback() {
             @Override
             public void onSuccess(String msg) {
                 if (!configContent.equals(msg)) {

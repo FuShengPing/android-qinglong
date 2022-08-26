@@ -4,6 +4,7 @@ import auto.qinglong.api.res.BaseRes;
 import auto.qinglong.api.res.EditEnvRes;
 import auto.qinglong.api.res.EditTaskRes;
 import auto.qinglong.api.res.EnvRes;
+import auto.qinglong.api.res.LogRes;
 import auto.qinglong.api.res.LoginRes;
 import auto.qinglong.api.res.ScriptRes;
 import auto.qinglong.api.res.SystemRes;
@@ -107,6 +108,10 @@ public interface QL {
     //获取脚本详细
     @GET
     Call<BaseRes> getScriptDetail(@Url String url, @Header("Authorization") String authorization);
+
+    //获取日志列表
+    @GET("api/logs")
+    Call<LogRes> getLogs(@Header("Authorization") String authorization);
 
     //读取日志信息
     @GET

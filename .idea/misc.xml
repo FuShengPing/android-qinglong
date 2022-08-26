@@ -34,11 +34,12 @@
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/fg_config.xml" value="0.18699186991869918" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/fg_dep.xml" value="0.1921875" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/fg_env.xml" value="0.33" />
-        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/fg_log.xml" value="0.1921875" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/fg_log.xml" value="0.33" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/fg_script.xml" value="0.4188422247446084" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/fg_setting.xml" value="0.1921875" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/fg_task.xml" value="0.4188422247446084" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/item_env.xml" value="0.33" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/item_file.xml" value="0.1921875" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/item_script.xml" value="0.33" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/item_task.xml" value="0.5" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/pop_confirm.xml" value="0.33" />

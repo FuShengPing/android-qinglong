@@ -2,25 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/bg_gray"
     android:orientation="vertical">
 
     <RelativeLayout
-        android:clickable="true"
         android:id="@+id/log_bar"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/theme_color"
+        android:clickable="true"
         android:paddingHorizontal="15dp"
         android:paddingVertical="8dp">
 
         <ImageView
-            android:clickable="true"
             android:id="@+id/log_nav"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:background="@drawable/style_press_gray"
+            android:clickable="true"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_menu" />
 
@@ -46,11 +46,22 @@
             android:src="@drawable/ic_more_ver" />
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/log_dir_tip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingVertical="2dp"
+        android:paddingStart="15dp"
+        android:text="/"
+        android:textColor="@color/theme_color_shadow"
+        android:textSize="12sp" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/log_swipe"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/bg_gray">
+        android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/log_recycler"

@@ -31,7 +31,7 @@ public class ScriptAdapter extends RecyclerView.Adapter<MyViewHolder> {
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_script, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_file, parent, false);
         return new MyViewHolder(view);
     }
 
@@ -106,10 +106,10 @@ class MyViewHolder extends RecyclerView.ViewHolder {
 
     public MyViewHolder(@NonNull View itemView) {
         super(itemView);
-        layout_image = itemView.findViewById(R.id.item_script_image);
-        layout_title = itemView.findViewById(R.id.item_script_title);
-        layout_num = itemView.findViewById(R.id.item_script_num);
-        layout_mtime = itemView.findViewById(R.id.item_script_mtime);
+        layout_image = itemView.findViewById(R.id.item_file_image);
+        layout_title = itemView.findViewById(R.id.item_file_title);
+        layout_num = itemView.findViewById(R.id.item_file_num);
+        layout_mtime = itemView.findViewById(R.id.item_file_time);
     }
 }
 

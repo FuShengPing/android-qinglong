@@ -415,7 +415,7 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
     }
 
     public void queryTasks(String searchValue, QueryType queryType) {
-        ApiController.getTasks(getClassName(), searchValue, new ApiController.GetTaskCallback() {
+        ApiController.getTasks(getClassName(), searchValue, new ApiController.GetTasksCallback() {
             @Override
             public void onSuccess(TasksRes data) {
                 isSuccess = true;

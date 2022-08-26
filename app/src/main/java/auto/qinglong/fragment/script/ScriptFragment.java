@@ -24,12 +24,10 @@ import auto.qinglong.R;
 import auto.qinglong.activity.ScriptActivity;
 import auto.qinglong.api.ApiController;
 import auto.qinglong.api.object.Script;
-import auto.qinglong.api.res.ScriptRes;
 import auto.qinglong.fragment.BaseFragment;
 import auto.qinglong.fragment.FragmentInterFace;
 import auto.qinglong.fragment.MenuClickInterface;
 import auto.qinglong.tools.CallManager;
-import auto.qinglong.tools.LogUnit;
 import auto.qinglong.tools.SortUnit;
 import auto.qinglong.tools.ToastUnit;
 
@@ -40,7 +38,7 @@ public class ScriptFragment extends BaseFragment implements FragmentInterFace {
     private ScriptAdapter scriptAdapter;
     private List<Script> oData;
     private boolean canBack = false;
-    private boolean isSuccess = false;
+    private boolean haveLoad = false;
 
     private ImageView layout_menu;
     private SwipeRefreshLayout layout_swipe;
@@ -58,6 +56,9 @@ public class ScriptFragment extends BaseFragment implements FragmentInterFace {
         layout_recyclerView = view.findViewById(R.id.script_recycler);
 
         scriptAdapter = new ScriptAdapter(requireContext());
+        layout_recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
+        Objects.requireNonNull(layout_recyclerView.getItemAnimator()).setChangeDuration(0);
+        layout_recyclerView.setAdapter(scriptAdapter);
 
         initViewSetting();
 
@@ -66,10 +67,6 @@ public class ScriptFragment extends BaseFragment implements FragmentInterFace {
 
     @Override
     public void initViewSetting() {
-        layout_recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
-        Objects.requireNonNull(layout_recyclerView.getItemAnimator()).setChangeDuration(0);
-        layout_recyclerView.setAdapter(scriptAdapter);
-
         scriptAdapter.setScriptInterface(new ScriptInterface() {
             @Override
             public void onEdit(Script script) {
@@ -114,11 +111,11 @@ public class ScriptFragment extends BaseFragment implements FragmentInterFace {
     private void getScripts() {
         ApiController.getScripts(getClassName(), new ApiController.GetScriptsCallback() {
             @Override
-            public void onSuccess(ScriptRes data) {
-                setData(data.getData(), "");
-                oData = data.getData();
+            public void onSuccess(List<Script> scripts) {
+                setData(scripts, "");
+                oData = scripts;
                 canBack = false;
-                isSuccess = true;
+                haveLoad = true;
                 if (layout_swipe.isRefreshing()) {
                     layout_swipe.setRefreshing(false);
                 }
@@ -142,7 +139,7 @@ public class ScriptFragment extends BaseFragment implements FragmentInterFace {
 
     @Override
     public void onResume() {
-        if (!isSuccess && !CallManager.isRequesting(getClassName())) {
+        if (!haveLoad && !CallManager.isRequesting(getClassName())) {
             getScripts();
         }
         super.onResume();

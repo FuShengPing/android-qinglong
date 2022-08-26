@@ -8,14 +8,16 @@ import com.google.gson.JsonObject;
 import java.util.List;
 
 import auto.qinglong.api.object.Environment;
+import auto.qinglong.api.object.Log;
+import auto.qinglong.api.object.Script;
 import auto.qinglong.api.object.Task;
 import auto.qinglong.api.res.BaseRes;
 import auto.qinglong.api.res.EditEnvRes;
 import auto.qinglong.api.res.EditTaskRes;
 import auto.qinglong.api.res.EnvRes;
+import auto.qinglong.api.res.LogRes;
 import auto.qinglong.api.res.LoginRes;
 import auto.qinglong.api.res.ScriptRes;
-import auto.qinglong.api.res.SystemRes;
 import auto.qinglong.api.res.TasksRes;
 import auto.qinglong.database.object.Account;
 import auto.qinglong.database.sp.AccountSP;
@@ -124,7 +126,7 @@ public class ApiController {
         CallManager.addCall(call, requestId);
     }
 
-    public static void getTasks(@NonNull String requestId, @NonNull String searchValue, @NonNull GetTaskCallback callback) {
+    public static void getTasks(@NonNull String requestId, @NonNull String searchValue, @NonNull GetTasksCallback callback) {
         Call<TasksRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -849,7 +851,45 @@ public class ApiController {
 
     }
 
-    public static void loadLog(@NonNull String requestId, @NonNull String logPath, @NonNull BaseCallback callback) {
+    public static void getLogs(@NonNull String requestId, @NonNull GetLogsCallback callback) {
+        Call<LogRes> call = new Retrofit.Builder()
+                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(QL.class)
+                .getLogs(AccountSP.getCurrentAccount().getAuthorization());
+        call.enqueue(new Callback<LogRes>() {
+            @Override
+            public void onResponse(Call<LogRes> call, Response<LogRes> response) {
+                LogRes logRes = response.body();
+                if (logRes == null) {
+                    if (response.code() == 401) {
+                        callback.onFailure(RES_INVALID_AUTH);
+                    } else {
+                        callback.onFailure(RES_NO_BODY);
+                    }
+
+                } else {
+                    if (logRes.getCode() == 200) {
+                        callback.onSuccess(logRes.getDirs());
+                    } else {
+                        callback.onFailure(logRes.getMessage());
+                    }
+                }
+                CallManager.finishCall(requestId);
+            }
+
+            @Override
+            public void onFailure(Call<LogRes> call, Throwable t) {
+                callback.onFailure(t.getLocalizedMessage());
+                CallManager.finishCall(requestId);
+            }
+        });
+
+        CallManager.addCall(call, requestId);
+    }
+
+    public static void getLogDetail(@NonNull String requestId, @NonNull String logPath, @NonNull BaseCallback callback) {
         Call<BaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -881,7 +921,7 @@ public class ApiController {
         CallManager.addCall(call, requestId);
     }
 
-    public static void loadConfig(@NonNull String requestId, @NonNull BaseCallback callback) {
+    public static void getConfigDetail(@NonNull String requestId, @NonNull BaseCallback callback) {
         Call<BaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -973,7 +1013,7 @@ public class ApiController {
 
                 } else {
                     if (scriptRes.getCode() == 200) {
-                        callback.onSuccess(scriptRes);
+                        callback.onSuccess(scriptRes.getData());
                     } else {
                         callback.onFailure(scriptRes.getMessage());
                     }
@@ -1076,12 +1116,6 @@ public class ApiController {
         void onFailure(String msg);
     }
 
-    public interface GetTaskCallback {
-        void onSuccess(TasksRes data);
-
-        void onFailure(String msg);
-    }
-
     public interface RunTaskCallback {
         void onSuccess(String msg);
 
@@ -1094,8 +1128,20 @@ public class ApiController {
         void onFailure(String msg);
     }
 
+    public interface GetTasksCallback {
+        void onSuccess(TasksRes data);
+
+        void onFailure(String msg);
+    }
+
     public interface GetScriptsCallback {
-        void onSuccess(ScriptRes data);
+        void onSuccess(List<Script> scripts);
+
+        void onFailure(String msg);
+    }
+
+    public interface GetLogsCallback {
+        void onSuccess(List<Log> logs);
 
         void onFailure(String msg);
     }
