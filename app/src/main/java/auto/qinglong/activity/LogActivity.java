@@ -2,6 +2,7 @@ package auto.qinglong.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -117,7 +118,7 @@ public class LogActivity extends BaseActivity {
      * @param logPath 日志地址
      */
     private void loadLog(String logPath) {
-        if (logPath == null || logPath.isEmpty()) {
+        if (TextUtils.isEmpty(logPath)) {
             WebJsManager.setCode(webView, "无效日志路径");
             return;
         }
@@ -128,7 +129,7 @@ public class LogActivity extends BaseActivity {
                 if (!logContent.equals(msg)) {
                     logContent = msg;
                     WebJsManager.setCode(webView, msg);
-                }else if (msg.isEmpty()){
+                } else if (msg.isEmpty()) {
                     logContent = msg;
                     WebJsManager.setCode(webView, "暂无日志信息");
                 }

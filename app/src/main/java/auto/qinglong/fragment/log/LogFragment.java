@@ -33,8 +33,6 @@ import auto.qinglong.tools.ToastUnit;
 
 public class LogFragment extends BaseFragment implements FragmentInterFace {
     public static String TAG = "LogFragment";
-    private String currentSearcValue = "";
-    private boolean isRequesting = false;
     private boolean haveLoad = false;
     private boolean canBack = false;
     private List<Log> oData;
@@ -109,6 +107,7 @@ public class LogFragment extends BaseFragment implements FragmentInterFace {
                 if (layout_swipe.isRefreshing()) {
                     layout_swipe.setRefreshing(false);
                 }
+                ToastUnit.showShort(requireContext(), "加载成功");
             }
 
             @Override

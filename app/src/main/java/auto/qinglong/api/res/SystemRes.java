@@ -4,7 +4,9 @@ import auto.qinglong.api.object.SystemData;
 
 public class SystemRes {
     private int code;
-
+    private String message;
+    private SystemData data;
+    
     public int getCode() {
         return code;
     }
@@ -29,6 +31,5 @@ public class SystemRes {
         this.data = data;
     }
 
-    private String message;
-    private SystemData data;
+
 }

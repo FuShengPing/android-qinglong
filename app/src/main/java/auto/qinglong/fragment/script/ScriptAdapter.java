@@ -51,13 +51,13 @@ public class ScriptAdapter extends RecyclerView.Adapter<MyViewHolder> {
         if (script.getChildren() != null) {
             holder.layout_image.setImageResource(R.drawable.ic_folder);
         } else if (script.getTitle().matches(".*\\.(js)|(JS)$")) {
-            holder.layout_image.setImageResource(R.mipmap.ic_script_js);
+            holder.layout_image.setImageResource(R.mipmap.ic_file_js);
         } else if (script.getTitle().matches(".*\\.(py)|(PY)$")) {
-            holder.layout_image.setImageResource(R.mipmap.ic_script_py);
+            holder.layout_image.setImageResource(R.mipmap.ic_file_py);
         } else if (script.getTitle().matches(".*\\.(json)|(JSON)$")) {
-            holder.layout_image.setImageResource(R.mipmap.ic_script_json);
+            holder.layout_image.setImageResource(R.mipmap.ic_file_json);
         } else {
-            holder.layout_image.setImageResource(R.mipmap.ic_script_other);
+            holder.layout_image.setImageResource(R.mipmap.ic_file_unknow);
         }
 
         holder.layout_mtime.setText(TimeUnit.formatTimeB((long) script.getMtime()));

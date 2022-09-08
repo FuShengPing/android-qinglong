@@ -27,7 +27,7 @@ public interface QL {
 
     //查询系统信息
     @GET("api/system")
-    Call<SystemRes> system(@Header("Authorization") String authorization);
+    Call<SystemRes> getSystemInfo();
 
     //查询任务列表
     @GET("api/crons")

@@ -18,6 +18,7 @@ import auto.qinglong.api.res.EnvRes;
 import auto.qinglong.api.res.LogRes;
 import auto.qinglong.api.res.LoginRes;
 import auto.qinglong.api.res.ScriptRes;
+import auto.qinglong.api.res.SystemRes;
 import auto.qinglong.api.res.TasksRes;
 import auto.qinglong.database.object.Account;
 import auto.qinglong.database.sp.AccountSP;
@@ -41,6 +42,44 @@ public class ApiController {
     public static String RES_NO_BODY = "响应异常";
     public static String RES_INVALID_AUTH = "无效会话";
 
+    public static void getSystemInfo(@NonNull String requestId, @NonNull Account account, @NonNull SystemCallback callback) {
+        Call<SystemRes> call = new Retrofit.Builder()
+                .baseUrl(account.getBaseUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(QL.class)
+                .getSystemInfo();
+
+        call.enqueue(new Callback<SystemRes>() {
+            @Override
+            public void onResponse(Call<SystemRes> call, Response<SystemRes> response) {
+                SystemRes systemRes = response.body();
+                if (systemRes == null) {
+                    if (response.code() == 401) {
+                        callback.onFailure(RES_INVALID_AUTH);
+                    } else {
+                        callback.onFailure(RES_NO_BODY + response.code());
+                    }
+                } else {
+
+                    if (systemRes.getCode() == 200) {
+                        callback.onSuccess(systemRes);
+                    } else {
+                        callback.onFailure(systemRes.getMessage());
+                    }
+                }
+                CallManager.finishCall(requestId);
+            }
+
+            @Override
+            public void onFailure(Call<SystemRes> call, Throwable t) {
+                callback.onFailure(t.getLocalizedMessage());
+                CallManager.finishCall(requestId);
+            }
+        });
+
+        CallManager.addCall(call, requestId);
+    }
 
     public static void checkToken(@NonNull String requestId, @NonNull Account account, @NonNull LoginCallback callback) {
         Call<TasksRes> call = new Retrofit.Builder()
@@ -1102,6 +1141,12 @@ public class ApiController {
         });
 
         CallManager.addCall(call, requestId);
+    }
+
+    public interface SystemCallback {
+        void onSuccess(SystemRes systemRes);
+
+        void onFailure(String msg);
     }
 
     public interface BaseCallback {

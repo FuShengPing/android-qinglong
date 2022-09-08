@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import auto.qinglong.R;
 import auto.qinglong.api.ApiController;
+import auto.qinglong.api.res.SystemRes;
 import auto.qinglong.database.db.AccountDBHelper;
 import auto.qinglong.database.object.Account;
 import auto.qinglong.database.sp.AccountSP;
@@ -88,10 +89,10 @@ public class LoginActivity extends BaseActivity {
                 Account account;
                 if (AccountDBHelper.isAccountExist(address)) {
                     account = AccountDBHelper.getAccount(address);
-                    checkToken(account);
+                    querySystemInfo(account, false);
                 } else {
                     account = new Account(username, password, address, "");
-                    login(account);
+                    querySystemInfo(account, true);
                 }
             }
         });
@@ -111,12 +112,45 @@ public class LoginActivity extends BaseActivity {
         WindowUnit.setTranslucentStatus(this);
     }
 
+
+    /**
+     * 查询系统信息 主要是查看是否已经初始化
+     *
+     * @param account
+     * @param isLogin
+     */
+    protected void querySystemInfo(Account account, boolean isLogin) {
+        ApiController.getSystemInfo(this.getClassName(), account, new ApiController.SystemCallback() {
+            @Override
+            public void onSuccess(SystemRes systemRes) {
+                if (systemRes.getData().isInitialized()) {
+                    if (isLogin) {
+                        login(account);
+                    } else {
+                        checkToken(account);
+                    }
+                } else {
+                    ToastUnit.showShort(myContext, "系统未初始化，无法登录");
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort(myContext, msg);
+            }
+        });
+    }
+
+    /**
+     * 检查会话是否有效，防止多次登录
+     * @param account
+     */
     protected void checkToken(Account account) {
         ApiController.checkToken(this.getClassName(), account, new ApiController.LoginCallback() {
             @Override
             public void onSuccess(Account account) {
                 LogUnit.log(account.getAuthorization());
-                accountValid(account);
+                enterMain(account);
             }
 
             @Override
@@ -130,7 +164,7 @@ public class LoginActivity extends BaseActivity {
         ApiController.login(this.getClassName(), account, new ApiController.LoginCallback() {
             @Override
             public void onSuccess(Account account) {
-                accountValid(account);
+                enterMain(account);
             }
 
             @Override
@@ -140,7 +174,7 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    private void accountValid(Account account) {
+    private void enterMain(Account account) {
         //保存账号信息
         AccountSP.saveAccount(account);
         AccountDBHelper.insertAccount(account);

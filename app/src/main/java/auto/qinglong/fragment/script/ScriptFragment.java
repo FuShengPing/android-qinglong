@@ -43,7 +43,7 @@ public class ScriptFragment extends BaseFragment implements FragmentInterFace {
     private ImageView layout_menu;
     private SwipeRefreshLayout layout_swipe;
     private TextView layout_dir;
-    private RecyclerView layout_recyclerView;
+    private RecyclerView layout_recycler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,12 +53,12 @@ public class ScriptFragment extends BaseFragment implements FragmentInterFace {
         layout_swipe = view.findViewById(R.id.script_swipe);
         layout_dir = view.findViewById(R.id.script_dir_tip);
         layout_menu = view.findViewById(R.id.scrip_menu);
-        layout_recyclerView = view.findViewById(R.id.script_recycler);
+        layout_recycler = view.findViewById(R.id.script_recycler);
 
         scriptAdapter = new ScriptAdapter(requireContext());
-        layout_recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
-        Objects.requireNonNull(layout_recyclerView.getItemAnimator()).setChangeDuration(0);
-        layout_recyclerView.setAdapter(scriptAdapter);
+        layout_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
+        Objects.requireNonNull(layout_recycler.getItemAnimator()).setChangeDuration(0);
+        layout_recycler.setAdapter(scriptAdapter);
 
         initViewSetting();
 

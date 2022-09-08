@@ -1,6 +1,10 @@
 package auto.qinglong.api.object;
 
 public class SystemData {
+    private boolean isInitialized;
+
+    private String version;
+
     public boolean isInitialized() {
         return isInitialized;
     }
@@ -16,9 +20,6 @@ public class SystemData {
     public void setVersion(String version) {
         this.version = version;
     }
-
-    private boolean isInitialized;
-    private String version;
 
 
 }

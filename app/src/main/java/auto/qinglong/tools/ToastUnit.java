@@ -4,11 +4,14 @@ import android.content.Context;
 import android.os.Looper;
 import android.widget.Toast;
 
+import auto.qinglong.MyApplication;
+
 public class ToastUnit {
     private static Toast shortToast = null;
     private static Toast longToast = null;
 
     public static void showShort(Context context,String str) {
+        cancel();
         boolean flag = false;
         if (Looper.myLooper() == null) {
             Looper.prepare();
@@ -16,7 +19,29 @@ public class ToastUnit {
         }
 
         if (shortToast == null) {
-            shortToast = Toast.makeText(context, str, Toast.LENGTH_SHORT);
+            shortToast = Toast.makeText(MyApplication.getContext(), str, Toast.LENGTH_SHORT);
+        }
+
+        shortToast.setText(str);
+        shortToast.show();
+        shortToast = null;
+
+        if (flag) {
+            Looper.loop();
+        }
+
+    }
+
+    public static void showShort(String str) {
+        cancel();
+        boolean flag = false;
+        if (Looper.myLooper() == null) {
+            Looper.prepare();
+            flag = true;
+        }
+
+        if (shortToast == null) {
+            shortToast = Toast.makeText(MyApplication.getContext(), str, Toast.LENGTH_SHORT);
         }
 
         shortToast.setText(str);
