@@ -42,12 +42,12 @@ public class LogActivity extends BaseActivity {
         layout_tip = findViewById(R.id.log_name);
         layout_refresh = findViewById(R.id.log_refresh);
         layout_web_container = findViewById(R.id.web_container);
-        initViewSetting();
+        init();
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
-    protected void initViewSetting() {
+    protected void init() {
         //设置日志名称
         layout_tip.setText(logName);
 

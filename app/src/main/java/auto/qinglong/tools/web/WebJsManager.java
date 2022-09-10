@@ -69,8 +69,8 @@ public class WebJsManager {
                 if (webCallback != null) {
                     //必须替换字符 否则传递会错乱或不显示
                     String content = value.replace("\\'", "'")
-                            .replace("\\\"", "\"")
-                            .replace("\\n", "\n");
+                            .replace("\\\"", "\"");
+                            //.replace("\\n", "\n");
 
                     //去掉字符串两端“”符号
                     StringBuilder stringBuilder = new StringBuilder(content);

@@ -37,10 +37,7 @@ import auto.qinglong.api.res.EnvRes;
 import auto.qinglong.fragment.BaseFragment;
 import auto.qinglong.fragment.FragmentInterFace;
 import auto.qinglong.fragment.MenuClickInterface;
-import auto.qinglong.fragment.task.TaskFragment;
 import auto.qinglong.tools.CallManager;
-import auto.qinglong.tools.LogUnit;
-import auto.qinglong.tools.SortUnit;
 import auto.qinglong.tools.ToastUnit;
 import auto.qinglong.tools.WindowUnit;
 
@@ -112,13 +109,13 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
         layout_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
         Objects.requireNonNull(layout_recycler.getItemAnimator()).setChangeDuration(0);
 
-        initViewSetting();
+        init();
 
         return view;
     }
 
     @Override
-    public void initViewSetting() {
+    public void init() {
         envAdapter.setItemInterface(new ItemInterface() {
             @Override
             public void onEdit(Environment environment, int position) {

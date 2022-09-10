@@ -1,13 +1,23 @@
 package auto.qinglong.activity;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -17,10 +27,12 @@ import auto.qinglong.R;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.fragment.BaseFragment;
 import auto.qinglong.fragment.config.ConfigFragment;
+import auto.qinglong.fragment.dep.DepFragment;
 import auto.qinglong.fragment.env.EnvFragment;
 import auto.qinglong.fragment.log.LogFragment;
 import auto.qinglong.fragment.MenuClickInterface;
 import auto.qinglong.fragment.script.ScriptFragment;
+import auto.qinglong.fragment.setting.SettingFragment;
 import auto.qinglong.fragment.task.TaskFragment;
 import auto.qinglong.tools.NetUnit;
 import auto.qinglong.tools.WindowUnit;
@@ -31,32 +43,56 @@ public class HomeActivity extends BaseActivity {
     private ConfigFragment configFragment;
     private ScriptFragment scriptFragment;
     private EnvFragment envFragment;
+    private DepFragment depFragment;
+    private SettingFragment settingFragment;
 
     private BaseFragment currentFragment;
     private String currentMenu = "";
-    private PopupWindow popWindowMenu;
+    private MenuClickInterface menuClickInterface;
 
-    private RelativeLayout layout_root;
-    private View layout_popGuide;
+    private AnimatorSet animator_menu_enter;
+    private AnimatorSet animator_menu_exit;
+
+    //布局变量
+    private RelativeLayout layout_menu_bar;
+    private LinearLayout layout_menu_bar_left;
+    private View layout_menu_bar_right;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        layout_root = findViewById(R.id.home_root);
-        layout_popGuide = findViewById(R.id.home_pop_guide);
-        initViewSetting();
+        layout_menu_bar = findViewById(R.id.home_menu_bar);
+        layout_menu_bar_left = layout_menu_bar.findViewById(R.id.home_menu_bar_left);
+        layout_menu_bar_right = layout_menu_bar.findViewById(R.id.home_menu_bar_right);
+
+        init();
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        initViewSetting();
+        init();
     }
 
+    /**
+     * 初始化函数，进行变量和控件的初始化
+     */
     @Override
-    protected void initViewSetting() {
+    protected void init() {
+        //变量初始化
+        menuClickInterface = new MenuClickInterface() {
+            @Override
+            public void onMenuClick() {
+                showMenuBar();
+            }
+        };
+
+        //导航栏初始化
+        initMenuBar();
+
+        //初始化第一帧页面
         showFragment(TaskFragment.TAG);
     }
 
@@ -68,9 +104,6 @@ public class HomeActivity extends BaseActivity {
     private void showFragment(String menu) {
         //点击当前界面导航则直接返回
         if (menu.equals(currentMenu)) {
-            if (popWindowMenu != null) {
-                popWindowMenu.dismiss();
-            }
             return;
         } else {
             currentMenu = menu;
@@ -84,159 +117,237 @@ public class HomeActivity extends BaseActivity {
         if (menu.equals(TaskFragment.TAG)) {
             if (taskFragment == null) {
                 taskFragment = new TaskFragment();
-                taskFragment.setMenuClickInterface(new MenuClickInterface() {
-                    @Override
-                    public void onMenuClick() {
-                        showPopWindowMenu();
-                    }
-                });
+                taskFragment.setMenuClickInterface(menuClickInterface);
                 getSupportFragmentManager().beginTransaction().add(R.id.home_fragment_layout, taskFragment, TaskFragment.TAG).commit();
             }
             currentFragment = taskFragment;
         } else if (menu.equals(LogFragment.TAG)) {
             if (logFragment == null) {
                 logFragment = new LogFragment();
-                logFragment.setMenuClickInterface(new MenuClickInterface() {
-                    @Override
-                    public void onMenuClick() {
-                        showPopWindowMenu();
-                    }
-                });
+                logFragment.setMenuClickInterface(menuClickInterface);
                 getSupportFragmentManager().beginTransaction().add(R.id.home_fragment_layout, logFragment, LogFragment.TAG).commit();
             }
             currentFragment = logFragment;
         } else if (menu.equals(ConfigFragment.TAG)) {
             if (configFragment == null) {
                 configFragment = new ConfigFragment();
-                configFragment.setMenuClickInterface(new MenuClickInterface() {
-                    @Override
-                    public void onMenuClick() {
-                        showPopWindowMenu();
-                    }
-                });
+                configFragment.setMenuClickInterface(menuClickInterface);
                 getSupportFragmentManager().beginTransaction().add(R.id.home_fragment_layout, configFragment, ConfigFragment.TAG).commit();
             }
             currentFragment = configFragment;
         } else if (menu.equals(ScriptFragment.TAG)) {
             if (scriptFragment == null) {
                 scriptFragment = new ScriptFragment();
-                scriptFragment.setMenuClickInterface(new MenuClickInterface() {
-                    @Override
-                    public void onMenuClick() {
-                        showPopWindowMenu();
-                    }
-                });
+                scriptFragment.setMenuClickInterface(menuClickInterface);
                 getSupportFragmentManager().beginTransaction().add(R.id.home_fragment_layout, scriptFragment, ScriptFragment.TAG).commit();
             }
             currentFragment = scriptFragment;
         } else if (menu.equals(EnvFragment.TAG)) {
             if (envFragment == null) {
                 envFragment = new EnvFragment();
-                envFragment.setMenuClickInterface(new MenuClickInterface() {
-                    @Override
-                    public void onMenuClick() {
-                        showPopWindowMenu();
-                    }
-                });
+                envFragment.setMenuClickInterface(menuClickInterface);
                 getSupportFragmentManager().beginTransaction().add(R.id.home_fragment_layout, envFragment, EnvFragment.TAG).commit();
             }
             currentFragment = envFragment;
+        } else if (menu.equals(DepFragment.TAG)) {
+            if (depFragment == null) {
+                depFragment = new DepFragment();
+                depFragment.setMenuClickInterface(menuClickInterface);
+                getSupportFragmentManager().beginTransaction().add(R.id.home_fragment_layout, depFragment, EnvFragment.TAG).commit();
+            }
+            currentFragment = depFragment;
+        } else if (menu.equals(SettingFragment.TAG)) {
+            if (settingFragment == null) {
+                settingFragment = new SettingFragment();
+                settingFragment.setMenuClickInterface(menuClickInterface);
+                getSupportFragmentManager().beginTransaction().add(R.id.home_fragment_layout, settingFragment, EnvFragment.TAG).commit();
+            }
+            currentFragment = settingFragment;
         }
 
+        //显示帧页面
         getSupportFragmentManager().beginTransaction().show(currentFragment).commit();
         //关闭导航栏
-        if (popWindowMenu != null) {
-            popWindowMenu.dismiss();
+        if (layout_menu_bar.getVisibility() == View.VISIBLE) {
+            hideMenuBar();
         }
+    }
+
+    /**
+     * 初始化导航栏
+     */
+    @SuppressLint("SetTextI18n")
+    private void initMenuBar() {
+        layout_menu_bar.setVisibility(View.INVISIBLE);
+        //左侧导航栏
+        //用户名和地址
+        TextView layout_username = layout_menu_bar.findViewById(R.id.menu_info_username);
+        TextView layout_address = layout_menu_bar.findViewById(R.id.menu_info_address);
+        layout_username.setText(AccountSP.getCurrentAccount().getUsername());
+        layout_address.setText(AccountSP.getCurrentAccount().getAddress());
+        String ip = NetUnit.getIP();
+        if (ip != null) {
+            TextView layout_ip = layout_menu_bar.findViewById(R.id.menu_info_inner_ip);
+            layout_ip.setText("本地：" + ip);
+            layout_ip.setVisibility(View.VISIBLE);
+        }
+
+        //导航监听
+        LinearLayout menu_task = layout_menu_bar.findViewById(R.id.menu_task);
+        LinearLayout menu_log = layout_menu_bar.findViewById(R.id.menu_log);
+        LinearLayout menu_config = layout_menu_bar.findViewById(R.id.menu_config);
+        LinearLayout menu_script = layout_menu_bar.findViewById(R.id.menu_script);
+        LinearLayout menu_env = layout_menu_bar.findViewById(R.id.menu_env);
+        LinearLayout menu_setting = layout_menu_bar.findViewById(R.id.menu_setting);
+        LinearLayout menu_dep = layout_menu_bar.findViewById(R.id.menu_dep);
+        LinearLayout menu_app_account = layout_menu_bar.findViewById(R.id.menu_app_account);
+        LinearLayout menu_app_setting = layout_menu_bar.findViewById(R.id.menu_app_setting);
+
+        menu_task.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFragment(TaskFragment.TAG);
+            }
+        });
+
+        menu_log.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFragment(LogFragment.TAG);
+            }
+        });
+
+        menu_config.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFragment(ConfigFragment.TAG);
+            }
+        });
+
+        menu_script.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFragment(ScriptFragment.TAG);
+            }
+        });
+
+        menu_env.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFragment(EnvFragment.TAG);
+            }
+        });
+
+        menu_dep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFragment(DepFragment.TAG);
+            }
+        });
+
+        menu_setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFragment(SettingFragment.TAG);
+            }
+        });
+
+        menu_app_account.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), AccountActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //右侧空白 实现点击隐藏导航栏
+        View layout_right = layout_menu_bar.findViewById(R.id.home_menu_bar_right);
+        layout_right.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    hideMenuBar();
+                }
+                return true;
+            }
+        });
+    }
+
+    /**
+     * 显示导航栏
+     */
+    private void showMenuBar() {
+        if (animator_menu_enter == null) {
+            initMenuBarAnimator();
+        }
+
+        if (animator_menu_enter.isRunning()) {
+            return;
+        }
+
+        animator_menu_enter.start();
+    }
+
+    /**
+     * 隐藏导航栏
+     */
+    private void hideMenuBar() {
+        if (animator_menu_exit == null) {
+            initMenuBarAnimator();
+        }
+
+        if (animator_menu_exit.isRunning()) {
+            return;
+        }
+
+        animator_menu_exit.start();
 
     }
 
-
-    @SuppressLint("SetTextI18n")
-    private void showPopWindowMenu() {
-        if (popWindowMenu == null) {
-            View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.pop_home_nav, null);
-            popWindowMenu = new PopupWindow(getBaseContext());
-            popWindowMenu.setContentView(view);
-            popWindowMenu.setOutsideTouchable(true);
-            popWindowMenu.setFocusable(true);
-            popWindowMenu.setHeight(WindowManager.LayoutParams.MATCH_PARENT);
-            popWindowMenu.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-            popWindowMenu.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            popWindowMenu.setAnimationStyle(R.style.anim_activity_home_pop_menu);
-            popWindowMenu.setOnDismissListener(new PopupWindow.OnDismissListener() {
+    /**
+     * 初始化导航栏动画
+     */
+    private void initMenuBarAnimator() {
+        //退场
+        if (animator_menu_exit == null) {
+            int width = layout_menu_bar_left.getWidth();
+            animator_menu_exit = new AnimatorSet();
+            ObjectAnimator animator_right = ObjectAnimator.ofFloat(layout_menu_bar_right, "alpha", 1f, 0f);
+            ObjectAnimator animator_left = ObjectAnimator.ofFloat(layout_menu_bar_left, "translationX", 0, -width);
+            animator_right.setDuration(200);
+            animator_left.setDuration(200);
+            animator_menu_exit.play(animator_right).with(animator_left);
+            animator_menu_exit.addListener(new AnimatorListenerAdapter() {
                 @Override
-                public void onDismiss() {
-                    //取消半透明效果
-                    layout_root.setForeground(null);
-                }
-            });
-
-            //用户名和地址
-            TextView layout_username = view.findViewById(R.id.menu_info_username);
-            TextView layout_address = view.findViewById(R.id.menu_info_address);
-            layout_username.setText(AccountSP.getCurrentAccount().getUsername());
-            layout_address.setText(AccountSP.getCurrentAccount().getAddress());
-            String ip = NetUnit.getIP();
-            if (ip != null) {
-                TextView layout_ip = view.findViewById(R.id.menu_info_inner_ip);
-                layout_ip.setText("本地：" + ip);
-                layout_ip.setVisibility(View.VISIBLE);
-            }
-            //导航监听
-            LinearLayout menu_task = view.findViewById(R.id.menu_task);
-            LinearLayout menu_log = view.findViewById(R.id.menu_log);
-            LinearLayout menu_config = view.findViewById(R.id.menu_config);
-            LinearLayout menu_script = view.findViewById(R.id.menu_script);
-            LinearLayout menu_env = view.findViewById(R.id.menu_env);
-            LinearLayout menu_account = view.findViewById(R.id.menu_app_account);
-
-            menu_task.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showFragment(TaskFragment.TAG);
-                }
-            });
-
-            menu_log.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showFragment(LogFragment.TAG);
-                }
-            });
-
-            menu_config.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showFragment(ConfigFragment.TAG);
-                }
-            });
-
-            menu_script.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showFragment(ScriptFragment.TAG);
-                }
-            });
-
-            menu_env.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showFragment(EnvFragment.TAG);
-                }
-            });
-
-            menu_account.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getBaseContext(), AccountActivity.class);
-                    startActivity(intent);
+                public void onAnimationEnd(Animator animation, boolean isReverse) {
+                    layout_menu_bar.setVisibility(View.INVISIBLE);
                 }
             });
         }
-        popWindowMenu.showAsDropDown(layout_popGuide, 0, 0);
-        //显示半透明效果
-        layout_root.setForeground(new ColorDrawable(0x66000000));
+
+        //进场
+        if (animator_menu_enter == null) {
+            int width = layout_menu_bar_left.getWidth();
+            animator_menu_enter = new AnimatorSet();
+            ObjectAnimator animator_right = ObjectAnimator.ofFloat(layout_menu_bar_right, "alpha", 0f, 1f);
+            ObjectAnimator animator_left = ObjectAnimator.ofFloat(layout_menu_bar_left, "translationX", -width, 0);
+            animator_right.setDuration(200);
+            animator_left.setDuration(200);
+            animator_menu_enter.play(animator_right).with(animator_left);
+            animator_menu_enter.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationStart(Animator animation, boolean isReverse) {
+                    layout_menu_bar.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation, boolean isReverse) {
+                    //恢复右部可点击
+                    layout_menu_bar_right.setClickable(true);
+                }
+            });
+        }
+
     }
 
     @Override

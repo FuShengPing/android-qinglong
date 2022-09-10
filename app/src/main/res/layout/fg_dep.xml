@@ -1,41 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical">
 
     <RelativeLayout
-        android:clickable="true"
-        android:id="@+id/log_bar"
+        android:id="@+id/dep_top_bar"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/theme_color"
+        android:clickable="true"
         android:paddingHorizontal="15dp"
         android:paddingVertical="8dp">
 
         <ImageView
-            android:clickable="true"
-            android:id="@+id/log_nav"
+            android:id="@+id/dep_top_bar_menu"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:background="@drawable/style_press_gray"
+            android:clickable="true"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_menu" />
 
         <ImageView
-            android:id="@+id/log_search"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@id/log_more"
-            android:background="@drawable/style_press_gray"
-            android:clickable="true"
-            android:src="@drawable/ic_search" />
-
-        <ImageView
-            android:id="@+id/log_more"
+            android:id="@+id/dep_more"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"
@@ -43,19 +34,28 @@
             android:layout_marginStart="10dp"
             android:background="@drawable/style_press_gray"
             android:clickable="true"
-            android:src="@drawable/ic_more_ver" />
+            android:src="@drawable/ic_add_white" />
     </RelativeLayout>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/log_swipe"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/dep_page_tab"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white"
+        app:tabIndicatorColor="@color/theme_color_shadow"
+        app:tabIndicatorFullWidth="false"
+        app:tabRippleColor="@android:color/transparent"
+        app:tabSelectedTextColor="@color/theme_color_shadow"
+        app:tabTextColor="@color/text_color_49">
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/dep_page"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bg_gray">
+        android:orientation="horizontal"
+        android:overScrollMode="never">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/log_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.viewpager2.widget.ViewPager2>
 </LinearLayout>

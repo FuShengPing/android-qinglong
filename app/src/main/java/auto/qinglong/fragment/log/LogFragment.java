@@ -1,6 +1,7 @@
 package auto.qinglong.fragment.log;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,16 +19,13 @@ import java.util.List;
 import java.util.Objects;
 
 import auto.qinglong.R;
+import auto.qinglong.activity.LogActivity;
 import auto.qinglong.api.ApiController;
 import auto.qinglong.api.object.Log;
-import auto.qinglong.api.object.Script;
 import auto.qinglong.fragment.BaseFragment;
 import auto.qinglong.fragment.FragmentInterFace;
 import auto.qinglong.fragment.MenuClickInterface;
-import auto.qinglong.fragment.task.TaskAdapter;
 import auto.qinglong.tools.CallManager;
-import auto.qinglong.tools.LogUnit;
-import auto.qinglong.tools.SortUnit;
 import auto.qinglong.tools.ToastUnit;
 
 
@@ -59,13 +57,13 @@ public class LogFragment extends BaseFragment implements FragmentInterFace {
         Objects.requireNonNull(layout_recycler.getItemAnimator()).setChangeDuration(0);
         layout_recycler.setAdapter(logAdapter);
 
-        initViewSetting();
+        init();
         return view;
     }
 
 
     @Override
-    public void initViewSetting() {
+    public void init() {
         layout_nav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,6 +79,11 @@ public class LogFragment extends BaseFragment implements FragmentInterFace {
                 if (log.isDir()) {
                     canBack = true;
                     setData(log.getChildren(), log.getName());
+                } else {
+                    Intent intent = new Intent(getContext(), LogActivity.class);
+                    intent.putExtra(LogActivity.ExtraName, log.getName());
+                    intent.putExtra(LogActivity.ExtraPath, log.getLogPath());
+                    startActivity(intent);
                 }
             }
         });

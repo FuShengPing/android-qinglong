@@ -60,12 +60,12 @@ public class ScriptActivity extends BaseActivity {
         layout_edit_back = findViewById(R.id.script_edit_back);
         layout_edit_save = findViewById(R.id.script_edit_save);
         layout_web_container = findViewById(R.id.web_container);
-        initViewSetting();
+        init();
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
-    protected void initViewSetting() {
+    protected void init() {
         //设置脚本名称
         layout_tip.setText(scriptName);
 

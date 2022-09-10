@@ -15,7 +15,7 @@ public class AccountActivity extends BaseActivity {
     }
 
     @Override
-    protected void initViewSetting() {
+    protected void init() {
 
     }
 

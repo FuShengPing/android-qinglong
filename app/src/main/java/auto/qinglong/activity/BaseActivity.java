@@ -91,7 +91,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         this.getWindow().setAttributes(lp);
     }
 
-    protected abstract void initViewSetting();
+    protected abstract void init();
 
     protected abstract void initWindow();
 }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dep_page_fg_swipe"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_gray">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/dep_page_fg_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

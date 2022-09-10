@@ -60,13 +60,13 @@ public class ScriptFragment extends BaseFragment implements FragmentInterFace {
         Objects.requireNonNull(layout_recycler.getItemAnimator()).setChangeDuration(0);
         layout_recycler.setAdapter(scriptAdapter);
 
-        initViewSetting();
+        init();
 
         return view;
     }
 
     @Override
-    public void initViewSetting() {
+    public void init() {
         scriptAdapter.setScriptInterface(new ScriptInterface() {
             @Override
             public void onEdit(Script script) {

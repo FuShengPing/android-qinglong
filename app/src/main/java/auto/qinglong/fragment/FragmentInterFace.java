@@ -1,6 +1,7 @@
 package auto.qinglong.fragment;
 
 public interface FragmentInterFace {
-    void initViewSetting();
+    void init();
+
     void setMenuClickInterface(MenuClickInterface menuClickInterface);
 }

@@ -1,5 +1,7 @@
 package auto.qinglong.api.object;
 
+import android.text.TextUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,4 +55,12 @@ public class Log {
         return logs;
     }
 
+    public String getLogPath() {
+        if (TextUtils.isEmpty(parentName)) {
+            return "api/logs/" + name;
+        } else {
+            return "api/logs/" + parentName + "/" + name;
+        }
+
+    }
 }

@@ -135,7 +135,7 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
         layout_recycler.setAdapter(taskAdapter);
         layout_recycler.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
 
-        initViewSetting();
+        init();
 
         return view;
     }
@@ -150,7 +150,7 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
     }
 
     @Override
-    public void initViewSetting() {
+    public void init() {
         //任务操作接口
         taskAdapter.setTaskInterface(new ItemInterface() {
             @Override

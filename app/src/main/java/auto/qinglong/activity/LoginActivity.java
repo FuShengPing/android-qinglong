@@ -46,11 +46,11 @@ public class LoginActivity extends BaseActivity {
         layout_password = findViewById(R.id.input_password);
 
         initWindow();
-        initViewSetting();
+        init();
     }
 
     @Override
-    protected void initViewSetting() {
+    protected void init() {
         layout_logo_ql.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

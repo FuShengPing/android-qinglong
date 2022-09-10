@@ -56,13 +56,13 @@ public class ConfigFragment extends BaseFragment implements FragmentInterFace {
         layout_edit_back = view.findViewById(R.id.config_edit_back);
         layout_edit_save = view.findViewById(R.id.config_edit_save);
         layout_web_container = view.findViewById(R.id.config_web_container);
-        initViewSetting();
+        init();
 
         return view;
     }
 
     @Override
-    public void initViewSetting() {
+    public void init() {
         layout_menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

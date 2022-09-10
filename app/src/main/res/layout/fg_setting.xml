@@ -1,7 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
 
+    <RelativeLayout
+        android:id="@+id/setting_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/theme_color"
+        android:clickable="true"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="8dp">
+
+        <ImageView
+            android:id="@+id/setting_top_bar_menu"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/style_press_gray"
+            android:clickable="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_menu" />
+
+        <ImageView
+            android:id="@+id/setting_save"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/style_press_gray"
+            android:clickable="true"
+            android:src="@drawable/ic_save_white" />
+    </RelativeLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </androidx.viewpager2.widget.ViewPager2>
 </LinearLayout>
