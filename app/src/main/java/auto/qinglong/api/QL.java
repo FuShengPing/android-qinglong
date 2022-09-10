@@ -1,9 +1,10 @@
 package auto.qinglong.api;
 
 import auto.qinglong.api.res.BaseRes;
+import auto.qinglong.api.res.DependenceRes;
 import auto.qinglong.api.res.EditEnvRes;
 import auto.qinglong.api.res.EditTaskRes;
-import auto.qinglong.api.res.EnvRes;
+import auto.qinglong.api.res.EnvironmentRes;
 import auto.qinglong.api.res.LogRes;
 import auto.qinglong.api.res.LoginRes;
 import auto.qinglong.api.res.ScriptRes;
@@ -71,7 +72,7 @@ public interface QL {
 
     //获取环境变量
     @GET("api/envs")
-    Call<EnvRes> getEnvs(@Header("Authorization") String authorization, @Query("searchValue") String searchValue);
+    Call<EnvironmentRes> getEnvs(@Header("Authorization") String authorization, @Query("searchValue") String searchValue);
 
     //更新环境变量
     @PUT("api/envs")
@@ -79,7 +80,7 @@ public interface QL {
 
     //新建环境变量
     @POST("api/envs")
-    Call<EnvRes> addEnvs(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<EnvironmentRes> addEnvs(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //删除环境变量
     @HTTP(method = "DELETE", path = "api/envs", hasBody = true)
@@ -109,6 +110,14 @@ public interface QL {
     @GET
     Call<BaseRes> getScriptDetail(@Url String url, @Header("Authorization") String authorization);
 
+    //保存脚本
+    @PUT("api/scripts")
+    Call<BaseRes> saveScript(@Header("Authorization") String authorization, @Body RequestBody body);
+
+    //获取依赖
+    @GET("api/dependencies")
+    Call<DependenceRes> getDependencies(@Header("Authorization") String authorization, @Query("searchValue") String searchValue, @Query("type") String type);
+
     //获取日志列表
     @GET("api/logs")
     Call<LogRes> getLogs(@Header("Authorization") String authorization);
@@ -117,7 +126,5 @@ public interface QL {
     @GET
     Call<BaseRes> getLogDetail(@Url String url, @Header("Authorization") String authorization);
 
-    //保存脚本
-    @PUT("api/scripts")
-    Call<BaseRes> saveScript(@Header("Authorization") String authorization, @Body RequestBody body);
+
 }

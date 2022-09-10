@@ -12,9 +12,10 @@ import auto.qinglong.api.object.Log;
 import auto.qinglong.api.object.Script;
 import auto.qinglong.api.object.Task;
 import auto.qinglong.api.res.BaseRes;
+import auto.qinglong.api.res.DependenceRes;
 import auto.qinglong.api.res.EditEnvRes;
 import auto.qinglong.api.res.EditTaskRes;
-import auto.qinglong.api.res.EnvRes;
+import auto.qinglong.api.res.EnvironmentRes;
 import auto.qinglong.api.res.LogRes;
 import auto.qinglong.api.res.LoginRes;
 import auto.qinglong.api.res.ScriptRes;
@@ -612,18 +613,18 @@ public class ApiController {
         CallManager.addCall(call, requestId);
     }
 
-    public static void getEnvs(@NonNull String requestId, @NonNull String searchValue, @NonNull GetEnvsCallback callback) {
-        Call<EnvRes> call = new Retrofit.Builder()
+    public static void getEnvironments(@NonNull String requestId, @NonNull String searchValue, @NonNull GetEnvironmentsCallback callback) {
+        Call<EnvironmentRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QL.class)
                 .getEnvs(AccountSP.getCurrentAccount().getAuthorization(), searchValue);
-        call.enqueue(new Callback<EnvRes>() {
+        call.enqueue(new Callback<EnvironmentRes>() {
             @Override
-            public void onResponse(Call<EnvRes> call, Response<EnvRes> response) {
-                EnvRes envRes = response.body();
-                if (envRes == null) {
+            public void onResponse(Call<EnvironmentRes> call, Response<EnvironmentRes> response) {
+                EnvironmentRes environmentRes = response.body();
+                if (environmentRes == null) {
                     if (response.code() == 401) {
                         callback.onFailure(RES_INVALID_AUTH);
                     } else {
@@ -631,17 +632,17 @@ public class ApiController {
                     }
 
                 } else {
-                    if (envRes.getCode() == 200) {
-                        callback.onSuccess(envRes);
+                    if (environmentRes.getCode() == 200) {
+                        callback.onSuccess(environmentRes);
                     } else {
-                        callback.onFailure(envRes.getMessage());
+                        callback.onFailure(environmentRes.getMessage());
                     }
                 }
                 CallManager.finishCall(requestId);
             }
 
             @Override
-            public void onFailure(Call<EnvRes> call, Throwable t) {
+            public void onFailure(Call<EnvironmentRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 CallManager.finishCall(requestId);
             }
@@ -650,7 +651,7 @@ public class ApiController {
         CallManager.addCall(call, requestId);
     }
 
-    public static void addEnvs(@NonNull String requestId, @NonNull List<Environment> environments, @NonNull GetEnvsCallback callback) {
+    public static void addEnvironment(@NonNull String requestId, @NonNull List<Environment> environments, @NonNull GetEnvironmentsCallback callback) {
         JsonArray jsonArray = new JsonArray();
         JsonObject jsonObject;
         for (Environment environment : environments) {
@@ -663,18 +664,18 @@ public class ApiController {
         String json = jsonArray.toString();
         LogUnit.log(json);
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<EnvRes> call = new Retrofit.Builder()
+        Call<EnvironmentRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QL.class)
                 .addEnvs(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
 
-        call.enqueue(new Callback<EnvRes>() {
+        call.enqueue(new Callback<EnvironmentRes>() {
             @Override
-            public void onResponse(Call<EnvRes> call, Response<EnvRes> response) {
-                EnvRes envRes = response.body();
-                if (envRes == null) {
+            public void onResponse(Call<EnvironmentRes> call, Response<EnvironmentRes> response) {
+                EnvironmentRes environmentRes = response.body();
+                if (environmentRes == null) {
                     if (response.code() == 401) {
                         callback.onFailure(RES_INVALID_AUTH);
                     } else {
@@ -682,17 +683,17 @@ public class ApiController {
                     }
 
                 } else {
-                    if (envRes.getCode() == 200) {
-                        callback.onSuccess(envRes);
+                    if (environmentRes.getCode() == 200) {
+                        callback.onSuccess(environmentRes);
                     } else {
-                        callback.onFailure(envRes.getMessage());
+                        callback.onFailure(environmentRes.getMessage());
                     }
                 }
                 CallManager.finishCall(requestId);
             }
 
             @Override
-            public void onFailure(Call<EnvRes> call, Throwable t) {
+            public void onFailure(Call<EnvironmentRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 CallManager.finishCall(requestId);
             }
@@ -701,7 +702,7 @@ public class ApiController {
         CallManager.addCall(call, requestId);
     }
 
-    public static void updateEnv(@NonNull String requestId, @NonNull Environment environment, @NonNull EditEnvCallback callback) {
+    public static void updateEnvironment(@NonNull String requestId, @NonNull Environment environment, @NonNull EditEnvCallback callback) {
         JsonObject jsonObject;
         jsonObject = new JsonObject();
         jsonObject.addProperty("name", environment.getName());
@@ -749,7 +750,7 @@ public class ApiController {
         CallManager.addCall(call, requestId);
     }
 
-    public static void deleteEnvs(@NonNull String requestId, @NonNull List<String> envIds, @NonNull BaseCallback callback) {
+    public static void deleteEnvironments(@NonNull String requestId, @NonNull List<String> envIds, @NonNull BaseCallback callback) {
         JsonArray jsonArray = new JsonArray();
         for (int i = 0; i < envIds.size(); i++) {
             jsonArray.add(envIds.get(i));
@@ -796,7 +797,7 @@ public class ApiController {
 
     }
 
-    public static void enableEnvs(@NonNull String requestId, @NonNull List<String> envIds, @NonNull BaseCallback callback) {
+    public static void enableEnvironments(@NonNull String requestId, @NonNull List<String> envIds, @NonNull BaseCallback callback) {
         JsonArray jsonArray = new JsonArray();
         for (int i = 0; i < envIds.size(); i++) {
             jsonArray.add(envIds.get(i));
@@ -843,7 +844,7 @@ public class ApiController {
 
     }
 
-    public static void disableEnvs(@NonNull String requestId, @NonNull List<String> envIds, @NonNull BaseCallback callback) {
+    public static void disableEnvironments(@NonNull String requestId, @NonNull List<String> envIds, @NonNull BaseCallback callback) {
         JsonArray jsonArray = new JsonArray();
         for (int i = 0; i < envIds.size(); i++) {
             jsonArray.add(envIds.get(i));
@@ -1143,6 +1144,39 @@ public class ApiController {
         CallManager.addCall(call, requestId);
     }
 
+    public static void getDependencies(@NonNull String requestId, String searchValue, String type, @NonNull GetDependenciesCallback callback) {
+        Call<DependenceRes> call = new Retrofit.Builder()
+                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(QL.class)
+                .getDependencies(AccountSP.getCurrentAccount().getAuthorization(), searchValue, type);
+
+        call.enqueue(new Callback<DependenceRes>() {
+            @Override
+            public void onResponse(Call<DependenceRes> call, Response<DependenceRes> response) {
+                if (response.body() == null) {
+                    if (response.code() == 401) {
+                        callback.onFailure(RES_INVALID_AUTH);
+                    } else {
+                        callback.onFailure(RES_NO_BODY);
+                    }
+                } else {
+                    callback.onSuccess(response.body());
+                }
+                CallManager.finishCall(requestId);
+            }
+
+            @Override
+            public void onFailure(Call<DependenceRes> call, Throwable t) {
+                callback.onFailure(t.getLocalizedMessage());
+                CallManager.finishCall(requestId);
+            }
+        });
+        CallManager.addCall(call, requestId);
+
+    }
+
     public interface SystemCallback {
         void onSuccess(SystemRes systemRes);
 
@@ -1191,8 +1225,14 @@ public class ApiController {
         void onFailure(String msg);
     }
 
-    public interface GetEnvsCallback {
-        void onSuccess(EnvRes data);
+    public interface GetEnvironmentsCallback {
+        void onSuccess(EnvironmentRes res);
+
+        void onFailure(String msg);
+    }
+
+    public interface GetDependenciesCallback {
+        void onSuccess(DependenceRes res);
 
         void onFailure(String msg);
     }

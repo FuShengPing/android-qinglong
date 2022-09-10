@@ -4,7 +4,7 @@ import java.util.List;
 
 import auto.qinglong.api.object.Environment;
 
-public class EnvRes {
+public class DependenceRes {
     private int code;
     private String message;
     private List<Environment> data;
@@ -32,6 +32,4 @@ public class EnvRes {
     public void setData(List<Environment> data) {
         this.data = data;
     }
-
-
 }

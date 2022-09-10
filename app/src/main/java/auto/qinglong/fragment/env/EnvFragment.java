@@ -33,7 +33,7 @@ import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.api.ApiController;
 import auto.qinglong.api.object.Environment;
-import auto.qinglong.api.res.EnvRes;
+import auto.qinglong.api.res.EnvironmentRes;
 import auto.qinglong.fragment.BaseFragment;
 import auto.qinglong.fragment.FragmentInterFace;
 import auto.qinglong.fragment.MenuClickInterface;
@@ -269,9 +269,9 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
     }
 
     private void getEnvs(String searchValue, QueryType queryType) {
-        ApiController.getEnvs(getClassName(), searchValue, new ApiController.GetEnvsCallback() {
+        ApiController.getEnvironments(getClassName(), searchValue, new ApiController.GetEnvironmentsCallback() {
             @Override
-            public void onSuccess(EnvRes res) {
+            public void onSuccess(EnvironmentRes res) {
                 isSuccess = true;
                 envAdapter.setData(res.getData());
                 if (queryType == QueryType.QUERY) {
@@ -293,7 +293,7 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
     }
 
     public void updateEnv(Environment environment) {
-        ApiController.updateEnv(getClassName(), environment, new ApiController.EditEnvCallback() {
+        ApiController.updateEnvironment(getClassName(), environment, new ApiController.EditEnvCallback() {
             @Override
             public void onSuccess(Environment data) {
                 popupWindowEdit.dismiss();
@@ -309,9 +309,9 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
     }
 
     public void addEnvs(List<Environment> environments) {
-        ApiController.addEnvs(getClassName(), environments, new ApiController.GetEnvsCallback() {
+        ApiController.addEnvironment(getClassName(), environments, new ApiController.GetEnvironmentsCallback() {
             @Override
-            public void onSuccess(EnvRes data) {
+            public void onSuccess(EnvironmentRes res) {
                 popupWindowEdit.dismiss();
                 ToastUnit.showShort(requireContext(), "新建成功");
                 getEnvs(currentSearchValue, QueryType.OTHER);
@@ -325,7 +325,7 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
     }
 
     public void deleteEnvs(List<String> ids) {
-        ApiController.deleteEnvs(getClassName(), ids, new ApiController.BaseCallback() {
+        ApiController.deleteEnvironments(getClassName(), ids, new ApiController.BaseCallback() {
             @Override
             public void onSuccess(String msg) {
                 layout_actions_back.performClick();
@@ -341,7 +341,7 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
     }
 
     public void enableEnvs(List<String> ids) {
-        ApiController.enableEnvs(getClassName(), ids, new ApiController.BaseCallback() {
+        ApiController.enableEnvironments(getClassName(), ids, new ApiController.BaseCallback() {
             @Override
             public void onSuccess(String msg) {
                 layout_actions_back.performClick();
@@ -358,7 +358,7 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
     }
 
     public void disableEnvs(List<String> ids) {
-        ApiController.disableEnvs(getClassName(), ids, new ApiController.BaseCallback() {
+        ApiController.disableEnvironments(getClassName(), ids, new ApiController.BaseCallback() {
             @Override
             public void onSuccess(String msg) {
                 layout_actions_back.performClick();

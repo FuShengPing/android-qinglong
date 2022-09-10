@@ -1,9 +1,13 @@
 package auto.qinglong.api.res;
 
-public class BaseRes {
-    private int code;//响应码
-    private String message;//响应提示
-    private String data;
+import java.util.List;
+
+import auto.qinglong.api.object.Environment;
+
+public class EnvironmentRes {
+    private int code;
+    private String message;
+    private List<Environment> data;
 
     public int getCode() {
         return code;
@@ -21,11 +25,13 @@ public class BaseRes {
         this.message = message;
     }
 
-    public String getData() {
+    public List<Environment> getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(List<Environment> data) {
         this.data = data;
     }
+
+
 }
