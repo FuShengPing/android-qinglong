@@ -7,7 +7,15 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 public class PagerAdapter extends FragmentStateAdapter {
+    private HashMap<Integer, PagerFragment> fragmentList;
+
+    private PagerInterface pagerInterface;
+
     public PagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
     }
@@ -20,10 +28,17 @@ public class PagerAdapter extends FragmentStateAdapter {
         if (position == 0) {
             pagerFragment.setType("nodejs");
         } else if (position == 1) {
-            pagerFragment.setType("python");
+            pagerFragment.setType("python3");
         } else if (position == 2) {
             pagerFragment.setType("linux");
         }
+
+        if (fragmentList == null) {
+            fragmentList = new HashMap<>();
+        }
+
+        fragmentList.put(position, pagerFragment);
+        pagerFragment.setPagerInterface(pagerInterface);
         return pagerFragment;
     }
 
@@ -31,4 +46,15 @@ public class PagerAdapter extends FragmentStateAdapter {
     public int getItemCount() {
         return 3;
     }
+
+    public PagerFragment getCurrentFragment(int position) {
+        return fragmentList.get(position);
+    }
+
+    public void setPagerInterface(PagerInterface pagerInterface) {
+        this.pagerInterface = pagerInterface;
+
+    }
+
+
 }

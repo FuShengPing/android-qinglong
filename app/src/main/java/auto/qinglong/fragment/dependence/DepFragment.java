@@ -26,6 +26,8 @@ import auto.qinglong.fragment.MenuClickInterface;
 public class DepFragment extends BaseFragment implements FragmentInterFace {
     public static String TAG = "DepFragment";
 
+    private PagerFragment currentFragment;
+    private PagerAdapter pagerAdapter;
     private MenuClickInterface menuClickInterface;
 
     private ViewPager2 layout_page;
@@ -51,7 +53,16 @@ public class DepFragment extends BaseFragment implements FragmentInterFace {
         layout_menu.setOnClickListener(v -> menuClickInterface.onMenuClick());
 
         //设置界面适配器
-        layout_page.setAdapter(new PagerAdapter(requireActivity()));
+        pagerAdapter = new PagerAdapter(requireActivity());
+        pagerAdapter.setPagerInterface(new PagerInterface() {
+            @Override
+            public void onAction() {
+                //进入选择状态,关闭状态栏
+            }
+        });
+
+        layout_page.setAdapter(pagerAdapter);
+
         //设置界面联动
         TabLayoutMediator mediator = new TabLayoutMediator(layout_page_tab, layout_page, (tab, position) -> {
             switch (position) {
@@ -59,7 +70,7 @@ public class DepFragment extends BaseFragment implements FragmentInterFace {
                     tab.setText("NodeJs");
                     break;
                 case 1:
-                    tab.setText("Python");
+                    tab.setText("Python3");
                     break;
                 case 2:
                     tab.setText("Linux");

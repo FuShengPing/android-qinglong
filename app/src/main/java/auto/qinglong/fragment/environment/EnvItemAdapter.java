@@ -22,14 +22,14 @@ import auto.qinglong.R;
 import auto.qinglong.api.object.Environment;
 import auto.qinglong.tools.TimeUnit;
 
-public class EnvAdapter extends RecyclerView.Adapter<MyViewHolder> {
+public class EnvItemAdapter extends RecyclerView.Adapter<MyViewHolder> {
     private Context context;
     private List<Environment> data;
     private ItemInterface itemInterface;
     private boolean checkState;
     private Boolean[] dataCheckState;
 
-    public EnvAdapter(@NonNull Context context) {
+    public EnvItemAdapter(@NonNull Context context) {
         this.context = context;
         this.data = new ArrayList<>();
         this.checkState = false;
@@ -101,6 +101,7 @@ public class EnvAdapter extends RecyclerView.Adapter<MyViewHolder> {
         return this.data == null ? 0 : this.data.size();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setData(List<Environment> data) {
         this.data.clear();
         this.data.addAll(data);
@@ -122,9 +123,9 @@ public class EnvAdapter extends RecyclerView.Adapter<MyViewHolder> {
         notifyItemRangeChanged(0, getItemCount());
     }
 
-    public void setAllSelect(boolean isSelected) {
+    public void setAllChecked(boolean checked) {
         if (checkState) {
-            Arrays.fill(this.dataCheckState, isSelected);
+            Arrays.fill(this.dataCheckState, checked);
             notifyItemRangeChanged(0, getItemCount());
         }
     }
@@ -165,4 +166,10 @@ class MyViewHolder extends RecyclerView.ViewHolder {
         layout_remark = itemView.findViewById(R.id.env_remark);
         layout_createAt = itemView.findViewById(R.id.env_create_time);
     }
+}
+
+interface ItemInterface {
+    void onEdit(Environment environment, int position);
+
+    void onActions(Environment environment, int position);
 }

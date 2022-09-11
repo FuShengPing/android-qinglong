@@ -45,7 +45,7 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
     public static String TAG = "EnvFragment";
     private String currentSearchValue = "";
     private MenuClickInterface menuClickInterface;
-    private EnvAdapter envAdapter;
+    private EnvItemAdapter envItemAdapter;
     private boolean isSuccess = false;
 
     enum QueryType {QUERY, OTHER}
@@ -104,8 +104,8 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
 
         layout_swipe = view.findViewById(R.id.env_swipe);
         layout_recycler = view.findViewById(R.id.env_recycler);
-        envAdapter = new EnvAdapter(requireContext());
-        layout_recycler.setAdapter(envAdapter);
+        envItemAdapter = new EnvItemAdapter(requireContext());
+        layout_recycler.setAdapter(envItemAdapter);
         layout_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
         Objects.requireNonNull(layout_recycler.getItemAnimator()).setChangeDuration(0);
 
@@ -116,7 +116,7 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
 
     @Override
     public void init() {
-        envAdapter.setItemInterface(new ItemInterface() {
+        envItemAdapter.setItemInterface(new ItemInterface() {
             @Override
             public void onEdit(Environment environment, int position) {
                 showPopWindowEdit(environment);
@@ -124,7 +124,7 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
 
             @Override
             public void onActions(Environment environment, int position) {
-                if (!envAdapter.isCheckState()) {
+                if (!envItemAdapter.isCheckState()) {
                     showBar(BarType.ACTIONS);
                 }
             }
@@ -199,7 +199,7 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
         layout_actions_select.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                envAdapter.setAllSelect(isChecked);
+                envItemAdapter.setAllChecked(isChecked);
             }
         });
 
@@ -210,7 +210,7 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
                 if (CallManager.isRequesting(getClassName())) {
                     return;
                 }
-                List<Environment> environments = envAdapter.getSelectedItems();
+                List<Environment> environments = envItemAdapter.getSelectedItems();
                 if (environments.size() == 0) {
                     ToastUnit.showShort(getContext(), "至少选择一项");
                     return;
@@ -231,7 +231,7 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
                 if (CallManager.isRequesting(getClassName())) {
                     return;
                 }
-                List<Environment> environments = envAdapter.getSelectedItems();
+                List<Environment> environments = envItemAdapter.getSelectedItems();
                 if (environments.size() == 0) {
                     ToastUnit.showShort(getContext(), "至少选择一项");
                     return;
@@ -252,7 +252,7 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
                 if (CallManager.isRequesting(getClassName())) {
                     return;
                 }
-                List<Environment> environments = envAdapter.getSelectedItems();
+                List<Environment> environments = envItemAdapter.getSelectedItems();
                 if (environments.size() == 0) {
                     ToastUnit.showShort(getContext(), "至少选择一项");
                     return;
@@ -273,7 +273,7 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
             @Override
             public void onSuccess(EnvironmentRes res) {
                 isSuccess = true;
-                envAdapter.setData(res.getData());
+                envItemAdapter.setData(res.getData());
                 if (queryType == QueryType.QUERY) {
                     ToastUnit.showShort(requireContext(), "加载成功");
                 }
@@ -507,7 +507,7 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
 
         if (layout_bar_actions.getVisibility() == View.VISIBLE) {
             layout_bar_actions.setVisibility(View.INVISIBLE);
-            envAdapter.setCheckState(false, -1);
+            envItemAdapter.setCheckState(false, -1);
             layout_actions_select.setChecked(false);
         }
 
@@ -519,7 +519,7 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
             layout_bar_search.setVisibility(View.VISIBLE);
         } else {
             layout_actions_select.setChecked(false);
-            envAdapter.setCheckState(true, -1);
+            envItemAdapter.setCheckState(true, -1);
             layout_bar_actions.setVisibility(View.VISIBLE);
         }
     }
