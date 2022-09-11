@@ -13,6 +13,7 @@ import auto.qinglong.api.res.TasksRes;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.Header;
@@ -72,19 +73,19 @@ public interface QL {
 
     //获取环境变量
     @GET("api/envs")
-    Call<EnvironmentRes> getEnvs(@Header("Authorization") String authorization, @Query("searchValue") String searchValue);
+    Call<EnvironmentRes> getEnvironments(@Header("Authorization") String authorization, @Query("searchValue") String searchValue);
 
     //更新环境变量
     @PUT("api/envs")
-    Call<EditEnvRes> updateEnv(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<EditEnvRes> updateEnvironment(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //新建环境变量
     @POST("api/envs")
-    Call<EnvironmentRes> addEnvs(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<EnvironmentRes> addEnvironments(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //删除环境变量
     @HTTP(method = "DELETE", path = "api/envs", hasBody = true)
-    Call<BaseRes> deleteEnvs(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<BaseRes> deleteEnvironments(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //启用环境变量
     @PUT("api/envs/enable")
@@ -117,6 +118,14 @@ public interface QL {
     //获取依赖
     @GET("api/dependencies")
     Call<DependenceRes> getDependencies(@Header("Authorization") String authorization, @Query("searchValue") String searchValue, @Query("type") String type);
+
+    //新建依赖
+    @POST("api/dependencies")
+    Call<BaseRes> addDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
+
+    //删除依赖
+    @HTTP(method = "DELETE", path = "api/dependencies", hasBody = true)
+    Call<BaseRes> deleteDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //获取日志列表
     @GET("api/logs")

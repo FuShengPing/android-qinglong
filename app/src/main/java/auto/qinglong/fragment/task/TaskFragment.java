@@ -158,7 +158,7 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
                 Intent intent = new Intent(getContext(), LogActivity.class);
                 intent.putExtra(LogActivity.ExtraName, task.getName());
                 String path = task.getLogPath();
-                LogUnit.log(path);
+
                 intent.putExtra(LogActivity.ExtraPath, task.getLogPath());
                 startActivity(intent);
             }
@@ -549,7 +549,7 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
     public void deleteTasks(List<String> ids) {
         ApiController.deleteTasks(getClassName(), ids, new ApiController.BaseCallback() {
             @Override
-            public void onSuccess(String msg) {
+            public void onSuccess() {
                 if (layout_actions_back.getVisibility() == View.VISIBLE) {
                     layout_actions_back.performClick();
                 }
@@ -598,9 +598,13 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
 
     public void showPopWindowMore() {
         if (popupWindowMore == null) {
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.pop_fg_task_more, null, false);
-            LinearLayout layout_add = view.findViewById(R.id.pop_fg_task_more_add);
-            LinearLayout layout_actions = view.findViewById(R.id.pop_fg_task_more_actions);
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.pop_fg_more, null, false);
+            LinearLayout layout_add = view.findViewById(R.id.pop_fg_more_add);
+            LinearLayout layout_action = view.findViewById(R.id.pop_fg_more_action);
+            TextView layout_add_text = view.findViewById(R.id.pop_fg_more_add_text);
+            TextView layout_action_text = view.findViewById(R.id.pop_fg_more_action_text);
+            layout_add_text.setText("新建任务");
+            layout_action_text.setText("批量操作");
 
             popupWindowMore = new PopupWindow(getContext());
             popupWindowMore.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
@@ -618,7 +622,7 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
                 }
             });
 
-            layout_actions.setOnClickListener(new View.OnClickListener() {
+            layout_action.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     popupWindowMore.dismiss();

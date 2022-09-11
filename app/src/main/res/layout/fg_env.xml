@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/env_bar"
+        android:id="@+id/env_top_bar"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/theme_color"

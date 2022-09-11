@@ -7,6 +7,6 @@ import auto.qinglong.tools.LogUnit;
 public class JsInterface {
     @JavascriptInterface
     public void setCode(String str) {
-        LogUnit.log(str);
+
     }
 }

@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 
 import java.util.List;
 
+import auto.qinglong.api.object.Dependence;
 import auto.qinglong.api.object.Environment;
 import auto.qinglong.api.object.Log;
 import auto.qinglong.api.object.Script;
@@ -23,7 +24,6 @@ import auto.qinglong.api.res.SystemRes;
 import auto.qinglong.api.res.TasksRes;
 import auto.qinglong.database.object.Account;
 import auto.qinglong.database.sp.AccountSP;
-import auto.qinglong.tools.LogUnit;
 import auto.qinglong.tools.CallManager;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -501,7 +501,7 @@ public class ApiController {
                     }
                 } else {
                     if (response.body().getCode() == 200) {
-                        callback.onSuccess(response.body().getMessage());
+                        callback.onSuccess();
                     } else {
                         callback.onFailure(response.body().getMessage());
                     }
@@ -529,7 +529,7 @@ public class ApiController {
         jsonObject.addProperty("schedule", task.getSchedule());
 
         String json = jsonObject.toString();
-        LogUnit.log(json);
+
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         Call<EditTaskRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
@@ -619,7 +619,7 @@ public class ApiController {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QL.class)
-                .getEnvs(AccountSP.getCurrentAccount().getAuthorization(), searchValue);
+                .getEnvironments(AccountSP.getCurrentAccount().getAuthorization(), searchValue);
         call.enqueue(new Callback<EnvironmentRes>() {
             @Override
             public void onResponse(Call<EnvironmentRes> call, Response<EnvironmentRes> response) {
@@ -662,14 +662,14 @@ public class ApiController {
             jsonArray.add(jsonObject);
         }
         String json = jsonArray.toString();
-        LogUnit.log(json);
+
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
         Call<EnvironmentRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QL.class)
-                .addEnvs(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
+                .addEnvironments(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
 
         call.enqueue(new Callback<EnvironmentRes>() {
             @Override
@@ -717,7 +717,7 @@ public class ApiController {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QL.class)
-                .updateEnv(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
+                .updateEnvironment(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
 
         call.enqueue(new Callback<EditEnvRes>() {
             @Override
@@ -763,7 +763,7 @@ public class ApiController {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QL.class)
-                .deleteEnvs(AccountSP.getCurrentAccount().getAuthorization(), body);
+                .deleteEnvironments(AccountSP.getCurrentAccount().getAuthorization(), body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -777,7 +777,7 @@ public class ApiController {
                     }
                 } else {
                     if (response.body().getCode() == 200) {
-                        callback.onSuccess(baseRes.getMessage());
+                        callback.onSuccess();
                     } else {
                         callback.onFailure(baseRes.getMessage());
                     }
@@ -824,7 +824,7 @@ public class ApiController {
                     }
                 } else {
                     if (response.body().getCode() == 200) {
-                        callback.onSuccess(baseRes.getMessage());
+                        callback.onSuccess();
                     } else {
                         callback.onFailure(baseRes.getMessage());
                     }
@@ -871,7 +871,7 @@ public class ApiController {
                     }
                 } else {
                     if (response.body().getCode() == 200) {
-                        callback.onSuccess(baseRes.getMessage());
+                        callback.onSuccess();
                     } else {
                         callback.onFailure(baseRes.getMessage());
                     }
@@ -947,7 +947,7 @@ public class ApiController {
                         callback.onFailure(RES_NO_BODY);
                     }
                 } else {
-                    callback.onSuccess(response.body().getData());
+                    callback.onSuccess();
                 }
                 CallManager.finishCall(requestId);
             }
@@ -979,7 +979,7 @@ public class ApiController {
                         callback.onFailure(RES_NO_BODY);
                     }
                 } else {
-                    callback.onSuccess(response.body().getData());
+                    callback.onSuccess();
                 }
                 CallManager.finishCall(requestId);
             }
@@ -1018,7 +1018,7 @@ public class ApiController {
                         callback.onFailure(RES_NO_BODY);
                     }
                 } else {
-                    callback.onSuccess(response.body().getMessage());
+                    callback.onSuccess();
                 }
                 CallManager.finishCall(requestId);
             }
@@ -1089,7 +1089,7 @@ public class ApiController {
                         callback.onFailure(RES_NO_BODY);
                     }
                 } else {
-                    callback.onSuccess(response.body().getData());
+                    callback.onSuccess();
                 }
                 CallManager.finishCall(requestId);
             }
@@ -1129,7 +1129,7 @@ public class ApiController {
                         callback.onFailure(RES_NO_BODY);
                     }
                 } else {
-                    callback.onSuccess(response.body().getMessage());
+                    callback.onSuccess();
                 }
                 CallManager.finishCall(requestId);
             }
@@ -1177,6 +1177,103 @@ public class ApiController {
 
     }
 
+    public static void addDependencies(@NonNull String requestId, @NonNull List<Dependence> dependencies, @NonNull BaseCallback callback) {
+        JsonArray jsonArray = new JsonArray();
+        JsonObject jsonObject;
+        for (Dependence dependence : dependencies) {
+            jsonObject = new JsonObject();
+            jsonObject.addProperty("name", dependence.getName());
+            jsonObject.addProperty("type", dependence.getType());
+            jsonArray.add(jsonObject);
+        }
+        String json = jsonArray.toString();
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(QL.class)
+                .addDependencies(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+                BaseRes baseRes = response.body();
+                if (baseRes == null) {
+                    if (response.code() == 401) {
+                        callback.onFailure(RES_INVALID_AUTH);
+                    } else {
+                        callback.onFailure(RES_NO_BODY);
+                    }
+
+                } else {
+                    if (baseRes.getCode() == 200) {
+                        callback.onSuccess();
+                    } else {
+                        callback.onFailure(baseRes.getMessage());
+                    }
+                }
+                CallManager.finishCall(requestId);
+            }
+
+            @Override
+            public void onFailure(Call<BaseRes> call, Throwable t) {
+                callback.onFailure(t.getLocalizedMessage());
+                CallManager.finishCall(requestId);
+            }
+        });
+
+        CallManager.addCall(call, requestId);
+    }
+
+    public static void deleteDependencies(@NonNull String requestId, @NonNull List<String> ids, @NonNull BaseCallback callback) {
+        JsonArray jsonArray = new JsonArray();
+        for (String id : ids) {
+            jsonArray.add(id);
+        }
+        String json = jsonArray.toString();
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(QL.class)
+                .deleteDependencies(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+                BaseRes baseRes = response.body();
+                if (baseRes == null) {
+                    if (response.code() == 401) {
+                        callback.onFailure(RES_INVALID_AUTH);
+                    } else {
+                        callback.onFailure(RES_NO_BODY);
+                    }
+
+                } else {
+                    if (baseRes.getCode() == 200) {
+                        callback.onSuccess();
+                    } else {
+                        callback.onFailure(baseRes.getMessage());
+                    }
+                }
+                CallManager.finishCall(requestId);
+            }
+
+            @Override
+            public void onFailure(Call<BaseRes> call, Throwable t) {
+                callback.onFailure(t.getLocalizedMessage());
+                CallManager.finishCall(requestId);
+            }
+        });
+
+        CallManager.addCall(call, requestId);
+    }
+
+
     public interface SystemCallback {
         void onSuccess(SystemRes systemRes);
 
@@ -1184,7 +1281,7 @@ public class ApiController {
     }
 
     public interface BaseCallback {
-        void onSuccess(String msg);
+        void onSuccess();
 
         void onFailure(String msg);
     }

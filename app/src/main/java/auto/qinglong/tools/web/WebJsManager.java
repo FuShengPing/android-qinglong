@@ -22,7 +22,6 @@ public class WebJsManager {
     /**
      * 设置编辑器是否可用编辑
      *
-     * @param editable
      */
     public static void setEditable(WebView webView, boolean editable) {
         if (webView == null) {
@@ -55,8 +54,6 @@ public class WebJsManager {
     /**
      * 获取编辑器内容（代码)
      *
-     * @param webView
-     * @return 编辑器内容
      */
     public static void getCode(WebView webView, WebCallback webCallback) {
         if (webView == null && webCallback != null) {

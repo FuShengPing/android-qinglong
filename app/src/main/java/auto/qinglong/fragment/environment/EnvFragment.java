@@ -1,4 +1,4 @@
-package auto.qinglong.fragment.env;
+package auto.qinglong.fragment.environment;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +47,6 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
     private String currentSearchValue = "";
     private MenuClickInterface menuClickInterface;
     private EnvItemAdapter envItemAdapter;
-    private boolean isSuccess = false;
 
     enum QueryType {QUERY, OTHER}
 
@@ -71,7 +71,7 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
 
     private PopupWindow popupWindowMore;
     private PopupWindow popupWindowEdit;
-    private TextView layout_edit_type;
+    private TextView layout_edit_title;
     private TextView layout_edit_name;
     private TextView layout_edit_value;
     private TextView layout_edit_remark;
@@ -86,7 +86,7 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
         View view = inflater.inflate(R.layout.fg_env, null);
 
         layout_root = view.findViewById(R.id.root);
-        layout_bar = view.findViewById(R.id.env_bar);
+        layout_bar = view.findViewById(R.id.env_top_bar);
         layout_bar_nav = view.findViewById(R.id.env_bar_nav);
         layout_nav_menu = view.findViewById(R.id.env_menu);
         layout_nav_search = view.findViewById(R.id.env_search);
@@ -104,6 +104,7 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
 
         layout_swipe = view.findViewById(R.id.env_swipe);
         layout_recycler = view.findViewById(R.id.env_recycler);
+
         envItemAdapter = new EnvItemAdapter(requireContext());
         layout_recycler.setAdapter(envItemAdapter);
         layout_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
@@ -112,6 +113,41 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
         init();
 
         return view;
+    }
+
+    /**
+     * fragment中只有第一次载入可见时才会触发该回调
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!haveFirstSuccess) {
+            loadFirst();
+        }
+    }
+
+    /**
+     * 第一次载入页面不会触发 此后页面可见性改变则触发该回调
+     */
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!haveFirstSuccess && !hidden) {
+            loadFirst();
+        }
+    }
+
+    private void loadFirst() {
+        //延迟加载
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //可见则加载
+                if (isVisible()) {
+                    getEnvironments(currentSearchValue, QueryType.QUERY);
+                }
+            }
+        }, 1000);
     }
 
     @Override
@@ -144,7 +180,7 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
         layout_swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getEnvs(currentSearchValue, QueryType.QUERY);
+                getEnvironments(currentSearchValue, QueryType.QUERY);
             }
         });
 
@@ -173,7 +209,7 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
                 if (!value.isEmpty()) {
                     currentSearchValue = value;
                     WindowUnit.hideKeyboard(layout_search_value);
-                    getEnvs(currentSearchValue, QueryType.OTHER);
+                    getEnvironments(currentSearchValue, QueryType.OTHER);
                 }
             }
         });
@@ -220,7 +256,7 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
                 for (Environment environment : environments) {
                     ids.add(environment.get_id());
                 }
-                deleteEnvs(ids);
+                deleteEnvironments(ids);
             }
         });
 
@@ -241,7 +277,7 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
                 for (Environment environment : environments) {
                     ids.add(environment.get_id());
                 }
-                disableEnvs(ids);
+                disableEnvironments(ids);
             }
         });
 
@@ -262,24 +298,25 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
                 for (Environment environment : environments) {
                     ids.add(environment.get_id());
                 }
-                enableEnvs(ids);
+                enableEnvironments(ids);
             }
         });
 
     }
 
-    private void getEnvs(String searchValue, QueryType queryType) {
+    private void getEnvironments(String searchValue, QueryType queryType) {
         ApiController.getEnvironments(getClassName(), searchValue, new ApiController.GetEnvironmentsCallback() {
             @Override
             public void onSuccess(EnvironmentRes res) {
-                isSuccess = true;
-                envItemAdapter.setData(res.getData());
-                if (queryType == QueryType.QUERY) {
-                    ToastUnit.showShort(requireContext(), "加载成功");
-                }
+                haveFirstSuccess = true;
                 if (layout_swipe.isRefreshing()) {
                     layout_swipe.setRefreshing(false);
                 }
+                if (queryType == QueryType.QUERY) {
+                    ToastUnit.showShort(requireContext(), "加载成功");
+                }
+                envItemAdapter.setData(res.getData());
+
             }
 
             @Override
@@ -292,13 +329,13 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
         });
     }
 
-    public void updateEnv(Environment environment) {
+    public void updateEnvironment(Environment environment) {
         ApiController.updateEnvironment(getClassName(), environment, new ApiController.EditEnvCallback() {
             @Override
             public void onSuccess(Environment data) {
                 popupWindowEdit.dismiss();
                 ToastUnit.showShort(requireContext(), "更新成功");
-                getEnvs(currentSearchValue, QueryType.OTHER);
+                getEnvironments(currentSearchValue, QueryType.OTHER);
             }
 
             @Override
@@ -308,13 +345,13 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
         });
     }
 
-    public void addEnvs(List<Environment> environments) {
+    public void addEnvironments(List<Environment> environments) {
         ApiController.addEnvironment(getClassName(), environments, new ApiController.GetEnvironmentsCallback() {
             @Override
             public void onSuccess(EnvironmentRes res) {
                 popupWindowEdit.dismiss();
                 ToastUnit.showShort(requireContext(), "新建成功");
-                getEnvs(currentSearchValue, QueryType.OTHER);
+                getEnvironments(currentSearchValue, QueryType.OTHER);
             }
 
             @Override
@@ -324,13 +361,13 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
         });
     }
 
-    public void deleteEnvs(List<String> ids) {
+    public void deleteEnvironments(List<String> ids) {
         ApiController.deleteEnvironments(getClassName(), ids, new ApiController.BaseCallback() {
             @Override
-            public void onSuccess(String msg) {
+            public void onSuccess() {
                 layout_actions_back.performClick();
                 ToastUnit.showShort(requireContext(), "删除成功");
-                getEnvs(currentSearchValue, QueryType.OTHER);
+                getEnvironments(currentSearchValue, QueryType.OTHER);
             }
 
             @Override
@@ -340,13 +377,13 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
         });
     }
 
-    public void enableEnvs(List<String> ids) {
+    public void enableEnvironments(List<String> ids) {
         ApiController.enableEnvironments(getClassName(), ids, new ApiController.BaseCallback() {
             @Override
-            public void onSuccess(String msg) {
+            public void onSuccess() {
                 layout_actions_back.performClick();
                 ToastUnit.showShort(requireContext(), "启用成功");
-                getEnvs(currentSearchValue, QueryType.OTHER);
+                getEnvironments(currentSearchValue, QueryType.OTHER);
             }
 
             @Override
@@ -357,13 +394,13 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
 
     }
 
-    public void disableEnvs(List<String> ids) {
+    public void disableEnvironments(List<String> ids) {
         ApiController.disableEnvironments(getClassName(), ids, new ApiController.BaseCallback() {
             @Override
-            public void onSuccess(String msg) {
+            public void onSuccess() {
                 layout_actions_back.performClick();
                 ToastUnit.showShort(requireContext(), "禁用成功");
-                getEnvs(currentSearchValue, QueryType.OTHER);
+                getEnvironments(currentSearchValue, QueryType.OTHER);
             }
 
             @Override
@@ -373,82 +410,95 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
         });
     }
 
+    private void initPopWindowMore() {
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.pop_fg_more, null, false);
+        LinearLayout layout_add = view.findViewById(R.id.pop_fg_more_add);
+        LinearLayout layout_action = view.findViewById(R.id.pop_fg_more_action);
+        TextView layout_add_text = view.findViewById(R.id.pop_fg_more_add_text);
+        TextView layout_action_text = view.findViewById(R.id.pop_fg_more_action_text);
+        layout_add_text.setText("新建变量");
+        layout_action_text.setText("批量操作");
+
+        popupWindowMore = new PopupWindow(getContext());
+        popupWindowMore.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+        popupWindowMore.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        popupWindowMore.setContentView(view);
+        popupWindowMore.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popupWindowMore.setOutsideTouchable(true);
+        popupWindowMore.setFocusable(true);
+
+        layout_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindowMore.dismiss();
+                showPopWindowEdit(null);
+            }
+        });
+
+        layout_action.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindowMore.dismiss();
+                showBar(BarType.ACTIONS);
+            }
+        });
+    }
+
+    private void initPopWindowEdit() {
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.pop_fg_env_edit, null, false);
+
+        layout_edit_title = view.findViewById(R.id.env_edit_type);
+        layout_edit_name = view.findViewById(R.id.env_edit_name);
+        layout_edit_value = view.findViewById(R.id.env_edit_value);
+        layout_edit_remark = view.findViewById(R.id.env_edit_remark);
+        Button layout_edit_cancel = view.findViewById(R.id.env_edit_cancel);
+        layout_edit_save = view.findViewById(R.id.env_edit_save);
+
+        popupWindowEdit = new PopupWindow(getContext());
+        popupWindowEdit.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+        popupWindowEdit.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        popupWindowEdit.setContentView(view);
+        popupWindowEdit.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popupWindowEdit.setOutsideTouchable(true);
+        popupWindowEdit.setFocusable(true);
+        popupWindowEdit.setAnimationStyle(R.style.anim_fg_task_pop_edit);
+
+        layout_edit_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindowEdit.dismiss();
+            }
+        });
+
+        popupWindowEdit.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                BaseActivity baseActivity = (BaseActivity) getActivity();
+                assert baseActivity != null;
+                baseActivity.setBackgroundAlpha(1.0f);
+            }
+        });
+    }
+
     public void showPopWindowMore() {
         if (popupWindowMore == null) {
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.pop_fg_env_more, null, false);
-            LinearLayout layout_add = view.findViewById(R.id.pop_fg_env_more_add);
-            LinearLayout layout_actions = view.findViewById(R.id.pop_fg_env_more_actions);
-
-            popupWindowMore = new PopupWindow(getContext());
-            popupWindowMore.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-            popupWindowMore.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-            popupWindowMore.setContentView(view);
-            popupWindowMore.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            popupWindowMore.setOutsideTouchable(true);
-            popupWindowMore.setFocusable(true);
-
-            layout_add.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    popupWindowMore.dismiss();
-                    showPopWindowEdit(null);
-                }
-            });
-
-            layout_actions.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    popupWindowMore.dismiss();
-                    showBar(BarType.ACTIONS);
-                }
-            });
+            initPopWindowMore();
         }
         popupWindowMore.showAsDropDown(layout_bar, 0, 0, Gravity.END);
     }
 
-    public void showPopWindowEdit(Environment environment) {
+    private void showPopWindowEdit(Environment environment) {
         if (popupWindowEdit == null) {
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.pop_fg_env_edit, null, false);
-
-            layout_edit_type = view.findViewById(R.id.env_edit_type);
-            layout_edit_name = view.findViewById(R.id.env_edit_name);
-            layout_edit_value = view.findViewById(R.id.env_edit_value);
-            layout_edit_remark = view.findViewById(R.id.env_edit_remark);
-            Button layout_edit_cancel = view.findViewById(R.id.env_edit_cancel);
-            layout_edit_save = view.findViewById(R.id.env_edit_save);
-
-            popupWindowEdit = new PopupWindow(getContext());
-            popupWindowEdit.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-            popupWindowEdit.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-            popupWindowEdit.setContentView(view);
-            popupWindowEdit.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            popupWindowEdit.setOutsideTouchable(true);
-            popupWindowEdit.setFocusable(true);
-            popupWindowEdit.setAnimationStyle(R.style.anim_fg_task_pop_edit);
-
-            layout_edit_cancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    popupWindowEdit.dismiss();
-                }
-            });
-
-            popupWindowEdit.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                @Override
-                public void onDismiss() {
-                    BaseActivity baseActivity = (BaseActivity) getActivity();
-                    baseActivity.setBackgroundAlpha(1.0f);
-                }
-            });
+            initPopWindowEdit();
         }
 
         if (environment == null) {
-            layout_edit_type.setText("新建变量");
+            layout_edit_title.setText("新建变量");
             layout_edit_name.setText(null);
             layout_edit_value.setText(null);
             layout_edit_remark.setText(null);
         } else {
-            layout_edit_type.setText("编辑变量");
+            layout_edit_title.setText("编辑变量");
             layout_edit_name.setText(environment.getName());
             layout_edit_value.setText(environment.getValue());
             layout_edit_remark.setText(environment.getRemarks());
@@ -485,15 +535,16 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
                 newEnv.setRemarks(remarks);
                 environments.add(newEnv);
                 if (environment == null) {
-                    addEnvs(environments);
+                    addEnvironments(environments);
                 } else {
                     newEnv.set_id(environment.get_id());
-                    updateEnv(newEnv);
+                    updateEnvironment(newEnv);
                 }
             }
         });
 
         BaseActivity baseActivity = (BaseActivity) getActivity();
+        assert baseActivity != null;
         baseActivity.setBackgroundAlpha(0.5f);
         popupWindowEdit.showAtLocation(layout_root, Gravity.CENTER, 0, 0);
     }
@@ -522,14 +573,6 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
             envItemAdapter.setCheckState(true, -1);
             layout_bar_actions.setVisibility(View.VISIBLE);
         }
-    }
-
-    @Override
-    public void onResume() {
-        if (!isSuccess && !CallManager.isRequesting(getClassName())) {
-            getEnvs(currentSearchValue, QueryType.QUERY);
-        }
-        super.onResume();
     }
 
     @Override

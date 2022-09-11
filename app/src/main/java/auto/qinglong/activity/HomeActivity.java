@@ -1,25 +1,15 @@
 package auto.qinglong.activity;
 
 import android.animation.Animator;
-import android.animation.AnimatorInflater;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -27,8 +17,8 @@ import auto.qinglong.R;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.fragment.BaseFragment;
 import auto.qinglong.fragment.config.ConfigFragment;
-import auto.qinglong.fragment.dep.DepFragment;
-import auto.qinglong.fragment.env.EnvFragment;
+import auto.qinglong.fragment.dependence.DepFragment;
+import auto.qinglong.fragment.environment.EnvFragment;
 import auto.qinglong.fragment.log.LogFragment;
 import auto.qinglong.fragment.MenuClickInterface;
 import auto.qinglong.fragment.script.ScriptFragment;

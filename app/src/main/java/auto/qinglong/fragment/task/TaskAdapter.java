@@ -215,7 +215,7 @@ class MyViewHolder extends RecyclerView.ViewHolder {
         layout_command = itemView.findViewById(R.id.task_command);
         layout_schedule = itemView.findViewById(R.id.task_schedule);
         layout_state = itemView.findViewById(R.id.task_state);
-        layout_action = itemView.findViewById(R.id.task_action);
+        layout_action = itemView.findViewById(R.id.task_action_run);
         layout_check = itemView.findViewById(R.id.task_check);
         layout_pinned = itemView.findViewById(R.id.task_pinned);
         layout_last_run_time = itemView.findViewById(R.id.task_last_running_time);

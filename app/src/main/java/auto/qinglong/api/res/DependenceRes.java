@@ -2,12 +2,12 @@ package auto.qinglong.api.res;
 
 import java.util.List;
 
-import auto.qinglong.api.object.Environment;
+import auto.qinglong.api.object.Dependence;
 
 public class DependenceRes {
     private int code;
     private String message;
-    private List<Environment> data;
+    private List<Dependence> data;
 
     public int getCode() {
         return code;
@@ -25,11 +25,11 @@ public class DependenceRes {
         this.message = message;
     }
 
-    public List<Environment> getData() {
+    public List<Dependence> getData() {
         return data;
     }
 
-    public void setData(List<Environment> data) {
+    public void setData(List<Dependence> data) {
         this.data = data;
     }
 }

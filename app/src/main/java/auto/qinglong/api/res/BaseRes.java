@@ -3,7 +3,6 @@ package auto.qinglong.api.res;
 public class BaseRes {
     private int code;//响应码
     private String message;//响应提示
-    private String data;
 
     public int getCode() {
         return code;
@@ -19,13 +18,5 @@ public class BaseRes {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
     }
 }

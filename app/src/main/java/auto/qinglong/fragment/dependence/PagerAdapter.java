@@ -1,15 +1,11 @@
-package auto.qinglong.fragment.dep;
+package auto.qinglong.fragment.dependence;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class PagerAdapter extends FragmentStateAdapter {
     private HashMap<Integer, PagerFragment> fragmentList;

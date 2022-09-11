@@ -1,4 +1,4 @@
-package auto.qinglong.fragment.dep;
+package auto.qinglong.fragment.dependence;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -47,6 +47,7 @@ public class DepItemAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
         holder.layout_title.setText(dependence.getName());
         holder.layout_time.setText(TimeUnit.formatTimeA(dependence.getCreated()));
+
         if (dependence.getStatus() == 0) {
             holder.layout_status.setText("安装中");
             holder.layout_status.setTextColor(context.getColor(R.color.text_color_49));
@@ -73,12 +74,9 @@ public class DepItemAdapter extends RecyclerView.Adapter<MyViewHolder> {
             }
         });
 
+        //处于选择状态
         if (this.checkState) {
-            if(this.dataCheckState != null && this.dataCheckState[position]){
-                holder.layout_check.setChecked(true);
-            }else{
-                holder.layout_check.setChecked(false);
-            }
+            holder.layout_check.setChecked(this.dataCheckState != null && this.dataCheckState[position]);
             holder.layout_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -137,6 +135,9 @@ public class DepItemAdapter extends RecyclerView.Adapter<MyViewHolder> {
         }
     }
 
+    /**
+     * 获取被选中的item
+     */
     public List<Dependence> getCheckedItems() {
         List<Dependence> dependencies = new ArrayList<>();
         if (this.dataCheckState != null) {

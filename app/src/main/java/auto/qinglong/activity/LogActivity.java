@@ -125,14 +125,14 @@ public class LogActivity extends BaseActivity {
 
         ApiController.getLogDetail(getClass().getName(), logPath, new ApiController.BaseCallback() {
             @Override
-            public void onSuccess(String msg) {
-                if (!logContent.equals(msg)) {
-                    logContent = msg;
-                    WebJsManager.setCode(webView, msg);
-                } else if (msg.isEmpty()) {
-                    logContent = msg;
-                    WebJsManager.setCode(webView, "暂无日志信息");
-                }
+            public void onSuccess() {
+//                if (!logContent.equals(msg)) {
+//                    logContent = msg;
+//                    WebJsManager.setCode(webView, msg);
+//                } else if (msg.isEmpty()) {
+//                    logContent = msg;
+//                    WebJsManager.setCode(webView, "暂无日志信息");
+//                }
                 clearRefresh();
             }
 

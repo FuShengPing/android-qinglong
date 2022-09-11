@@ -47,7 +47,7 @@
             android:textSize="17sp" />
 
         <ImageView
-            android:id="@+id/task_action"
+            android:id="@+id/task_action_run"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:scaleType="centerCrop"

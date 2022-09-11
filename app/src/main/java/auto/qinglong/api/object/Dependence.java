@@ -6,10 +6,10 @@ public class Dependence {
     private String _id;//ID
     private String remark;//备注
     private String name;//名称
-    private String timestamp;//创建时间（Date类型）
+    private String timestamp;//创建时间(Date类型)
     private List<String> log;//日志
-    private long created;//创建时间
-    private int status;//状态 1已安装
+    private long created;//创建时间(时间戳)
+    private int status;//状态
     private int type;//类型
 
     public String get_id() {

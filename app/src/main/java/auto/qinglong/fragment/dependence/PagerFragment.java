@@ -1,6 +1,7 @@
-package auto.qinglong.fragment.dep;
+package auto.qinglong.fragment.dependence;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import auto.qinglong.R;
@@ -21,7 +23,6 @@ import auto.qinglong.tools.ToastUnit;
 
 public class PagerFragment extends BaseFragment {
     private String type;
-    private boolean isLoadSuccess = false;
 
     private DepItemAdapter depItemAdapter;
     private PagerInterface pagerInterface;
@@ -47,8 +48,17 @@ public class PagerFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (!isLoadSuccess) {
-            getDependencies();
+        //延迟进行首次加载
+        if (!haveFirstSuccess) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    //如果视图可视则进行加载
+                    if (isVisible()) {
+                        getDependencies();
+                    }
+                }
+            }, 1000);
         }
     }
 
@@ -71,8 +81,10 @@ public class PagerFragment extends BaseFragment {
 
             }
         });
+
         layout_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
         layout_recycler.setAdapter(depItemAdapter);
+
         //刷新控件
         layout_swipe.setColorSchemeColors(getResources().getColor(R.color.theme_color_shadow, null));
         layout_swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -84,27 +96,44 @@ public class PagerFragment extends BaseFragment {
     }
 
     private void getDependencies() {
+        if (!layout_swipe.isRefreshing()) {
+            layout_swipe.setRefreshing(true);
+        }
 
         ApiController.getDependencies(getClassName(), "", this.type, new ApiController.GetDependenciesCallback() {
             @Override
             public void onSuccess(DependenceRes res) {
-                depItemAdapter.setData(res.getData());
                 if (layout_swipe.isRefreshing()) {
                     layout_swipe.setRefreshing(false);
                 }
-                isLoadSuccess = true;
+                depItemAdapter.setData(res.getData());
+                haveFirstSuccess = true;
                 ToastUnit.showShort("加载成功");
             }
 
             @Override
             public void onFailure(String msg) {
+                if (layout_swipe.isRefreshing()) {
+                    layout_swipe.setRefreshing(false);
+                }
                 ToastUnit.showShort(msg);
             }
         });
     }
 
+    public void refreshData() {
+        this.getDependencies();
+    }
+
+    /**
+     * 获取被选择的item ID
+     */
     public List<String> getCheckedItemIds() {
-        return null;
+        List<String> ids = new ArrayList<>();
+        for (Dependence dependence : depItemAdapter.getCheckedItems()) {
+            ids.add(dependence.get_id());
+        }
+        return ids;
     }
 
     public void setPagerInterface(PagerInterface pagerInterface) {
@@ -118,8 +147,23 @@ public class PagerFragment extends BaseFragment {
         depItemAdapter.setCheckState(checkState, -1);
     }
 
+    /**
+     * 设置item全选
+     */
+    public void setAllItemCheck(boolean isChecked) {
+        if (depItemAdapter.getCheckState()) {
+            depItemAdapter.setAllChecked(isChecked);
+        }
+    }
+
+    /**
+     * 设置依赖类型
+     */
     public void setType(String type) {
         this.type = type;
     }
 
+    public String getType() {
+        return this.type;
+    }
 }
