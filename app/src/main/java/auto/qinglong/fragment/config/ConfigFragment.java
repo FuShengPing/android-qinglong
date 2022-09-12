@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import auto.qinglong.MyApplication;
 import auto.qinglong.R;
 import auto.qinglong.api.ApiController;
+import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.fragment.BaseFragment;
 import auto.qinglong.fragment.FragmentInterFace;
 import auto.qinglong.fragment.MenuClickInterface;
@@ -56,6 +57,7 @@ public class ConfigFragment extends BaseFragment implements FragmentInterFace {
         layout_edit_back = view.findViewById(R.id.config_edit_back);
         layout_edit_save = view.findViewById(R.id.config_edit_save);
         layout_web_container = view.findViewById(R.id.config_web_container);
+
         init();
 
         return view;
@@ -63,64 +65,53 @@ public class ConfigFragment extends BaseFragment implements FragmentInterFace {
 
     @Override
     public void init() {
-        layout_menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                menuClickInterface.onMenuClick();
-            }
+        layout_menu.setOnClickListener(v -> menuClickInterface.onMenuClick());
+
+        //进入编辑状态
+        layout_edit.setOnClickListener(v -> {
+            layout_menu_bar.setVisibility(View.INVISIBLE);
+            layout_edit_bar.setVisibility(View.VISIBLE);
+            WebJsManager.setEditable(webView, true);
         });
 
-        layout_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                layout_menu_bar.setVisibility(View.INVISIBLE);
-                layout_edit_bar.setVisibility(View.VISIBLE);
-                WebJsManager.setEditable(webView, true);
-            }
+        //退出编辑状态
+        layout_edit_back.setOnClickListener(v -> {
+            layout_edit_bar.setVisibility(View.GONE);
+            layout_menu_bar.setVisibility(View.VISIBLE);
+            WindowUnit.hideKeyboard(webView);
+            WebJsManager.setEditable(webView, false);
+            WebJsManager.backConfig(webView);
         });
 
-        layout_edit_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                layout_edit_bar.setVisibility(View.GONE);
-                layout_menu_bar.setVisibility(View.VISIBLE);
-                WindowUnit.hideKeyboard(webView);
-                WebJsManager.setCode(webView, configContent);
-                WebJsManager.setEditable(webView, false);
-            }
-        });
+        layout_refresh.setOnClickListener(v -> {
+            //禁用点击
+            layout_refresh.setEnabled(false);
+            //开启动画
+            Animation animation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
 
-        layout_refresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (CallManager.isRequesting(getClassName())) {
-                    return;
                 }
-                //禁用点击
-                layout_refresh.setEnabled(false);
-                //开启动画
-                Animation animation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                animation.setDuration(1000);
-                animation.setRepeatCount(Animation.INFINITE);
-                layout_refresh.startAnimation(animation);
-                loadConfig();
-            }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    layout_refresh.setEnabled(true);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            animation.setDuration(1000);
+            animation.setRepeatCount(Animation.INFINITE);
+            layout_refresh.startAnimation(animation);
+            WebJsManager.refreshConfig(webView);
         });
 
-        layout_edit_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (CallManager.isRequesting(getClassName())) {
-                    return;
-                }
-                WindowUnit.hideKeyboard(webView);
-                WebJsManager.getCode(webView, new WebJsManager.WebCallback() {
-                    @Override
-                    public void onContent(String content) {
-                        saveConfig(content);
-                    }
-                });
-            }
+        layout_edit_save.setOnClickListener(v -> {
+
         });
 
         createWebView();
@@ -137,7 +128,7 @@ public class ConfigFragment extends BaseFragment implements FragmentInterFace {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                loadConfig();
+                WebJsManager.initConfig(webView, AccountSP.getCurrentAccount().getBaseUrl(), AccountSP.getCurrentAccount().getAuthorization());
             }
         });
         //加载本地网页
@@ -154,51 +145,6 @@ public class ConfigFragment extends BaseFragment implements FragmentInterFace {
             webView.destroy();
             webView = null;
         }
-    }
-
-    private void loadConfig() {
-        ApiController.getConfigDetail(getClassName(), new ApiController.BaseCallback() {
-            @Override
-            public void onSuccess() {
-//                if (!configContent.equals(msg)) {
-//                    configContent = msg;
-//                    WebJsManager.setCode(webView, msg);
-//                    layout_edit.setVisibility(View.VISIBLE);
-//                }
-                clearRefresh();
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                layout_edit.setVisibility(View.INVISIBLE);
-                clearRefresh();
-            }
-        });
-    }
-
-    private void saveConfig(String content) {
-        ApiController.saveConfig(getClassName(), content, new ApiController.BaseCallback() {
-            @Override
-            public void onSuccess() {
-                configContent = content;
-                ToastUnit.showShort(getContext(), "保存成功");
-                layout_edit_back.performClick();
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                ToastUnit.showShort(getContext(), "保存失败：" + msg);
-            }
-        });
-    }
-
-    /**
-     * 清除刷新效果
-     */
-    private void clearRefresh() {
-        layout_refresh.setVisibility(View.VISIBLE);
-        layout_refresh.clearAnimation();
-        layout_refresh.setEnabled(true);
     }
 
     @Override

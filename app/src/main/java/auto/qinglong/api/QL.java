@@ -127,6 +127,10 @@ public interface QL {
     @HTTP(method = "DELETE", path = "api/dependencies", hasBody = true)
     Call<BaseRes> deleteDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
 
+    //重装依赖
+    @PUT("api/dependencies/reinstall?t=1662824091642")
+    Call<BaseRes> reinstallDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
+
     //获取日志列表
     @GET("api/logs")
     Call<LogRes> getLogs(@Header("Authorization") String authorization);

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +41,6 @@ import auto.qinglong.fragment.BaseFragment;
 import auto.qinglong.fragment.FragmentInterFace;
 import auto.qinglong.fragment.MenuClickInterface;
 import auto.qinglong.tools.CronUnit;
-import auto.qinglong.tools.LogUnit;
 import auto.qinglong.tools.SortUnit;
 import auto.qinglong.tools.ToastUnit;
 import auto.qinglong.tools.WindowUnit;
@@ -49,7 +49,6 @@ import auto.qinglong.tools.CallManager;
 public class TaskFragment extends BaseFragment implements FragmentInterFace {
     public static String TAG = "TaskFragment";
 
-    private boolean isSuccess = false;
     private String currentSearchValue = "";
     private MenuClickInterface menuClickInterface;
     private TaskAdapter taskAdapter;
@@ -142,11 +141,29 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
 
     @Override
     public void onResume() {
-        //界面重显时成功加载一次
-        if (!isSuccess && !CallManager.isRequesting(this.getClassName())) {
-            queryTasks(currentSearchValue, QueryType.QUERY);
+        if (!haveFirstSuccess && !CallManager.isRequesting(this.getClassName())) {
+            firstLoad();
         }
         super.onResume();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (!hidden && !haveFirstSuccess && !CallManager.isRequesting(this.getClassName())) {
+            firstLoad();
+        }
+        super.onHiddenChanged(hidden);
+    }
+
+    private void firstLoad() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isVisible()) {
+                    getTasks("", QueryType.QUERY);
+                }
+            }
+        }, 1000);
     }
 
     @Override
@@ -175,9 +192,6 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
 
             @Override
             public void onRun(Task task) {
-                if (CallManager.isRequesting(getClassName())) {
-                    return;
-                }
                 List<String> ids = new ArrayList<>();
                 ids.add(task.get_id());
                 runTasks(ids, false);
@@ -204,7 +218,7 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
         layout_swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                queryTasks(currentSearchValue, QueryType.QUERY);
+                getTasks(currentSearchValue, QueryType.QUERY);
             }
         });
 
@@ -245,7 +259,7 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
                 ToastUnit.showShort(getContext(), "搜索中...");
                 currentSearchValue = layout_search_value.getText().toString();
                 WindowUnit.hideKeyboard(layout_search_value);
-                queryTasks(currentSearchValue, QueryType.SEARCH);
+                getTasks(currentSearchValue, QueryType.SEARCH);
             }
         });
 
@@ -414,11 +428,11 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
         this.menuClickInterface = menuClickInterface;
     }
 
-    public void queryTasks(String searchValue, QueryType queryType) {
+    public void getTasks(String searchValue, QueryType queryType) {
         ApiController.getTasks(getClassName(), searchValue, new ApiController.GetTasksCallback() {
             @Override
             public void onSuccess(TasksRes data) {
-                isSuccess = true;
+                haveFirstSuccess = true;
                 taskAdapter.setData(SortUnit.sortTasks(data.getData()));
                 if (queryType == QueryType.QUERY) {
                     ToastUnit.showShort(getContext(), "加载成功");
@@ -437,6 +451,9 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
     }
 
     public void runTasks(List<String> ids, boolean isFromBar) {
+        if (CallManager.isRequesting(getClassName())) {
+            return;
+        }
         ApiController.runTasks(getClassName(), ids, new ApiController.RunTaskCallback() {
             @Override
             public void onSuccess(String msg) {
@@ -444,7 +461,7 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
                     layout_actions_back.performClick();
                 }
                 ToastUnit.showShort(getContext(), "执行成功");
-                queryTasks(currentSearchValue, QueryType.OTHER);
+                getTasks(currentSearchValue, QueryType.OTHER);
             }
 
             @Override
@@ -464,7 +481,7 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
                     layout_actions_back.performClick();
                 }
                 ToastUnit.showShort(getContext(), "终止成功");
-                queryTasks(currentSearchValue, QueryType.OTHER);
+                getTasks(currentSearchValue, QueryType.OTHER);
             }
 
             @Override
@@ -482,7 +499,7 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
                     layout_actions_back.performClick();
                 }
                 ToastUnit.showShort(getContext(), "启用成功");
-                queryTasks(currentSearchValue, QueryType.OTHER);
+                getTasks(currentSearchValue, QueryType.OTHER);
             }
 
             @Override
@@ -500,7 +517,7 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
                     layout_actions_back.performClick();
                 }
                 ToastUnit.showShort(getContext(), "禁用成功");
-                queryTasks(currentSearchValue, QueryType.OTHER);
+                getTasks(currentSearchValue, QueryType.OTHER);
             }
 
             @Override
@@ -518,7 +535,7 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
                     layout_actions_back.performClick();
                 }
                 ToastUnit.showShort(getContext(), "顶置成功");
-                queryTasks(currentSearchValue, QueryType.OTHER);
+                getTasks(currentSearchValue, QueryType.OTHER);
             }
 
             @Override
@@ -536,7 +553,7 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
                     layout_actions_back.performClick();
                 }
                 ToastUnit.showShort(getContext(), "取消顶置成功");
-                queryTasks(currentSearchValue, QueryType.OTHER);
+                getTasks(currentSearchValue, QueryType.OTHER);
             }
 
             @Override
@@ -554,7 +571,7 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
                     layout_actions_back.performClick();
                 }
                 ToastUnit.showShort(getContext(), "删除成功");
-                queryTasks(currentSearchValue, QueryType.OTHER);
+                getTasks(currentSearchValue, QueryType.OTHER);
             }
 
             @Override
@@ -570,7 +587,7 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
             public void onSuccess(Task task) {
                 popupWindowEdit.dismiss();
                 ToastUnit.showShort(getContext(), "编辑成功");
-                queryTasks(currentSearchValue, QueryType.OTHER);
+                getTasks(currentSearchValue, QueryType.OTHER);
             }
 
             @Override
@@ -586,7 +603,7 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
             public void onSuccess(Task task) {
                 popupWindowEdit.dismiss();
                 ToastUnit.showShort(getContext(), "新建任务成功");
-                queryTasks(currentSearchValue, QueryType.OTHER);
+                getTasks(currentSearchValue, QueryType.OTHER);
             }
 
             @Override

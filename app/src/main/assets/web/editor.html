@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
-<meta charset="utf-8"/>
+<meta charset="utf-8" />
 <link rel="stylesheet" href="codemirror.css">
 <link rel="stylesheet" href="solarized.css">
 <script src="codemirror.js"></script>
 <script src="python.js"></script>
+<script src="axios.js"></script>
+<script src="api.js"></script>
 <style>
     * {
         padding: 0;
@@ -29,51 +31,18 @@
         overflow: hidden;
         overflow-x: auto;
     }
-
-
 </style>
 
 <body>
-<textarea id="code" name="code">加载中...</textarea>
+    <textarea id="code" name="code">加载中...</textarea>
 </body>
 <script>
-    var editor;
-
-     //初始化显示
-    init()
-    function init() {
-        editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-            mode: {
-                name: "python",
-                version: 3,
-                singleLineStringErrors: false
-            },
-            theme: "solarized",//主题风格
-            lineNumbers: true,//显示行号
-            indentUnit: 4,
-            matchBrackets: true,
-            readOnly: true,//只读
-            lineWrapping: false,//换行
-        });
-    }
-
-    function getCode(){
-        return  editor.getValue()
-    }
-
-    //重置代码
-    function setCode(code){
-        document.getElementById("code").value = code;
-        editor.setValue(code)
-        editor.refresh()
-    }
-
-    //设置是否可用编辑
-    function setEditable(editable) {
-        editor.options.readOnly = !editable
-    }
-
-
+    initEditor()
+    // host = "http://121.5.175.238:5702/"
+    // auth = "Bearer eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR1JEV2w4NjZWWEhScWF2R1gtNkJELXQ2cDFZZExia0E4QnktNUpadVlNOUpENVBsa0NpRjdOTTEiLCJpYXQiOjE2NjI5MDA3NjQsImV4cCI6MTY2MzE1OTk2NH0.wJ-k0pioo2t5QHi6qU2X-Dd-GTkHHx4S7fEc7FH91Iiv0vBzp7h-5rKBTo520rJA"
+    // filename = "ydyp.py"
+    // path = "FuShengPing_Script"
+    // initOfScript(host,auth,filename,path)
 </script>
 
 </html>

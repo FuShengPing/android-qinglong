@@ -25,6 +25,7 @@ import auto.qinglong.api.res.TasksRes;
 import auto.qinglong.database.object.Account;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.tools.CallManager;
+import auto.qinglong.tools.LogUnit;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -1241,6 +1242,52 @@ public class ApiController {
                 .build()
                 .create(QL.class)
                 .deleteDependencies(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+                BaseRes baseRes = response.body();
+                if (baseRes == null) {
+                    if (response.code() == 401) {
+                        callback.onFailure(RES_INVALID_AUTH);
+                    } else {
+                        callback.onFailure(RES_NO_BODY);
+                    }
+
+                } else {
+                    if (baseRes.getCode() == 200) {
+                        callback.onSuccess();
+                    } else {
+                        callback.onFailure(baseRes.getMessage());
+                    }
+                }
+                CallManager.finishCall(requestId);
+            }
+
+            @Override
+            public void onFailure(Call<BaseRes> call, Throwable t) {
+                callback.onFailure(t.getLocalizedMessage());
+                CallManager.finishCall(requestId);
+            }
+        });
+
+        CallManager.addCall(call, requestId);
+    }
+
+    public static void reinstallDependencies(@NonNull String requestId, @NonNull List<String> ids, @NonNull BaseCallback callback) {
+        JsonArray jsonArray = new JsonArray();
+        for (String id : ids) {
+            jsonArray.add(id);
+        }
+        String json = jsonArray.toString();
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(QL.class)
+                .reinstallDependencies(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override

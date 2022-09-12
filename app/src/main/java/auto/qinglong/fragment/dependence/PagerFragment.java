@@ -18,6 +18,7 @@ import auto.qinglong.api.ApiController;
 import auto.qinglong.api.object.Dependence;
 import auto.qinglong.api.res.DependenceRes;
 import auto.qinglong.fragment.BaseFragment;
+import auto.qinglong.tools.CallManager;
 import auto.qinglong.tools.LogUnit;
 import auto.qinglong.tools.ToastUnit;
 
@@ -67,8 +68,7 @@ public class PagerFragment extends BaseFragment {
         depItemAdapter = new DepItemAdapter(requireContext());
         depItemAdapter.setItemInterface(new ItemInterface() {
             @Override
-            public void onLongClick(Dependence dependence, int position) {
-                LogUnit.log("onLongClick");
+            public void onAction(Dependence dependence, int position) {
                 //适配器未处于选择状态则进入
                 if (!depItemAdapter.getCheckState()) {
                     depItemAdapter.setCheckState(true, position);
@@ -77,8 +77,15 @@ public class PagerFragment extends BaseFragment {
             }
 
             @Override
-            public void onClick(Dependence dependence, int position) {
+            public void onDetail(Dependence dependence, int position) {
 
+            }
+
+            @Override
+            public void onReinstall(Dependence dependence, int position) {
+                List<String> ids = new ArrayList<>();
+                ids.add(dependence.get_id());
+                reinstallDependencies(ids);
             }
         });
 
@@ -87,19 +94,10 @@ public class PagerFragment extends BaseFragment {
 
         //刷新控件
         layout_swipe.setColorSchemeColors(getResources().getColor(R.color.theme_color_shadow, null));
-        layout_swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getDependencies();
-            }
-        });
+        layout_swipe.setOnRefreshListener(this::getDependencies);
     }
 
     private void getDependencies() {
-        if (!layout_swipe.isRefreshing()) {
-            layout_swipe.setRefreshing(true);
-        }
-
         ApiController.getDependencies(getClassName(), "", this.type, new ApiController.GetDependenciesCallback() {
             @Override
             public void onSuccess(DependenceRes res) {
@@ -121,6 +119,29 @@ public class PagerFragment extends BaseFragment {
         });
     }
 
+    private void reinstallDependencies(List<String> ids) {
+        if (CallManager.isRequesting(getClassName())) {
+            return;
+        }
+        ToastUnit.showShort("请求中...");
+        ApiController.reinstallDependencies(getClassName(), ids, new ApiController.BaseCallback() {
+            @Override
+            public void onSuccess() {
+                getDependencies();
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort("请求失败：" + msg);
+                //该接口发送请求成功 但出现响应时间超时问题
+                getDependencies();
+            }
+        });
+    }
+
+    /**
+     * 刷新数据 由外部调用
+     */
     public void refreshData() {
         this.getDependencies();
     }
@@ -136,6 +157,9 @@ public class PagerFragment extends BaseFragment {
         return ids;
     }
 
+    /**
+     * 设置外部回调接口
+     */
     public void setPagerInterface(PagerInterface pagerInterface) {
         this.pagerInterface = pagerInterface;
     }

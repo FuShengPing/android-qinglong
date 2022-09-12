@@ -40,7 +40,7 @@
                 android:background="@drawable/style_press_gray"
                 android:clickable="true"
                 android:src="@drawable/ic_write_white"
-                android:visibility="invisible" />
+                android:visibility="visible" />
 
             <ImageView
                 android:id="@+id/config_refresh"
@@ -52,7 +52,7 @@
                 android:background="@drawable/style_press_gray"
                 android:clickable="true"
                 android:src="@drawable/ic_refresh"
-                android:visibility="invisible" />
+                android:visibility="visible" />
         </RelativeLayout>
 
         <RelativeLayout

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,8 +38,7 @@ public class ScriptFragment extends BaseFragment implements FragmentInterFace {
     private MenuClickInterface menuClickInterface;
     private ScriptAdapter scriptAdapter;
     private List<Script> oData;
-    private boolean canBack = false;
-    private boolean haveLoad = false;
+    private boolean canBack = false;//存在可返回操作
 
     private ImageView layout_menu;
     private SwipeRefreshLayout layout_swipe;
@@ -66,7 +66,35 @@ public class ScriptFragment extends BaseFragment implements FragmentInterFace {
     }
 
     @Override
+    public void onResume() {
+        if (!haveFirstSuccess && !CallManager.isRequesting(getClassName())) {
+            firstLoad();
+        }
+        super.onResume();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (!hidden && !haveFirstSuccess && !CallManager.isRequesting(getClassName())) {
+            firstLoad();
+        }
+        super.onHiddenChanged(hidden);
+    }
+
+    private void firstLoad() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isVisible()) {
+                    getScripts();
+                }
+            }
+        }, 1000);
+    }
+
+    @Override
     public void init() {
+        //item回调
         scriptAdapter.setScriptInterface(new ScriptInterface() {
             @Override
             public void onEdit(Script script) {
@@ -90,22 +118,13 @@ public class ScriptFragment extends BaseFragment implements FragmentInterFace {
             }
         });
 
-
+        //刷新控件
         layout_swipe.setColorSchemeColors(requireContext().getColor(R.color.theme_color));
         layout_swipe.setRefreshing(true);
-        layout_swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getScripts();
-            }
-        });
+        layout_swipe.setOnRefreshListener(this::getScripts);
 
-        layout_menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                menuClickInterface.onMenuClick();
-            }
-        });
+        //唤起主导航栏
+        layout_menu.setOnClickListener(v -> menuClickInterface.onMenuClick());
     }
 
     private void getScripts() {
@@ -115,7 +134,7 @@ public class ScriptFragment extends BaseFragment implements FragmentInterFace {
                 setData(scripts, "");
                 oData = scripts;
                 canBack = false;
-                haveLoad = true;
+                haveFirstSuccess = true;
                 if (layout_swipe.isRefreshing()) {
                     layout_swipe.setRefreshing(false);
                 }
@@ -135,14 +154,6 @@ public class ScriptFragment extends BaseFragment implements FragmentInterFace {
     private void setData(List<Script> data, String dir) {
         scriptAdapter.setData(SortUnit.sortScript(data));
         layout_dir.setText("/" + dir);
-    }
-
-    @Override
-    public void onResume() {
-        if (!haveLoad && !CallManager.isRequesting(getClassName())) {
-            getScripts();
-        }
-        super.onResume();
     }
 
     @Override

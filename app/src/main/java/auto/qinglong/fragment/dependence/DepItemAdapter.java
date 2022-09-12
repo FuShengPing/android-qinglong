@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -62,15 +63,22 @@ public class DepItemAdapter extends RecyclerView.Adapter<MyViewHolder> {
         holder.layout_title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                itemInterface.onClick(dependence, holder.getAdapterPosition());
+                itemInterface.onDetail(dependence, holder.getAdapterPosition());
             }
         });
 
         holder.layout_title.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                itemInterface.onLongClick(dependence, holder.getAdapterPosition());
+                itemInterface.onAction(dependence, holder.getAdapterPosition());
                 return true;
+            }
+        });
+
+        holder.layout_bug.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                itemInterface.onReinstall(dependence, holder.getAdapterPosition());
             }
         });
 
@@ -156,6 +164,7 @@ class MyViewHolder extends RecyclerView.ViewHolder {
     public TextView layout_time;
     public TextView layout_status;
     public CheckBox layout_check;
+    public ImageView layout_bug;
 
     public MyViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -164,11 +173,15 @@ class MyViewHolder extends RecyclerView.ViewHolder {
         layout_time = itemView.findViewById(R.id.dep_item_time);
         layout_status = itemView.findViewById(R.id.dep_item_status);
         layout_check = itemView.findViewById(R.id.item_check);
+        layout_bug = itemView.findViewById(R.id.dep_action_bug);
+
     }
 }
 
 interface ItemInterface {
-    void onLongClick(Dependence dependence, int position);
+    void onAction(Dependence dependence, int position);
 
-    void onClick(Dependence dependence, int position);
+    void onDetail(Dependence dependence, int position);
+
+    void onReinstall(Dependence dependence, int position);
 }

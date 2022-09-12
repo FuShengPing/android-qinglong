@@ -3,6 +3,7 @@ package auto.qinglong.fragment.log;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,6 @@ import auto.qinglong.tools.ToastUnit;
 
 public class LogFragment extends BaseFragment implements FragmentInterFace {
     public static String TAG = "LogFragment";
-    private boolean haveLoad = false;
     private boolean canBack = false;
     private List<Log> oData;
     private MenuClickInterface menuClickInterface;
@@ -61,6 +61,32 @@ public class LogFragment extends BaseFragment implements FragmentInterFace {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        if (!haveFirstSuccess && !CallManager.isRequesting(getClassName())) {
+            firstLoad();
+        }
+        super.onResume();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if(!hidden && !haveFirstSuccess && !CallManager.isRequesting(getClassName())){
+            firstLoad();
+        }
+        super.onHiddenChanged(hidden);
+    }
+
+    private void firstLoad() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isVisible()) {
+                    getLogs();
+                }
+            }
+        }, 1000);
+    }
 
     @Override
     public void init() {
@@ -106,7 +132,7 @@ public class LogFragment extends BaseFragment implements FragmentInterFace {
                 setData(logs, "");
                 oData = logs;
                 canBack = false;
-                haveLoad = true;
+                haveFirstSuccess = true;
                 if (layout_swipe.isRefreshing()) {
                     layout_swipe.setRefreshing(false);
                 }
@@ -128,15 +154,6 @@ public class LogFragment extends BaseFragment implements FragmentInterFace {
         logAdapter.setData(data);
         layout_dir.setText("/" + dir);
     }
-
-    @Override
-    public void onResume() {
-        if (!haveLoad && !CallManager.isRequesting(getClassName())) {
-            getLogs();
-        }
-        super.onResume();
-    }
-
 
     public void setMenuClickInterface(MenuClickInterface menuClickInterface) {
         this.menuClickInterface = menuClickInterface;
