@@ -103,7 +103,6 @@ public class ScriptFragment extends BaseFragment implements FragmentInterFace {
                     setData(script.getChildren(), script.getTitle());
                 } else {
                     Intent intent = new Intent(getContext(), ScriptActivity.class);
-                    intent.putExtra(ScriptActivity.EXTRA_URL, script.getUrl());
                     intent.putExtra(ScriptActivity.EXTRA_NAME, script.getTitle());
                     intent.putExtra(ScriptActivity.EXTRA_PARENT, script.getParent());
                     startActivity(intent);

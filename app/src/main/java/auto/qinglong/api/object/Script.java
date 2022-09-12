@@ -1,5 +1,7 @@
 package auto.qinglong.api.object;
 
+import android.text.TextUtils;
+
 import java.util.List;
 
 public class Script {
@@ -28,7 +30,11 @@ public class Script {
     }
 
     public String getParent() {
-        return parent;
+        if (TextUtils.isEmpty(parent)) {
+            return "";
+        } else {
+            return parent;
+        }
     }
 
     public void setParent(String parent) {
@@ -65,14 +71,6 @@ public class Script {
 
     public void setChildren(List<Script> children) {
         this.children = children;
-    }
-
-    public String getUrl() {
-        if (parent != null && !parent.isEmpty()) {
-            return "api/scripts/" + title + "?path=" + parent;
-        } else {
-            return "api/scripts/" + title + "?path=";
-        }
     }
 
 }

@@ -12,7 +12,11 @@ public class Log {
     List<String> files;
 
     public String getParentName() {
-        return parentName;
+        if (TextUtils.isEmpty(parentName)) {
+            return "";
+        } else {
+            return parentName;
+        }
     }
 
     public void setParentName(String parentName) {

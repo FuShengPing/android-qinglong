@@ -348,4 +348,14 @@ public class DepFragment extends BaseFragment implements FragmentInterFace {
     public void setMenuClickInterface(MenuClickInterface menuClickInterface) {
         this.menuClickInterface = menuClickInterface;
     }
+
+    @Override
+    public boolean onBackPressed() {
+        if (layout_action_bar.getVisibility() == View.VISIBLE) {
+            layout_action_bar_back.performClick();
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

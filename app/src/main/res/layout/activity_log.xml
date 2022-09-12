@@ -43,7 +43,7 @@
             android:background="@drawable/style_press_gray"
             android:clickable="true"
             android:src="@drawable/ic_refresh"
-            android:visibility="invisible" />
+            android:visibility="visible" />
     </RelativeLayout>
 
     <LinearLayout

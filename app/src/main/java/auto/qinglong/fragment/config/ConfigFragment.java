@@ -30,7 +30,6 @@ import auto.qinglong.tools.web.WebJsManager;
 
 public class ConfigFragment extends BaseFragment implements FragmentInterFace {
     public static String TAG = "ConfigFragment";
-    private String configContent = "";
 
     private MenuClickInterface menuClickInterface;
 
@@ -47,7 +46,7 @@ public class ConfigFragment extends BaseFragment implements FragmentInterFace {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.fg_config, null);
+        View view = inflater.inflate(R.layout.fg_config, null);
 
         layout_menu_bar = view.findViewById(R.id.config_menu_bar);
         layout_menu = view.findViewById(R.id.config_menu);
@@ -83,6 +82,7 @@ public class ConfigFragment extends BaseFragment implements FragmentInterFace {
             WebJsManager.backConfig(webView);
         });
 
+        //刷新
         layout_refresh.setOnClickListener(v -> {
             //禁用点击
             layout_refresh.setEnabled(false);
@@ -105,14 +105,12 @@ public class ConfigFragment extends BaseFragment implements FragmentInterFace {
                 }
             });
             animation.setDuration(1000);
-            animation.setRepeatCount(Animation.INFINITE);
             layout_refresh.startAnimation(animation);
             WebJsManager.refreshConfig(webView);
         });
 
-        layout_edit_save.setOnClickListener(v -> {
-
-        });
+        //保存编辑
+        layout_edit_save.setOnClickListener(v -> WebJsManager.saveConfig(webView));
 
         createWebView();
     }
@@ -158,7 +156,6 @@ public class ConfigFragment extends BaseFragment implements FragmentInterFace {
         if (hidden) {
             destroyWebView();
         } else {
-            configContent = "";
             createWebView();
         }
         super.onHiddenChanged(hidden);

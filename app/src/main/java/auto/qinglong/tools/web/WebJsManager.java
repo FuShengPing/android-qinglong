@@ -25,10 +25,6 @@ public class WebJsManager {
         webView.evaluateJavascript(script, null);
     }
 
-    /**
-     *
-     */
-
     public static void initConfig(WebView webView, String host, String authorization) {
         if (webView == null) {
             return;
@@ -39,7 +35,7 @@ public class WebJsManager {
         webView.evaluateJavascript(script, null);
     }
 
-    public static void refreshConfig(WebView webView){
+    public static void refreshConfig(WebView webView) {
         if (webView == null) {
             return;
         }
@@ -49,7 +45,7 @@ public class WebJsManager {
         webView.evaluateJavascript(script, null);
     }
 
-    public static void backConfig(WebView webView){
+    public static void backConfig(WebView webView) {
         if (webView == null) {
             return;
         }
@@ -59,54 +55,76 @@ public class WebJsManager {
         webView.evaluateJavascript(script, null);
     }
 
-    /**
-     * 设置编辑器内容（代码)
-     *
-     * @param code 显示的代码
-     */
-    public static void setCode(WebView webView, String code) {
+    public static void saveConfig(WebView webView) {
         if (webView == null) {
             return;
         }
-        //必须替换字符 否则传递会错乱或不显示
-        String content = code.replace("'", "\\'")
-                .replace("\"", "\\\"")
-                .replace("\n", "\\n");
-        webView.evaluateJavascript("javascript:setCode('" + content + "')", null);
+
+        String script = "javascript:saveConfig()";
+        LogUnit.log(script);
+        webView.evaluateJavascript(script, null);
     }
 
-    /**
-     * 获取编辑器内容（代码)
-     */
-    public static void getCode(WebView webView, WebCallback webCallback) {
-        if (webView == null && webCallback != null) {
-            webCallback.onContent(null);
+
+    public static void initLog(WebView webView, String host, String authorization, String path) {
+        if (webView == null) {
+            return;
         }
-        assert webView != null;
-        webView.evaluateJavascript("javascript:getCode()", new ValueCallback<String>() {
-            @Override
-            public void onReceiveValue(String value) {
-                if (webCallback != null) {
-                    //必须替换字符 否则传递会错乱或不显示
-                    String content = value.replace("\\'", "'")
-                            .replace("\\\"", "\"");
-                    //.replace("\\n", "\n");
 
-                    //去掉字符串两端“”符号
-                    StringBuilder stringBuilder = new StringBuilder(content);
-                    if (stringBuilder.charAt(0) == '\"') {
-                        stringBuilder.replace(0, 1, "");
-                    }
-                    if (stringBuilder.charAt(stringBuilder.length() - 1) == '\"') {
-                        stringBuilder.replace(stringBuilder.length() - 1, stringBuilder.length(), "");
-                    }
-                    webCallback.onContent(stringBuilder.toString());
-                }
-            }
-        });
+        String script = String.format("javascript:initLog('%1$s','%2$s','%3$s')", host, authorization, path);
+        LogUnit.log(script);
+        webView.evaluateJavascript(script, null);
     }
 
-    public interface WebCallback {
-        void onContent(String content);
+    public static void refreshLog(WebView webView) {
+        if (webView == null) {
+            return;
+        }
+
+        String script = "javascript:refreshLog()";
+        LogUnit.log(script);
+        webView.evaluateJavascript(script, null);
     }
-}
+
+
+    public static void initScript(WebView webView, String host, String authorization, String filename, String path) {
+        if (webView == null) {
+            return;
+        }
+
+        String script = String.format("javascript:initScript('%1$s','%2$s','%3$s','%4$s')", host, authorization, filename, path);
+        LogUnit.log(script);
+        webView.evaluateJavascript(script, null);
+    }
+
+    public static void saveScript(WebView webView) {
+        if (webView == null) {
+            return;
+        }
+
+        String script = "javascript:saveScript()";
+        LogUnit.log(script);
+        webView.evaluateJavascript(script, null);
+    }
+
+    public static void backScript(WebView webView) {
+        if (webView == null) {
+            return;
+        }
+
+        String script = "javascript:backScript()";
+        LogUnit.log(script);
+        webView.evaluateJavascript(script, null);
+    }
+
+    public static void refreshScript(WebView webView) {
+        if (webView == null) {
+            return;
+        }
+
+        String script = "javascript:refreshScript()";
+        LogUnit.log(script);
+        webView.evaluateJavascript(script, null);
+    }
+
+    }

@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -25,9 +26,12 @@ import auto.qinglong.fragment.script.ScriptFragment;
 import auto.qinglong.fragment.setting.SettingFragment;
 import auto.qinglong.fragment.task.TaskFragment;
 import auto.qinglong.tools.NetUnit;
+import auto.qinglong.tools.ToastUnit;
 import auto.qinglong.tools.WindowUnit;
 
 public class HomeActivity extends BaseActivity {
+    private long lastBackPressed = 0;//上次返回按下时间
+
     private TaskFragment taskFragment;
     private LogFragment logFragment;
     private ConfigFragment configFragment;
@@ -193,73 +197,38 @@ public class HomeActivity extends BaseActivity {
         LinearLayout menu_app_account = layout_menu_bar.findViewById(R.id.menu_app_account);
         LinearLayout menu_app_setting = layout_menu_bar.findViewById(R.id.menu_app_setting);
 
-        menu_task.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFragment(TaskFragment.TAG);
-            }
+        menu_task.setOnClickListener(v -> showFragment(TaskFragment.TAG));
+
+        menu_log.setOnClickListener(v -> showFragment(LogFragment.TAG));
+
+        menu_config.setOnClickListener(v -> showFragment(ConfigFragment.TAG));
+
+        menu_script.setOnClickListener(v -> showFragment(ScriptFragment.TAG));
+
+        menu_env.setOnClickListener(v -> showFragment(EnvFragment.TAG));
+
+        menu_dep.setOnClickListener(v -> showFragment(DepFragment.TAG));
+
+        menu_setting.setOnClickListener(v -> {
+            ToastUnit.showShort("敬请期待");
+            //showFragment(SettingFragment.TAG);
         });
 
-        menu_log.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFragment(LogFragment.TAG);
-            }
+        menu_app_account.setOnClickListener(v -> {
+            ToastUnit.showShort("敬请期待");
+//                Intent intent = new Intent(getBaseContext(), AccountActivity.class);
+//                startActivity(intent);
         });
 
-        menu_config.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFragment(ConfigFragment.TAG);
-            }
-        });
-
-        menu_script.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFragment(ScriptFragment.TAG);
-            }
-        });
-
-        menu_env.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFragment(EnvFragment.TAG);
-            }
-        });
-
-        menu_dep.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFragment(DepFragment.TAG);
-            }
-        });
-
-        menu_setting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFragment(SettingFragment.TAG);
-            }
-        });
-
-        menu_app_account.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getBaseContext(), AccountActivity.class);
-                startActivity(intent);
-            }
-        });
+        menu_app_setting.setOnClickListener(v -> ToastUnit.showShort("敬请期待"));
 
         //右侧空白 实现点击隐藏导航栏
         View layout_right = layout_menu_bar.findViewById(R.id.home_menu_bar_right);
-        layout_right.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    hideMenuBar();
-                }
-                return true;
+        layout_right.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                hideMenuBar();
             }
+            return true;
         });
     }
 
@@ -349,7 +318,13 @@ public class HomeActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         if (!currentFragment.onBackPressed()) {
-            super.onBackPressed();
+            long current = System.currentTimeMillis();
+            if (current - lastBackPressed < 2000) {
+                finish();
+            } else {
+                lastBackPressed = current;
+                ToastUnit.showShort("再按一次退出");
+            }
         }
     }
 }

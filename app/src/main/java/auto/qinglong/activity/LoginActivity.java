@@ -24,8 +24,6 @@ import auto.qinglong.tools.CallManager;
 public class LoginActivity extends BaseActivity {
 
     private ImageView layout_logo_ql;
-    private ImageView layout_logo_github;
-    private ImageView layout_logo_gitee;
 
     private Button layout_confirm;
     private EditText layout_address;
@@ -38,8 +36,6 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
 
         layout_logo_ql = findViewById(R.id.logo_ql);
-        layout_logo_gitee = findViewById(R.id.logo_gitee);
-        layout_logo_github = findViewById(R.id.logo_github);
         layout_confirm = findViewById(R.id.button_confirm);
         layout_address = findViewById(R.id.input_address);
         layout_username = findViewById(R.id.input_username);
@@ -51,49 +47,43 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void init() {
-        layout_logo_ql.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Uri uri = Uri.parse(getString(R.string.url_qinglong));
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-            }
+        layout_logo_ql.setOnClickListener(v -> {
+            Uri uri = Uri.parse(getString(R.string.url_qinglong));
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
         });
 
-        layout_confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (CallManager.isRequesting(getClassName())) {
-                    return;
-                }
-                String address = layout_address.getText().toString();
-                if (!address.matches("\\d{2,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}:\\d{1,5}")) {
-                    ToastUnit.showShort(myContext, "地址格式错误");
-                    return;
-                }
+        layout_confirm.setOnClickListener(v -> {
+            if (CallManager.isRequesting(getClassName())) {
+                return;
+            }
+            String address = layout_address.getText().toString();
+            if (!address.matches("\\d{2,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}:\\d{1,5}")) {
+                ToastUnit.showShort(myContext, "地址格式错误");
+                return;
+            }
 
-                String username = layout_username.getText().toString();
-                if (username.isEmpty()) {
-                    ToastUnit.showShort(myContext, "账号不能为空");
-                    return;
-                }
+            String username = layout_username.getText().toString();
+            if (username.isEmpty()) {
+                ToastUnit.showShort(myContext, "账号不能为空");
+                return;
+            }
 
-                String password = layout_password.getText().toString();
-                if (password.isEmpty()) {
-                    ToastUnit.showShort(myContext, "密码不能为空");
-                    return;
-                }
-                WindowUnit.hideKeyboard(layout_password);
+            String password = layout_password.getText().toString();
+            if (password.isEmpty()) {
+                ToastUnit.showShort(myContext, "密码不能为空");
+                return;
+            }
+            WindowUnit.hideKeyboard(layout_password);
 
-                //先检查是否存在数据库中，存在则先检查会话是否有效，不存在则进行登录
-                Account account;
-                if (AccountDBHelper.isAccountExist(address)) {
-                    account = AccountDBHelper.getAccount(address);
-                    querySystemInfo(account, false);
-                } else {
-                    account = new Account(username, password, address, "");
-                    querySystemInfo(account, true);
-                }
+            //先检查是否存在数据库中，存在则先检查会话是否有效，不存在则进行登录
+            Account account;
+            if (AccountDBHelper.isAccountExist(address)) {
+                account = AccountDBHelper.getAccount(address);
+                querySystemInfo(account, false);
+            } else {
+                account = new Account(username, password, address, "");
+                querySystemInfo(account, true);
             }
         });
 
@@ -181,5 +171,6 @@ public class LoginActivity extends BaseActivity {
         //进入主界面
         Intent intent = new Intent(myContext, HomeActivity.class);
         startActivity(intent);
+        finish();
     }
 }

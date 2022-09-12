@@ -33,6 +33,7 @@
             android:layout_marginStart="10dp"
             android:background="@drawable/style_press_gray"
             android:clickable="true"
+            android:visibility="invisible"
             android:src="@drawable/ic_add_white" />
     </RelativeLayout>
 

@@ -86,6 +86,7 @@ public class PagerFragment extends BaseFragment {
                 List<String> ids = new ArrayList<>();
                 ids.add(dependence.get_id());
                 reinstallDependencies(ids);
+                getDependencies();
             }
         });
 
@@ -123,7 +124,6 @@ public class PagerFragment extends BaseFragment {
         if (CallManager.isRequesting(getClassName())) {
             return;
         }
-        ToastUnit.showShort("请求中...");
         ApiController.reinstallDependencies(getClassName(), ids, new ApiController.BaseCallback() {
             @Override
             public void onSuccess() {

@@ -33,9 +33,6 @@
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activity.PreviewActivity"
-            android:exported="false" />
-        <activity
             android:name=".activity.LoginActivity"
             android:exported="true"
             android:launchMode="singleTask">

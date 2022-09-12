@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import auto.qinglong.R;
 import auto.qinglong.api.ApiController;
+import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.tools.CallManager;
 import auto.qinglong.tools.web.WebJsManager;
 
@@ -23,7 +24,6 @@ public class LogActivity extends BaseActivity {
     public static String ExtraPath = "logPath";
     private String logPath;
     private String logName;
-    private String logContent = "";
     private ImageView layout_back;
     private TextView layout_tip;
     private ImageView layout_refresh;
@@ -52,30 +52,36 @@ public class LogActivity extends BaseActivity {
         layout_tip.setText(logName);
 
         //返回监听
-        layout_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        layout_back.setOnClickListener(v -> finish());
 
         //刷新监听
-        layout_refresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (CallManager.isRequesting(getClassName())) {
-                    return;
-                }
-                //禁用点击
-                layout_refresh.setEnabled(false);
-                //开启动画
-                Animation animation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                animation.setDuration(1000);
-                animation.setRepeatCount(Animation.INFINITE);
-                layout_refresh.startAnimation(animation);
-                //加载
-                loadLog(logPath);
+        layout_refresh.setOnClickListener(v -> {
+            if (CallManager.isRequesting(getClassName())) {
+                return;
             }
+            //禁用点击
+            layout_refresh.setEnabled(false);
+            //开启动画
+            Animation animation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    layout_refresh.setEnabled(true);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            animation.setDuration(1000);
+            layout_refresh.startAnimation(animation);
+            WebJsManager.refreshLog(webView);
         });
 
         createWebView();
@@ -92,10 +98,10 @@ public class LogActivity extends BaseActivity {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                loadLog(logPath);
+                WebJsManager.initLog(webView, AccountSP.getCurrentAccount().getBaseUrl(), AccountSP.getCurrentAccount().getAuthorization(), logPath);
             }
         });
+
         //加载本地网页
         webView.loadUrl("file:///android_asset/web/editor.html");
         layout_web_container.addView(webView);
@@ -110,48 +116,6 @@ public class LogActivity extends BaseActivity {
             webView.destroy();
             webView = null;
         }
-    }
-
-    /**
-     * 从服务器加载日志
-     *
-     * @param logPath 日志地址
-     */
-    private void loadLog(String logPath) {
-        if (TextUtils.isEmpty(logPath)) {
-            WebJsManager.setCode(webView, "无效日志路径");
-            return;
-        }
-
-        ApiController.getLogDetail(getClass().getName(), logPath, new ApiController.BaseCallback() {
-            @Override
-            public void onSuccess() {
-//                if (!logContent.equals(msg)) {
-//                    logContent = msg;
-//                    WebJsManager.setCode(webView, msg);
-//                } else if (msg.isEmpty()) {
-//                    logContent = msg;
-//                    WebJsManager.setCode(webView, "暂无日志信息");
-//                }
-                clearRefresh();
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                WebJsManager.setCode(webView, msg);
-                clearRefresh();
-            }
-        });
-    }
-
-
-    /**
-     * 清除刷新效果
-     */
-    private void clearRefresh() {
-        layout_refresh.setVisibility(View.VISIBLE);
-        layout_refresh.clearAnimation();
-        layout_refresh.setEnabled(true);
     }
 
     /**
