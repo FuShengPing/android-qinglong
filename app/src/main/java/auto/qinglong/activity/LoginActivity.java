@@ -35,6 +35,11 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
+            finish();
+            return;
+        }
+
         layout_logo_ql = findViewById(R.id.logo_ql);
         layout_confirm = findViewById(R.id.button_confirm);
         layout_address = findViewById(R.id.input_address);

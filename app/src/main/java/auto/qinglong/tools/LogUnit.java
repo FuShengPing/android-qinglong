@@ -6,7 +6,7 @@ public class LogUnit {
     final static String TAG = "QINGLONG";
 
     public static void log(String str){
-        Log.e(TAG,str);
+        //Log.e(TAG,str);
     }
 
     public static void log(int str){

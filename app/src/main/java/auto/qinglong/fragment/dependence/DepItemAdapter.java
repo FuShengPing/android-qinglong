@@ -58,6 +58,9 @@ public class DepItemAdapter extends RecyclerView.Adapter<MyViewHolder> {
         } else if (dependence.getStatus() == 2) {
             holder.layout_status.setText("安装失败");
             holder.layout_status.setTextColor(context.getColor(R.color.text_color_red));
+        } else {
+            holder.layout_status.setText("卸载中");
+            holder.layout_status.setTextColor(context.getColor(R.color.text_color_49));
         }
 
         holder.layout_title.setOnClickListener(new View.OnClickListener() {

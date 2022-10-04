@@ -31,11 +31,11 @@
         <activity
             android:name=".activity.HomeActivity"
             android:exported="false"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTop" />
         <activity
             android:name=".activity.LoginActivity"
-            android:exported="true"
-            android:launchMode="singleTask">
+            android:launchMode="singleTop"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
