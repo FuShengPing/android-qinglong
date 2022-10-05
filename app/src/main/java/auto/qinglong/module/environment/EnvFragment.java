@@ -149,7 +149,7 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
 
     @Override
     public void init() {
-        envItemAdapter.setItemInterface(new ItemInterface() {
+        envItemAdapter.setItemInterface(new OnItemActionListener() {
             @Override
             public void onEdit(Environment environment, int position) {
                 showPopWindowEdit(environment);

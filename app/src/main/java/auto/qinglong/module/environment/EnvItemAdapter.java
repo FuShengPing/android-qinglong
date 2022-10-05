@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,7 +22,7 @@ import auto.qinglong.tools.TimeUnit;
 public class EnvItemAdapter extends RecyclerView.Adapter<MyViewHolder> {
     private Context context;
     private List<Environment> data;
-    private ItemInterface itemInterface;
+    private OnItemActionListener onItemActionListener;
     private boolean checkState;
     private Boolean[] dataCheckState;
 
@@ -70,28 +69,17 @@ public class EnvItemAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
         holder.layout_createAt.setText(TimeUnit.formatTimeA(environment.getCreated()));
 
-        holder.layout_name.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                itemInterface.onActions(environment, holder.getAdapterPosition());
-                return true;
-            }
+        holder.layout_name.setOnLongClickListener(v -> {
+            onItemActionListener.onActions(environment, holder.getAdapterPosition());
+            return true;
         });
 
-        holder.layout_body.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                itemInterface.onEdit(environment, holder.getAdapterPosition());
-                return true;
-            }
+        holder.layout_body.setOnLongClickListener(v -> {
+            onItemActionListener.onEdit(environment, holder.getAdapterPosition());
+            return true;
         });
 
-        holder.layout_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                dataCheckState[holder.getAdapterPosition()] = isChecked;
-            }
-        });
+        holder.layout_check.setOnCheckedChangeListener((buttonView, isChecked) -> dataCheckState[holder.getAdapterPosition()] = isChecked);
     }
 
     @Override
@@ -138,8 +126,8 @@ public class EnvItemAdapter extends RecyclerView.Adapter<MyViewHolder> {
         return environments;
     }
 
-    public void setItemInterface(ItemInterface itemInterface) {
-        this.itemInterface = itemInterface;
+    public void setItemInterface(OnItemActionListener onItemActionListener) {
+        this.onItemActionListener = onItemActionListener;
     }
 
 }
@@ -166,7 +154,7 @@ class MyViewHolder extends RecyclerView.ViewHolder {
     }
 }
 
-interface ItemInterface {
+interface OnItemActionListener {
     void onEdit(Environment environment, int position);
 
     void onActions(Environment environment, int position);
