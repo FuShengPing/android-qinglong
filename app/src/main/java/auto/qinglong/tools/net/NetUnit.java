@@ -1,4 +1,4 @@
-package auto.qinglong.tools;
+package auto.qinglong.tools.net;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;

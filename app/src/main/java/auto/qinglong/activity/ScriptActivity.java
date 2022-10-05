@@ -13,14 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import auto.qinglong.R;
-import auto.qinglong.api.ApiController;
 import auto.qinglong.database.sp.AccountSP;
-import auto.qinglong.tools.LogUnit;
-import auto.qinglong.tools.ToastUnit;
 import auto.qinglong.tools.WindowUnit;
-import auto.qinglong.tools.CallManager;
-import auto.qinglong.tools.web.JsInterface;
-import auto.qinglong.tools.web.WebJsManager;
+import auto.qinglong.tools.net.CallManager;
+import auto.qinglong.tools.net.WebJsManager;
 
 public class ScriptActivity extends BaseActivity {
     public static String EXTRA_NAME = "scriptName";

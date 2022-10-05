@@ -39,18 +39,17 @@ import auto.qinglong.api.object.Task;
 import auto.qinglong.api.res.TasksRes;
 import auto.qinglong.fragment.BaseFragment;
 import auto.qinglong.fragment.FragmentInterFace;
-import auto.qinglong.fragment.MenuClickInterface;
-import auto.qinglong.tools.CronUnit;
+import auto.qinglong.fragment.MenuClickListener;
 import auto.qinglong.tools.SortUnit;
 import auto.qinglong.tools.ToastUnit;
 import auto.qinglong.tools.WindowUnit;
-import auto.qinglong.tools.CallManager;
+import auto.qinglong.tools.net.CallManager;
 
 public class TaskFragment extends BaseFragment implements FragmentInterFace {
     public static String TAG = "TaskFragment";
 
     private String currentSearchValue = "";
-    private MenuClickInterface menuClickInterface;
+    private MenuClickListener menuClickListener;
     private TaskAdapter taskAdapter;
 
     private LinearLayout layout_root;
@@ -226,8 +225,8 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
         layout_nav_menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (menuClickInterface != null) {
-                    menuClickInterface.onMenuClick();
+                if (menuClickListener != null) {
+                    menuClickListener.onMenuClick();
                 }
             }
         });
@@ -424,8 +423,8 @@ public class TaskFragment extends BaseFragment implements FragmentInterFace {
         });
     }
 
-    public void setMenuClickInterface(MenuClickInterface menuClickInterface) {
-        this.menuClickInterface = menuClickInterface;
+    public void setMenuClickInterface(MenuClickListener menuClickListener) {
+        this.menuClickListener = menuClickListener;
     }
 
     public void getTasks(String searchValue, QueryType queryType) {

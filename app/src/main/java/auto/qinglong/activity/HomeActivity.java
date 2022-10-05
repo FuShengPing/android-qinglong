@@ -17,11 +17,11 @@ import auto.qinglong.fragment.config.ConfigFragment;
 import auto.qinglong.fragment.dependence.DepFragment;
 import auto.qinglong.fragment.environment.EnvFragment;
 import auto.qinglong.fragment.log.LogFragment;
-import auto.qinglong.fragment.MenuClickInterface;
+import auto.qinglong.fragment.MenuClickListener;
 import auto.qinglong.fragment.script.ScriptFragment;
 import auto.qinglong.fragment.setting.SettingFragment;
 import auto.qinglong.fragment.task.TaskFragment;
-import auto.qinglong.tools.NetUnit;
+import auto.qinglong.tools.net.NetUnit;
 import auto.qinglong.tools.ToastUnit;
 import auto.qinglong.tools.WindowUnit;
 
@@ -38,7 +38,7 @@ public class HomeActivity extends BaseActivity {
 
     private BaseFragment currentFragment;
     private String currentMenu = "";
-    private MenuClickInterface menuClickInterface;
+    private MenuClickListener menuClickListener;
 
     private AnimatorSet animator_menu_enter;
     private AnimatorSet animator_menu_exit;
@@ -69,7 +69,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void init() {
         //变量初始化
-        menuClickInterface = () -> layout_drawer.openDrawer(layout_drawer_left);
+        menuClickListener = () -> layout_drawer.openDrawer(layout_drawer_left);
 
         //导航栏初始化
         initDrawerBar();
@@ -99,49 +99,49 @@ public class HomeActivity extends BaseActivity {
         if (menu.equals(TaskFragment.TAG)) {
             if (taskFragment == null) {
                 taskFragment = new TaskFragment();
-                taskFragment.setMenuClickInterface(menuClickInterface);
+                taskFragment.setMenuClickInterface(menuClickListener);
                 getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, taskFragment, TaskFragment.TAG).commit();
             }
             currentFragment = taskFragment;
         } else if (menu.equals(LogFragment.TAG)) {
             if (logFragment == null) {
                 logFragment = new LogFragment();
-                logFragment.setMenuClickInterface(menuClickInterface);
+                logFragment.setMenuClickInterface(menuClickListener);
                 getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, logFragment, LogFragment.TAG).commit();
             }
             currentFragment = logFragment;
         } else if (menu.equals(ConfigFragment.TAG)) {
             if (configFragment == null) {
                 configFragment = new ConfigFragment();
-                configFragment.setMenuClickInterface(menuClickInterface);
+                configFragment.setMenuClickInterface(menuClickListener);
                 getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, configFragment, ConfigFragment.TAG).commit();
             }
             currentFragment = configFragment;
         } else if (menu.equals(ScriptFragment.TAG)) {
             if (scriptFragment == null) {
                 scriptFragment = new ScriptFragment();
-                scriptFragment.setMenuClickInterface(menuClickInterface);
+                scriptFragment.setMenuClickInterface(menuClickListener);
                 getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, scriptFragment, ScriptFragment.TAG).commit();
             }
             currentFragment = scriptFragment;
         } else if (menu.equals(EnvFragment.TAG)) {
             if (envFragment == null) {
                 envFragment = new EnvFragment();
-                envFragment.setMenuClickInterface(menuClickInterface);
+                envFragment.setMenuClickInterface(menuClickListener);
                 getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, envFragment, EnvFragment.TAG).commit();
             }
             currentFragment = envFragment;
         } else if (menu.equals(DepFragment.TAG)) {
             if (depFragment == null) {
                 depFragment = new DepFragment();
-                depFragment.setMenuClickInterface(menuClickInterface);
+                depFragment.setMenuClickInterface(menuClickListener);
                 getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, depFragment, EnvFragment.TAG).commit();
             }
             currentFragment = depFragment;
         } else if (menu.equals(SettingFragment.TAG)) {
             if (settingFragment == null) {
                 settingFragment = new SettingFragment();
-                settingFragment.setMenuClickInterface(menuClickInterface);
+                settingFragment.setMenuClickInterface(menuClickListener);
                 getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, settingFragment, EnvFragment.TAG).commit();
             }
             currentFragment = settingFragment;

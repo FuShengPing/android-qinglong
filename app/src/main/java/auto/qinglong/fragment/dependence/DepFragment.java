@@ -32,8 +32,7 @@ import auto.qinglong.api.ApiController;
 import auto.qinglong.api.object.Dependence;
 import auto.qinglong.fragment.BaseFragment;
 import auto.qinglong.fragment.FragmentInterFace;
-import auto.qinglong.fragment.MenuClickInterface;
-import auto.qinglong.tools.LogUnit;
+import auto.qinglong.fragment.MenuClickListener;
 import auto.qinglong.tools.ToastUnit;
 
 
@@ -48,7 +47,7 @@ public class DepFragment extends BaseFragment implements FragmentInterFace {
 
     private PagerFragment currentFragment;
     private PagerAdapter pagerAdapter;
-    private MenuClickInterface menuClickInterface;
+    private MenuClickListener menuClickListener;
 
     private RelativeLayout layout_bar;
     private LinearLayout layout_nav_bar;
@@ -95,7 +94,7 @@ public class DepFragment extends BaseFragment implements FragmentInterFace {
     @Override
     public void init() {
         //导航栏回调
-        layout_menu.setOnClickListener(v -> menuClickInterface.onMenuClick());
+        layout_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
 
         //弹窗-更多
         layout_more.setOnClickListener(new View.OnClickListener() {
@@ -212,7 +211,7 @@ public class DepFragment extends BaseFragment implements FragmentInterFace {
 
     private void initPopWindowEdit() {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.pop_fg_dep_edit, null, false);
-        TextView layout_title = view.findViewById(R.id.pop_edit_title);
+        TextView layout_title = view.findViewById(R.id.pop_title);
         Button layout_edit_cancel = view.findViewById(R.id.pop_edit_cancel);
         layout_edit_type = view.findViewById(R.id.pop_edit_dep_type);
         layout_edit_name = view.findViewById(R.id.pop_edit_dep_name);
@@ -345,8 +344,8 @@ public class DepFragment extends BaseFragment implements FragmentInterFace {
     }
 
     @Override
-    public void setMenuClickInterface(MenuClickInterface menuClickInterface) {
-        this.menuClickInterface = menuClickInterface;
+    public void setMenuClickInterface(MenuClickListener menuClickListener) {
+        this.menuClickListener = menuClickListener;
     }
 
     @Override

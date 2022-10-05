@@ -3,7 +3,6 @@ package auto.qinglong.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -19,7 +18,7 @@ import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.tools.LogUnit;
 import auto.qinglong.tools.ToastUnit;
 import auto.qinglong.tools.WindowUnit;
-import auto.qinglong.tools.CallManager;
+import auto.qinglong.tools.net.CallManager;
 
 public class LoginActivity extends BaseActivity {
 

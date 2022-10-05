@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import auto.qinglong.api.object.Environment;
 import auto.qinglong.api.object.Script;
 import auto.qinglong.api.object.Task;
 import auto.qinglong.api.object.TaskState;

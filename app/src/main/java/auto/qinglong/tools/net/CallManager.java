@@ -1,4 +1,4 @@
-package auto.qinglong.tools;
+package auto.qinglong.tools.net;
 
 import java.util.HashMap;
 import java.util.Map;

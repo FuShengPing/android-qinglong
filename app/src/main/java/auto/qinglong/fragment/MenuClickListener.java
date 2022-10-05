@@ -1,5 +1,5 @@
 package auto.qinglong.fragment;
 
-public interface MenuClickInterface {
+public interface MenuClickListener {
     void onMenuClick();
 }

@@ -1,6 +1,5 @@
-package auto.qinglong.tools.web;
+package auto.qinglong.tools.net;
 
-import android.webkit.ValueCallback;
 import android.webkit.WebView;
 
 import auto.qinglong.tools.LogUnit;

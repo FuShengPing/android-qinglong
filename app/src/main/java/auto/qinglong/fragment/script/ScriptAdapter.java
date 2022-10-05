@@ -21,7 +21,7 @@ import auto.qinglong.tools.TimeUnit;
 public class ScriptAdapter extends RecyclerView.Adapter<MyViewHolder> {
     private Context context;
     private List<Script> data;
-    private ScriptInterface scriptInterface;
+    private ScriptItemListener scriptInterface;
 
     public ScriptAdapter(@NonNull Context context) {
         this.context = context;
@@ -91,7 +91,7 @@ public class ScriptAdapter extends RecyclerView.Adapter<MyViewHolder> {
     }
 
 
-    public void setScriptInterface(ScriptInterface scriptInterface) {
+    public void setScriptInterface(ScriptItemListener scriptInterface) {
         this.scriptInterface = scriptInterface;
     }
 

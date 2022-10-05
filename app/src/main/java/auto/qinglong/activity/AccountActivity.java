@@ -1,7 +1,5 @@
 package auto.qinglong.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 
 import auto.qinglong.R;

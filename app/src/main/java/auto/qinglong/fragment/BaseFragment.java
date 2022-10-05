@@ -2,7 +2,7 @@ package auto.qinglong.fragment;
 
 import androidx.fragment.app.Fragment;
 
-import auto.qinglong.tools.CallManager;
+import auto.qinglong.tools.net.CallManager;
 
 public class BaseFragment extends Fragment {
     protected boolean haveFirstSuccess = false;//是否已经加载成功过数据

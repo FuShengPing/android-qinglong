@@ -10,13 +10,13 @@ import android.widget.ImageView;
 import auto.qinglong.R;
 import auto.qinglong.fragment.BaseFragment;
 import auto.qinglong.fragment.FragmentInterFace;
-import auto.qinglong.fragment.MenuClickInterface;
+import auto.qinglong.fragment.MenuClickListener;
 
 
 public class SettingFragment extends BaseFragment implements FragmentInterFace {
     public static String TAG = "SettingFragment";
 
-    private MenuClickInterface menuClickInterface;
+    private MenuClickListener menuClickListener;
 
 
     private ImageView layout_menu;
@@ -38,13 +38,13 @@ public class SettingFragment extends BaseFragment implements FragmentInterFace {
         layout_menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                menuClickInterface.onMenuClick();
+                menuClickListener.onMenuClick();
             }
         });
     }
 
     @Override
-    public void setMenuClickInterface(MenuClickInterface menuClickInterface) {
-        this.menuClickInterface = menuClickInterface;
+    public void setMenuClickInterface(MenuClickListener menuClickListener) {
+        this.menuClickListener = menuClickListener;
     }
 }

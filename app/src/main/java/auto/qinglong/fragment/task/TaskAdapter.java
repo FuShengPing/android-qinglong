@@ -21,7 +21,6 @@ import java.util.List;
 import auto.qinglong.R;
 import auto.qinglong.api.object.Task;
 import auto.qinglong.api.object.TaskState;
-import auto.qinglong.tools.CronUnit;
 import auto.qinglong.tools.TimeUnit;
 
 public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {

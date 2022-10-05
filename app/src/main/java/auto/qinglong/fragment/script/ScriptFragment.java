@@ -1,6 +1,5 @@
 package auto.qinglong.fragment.script;
 
-import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -27,18 +26,21 @@ import auto.qinglong.api.ApiController;
 import auto.qinglong.api.object.Script;
 import auto.qinglong.fragment.BaseFragment;
 import auto.qinglong.fragment.FragmentInterFace;
-import auto.qinglong.fragment.MenuClickInterface;
-import auto.qinglong.tools.CallManager;
+import auto.qinglong.fragment.MenuClickListener;
+import auto.qinglong.tools.net.CallManager;
 import auto.qinglong.tools.SortUnit;
 import auto.qinglong.tools.ToastUnit;
 
 
 public class ScriptFragment extends BaseFragment implements FragmentInterFace {
     public static String TAG = "ScriptFragment";
-    private MenuClickInterface menuClickInterface;
+
+    private MenuClickListener menuClickListener;
     private ScriptAdapter scriptAdapter;
+    //原始数据
     private List<Script> oData;
-    private boolean canBack = false;//存在可返回操作
+    //可返回操作
+    private boolean canBack = false;
 
     private ImageView layout_menu;
     private SwipeRefreshLayout layout_swipe;
@@ -67,35 +69,33 @@ public class ScriptFragment extends BaseFragment implements FragmentInterFace {
 
     @Override
     public void onResume() {
-        if (!haveFirstSuccess && !CallManager.isRequesting(getClassName())) {
-            firstLoad();
-        }
         super.onResume();
+        firstLoad();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if (!hidden && !haveFirstSuccess && !CallManager.isRequesting(getClassName())) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
             firstLoad();
         }
-        super.onHiddenChanged(hidden);
     }
 
     private void firstLoad() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        if (!haveFirstSuccess && !CallManager.isRequesting(getClassName())) {
+            new Handler().postDelayed(() -> {
                 if (isVisible()) {
                     getScripts();
                 }
-            }
-        }, 1000);
+            }, 1000);
+        }
+
     }
 
     @Override
     public void init() {
         //item回调
-        scriptAdapter.setScriptInterface(new ScriptInterface() {
+        scriptAdapter.setScriptInterface(new ScriptItemListener() {
             @Override
             public void onEdit(Script script) {
                 if (script.getChildren() != null) {
@@ -123,7 +123,7 @@ public class ScriptFragment extends BaseFragment implements FragmentInterFace {
         layout_swipe.setOnRefreshListener(this::getScripts);
 
         //唤起主导航栏
-        layout_menu.setOnClickListener(v -> menuClickInterface.onMenuClick());
+        layout_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
     }
 
     private void getScripts() {
@@ -149,15 +149,15 @@ public class ScriptFragment extends BaseFragment implements FragmentInterFace {
         });
     }
 
-    @SuppressLint("SetTextI18n")
     private void setData(List<Script> data, String dir) {
         scriptAdapter.setData(SortUnit.sortScript(data));
-        layout_dir.setText("/" + dir);
+        String text = "/" + dir;
+        layout_dir.setText(text);
     }
 
     @Override
-    public void setMenuClickInterface(MenuClickInterface menuClickInterface) {
-        this.menuClickInterface = menuClickInterface;
+    public void setMenuClickInterface(MenuClickListener menuClickListener) {
+        this.menuClickListener = menuClickListener;
     }
 
     @Override

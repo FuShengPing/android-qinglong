@@ -1,10 +1,7 @@
 package auto.qinglong.activity;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -15,10 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import auto.qinglong.R;
-import auto.qinglong.api.ApiController;
 import auto.qinglong.database.sp.AccountSP;
-import auto.qinglong.tools.CallManager;
-import auto.qinglong.tools.web.WebJsManager;
+import auto.qinglong.tools.net.CallManager;
+import auto.qinglong.tools.net.WebJsManager;
 
 public class LogActivity extends BaseActivity {
     public static String ExtraName = "logName";

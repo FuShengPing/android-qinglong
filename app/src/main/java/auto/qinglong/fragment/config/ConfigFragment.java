@@ -18,20 +18,17 @@ import androidx.annotation.Nullable;
 
 import auto.qinglong.MyApplication;
 import auto.qinglong.R;
-import auto.qinglong.api.ApiController;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.fragment.BaseFragment;
 import auto.qinglong.fragment.FragmentInterFace;
-import auto.qinglong.fragment.MenuClickInterface;
-import auto.qinglong.tools.ToastUnit;
+import auto.qinglong.fragment.MenuClickListener;
 import auto.qinglong.tools.WindowUnit;
-import auto.qinglong.tools.CallManager;
-import auto.qinglong.tools.web.WebJsManager;
+import auto.qinglong.tools.net.WebJsManager;
 
 public class ConfigFragment extends BaseFragment implements FragmentInterFace {
     public static String TAG = "ConfigFragment";
 
-    private MenuClickInterface menuClickInterface;
+    private MenuClickListener menuClickListener;
 
     private RelativeLayout layout_menu_bar;
     private ImageView layout_menu;
@@ -64,7 +61,7 @@ public class ConfigFragment extends BaseFragment implements FragmentInterFace {
 
     @Override
     public void init() {
-        layout_menu.setOnClickListener(v -> menuClickInterface.onMenuClick());
+        layout_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
 
         //进入编辑状态
         layout_edit.setOnClickListener(v -> {
@@ -146,8 +143,8 @@ public class ConfigFragment extends BaseFragment implements FragmentInterFace {
     }
 
     @Override
-    public void setMenuClickInterface(MenuClickInterface menuClickInterface) {
-        this.menuClickInterface = menuClickInterface;
+    public void setMenuClickInterface(MenuClickListener menuClickListener) {
+        this.menuClickListener = menuClickListener;
     }
 
     @Override

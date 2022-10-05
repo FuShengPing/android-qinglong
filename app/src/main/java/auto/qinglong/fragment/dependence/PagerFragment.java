@@ -18,8 +18,7 @@ import auto.qinglong.api.ApiController;
 import auto.qinglong.api.object.Dependence;
 import auto.qinglong.api.res.DependenceRes;
 import auto.qinglong.fragment.BaseFragment;
-import auto.qinglong.tools.CallManager;
-import auto.qinglong.tools.LogUnit;
+import auto.qinglong.tools.net.CallManager;
 import auto.qinglong.tools.ToastUnit;
 
 public class PagerFragment extends BaseFragment {

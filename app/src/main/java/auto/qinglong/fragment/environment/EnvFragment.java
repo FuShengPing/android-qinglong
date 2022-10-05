@@ -37,15 +37,15 @@ import auto.qinglong.api.object.Environment;
 import auto.qinglong.api.res.EnvironmentRes;
 import auto.qinglong.fragment.BaseFragment;
 import auto.qinglong.fragment.FragmentInterFace;
-import auto.qinglong.fragment.MenuClickInterface;
-import auto.qinglong.tools.CallManager;
+import auto.qinglong.fragment.MenuClickListener;
+import auto.qinglong.tools.net.CallManager;
 import auto.qinglong.tools.ToastUnit;
 import auto.qinglong.tools.WindowUnit;
 
 public class EnvFragment extends BaseFragment implements FragmentInterFace {
     public static String TAG = "EnvFragment";
     private String currentSearchValue = "";
-    private MenuClickInterface menuClickInterface;
+    private MenuClickListener menuClickListener;
     private EnvItemAdapter envItemAdapter;
 
     enum QueryType {QUERY, OTHER}
@@ -170,7 +170,7 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
         layout_nav_menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                menuClickInterface.onMenuClick();
+                menuClickListener.onMenuClick();
             }
         });
 
@@ -576,8 +576,8 @@ public class EnvFragment extends BaseFragment implements FragmentInterFace {
     }
 
     @Override
-    public void setMenuClickInterface(MenuClickInterface menuClickInterface) {
-        this.menuClickInterface = menuClickInterface;
+    public void setMenuClickInterface(MenuClickListener menuClickListener) {
+        this.menuClickListener = menuClickListener;
     }
 
     @Override
