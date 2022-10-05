@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@drawable/style_bg_gradient_blue_90"
-        android:paddingHorizontal="15dp"
+        android:paddingHorizontal="16dp"
         android:paddingVertical="8dp">
 
         <ImageView
@@ -17,6 +17,7 @@
             android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:background="@drawable/style_press_gray"
+            android:clickable="true"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_arrow_back" />
 
@@ -24,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="账号管理"
+            android:text="@string/account_manage"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="18sp" />
@@ -35,9 +36,16 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:text="编辑"
+            android:text="@string/edit"
             android:textColor="@color/white"
             android:textSize="18sp" />
 
     </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
 </LinearLayout>
