@@ -6,6 +6,22 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="mul_action">批量操作</string>
-    <string name="edit">编辑</string>
+    <string name="action_new_task">新建任务</string>
     <string name="account_manage">账号管理</string>
+    <string name="action_select_all">全选</string>
+    <string name="action_edit">编辑</string>
+    <string name="action_edit_task">编辑任务</string>
+    <string name="action_run">运行</string>
+    <string name="action_stop">停止</string>
+    <string name="action_pin">顶置</string>
+    <string name="action_pin_success">顶置</string>
+    <string name="action_pin_failure">顶置</string>
+    <string name="action_pin_cancel">下置</string>
+    <string name="action_enable">启用</string>
+    <string name="action_disable">禁用</string>
+    <string name="action_delete">删除</string>
+    <string name="edit_empty_task_name">任务名称不能为空</string>
+    <string name="edit_empty_command">任务命令不能为空</string>
+    <string name="edit_invalid_schedule">任务定时规则不合法</string>
+    <string name="tip_searching">搜索中…</string>
 </resources>

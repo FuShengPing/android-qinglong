@@ -127,7 +127,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="全选"
+                    android:text="@string/action_select_all"
                     android:textColor="@color/white"
                     android:textSize="11sp" />
             </LinearLayout>
@@ -164,7 +164,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="运行"
+                            android:text="@string/action_run"
                             android:textColor="@color/white"
                             android:textSize="11sp" />
                     </LinearLayout>
@@ -188,7 +188,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="停止"
+                            android:text="@string/action_stop"
                             android:textColor="@color/white"
                             android:textSize="11sp" />
                     </LinearLayout>
@@ -212,7 +212,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="顶置"
+                            android:text="@string/action_pin"
                             android:textColor="@color/white"
                             android:textSize="11sp" />
                     </LinearLayout>
@@ -236,7 +236,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="下置"
+                            android:text="@string/action_pin_cancel"
                             android:textColor="@color/white"
                             android:textSize="11sp" />
                     </LinearLayout>
@@ -260,7 +260,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="启用"
+                            android:text="@string/action_enable"
                             android:textColor="@color/white"
                             android:textSize="11sp" />
                     </LinearLayout>
@@ -284,7 +284,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="禁用"
+                            android:text="@string/action_disable"
                             android:textColor="@color/white"
                             android:textSize="11sp" />
                     </LinearLayout>
@@ -308,7 +308,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="删除"
+                            android:text="@string/action_delete"
                             android:textColor="@color/white"
                             android:textSize="11sp" />
                     </LinearLayout>
@@ -322,18 +322,23 @@
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:srlEnableAutoLoadMore="false"
         android:background="@color/bg_gray"
         app:srlAccentColor="@color/text_color_80"
+        app:srlDisableContentWhenRefresh="true"
         app:srlPrimaryColor="@color/white">
 
         <com.scwang.smart.refresh.header.ClassicsHeader
             android:id="@+id/refreshHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:srlEnableLastTime="false" />
+            app:srlDrawableMarginRight="10dp"
+            app:srlDrawableSize="15dp"
+            app:srlEnableLastTime="false"
+            app:srlTextSizeTitle="13sp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/task_recycler"
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never"

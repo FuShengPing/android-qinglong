@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -25,12 +24,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.scwang.smart.refresh.header.ClassicsHeader;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
-import com.scwang.smart.refresh.layout.api.RefreshLayout;
-import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,30 +48,25 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
     private MenuClickListener menuClickListener;
     private TaskAdapter taskAdapter;
 
-    private LinearLayout layout_root;
-    private RelativeLayout layout_bar;
-    private SmartRefreshLayout layout_refresh;
-    private RecyclerView layout_recycler;
+    //弹窗编辑框
     private PopupWindow popupWindowMore;
     private PopupWindow popupWindowEdit;
     private TextView layout_edit_type;
     private TextView layout_edit_name;
     private TextView layout_edit_command;
     private TextView layout_edit_schedule;
-    private TextView layout_edit_label;
     private Button layout_edit_save;
-
     //初始导航栏
     private LinearLayout layout_bar_nav;
     private ImageView layout_nav_menu;
     private ImageView layout_nav_search;
     private ImageView layout_nav_more;
-    //搜索导航栏
+    //搜索导航栏控件
     private LinearLayout layout_bar_search;
     private ImageView layout_search_back;
     private ImageView layout_search_confirm;
     private EditText layout_search_value;
-    //批量操作导航栏
+    //批量操作导航栏控件
     private LinearLayout layout_bar_actions;
     private ImageView layout_actions_back;
     private CheckBox layout_actions_select;
@@ -88,6 +78,11 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
     private LinearLayout layout_actions_enable;
     private LinearLayout layout_actions_disable;
     private LinearLayout layout_actions_delete;
+    //布局控件
+    private LinearLayout layout_root;
+    private RelativeLayout layout_bar;
+    private SmartRefreshLayout layout_refresh;
+    private RecyclerView layout_recycler;
 
     private enum QueryType {QUERY, SEARCH, OTHER}
 
@@ -100,7 +95,9 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fg_task, null);
+
         layout_root = view.findViewById(R.id.root);
+
         layout_bar = view.findViewById(R.id.task_bar);
         layout_bar_nav = view.findViewById(R.id.task_bar_nav);
         layout_nav_search = view.findViewById(R.id.task_bar_nav_search);
@@ -125,7 +122,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
         layout_actions_delete = view.findViewById(R.id.task_bar_actions_delete);
 
         layout_refresh = view.findViewById(R.id.refreshLayout);
-        layout_recycler = view.findViewById(R.id.task_recycler);
+        layout_recycler = view.findViewById(R.id.recyclerView);
 
         //item容器配置
         taskAdapter = new TaskAdapter(getContext());
@@ -134,11 +131,6 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
         layout_recycler.setAdapter(taskAdapter);
         layout_recycler.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
 
-        ClassicsHeader header = view.findViewById(R.id.refreshHeader);
-        header.setTextSizeTitle(13);//设置标题文字大小（sp单位）
-        //header.setEnableLastTime(false);
-        layout_refresh.setDisableContentWhenRefresh(true);
-
         init();
 
         return view;
@@ -146,21 +138,25 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
 
     @Override
     public void onResume() {
-        if (!haveFirstSuccess && !RequestManager.isRequesting(this.getClassName())) {
-            firstLoad();
-        }
         super.onResume();
+        firstLoad();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if (!hidden && !haveFirstSuccess && !RequestManager.isRequesting(this.getClassName())) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
             firstLoad();
         }
-        super.onHiddenChanged(hidden);
     }
 
+    /***
+     * 首次加载数据(直至成功加载一次) 页面转入可见时调用
+     */
     private void firstLoad() {
+        if (haveFirstSuccess || RequestManager.isRequesting(this.getClassName())) {
+            return;
+        }
         new Handler().postDelayed(() -> {
             if (isVisible()) {
                 getTasks("", QueryType.QUERY);
@@ -170,7 +166,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
 
     @Override
     public void init() {
-        //任务操作接口
+        //列表item操作接口
         taskAdapter.setTaskInterface(new ItemInterface() {
             @Override
             public void onLog(Task task) {
@@ -211,10 +207,11 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
             }
         });
 
-
+        //刷新控件//
+        //初始设置处于刷新状态
         layout_refresh.autoRefreshAnimationOnly();
         layout_refresh.setOnRefreshListener(refreshLayout -> getTasks(currentSearchValue, QueryType.QUERY));
-        layout_refresh.setEnableLoadMore(false);
+
         //导航点击监听
         layout_nav_menu.setOnClickListener(v -> {
             if (menuClickListener != null) {
@@ -236,7 +233,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
             if (RequestManager.isRequesting(getClassName())) {
                 return;
             }
-            ToastUnit.showShort(getContext(), "搜索中...");
+            ToastUnit.showShort(getContext(), getString(R.string.tip_searching));
             currentSearchValue = layout_search_value.getText().toString();
             WindowUnit.hideKeyboard(layout_search_value);
             getTasks(currentSearchValue, QueryType.SEARCH);
@@ -395,13 +392,19 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
                 } else if (queryType == QueryType.SEARCH) {
                     ToastUnit.showShort(getContext(), "搜索成功");
                 }
-                onNetRequestEnd();
+                this.onEnd(true);
             }
 
             @Override
             public void onFailure(String msg) {
                 ToastUnit.showShort(getContext(), "加载失败：" + msg);
-                onNetRequestEnd();
+                this.onEnd(false);
+            }
+
+            public void onEnd(boolean isSuccess) {
+                if (layout_refresh.isRefreshing()) {
+                    layout_refresh.finishRefresh();
+                }
             }
         });
     }
@@ -423,7 +426,6 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
             @Override
             public void onFailure(String msg) {
                 ToastUnit.showShort(getContext(), "执行失败：" + msg);
-                onNetRequestEnd();
             }
         });
 
@@ -490,13 +492,13 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
                 if (layout_actions_back.getVisibility() == View.VISIBLE) {
                     layout_actions_back.performClick();
                 }
-                ToastUnit.showShort(getContext(), "顶置成功");
+                ToastUnit.showShort(getContext(), getString(R.string.action_pin_success));
                 getTasks(currentSearchValue, QueryType.OTHER);
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort(getContext(), "顶置失败：" + msg);
+                ToastUnit.showShort(getContext(), getString(R.string.action_pin_failure) + msg);
             }
         });
     }
@@ -576,8 +578,8 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
             LinearLayout layout_action = view.findViewById(R.id.pop_fg_more_action);
             TextView layout_add_text = view.findViewById(R.id.pop_fg_more_add_text);
             TextView layout_action_text = view.findViewById(R.id.pop_fg_more_action_text);
-            layout_add_text.setText("新建任务");
-            layout_action_text.setText("批量操作");
+            layout_add_text.setText(getString(R.string.action_new_task));
+            layout_action_text.setText(getString(R.string.mul_action));
 
             popupWindowMore = new PopupWindow(getContext());
             popupWindowMore.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
@@ -595,9 +597,9 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
             layout_action.setOnClickListener(v -> {
                 popupWindowMore.dismiss();
                 showBar(BarType.ACTIONS);
-
             });
         }
+
         popupWindowMore.showAsDropDown(layout_bar, 0, 0, Gravity.END);
     }
 
@@ -621,21 +623,20 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
             popupWindowEdit.setFocusable(true);
             popupWindowEdit.setAnimationStyle(R.style.anim_fg_task_pop_edit);
 
+            //关闭弹窗
             layout_edit_cancel.setOnClickListener(v -> popupWindowEdit.dismiss());
 
-            popupWindowEdit.setOnDismissListener(() -> {
-                BaseActivity baseActivity = (BaseActivity) getActivity();
-                baseActivity.setBackgroundAlpha(1.0f);
-            });
+            //取消蒙层
+            popupWindowEdit.setOnDismissListener(() -> WindowUnit.setBackgroundAlpha(requireActivity(), 1.0f));
         }
 
         if (task != null) {
-            layout_edit_type.setText("编辑任务");
+            layout_edit_type.setText(getString(R.string.action_edit_task));
             layout_edit_name.setText(task.getName());
             layout_edit_command.setText(task.getCommand());
             layout_edit_schedule.setText(task.getSchedule());
         } else {
-            layout_edit_type.setText("新建任务");
+            layout_edit_type.setText(getString(R.string.action_new_task));
             layout_edit_name.setText(null);
             layout_edit_command.setText(null);
             layout_edit_schedule.setText(null);
@@ -651,35 +652,35 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
             String name = layout_edit_name.getText().toString().trim();
             String command = layout_edit_command.getText().toString().trim();
             String schedule = layout_edit_schedule.getText().toString().trim();
+
             if (name.isEmpty()) {
-                ToastUnit.showShort(getContext(), "任务名称不能为空");
+                ToastUnit.showShort(getContext(), getString(R.string.edit_empty_task_name));
                 return;
             }
             if (command.isEmpty()) {
-                ToastUnit.showShort(getContext(), "任务命令不能为空");
+                ToastUnit.showShort(getContext(), getString(R.string.edit_empty_command));
                 return;
             }
             if (!CronUnit.isValid(schedule)) {
-                ToastUnit.showShort(getContext(), "任务定时规则不合法");
+                ToastUnit.showShort(getContext(), getString(R.string.edit_invalid_schedule));
                 return;
             }
 
+            Task newTask = new Task();
             if (task == null) {
-                Task newTask = new Task();
                 newTask.setName(name);
                 newTask.setCommand(command);
                 newTask.setSchedule(schedule);
                 addTask(newTask);
             } else {
-                task.setName(name);
-                task.setCommand(command);
-                task.setSchedule(schedule);
-                editTask(task);
+                newTask.setName(name);
+                newTask.setCommand(command);
+                newTask.setSchedule(schedule);
+                editTask(newTask);
             }
         });
 
-        BaseActivity baseActivity = (BaseActivity) getActivity();
-        baseActivity.setBackgroundAlpha(0.5f);
+        WindowUnit.setBackgroundAlpha(requireActivity(), 0.5f);
         popupWindowEdit.showAtLocation(layout_root, Gravity.CENTER, 0, 0);
     }
 
@@ -706,15 +707,6 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
             layout_actions_scroll.scrollTo(0, 0);
             taskAdapter.setCheckState(true, -1);
             layout_bar_actions.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public void onNetRequestEnd() {
-//        if (layout_swipe.isRefreshing()) {
-//            layout_swipe.setRefreshing(false);
-//        }
-        if (layout_refresh.isRefreshing()) {
-            layout_refresh.finishRefresh();
         }
     }
 

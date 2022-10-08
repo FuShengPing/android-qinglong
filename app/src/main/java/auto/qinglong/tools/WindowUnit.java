@@ -119,20 +119,13 @@ public class WindowUnit {
     }
 
     /**
-     * Sets max fling velocity.
-     * 改变Recycleview的滑动速度,默认8000
-     *
-     * @param recyclerView the recycler view
-     * @param velocity     the velocity
+     * 设置背景透明度 实现蒙层效果
      */
-    public static void setMaxFlingVelocity(RecyclerView recyclerView, int velocity) {
-
-        try {
-            Field field = recyclerView.getClass().getDeclaredField("mMaxFlingVelocity");
-            field.setAccessible(true);
-            field.set(recyclerView, velocity);
-        } catch (NoSuchFieldException | IllegalAccessException ignored) {
-        }
+    public static void setBackgroundAlpha(Activity activity, float bgAlpha) {
+        WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
+        lp.alpha = bgAlpha;
+        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        activity.getWindow().setAttributes(lp);
     }
 
     /**
