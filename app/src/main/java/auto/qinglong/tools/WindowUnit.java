@@ -16,8 +16,6 @@ import auto.qinglong.MyApplication;
 public class WindowUnit {
     /**
      * 隐藏虚拟键盘
-     *
-     * @param v
      */
     public static void hideKeyboard(View v) {
         InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -30,8 +28,6 @@ public class WindowUnit {
     /**
      * Get window height dp float.
      * 获取屏幕高度 dp
-     *
-     * @return the float
      */
     public static float getWindowHeightDp() {
         return px2dip(MyApplication.getContext().getResources().getDisplayMetrics().heightPixels);
@@ -40,8 +36,6 @@ public class WindowUnit {
     /**
      * Gets window height pix.
      * 获取屏幕高度 pix
-     *
-     * @return the window height pix
      */
     public static int getWindowHeightPix(Context context) {
         return context.getResources().getDisplayMetrics().heightPixels;
@@ -49,8 +43,6 @@ public class WindowUnit {
 
     /**
      * 获取屏幕宽度 pix
-     *
-     * @return
      */
     public static int getWindowWidthPix() {
         return MyApplication.getContext().getResources().getDisplayMetrics().widthPixels;
@@ -59,8 +51,6 @@ public class WindowUnit {
     /**
      * Gets status bar height.
      * 获取状态栏高度
-     *
-     * @return the status bar height
      */
 
     public static int getStatusBarHeight() {
@@ -90,8 +80,6 @@ public class WindowUnit {
     /**
      * Sets translucent status.
      * 设置透明状态栏
-     *
-     * @param activity the activity
      */
     public static void setTranslucentStatus(Activity activity) {
         activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -100,8 +88,6 @@ public class WindowUnit {
     /**
      * Sets translucent navigation.
      * 设置透明导航栏，ps:唤醒导航栏不会上推界面
-     *
-     * @param activity the activity
      */
     public static void setTranslucentNavigation(Activity activity) {
         activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -110,9 +96,6 @@ public class WindowUnit {
     /**
      * Set navigation color.
      * 设置导航栏颜色
-     *
-     * @param activity the activity
-     * @param color    the color
      */
     public static void setNavigationColor(Activity activity, int color) {
         activity.getWindow().setNavigationBarColor(color);
@@ -131,9 +114,6 @@ public class WindowUnit {
     /**
      * Dip 2 px int.
      * dp转化成px
-     *
-     * @param dp the dp
-     * @return the int
      */
     public static int dip2px(float dp) {
         final float scale = MyApplication.getContext().getResources().getDisplayMetrics().density;

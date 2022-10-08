@@ -39,9 +39,6 @@ public class HomeActivity extends BaseActivity {
     private String currentMenu = "";
     private BaseFragment.MenuClickListener menuClickListener;
 
-    private AnimatorSet animator_menu_enter;
-    private AnimatorSet animator_menu_exit;
-
     //布局变量
     private DrawerLayout layout_drawer;
     private LinearLayout layout_drawer_left;

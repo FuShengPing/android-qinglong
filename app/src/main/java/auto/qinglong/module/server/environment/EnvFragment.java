@@ -467,14 +467,7 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
             }
         });
 
-        popupWindowEdit.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                BaseActivity baseActivity = (BaseActivity) getActivity();
-                assert baseActivity != null;
-                baseActivity.setBackgroundAlpha(1.0f);
-            }
-        });
+        popupWindowEdit.setOnDismissListener(() -> WindowUnit.setBackgroundAlpha(requireActivity(),1.0f));
     }
 
     public void showPopWindowMore() {
@@ -540,9 +533,7 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
             }
         });
 
-        BaseActivity baseActivity = (BaseActivity) getActivity();
-        assert baseActivity != null;
-        baseActivity.setBackgroundAlpha(0.5f);
+        WindowUnit.setBackgroundAlpha(requireActivity(),0.5f);
         popupWindowEdit.showAtLocation(layout_root, Gravity.CENTER, 0, 0);
     }
 

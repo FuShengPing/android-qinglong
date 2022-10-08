@@ -63,16 +63,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * 设置背景透明度 实现蒙层效果
-     */
-    public void setBackgroundAlpha(float bgAlpha) {
-        WindowManager.LayoutParams lp = this.getWindow().getAttributes();
-        lp.alpha = bgAlpha;
-        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        this.getWindow().setAttributes(lp);
-    }
-
     protected abstract void init();
 
     protected abstract void initWindow();

@@ -31,6 +31,7 @@ import auto.qinglong.module.BaseActivity;
 import auto.qinglong.net.ApiController;
 import auto.qinglong.module.BaseFragment;
 import auto.qinglong.tools.ToastUnit;
+import auto.qinglong.tools.WindowUnit;
 
 
 public class DepFragment extends BaseFragment implements BaseFragment.FragmentInterFace {
@@ -231,14 +232,7 @@ public class DepFragment extends BaseFragment implements BaseFragment.FragmentIn
             }
         });
 
-        popupWindowEdit.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                BaseActivity baseActivity = (BaseActivity) getActivity();
-                assert baseActivity != null;
-                baseActivity.setBackgroundAlpha(1.0f);
-            }
-        });
+        popupWindowEdit.setOnDismissListener(() -> WindowUnit.setBackgroundAlpha(requireActivity(),1.0f));
 
     }
 
@@ -250,36 +244,31 @@ public class DepFragment extends BaseFragment implements BaseFragment.FragmentIn
         //设置依赖类型
         layout_edit_type.setHint(pagerAdapter.getCurrentFragment(layout_page.getCurrentItem()).getType());
 
-        layout_edit_confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String type = layout_edit_type.getHint().toString();
-                String name = layout_edit_name.getText().toString().trim();
+        layout_edit_confirm.setOnClickListener(v -> {
+            String type = layout_edit_type.getHint().toString();
+            String name = layout_edit_name.getText().toString().trim();
 
-                if (name.isEmpty()) {
-                    ToastUnit.showShort("请输入依赖名称");
-                    return;
-                }
-
-                List<Dependence> dependencies = new ArrayList<>();
-                Dependence dependence = new Dependence();
-                dependence.setName(name);
-                if (type.equals(type_linux)) {
-                    dependence.setType(0);
-                } else if (type.equals(type_python)) {
-                    dependence.setType(1);
-                } else {
-                    dependence.setType(2);
-                }
-                dependencies.add(dependence);
-
-                addDependence(dependencies);
+            if (name.isEmpty()) {
+                ToastUnit.showShort("请输入依赖名称");
+                return;
             }
+
+            List<Dependence> dependencies = new ArrayList<>();
+            Dependence dependence = new Dependence();
+            dependence.setName(name);
+            if (type.equals(type_linux)) {
+                dependence.setType(0);
+            } else if (type.equals(type_python)) {
+                dependence.setType(1);
+            } else {
+                dependence.setType(2);
+            }
+            dependencies.add(dependence);
+
+            addDependence(dependencies);
         });
 
-        BaseActivity baseActivity = (BaseActivity) getActivity();
-        assert baseActivity != null;
-        baseActivity.setBackgroundAlpha(0.5f);
+        WindowUnit.setBackgroundAlpha(requireActivity(),0.5f);
         popupWindowEdit.showAtLocation(getView(), Gravity.CENTER, 0, 0);
     }
 

@@ -20,8 +20,9 @@
     <string name="action_enable">启用</string>
     <string name="action_disable">禁用</string>
     <string name="action_delete">删除</string>
-    <string name="edit_empty_task_name">任务名称不能为空</string>
-    <string name="edit_empty_command">任务命令不能为空</string>
-    <string name="edit_invalid_schedule">任务定时规则不合法</string>
+    <string name="tip_empty_task_name">任务名称不能为空</string>
+    <string name="tip_empty_command">任务命令不能为空</string>
+    <string name="tip_invalid_schedule">任务定时规则不合法</string>
     <string name="tip_searching">搜索中…</string>
+    <string name="tip_empty_select">至少选择一项</string>
 </resources>

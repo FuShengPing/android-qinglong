@@ -123,13 +123,6 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
         layout_refresh = view.findViewById(R.id.refreshLayout);
         layout_recycler = view.findViewById(R.id.recyclerView);
 
-        //item容器配置
-        taskAdapter = new TaskAdapter(getContext());
-        //取消更新动画，避免刷新闪烁
-        Objects.requireNonNull(layout_recycler.getItemAnimator()).setChangeDuration(0);
-        layout_recycler.setAdapter(taskAdapter);
-        layout_recycler.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-
         init();
 
         return view;
@@ -165,6 +158,13 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
 
     @Override
     public void init() {
+        //item容器配置
+        taskAdapter = new TaskAdapter(getContext());
+        //取消更新动画，避免刷新闪烁
+        Objects.requireNonNull(layout_recycler.getItemAnimator()).setChangeDuration(0);
+        layout_recycler.setAdapter(taskAdapter);
+        layout_recycler.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+
         //列表item操作接口
         taskAdapter.setTaskInterface(new ItemInterface() {
             @Override
@@ -256,7 +256,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
             if (!RequestManager.isRequesting(getClassName())) {
                 List<Task> tasks = taskAdapter.getCheckedItems();
                 if (tasks.size() == 0) {
-                    ToastUnit.showShort(getContext(), "至少选择一项");
+                    ToastUnit.showShort(getContext(), getString(R.string.tip_empty_select));
                 } else {
                     List<String> ids = new ArrayList<>();
                     for (Task task : tasks) {
@@ -272,7 +272,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
             if (!RequestManager.isRequesting(getClassName())) {
                 List<Task> tasks = taskAdapter.getCheckedItems();
                 if (tasks.size() == 0) {
-                    ToastUnit.showShort(getContext(), "至少选择一项");
+                    ToastUnit.showShort(getContext(), getString(R.string.tip_empty_select));
                 } else {
                     List<String> ids = new ArrayList<>();
                     for (Task task : tasks) {
@@ -288,7 +288,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
             if (!RequestManager.isRequesting(getClassName())) {
                 List<Task> tasks = taskAdapter.getCheckedItems();
                 if (tasks.size() == 0) {
-                    ToastUnit.showShort(getContext(), "至少选择一项");
+                    ToastUnit.showShort(getContext(), getString(R.string.tip_empty_select));
                 } else {
                     List<String> ids = new ArrayList<>();
                     for (Task task : tasks) {
@@ -300,77 +300,65 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
         });
 
         //取消顶置
-        layout_actions_unpin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!RequestManager.isRequesting(getClassName())) {
-                    List<Task> tasks = taskAdapter.getCheckedItems();
-                    if (tasks.size() == 0) {
-                        ToastUnit.showShort(getContext(), "至少选择一项");
-                    } else {
-                        List<String> ids = new ArrayList<>();
-                        for (Task task : tasks) {
-                            ids.add(task.get_id());
-                        }
-                        unpinTasks(ids);
+        layout_actions_unpin.setOnClickListener(v -> {
+            if (!RequestManager.isRequesting(getClassName())) {
+                List<Task> tasks = taskAdapter.getCheckedItems();
+                if (tasks.size() == 0) {
+                    ToastUnit.showShort(getContext(), getString(R.string.tip_empty_select));
+                } else {
+                    List<String> ids = new ArrayList<>();
+                    for (Task task : tasks) {
+                        ids.add(task.get_id());
                     }
+                    unpinTasks(ids);
                 }
             }
         });
 
         //启用
-        layout_actions_enable.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!RequestManager.isRequesting(getClassName())) {
-                    List<Task> tasks = taskAdapter.getCheckedItems();
-                    if (tasks.size() == 0) {
-                        ToastUnit.showShort(getContext(), "至少选择一项");
-                    } else {
-                        List<String> ids = new ArrayList<>();
-                        for (Task task : tasks) {
-                            ids.add(task.get_id());
-                        }
-                        enableTasks(ids);
+        layout_actions_enable.setOnClickListener(v -> {
+            if (!RequestManager.isRequesting(getClassName())) {
+                List<Task> tasks = taskAdapter.getCheckedItems();
+                if (tasks.size() == 0) {
+                    ToastUnit.showShort(getContext(), getString(R.string.tip_empty_select));
+                } else {
+                    List<String> ids = new ArrayList<>();
+                    for (Task task : tasks) {
+                        ids.add(task.get_id());
                     }
+                    enableTasks(ids);
                 }
             }
         });
 
         //禁用
-        layout_actions_disable.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!RequestManager.isRequesting(getClassName())) {
-                    List<Task> tasks = taskAdapter.getCheckedItems();
-                    if (tasks.size() == 0) {
-                        ToastUnit.showShort(getContext(), "至少选择一项");
-                    } else {
-                        List<String> ids = new ArrayList<>();
-                        for (Task task : tasks) {
-                            ids.add(task.get_id());
-                        }
-                        disableTasks(ids);
+        layout_actions_disable.setOnClickListener(v -> {
+            if (!RequestManager.isRequesting(getClassName())) {
+                List<Task> tasks = taskAdapter.getCheckedItems();
+                if (tasks.size() == 0) {
+                    ToastUnit.showShort(getContext(), getString(R.string.tip_empty_select));
+                } else {
+                    List<String> ids = new ArrayList<>();
+                    for (Task task : tasks) {
+                        ids.add(task.get_id());
                     }
+                    disableTasks(ids);
                 }
             }
         });
 
         //删除
-        layout_actions_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!RequestManager.isRequesting(getClassName())) {
-                    List<Task> tasks = taskAdapter.getCheckedItems();
-                    if (tasks.size() == 0) {
-                        ToastUnit.showShort(getContext(), "至少选择一项");
-                    } else {
-                        List<String> ids = new ArrayList<>();
-                        for (Task task : tasks) {
-                            ids.add(task.get_id());
-                        }
-                        deleteTasks(ids);
+        layout_actions_delete.setOnClickListener(v -> {
+            if (!RequestManager.isRequesting(getClassName())) {
+                List<Task> tasks = taskAdapter.getCheckedItems();
+                if (tasks.size() == 0) {
+                    ToastUnit.showShort(getContext(), getString(R.string.tip_empty_select));
+                } else {
+                    List<String> ids = new ArrayList<>();
+                    for (Task task : tasks) {
+                        ids.add(task.get_id());
                     }
+                    deleteTasks(ids);
                 }
             }
         });
@@ -402,7 +390,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
 
             public void onEnd(boolean isSuccess) {
                 if (layout_refresh.isRefreshing()) {
-                    layout_refresh.finishRefresh();
+                    layout_refresh.finishRefresh(isSuccess);
                 }
             }
         });
@@ -653,15 +641,15 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
             String schedule = layout_edit_schedule.getText().toString().trim();
 
             if (name.isEmpty()) {
-                ToastUnit.showShort(getContext(), getString(R.string.edit_empty_task_name));
+                ToastUnit.showShort(getContext(), getString(R.string.tip_empty_task_name));
                 return;
             }
             if (command.isEmpty()) {
-                ToastUnit.showShort(getContext(), getString(R.string.edit_empty_command));
+                ToastUnit.showShort(getContext(), getString(R.string.tip_empty_command));
                 return;
             }
             if (!CronUnit.isValid(schedule)) {
-                ToastUnit.showShort(getContext(), getString(R.string.edit_invalid_schedule));
+                ToastUnit.showShort(getContext(), getString(R.string.tip_invalid_schedule));
                 return;
             }
 
