@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -27,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import auto.qinglong.R;
-import auto.qinglong.module.BaseActivity;
 import auto.qinglong.net.ApiController;
 import auto.qinglong.module.BaseFragment;
 import auto.qinglong.tools.ToastUnit;
@@ -95,50 +93,29 @@ public class DepFragment extends BaseFragment implements BaseFragment.FragmentIn
         layout_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
 
         //弹窗-更多
-        layout_more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPopWindowMore();
-            }
-        });
+        layout_more.setOnClickListener(v -> showPopWindowMore());
 
         //操作栏-返回
-        layout_action_bar_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showBar(BarType.NAV);
-            }
-        });
+        layout_action_bar_back.setOnClickListener(v -> showBar(BarType.NAV));
 
         //操作栏-全选
-        layout_action_bar_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                currentFragment.setAllItemCheck(isChecked);
-            }
-        });
+        layout_action_bar_check.setOnCheckedChangeListener((buttonView, isChecked) -> currentFragment.setAllItemCheck(isChecked));
 
         //操作栏-删除
-        layout_action_bar_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                List<String> ids = currentFragment.getCheckedItemIds();
-                if (ids != null && ids.size() > 0) {
-                    deleteDependence(ids);
-                } else {
-                    ToastUnit.showShort("至少选择一项");
-                }
+        layout_action_bar_delete.setOnClickListener(v -> {
+            List<String> ids = currentFragment.getCheckedItemIds();
+            if (ids != null && ids.size() > 0) {
+                deleteDependence(ids);
+            } else {
+                ToastUnit.showShort(getString(R.string.tip_empty_select));
             }
         });
 
         //设置界面适配器
         pagerAdapter = new PagerAdapter(requireActivity());
-        pagerAdapter.setPagerInterface(new PagerInterface() {
-            @Override
-            public void onAction() {
-                //进入操作栏
-                showBar(BarType.ACTION);
-            }
+        pagerAdapter.setPagerActionListener(() -> {
+            //进入操作栏
+            showBar(BarType.ACTION);
         });
 
         layout_page.setAdapter(pagerAdapter);
@@ -179,7 +156,7 @@ public class DepFragment extends BaseFragment implements BaseFragment.FragmentIn
         TextView layout_add_text = view.findViewById(R.id.pop_fg_more_add_text);
         TextView layout_action_text = view.findViewById(R.id.pop_fg_more_action_text);
         layout_add_text.setText("新建依赖");
-        layout_action_text.setText("批量操作");
+        layout_action_text.setText(getString(R.string.mul_action));
 
         popupWindowMore = new PopupWindow(getContext());
         popupWindowMore.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
@@ -189,21 +166,15 @@ public class DepFragment extends BaseFragment implements BaseFragment.FragmentIn
         popupWindowMore.setOutsideTouchable(true);
         popupWindowMore.setFocusable(true);
 
-        layout_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindowMore.dismiss();
-                showPopWindowEdit();
-            }
+        layout_add.setOnClickListener(v -> {
+            popupWindowMore.dismiss();
+            showPopWindowEdit();
         });
 
-        layout_action.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindowMore.dismiss();
-                currentFragment.setCheckState(true);
-                showBar(BarType.ACTION);
-            }
+        layout_action.setOnClickListener(v -> {
+            popupWindowMore.dismiss();
+            currentFragment.setCheckState(true);
+            showBar(BarType.ACTION);
         });
     }
 
@@ -225,14 +196,9 @@ public class DepFragment extends BaseFragment implements BaseFragment.FragmentIn
         popupWindowEdit.setOutsideTouchable(true);
         popupWindowEdit.setFocusable(true);
 
-        layout_edit_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindowEdit.dismiss();
-            }
-        });
+        layout_edit_cancel.setOnClickListener(v -> popupWindowEdit.dismiss());
 
-        popupWindowEdit.setOnDismissListener(() -> WindowUnit.setBackgroundAlpha(requireActivity(),1.0f));
+        popupWindowEdit.setOnDismissListener(() -> WindowUnit.setBackgroundAlpha(requireActivity(), 1.0f));
 
     }
 
@@ -268,7 +234,7 @@ public class DepFragment extends BaseFragment implements BaseFragment.FragmentIn
             addDependence(dependencies);
         });
 
-        WindowUnit.setBackgroundAlpha(requireActivity(),0.5f);
+        WindowUnit.setBackgroundAlpha(requireActivity(), 0.5f);
         popupWindowEdit.showAtLocation(getView(), Gravity.CENTER, 0, 0);
     }
 
@@ -280,7 +246,7 @@ public class DepFragment extends BaseFragment implements BaseFragment.FragmentIn
     }
 
     public void addDependence(List<Dependence> dependencies) {
-        ApiController.addDependencies(getClassName(), dependencies, new ApiController.BaseCallback() {
+        ApiController.addDependencies(getNetRequestID(), dependencies, new ApiController.BaseCallback() {
             @Override
             public void onSuccess() {
                 popupWindowEdit.dismiss();
@@ -297,7 +263,7 @@ public class DepFragment extends BaseFragment implements BaseFragment.FragmentIn
     }
 
     public void deleteDependence(List<String> ids) {
-        ApiController.deleteDependencies(getClassName(), ids, new ApiController.BaseCallback() {
+        ApiController.deleteDependencies(getNetRequestID(), ids, new ApiController.BaseCallback() {
             @Override
             public void onSuccess() {
                 showBar(BarType.NAV);

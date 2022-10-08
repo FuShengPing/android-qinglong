@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class PagerAdapter extends FragmentStateAdapter {
     private HashMap<Integer, PagerFragment> fragmentList;
 
-    private PagerInterface pagerInterface;
+    private PagerFragment.PagerActionListener pagerActionListener;
 
     public PagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
@@ -34,7 +34,7 @@ public class PagerAdapter extends FragmentStateAdapter {
         }
 
         fragmentList.put(position, pagerFragment);
-        pagerFragment.setPagerInterface(pagerInterface);
+        pagerFragment.setPagerActionListener(pagerActionListener);
         return pagerFragment;
     }
 
@@ -47,9 +47,8 @@ public class PagerAdapter extends FragmentStateAdapter {
         return fragmentList.get(position);
     }
 
-    public void setPagerInterface(PagerInterface pagerInterface) {
-        this.pagerInterface = pagerInterface;
-
+    public void setPagerActionListener(PagerFragment.PagerActionListener pagerActionListener) {
+        this.pagerActionListener = pagerActionListener;
     }
 
 

@@ -146,7 +146,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
      * 首次加载数据(直至成功加载一次) 页面转入可见时调用
      */
     private void firstLoad() {
-        if (haveFirstSuccess || RequestManager.isRequesting(this.getClassName())) {
+        if (haveFirstSuccess || RequestManager.isRequesting(this.getNetRequestID())) {
             return;
         }
         new Handler().postDelayed(() -> {
@@ -177,7 +177,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
 
             @Override
             public void onStop(Task task) {
-                if (RequestManager.isRequesting(getClassName())) {
+                if (RequestManager.isRequesting(getNetRequestID())) {
                     return;
                 }
                 List<String> ids = new ArrayList<>();
@@ -229,7 +229,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
 
         //搜索确定监听
         layout_search_confirm.setOnClickListener(v -> {
-            if (RequestManager.isRequesting(getClassName())) {
+            if (RequestManager.isRequesting(getNetRequestID())) {
                 return;
             }
             ToastUnit.showShort(getContext(), getString(R.string.tip_searching));
@@ -253,7 +253,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
 
         //执行
         layout_actions_run.setOnClickListener(v -> {
-            if (!RequestManager.isRequesting(getClassName())) {
+            if (!RequestManager.isRequesting(getNetRequestID())) {
                 List<Task> tasks = taskAdapter.getCheckedItems();
                 if (tasks.size() == 0) {
                     ToastUnit.showShort(getContext(), getString(R.string.tip_empty_select));
@@ -269,7 +269,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
 
         //停止
         layout_actions_stop.setOnClickListener(v -> {
-            if (!RequestManager.isRequesting(getClassName())) {
+            if (!RequestManager.isRequesting(getNetRequestID())) {
                 List<Task> tasks = taskAdapter.getCheckedItems();
                 if (tasks.size() == 0) {
                     ToastUnit.showShort(getContext(), getString(R.string.tip_empty_select));
@@ -285,7 +285,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
 
         //顶置
         layout_actions_pin.setOnClickListener(v -> {
-            if (!RequestManager.isRequesting(getClassName())) {
+            if (!RequestManager.isRequesting(getNetRequestID())) {
                 List<Task> tasks = taskAdapter.getCheckedItems();
                 if (tasks.size() == 0) {
                     ToastUnit.showShort(getContext(), getString(R.string.tip_empty_select));
@@ -301,7 +301,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
 
         //取消顶置
         layout_actions_unpin.setOnClickListener(v -> {
-            if (!RequestManager.isRequesting(getClassName())) {
+            if (!RequestManager.isRequesting(getNetRequestID())) {
                 List<Task> tasks = taskAdapter.getCheckedItems();
                 if (tasks.size() == 0) {
                     ToastUnit.showShort(getContext(), getString(R.string.tip_empty_select));
@@ -317,7 +317,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
 
         //启用
         layout_actions_enable.setOnClickListener(v -> {
-            if (!RequestManager.isRequesting(getClassName())) {
+            if (!RequestManager.isRequesting(getNetRequestID())) {
                 List<Task> tasks = taskAdapter.getCheckedItems();
                 if (tasks.size() == 0) {
                     ToastUnit.showShort(getContext(), getString(R.string.tip_empty_select));
@@ -333,7 +333,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
 
         //禁用
         layout_actions_disable.setOnClickListener(v -> {
-            if (!RequestManager.isRequesting(getClassName())) {
+            if (!RequestManager.isRequesting(getNetRequestID())) {
                 List<Task> tasks = taskAdapter.getCheckedItems();
                 if (tasks.size() == 0) {
                     ToastUnit.showShort(getContext(), getString(R.string.tip_empty_select));
@@ -349,7 +349,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
 
         //删除
         layout_actions_delete.setOnClickListener(v -> {
-            if (!RequestManager.isRequesting(getClassName())) {
+            if (!RequestManager.isRequesting(getNetRequestID())) {
                 List<Task> tasks = taskAdapter.getCheckedItems();
                 if (tasks.size() == 0) {
                     ToastUnit.showShort(getContext(), getString(R.string.tip_empty_select));
@@ -369,7 +369,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
     }
 
     public void getTasks(String searchValue, QueryType queryType) {
-        ApiController.getTasks(getClassName(), searchValue, new ApiController.GetTasksCallback() {
+        ApiController.getTasks(getNetRequestID(), searchValue, new ApiController.GetTasksCallback() {
             @Override
             public void onSuccess(TasksRes data) {
                 haveFirstSuccess = true;
@@ -397,10 +397,10 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
     }
 
     public void runTasks(List<String> ids, boolean isFromBar) {
-        if (RequestManager.isRequesting(getClassName())) {
+        if (RequestManager.isRequesting(getNetRequestID())) {
             return;
         }
-        ApiController.runTasks(getClassName(), ids, new ApiController.RunTaskCallback() {
+        ApiController.runTasks(getNetRequestID(), ids, new ApiController.RunTaskCallback() {
             @Override
             public void onSuccess(String msg) {
                 if (isFromBar && layout_bar_actions.getVisibility() == View.VISIBLE) {
@@ -419,7 +419,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
     }
 
     public void stopTasks(List<String> ids, boolean isFromBar) {
-        ApiController.stopTasks(getClassName(), ids, new ApiController.RunTaskCallback() {
+        ApiController.stopTasks(getNetRequestID(), ids, new ApiController.RunTaskCallback() {
             @Override
             public void onSuccess(String msg) {
                 if (isFromBar && layout_bar_actions.getVisibility() == View.VISIBLE) {
@@ -437,7 +437,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
     }
 
     public void enableTasks(List<String> ids) {
-        ApiController.enableTasks(getClassName(), ids, new ApiController.RunTaskCallback() {
+        ApiController.enableTasks(getNetRequestID(), ids, new ApiController.RunTaskCallback() {
             @Override
             public void onSuccess(String msg) {
                 if (layout_actions_back.getVisibility() == View.VISIBLE) {
@@ -455,7 +455,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
     }
 
     public void disableTasks(List<String> ids) {
-        ApiController.disableTasks(getClassName(), ids, new ApiController.RunTaskCallback() {
+        ApiController.disableTasks(getNetRequestID(), ids, new ApiController.RunTaskCallback() {
             @Override
             public void onSuccess(String msg) {
                 if (layout_actions_back.getVisibility() == View.VISIBLE) {
@@ -473,7 +473,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
     }
 
     public void pinTasks(List<String> ids) {
-        ApiController.pinTasks(getClassName(), ids, new ApiController.RunTaskCallback() {
+        ApiController.pinTasks(getNetRequestID(), ids, new ApiController.RunTaskCallback() {
             @Override
             public void onSuccess(String msg) {
                 if (layout_actions_back.getVisibility() == View.VISIBLE) {
@@ -491,7 +491,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
     }
 
     public void unpinTasks(List<String> ids) {
-        ApiController.unpinTasks(getClassName(), ids, new ApiController.RunTaskCallback() {
+        ApiController.unpinTasks(getNetRequestID(), ids, new ApiController.RunTaskCallback() {
             @Override
             public void onSuccess(String msg) {
                 if (layout_actions_back.getVisibility() == View.VISIBLE) {
@@ -509,7 +509,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
     }
 
     public void deleteTasks(List<String> ids) {
-        ApiController.deleteTasks(getClassName(), ids, new ApiController.BaseCallback() {
+        ApiController.deleteTasks(getNetRequestID(), ids, new ApiController.BaseCallback() {
             @Override
             public void onSuccess() {
                 if (layout_actions_back.getVisibility() == View.VISIBLE) {
@@ -527,7 +527,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
     }
 
     public void editTask(Task task) {
-        ApiController.editTask(getClassName(), task, new ApiController.EditTaskCallback() {
+        ApiController.editTask(getNetRequestID(), task, new ApiController.EditTaskCallback() {
             @Override
             public void onSuccess(Task task) {
                 popupWindowEdit.dismiss();
@@ -543,7 +543,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
     }
 
     public void addTask(Task task) {
-        ApiController.addTask(getClassName(), task, new ApiController.EditTaskCallback() {
+        ApiController.addTask(getNetRequestID(), task, new ApiController.EditTaskCallback() {
             @Override
             public void onSuccess(Task task) {
                 popupWindowEdit.dismiss();
@@ -630,7 +630,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
         }
 
         layout_edit_save.setOnClickListener(v -> {
-            if (RequestManager.isRequesting(getClassName())) {
+            if (RequestManager.isRequesting(getNetRequestID())) {
                 return;
             }
 

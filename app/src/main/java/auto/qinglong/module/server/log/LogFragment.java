@@ -14,7 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.List;
 import java.util.Objects;
@@ -34,7 +35,7 @@ public class LogFragment extends BaseFragment implements BaseFragment.FragmentIn
     private LogAdapter logAdapter;
 
     private ImageView layout_nav;
-    private SwipeRefreshLayout layout_swipe;
+    private SmartRefreshLayout layout_refresh;
     private TextView layout_dir;
     private RecyclerView layout_recycler;
 
@@ -43,15 +44,11 @@ public class LogFragment extends BaseFragment implements BaseFragment.FragmentIn
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fg_log, null);
-        layout_nav = view.findViewById(R.id.log_nav);
-        layout_swipe = view.findViewById(R.id.log_swipe);
-        layout_dir = view.findViewById(R.id.log_dir_tip);
-        layout_recycler = view.findViewById(R.id.log_recycler);
 
-        logAdapter = new LogAdapter(requireContext());
-        layout_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
-        Objects.requireNonNull(layout_recycler.getItemAnimator()).setChangeDuration(0);
-        layout_recycler.setAdapter(logAdapter);
+        layout_nav = view.findViewById(R.id.log_nav);
+        layout_refresh = view.findViewById(R.id.refreshLayout);
+        layout_dir = view.findViewById(R.id.log_dir_tip);
+        layout_recycler = view.findViewById(R.id.recyclerView);
 
         init();
         return view;
@@ -59,87 +56,81 @@ public class LogFragment extends BaseFragment implements BaseFragment.FragmentIn
 
     @Override
     public void onResume() {
-        if (!haveFirstSuccess && !RequestManager.isRequesting(getClassName())) {
-            firstLoad();
-        }
         super.onResume();
+        firstLoad();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if(!hidden && !haveFirstSuccess && !RequestManager.isRequesting(getClassName())){
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
             firstLoad();
         }
-        super.onHiddenChanged(hidden);
     }
 
     private void firstLoad() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        if (!haveFirstSuccess && !RequestManager.isRequesting(getNetRequestID())) {
+            new Handler().postDelayed(() -> {
                 if (isVisible()) {
                     getLogs();
                 }
-            }
-        }, 1000);
+            }, 1000);
+        }
+
     }
 
     @Override
     public void init() {
-        layout_nav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (menuClickListener != null) {
-                    menuClickListener.onMenuClick();
-                }
+        logAdapter = new LogAdapter(requireContext());
+        layout_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
+        Objects.requireNonNull(layout_recycler.getItemAnimator()).setChangeDuration(0);
+        layout_recycler.setAdapter(logAdapter);
+
+        layout_nav.setOnClickListener(v -> {
+            if (menuClickListener != null) {
+                menuClickListener.onMenuClick();
             }
         });
 
-        logAdapter.setLogInterFace(new LogInterFace() {
-            @Override
-            public void onItemClick(Log log) {
-                if (log.isDir()) {
-                    canBack = true;
-                    setData(log.getChildren(), log.getName());
-                } else {
-                    Intent intent = new Intent(getContext(), LogActivity.class);
-                    intent.putExtra(LogActivity.ExtraName, log.getName());
-                    intent.putExtra(LogActivity.ExtraPath, log.getLogPath());
-                    startActivity(intent);
-                }
+        logAdapter.setLogInterFace(log -> {
+            if (log.isDir()) {
+                canBack = true;
+                setData(log.getChildren(), log.getName());
+            } else {
+                Intent intent = new Intent(getContext(), LogActivity.class);
+                intent.putExtra(LogActivity.ExtraName, log.getName());
+                intent.putExtra(LogActivity.ExtraPath, log.getLogPath());
+                startActivity(intent);
             }
         });
 
-        layout_swipe.setColorSchemeColors(requireContext().getColor(R.color.theme_color));
-        layout_swipe.setRefreshing(true);
-        layout_swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getLogs();
-            }
-        });
+        //刷新控件//
+        //初始设置处于刷新状态
+        layout_refresh.autoRefreshAnimationOnly();
+        layout_refresh.setOnRefreshListener(refreshLayout -> getLogs());
     }
 
 
     private void getLogs() {
-        ApiController.getLogs(getClassName(), new ApiController.GetLogsCallback() {
+        ApiController.getLogs(getNetRequestID(), new ApiController.GetLogsCallback() {
             @Override
             public void onSuccess(List<Log> logs) {
                 setData(logs, "");
                 oData = logs;
                 canBack = false;
                 haveFirstSuccess = true;
-                if (layout_swipe.isRefreshing()) {
-                    layout_swipe.setRefreshing(false);
-                }
-                ToastUnit.showShort(requireContext(), "加载成功");
+                this.onEnd(true);
             }
 
             @Override
             public void onFailure(String msg) {
                 ToastUnit.showShort(requireContext(), "加载失败：" + msg);
-                if (layout_swipe.isRefreshing()) {
-                    layout_swipe.setRefreshing(false);
+                this.onEnd(false);
+            }
+
+            protected void onEnd(boolean isSuccess) {
+                if (layout_refresh.isRefreshing()) {
+                    layout_refresh.finishRefresh(isSuccess);
                 }
             }
         });
@@ -148,7 +139,7 @@ public class LogFragment extends BaseFragment implements BaseFragment.FragmentIn
     @SuppressLint("SetTextI18n")
     private void setData(List<Log> data, String dir) {
         logAdapter.setData(data);
-        layout_dir.setText("/" + dir);
+        layout_dir.setText(getString(R.string.char_path_split) + dir);
     }
 
     public void setMenuClickListener(MenuClickListener menuClickListener) {
@@ -159,7 +150,7 @@ public class LogFragment extends BaseFragment implements BaseFragment.FragmentIn
     public boolean onBackPressed() {
         if (canBack) {
             logAdapter.setData(oData);
-            layout_dir.setText("/");
+            layout_dir.setText(getString(R.string.char_path_split));
             canBack = false;
             return true;
         } else {

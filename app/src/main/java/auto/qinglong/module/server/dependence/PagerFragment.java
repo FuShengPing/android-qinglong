@@ -8,7 +8,8 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,17 +25,17 @@ public class PagerFragment extends BaseFragment {
     private String type;
 
     private DepItemAdapter depItemAdapter;
-    private PagerInterface pagerInterface;
+    private PagerActionListener pagerActionListener;
 
-    private SwipeRefreshLayout layout_swipe;
+    private SmartRefreshLayout layout_refresh;
     private RecyclerView layout_recycler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fg_dep_pager, container, false);
 
-        layout_swipe = view.findViewById(R.id.dep_page_fg_swipe);
-        layout_recycler = view.findViewById(R.id.dep_page_fg_recycler);
+        layout_refresh = view.findViewById(R.id.refreshLayout);
+        layout_recycler = view.findViewById(R.id.recyclerView);
 
         init();
 
@@ -47,15 +48,14 @@ public class PagerFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        //延迟进行首次加载
-        if (!haveFirstSuccess) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    //如果视图可视则进行加载
-                    if (isVisible()) {
-                        getDependencies();
-                    }
+        firstLoad();
+    }
+
+    private void firstLoad() {
+        if (!haveFirstSuccess && !RequestManager.isRequesting(getNetRequestID())) {
+            new Handler().postDelayed(() -> {
+                if (isVisible()) {
+                    getDependencies();
                 }
             }, 1000);
         }
@@ -64,13 +64,15 @@ public class PagerFragment extends BaseFragment {
     private void init() {
         //适配器
         depItemAdapter = new DepItemAdapter(requireContext());
-        depItemAdapter.setItemInterface(new ItemInterface() {
+        layout_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
+        layout_recycler.setAdapter(depItemAdapter);
+
+        depItemAdapter.setItemInterface(new DepItemAdapter.ItemActionListener() {
             @Override
             public void onAction(Dependence dependence, int position) {
-                //适配器未处于选择状态则进入
                 if (!depItemAdapter.getCheckState()) {
                     depItemAdapter.setCheckState(true, position);
-                    pagerInterface.onAction();
+                    pagerActionListener.onAction();
                 }
             }
 
@@ -84,45 +86,40 @@ public class PagerFragment extends BaseFragment {
                 List<String> ids = new ArrayList<>();
                 ids.add(dependence.get_id());
                 reinstallDependencies(ids);
-                getDependencies();
             }
         });
 
-        layout_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
-        layout_recycler.setAdapter(depItemAdapter);
-
-        //刷新控件
-        layout_swipe.setColorSchemeColors(getResources().getColor(R.color.theme_color_shadow, null));
-        layout_swipe.setOnRefreshListener(this::getDependencies);
+        //刷新控件//
+        //初始设置处于刷新状态
+        layout_refresh.autoRefreshAnimationOnly();
+        layout_refresh.setOnRefreshListener(refreshLayout -> getDependencies());
     }
 
     private void getDependencies() {
-        ApiController.getDependencies(getClassName(), "", this.type, new ApiController.GetDependenciesCallback() {
+        ApiController.getDependencies(getNetRequestID(), "", this.type, new ApiController.GetDependenciesCallback() {
             @Override
             public void onSuccess(DependenceRes res) {
-                if (layout_swipe.isRefreshing()) {
-                    layout_swipe.setRefreshing(false);
-                }
                 depItemAdapter.setData(res.getData());
                 haveFirstSuccess = true;
-                ToastUnit.showShort("加载成功");
+                this.onEnd(true);
             }
 
             @Override
             public void onFailure(String msg) {
-                if (layout_swipe.isRefreshing()) {
-                    layout_swipe.setRefreshing(false);
+                ToastUnit.showShort("加载失败：" + msg);
+                this.onEnd(false);
+            }
+
+            protected void onEnd(boolean isSuccess) {
+                if (layout_refresh.isRefreshing()) {
+                    layout_refresh.finishRefresh(isSuccess);
                 }
-                ToastUnit.showShort(msg);
             }
         });
     }
 
     private void reinstallDependencies(List<String> ids) {
-        if (RequestManager.isRequesting(getClassName())) {
-            return;
-        }
-        ApiController.reinstallDependencies(getClassName(), ids, new ApiController.BaseCallback() {
+        ApiController.reinstallDependencies(getNetRequestID(), ids, new ApiController.BaseCallback() {
             @Override
             public void onSuccess() {
                 getDependencies();
@@ -131,7 +128,7 @@ public class PagerFragment extends BaseFragment {
             @Override
             public void onFailure(String msg) {
                 ToastUnit.showShort("请求失败：" + msg);
-                //该接口发送请求成功 但出现响应时间超时问题
+                //该接口发送请求成功 但可能会出现响应时间超时问题
                 getDependencies();
             }
         });
@@ -158,8 +155,8 @@ public class PagerFragment extends BaseFragment {
     /**
      * 设置外部回调接口
      */
-    public void setPagerInterface(PagerInterface pagerInterface) {
-        this.pagerInterface = pagerInterface;
+    public void setPagerActionListener(PagerActionListener pagerActionListener) {
+        this.pagerActionListener = pagerActionListener;
     }
 
     /**
@@ -187,5 +184,9 @@ public class PagerFragment extends BaseFragment {
 
     public String getType() {
         return this.type;
+    }
+
+    public interface PagerActionListener {
+        void onAction();
     }
 }

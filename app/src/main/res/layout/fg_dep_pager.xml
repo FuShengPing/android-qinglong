@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/dep_page_fg_swipe"
+<com.scwang.smart.refresh.layout.SmartRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/refreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_gray">
+    android:background="@color/bg_gray"
+    app:srlAccentColor="@color/text_color_80"
+    app:srlEnableOverScrollDrag="true"
+    app:srlPrimaryColor="@color/white">
+
+    <com.scwang.smart.refresh.header.ClassicsHeader
+        android:id="@+id/refreshHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srlDrawableMarginRight="10dp"
+        app:srlDrawableSize="15dp"
+        app:srlEnableLastTime="false"
+        app:srlTextSizeTitle="13sp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/dep_page_fg_recycler"
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
+</com.scwang.smart.refresh.layout.SmartRefreshLayout>

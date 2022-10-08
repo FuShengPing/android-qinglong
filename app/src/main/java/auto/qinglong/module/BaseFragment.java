@@ -7,15 +7,15 @@ import auto.qinglong.net.RequestManager;
 public class BaseFragment extends Fragment {
     protected boolean haveFirstSuccess = false;//是否已经加载成功过数据
 
-    public String getClassName() {
-        return getClass().getName();
+    public String getNetRequestID() {
+        return getClass().getName() + this;
     }
 
     @Override
-    public void onPause() {
+    public void onStop() {
+        super.onStop();
         //请求本页面的网络请求
         RequestManager.cancelCall(getClass().getName());
-        super.onPause();
     }
 
     public boolean onBackPressed() {

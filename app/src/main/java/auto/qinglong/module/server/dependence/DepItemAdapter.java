@@ -20,12 +20,12 @@ import java.util.List;
 import auto.qinglong.R;
 import auto.qinglong.tools.TimeUnit;
 
-public class DepItemAdapter extends RecyclerView.Adapter<MyViewHolder> {
+public class DepItemAdapter extends RecyclerView.Adapter<DepItemAdapter.MyViewHolder> {
     List<Dependence> data;
     private boolean checkState;
     private Boolean[] dataCheckState;
 
-    ItemInterface itemInterface;
+    ItemActionListener itemActionListener;
     Context context;
 
     public DepItemAdapter(Context context) {
@@ -62,42 +62,23 @@ public class DepItemAdapter extends RecyclerView.Adapter<MyViewHolder> {
             holder.layout_status.setTextColor(context.getColor(R.color.text_color_49));
         }
 
-        holder.layout_title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                itemInterface.onDetail(dependence, holder.getAdapterPosition());
-            }
+        holder.layout_title.setOnClickListener(v -> itemActionListener.onDetail(dependence, holder.getAdapterPosition()));
+
+        holder.layout_title.setOnLongClickListener(v -> {
+            itemActionListener.onAction(dependence, holder.getAdapterPosition());
+            return true;
         });
 
-        holder.layout_title.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                itemInterface.onAction(dependence, holder.getAdapterPosition());
-                return true;
-            }
-        });
-
-        holder.layout_bug.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                itemInterface.onReinstall(dependence, holder.getAdapterPosition());
-            }
-        });
+        holder.layout_bug.setOnClickListener(v -> itemActionListener.onReinstall(dependence, holder.getAdapterPosition()));
 
         //处于选择状态
         if (this.checkState) {
             holder.layout_check.setChecked(this.dataCheckState != null && this.dataCheckState[position]);
-            holder.layout_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    dataCheckState[holder.getAdapterPosition()] = isChecked;
-                }
-            });
+            holder.layout_check.setOnCheckedChangeListener((buttonView, isChecked) -> dataCheckState[holder.getAdapterPosition()] = isChecked);
             holder.layout_check.setVisibility(View.VISIBLE);
         } else {
             holder.layout_check.setVisibility(View.GONE);
         }
-
 
     }
 
@@ -115,8 +96,8 @@ public class DepItemAdapter extends RecyclerView.Adapter<MyViewHolder> {
         notifyDataSetChanged();
     }
 
-    public void setItemInterface(ItemInterface itemInterface) {
-        this.itemInterface = itemInterface;
+    public void setItemInterface(ItemActionListener itemActionListener) {
+        this.itemActionListener = itemActionListener;
     }
 
     public boolean getCheckState() {
@@ -159,31 +140,35 @@ public class DepItemAdapter extends RecyclerView.Adapter<MyViewHolder> {
         }
         return dependencies;
     }
-}
 
-class MyViewHolder extends RecyclerView.ViewHolder {
-    public TextView layout_title;
-    public TextView layout_time;
-    public TextView layout_status;
-    public CheckBox layout_check;
-    public ImageView layout_bug;
+    public interface ItemActionListener {
+        void onAction(Dependence dependence, int position);
 
-    public MyViewHolder(@NonNull View itemView) {
-        super(itemView);
+        void onDetail(Dependence dependence, int position);
 
-        layout_title = itemView.findViewById(R.id.item_title);
-        layout_time = itemView.findViewById(R.id.dep_item_time);
-        layout_status = itemView.findViewById(R.id.dep_item_status);
-        layout_check = itemView.findViewById(R.id.item_check);
-        layout_bug = itemView.findViewById(R.id.dep_action_bug);
+        void onReinstall(Dependence dependence, int position);
+    }
 
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView layout_title;
+        public TextView layout_time;
+        public TextView layout_status;
+        public CheckBox layout_check;
+        public ImageView layout_bug;
+
+        public MyViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            layout_title = itemView.findViewById(R.id.item_title);
+            layout_time = itemView.findViewById(R.id.dep_item_time);
+            layout_status = itemView.findViewById(R.id.dep_item_status);
+            layout_check = itemView.findViewById(R.id.item_check);
+            layout_bug = itemView.findViewById(R.id.dep_action_bug);
+
+        }
     }
 }
 
-interface ItemInterface {
-    void onAction(Dependence dependence, int position);
 
-    void onDetail(Dependence dependence, int position);
 
-    void onReinstall(Dependence dependence, int position);
-}
+

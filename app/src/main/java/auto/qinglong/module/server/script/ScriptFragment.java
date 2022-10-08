@@ -9,7 +9,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -17,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,8 +44,8 @@ public class ScriptFragment extends BaseFragment implements BaseFragment.Fragmen
     private boolean canBack = false;
 
     private ImageView layout_menu;
-    private SwipeRefreshLayout layout_swipe;
-    private TextView layout_dir;
+    private SmartRefreshLayout layout_refresh;
+    private TextView layout_dir_tip;
     private RecyclerView layout_recycler;
 
     @Override
@@ -52,10 +53,10 @@ public class ScriptFragment extends BaseFragment implements BaseFragment.Fragmen
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fg_script, null, false);
 
-        layout_swipe = view.findViewById(R.id.script_swipe);
-        layout_dir = view.findViewById(R.id.script_dir_tip);
+        layout_dir_tip = view.findViewById(R.id.script_dir_tip);
         layout_menu = view.findViewById(R.id.scrip_menu);
-        layout_recycler = view.findViewById(R.id.script_recycler);
+        layout_refresh = view.findViewById(R.id.refreshLayout);
+        layout_recycler = view.findViewById(R.id.recyclerView);
 
         init();
 
@@ -77,7 +78,7 @@ public class ScriptFragment extends BaseFragment implements BaseFragment.Fragmen
     }
 
     private void firstLoad() {
-        if (!haveFirstSuccess && !RequestManager.isRequesting(getClassName())) {
+        if (!haveFirstSuccess && !RequestManager.isRequesting(getNetRequestID())) {
             new Handler().postDelayed(() -> {
                 if (isVisible()) {
                     getScripts();
@@ -117,33 +118,35 @@ public class ScriptFragment extends BaseFragment implements BaseFragment.Fragmen
             }
         });
 
-        //刷新控件
-        layout_swipe.setColorSchemeColors(requireContext().getColor(R.color.theme_color));
-        layout_swipe.setRefreshing(true);
-        layout_swipe.setOnRefreshListener(this::getScripts);
+        //刷新控件//
+        //初始设置处于刷新状态
+        layout_refresh.autoRefreshAnimationOnly();
+        layout_refresh.setOnRefreshListener(refreshLayout -> getScripts());
 
         //唤起主导航栏
         layout_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
     }
 
     private void getScripts() {
-        ApiController.getScripts(getClassName(), new ApiController.GetScriptsCallback() {
+        ApiController.getScripts(getNetRequestID(), new ApiController.GetScriptsCallback() {
             @Override
             public void onSuccess(List<Script> scripts) {
                 setData(scripts, "");
                 oData = scripts;
                 canBack = false;
                 haveFirstSuccess = true;
-                if (layout_swipe.isRefreshing()) {
-                    layout_swipe.setRefreshing(false);
-                }
+                this.onEnd(true);
             }
 
             @Override
             public void onFailure(String msg) {
                 ToastUnit.showShort(requireContext(), "加载失败：" + msg);
-                if (layout_swipe.isRefreshing()) {
-                    layout_swipe.setRefreshing(false);
+                this.onEnd(false);
+            }
+
+            protected void onEnd(boolean isSuccess) {
+                if (layout_refresh.isRefreshing()) {
+                    layout_refresh.finishRefresh(isSuccess);
                 }
             }
         });
@@ -151,8 +154,8 @@ public class ScriptFragment extends BaseFragment implements BaseFragment.Fragmen
 
     private void setData(List<Script> data, String dir) {
         scriptAdapter.setData(ScriptFragment.sortScript(data));
-        String text = "/" + dir;
-        layout_dir.setText(text);
+        String text = getString(R.string.char_path_split) + dir;
+        layout_dir_tip.setText(text);
     }
 
     @Override
@@ -164,7 +167,7 @@ public class ScriptFragment extends BaseFragment implements BaseFragment.Fragmen
     public boolean onBackPressed() {
         if (canBack) {
             scriptAdapter.setData(oData);
-            layout_dir.setText("/");
+            layout_dir_tip.setText(getString(R.string.char_path_split));
             canBack = false;
             return true;
         } else {

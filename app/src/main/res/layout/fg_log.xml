@@ -54,19 +54,32 @@
         android:maxLines="1"
         android:paddingVertical="2dp"
         android:paddingStart="15dp"
-        android:text="/"
+        android:text="@string/char_path_split"
         android:textColor="@color/theme_color_shadow"
         android:textSize="12sp" />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/log_swipe"
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:srlAccentColor="@color/text_color_80"
+        app:srlEnableOverScrollDrag="true"
+        app:srlPrimaryColor="@color/bg_gray">
+
+        <com.scwang.smart.refresh.header.ClassicsHeader
+            android:id="@+id/refreshHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srlDrawableMarginRight="10dp"
+            app:srlDrawableSize="15dp"
+            app:srlEnableLastTime="false"
+            app:srlTextSizeTitle="13sp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/log_recycler"
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            android:overScrollMode="never"
+            android:scrollbars="none" />
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 </LinearLayout>

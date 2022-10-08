@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Objects;
 
 import auto.qinglong.R;
-import auto.qinglong.module.server.task.TaskFragment;
 import auto.qinglong.net.ApiController;
 import auto.qinglong.net.response.EnvironmentRes;
 import auto.qinglong.module.BaseFragment;
@@ -133,7 +132,7 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
     }
 
     private void loadFirst() {
-        if (haveFirstSuccess || RequestManager.isRequesting(getClassName())) {
+        if (haveFirstSuccess || RequestManager.isRequesting(getNetRequestID())) {
             return;
         }
         //延迟加载
@@ -199,7 +198,7 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
 
         //删除
         layout_actions_delete.setOnClickListener(v -> {
-            if (RequestManager.isRequesting(getClassName())) {
+            if (RequestManager.isRequesting(getNetRequestID())) {
                 return;
             }
             List<Environment> environments = envItemAdapter.getSelectedItems();
@@ -217,7 +216,7 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
 
         //禁用
         layout_actions_disable.setOnClickListener(v -> {
-            if (RequestManager.isRequesting(getClassName())) {
+            if (RequestManager.isRequesting(getNetRequestID())) {
                 return;
             }
             List<Environment> environments = envItemAdapter.getSelectedItems();
@@ -235,7 +234,7 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
 
         //启用
         layout_actions_enable.setOnClickListener(v -> {
-            if (RequestManager.isRequesting(getClassName())) {
+            if (RequestManager.isRequesting(getNetRequestID())) {
                 return;
             }
             List<Environment> environments = envItemAdapter.getSelectedItems();
@@ -254,7 +253,7 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
     }
 
     private void getEnvironments(String searchValue, QueryType queryType) {
-        ApiController.getEnvironments(getClassName(), searchValue, new ApiController.GetEnvironmentsCallback() {
+        ApiController.getEnvironments(getNetRequestID(), searchValue, new ApiController.GetEnvironmentsCallback() {
             @Override
             public void onSuccess(EnvironmentRes res) {
                 haveFirstSuccess = true;
@@ -280,7 +279,7 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
     }
 
     public void updateEnvironment(Environment environment) {
-        ApiController.updateEnvironment(getClassName(), environment, new ApiController.EditEnvCallback() {
+        ApiController.updateEnvironment(getNetRequestID(), environment, new ApiController.EditEnvCallback() {
             @Override
             public void onSuccess(Environment data) {
                 popupWindowEdit.dismiss();
@@ -296,7 +295,7 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
     }
 
     public void addEnvironments(List<Environment> environments) {
-        ApiController.addEnvironment(getClassName(), environments, new ApiController.GetEnvironmentsCallback() {
+        ApiController.addEnvironment(getNetRequestID(), environments, new ApiController.GetEnvironmentsCallback() {
             @Override
             public void onSuccess(EnvironmentRes res) {
                 popupWindowEdit.dismiss();
@@ -312,7 +311,7 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
     }
 
     public void deleteEnvironments(List<String> ids) {
-        ApiController.deleteEnvironments(getClassName(), ids, new ApiController.BaseCallback() {
+        ApiController.deleteEnvironments(getNetRequestID(), ids, new ApiController.BaseCallback() {
             @Override
             public void onSuccess() {
                 layout_actions_back.performClick();
@@ -328,7 +327,7 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
     }
 
     public void enableEnvironments(List<String> ids) {
-        ApiController.enableEnvironments(getClassName(), ids, new ApiController.BaseCallback() {
+        ApiController.enableEnvironments(getNetRequestID(), ids, new ApiController.BaseCallback() {
             @Override
             public void onSuccess() {
                 layout_actions_back.performClick();
@@ -345,7 +344,7 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
     }
 
     public void disableEnvironments(List<String> ids) {
-        ApiController.disableEnvironments(getClassName(), ids, new ApiController.BaseCallback() {
+        ApiController.disableEnvironments(getNetRequestID(), ids, new ApiController.BaseCallback() {
             @Override
             public void onSuccess() {
                 layout_actions_back.performClick();
@@ -437,7 +436,7 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
         }
 
         layout_edit_save.setOnClickListener(v -> {
-            if (RequestManager.isRequesting(getClassName())) {
+            if (RequestManager.isRequesting(getNetRequestID())) {
                 return;
             }
 
