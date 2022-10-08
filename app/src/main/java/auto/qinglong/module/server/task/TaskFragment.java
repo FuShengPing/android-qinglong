@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Objects;
 
 import auto.qinglong.R;
-import auto.qinglong.module.BaseActivity;
 import auto.qinglong.module.server.log.LogActivity;
 import auto.qinglong.net.ApiController;
 import auto.qinglong.net.response.TasksRes;
