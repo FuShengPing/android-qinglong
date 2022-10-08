@@ -134,7 +134,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="全选"
+                    android:text="@string/action_select_all"
                     android:textColor="@color/white"
                     android:textSize="11sp" />
             </LinearLayout>
@@ -158,7 +158,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="启用"
+                    android:text="@string/action_enable"
                     android:textColor="@color/white"
                     android:textSize="11sp" />
             </LinearLayout>
@@ -182,7 +182,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="禁用"
+                    android:text="@string/action_disable"
                     android:textColor="@color/white"
                     android:textSize="11sp" />
             </LinearLayout>
@@ -206,23 +206,37 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="删除"
+                    android:text="@string/action_delete"
                     android:textColor="@color/white"
                     android:textSize="11sp" />
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/env_swipe"
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bg_gray">
+        android:background="@color/bg_gray"
+        app:srlAccentColor="@color/text_color_80"
+        app:srlDisableContentWhenRefresh="true"
+        app:srlEnableOverScrollDrag="true"
+        app:srlPrimaryColor="@color/white">
+
+        <com.scwang.smart.refresh.header.ClassicsHeader
+            android:id="@+id/refreshHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srlDrawableMarginRight="10dp"
+            app:srlDrawableSize="15dp"
+            app:srlEnableLastTime="false"
+            app:srlTextSizeTitle="13sp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/env_recycler"
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            android:overScrollMode="never"
+            android:scrollbars="none" />
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 </LinearLayout>

@@ -57,11 +57,6 @@ public class ScriptFragment extends BaseFragment implements BaseFragment.Fragmen
         layout_menu = view.findViewById(R.id.scrip_menu);
         layout_recycler = view.findViewById(R.id.script_recycler);
 
-        scriptAdapter = new ScriptAdapter(requireContext());
-        layout_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
-        Objects.requireNonNull(layout_recycler.getItemAnimator()).setChangeDuration(0);
-        layout_recycler.setAdapter(scriptAdapter);
-
         init();
 
         return view;
@@ -94,6 +89,11 @@ public class ScriptFragment extends BaseFragment implements BaseFragment.Fragmen
 
     @Override
     public void init() {
+        scriptAdapter = new ScriptAdapter(requireContext());
+        layout_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
+        Objects.requireNonNull(layout_recycler.getItemAnimator()).setChangeDuration(0);
+        layout_recycler.setAdapter(scriptAdapter);
+
         //item回调
         scriptAdapter.setScriptInterface(new ScriptItemListener() {
             @Override
@@ -113,7 +113,7 @@ public class ScriptFragment extends BaseFragment implements BaseFragment.Fragmen
             public void onAction(Script script) {
                 ClipboardManager clipboardManager = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
                 clipboardManager.setPrimaryClip(ClipData.newPlainText(null, script.getKey()));
-                ToastUnit.showShort(requireContext(), "已复制路径到粘贴板");
+                ToastUnit.showShort(requireContext(), getString(R.string.tip_copy_path_ready));
             }
         });
 

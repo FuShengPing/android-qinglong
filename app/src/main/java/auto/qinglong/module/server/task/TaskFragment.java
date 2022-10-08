@@ -210,7 +210,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
         //初始设置处于刷新状态
         layout_refresh.autoRefreshAnimationOnly();
         layout_refresh.setOnRefreshListener(refreshLayout -> getTasks(currentSearchValue, QueryType.QUERY));
-
+        
         //导航点击监听
         layout_nav_menu.setOnClickListener(v -> {
             if (menuClickListener != null) {

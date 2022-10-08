@@ -324,7 +324,6 @@
         android:layout_height="match_parent"
         android:background="@color/bg_gray"
         app:srlAccentColor="@color/text_color_80"
-        app:srlDisableContentWhenRefresh="true"
         app:srlEnableOverScrollDrag="true"
         app:srlPrimaryColor="@color/white">
 

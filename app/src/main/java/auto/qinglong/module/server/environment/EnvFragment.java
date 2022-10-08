@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
 import android.view.Gravity;
@@ -18,7 +17,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,12 +24,14 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import auto.qinglong.R;
-import auto.qinglong.module.BaseActivity;
+import auto.qinglong.module.server.task.TaskFragment;
 import auto.qinglong.net.ApiController;
 import auto.qinglong.net.response.EnvironmentRes;
 import auto.qinglong.module.BaseFragment;
@@ -75,7 +75,7 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
     private Button layout_edit_save;
 
     private RecyclerView layout_recycler;
-    private SwipeRefreshLayout layout_swipe;
+    private SmartRefreshLayout layout_refresh;
 
     @Nullable
     @Override
@@ -99,8 +99,8 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
         layout_actions_disable = view.findViewById(R.id.env_bar_actions_disable);
         layout_actions_delete = view.findViewById(R.id.env_bar_actions_delete);
 
-        layout_swipe = view.findViewById(R.id.env_swipe);
-        layout_recycler = view.findViewById(R.id.env_recycler);
+        layout_refresh = view.findViewById(R.id.refreshLayout);
+        layout_recycler = view.findViewById(R.id.recyclerView);
 
         envItemAdapter = new EnvItemAdapter(requireContext());
         layout_recycler.setAdapter(envItemAdapter);
@@ -164,12 +164,12 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
         //导航栏
         layout_nav_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
 
-        //下拉刷新
-        layout_swipe.setColorSchemeColors(requireContext().getColor(R.color.theme_color));
-        layout_swipe.setRefreshing(true);
-        layout_swipe.setOnRefreshListener(() -> getEnvironments(currentSearchValue, QueryType.QUERY));
+        //刷新控件//
+        //初始设置处于刷新状态
+        layout_refresh.autoRefreshAnimationOnly();
+        layout_refresh.setOnRefreshListener(refreshLayout -> getEnvironments(currentSearchValue, QueryType.QUERY));
 
-        //更多
+        //更多操作
         layout_nav_more.setOnClickListener(v -> showPopWindowMore());
 
         //搜索栏进入
@@ -258,21 +258,22 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
             @Override
             public void onSuccess(EnvironmentRes res) {
                 haveFirstSuccess = true;
-                if (layout_swipe.isRefreshing()) {
-                    layout_swipe.setRefreshing(false);
-                }
                 if (queryType == QueryType.QUERY) {
                     ToastUnit.showShort(requireContext(), "加载成功");
                 }
                 envItemAdapter.setData(res.getData());
-
+                this.onEnd(true);
             }
 
             @Override
             public void onFailure(String msg) {
                 ToastUnit.showShort(requireContext(), "加载失败：" + msg);
-                if (layout_swipe.isRefreshing()) {
-                    layout_swipe.setRefreshing(false);
+                this.onEnd(false);
+            }
+
+            public void onEnd(boolean isSuccess) {
+                if (layout_refresh.isRefreshing()) {
+                    layout_refresh.finishRefresh(isSuccess);
                 }
             }
         });

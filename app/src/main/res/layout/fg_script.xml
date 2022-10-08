@@ -33,8 +33,8 @@
             android:layout_marginStart="10dp"
             android:background="@drawable/style_press_gray"
             android:clickable="true"
-            android:visibility="invisible"
-            android:src="@drawable/ic_add_white" />
+            android:src="@drawable/ic_add_white"
+            android:visibility="invisible" />
     </RelativeLayout>
 
     <TextView
@@ -45,7 +45,7 @@
         android:maxLines="1"
         android:paddingVertical="2dp"
         android:paddingStart="15dp"
-        android:text="/"
+        android:text="@string/char_path_split"
         android:textColor="@color/theme_color_shadow"
         android:textSize="12sp" />
 
