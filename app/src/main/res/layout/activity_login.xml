@@ -7,7 +7,7 @@
     android:paddingHorizontal="30dp"
     android:paddingTop="100dp"
     android:paddingBottom="60dp"
-    tools:context=".module.login.LoginActivity">
+    tools:context=".module.server.login.LoginActivity">
 
     <ImageView
         android:id="@+id/logo_ql"

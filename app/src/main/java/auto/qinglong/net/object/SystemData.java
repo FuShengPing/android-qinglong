@@ -21,5 +21,4 @@ public class SystemData {
         this.version = version;
     }
 
-
 }

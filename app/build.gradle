@@ -53,5 +53,10 @@ dependencies {
     //Glide
     //implementation 'com.github.bumptech.glide:glide:4.13.2'
 
+    //智能下拉刷新框架
+    implementation  'io.github.scwang90:refresh-layout-kernel:2.0.5'      //核心必须依赖
+    implementation  'io.github.scwang90:refresh-header-classics:2.0.5'    //经典刷新头
+    implementation  'io.github.scwang90:refresh-footer-classics:2.0.5'    //经典加载
+
 
 }

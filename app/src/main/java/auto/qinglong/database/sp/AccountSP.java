@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import auto.qinglong.MyApplication;
-import auto.qinglong.database.object.Account;
+import auto.qinglong.module.app.account.Account;
 
 public class AccountSP {
     private static final String TAG = "ACCOUNT";

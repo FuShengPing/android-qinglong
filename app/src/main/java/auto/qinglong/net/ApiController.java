@@ -7,22 +7,22 @@ import com.google.gson.JsonObject;
 
 import java.util.List;
 
-import auto.qinglong.module.dependence.Dependence;
-import auto.qinglong.module.environment.Environment;
-import auto.qinglong.module.log.Log;
-import auto.qinglong.module.script.Script;
-import auto.qinglong.module.task.Task;
-import auto.qinglong.net.res.BaseRes;
-import auto.qinglong.net.res.DependenceRes;
-import auto.qinglong.net.res.EditEnvRes;
-import auto.qinglong.net.res.EditTaskRes;
-import auto.qinglong.net.res.EnvironmentRes;
-import auto.qinglong.net.res.LogRes;
-import auto.qinglong.net.res.LoginRes;
-import auto.qinglong.net.res.ScriptRes;
-import auto.qinglong.net.res.SystemRes;
-import auto.qinglong.net.res.TasksRes;
-import auto.qinglong.database.object.Account;
+import auto.qinglong.module.server.dependence.Dependence;
+import auto.qinglong.module.server.environment.Environment;
+import auto.qinglong.module.server.log.Log;
+import auto.qinglong.module.server.script.Script;
+import auto.qinglong.module.server.task.Task;
+import auto.qinglong.net.response.BaseRes;
+import auto.qinglong.net.response.DependenceRes;
+import auto.qinglong.net.response.EditEnvRes;
+import auto.qinglong.net.response.EditTaskRes;
+import auto.qinglong.net.response.EnvironmentRes;
+import auto.qinglong.net.response.LogRes;
+import auto.qinglong.net.response.LoginRes;
+import auto.qinglong.net.response.ScriptRes;
+import auto.qinglong.net.response.SystemRes;
+import auto.qinglong.net.response.TasksRes;
+import auto.qinglong.module.app.account.Account;
 import auto.qinglong.database.sp.AccountSP;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -47,7 +47,7 @@ public class ApiController {
                 .baseUrl(account.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .getSystemInfo();
 
         call.enqueue(new Callback<SystemRes>() {
@@ -68,17 +68,17 @@ public class ApiController {
                         callback.onFailure(systemRes.getMessage());
                     }
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<SystemRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
     }
 
     public static void checkToken(@NonNull String requestId, @NonNull Account account, @NonNull LoginCallback callback) {
@@ -86,7 +86,7 @@ public class ApiController {
                 .baseUrl(account.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .getTasks(account.getAuthorization(), "");
 
         call.enqueue(new Callback<TasksRes>() {
@@ -107,17 +107,17 @@ public class ApiController {
                         callback.onFailure(tasksRes.getMessage());
                     }
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<TasksRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
     }
 
     public static void login(@NonNull String requestId, @NonNull Account account, @NonNull LoginCallback callback) {
@@ -131,7 +131,7 @@ public class ApiController {
                 .baseUrl(account.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .login(body);
 
         call.enqueue(new Callback<LoginRes>() {
@@ -153,16 +153,16 @@ public class ApiController {
                         callback.onFailure(loginRes.getMessage());
                     }
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<LoginRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
     }
 
     public static void getTasks(@NonNull String requestId, @NonNull String searchValue, @NonNull GetTasksCallback callback) {
@@ -170,7 +170,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .getTasks(AccountSP.getCurrentAccount().getAuthorization(), searchValue);
         call.enqueue(new Callback<TasksRes>() {
             @Override
@@ -190,17 +190,17 @@ public class ApiController {
                         callback.onFailure(tasksRes.getMessage());
                     }
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<TasksRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
     }
 
     public static void runTasks(@NonNull String requestId, @NonNull List<String> taskIds, @NonNull RunTaskCallback callback) {
@@ -215,7 +215,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .runTasks(AccountSP.getCurrentAccount().getAuthorization(), body);
 
         call.enqueue(new Callback<BaseRes>() {
@@ -230,17 +230,17 @@ public class ApiController {
                 } else {
                     callback.onSuccess(response.body().getMessage());
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
 
     }
 
@@ -256,7 +256,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .stopTasks(AccountSP.getCurrentAccount().getAuthorization(), body);
 
         call.enqueue(new Callback<BaseRes>() {
@@ -276,17 +276,17 @@ public class ApiController {
                     }
 
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
 
     }
 
@@ -302,7 +302,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .enableTasks(AccountSP.getCurrentAccount().getAuthorization(), body);
 
         call.enqueue(new Callback<BaseRes>() {
@@ -322,17 +322,17 @@ public class ApiController {
                     }
 
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
 
     }
 
@@ -348,7 +348,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .disableTasks(AccountSP.getCurrentAccount().getAuthorization(), body);
 
         call.enqueue(new Callback<BaseRes>() {
@@ -368,17 +368,17 @@ public class ApiController {
                     }
 
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
 
     }
 
@@ -394,7 +394,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .pinTasks(AccountSP.getCurrentAccount().getAuthorization(), body);
 
         call.enqueue(new Callback<BaseRes>() {
@@ -414,17 +414,17 @@ public class ApiController {
                     }
 
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
 
     }
 
@@ -440,7 +440,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .unpinTasks(AccountSP.getCurrentAccount().getAuthorization(), body);
 
         call.enqueue(new Callback<BaseRes>() {
@@ -460,17 +460,17 @@ public class ApiController {
                     }
 
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
 
     }
 
@@ -486,7 +486,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .deleteTasks(AccountSP.getCurrentAccount().getAuthorization(), body);
 
         call.enqueue(new Callback<BaseRes>() {
@@ -506,17 +506,17 @@ public class ApiController {
                     }
 
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
 
     }
 
@@ -534,7 +534,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .editTask(AccountSP.getCurrentAccount().getAuthorization(), body);
 
         call.enqueue(new Callback<EditTaskRes>() {
@@ -554,17 +554,17 @@ public class ApiController {
                     }
 
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<EditTaskRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
     }
 
     public static void addTask(@NonNull String requestId, @NonNull Task task, @NonNull EditTaskCallback callback) {
@@ -579,7 +579,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .addTask(AccountSP.getCurrentAccount().getAuthorization(), body);
 
         call.enqueue(new Callback<EditTaskRes>() {
@@ -599,17 +599,17 @@ public class ApiController {
                     }
 
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<EditTaskRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
     }
 
     public static void getEnvironments(@NonNull String requestId, @NonNull String searchValue, @NonNull GetEnvironmentsCallback callback) {
@@ -617,7 +617,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .getEnvironments(AccountSP.getCurrentAccount().getAuthorization(), searchValue);
         call.enqueue(new Callback<EnvironmentRes>() {
             @Override
@@ -637,17 +637,17 @@ public class ApiController {
                         callback.onFailure(environmentRes.getMessage());
                     }
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<EnvironmentRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
     }
 
     public static void addEnvironment(@NonNull String requestId, @NonNull List<Environment> environments, @NonNull GetEnvironmentsCallback callback) {
@@ -667,7 +667,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .addEnvironments(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
 
         call.enqueue(new Callback<EnvironmentRes>() {
@@ -688,17 +688,17 @@ public class ApiController {
                         callback.onFailure(environmentRes.getMessage());
                     }
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<EnvironmentRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
     }
 
     public static void updateEnvironment(@NonNull String requestId, @NonNull Environment environment, @NonNull EditEnvCallback callback) {
@@ -715,7 +715,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .updateEnvironment(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
 
         call.enqueue(new Callback<EditEnvRes>() {
@@ -736,17 +736,17 @@ public class ApiController {
                         callback.onFailure(editEnvRes.getMessage());
                     }
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<EditEnvRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
     }
 
     public static void deleteEnvironments(@NonNull String requestId, @NonNull List<String> envIds, @NonNull BaseCallback callback) {
@@ -761,7 +761,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .deleteEnvironments(AccountSP.getCurrentAccount().getAuthorization(), body);
 
         call.enqueue(new Callback<BaseRes>() {
@@ -782,17 +782,17 @@ public class ApiController {
                     }
 
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
 
     }
 
@@ -808,7 +808,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .enableEnv(AccountSP.getCurrentAccount().getAuthorization(), body);
 
         call.enqueue(new Callback<BaseRes>() {
@@ -829,17 +829,17 @@ public class ApiController {
                     }
 
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
 
     }
 
@@ -855,7 +855,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .disableEnv(AccountSP.getCurrentAccount().getAuthorization(), body);
 
         call.enqueue(new Callback<BaseRes>() {
@@ -876,17 +876,17 @@ public class ApiController {
                     }
 
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
 
     }
 
@@ -895,7 +895,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .getLogs(AccountSP.getCurrentAccount().getAuthorization());
         call.enqueue(new Callback<LogRes>() {
             @Override
@@ -915,17 +915,17 @@ public class ApiController {
                         callback.onFailure(logRes.getMessage());
                     }
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<LogRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
     }
 
     public static void getLogDetail(@NonNull String requestId, @NonNull String logPath, @NonNull BaseCallback callback) {
@@ -933,7 +933,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .getLogDetail(logPath, AccountSP.getCurrentAccount().getAuthorization());
 
         call.enqueue(new Callback<BaseRes>() {
@@ -948,16 +948,16 @@ public class ApiController {
                 } else {
                     callback.onSuccess();
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
     }
 
     public static void getConfigDetail(@NonNull String requestId, @NonNull BaseCallback callback) {
@@ -965,7 +965,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .getConfig(AccountSP.getCurrentAccount().getAuthorization());
 
         call.enqueue(new Callback<BaseRes>() {
@@ -980,16 +980,16 @@ public class ApiController {
                 } else {
                     callback.onSuccess();
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
     }
 
     public static void saveConfig(@NonNull String requestId, @NonNull String content, @NonNull BaseCallback callback) {
@@ -1004,7 +1004,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .saveConfig(AccountSP.getCurrentAccount().getAuthorization(), body);
 
         call.enqueue(new Callback<BaseRes>() {
@@ -1019,17 +1019,17 @@ public class ApiController {
                 } else {
                     callback.onSuccess();
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
     }
 
     public static void getScripts(@NonNull String requestId, @NonNull GetScriptsCallback callback) {
@@ -1037,7 +1037,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .getScripts(AccountSP.getCurrentAccount().getAuthorization());
         call.enqueue(new Callback<ScriptRes>() {
             @Override
@@ -1057,17 +1057,17 @@ public class ApiController {
                         callback.onFailure(scriptRes.getMessage());
                     }
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<ScriptRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
     }
 
     public static void getScriptDetail(@NonNull String requestId, @NonNull String scriptPath, @NonNull BaseCallback callback) {
@@ -1075,7 +1075,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .getScriptDetail(scriptPath, AccountSP.getCurrentAccount().getAuthorization());
 
         call.enqueue(new Callback<BaseRes>() {
@@ -1090,16 +1090,16 @@ public class ApiController {
                 } else {
                     callback.onSuccess();
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
     }
 
     public static void saveScript(@NonNull String requestId, @NonNull String content, @NonNull String filename, String path, @NonNull BaseCallback callback) {
@@ -1115,7 +1115,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .saveScript(AccountSP.getCurrentAccount().getAuthorization(), body);
 
         call.enqueue(new Callback<BaseRes>() {
@@ -1130,17 +1130,17 @@ public class ApiController {
                 } else {
                     callback.onSuccess();
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
     }
 
     public static void getDependencies(@NonNull String requestId, String searchValue, String type, @NonNull GetDependenciesCallback callback) {
@@ -1148,7 +1148,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .getDependencies(AccountSP.getCurrentAccount().getAuthorization(), searchValue, type);
 
         call.enqueue(new Callback<DependenceRes>() {
@@ -1163,16 +1163,16 @@ public class ApiController {
                 } else {
                     callback.onSuccess(response.body());
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<DependenceRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
 
     }
 
@@ -1192,7 +1192,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .addDependencies(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
 
         call.enqueue(new Callback<BaseRes>() {
@@ -1213,17 +1213,17 @@ public class ApiController {
                         callback.onFailure(baseRes.getMessage());
                     }
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
     }
 
     public static void deleteDependencies(@NonNull String requestId, @NonNull List<String> ids, @NonNull BaseCallback callback) {
@@ -1238,7 +1238,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .deleteDependencies(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
 
         call.enqueue(new Callback<BaseRes>() {
@@ -1259,17 +1259,17 @@ public class ApiController {
                         callback.onFailure(baseRes.getMessage());
                     }
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
     }
 
     public static void reinstallDependencies(@NonNull String requestId, @NonNull List<String> ids, @NonNull BaseCallback callback) {
@@ -1284,7 +1284,7 @@ public class ApiController {
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QL.class)
+                .create(Api.class)
                 .reinstallDependencies(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
 
         call.enqueue(new Callback<BaseRes>() {
@@ -1305,17 +1305,17 @@ public class ApiController {
                         callback.onFailure(baseRes.getMessage());
                     }
                 }
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
-                CallManager.finishCall(requestId);
+                RequestManager.finishCall(requestId);
             }
         });
 
-        CallManager.addCall(call, requestId);
+        RequestManager.addCall(call, requestId);
     }
 
 

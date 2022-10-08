@@ -2,7 +2,7 @@ package auto.qinglong.module;
 
 import androidx.fragment.app.Fragment;
 
-import auto.qinglong.net.CallManager;
+import auto.qinglong.net.RequestManager;
 
 public class BaseFragment extends Fragment {
     protected boolean haveFirstSuccess = false;//是否已经加载成功过数据
@@ -14,7 +14,7 @@ public class BaseFragment extends Fragment {
     @Override
     public void onPause() {
         //请求本页面的网络请求
-        CallManager.cancelCall(getClass().getName());
+        RequestManager.cancelCall(getClass().getName());
         super.onPause();
     }
 

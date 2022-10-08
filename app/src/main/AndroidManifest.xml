@@ -17,15 +17,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QingLong">
         <activity
-            android:name=".module.AccountActivity"
+            android:name=".module.app.account.AccountActivity"
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".module.log.LogActivity"
+            android:name=".module.server.log.LogActivity"
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".module.script.ScriptActivity"
+            android:name=".module.server.script.ScriptActivity"
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
@@ -33,7 +33,7 @@
             android:exported="false"
             android:launchMode="singleTop" />
         <activity
-            android:name=".module.login.LoginActivity"
+            android:name=".module.server.login.LoginActivity"
             android:launchMode="singleTop"
             android:exported="true">
             <intent-filter>

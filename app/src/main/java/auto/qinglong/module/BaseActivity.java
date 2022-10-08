@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 //import com.bumptech.glide.Glide;
 
-import auto.qinglong.net.CallManager;
+import auto.qinglong.net.RequestManager;
 
 public abstract class BaseActivity extends AppCompatActivity {
     //弹窗
@@ -43,7 +43,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             popupWindow.dismiss();
         }
         //取消本页面的网络请求
-        CallManager.cancelCall(getClass().getName());
+        RequestManager.cancelCall(getClass().getName());
         super.onDestroy();
     }
 
