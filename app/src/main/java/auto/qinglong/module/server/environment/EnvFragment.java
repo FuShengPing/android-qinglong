@@ -118,9 +118,7 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
     @Override
     public void onResume() {
         super.onResume();
-        if (!haveFirstSuccess) {
-            loadFirst();
-        }
+        loadFirst();
     }
 
     /**
@@ -129,20 +127,20 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!haveFirstSuccess && !hidden) {
+        if (!hidden) {
             loadFirst();
         }
     }
 
     private void loadFirst() {
+        if (haveFirstSuccess || RequestManager.isRequesting(getClassName())) {
+            return;
+        }
         //延迟加载
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //可见则加载
-                if (isVisible()) {
-                    getEnvironments(currentSearchValue, QueryType.QUERY);
-                }
+        new Handler().postDelayed(() -> {
+            //可见则加载
+            if (isVisible()) {
+                getEnvironments(currentSearchValue, QueryType.QUERY);
             }
         }, 1000);
     }
@@ -164,139 +162,93 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
         });
 
         //导航栏
-        layout_nav_menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                menuClickListener.onMenuClick();
-            }
-        });
+        layout_nav_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
 
         //下拉刷新
         layout_swipe.setColorSchemeColors(requireContext().getColor(R.color.theme_color));
         layout_swipe.setRefreshing(true);
-        layout_swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getEnvironments(currentSearchValue, QueryType.QUERY);
-            }
-        });
+        layout_swipe.setOnRefreshListener(() -> getEnvironments(currentSearchValue, QueryType.QUERY));
 
         //更多
-        layout_nav_more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPopWindowMore();
-            }
-        });
+        layout_nav_more.setOnClickListener(v -> showPopWindowMore());
 
         //搜索栏进入
-        layout_nav_search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                layout_search_value.setText(currentSearchValue);
-                showBar(BarType.SEARCH);
-            }
+        layout_nav_search.setOnClickListener(v -> {
+            layout_search_value.setText(currentSearchValue);
+            showBar(BarType.SEARCH);
         });
 
         //搜索栏确定
-        layout_search_confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String value = layout_search_value.getText().toString().trim();
-                if (!value.isEmpty()) {
-                    currentSearchValue = value;
-                    WindowUnit.hideKeyboard(layout_search_value);
-                    getEnvironments(currentSearchValue, QueryType.OTHER);
-                }
+        layout_search_confirm.setOnClickListener(v -> {
+            String value = layout_search_value.getText().toString().trim();
+            if (!value.isEmpty()) {
+                currentSearchValue = value;
+                WindowUnit.hideKeyboard(layout_search_value);
+                getEnvironments(currentSearchValue, QueryType.OTHER);
             }
         });
 
         //搜索栏返回
-        layout_search_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                showBar(BarType.NAV);
-            }
-        });
+        layout_search_back.setOnClickListener(v -> showBar(BarType.NAV));
 
         //动作栏返回
-        layout_actions_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showBar(BarType.NAV);
-            }
-        });
+        layout_actions_back.setOnClickListener(v -> showBar(BarType.NAV));
 
         //全选
-        layout_actions_select.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                envItemAdapter.setAllChecked(isChecked);
-            }
-        });
+        layout_actions_select.setOnCheckedChangeListener((buttonView, isChecked) -> envItemAdapter.setAllChecked(isChecked));
 
         //删除
-        layout_actions_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (RequestManager.isRequesting(getClassName())) {
-                    return;
-                }
-                List<Environment> environments = envItemAdapter.getSelectedItems();
-                if (environments.size() == 0) {
-                    ToastUnit.showShort(getContext(), "至少选择一项");
-                    return;
-                }
-
-                List<String> ids = new ArrayList<>();
-                for (Environment environment : environments) {
-                    ids.add(environment.get_id());
-                }
-                deleteEnvironments(ids);
+        layout_actions_delete.setOnClickListener(v -> {
+            if (RequestManager.isRequesting(getClassName())) {
+                return;
             }
+            List<Environment> environments = envItemAdapter.getSelectedItems();
+            if (environments.size() == 0) {
+                ToastUnit.showShort(getContext(), getString(R.string.tip_empty_select));
+                return;
+            }
+
+            List<String> ids = new ArrayList<>();
+            for (Environment environment : environments) {
+                ids.add(environment.get_id());
+            }
+            deleteEnvironments(ids);
         });
 
         //禁用
-        layout_actions_disable.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (RequestManager.isRequesting(getClassName())) {
-                    return;
-                }
-                List<Environment> environments = envItemAdapter.getSelectedItems();
-                if (environments.size() == 0) {
-                    ToastUnit.showShort(getContext(), "至少选择一项");
-                    return;
-                }
-
-                List<String> ids = new ArrayList<>();
-                for (Environment environment : environments) {
-                    ids.add(environment.get_id());
-                }
-                disableEnvironments(ids);
+        layout_actions_disable.setOnClickListener(v -> {
+            if (RequestManager.isRequesting(getClassName())) {
+                return;
             }
+            List<Environment> environments = envItemAdapter.getSelectedItems();
+            if (environments.size() == 0) {
+                ToastUnit.showShort(getContext(), getString(R.string.tip_empty_select));
+                return;
+            }
+
+            List<String> ids = new ArrayList<>();
+            for (Environment environment : environments) {
+                ids.add(environment.get_id());
+            }
+            disableEnvironments(ids);
         });
 
         //启用
-        layout_actions_enable.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (RequestManager.isRequesting(getClassName())) {
-                    return;
-                }
-                List<Environment> environments = envItemAdapter.getSelectedItems();
-                if (environments.size() == 0) {
-                    ToastUnit.showShort(getContext(), "至少选择一项");
-                    return;
-                }
-
-                List<String> ids = new ArrayList<>();
-                for (Environment environment : environments) {
-                    ids.add(environment.get_id());
-                }
-                enableEnvironments(ids);
+        layout_actions_enable.setOnClickListener(v -> {
+            if (RequestManager.isRequesting(getClassName())) {
+                return;
             }
+            List<Environment> environments = envItemAdapter.getSelectedItems();
+            if (environments.size() == 0) {
+                ToastUnit.showShort(getContext(), getString(R.string.tip_empty_select));
+                return;
+            }
+
+            List<String> ids = new ArrayList<>();
+            for (Environment environment : environments) {
+                ids.add(environment.get_id());
+            }
+            enableEnvironments(ids);
         });
 
     }
@@ -414,7 +366,7 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
         TextView layout_add_text = view.findViewById(R.id.pop_fg_more_add_text);
         TextView layout_action_text = view.findViewById(R.id.pop_fg_more_action_text);
         layout_add_text.setText("新建变量");
-        layout_action_text.setText("批量操作");
+        layout_action_text.setText(getString(R.string.mul_action));
 
         popupWindowMore = new PopupWindow(getContext());
         popupWindowMore.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
@@ -424,20 +376,14 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
         popupWindowMore.setOutsideTouchable(true);
         popupWindowMore.setFocusable(true);
 
-        layout_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindowMore.dismiss();
-                showPopWindowEdit(null);
-            }
+        layout_add.setOnClickListener(v -> {
+            popupWindowMore.dismiss();
+            showPopWindowEdit(null);
         });
 
-        layout_action.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindowMore.dismiss();
-                showBar(BarType.ACTIONS);
-            }
+        layout_action.setOnClickListener(v -> {
+            popupWindowMore.dismiss();
+            showBar(BarType.ACTIONS);
         });
     }
 
@@ -460,14 +406,9 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
         popupWindowEdit.setFocusable(true);
         popupWindowEdit.setAnimationStyle(R.style.anim_fg_task_pop_edit);
 
-        layout_edit_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindowEdit.dismiss();
-            }
-        });
+        layout_edit_cancel.setOnClickListener(v -> popupWindowEdit.dismiss());
 
-        popupWindowEdit.setOnDismissListener(() -> WindowUnit.setBackgroundAlpha(requireActivity(),1.0f));
+        popupWindowEdit.setOnDismissListener(() -> WindowUnit.setBackgroundAlpha(requireActivity(), 1.0f));
     }
 
     public void showPopWindowMore() {
@@ -494,46 +435,43 @@ public class EnvFragment extends BaseFragment implements BaseFragment.FragmentIn
             layout_edit_remark.setText(environment.getRemarks());
         }
 
-        layout_edit_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (RequestManager.isRequesting(getClassName())) {
-                    return;
-                }
+        layout_edit_save.setOnClickListener(v -> {
+            if (RequestManager.isRequesting(getClassName())) {
+                return;
+            }
 
-                WindowUnit.hideKeyboard(layout_root);
+            WindowUnit.hideKeyboard(layout_root);
 
-                String name = layout_edit_name.getText().toString().trim();
-                String value = layout_edit_value.getText().toString().trim();
-                String remarks = layout_edit_remark.getText().toString().trim();
+            String name = layout_edit_name.getText().toString().trim();
+            String value = layout_edit_value.getText().toString().trim();
+            String remarks = layout_edit_remark.getText().toString().trim();
 
-                if (name.isEmpty()) {
-                    ToastUnit.showShort(requireContext(), "变量名称不能为空");
-                    return;
-                }
+            if (name.isEmpty()) {
+                ToastUnit.showShort(requireContext(), "变量名称不能为空");
+                return;
+            }
 
-                if (value.isEmpty()) {
-                    ToastUnit.showShort(requireContext(), "变量值不能为空");
-                    return;
-                }
+            if (value.isEmpty()) {
+                ToastUnit.showShort(requireContext(), "变量值不能为空");
+                return;
+            }
 
-                List<Environment> environments = new ArrayList<>();
-                Environment newEnv;
-                newEnv = new Environment();
-                newEnv.setName(name);
-                newEnv.setValue(value);
-                newEnv.setRemarks(remarks);
-                environments.add(newEnv);
-                if (environment == null) {
-                    addEnvironments(environments);
-                } else {
-                    newEnv.set_id(environment.get_id());
-                    updateEnvironment(newEnv);
-                }
+            List<Environment> environments = new ArrayList<>();
+            Environment newEnv;
+            newEnv = new Environment();
+            newEnv.setName(name);
+            newEnv.setValue(value);
+            newEnv.setRemarks(remarks);
+            environments.add(newEnv);
+            if (environment == null) {
+                addEnvironments(environments);
+            } else {
+                newEnv.set_id(environment.get_id());
+                updateEnvironment(newEnv);
             }
         });
 
-        WindowUnit.setBackgroundAlpha(requireActivity(),0.5f);
+        WindowUnit.setBackgroundAlpha(requireActivity(), 0.5f);
         popupWindowEdit.showAtLocation(layout_root, Gravity.CENTER, 0, 0);
     }
 

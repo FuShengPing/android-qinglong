@@ -151,7 +151,7 @@ public class TaskFragment extends BaseFragment implements BaseFragment.FragmentI
         }
         new Handler().postDelayed(() -> {
             if (isVisible()) {
-                getTasks("", QueryType.QUERY);
+                getTasks(currentSearchValue, QueryType.QUERY);
             }
         }, 1000);
     }
