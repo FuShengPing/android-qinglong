@@ -10,7 +10,7 @@ import android.widget.ImageView;
 
 import auto.qinglong.R;
 import auto.qinglong.module.BaseActivity;
-import auto.qinglong.module.HomeActivity;
+import auto.qinglong.module.app.HomeActivity;
 import auto.qinglong.net.ApiController;
 import auto.qinglong.net.response.SystemRes;
 import auto.qinglong.database.db.AccountDBHelper;

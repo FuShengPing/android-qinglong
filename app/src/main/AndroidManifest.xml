@@ -29,7 +29,7 @@
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".module.HomeActivity"
+            android:name=".module.app.HomeActivity"
             android:exported="false"
             android:launchMode="singleTop" />
         <activity

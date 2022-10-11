@@ -1,6 +1,5 @@
-package auto.qinglong.module;
+package auto.qinglong.module.app;
 
-import android.animation.AnimatorSet;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +11,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import auto.qinglong.R;
 import auto.qinglong.database.sp.AccountSP;
+import auto.qinglong.module.BaseActivity;
+import auto.qinglong.module.BaseFragment;
 import auto.qinglong.module.app.account.AccountActivity;
 import auto.qinglong.module.server.config.ConfigFragment;
 import auto.qinglong.module.server.dependence.DepFragment;

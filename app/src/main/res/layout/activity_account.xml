@@ -48,10 +48,11 @@
         android:layout_height="match_parent"
         android:background="@color/bg_gray"
         app:srlAccentColor="@color/text_color_49"
+        app:srlEnableOverScrollDrag="true"
         app:srlPrimaryColor="@color/white">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never"

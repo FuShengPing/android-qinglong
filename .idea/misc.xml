@@ -11,6 +11,7 @@
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/ic_nav.xml" value="0.2" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_bg_gradient.xml" value="0.19" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_bg_gradient_blue_90.xml" value="0.19" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_border_bottom_white.xml" value="0.196" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_button_blue.xml" value="0.19" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_button_white.xml" value="0.19" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_check_box.xml" value="0.19" />
@@ -40,6 +41,7 @@
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/fg_script.xml" value="0.4188422247446084" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/fg_setting.xml" value="0.1921875" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/fg_task.xml" value="0.4188422247446084" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/item_account.xml" value="0.5" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/item_dep.xml" value="0.33" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/item_env.xml" value="0.33" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/item_file.xml" value="0.1921875" />
