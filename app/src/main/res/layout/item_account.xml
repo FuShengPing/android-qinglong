@@ -1,50 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/style_border_bottom_white"
     android:orientation="horizontal"
-    android:paddingHorizontal="16dp"
     android:paddingVertical="8dp">
 
     <ImageView
         android:id="@+id/item_delete"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
         android:padding="8dp"
-        android:src="@drawable/ic_remove_circle_red" />
+        android:src="@drawable/ic_remove_circle_red"
+        android:visibility="gone" />
 
-    <LinearLayout
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/txt_username"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_toStartOf="@id/item_selected"
+        android:layout_toEndOf="@id/item_delete"
+        android:maxLines="1"
+        android:text="njustcs"
+        android:textColor="@color/text_color_4"
+        android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/txt_username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:text="njustcs"
-            android:textColor="@color/text_color_49"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/txt_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="127.0.0.1:5700"
-            android:textSize="13sp" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/txt_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txt_username"
+        android:layout_toStartOf="@id/item_selected"
+        android:layout_toEndOf="@id/item_delete"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="127.0.0.1:5700"
+        android:textSize="12sp" />
 
     <ImageView
         android:id="@+id/item_selected"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_gravity="center_vertical"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
         android:padding="8dp"
-        android:src="@drawable/ic_check"
-        android:visibility="gone" />
-</LinearLayout>
+        android:src="@drawable/ic_check" />
+</RelativeLayout>

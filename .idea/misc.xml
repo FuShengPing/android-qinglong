@@ -6,6 +6,8 @@
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable-anydpi/ic_nav.xml" value="0.19" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable-anydpi/ic_search.xml" value="0.19" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.19" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/ic_add_blue.xml" value="0.196" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/ic_add_circle_gray.xml" value="0.196" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/ic_check_box_blue_true.xml" value="0.208" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/ic_folder.xml" value="0.19" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/ic_nav.xml" value="0.2" />
@@ -25,8 +27,9 @@
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_login_container.xml" value="0.19" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_login_input.xml" value="0.19" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_press_gray.xml" value="0.19" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_radius_4_white.xml" value="0.196" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_ripple_gray.xml" value="0.19" />
-        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/activity_account.xml" value="0.1921875" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/activity_account.xml" value="0.33" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/activity_home.xml" value="0.33" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/activity_log.xml" value="0.22" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/activity_login.xml" value="0.33" />
@@ -41,7 +44,7 @@
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/fg_script.xml" value="0.4188422247446084" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/fg_setting.xml" value="0.1921875" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/fg_task.xml" value="0.4188422247446084" />
-        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/item_account.xml" value="0.5" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/item_account.xml" value="0.33" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/item_dep.xml" value="0.33" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/item_env.xml" value="0.33" />
         <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/item_file.xml" value="0.1921875" />

@@ -12,7 +12,7 @@
     <color name="theme_color_shadow">#40a9ff</color>
     <color name="bg_gray">#F5F6F8</color>
     <color name="divide_line">#dddddd</color>
-    <color name="press_gray">#22000000</color>
+    <color name="press_gray">#4ADDDDDD</color>
     <color name="icon_gray">#8B8B8B</color>
 
     <color name="text_color_49">#494949</color>

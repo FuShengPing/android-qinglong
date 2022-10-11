@@ -47,16 +47,38 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg_gray"
-        app:srlAccentColor="@color/text_color_49"
         app:srlEnableOverScrollDrag="true"
-        app:srlPrimaryColor="@color/white">
+        app:srlEnablePureScrollMode="true">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="never"
-            android:scrollbars="none" />
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="8dp"
+            android:background="@drawable/style_radius_4_white"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:scrollbars="none" />
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/style_press_gray"
+                android:clickable="true"
+                android:padding="8dp"
+                android:src="@drawable/ic_add_blue" />
+        </LinearLayout>
+
+
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
 

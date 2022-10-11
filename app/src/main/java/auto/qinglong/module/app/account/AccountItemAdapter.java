@@ -1,6 +1,7 @@
 package auto.qinglong.module.app.account;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -20,7 +21,7 @@ public class AccountItemAdapter extends RecyclerView.Adapter<MyViewHolder> {
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = View.inflate(context, R.layout.item_account, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_account, parent,false);
         return new MyViewHolder(view);
     }
 
