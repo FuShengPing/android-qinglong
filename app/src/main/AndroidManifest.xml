@@ -17,27 +17,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QingLong">
         <activity
-            android:name=".module.app.account.AccountActivity"
+            android:name=".activity.app.account.AccountActivity"
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".module.server.log.LogActivity"
+            android:name=".activity.service.log.LogActivity"
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".module.server.script.ScriptActivity"
+            android:name=".activity.service.script.ScriptActivity"
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".module.app.HomeActivity"
+            android:name=".activity.app.HomeActivity"
             android:exported="false"
             android:launchMode="singleTop" />
         <activity
-            android:name=".module.server.login.LoginActivity"
-            android:launchMode="singleTop"
-            android:exported="true">
+            android:name=".activity.app.login.LoginActivity"
+            android:exported="true"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

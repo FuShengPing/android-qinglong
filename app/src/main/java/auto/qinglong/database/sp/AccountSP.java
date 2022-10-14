@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import auto.qinglong.MyApplication;
-import auto.qinglong.module.app.account.Account;
+import auto.qinglong.activity.app.account.Account;
 
 public class AccountSP {
     private static final String TAG = "ACCOUNT";
@@ -14,17 +14,16 @@ public class AccountSP {
     private static final String field_token = "token";
     private static final String defaultValue = "";
 
-    private static Account currentAccount;
-    private static SharedPreferences sp;
+    private static final SharedPreferences sp;
 
     static {
         sp = MyApplication.getContext().getSharedPreferences(TAG, Context.MODE_PRIVATE);
     }
 
     /**
-     * @return 上次登录成功的账号
+     * @return 当前账号
      */
-    public static Account getAccount() {
+    public static Account getCurrentAccount() {
         String address = sp.getString(field_address, defaultValue);
         if (address.isEmpty()) {
             return null;
@@ -32,23 +31,15 @@ public class AccountSP {
         String username = sp.getString(field_username, defaultValue);
         String password = sp.getString(field_password, defaultValue);
         String token = sp.getString(field_token, defaultValue);
-        return new Account(username, password, address, token);
+        Account account = new Account(username, password, address, token);
+        account.setCurrent(true);
+        return account;
     }
 
     /**
-     * @return 本次登录成功的账号
+     * 保存当前账号
      */
-    public static Account getCurrentAccount() {
-        return currentAccount;
-    }
-
-    /**
-     * 保存本次登录成功的账号
-     *
-     * @param account
-     */
-    public static void saveAccount(Account account) {
-        currentAccount = account;
+    public static void saveCurrentAccount(Account account) {
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(field_username, account.getUsername());
         editor.putString(field_password, account.getPassword());
@@ -56,6 +47,5 @@ public class AccountSP {
         editor.putString(field_token, account.getToken());
         editor.apply();
     }
-
 
 }

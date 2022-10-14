@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import auto.qinglong.MyApplication;
-import auto.qinglong.module.app.account.Account;
+import auto.qinglong.activity.app.account.Account;
 
 public class AccountDBHelper {
     private static MyDBHelper myDBHelper;

@@ -42,42 +42,51 @@
 
     </RelativeLayout>
 
+
     <com.scwang.smart.refresh.layout.SmartRefreshLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg_gray"
+        app:srlEnableLoadMore="false"
+        app:srlEnableNestedScrolling="false"
         app:srlEnableOverScrollDrag="true"
-        app:srlEnablePureScrollMode="true">
+        app:srlEnableRefresh="false">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="8dp"
-            android:background="@drawable/style_radius_4_white"
-            android:orientation="vertical"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="8dp">
+            android:nestedScrollingEnabled="false"
+            android:overScrollMode="never"
+            android:scrollbars="none">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:overScrollMode="never"
-                android:scrollbars="none" />
+                android:background="@drawable/style_radius_4_white"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp">
 
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/style_press_gray"
-                android:clickable="true"
-                android:padding="8dp"
-                android:src="@drawable/ic_add_blue" />
-        </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never"
+                    android:scrollbars="none" />
 
+                <ImageView
+                    android:clickable="true"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_below="@id/recyclerView"
+                    android:layout_centerHorizontal="true"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_add_blue" />
+            </RelativeLayout>
+        </ScrollView>
 
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
