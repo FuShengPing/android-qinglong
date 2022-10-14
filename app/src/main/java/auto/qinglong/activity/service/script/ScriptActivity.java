@@ -155,8 +155,4 @@ public class ScriptActivity extends BaseActivity {
         super.onDestroy();
     }
 
-    @Override
-    protected void initWindow() {
-
-    }
 }

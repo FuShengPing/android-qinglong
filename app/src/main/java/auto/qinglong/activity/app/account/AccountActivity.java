@@ -40,8 +40,4 @@ public class AccountActivity extends BaseActivity {
 
     }
 
-    @Override
-    protected void initWindow() {
-
-    }
 }

@@ -4,19 +4,13 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.widget.PopupWindow;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-//import com.bumptech.glide.Glide;
-
 import auto.qinglong.network.RequestManager;
 
 public abstract class BaseActivity extends AppCompatActivity {
-    //弹窗
-    public PopupWindow popupWindow;
-
     public Context myContext;
 
     @Override
@@ -37,10 +31,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        //关闭弹窗
-        if (popupWindow != null) {
-            popupWindow.dismiss();
-        }
         //取消本页面的网络请求
         RequestManager.cancelCall(getClass().getName());
         super.onDestroy();
@@ -62,7 +52,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     }
 
-    protected abstract void init();
+    protected void init() {
 
-    protected abstract void initWindow();
+    }
+
 }

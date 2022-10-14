@@ -34,12 +34,10 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        //状态栏黑色字体
+        WindowUnit.setStatusBarTextColor(this, false);
 
-        if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
-            finish();
-            return;
-        }
+        setContentView(R.layout.activity_login);
 
         layout_logo_ql = findViewById(R.id.logo_ql);
         layout_confirm = findViewById(R.id.button_confirm);
@@ -47,7 +45,6 @@ public class LoginActivity extends BaseActivity {
         layout_username = findViewById(R.id.input_username);
         layout_password = findViewById(R.id.input_password);
 
-        initWindow();
         init();
     }
 
@@ -102,18 +99,8 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void initWindow() {
-        WindowUnit.setStatusBarTextColor(this, false);
-        WindowUnit.setTranslucentStatus(this);
-    }
-
-
     /**
      * 查询系统信息 主要是查看是否已经初始化
-     *
-     * @param account
-     * @param isLogin
      */
     protected void querySystemInfo(Account account, boolean isLogin) {
         ApiController.getSystemInfo(this.getClassName(), account, new ApiController.SystemCallback() {
@@ -139,14 +126,13 @@ public class LoginActivity extends BaseActivity {
 
     /**
      * 检查会话是否有效，防止多次登录
-     * @param account
      */
     protected void checkToken(Account account) {
         ApiController.checkToken(this.getClassName(), account, new ApiController.LoginCallback() {
             @Override
             public void onSuccess(Account account) {
                 LogUnit.log(account.getAuthorization());
-                enterMain(account);
+                enterHome(account);
             }
 
             @Override
@@ -160,7 +146,7 @@ public class LoginActivity extends BaseActivity {
         ApiController.login(this.getClassName(), account, new ApiController.LoginCallback() {
             @Override
             public void onSuccess(Account account) {
-                enterMain(account);
+                enterHome(account);
             }
 
             @Override
@@ -170,7 +156,7 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    private void enterMain(Account account) {
+    private void enterHome(Account account) {
         //保存账号信息
         AccountSP.saveCurrentAccount(account);
         AccountDBHelper.insertAccount(account);

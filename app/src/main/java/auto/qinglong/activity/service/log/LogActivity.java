@@ -126,8 +126,4 @@ public class LogActivity extends BaseActivity {
         super.onDestroy();
     }
 
-    @Override
-    protected void initWindow() {
-
-    }
 }

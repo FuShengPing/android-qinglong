@@ -23,7 +23,6 @@ import auto.qinglong.activity.service.setting.SettingFragment;
 import auto.qinglong.activity.service.task.TaskFragment;
 import auto.qinglong.tools.NetUnit;
 import auto.qinglong.tools.ToastUnit;
-import auto.qinglong.tools.WindowUnit;
 
 public class HomeActivity extends BaseActivity {
     private long lastBackPressed = 0;//上次返回按下时间
@@ -209,12 +208,6 @@ public class HomeActivity extends BaseActivity {
         });
 
 
-    }
-
-    @Override
-    protected void initWindow() {
-        WindowUnit.setStatusBarTextColor(this, false);
-        WindowUnit.setTranslucentStatus(this);
     }
 
     @Override

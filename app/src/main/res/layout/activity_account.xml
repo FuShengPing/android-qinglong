@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@drawable/style_bg_gradient_blue_90"
+        android:background="@color/theme_color"
         android:paddingHorizontal="16dp"
         android:paddingVertical="8dp">
 
@@ -18,6 +18,7 @@
             android:layout_centerVertical="true"
             android:background="@drawable/style_press_gray"
             android:clickable="true"
+            android:contentDescription="@string/tip_back"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_arrow_back" />
 
@@ -28,17 +29,19 @@
             android:text="@string/account_manage"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
-        <TextView
+        <ImageView
             android:id="@+id/account_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:text="@string/action_edit"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:background="@drawable/style_press_gray"
+            android:clickable="true"
+            android:contentDescription="@string/action_edit"
+            android:padding="2dp"
+            android:src="@drawable/ic_write_white" />
 
     </RelativeLayout>
 
@@ -78,11 +81,11 @@
                     android:scrollbars="none" />
 
                 <ImageView
-                    android:clickable="true"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_below="@id/recyclerView"
                     android:layout_centerHorizontal="true"
+                    android:clickable="true"
                     android:padding="8dp"
                     android:src="@drawable/ic_add_blue" />
             </RelativeLayout>

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f0f2f5"
+    android:background="@color/bg_gray"
     android:paddingHorizontal="30dp"
     android:paddingTop="100dp"
     android:paddingBottom="60dp"
@@ -13,8 +13,8 @@
         android:id="@+id/logo_ql"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginBottom="20dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
         android:background="@mipmap/ic_launcher_foreground"
         android:scaleType="centerCrop" />
 
@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/logo_ql"
-        android:background="@drawable/style_login_container"
+        android:background="@drawable/style_radius_8_white"
         android:orientation="vertical"
         android:paddingHorizontal="15dp"
         android:paddingVertical="20dp">

@@ -1,7 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.QingLong" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
+    <style name="Theme.main" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
         <!-- Primary brand color. -->
+        <!-- 导航栏颜色 -->
         <item name="colorPrimary">@color/theme_color</item>
         <item name="colorPrimaryVariant">@color/theme_color</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -11,6 +12,15 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Theme.white" parent="Theme.main">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/white</item>
+    </style>
+
+    <style name="Theme.gray" parent="Theme.main">
+        <item name="colorPrimary">@color/bg_gray</item>
+        <item name="colorPrimaryVariant">@color/bg_gray</item>
     </style>
 </resources>
