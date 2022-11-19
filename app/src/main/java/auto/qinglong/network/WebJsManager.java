@@ -13,14 +13,12 @@ public class WebJsManager {
         if (webView == null) {
             return;
         }
-
         String script;
         if (editable) {
             script = String.format("javascript:setEditable(%1$s)", "true");
         } else {
             script = String.format("javascript:setEditable(%1$s)", "false");
         }
-        LogUnit.log(script);
         webView.evaluateJavascript(script, null);
     }
 
@@ -28,9 +26,7 @@ public class WebJsManager {
         if (webView == null) {
             return;
         }
-
         String script = String.format("javascript:initConfig('%1$s','%2$s')", host, authorization);
-        LogUnit.log(script);
         webView.evaluateJavascript(script, null);
     }
 
@@ -38,9 +34,7 @@ public class WebJsManager {
         if (webView == null) {
             return;
         }
-
         String script = "javascript:refreshConfig()";
-        LogUnit.log(script);
         webView.evaluateJavascript(script, null);
     }
 
@@ -48,9 +42,7 @@ public class WebJsManager {
         if (webView == null) {
             return;
         }
-
         String script = "javascript:backConfig()";
-        LogUnit.log(script);
         webView.evaluateJavascript(script, null);
     }
 
@@ -58,9 +50,7 @@ public class WebJsManager {
         if (webView == null) {
             return;
         }
-
         String script = "javascript:saveConfig()";
-        LogUnit.log(script);
         webView.evaluateJavascript(script, null);
     }
 
@@ -69,9 +59,7 @@ public class WebJsManager {
         if (webView == null) {
             return;
         }
-
         String script = String.format("javascript:initLog('%1$s','%2$s','%3$s')", host, authorization, path);
-        LogUnit.log(script);
         webView.evaluateJavascript(script, null);
     }
 
@@ -79,9 +67,7 @@ public class WebJsManager {
         if (webView == null) {
             return;
         }
-
         String script = "javascript:refreshLog()";
-        LogUnit.log(script);
         webView.evaluateJavascript(script, null);
     }
 
@@ -90,7 +76,6 @@ public class WebJsManager {
         if (webView == null) {
             return;
         }
-
         String script = String.format("javascript:initScript('%1$s','%2$s','%3$s','%4$s')", host, authorization, filename, path);
         LogUnit.log(script);
         webView.evaluateJavascript(script, null);
@@ -100,9 +85,7 @@ public class WebJsManager {
         if (webView == null) {
             return;
         }
-
         String script = "javascript:saveScript()";
-        LogUnit.log(script);
         webView.evaluateJavascript(script, null);
     }
 
@@ -110,9 +93,7 @@ public class WebJsManager {
         if (webView == null) {
             return;
         }
-
         String script = "javascript:backScript()";
-        LogUnit.log(script);
         webView.evaluateJavascript(script, null);
     }
 
@@ -120,9 +101,7 @@ public class WebJsManager {
         if (webView == null) {
             return;
         }
-
         String script = "javascript:refreshScript()";
-        LogUnit.log(script);
         webView.evaluateJavascript(script, null);
     }
 

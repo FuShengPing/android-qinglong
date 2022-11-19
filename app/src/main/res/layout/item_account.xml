@@ -8,8 +8,9 @@
 
     <ImageView
         android:id="@+id/item_delete"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
         android:layout_marginEnd="8dp"
         android:padding="8dp"
         android:src="@drawable/ic_remove_circle_red"
@@ -22,7 +23,6 @@
         android:layout_toStartOf="@id/item_selected"
         android:layout_toEndOf="@id/item_delete"
         android:maxLines="1"
-        android:text="njustcs"
         android:textColor="@color/text_color_4"
         android:textSize="20sp" />
 
@@ -35,7 +35,6 @@
         android:layout_toEndOf="@id/item_delete"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="127.0.0.1:5700"
         android:textSize="12sp" />
 
     <ImageView
@@ -45,5 +44,6 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:padding="8dp"
-        android:src="@drawable/ic_check" />
+        android:src="@drawable/ic_check"
+        android:visibility="gone" />
 </RelativeLayout>

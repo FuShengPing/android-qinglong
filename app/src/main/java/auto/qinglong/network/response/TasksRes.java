@@ -2,12 +2,12 @@ package auto.qinglong.network.response;
 
 import java.util.List;
 
-import auto.qinglong.activity.service.task.Task;
+import auto.qinglong.activity.module.task.QLTask;
 
 public class TasksRes {
     private int code;
     private String message;
-    private List<Task> data;
+    private List<QLTask> data;
 
 
     public int getCode() {
@@ -21,11 +21,11 @@ public class TasksRes {
     /**
      * @return 排序：运行>顶置>空闲>禁止
      */
-    public List<Task> getData() {
+    public List<QLTask> getData() {
         return data;
     }
 
-    public void setData(List<Task> data) {
+    public void setData(List<QLTask> data) {
         this.data = data;
     }
 

@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="task LinYuanovo_scripts/hmdLY.js"
+                android:text="QLTask LinYuanovo_scripts/hmdLY.js"
                 android:textAlignment="viewEnd"
                 android:textColor="@color/text_color_49" />
         </LinearLayout>

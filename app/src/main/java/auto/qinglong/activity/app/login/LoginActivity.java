@@ -66,28 +66,26 @@ public class LoginActivity extends BaseActivity {
                 return;
             }
 
-            String username = layout_username.getText().toString();
+            String username = layout_username.getText().toString().trim();
             if (username.isEmpty()) {
                 ToastUnit.showShort(myContext, "账号不能为空");
                 return;
             }
 
-            String password = layout_password.getText().toString();
+            String password = layout_password.getText().toString().trim();
             if (password.isEmpty()) {
                 ToastUnit.showShort(myContext, "密码不能为空");
                 return;
             }
             WindowUnit.hideKeyboard(layout_password);
 
-            //先检查是否存在数据库中，存在则先检查会话是否有效，不存在则进行登录
-            Account account;
+            Account account = new Account(username, password, address, "");
+            //账号登录过则设置之前token
             if (AccountDBHelper.isAccountExist(address)) {
-                account = AccountDBHelper.getAccount(address);
-                querySystemInfo(account, false);
-            } else {
-                account = new Account(username, password, address, "");
-                querySystemInfo(account, true);
+                account.setToken(AccountDBHelper.getAccount(address).getToken());
             }
+            //检测系统是否初始化和版本信息
+            querySystemInfo(account);
         });
 
         //初始化账号
@@ -102,16 +100,12 @@ public class LoginActivity extends BaseActivity {
     /**
      * 查询系统信息 主要是查看是否已经初始化
      */
-    protected void querySystemInfo(Account account, boolean isLogin) {
+    protected void querySystemInfo(Account account) {
         ApiController.getSystemInfo(this.getClassName(), account, new ApiController.SystemCallback() {
             @Override
             public void onSuccess(SystemRes systemRes) {
                 if (systemRes.getData().isInitialized()) {
-                    if (isLogin) {
-                        login(account);
-                    } else {
-                        checkToken(account);
-                    }
+                    checkToken(account);
                 } else {
                     ToastUnit.showShort(myContext, "系统未初始化，无法登录");
                 }
@@ -125,7 +119,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     /**
-     * 检查会话是否有效，防止多次登录
+     * 检查会话是否有效，无效则登录
      */
     protected void checkToken(Account account) {
         ApiController.checkToken(this.getClassName(), account, new ApiController.LoginCallback() {

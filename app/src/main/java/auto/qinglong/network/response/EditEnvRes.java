@@ -1,6 +1,6 @@
 package auto.qinglong.network.response;
 
-import auto.qinglong.activity.service.environment.Environment;
+import auto.qinglong.activity.module.environment.QLEnvironment;
 
 public class EditEnvRes {
     public int getCode() {
@@ -19,15 +19,15 @@ public class EditEnvRes {
         this.message = message;
     }
 
-    public Environment getData() {
+    public QLEnvironment getData() {
         return data;
     }
 
-    public void setData(Environment data) {
+    public void setData(QLEnvironment data) {
         this.data = data;
     }
 
     private int code;
     private String message;
-    private Environment data;
+    private QLEnvironment data;
 }

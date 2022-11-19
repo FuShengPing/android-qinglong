@@ -9,5 +9,9 @@ public class LogUnit {
         Log.e(TAG, String.valueOf(msg));
     }
 
+    public static void log(String tag,Object msg) {
+        Log.e(tag, String.valueOf(msg));
+    }
+
 
 }

@@ -1,11 +1,11 @@
 package auto.qinglong.network.response;
 
-import auto.qinglong.activity.service.task.Task;
+import auto.qinglong.activity.module.task.QLTask;
 
 public class EditTaskRes {
     private int code;
     private String message;
-    private Task data;
+    private QLTask data;
 
     public int getCode() {
         return code;
@@ -23,11 +23,11 @@ public class EditTaskRes {
         this.message = message;
     }
 
-    public Task getData() {
+    public QLTask getData() {
         return data;
     }
 
-    public void setData(Task data) {
+    public void setData(QLTask data) {
         this.data = data;
     }
 

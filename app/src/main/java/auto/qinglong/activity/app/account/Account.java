@@ -1,10 +1,10 @@
 package auto.qinglong.activity.app.account;
 
 public class Account {
-    private String username;
-    private String password;
-    private String address;
-    private String token;
+    private String username = "";
+    private String password = "";
+    private String address = "";
+    private String token = "";
     private int state;
     //是否为当前账号
     private boolean isCurrent;

@@ -14,13 +14,13 @@ import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.activity.app.account.AccountActivity;
-import auto.qinglong.activity.service.config.ConfigFragment;
-import auto.qinglong.activity.service.dependence.DepFragment;
-import auto.qinglong.activity.service.environment.EnvFragment;
-import auto.qinglong.activity.service.log.LogFragment;
-import auto.qinglong.activity.service.script.ScriptFragment;
-import auto.qinglong.activity.service.setting.SettingFragment;
-import auto.qinglong.activity.service.task.TaskFragment;
+import auto.qinglong.activity.module.config.ConfigFragment;
+import auto.qinglong.activity.module.dependence.DepFragment;
+import auto.qinglong.activity.module.environment.EnvFragment;
+import auto.qinglong.activity.module.log.LogFragment;
+import auto.qinglong.activity.module.script.ScriptFragment;
+import auto.qinglong.activity.module.setting.SettingFragment;
+import auto.qinglong.activity.module.task.TaskFragment;
 import auto.qinglong.tools.NetUnit;
 import auto.qinglong.tools.ToastUnit;
 
@@ -200,11 +200,13 @@ public class HomeActivity extends BaseActivity {
         });
 
         menu_app_account.setOnClickListener(v -> {
-            Intent intent = new Intent(getBaseContext(), AccountActivity.class);
-            startActivity(intent);
+            ToastUnit.showShort("敬请期待");
+//            Intent intent = new Intent(getBaseContext(), AccountActivity.class);
+//            startActivity(intent);
         });
 
         menu_app_setting.setOnClickListener(v -> {
+            ToastUnit.showShort("敬请期待");
         });
 
 

@@ -2,11 +2,11 @@ package auto.qinglong.network.response;
 
 import java.util.List;
 
-import auto.qinglong.activity.service.script.Script;
+import auto.qinglong.activity.module.script.QLScript;
 
 public class ScriptRes {
     private int code;
-    private List<Script> data;
+    private List<QLScript> data;
     private String message;
 
     public int getCode() {
@@ -17,11 +17,11 @@ public class ScriptRes {
         this.code = code;
     }
 
-    public List<Script> getData() {
+    public List<QLScript> getData() {
         return data;
     }
 
-    public void setData(List<Script> data) {
+    public void setData(List<QLScript> data) {
         this.data = data;
     }
 

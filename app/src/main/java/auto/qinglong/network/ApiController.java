@@ -7,11 +7,11 @@ import com.google.gson.JsonObject;
 
 import java.util.List;
 
-import auto.qinglong.activity.service.dependence.Dependence;
-import auto.qinglong.activity.service.environment.Environment;
-import auto.qinglong.activity.service.log.Log;
-import auto.qinglong.activity.service.script.Script;
-import auto.qinglong.activity.service.task.Task;
+import auto.qinglong.activity.module.dependence.QLDependence;
+import auto.qinglong.activity.module.environment.QLEnvironment;
+import auto.qinglong.activity.module.log.QLLog;
+import auto.qinglong.activity.module.script.QLScript;
+import auto.qinglong.activity.module.task.QLTask;
 import auto.qinglong.network.response.BaseRes;
 import auto.qinglong.network.response.DependenceRes;
 import auto.qinglong.network.response.EditEnvRes;
@@ -520,12 +520,12 @@ public class ApiController {
 
     }
 
-    public static void editTask(@NonNull String requestId, @NonNull Task task, @NonNull EditTaskCallback callback) {
+    public static void editTask(@NonNull String requestId, @NonNull QLTask QLTask, @NonNull EditTaskCallback callback) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("name", task.getName());
-        jsonObject.addProperty("_id", task.get_id());
-        jsonObject.addProperty("command", task.getCommand());
-        jsonObject.addProperty("schedule", task.getSchedule());
+        jsonObject.addProperty("name", QLTask.getName());
+        jsonObject.addProperty("_id", QLTask.get_id());
+        jsonObject.addProperty("command", QLTask.getCommand());
+        jsonObject.addProperty("schedule", QLTask.getSchedule());
 
         String json = jsonObject.toString();
 
@@ -567,11 +567,11 @@ public class ApiController {
         RequestManager.addCall(call, requestId);
     }
 
-    public static void addTask(@NonNull String requestId, @NonNull Task task, @NonNull EditTaskCallback callback) {
+    public static void addTask(@NonNull String requestId, @NonNull QLTask QLTask, @NonNull EditTaskCallback callback) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("name", task.getName());
-        jsonObject.addProperty("command", task.getCommand());
-        jsonObject.addProperty("schedule", task.getSchedule());
+        jsonObject.addProperty("name", QLTask.getName());
+        jsonObject.addProperty("command", QLTask.getCommand());
+        jsonObject.addProperty("schedule", QLTask.getSchedule());
 
         String json = jsonObject.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
@@ -650,10 +650,10 @@ public class ApiController {
         RequestManager.addCall(call, requestId);
     }
 
-    public static void addEnvironment(@NonNull String requestId, @NonNull List<Environment> environments, @NonNull GetEnvironmentsCallback callback) {
+    public static void addEnvironment(@NonNull String requestId, @NonNull List<QLEnvironment> environments, @NonNull GetEnvironmentsCallback callback) {
         JsonArray jsonArray = new JsonArray();
         JsonObject jsonObject;
-        for (Environment environment : environments) {
+        for (QLEnvironment environment : environments) {
             jsonObject = new JsonObject();
             jsonObject.addProperty("name", environment.getName());
             jsonObject.addProperty("remarks", environment.getRemarks());
@@ -701,7 +701,7 @@ public class ApiController {
         RequestManager.addCall(call, requestId);
     }
 
-    public static void updateEnvironment(@NonNull String requestId, @NonNull Environment environment, @NonNull EditEnvCallback callback) {
+    public static void updateEnvironment(@NonNull String requestId, @NonNull QLEnvironment environment, @NonNull EditEnvCallback callback) {
         JsonObject jsonObject;
         jsonObject = new JsonObject();
         jsonObject.addProperty("name", environment.getName());
@@ -1176,13 +1176,13 @@ public class ApiController {
 
     }
 
-    public static void addDependencies(@NonNull String requestId, @NonNull List<Dependence> dependencies, @NonNull BaseCallback callback) {
+    public static void addDependencies(@NonNull String requestId, @NonNull List<QLDependence> dependencies, @NonNull BaseCallback callback) {
         JsonArray jsonArray = new JsonArray();
         JsonObject jsonObject;
-        for (Dependence dependence : dependencies) {
+        for (QLDependence QLDependence : dependencies) {
             jsonObject = new JsonObject();
-            jsonObject.addProperty("name", dependence.getName());
-            jsonObject.addProperty("type", dependence.getType());
+            jsonObject.addProperty("name", QLDependence.getName());
+            jsonObject.addProperty("type", QLDependence.getType());
             jsonArray.add(jsonObject);
         }
         String json = jsonArray.toString();
@@ -1344,7 +1344,7 @@ public class ApiController {
     }
 
     public interface EditTaskCallback {
-        void onSuccess(Task task);
+        void onSuccess(QLTask QLTask);
 
         void onFailure(String msg);
     }
@@ -1356,13 +1356,13 @@ public class ApiController {
     }
 
     public interface GetScriptsCallback {
-        void onSuccess(List<Script> scripts);
+        void onSuccess(List<QLScript> QLScripts);
 
         void onFailure(String msg);
     }
 
     public interface GetLogsCallback {
-        void onSuccess(List<Log> logs);
+        void onSuccess(List<QLLog> QLLogs);
 
         void onFailure(String msg);
     }
@@ -1380,7 +1380,7 @@ public class ApiController {
     }
 
     public interface EditEnvCallback {
-        void onSuccess(Environment environment);
+        void onSuccess(QLEnvironment QLEnvironment);
 
         void onFailure(String msg);
     }

@@ -2,12 +2,12 @@ package auto.qinglong.network.response;
 
 import java.util.List;
 
-import auto.qinglong.activity.service.dependence.Dependence;
+import auto.qinglong.activity.module.dependence.QLDependence;
 
 public class DependenceRes {
     private int code;
     private String message;
-    private List<Dependence> data;
+    private List<QLDependence> data;
 
     public int getCode() {
         return code;
@@ -25,11 +25,11 @@ public class DependenceRes {
         this.message = message;
     }
 
-    public List<Dependence> getData() {
+    public List<QLDependence> getData() {
         return data;
     }
 
-    public void setData(List<Dependence> data) {
+    public void setData(List<QLDependence> data) {
         this.data = data;
     }
 }

@@ -9,23 +9,24 @@ import java.util.List;
 
 import auto.qinglong.MyApplication;
 import auto.qinglong.activity.app.account.Account;
+import auto.qinglong.tools.LogUnit;
 
 public class AccountDBHelper {
-    private static MyDBHelper myDBHelper;
-    private static String key_address = "address";
-    private static String key_username = "username";
-    private static String key_password = "password";
-    private static String key_token = "token";
-    private static String key_state = "state";
+    protected static DBHelper DBHelper;
+    protected static final String key_address = "address";
+    protected static final String key_username = "username";
+    protected static final String key_password = "password";
+    protected static final String key_token = "token";
+    protected static final String key_state = "state";
 
     static {
-        myDBHelper = new MyDBHelper(MyApplication.getContext(), MyDBHelper.DB_NAME, null, MyDBHelper.VERSION);
+        DBHelper = new DBHelper(MyApplication.getContext(), auto.qinglong.database.db.DBHelper.DB_NAME, null, auto.qinglong.database.db.DBHelper.VERSION);
     }
 
     @SuppressLint("Range")
     public static List<Account> getAllAccount() {
         List<Account> accounts = new ArrayList<>();
-        Cursor cursor = myDBHelper.getWritableDatabase().query(MyDBHelper.db_account, null, null, null, null, null, null);
+        Cursor cursor = DBHelper.getWritableDatabase().query(auto.qinglong.database.db.DBHelper.db_account, null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             do {
                 Account account = new Account();
@@ -45,7 +46,7 @@ public class AccountDBHelper {
     public static Account getAccount(String address) {
         Account account = null;
         String sql = "address = ?";
-        Cursor cursor = myDBHelper.getWritableDatabase().query(MyDBHelper.db_account, null, sql, new String[]{address}, null, null, null);
+        Cursor cursor = DBHelper.getWritableDatabase().query(auto.qinglong.database.db.DBHelper.db_account, null, sql, new String[]{address}, null, null, null);
         if (cursor.moveToFirst()) {
             account = new Account();
             account.setAddress(cursor.getString(cursor.getColumnIndex(key_address)));
@@ -68,18 +69,18 @@ public class AccountDBHelper {
         if (isAccountExist(account.getAddress())) {
             deleteAccount(account.getAddress());
         }
-        myDBHelper.getWritableDatabase().insert(MyDBHelper.db_account, null, values);
+        DBHelper.getWritableDatabase().insert(auto.qinglong.database.db.DBHelper.db_account, null, values);
 
     }
 
     public static void deleteAccount(String address) {
         String where = "address = ?";
-        myDBHelper.getWritableDatabase().delete(MyDBHelper.db_account, where, new String[]{address});
+        DBHelper.getWritableDatabase().delete(auto.qinglong.database.db.DBHelper.db_account, where, new String[]{address});
     }
 
     public static boolean isAccountExist(String address) {
         String where = "address = ?";
-        Cursor cursor = myDBHelper.getWritableDatabase().query(MyDBHelper.db_account, null, where, new String[]{address}, null, null, null);
+        Cursor cursor = DBHelper.getWritableDatabase().query(auto.qinglong.database.db.DBHelper.db_account, null, where, new String[]{address}, null, null, null);
         boolean flag = cursor.moveToFirst();
         cursor.close();
         return flag;

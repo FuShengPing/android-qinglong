@@ -30,11 +30,11 @@
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activity.service.log.LogActivity"
+            android:name=".activity.module.log.LogActivity"
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activity.service.script.ScriptActivity"
+            android:name=".activity.module.script.ScriptActivity"
             android:exported="false"
             android:launchMode="singleTask" />
         <activity

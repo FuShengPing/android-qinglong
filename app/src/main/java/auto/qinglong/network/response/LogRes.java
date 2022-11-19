@@ -2,11 +2,11 @@ package auto.qinglong.network.response;
 
 import java.util.List;
 
-import auto.qinglong.activity.service.log.Log;
+import auto.qinglong.activity.module.log.QLLog;
 
 public class LogRes {
     int code;
-    List<Log> dirs;
+    List<QLLog> dirs;
     String message;
 
     public String getMessage() {
@@ -25,11 +25,11 @@ public class LogRes {
         this.code = code;
     }
 
-    public List<Log> getDirs() {
+    public List<QLLog> getDirs() {
         return dirs;
     }
 
-    public void setDirs(List<Log> dirs) {
+    public void setDirs(List<QLLog> dirs) {
         this.dirs = dirs;
     }
 
