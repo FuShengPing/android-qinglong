@@ -1,37 +1,22 @@
 # QingLong
 
 #### 介绍
-更新
+青龙面板是支持python3、javaScript、shell、typescript 的定时任务管理面板。本APP基于青龙面板2.10.13接口开发，支持面板大部分原生功能。
 
 #### 软件架构
-软件架构说明
+安卓8.0及以上
 
 
-#### 安装教程
+#### 功能介绍
+提供定时任务、环境变量、配置文件、脚本管理、依赖管理、任务日志功能。（部分编辑功能需要长按详细信息部分唤醒）
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+（1）定时任务：支持新建任务、编辑任务、任务操作、任务搜索和运行日志查看；
+（2）环境变量：支持新建变量、编辑变量、变量操作和变量搜索；
+（3）配置文件：支持查看配置和修改配置；
+（4）脚本管理：支持查看脚本和修改脚本；
+（5）依赖管理：支持新建依赖和依赖操作；
+（6）任务日志：支持查看任务日志；
 
-#### 使用说明
+#### 意见反馈
+APP还在开发，后续尝试接入工具箱、VPN和Termux,提供更加强大的功能，有问题和需求可以提issue，有空就解决。
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
-
-
-#### 特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
