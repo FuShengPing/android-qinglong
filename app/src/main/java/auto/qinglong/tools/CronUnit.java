@@ -12,9 +12,9 @@ import java.util.Optional;
 
 public class CronUnit {
     static String TAG = "CronUnit";
-    private static CronParser cronParser6;
-    private static CronParser cronParser5;
-    private static DateTimeFormatter dateTimeFormatter;
+    private static final CronParser cronParser6;
+    private static final CronParser cronParser5;
+    private static final DateTimeFormatter dateTimeFormatter;
 
     static {
         cronParser5 = getParser(5);
@@ -22,6 +22,12 @@ public class CronUnit {
         dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/M/d HH:mm:ss");
     }
 
+    /**
+     * 判断定时规则是否合法
+     *
+     * @param expression 定时规则
+     * @return true/false
+     */
     public static boolean isValid(String expression) {
         try {
             if (expression == null || expression.isEmpty()) {
@@ -40,11 +46,9 @@ public class CronUnit {
             LogUnit.log(TAG, e.getMessage());
             return false;
         }
-
     }
 
     public static String nextExecutionTime(String expression) {
-        LogUnit.log(expression);
         ExecutionTime executionTime;
         String[] values = expression.trim().split(" ");
         try {

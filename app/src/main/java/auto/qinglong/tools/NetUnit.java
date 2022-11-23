@@ -6,6 +6,13 @@ import java.net.NetworkInterface;
 import java.util.Enumeration;
 
 public class NetUnit {
+    private static final String TAG = "NetUnit";
+
+    /**
+     * 获取本机局域网IP
+     *
+     * @return IP/null
+     */
     public static String getIP() {
         try {
             for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
@@ -18,6 +25,7 @@ public class NetUnit {
                 }
             }
         } catch (Exception ex) {
+            LogUnit.log(TAG, ex.getMessage());
             return null;
         }
         return null;

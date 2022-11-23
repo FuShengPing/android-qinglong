@@ -10,10 +10,10 @@ import android.widget.TextView;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import auto.qinglong.R;
+import auto.qinglong.activity.app.login.LoginActivity;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.activity.BaseFragment;
-import auto.qinglong.activity.app.account.AccountActivity;
 import auto.qinglong.activity.module.config.ConfigFragment;
 import auto.qinglong.activity.module.dependence.DepFragment;
 import auto.qinglong.activity.module.environment.EnvFragment;
@@ -53,12 +53,6 @@ public class HomeActivity extends BaseActivity {
         init();
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        init();
-    }
-
     /**
      * 初始化函数，进行变量和控件的初始化
      */
@@ -72,6 +66,19 @@ public class HomeActivity extends BaseActivity {
 
         //初始化第一帧页面
         showFragment(TaskFragment.TAG);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!currentFragment.onBackPressed()) {
+            long current = System.currentTimeMillis();
+            if (current - lastBackPressed < 2000) {
+                finish();
+            } else {
+                lastBackPressed = current;
+                ToastUnit.showShort("再按一次退出");
+            }
+        }
     }
 
     /**
@@ -179,7 +186,7 @@ public class HomeActivity extends BaseActivity {
         LinearLayout menu_env = layout_drawer_left.findViewById(R.id.menu_env);
         LinearLayout menu_setting = layout_drawer_left.findViewById(R.id.menu_setting);
         LinearLayout menu_dep = layout_drawer_left.findViewById(R.id.menu_dep);
-        LinearLayout menu_app_account = layout_drawer_left.findViewById(R.id.menu_app_account);
+        LinearLayout menu_app_exit = layout_drawer_left.findViewById(R.id.menu_app_exit);
         LinearLayout menu_app_setting = layout_drawer_left.findViewById(R.id.menu_app_setting);
 
         menu_task.setOnClickListener(v -> showFragment(TaskFragment.TAG));
@@ -196,13 +203,13 @@ public class HomeActivity extends BaseActivity {
 
         menu_setting.setOnClickListener(v -> {
             ToastUnit.showShort("敬请期待");
-            //showFragment(SettingFragment.TAG);
         });
 
-        menu_app_account.setOnClickListener(v -> {
-            ToastUnit.showShort("敬请期待");
-//            Intent intent = new Intent(getBaseContext(), AccountActivity.class);
-//            startActivity(intent);
+        menu_app_exit.setOnClickListener(v -> {
+            Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.activity_alpha_enter, R.anim.activity_alpha_out);
+            finish();
         });
 
         menu_app_setting.setOnClickListener(v -> {
@@ -212,16 +219,5 @@ public class HomeActivity extends BaseActivity {
 
     }
 
-    @Override
-    public void onBackPressed() {
-        if (!currentFragment.onBackPressed()) {
-            long current = System.currentTimeMillis();
-            if (current - lastBackPressed < 2000) {
-                finish();
-            } else {
-                lastBackPressed = current;
-                ToastUnit.showShort("再按一次退出");
-            }
-        }
-    }
+
 }

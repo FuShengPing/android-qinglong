@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,9 +19,12 @@ import java.util.List;
 
 import auto.qinglong.R;
 import auto.qinglong.tools.CronUnit;
+import auto.qinglong.tools.LogUnit;
 import auto.qinglong.tools.TimeUnit;
 
 public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
+    private static final String TAG = "TaskAdapter";
+
     Context context;
     private ItemInterface itemInterface;
     private List<QLTask> data;
@@ -63,6 +65,7 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
             holder.layout_state.setTextColor(context.getColor(R.color.text_color_49));
             holder.layout_action.setImageResource(R.drawable.ic_start);
         }
+
         //上次运行时长
         @SuppressLint("DefaultLocale") String str;
         if (QLTask.getLast_running_time() >= 60) {
@@ -73,6 +76,7 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
             str = "--";
         }
         holder.layout_last_run_time.setText(str);
+
         //上次运行时间
         if (QLTask.getLast_execution_time() > 0) {
             str = TimeUnit.formatTimeA(QLTask.getLast_execution_time() * 1000);
@@ -80,17 +84,18 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
             str = "--";
         }
         holder.layout_last_execution_time.setText(str);
-        //下次运行时间
-        holder.layout_next_execution_time.setText(CronUnit.nextExecutionTime(QLTask.getSchedule()));
-        //选择框
+
+        //下次运行时间(判断定时规则是否合法)
+        if (CronUnit.isValid(QLTask.getSchedule())) {
+            holder.layout_next_execution_time.setText(CronUnit.nextExecutionTime(QLTask.getSchedule()));
+        } else {
+            holder.layout_next_execution_time.setText("--");
+        }
+
+        //复选框
         if (checkState) {
             holder.layout_check.setChecked(dataCheckState[position]);
-            holder.layout_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    dataCheckState[holder.getAdapterPosition()] = isChecked;
-                }
-            });
+            holder.layout_check.setOnCheckedChangeListener((buttonView, isChecked) -> dataCheckState[holder.getAdapterPosition()] = isChecked);
             holder.layout_check.setVisibility(View.VISIBLE);
         } else {
             holder.layout_check.setVisibility(View.GONE);
@@ -108,38 +113,24 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
             return;
         }
 
-        holder.layout_action.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (QLTask.getTaskState() != TaskState.RUNNING) {
-                    itemInterface.onRun(QLTask);
-                } else {
-                    itemInterface.onStop(QLTask);
-                }
+        holder.layout_action.setOnClickListener(v -> {
+            if (QLTask.getTaskState() != TaskState.RUNNING) {
+                itemInterface.onRun(QLTask);
+            } else {
+                itemInterface.onStop(QLTask);
             }
         });
 
-        holder.layout_name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                itemInterface.onLog(QLTask);
-            }
+        holder.layout_name.setOnClickListener(v -> itemInterface.onLog(QLTask));
+
+        holder.layout_name.setOnLongClickListener(v -> {
+            itemInterface.onAction(QLTask, holder.getAdapterPosition());
+            return true;
         });
 
-        holder.layout_name.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                itemInterface.onAction(QLTask, holder.getAdapterPosition());
-                return true;
-            }
-        });
-
-        holder.layout_detail.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                itemInterface.onEdit(QLTask);
-                return true;
-            }
+        holder.layout_detail.setOnLongClickListener(v -> {
+            itemInterface.onEdit(QLTask);
+            return true;
         });
     }
 

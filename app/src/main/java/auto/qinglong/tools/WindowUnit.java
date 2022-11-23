@@ -7,10 +7,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
-import androidx.recyclerview.widget.RecyclerView;
-
-import java.lang.reflect.Field;
-
 import auto.qinglong.MyApplication;
 
 public class WindowUnit {

@@ -77,7 +77,6 @@ public class WebJsManager {
             return;
         }
         String script = String.format("javascript:initScript('%1$s','%2$s','%3$s','%4$s')", host, authorization, filename, path);
-        LogUnit.log(script);
         webView.evaluateJavascript(script, null);
     }
 
