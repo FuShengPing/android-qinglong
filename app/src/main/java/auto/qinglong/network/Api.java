@@ -1,15 +1,15 @@
 package auto.qinglong.network;
 
-import auto.qinglong.network.response.BaseRes;
-import auto.qinglong.network.response.DependenceRes;
-import auto.qinglong.network.response.EditEnvRes;
-import auto.qinglong.network.response.EditTaskRes;
-import auto.qinglong.network.response.EnvironmentRes;
-import auto.qinglong.network.response.LogRes;
-import auto.qinglong.network.response.LoginRes;
-import auto.qinglong.network.response.ScriptRes;
-import auto.qinglong.network.response.SystemRes;
-import auto.qinglong.network.response.TasksRes;
+import auto.qinglong.network.ql.BaseRes;
+import auto.qinglong.network.ql.DependenceRes;
+import auto.qinglong.network.ql.EditEnvRes;
+import auto.qinglong.network.ql.EditTaskRes;
+import auto.qinglong.network.ql.EnvironmentRes;
+import auto.qinglong.network.ql.LogRes;
+import auto.qinglong.network.ql.LoginRes;
+import auto.qinglong.network.ql.ScriptRes;
+import auto.qinglong.network.ql.SystemRes;
+import auto.qinglong.network.ql.TasksRes;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;

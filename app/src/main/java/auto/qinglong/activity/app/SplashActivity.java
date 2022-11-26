@@ -7,8 +7,7 @@ import android.os.Handler;
 
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
-import auto.qinglong.activity.app.account.Account;
-import auto.qinglong.activity.app.login.LoginActivity;
+import auto.qinglong.bean.app.Account;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.network.ApiController;
 

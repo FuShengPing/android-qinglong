@@ -3,10 +3,8 @@
     <string name="url_qinglong">https://github.com/whyour/qinglong</string>
     <string name="url_gitee">null</string>
     <string name="url_github">null</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- 操作 -->
     <string name="mul_action">批量操作</string>
-
     <string name="action_new_task">新建任务</string>
     <string name="account_manage">账号管理</string>
     <string name="action_select_all">全选</string>
@@ -21,7 +19,7 @@
     <string name="action_enable">启用</string>
     <string name="action_disable">禁用</string>
     <string name="action_delete">删除</string>
-
+    <!-- 提示 -->
     <string name="tip_empty_task_name">任务名称不能为空</string>
     <string name="tip_empty_command">任务命令不能为空</string>
     <string name="tip_invalid_schedule">任务定时规则不合法</string>
@@ -29,7 +27,21 @@
     <string name="tip_empty_select">至少选择一项</string>
     <string name="tip_copy_path_ready">已复制路径到粘贴板</string>
     <string name="tip_back">返回</string>
-    
+    <!-- 字符 -->
     <string name="char_path_split">/</string>
+    <!-- 常量字符串 -->
+    <string name="web_user_agent_android">Mozilla/5.0 (Linux; Android 10; JEF-AN00 Build/HUAWEIJEF-AN00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/78.0.3904.62 XWEB/2691 MMWEBSDK/200901 Mobile Safari/537.36 MMWEBID/8362 MicroMessenger/7.0.19.1760(0x2700133F)</string>
+    <string name="str_load">加载</string>
+    <string name="str_loading">加载中…</string>
+    <string name="str_read">读取</string>
+    <string name="str_import">导入</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
 </resources>

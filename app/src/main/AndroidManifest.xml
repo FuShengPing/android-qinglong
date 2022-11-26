@@ -22,19 +22,20 @@
             android:theme="@style/Theme.white">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.app.account.AccountActivity"
+            android:name=".activity.plugin.web.PluginWebActivity"
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activity.module.log.LogActivity"
+            android:name=".activity.ql.log.LogDetailActivity"
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activity.module.script.ScriptActivity"
+            android:name=".activity.ql.script.ScriptDetailActivity"
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
@@ -42,7 +43,7 @@
             android:exported="false"
             android:launchMode="singleTop" />
         <activity
-            android:name=".activity.app.login.LoginActivity"
+            android:name=".activity.app.LoginActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:theme="@style/Theme.gray" />

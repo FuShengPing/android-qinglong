@@ -23,4 +23,13 @@
         <item name="colorPrimary">@color/bg_gray</item>
         <item name="colorPrimaryVariant">@color/bg_gray</item>
     </style>
+
+    <style name="Theme.main.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.main.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.main.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

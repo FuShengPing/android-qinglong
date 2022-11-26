@@ -2,8 +2,6 @@ package auto.qinglong.network;
 
 import android.webkit.WebView;
 
-import auto.qinglong.tools.LogUnit;
-
 public class WebJsManager {
 
     /**

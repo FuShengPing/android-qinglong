@@ -5,7 +5,8 @@ import androidx.fragment.app.Fragment;
 import auto.qinglong.network.RequestManager;
 
 public abstract class BaseFragment extends Fragment {
-    protected boolean haveFirstSuccess = false;//是否已经加载成功过数据
+    //是否已经加载成功过数据标志
+    protected boolean loadSuccessFlag = false;
 
     public String getNetRequestID() {
         return getClass().getName() + this;
@@ -22,7 +23,7 @@ public abstract class BaseFragment extends Fragment {
         return false;
     }
 
-    protected void init(){
+    protected void init() {
     }
 
     public void setMenuClickListener(MenuClickListener menuClickListener) {

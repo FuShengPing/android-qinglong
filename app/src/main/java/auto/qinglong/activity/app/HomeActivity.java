@@ -10,62 +10,46 @@ import android.widget.TextView;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import auto.qinglong.R;
-import auto.qinglong.activity.app.login.LoginActivity;
+import auto.qinglong.activity.plugin.web.PluginWebActivity;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.activity.BaseFragment;
-import auto.qinglong.activity.module.config.ConfigFragment;
-import auto.qinglong.activity.module.dependence.DepFragment;
-import auto.qinglong.activity.module.environment.EnvFragment;
-import auto.qinglong.activity.module.log.LogFragment;
-import auto.qinglong.activity.module.script.ScriptFragment;
-import auto.qinglong.activity.module.setting.SettingFragment;
-import auto.qinglong.activity.module.task.TaskFragment;
-import auto.qinglong.tools.NetUnit;
-import auto.qinglong.tools.ToastUnit;
+import auto.qinglong.activity.ql.config.ConfigFragment;
+import auto.qinglong.activity.ql.dependence.DepFragment;
+import auto.qinglong.activity.ql.environment.EnvFragment;
+import auto.qinglong.activity.ql.log.LogFragment;
+import auto.qinglong.activity.ql.script.ScriptFragment;
+import auto.qinglong.activity.ql.setting.SettingFragment;
+import auto.qinglong.activity.ql.task.TaskFragment;
+import auto.qinglong.utils.NetUnit;
+import auto.qinglong.utils.ToastUnit;
 
 public class HomeActivity extends BaseActivity {
-    private long lastBackPressed = 0;//上次返回按下时间
-
-    private TaskFragment taskFragment;
-    private LogFragment logFragment;
-    private ConfigFragment configFragment;
-    private ScriptFragment scriptFragment;
-    private EnvFragment envFragment;
-    private DepFragment depFragment;
-    private SettingFragment settingFragment;
-
-    private BaseFragment currentFragment;
-    private String currentMenu = "";
+    private long lastBackPressed = 0;//上次返回按下时间戳
+    private BaseFragment currentFragment;//当前碎片
+    private String currentMenu = "";//当前菜单名称
     private BaseFragment.MenuClickListener menuClickListener;
-
+    // 碎片界面列表
+    private TaskFragment fg_task;
+    private LogFragment fg_log;
+    private ConfigFragment fg_config;
+    private ScriptFragment fg_script;
+    private EnvFragment fg_environment;
+    private DepFragment fg_dependence;
+    private SettingFragment fg_setting;
     //布局变量
-    private DrawerLayout layout_drawer;
-    private LinearLayout layout_drawer_left;
+    private DrawerLayout ui_drawer;
+    private LinearLayout ui_drawer_left;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        layout_drawer = findViewById(R.id.drawer_layout);
-        layout_drawer_left = findViewById(R.id.drawer_left);
+        ui_drawer = findViewById(R.id.drawer_layout);
+        ui_drawer_left = findViewById(R.id.drawer_left);
+
         init();
-    }
-
-    /**
-     * 初始化函数，进行变量和控件的初始化
-     */
-    @Override
-    protected void init() {
-        //变量初始化
-        menuClickListener = () -> layout_drawer.openDrawer(layout_drawer_left);
-
-        //导航栏初始化
-        initDrawerBar();
-
-        //初始化第一帧页面
-        showFragment(TaskFragment.TAG);
     }
 
     @Override
@@ -79,6 +63,21 @@ public class HomeActivity extends BaseActivity {
                 ToastUnit.showShort("再按一次退出");
             }
         }
+    }
+
+    /**
+     * 初始化函数，进行变量和控件的初始化
+     */
+    @Override
+    protected void init() {
+        //变量初始化
+        menuClickListener = () -> ui_drawer.openDrawer(ui_drawer_left);
+
+        //导航栏初始化
+        initDrawerBar();
+
+        //初始化第一帧页面
+        showFragment(TaskFragment.TAG);
     }
 
     /**
@@ -97,54 +96,54 @@ public class HomeActivity extends BaseActivity {
         BaseFragment old = currentFragment;
 
         if (menu.equals(TaskFragment.TAG)) {
-            if (taskFragment == null) {
-                taskFragment = new TaskFragment();
-                taskFragment.setMenuClickListener(menuClickListener);
-                getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, taskFragment, TaskFragment.TAG).commit();
+            if (fg_task == null) {
+                fg_task = new TaskFragment();
+                fg_task.setMenuClickListener(menuClickListener);
+                getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, fg_task, TaskFragment.TAG).commit();
             }
-            currentFragment = taskFragment;
+            currentFragment = fg_task;
         } else if (menu.equals(LogFragment.TAG)) {
-            if (logFragment == null) {
-                logFragment = new LogFragment();
-                logFragment.setMenuClickListener(menuClickListener);
-                getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, logFragment, LogFragment.TAG).commit();
+            if (fg_log == null) {
+                fg_log = new LogFragment();
+                fg_log.setMenuClickListener(menuClickListener);
+                getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, fg_log, LogFragment.TAG).commit();
             }
-            currentFragment = logFragment;
+            currentFragment = fg_log;
         } else if (menu.equals(ConfigFragment.TAG)) {
-            if (configFragment == null) {
-                configFragment = new ConfigFragment();
-                configFragment.setMenuClickListener(menuClickListener);
-                getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, configFragment, ConfigFragment.TAG).commit();
+            if (fg_config == null) {
+                fg_config = new ConfigFragment();
+                fg_config.setMenuClickListener(menuClickListener);
+                getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, fg_config, ConfigFragment.TAG).commit();
             }
-            currentFragment = configFragment;
+            currentFragment = fg_config;
         } else if (menu.equals(ScriptFragment.TAG)) {
-            if (scriptFragment == null) {
-                scriptFragment = new ScriptFragment();
-                scriptFragment.setMenuClickListener(menuClickListener);
-                getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, scriptFragment, ScriptFragment.TAG).commit();
+            if (fg_script == null) {
+                fg_script = new ScriptFragment();
+                fg_script.setMenuClickListener(menuClickListener);
+                getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, fg_script, ScriptFragment.TAG).commit();
             }
-            currentFragment = scriptFragment;
+            currentFragment = fg_script;
         } else if (menu.equals(EnvFragment.TAG)) {
-            if (envFragment == null) {
-                envFragment = new EnvFragment();
-                envFragment.setMenuClickListener(menuClickListener);
-                getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, envFragment, EnvFragment.TAG).commit();
+            if (fg_environment == null) {
+                fg_environment = new EnvFragment();
+                fg_environment.setMenuClickListener(menuClickListener);
+                getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, fg_environment, EnvFragment.TAG).commit();
             }
-            currentFragment = envFragment;
+            currentFragment = fg_environment;
         } else if (menu.equals(DepFragment.TAG)) {
-            if (depFragment == null) {
-                depFragment = new DepFragment();
-                depFragment.setMenuClickListener(menuClickListener);
-                getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, depFragment, EnvFragment.TAG).commit();
+            if (fg_dependence == null) {
+                fg_dependence = new DepFragment();
+                fg_dependence.setMenuClickListener(menuClickListener);
+                getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, fg_dependence, EnvFragment.TAG).commit();
             }
-            currentFragment = depFragment;
+            currentFragment = fg_dependence;
         } else if (menu.equals(SettingFragment.TAG)) {
-            if (settingFragment == null) {
-                settingFragment = new SettingFragment();
-                settingFragment.setMenuClickListener(menuClickListener);
-                getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, settingFragment, EnvFragment.TAG).commit();
+            if (fg_setting == null) {
+                fg_setting = new SettingFragment();
+                fg_setting.setMenuClickListener(menuClickListener);
+                getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, fg_setting, EnvFragment.TAG).commit();
             }
-            currentFragment = settingFragment;
+            currentFragment = fg_setting;
         }
 
         //隐藏旧页面
@@ -154,8 +153,8 @@ public class HomeActivity extends BaseActivity {
         //显示新页面
         getSupportFragmentManager().beginTransaction().show(currentFragment).commit();
         //关闭导航栏
-        if (layout_drawer.isDrawerOpen(layout_drawer_left)) {
-            layout_drawer.closeDrawer(layout_drawer_left);
+        if (ui_drawer.isDrawerOpen(ui_drawer_left)) {
+            ui_drawer.closeDrawer(ui_drawer_left);
         }
     }
 
@@ -164,30 +163,30 @@ public class HomeActivity extends BaseActivity {
      */
     @SuppressLint("SetTextI18n")
     private void initDrawerBar() {
-        layout_drawer_left.setVisibility(View.INVISIBLE);
+        ui_drawer_left.setVisibility(View.INVISIBLE);
         //左侧导航栏
         //用户名和地址
-        TextView layout_username = layout_drawer_left.findViewById(R.id.menu_info_username);
-        TextView layout_address = layout_drawer_left.findViewById(R.id.menu_info_address);
+        TextView layout_username = ui_drawer_left.findViewById(R.id.menu_info_username);
+        TextView layout_address = ui_drawer_left.findViewById(R.id.menu_info_address);
         layout_username.setText(AccountSP.getCurrentAccount().getUsername());
         layout_address.setText(AccountSP.getCurrentAccount().getAddress());
         String ip = NetUnit.getIP();
         if (ip != null) {
-            TextView layout_ip = layout_drawer_left.findViewById(R.id.menu_info_inner_ip);
+            TextView layout_ip = ui_drawer_left.findViewById(R.id.menu_info_inner_ip);
             layout_ip.setText("本地：" + ip);
             layout_ip.setVisibility(View.VISIBLE);
         }
 
         //导航监听
-        LinearLayout menu_task = layout_drawer_left.findViewById(R.id.menu_task);
-        LinearLayout menu_log = layout_drawer_left.findViewById(R.id.menu_log);
-        LinearLayout menu_config = layout_drawer_left.findViewById(R.id.menu_config);
-        LinearLayout menu_script = layout_drawer_left.findViewById(R.id.menu_script);
-        LinearLayout menu_env = layout_drawer_left.findViewById(R.id.menu_env);
-        LinearLayout menu_setting = layout_drawer_left.findViewById(R.id.menu_setting);
-        LinearLayout menu_dep = layout_drawer_left.findViewById(R.id.menu_dep);
-        LinearLayout menu_app_exit = layout_drawer_left.findViewById(R.id.menu_app_exit);
-        LinearLayout menu_app_setting = layout_drawer_left.findViewById(R.id.menu_app_setting);
+        LinearLayout menu_task = ui_drawer_left.findViewById(R.id.menu_task);
+        LinearLayout menu_log = ui_drawer_left.findViewById(R.id.menu_log);
+        LinearLayout menu_config = ui_drawer_left.findViewById(R.id.menu_config);
+        LinearLayout menu_script = ui_drawer_left.findViewById(R.id.menu_script);
+        LinearLayout menu_env = ui_drawer_left.findViewById(R.id.menu_env);
+        LinearLayout menu_setting = ui_drawer_left.findViewById(R.id.menu_setting);
+        LinearLayout menu_dep = ui_drawer_left.findViewById(R.id.menu_dep);
+        LinearLayout menu_app_exit = ui_drawer_left.findViewById(R.id.menu_app_exit);
+        LinearLayout menu_app_setting = ui_drawer_left.findViewById(R.id.menu_app_setting);
 
         menu_task.setOnClickListener(v -> showFragment(TaskFragment.TAG));
 
@@ -203,6 +202,8 @@ public class HomeActivity extends BaseActivity {
 
         menu_setting.setOnClickListener(v -> {
             ToastUnit.showShort("敬请期待");
+            Intent intent = new Intent(getBaseContext(), PluginWebActivity.class);
+            startActivity(intent);
         });
 
         menu_app_exit.setOnClickListener(v -> {
