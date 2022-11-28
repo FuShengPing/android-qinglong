@@ -1,12 +1,12 @@
-package auto.qinglong.network.ql;
+package auto.qinglong.bean.ql.response;
 
-import auto.qinglong.bean.ql.QLSystemData;
+import auto.qinglong.bean.ql.QLLoginData;
 
-public class SystemRes {
+public class LoginRes {
     private int code;
+    private QLLoginData data;
     private String message;
-    private QLSystemData data;
-    
+
     public int getCode() {
         return code;
     }
@@ -23,13 +23,11 @@ public class SystemRes {
         this.message = message;
     }
 
-    public QLSystemData getData() {
+    public QLLoginData getData() {
         return data;
     }
 
-    public void setData(QLSystemData data) {
+    public void setData(QLLoginData data) {
         this.data = data;
     }
-
-
 }

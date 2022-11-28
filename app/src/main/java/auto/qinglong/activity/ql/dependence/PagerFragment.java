@@ -16,10 +16,10 @@ import java.util.List;
 
 import auto.qinglong.R;
 import auto.qinglong.bean.ql.QLDependence;
-import auto.qinglong.network.ApiController;
-import auto.qinglong.network.ql.DependenceRes;
+import auto.qinglong.network.http.ApiController;
+import auto.qinglong.bean.ql.response.DependenceRes;
 import auto.qinglong.activity.BaseFragment;
-import auto.qinglong.network.RequestManager;
+import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.ToastUnit;
 
 public class PagerFragment extends BaseFragment {

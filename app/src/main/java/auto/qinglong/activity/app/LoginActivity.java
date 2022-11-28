@@ -10,9 +10,8 @@ import android.widget.ImageView;
 
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
-import auto.qinglong.activity.app.HomeActivity;
-import auto.qinglong.network.ApiController;
-import auto.qinglong.network.ql.SystemRes;
+import auto.qinglong.network.http.ApiController;
+import auto.qinglong.bean.ql.response.SystemRes;
 import auto.qinglong.database.db.AccountDBHelper;
 import auto.qinglong.bean.app.Account;
 import auto.qinglong.database.sp.AccountSP;
@@ -20,7 +19,7 @@ import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;
-import auto.qinglong.network.RequestManager;
+import auto.qinglong.network.http.RequestManager;
 
 public class LoginActivity extends BaseActivity {
 

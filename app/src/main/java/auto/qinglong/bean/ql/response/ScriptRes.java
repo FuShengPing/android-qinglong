@@ -1,14 +1,13 @@
-package auto.qinglong.network.ql;
+package auto.qinglong.bean.ql.response;
 
 import java.util.List;
 
-import auto.qinglong.bean.ql.QLTask;
+import auto.qinglong.bean.ql.QLScript;
 
-public class TasksRes {
+public class ScriptRes {
     private int code;
+    private List<QLScript> data;
     private String message;
-    private List<QLTask> data;
-
 
     public int getCode() {
         return code;
@@ -18,11 +17,11 @@ public class TasksRes {
         this.code = code;
     }
 
-    public List<QLTask> getData() {
+    public List<QLScript> getData() {
         return data;
     }
 
-    public void setData(List<QLTask> data) {
+    public void setData(List<QLScript> data) {
         this.data = data;
     }
 

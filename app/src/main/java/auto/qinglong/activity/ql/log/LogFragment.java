@@ -23,9 +23,9 @@ import java.util.Objects;
 
 import auto.qinglong.R;
 import auto.qinglong.bean.ql.QLLog;
-import auto.qinglong.network.ApiController;
+import auto.qinglong.network.http.ApiController;
 import auto.qinglong.activity.BaseFragment;
-import auto.qinglong.network.RequestManager;
+import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.ToastUnit;
 
 

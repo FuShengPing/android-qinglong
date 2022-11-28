@@ -11,8 +11,8 @@ import android.widget.LinearLayout;
 public class WebViewBuilder {
     public static final String TAG = "WebViewBuilder";
 
-    @SuppressLint("SetJavaScriptEnabled")
-    public static WebView build(Context context, ViewGroup viewGroup, WebViewClient webViewClient) {
+    @SuppressLint({"SetJavaScriptEnabled", "JavascriptInterface"})
+    public static WebView build(Context context, ViewGroup viewGroup, WebViewClient webViewClient, Object jsInterface) {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         WebView webView = new WebView(context);
         webView.setLayoutParams(layoutParams);
@@ -28,7 +28,9 @@ public class WebViewBuilder {
         webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
 
         webView.setWebViewClient(webViewClient);
-
+        if (jsInterface != null) {
+            webView.addJavascriptInterface(jsInterface, "Android");
+        }
         viewGroup.addView(webView);
         return webView;
     }

@@ -35,14 +35,13 @@ import java.util.Objects;
 import auto.qinglong.R;
 import auto.qinglong.activity.ql.log.LogDetailActivity;
 import auto.qinglong.bean.ql.QLTask;
-import auto.qinglong.bean.ql.QLTaskState;
-import auto.qinglong.network.ApiController;
-import auto.qinglong.network.ql.TasksRes;
+import auto.qinglong.network.http.ApiController;
+import auto.qinglong.bean.ql.response.TasksRes;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.utils.CronUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;
-import auto.qinglong.network.RequestManager;
+import auto.qinglong.network.http.RequestManager;
 
 public class TaskFragment extends BaseFragment {
     public static String TAG = "TaskFragment";
@@ -590,7 +589,67 @@ public class TaskFragment extends BaseFragment {
         popupWindowMore.showAsDropDown(layout_bar, 0, 0, Gravity.END);
     }
 
-    public void showPopWindowEdit(QLTask QLTask) {
+    public void showPopWindowEdit(QLTask qlTask) {
+//        EditWindow editWindow = new EditWindow("新建任务", "取消", "确定");
+//        EditWindowItem itemName = new EditWindowItem("name", null, "名称", "请输入任务名称");
+//        EditWindowItem itemCommand = new EditWindowItem("command", null, "命令", "请输入要执行的命令");
+//        EditWindowItem itemSchedule = new EditWindowItem("schedule", null, "定时规则", "秒(可选) 分 时 天 月 周");
+//
+//        if (qlTask != null) {
+//            editWindow.setTitle("编辑任务");
+//            itemName.setValue(qlTask.getName());
+//            itemCommand.setValue(qlTask.getCommand());
+//            itemSchedule.setValue(qlTask.getSchedule());
+//        }
+//
+//        editWindow.addItem(itemName);
+//        editWindow.addItem(itemCommand);
+//        editWindow.addItem(itemSchedule);
+//        editWindow.setActionListener(new EditWindow.OnActionListener() {
+//            @Override
+//            public boolean onConfirm(Map<String, String> map) {
+//                String name = map.get("name");
+//                String command = map.get("command");
+//                String schedule = map.get("schedule");
+//
+//                if (name.isEmpty()) {
+//                    ToastUnit.showShort(getContext(), getString(R.string.tip_empty_task_name));
+//                    return false;
+//                }
+//                if (command.isEmpty()) {
+//                    ToastUnit.showShort(getContext(), getString(R.string.tip_empty_command));
+//                    return false;
+//                }
+//                if (!CronUnit.isValid(schedule)) {
+//                    ToastUnit.showShort(getContext(), getString(R.string.tip_invalid_schedule));
+//                    return false;
+//                }
+//
+//                QLTask newQLTask = new QLTask();
+//                if (qlTask == null) {
+//                    newQLTask.setName(name);
+//                    newQLTask.setCommand(command);
+//                    newQLTask.setSchedule(schedule);
+//                    addTask(newQLTask);
+//                } else {
+//                    newQLTask.setName(name);
+//                    newQLTask.setCommand(command);
+//                    newQLTask.setSchedule(schedule);
+//                    newQLTask.set_id(qlTask.get_id());
+//                    editTask(newQLTask);
+//                }
+//
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onCancel() {
+//                return true;
+//            }
+//        });
+//
+//        PopupWindowManager.buildEditWindow(requireActivity(), editWindow);
+
         if (popupWindowEdit == null) {
             View view = LayoutInflater.from(getContext()).inflate(R.layout.pop_fg_task_edit, null, false);
 
@@ -617,11 +676,11 @@ public class TaskFragment extends BaseFragment {
             popupWindowEdit.setOnDismissListener(() -> WindowUnit.setBackgroundAlpha(requireActivity(), 1.0f));
         }
 
-        if (QLTask != null) {
+        if (qlTask != null) {
             layout_edit_type.setText(getString(R.string.action_edit_task));
-            layout_edit_name.setText(QLTask.getName());
-            layout_edit_command.setText(QLTask.getCommand());
-            layout_edit_schedule.setText(QLTask.getSchedule());
+            layout_edit_name.setText(qlTask.getName());
+            layout_edit_command.setText(qlTask.getCommand());
+            layout_edit_schedule.setText(qlTask.getSchedule());
         } else {
             layout_edit_type.setText(getString(R.string.action_new_task));
             layout_edit_name.setText(null);
@@ -654,7 +713,7 @@ public class TaskFragment extends BaseFragment {
             }
 
             QLTask newQLTask = new QLTask();
-            if (QLTask == null) {
+            if (qlTask == null) {
                 newQLTask.setName(name);
                 newQLTask.setCommand(command);
                 newQLTask.setSchedule(schedule);
@@ -663,7 +722,7 @@ public class TaskFragment extends BaseFragment {
                 newQLTask.setName(name);
                 newQLTask.setCommand(command);
                 newQLTask.setSchedule(schedule);
-                newQLTask.set_id(QLTask.get_id());
+                newQLTask.set_id(qlTask.get_id());
                 editTask(newQLTask);
             }
         });

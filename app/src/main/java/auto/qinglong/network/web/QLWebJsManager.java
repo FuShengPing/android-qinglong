@@ -1,8 +1,8 @@
-package auto.qinglong.network;
+package auto.qinglong.network.web;
 
 import android.webkit.WebView;
 
-public class WebJsManager {
+public class QLWebJsManager {
 
     /**
      * 设置编辑器是否可用编辑

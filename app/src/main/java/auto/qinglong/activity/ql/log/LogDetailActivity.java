@@ -12,8 +12,9 @@ import android.widget.TextView;
 import auto.qinglong.R;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.activity.BaseActivity;
-import auto.qinglong.network.RequestManager;
-import auto.qinglong.network.WebJsManager;
+import auto.qinglong.network.web.CommonJSInterface;
+import auto.qinglong.network.http.RequestManager;
+import auto.qinglong.network.web.QLWebJsManager;
 import auto.qinglong.views.WebViewBuilder;
 
 public class LogDetailActivity extends BaseActivity {
@@ -80,15 +81,15 @@ public class LogDetailActivity extends BaseActivity {
             });
             animation.setDuration(1000);
             ui_refresh.startAnimation(animation);
-            WebJsManager.refreshLog(ui_webView);
+            QLWebJsManager.refreshLog(ui_webView);
         });
 
         ui_webView = WebViewBuilder.build(getBaseContext(), ui_web_container, new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
-                WebJsManager.initLog(ui_webView, AccountSP.getCurrentAccount().getBaseUrl(), AccountSP.getCurrentAccount().getAuthorization(), logPath);
+                QLWebJsManager.initLog(ui_webView, AccountSP.getCurrentAccount().getBaseUrl(), AccountSP.getCurrentAccount().getAuthorization(), logPath);
             }
-        });
+        }, new CommonJSInterface());
         //加载本地网页
         ui_webView.loadUrl("file:///android_asset/web/editor.html");
 

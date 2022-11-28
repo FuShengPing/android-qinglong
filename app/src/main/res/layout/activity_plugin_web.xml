@@ -38,8 +38,17 @@
                 android:ellipsize="end"
                 android:lines="1"
                 android:singleLine="true"
+                android:text="CK助手"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/bar_rule"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/style_press_gray"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_view_list_white" />
         </LinearLayout>
     </RelativeLayout>
 

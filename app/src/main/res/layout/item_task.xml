@@ -82,8 +82,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:maxLines="2"
-                android:text="QLTask LinYuanovo_scripts/hmdLY.js"
+                android:maxLines="1"
                 android:textAlignment="viewEnd"
                 android:textColor="@color/text_color_49" />
         </LinearLayout>
@@ -104,8 +103,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:maxLines="2"
-                android:text="空闲中"
+                android:maxLines="1"
                 android:textAlignment="viewEnd"
                 android:textColor="@color/text_color_49" />
         </LinearLayout>
@@ -125,7 +123,6 @@
                 android:id="@+id/task_schedule"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="0 0 0/4 * * *"
                 android:textAlignment="viewEnd"
                 android:textColor="@color/text_color_49" />
         </LinearLayout>
@@ -145,7 +142,6 @@
                 android:id="@+id/task_last_execution_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="2022/6/21 16:00:00"
                 android:textAlignment="viewEnd"
                 android:textColor="@color/text_color_49" />
         </LinearLayout>
@@ -165,7 +161,6 @@
                 android:id="@+id/task_last_running_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="5分24秒"
                 android:textAlignment="viewEnd"
                 android:textColor="@color/text_color_49" />
         </LinearLayout>
@@ -185,7 +180,6 @@
                 android:id="@+id/task_next_execution_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="2022/6/21 20:00:00"
                 android:textAlignment="viewEnd"
                 android:textColor="@color/text_color_49" />
         </LinearLayout>

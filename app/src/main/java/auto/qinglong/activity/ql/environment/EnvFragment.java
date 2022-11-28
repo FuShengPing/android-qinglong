@@ -33,10 +33,10 @@ import java.util.Objects;
 
 import auto.qinglong.R;
 import auto.qinglong.bean.ql.QLEnvironment;
-import auto.qinglong.network.ApiController;
-import auto.qinglong.network.ql.EnvironmentRes;
+import auto.qinglong.network.http.ApiController;
+import auto.qinglong.bean.ql.response.EnvironmentRes;
 import auto.qinglong.activity.BaseFragment;
-import auto.qinglong.network.RequestManager;
+import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;
 

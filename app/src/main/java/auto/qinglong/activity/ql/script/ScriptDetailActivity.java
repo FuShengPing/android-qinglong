@@ -1,9 +1,7 @@
 package auto.qinglong.activity.ql.script;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.webkit.WebView;
@@ -15,9 +13,10 @@ import android.widget.TextView;
 import auto.qinglong.R;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.activity.BaseActivity;
+import auto.qinglong.network.web.CommonJSInterface;
 import auto.qinglong.utils.WindowUnit;
-import auto.qinglong.network.RequestManager;
-import auto.qinglong.network.WebJsManager;
+import auto.qinglong.network.http.RequestManager;
+import auto.qinglong.network.web.QLWebJsManager;
 import auto.qinglong.views.WebViewBuilder;
 
 public class ScriptDetailActivity extends BaseActivity {
@@ -98,31 +97,31 @@ public class ScriptDetailActivity extends BaseActivity {
             animation.setDuration(1000);
             ui_refresh.startAnimation(animation);
             //加载
-            WebJsManager.refreshScript(ui_webView);
+            QLWebJsManager.refreshScript(ui_webView);
         });
 
         ui_edit.setOnClickListener(v -> {
             ui_nav_bar.setVisibility(View.INVISIBLE);
             ui_edit_bar.setVisibility(View.VISIBLE);
-            WebJsManager.setEditable(ui_webView, true);
+            QLWebJsManager.setEditable(ui_webView, true);
         });
 
         ui_edit_back.setOnClickListener(v -> {
             ui_edit_bar.setVisibility(View.INVISIBLE);
             ui_nav_bar.setVisibility(View.VISIBLE);
             WindowUnit.hideKeyboard(ui_webView);
-            WebJsManager.setEditable(ui_webView, false);
-            WebJsManager.backScript(ui_webView);
+            QLWebJsManager.setEditable(ui_webView, false);
+            QLWebJsManager.backScript(ui_webView);
         });
 
-        ui_edit_save.setOnClickListener(v -> WebJsManager.saveScript(ui_webView));
+        ui_edit_save.setOnClickListener(v -> QLWebJsManager.saveScript(ui_webView));
 
         ui_webView = WebViewBuilder.build(getBaseContext(), ui_web_container, new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
-                WebJsManager.initScript(ui_webView, AccountSP.getCurrentAccount().getBaseUrl(), AccountSP.getCurrentAccount().getAuthorization(), scriptName, scriptParent);
+                QLWebJsManager.initScript(ui_webView, AccountSP.getCurrentAccount().getBaseUrl(), AccountSP.getCurrentAccount().getAuthorization(), scriptName, scriptParent);
             }
-        });
+        }, new CommonJSInterface());
         //加载本地网页
         ui_webView.loadUrl("file:///android_asset/web/editor.html");
 

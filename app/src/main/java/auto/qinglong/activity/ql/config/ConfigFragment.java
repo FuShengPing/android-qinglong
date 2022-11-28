@@ -18,8 +18,9 @@ import androidx.annotation.Nullable;
 import auto.qinglong.R;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.activity.BaseFragment;
+import auto.qinglong.network.web.CommonJSInterface;
 import auto.qinglong.utils.WindowUnit;
-import auto.qinglong.network.WebJsManager;
+import auto.qinglong.network.web.QLWebJsManager;
 import auto.qinglong.views.WebViewBuilder;
 
 public class ConfigFragment extends BaseFragment {
@@ -64,7 +65,7 @@ public class ConfigFragment extends BaseFragment {
         ui_edit.setOnClickListener(v -> {
             ui_menu_bar.setVisibility(View.INVISIBLE);
             ui_edit_bar.setVisibility(View.VISIBLE);
-            WebJsManager.setEditable(ui_webView, true);
+            QLWebJsManager.setEditable(ui_webView, true);
         });
 
         //退出编辑状态
@@ -72,8 +73,8 @@ public class ConfigFragment extends BaseFragment {
             ui_edit_bar.setVisibility(View.GONE);
             ui_menu_bar.setVisibility(View.VISIBLE);
             WindowUnit.hideKeyboard(ui_webView);
-            WebJsManager.setEditable(ui_webView, false);
-            WebJsManager.backConfig(ui_webView);
+            QLWebJsManager.setEditable(ui_webView, false);
+            QLWebJsManager.backConfig(ui_webView);
         });
 
         //刷新
@@ -100,19 +101,19 @@ public class ConfigFragment extends BaseFragment {
             });
             animation.setDuration(1000);
             ui_refresh.startAnimation(animation);
-            WebJsManager.refreshConfig(ui_webView);
+            QLWebJsManager.refreshConfig(ui_webView);
         });
 
         //保存编辑
-        ui_edit_save.setOnClickListener(v -> WebJsManager.saveConfig(ui_webView));
+        ui_edit_save.setOnClickListener(v -> QLWebJsManager.saveConfig(ui_webView));
 
         //初始化webView
         ui_webView = WebViewBuilder.build(getContext(), ui_web_container, new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
-                WebJsManager.initConfig(ui_webView, AccountSP.getCurrentAccount().getBaseUrl(), AccountSP.getCurrentAccount().getAuthorization());
+                QLWebJsManager.initConfig(ui_webView, AccountSP.getCurrentAccount().getBaseUrl(), AccountSP.getCurrentAccount().getAuthorization());
             }
-        });
+        }, new CommonJSInterface());
         //加载本地网页
         ui_webView.loadUrl("file:///android_asset/web/editor.html");
     }
@@ -121,17 +122,6 @@ public class ConfigFragment extends BaseFragment {
     public void setMenuClickListener(MenuClickListener menuClickListener) {
         this.menuClickListener = menuClickListener;
     }
-
-//    @Override
-//    public void onHiddenChanged(boolean hidden) {
-//        //避免占用过多内存，切换界面时销毁WebView
-//        if (hidden) {
-//            destroyWebView();
-//        } else {
-//            createWebView();
-//        }
-//        super.onHiddenChanged(hidden);
-//    }
 
     @Override
     public void onDestroy() {

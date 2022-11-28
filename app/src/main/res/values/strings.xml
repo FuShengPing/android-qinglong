@@ -1,8 +1,20 @@
 <resources>
     <string name="app_name">青龙面板</string>
     <string name="url_qinglong">https://github.com/whyour/qinglong</string>
-    <string name="url_gitee">null</string>
+    <string name="url_gitee">https://gitee.com/wsfsp4/QingLong</string>
+    <string name="url_version">https://gitee.com/wsfsp4/QingLong/raw/master/version.json</string>
     <string name="url_github">null</string>
+    <!-- 主页菜单栏 -->
+    <string name="menu_task">定时任务</string>
+    <string name="menu_environment">环境变量</string>
+    <string name="menu_config">配置文件</string>
+    <string name="menu_script">脚本管理</string>
+    <string name="menu_dependence">依赖管理</string>
+    <string name="menu_log">任务日志</string>
+    <string name="menu_setting">系统设置</string>
+    <string name="menu_exit">退出</string>
+    <string name="menu_extension_webck">CK助手</string>
+    <string name="menu_app_setting">设置</string>
     <!-- 操作 -->
     <string name="mul_action">批量操作</string>
     <string name="action_new_task">新建任务</string>
@@ -30,7 +42,6 @@
     <!-- 字符 -->
     <string name="char_path_split">/</string>
     <!-- 常量字符串 -->
-    <string name="web_user_agent_android">Mozilla/5.0 (Linux; Android 10; JEF-AN00 Build/HUAWEIJEF-AN00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/78.0.3904.62 XWEB/2691 MMWEBSDK/200901 Mobile Safari/537.36 MMWEBID/8362 MicroMessenger/7.0.19.1760(0x2700133F)</string>
     <string name="str_load">加载</string>
     <string name="str_loading">加载中…</string>
     <string name="str_read">读取</string>
@@ -43,5 +54,4 @@
     <string name="previous">Previous</string>
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-
 </resources>

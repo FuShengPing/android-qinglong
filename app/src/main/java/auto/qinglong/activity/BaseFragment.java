@@ -2,7 +2,7 @@ package auto.qinglong.activity;
 
 import androidx.fragment.app.Fragment;
 
-import auto.qinglong.network.RequestManager;
+import auto.qinglong.network.http.RequestManager;
 
 public abstract class BaseFragment extends Fragment {
     //是否已经加载成功过数据标志

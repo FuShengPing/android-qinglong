@@ -1,12 +1,8 @@
-package auto.qinglong.network.ql;
+package auto.qinglong.bean.ql.response;
 
-import auto.qinglong.bean.ql.QLLoginData;
+import auto.qinglong.bean.ql.QLEnvironment;
 
-public class LoginRes {
-    private int code;
-    private QLLoginData data;
-    private String message;
-
+public class EditEnvRes {
     public int getCode() {
         return code;
     }
@@ -23,11 +19,15 @@ public class LoginRes {
         this.message = message;
     }
 
-    public QLLoginData getData() {
+    public QLEnvironment getData() {
         return data;
     }
 
-    public void setData(QLLoginData data) {
+    public void setData(QLEnvironment data) {
         this.data = data;
     }
+
+    private int code;
+    private String message;
+    private QLEnvironment data;
 }

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:elevation="5dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingVertical="10dp">
+
+        <TextView
+            android:id="@+id/pop_common_tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textColor="@color/text_color_49"
+            android:textSize="17sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginVertical="5dp"
+            android:background="@color/divide_line" />
+
+        <TextView
+            android:id="@+id/pop_common_tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:maxHeight="400dp"
+            android:minHeight="100dp"
+            android:paddingHorizontal="10dp"
+            android:textColor="@color/text_color_49"
+            android:textIsSelectable="true"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginVertical="10dp"
+            android:background="@color/divide_line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp">
+
+            <Button
+                android:id="@+id/pop_common_bt_cancel"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/style_button_white"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="8dp"
+                android:textColor="@color/text_color_49"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/pop_common_bt_confirm"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/style_button_blue"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="8dp"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>

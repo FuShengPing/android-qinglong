@@ -30,7 +30,7 @@
             android:paddingEnd="40dp">
 
             <TextView
-                android:id="@+id/menu_info_username"
+                android:id="@+id/menu_top_info_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
@@ -41,7 +41,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/menu_info_address"
+                android:id="@+id/menu_top_info_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
@@ -50,7 +50,7 @@
                 android:textSize="11sp" />
 
             <TextView
-                android:id="@+id/menu_info_inner_ip"
+                android:id="@+id/menu_top_info_inner_ip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
@@ -86,14 +86,14 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_nav_task" />
+                        android:src="@drawable/ic_menu_task" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:lines="1"
                         android:singleLine="true"
-                        android:text="定时任务"
+                        android:text="@string/menu_task"
                         android:textColor="@color/text_color_49"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -113,12 +113,12 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginEnd="10dp"
-                        android:src="@drawable/ic_nav_env" />
+                        android:src="@drawable/ic_menu_environment" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="环境变量"
+                        android:text="@string/menu_environment"
                         android:textColor="@color/text_color_49"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -138,12 +138,12 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_nav_config" />
+                        android:src="@drawable/ic_menu_config" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="配置文件"
+                        android:text="@string/menu_config"
                         android:textColor="@color/text_color_49"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -163,12 +163,12 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_nav_script" />
+                        android:src="@drawable/ic_menu_script" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="脚本管理"
+                        android:text="@string/menu_script"
                         android:textColor="@color/text_color_49"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -188,12 +188,12 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginEnd="10dp"
-                        android:src="@drawable/ic_nav_dep" />
+                        android:src="@drawable/ic_menu_dependence" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="依赖管理"
+                        android:text="@string/menu_dependence"
                         android:textColor="@color/text_color_49"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -213,12 +213,12 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_nav_log" />
+                        android:src="@drawable/ic_menu_log" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="任务日志"
+                        android:text="@string/menu_log"
                         android:textColor="@color/text_color_49"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -238,23 +238,52 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_nav_setting" />
+                        android:src="@drawable/ic_menu_setting" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="系统设置"
+                        android:text="@string/menu_setting"
                         android:textColor="@color/text_color_49"
                         android:textSize="14sp" />
                 </LinearLayout>
 
+                <View
+                    android:layout_width="180dp"
+                    android:layout_height="1px"
+                    android:layout_marginVertical="10dp"
+                    android:background="@color/divide_line" />
+
+                <LinearLayout
+                    android:id="@+id/menu_extension_webck"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/style_press_gray"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="15dp"
+                    android:paddingLeft="15dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/ic_menu_extension_web" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/menu_extension_webck"
+                        android:textColor="@color/text_color_49"
+                        android:textSize="14sp" />
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
 
         <View
             android:layout_width="180dp"
             android:layout_height="1px"
-            android:layout_above="@id/nav_bottom"
             android:background="@color/divide_line" />
 
         <LinearLayout
@@ -265,7 +294,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/menu_app_exit"
+                android:id="@+id/menu_exit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -284,7 +313,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="退出"
+                    android:text="@string/menu_exit"
                     android:textColor="@color/text_color_49"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -304,31 +333,15 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_marginBottom="5dp"
-                    android:src="@drawable/ic_nav_setting" />
+                    android:src="@drawable/ic_menu_setting" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="设置"
+                    android:text="@string/menu_app_setting"
                     android:textColor="@color/text_color_49"
                     android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-    <!--    <RelativeLayout-->
-    <!--        android:id="@+id/home_menu_bar"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent"-->
-    <!--        android:orientation="horizontal"-->
-    <!--        android:visibility="invisible">-->
-
-    <!--        <View-->
-    <!--            android:background="#66000000"-->
-    <!--            android:id="@+id/home_menu_bar_right"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:clickable="true" />-->
-
-
-    <!--    </RelativeLayout>-->
 </androidx.drawerlayout.widget.DrawerLayout>

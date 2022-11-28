@@ -1,8 +1,12 @@
-package auto.qinglong.network.ql;
+package auto.qinglong.bean.ql.response;
 
-import auto.qinglong.bean.ql.QLEnvironment;
+import auto.qinglong.bean.ql.QLSystemData;
 
-public class EditEnvRes {
+public class SystemRes {
+    private int code;
+    private String message;
+    private QLSystemData data;
+    
     public int getCode() {
         return code;
     }
@@ -19,15 +23,13 @@ public class EditEnvRes {
         this.message = message;
     }
 
-    public QLEnvironment getData() {
+    public QLSystemData getData() {
         return data;
     }
 
-    public void setData(QLEnvironment data) {
+    public void setData(QLSystemData data) {
         this.data = data;
     }
 
-    private int code;
-    private String message;
-    private QLEnvironment data;
+
 }

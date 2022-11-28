@@ -9,7 +9,7 @@ import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.app.Account;
 import auto.qinglong.database.sp.AccountSP;
-import auto.qinglong.network.ApiController;
+import auto.qinglong.network.http.ApiController;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends BaseActivity {

@@ -27,7 +27,7 @@ import java.util.List;
 
 import auto.qinglong.R;
 import auto.qinglong.bean.ql.QLDependence;
-import auto.qinglong.network.ApiController;
+import auto.qinglong.network.http.ApiController;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;

@@ -1,4 +1,4 @@
-package auto.qinglong.network;
+package auto.qinglong.network.http;
 
 import java.util.HashMap;
 import java.util.Map;

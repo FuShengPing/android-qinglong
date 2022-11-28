@@ -1,4 +1,4 @@
-package auto.qinglong.network;
+package auto.qinglong.network.http;
 
 import androidx.annotation.NonNull;
 
@@ -12,16 +12,16 @@ import auto.qinglong.bean.ql.QLEnvironment;
 import auto.qinglong.bean.ql.QLLog;
 import auto.qinglong.bean.ql.QLScript;
 import auto.qinglong.bean.ql.QLTask;
-import auto.qinglong.network.ql.BaseRes;
-import auto.qinglong.network.ql.DependenceRes;
-import auto.qinglong.network.ql.EditEnvRes;
-import auto.qinglong.network.ql.EditTaskRes;
-import auto.qinglong.network.ql.EnvironmentRes;
-import auto.qinglong.network.ql.LogRes;
-import auto.qinglong.network.ql.LoginRes;
-import auto.qinglong.network.ql.ScriptRes;
-import auto.qinglong.network.ql.SystemRes;
-import auto.qinglong.network.ql.TasksRes;
+import auto.qinglong.bean.ql.response.BaseRes;
+import auto.qinglong.bean.ql.response.DependenceRes;
+import auto.qinglong.bean.ql.response.EditEnvRes;
+import auto.qinglong.bean.ql.response.EditTaskRes;
+import auto.qinglong.bean.ql.response.EnvironmentRes;
+import auto.qinglong.bean.ql.response.LogRes;
+import auto.qinglong.bean.ql.response.LoginRes;
+import auto.qinglong.bean.ql.response.ScriptRes;
+import auto.qinglong.bean.ql.response.SystemRes;
+import auto.qinglong.bean.ql.response.TasksRes;
 import auto.qinglong.bean.app.Account;
 import auto.qinglong.database.sp.AccountSP;
 import okhttp3.MediaType;

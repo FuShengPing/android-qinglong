@@ -1,6 +1,11 @@
 var API_config = "api/configs/config"
 var API_script = ""
 
+var SUCCESS_LOAD = "加载成功";
+var SUCCESS_SAVE = "保存成功";
+var ERROR_RESPONSE = "响应异常";
+var ERROR_AUTHORIZATION = "登录失效,请重新登录"
+
 var _host = "";
 var _authorization = "";
 
@@ -73,12 +78,13 @@ function getConfig() {
                 config_content = body['data'];
                 config_isValid = true;
                 setCode(body['data']);
+                Android.toast(SUCCESS_LOAD);
             } else if (body['code'] == 401) {
                 config_isValid = false;
-                setCode("无效会话")
+                setCode(ERROR_AUTHORIZATION)
             } else {
                 config_isValid = false;
-                setCode("请求异常")
+                setCode(ERROR_RESPONSE)
             }
         }).catch(function (error) {
             config_isValid = false;
@@ -101,14 +107,16 @@ function saveConfig() {
             if (body['code'] == 200) {
                 config_isValid = true;
                 config_content = editor.getValue()
+                Android.toast(SUCCESS_SAVE)
             } else if (body['code'] == 401) {
                 config_isValid = false;
-                setCode("无效会话")
+                setCode(ERROR_AUTHORIZATION)
             } else {
                 config_isValid = false;
-                setCode("请求异常")
+                setCode(ERROR_RESPONSE)
             }
         }).catch(function (error) {
+            config_isValid = false;
             setCode("请求异常：" + error['message'])
         })
 }
@@ -143,10 +151,11 @@ function getLog() {
             body = response.data
             if (body['code'] == 200) {
                 setCode(body['data']);
+                Android.toast(SUCCESS_LOAD);
             } else if (body['code'] == 401) {
-                setCode("无效会话")
+                setCode(ERROR_AUTHORIZATION);
             } else {
-                setCode("请求异常")
+                setCode(ERROR_RESPONSE);
             }
         }).catch(function (error) {
             setCode("请求异常：" + error['message'])
@@ -181,12 +190,13 @@ function getScript() {
                 script_content = body['data'];
                 script_isValid = true;
                 setCode(body['data']);
+                Android.toast(SUCCESS_LOAD);
             } else if (body['code'] == 401) {
                 script_isValid = false;
-                setCode("无效会话")
+                setCode(ERROR_AUTHORIZATION);
             } else {
                 script_isValid = false;
-                setCode("请求异常")
+                setCode(ERROR_RESPONSE)
             }
         }).catch(function (error) {
             script_isValid = false;
@@ -209,12 +219,13 @@ function saveScript() {
             body = response.data;
             if (body['code'] == 200) {
                 script_content = newContent;
+                Android.toast(SUCCESS_SAVE);
             } else if (body['code'] == 401) {
                 script_isValid = false;
-                setCode("无效会话");
+                setCode(ERROR_AUTHORIZATION);
             } else {
                 script_isValid = false;
-                setCode("请求异常");
+                setCode(ERROR_RESPONSE);
             }
         }).catch(function (error) {
             script_isValid = false;

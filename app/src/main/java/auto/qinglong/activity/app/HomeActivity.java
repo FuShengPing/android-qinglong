@@ -161,18 +161,17 @@ public class HomeActivity extends BaseActivity {
     /**
      * 初始化导航栏
      */
-    @SuppressLint("SetTextI18n")
+//    @SuppressLint("SetTextI18n")
     private void initDrawerBar() {
         ui_drawer_left.setVisibility(View.INVISIBLE);
-        //左侧导航栏
-        //用户名和地址
-        TextView layout_username = ui_drawer_left.findViewById(R.id.menu_info_username);
-        TextView layout_address = ui_drawer_left.findViewById(R.id.menu_info_address);
+        //用户信息
+        TextView layout_username = ui_drawer_left.findViewById(R.id.menu_top_info_username);
+        TextView layout_address = ui_drawer_left.findViewById(R.id.menu_top_info_address);
         layout_username.setText(AccountSP.getCurrentAccount().getUsername());
         layout_address.setText(AccountSP.getCurrentAccount().getAddress());
         String ip = NetUnit.getIP();
         if (ip != null) {
-            TextView layout_ip = ui_drawer_left.findViewById(R.id.menu_info_inner_ip);
+            TextView layout_ip = ui_drawer_left.findViewById(R.id.menu_top_info_inner_ip);
             layout_ip.setText("本地：" + ip);
             layout_ip.setVisibility(View.VISIBLE);
         }
@@ -185,7 +184,8 @@ public class HomeActivity extends BaseActivity {
         LinearLayout menu_env = ui_drawer_left.findViewById(R.id.menu_env);
         LinearLayout menu_setting = ui_drawer_left.findViewById(R.id.menu_setting);
         LinearLayout menu_dep = ui_drawer_left.findViewById(R.id.menu_dep);
-        LinearLayout menu_app_exit = ui_drawer_left.findViewById(R.id.menu_app_exit);
+        LinearLayout menu_exit = ui_drawer_left.findViewById(R.id.menu_exit);
+        LinearLayout menu_extension_webck = ui_drawer_left.findViewById(R.id.menu_extension_webck);
         LinearLayout menu_app_setting = ui_drawer_left.findViewById(R.id.menu_app_setting);
 
         menu_task.setOnClickListener(v -> showFragment(TaskFragment.TAG));
@@ -201,20 +201,23 @@ public class HomeActivity extends BaseActivity {
         menu_dep.setOnClickListener(v -> showFragment(DepFragment.TAG));
 
         menu_setting.setOnClickListener(v -> {
-            ToastUnit.showShort("敬请期待");
-            Intent intent = new Intent(getBaseContext(), PluginWebActivity.class);
-            startActivity(intent);
+            ToastUnit.showShort("暂未开放");
         });
 
-        menu_app_exit.setOnClickListener(v -> {
+        menu_exit.setOnClickListener(v -> {
             Intent intent = new Intent(getBaseContext(), LoginActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.activity_alpha_enter, R.anim.activity_alpha_out);
             finish();
         });
 
+        menu_extension_webck.setOnClickListener(v -> {
+            Intent intent = new Intent(getBaseContext(), PluginWebActivity.class);
+            startActivity(intent);
+        });
+
         menu_app_setting.setOnClickListener(v -> {
-            ToastUnit.showShort("敬请期待");
+            ToastUnit.showShort("暂未开放");
         });
 
 

@@ -1,4 +1,4 @@
-package auto.qinglong.network.ql;
+package auto.qinglong.bean.ql.response;
 
 public class BaseRes {
     private int code;//响应码

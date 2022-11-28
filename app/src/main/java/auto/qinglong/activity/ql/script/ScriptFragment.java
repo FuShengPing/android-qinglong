@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,18 +18,15 @@ import android.widget.TextView;
 
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import auto.qinglong.R;
 import auto.qinglong.bean.ql.QLScript;
-import auto.qinglong.network.ApiController;
+import auto.qinglong.network.http.ApiController;
 import auto.qinglong.activity.BaseFragment;
-import auto.qinglong.network.RequestManager;
+import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.ToastUnit;
 
 
