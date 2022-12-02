@@ -1,10 +1,14 @@
 {
-  "version": 1.2,
-  "description": [
+  "versionCode": 2,
+  "versionName": "1.2",
+  "isForce": true,
+  "updateTime": "2022-12-01",
+  "downloadUrl": "https://gitee.com/wsfsp4/QingLong/releases/download/V1.1/app-release_1_1.apk",
+  "updateDetail": [
     "修复依赖安装错乱问题",
-    "增加在线代码编辑操作提示",
     "优化任务、变量、脚本和日志排序",
+    "增加在线代码编辑操作提示",
     "其他细节优化",
-    "新增网页CK提取/导入拓展模块"
+    "新增网页CK提取\\导入拓展模块"
   ]
 }
