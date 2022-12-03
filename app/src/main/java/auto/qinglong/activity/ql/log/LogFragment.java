@@ -23,7 +23,7 @@ import java.util.Objects;
 
 import auto.qinglong.R;
 import auto.qinglong.bean.ql.QLLog;
-import auto.qinglong.network.http.ApiController;
+import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.ToastUnit;
@@ -41,7 +41,7 @@ public class LogFragment extends BaseFragment {
     private TextView layout_dir;
     private RecyclerView layout_recycler;
 
-
+    @SuppressLint("InflateParams")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -114,7 +114,7 @@ public class LogFragment extends BaseFragment {
 
 
     private void getLogs() {
-        ApiController.getLogs(getNetRequestID(), new ApiController.GetLogsCallback() {
+        QLApiController.getLogs(getNetRequestID(), new QLApiController.GetLogsCallback() {
             @Override
             public void onSuccess(List<QLLog> QLLogs) {
                 sortAndSetData(QLLogs, "");

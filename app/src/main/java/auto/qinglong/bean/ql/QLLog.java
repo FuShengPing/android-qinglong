@@ -6,17 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QLLog implements Comparable<QLLog> {
-    boolean isDir;
-    String name;
-    String parentName;
-    List<String> files;
+    private boolean isDir;
+    private String name;
+    private String parentName;
+    private List<String> files;
 
     public String getParentName() {
-        if (TextUtils.isEmpty(parentName)) {
-            return "";
-        } else {
-            return parentName;
-        }
+        return parentName;
     }
 
     public void setParentName(String parentName) {

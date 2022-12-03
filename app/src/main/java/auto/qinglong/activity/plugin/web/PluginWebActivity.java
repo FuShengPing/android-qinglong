@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.http.SslError;
 import android.os.Bundle;
-import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceRequest;
@@ -18,9 +17,17 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import java.util.List;
+import java.util.Map;
+
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
+import auto.qinglong.bean.app.WebRule;
+import auto.qinglong.database.db.WebRuleDBHelper;
+import auto.qinglong.utils.LogUnit;
+import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
+import auto.qinglong.utils.WebUnit;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.WebViewBuilder;
 import auto.qinglong.views.popup.ConfirmWindow;
@@ -28,8 +35,9 @@ import auto.qinglong.views.popup.PopupWindowManager;
 
 public class PluginWebActivity extends BaseActivity {
     public static final String TAG = "PluginWebActivity";
-    private CookieManager cookieManager;
 
+    private String urlLoaded = "";
+    private CookieManager cookieManager;
 
     private ImageView ui_bar_back;
     private ImageView ui_bar_rule;
@@ -69,12 +77,14 @@ public class PluginWebActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        //加载网页操作
+        //加载网页操作 同时清除所有cookies
         ui_bt_load.setOnClickListener(v -> {
             WindowUnit.hideKeyboard(ui_bt_load);
             cookieManager.removeAllCookies(null);
             String url = ui_et_url.getText().toString().trim();
-            if (!url.isEmpty()) {
+
+            if (TextUnit.isFull(url)) {
+                urlLoaded = url;
                 ui_webView.loadUrl(url);
             } else {
                 ToastUnit.showShort(getBaseContext(), "请输入网页地址");
@@ -94,8 +104,9 @@ public class PluginWebActivity extends BaseActivity {
                 return;
             }
 
-            //配置窗体信息
+            //配置pop窗体信息
             ConfirmWindow confirmWindow = new ConfirmWindow();
+            confirmWindow.setMaxHeight(WindowUnit.getWindowHeightPix() / 3);//限制最大高度
             confirmWindow.setConfirmTip("拷贝");
             confirmWindow.setCancelTip("取消");
             confirmWindow.setTitle("Cookies");
@@ -108,13 +119,24 @@ public class PluginWebActivity extends BaseActivity {
                 }
                 return true;
             });
-            //构建并显示窗体
+            //构建并显示pop窗体
             PopupWindowManager.buildConfirmWindow(this, confirmWindow);
         });
 
         //导入变量操作
         ui_bt_import.setOnClickListener(v -> {
-
+            WindowUnit.hideKeyboard(ui_bt_load);
+            String url = ui_webView.getOriginalUrl();
+            if (TextUnit.isFull(url)) {
+                //删除URL参数
+                url = url.split("\\?", 2)[0];
+                //读取cookies
+                String cookies = cookieManager.getCookie(url);
+                //开始导入变量流程
+                startImport(urlLoaded, cookies.trim());
+            } else {
+                ToastUnit.showShort(getBaseContext(), "请先加载网页");
+            }
         });
 
         //构建web控件
@@ -131,6 +153,22 @@ public class PluginWebActivity extends BaseActivity {
                 return !url.startsWith("https") && !url.startsWith("http");
             }
         }, null);
+        ui_webView.setBackgroundColor(getColor(R.color.bg_gray));
+    }
+
+    private void startImport(String url, String cookies) {
+        //获取键值对
+        Map<String, String> cks = WebUnit.parseCookies(cookies);
+        //获取规则列表
+        List<WebRule> rules = WebRuleDBHelper.getAllWebRule();
+        //规则匹配 取第一个匹配成功规则
+        for (WebRule rule : rules) {
+            if (rule.match(url, cks)) {
+                ToastUnit.showShort("匹配规则成功：" + rule.getName());
+                return;
+            }
+        }
+        ToastUnit.showShort("匹配规则失败");
     }
 
     /**

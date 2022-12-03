@@ -52,11 +52,22 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/plugin_web_rule_recycler"
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg_gray"
-        android:overScrollMode="never"
-        android:scrollbars="none" />
+        app:srlAccentColor="@color/text_color_80"
+        app:srlEnableLoadMore="false"
+        app:srlEnableOverScrollDrag="true"
+        app:srlEnableRefresh="false"
+        app:srlPrimaryColor="@color/white">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/plugin_web_rule_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:scrollbars="none" />
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 </LinearLayout>

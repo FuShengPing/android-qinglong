@@ -9,8 +9,8 @@ android {
         applicationId "auto.qinglong"
         minSdk 26
         targetSdk 31
-        versionCode 2
-        versionName "1.1"
+        versionCode 3
+        versionName "1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -58,9 +58,9 @@ dependencies {
     implementation 'com.cronutils:cron-utils:9.2.0'
 
     //智能下拉刷新框架
-    implementation  'io.github.scwang90:refresh-layout-kernel:2.0.5'      //核心必须依赖
-    implementation  'io.github.scwang90:refresh-header-classics:2.0.5'    //经典刷新头
-    implementation  'io.github.scwang90:refresh-footer-classics:2.0.5'    //经典加载
+    implementation 'io.github.scwang90:refresh-layout-kernel:2.0.5'      //核心必须依赖
+    implementation 'io.github.scwang90:refresh-header-classics:2.0.5'    //经典刷新头
+    implementation 'io.github.scwang90:refresh-footer-classics:2.0.5'    //经典加载
 
     //leakcanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'

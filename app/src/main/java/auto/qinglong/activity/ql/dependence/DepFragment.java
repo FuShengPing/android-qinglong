@@ -1,5 +1,6 @@
 package auto.qinglong.activity.ql.dependence;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -11,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,13 +24,18 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import auto.qinglong.R;
 import auto.qinglong.bean.ql.QLDependence;
-import auto.qinglong.network.http.ApiController;
+import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.activity.BaseFragment;
+import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;
+import auto.qinglong.views.popup.EditWindow;
+import auto.qinglong.views.popup.EditWindowItem;
+import auto.qinglong.views.popup.PopupWindowManager;
 
 
 public class DepFragment extends BaseFragment {
@@ -38,50 +43,47 @@ public class DepFragment extends BaseFragment {
 
     enum BarType {NAV, ACTION}
 
-    private final String type_nodejs = "nodejs";
-    private final String type_python = "python3";
-    private final String type_linux = "linux";
+    private final String TYPE_NODEJS = "nodejs";
+    private final String TYPE_PYTHON = "python3";
+    private final String TYPE_LINUX = "linux";
 
-    private PagerFragment currentFragment;
-    private PagerAdapter pagerAdapter;
-    private MenuClickListener menuClickListener;
+    private PagerFragment mCurrentFragment;
+    private PagerAdapter mPagerAdapter;
+    private MenuClickListener mMenuClickListener;
 
-    private RelativeLayout layout_bar;
-    private LinearLayout layout_nav_bar;
-    private LinearLayout layout_action_bar;
-    private CheckBox layout_action_bar_check;
-    private LinearLayout layout_action_bar_delete;
-    private ImageView layout_action_bar_back;
+    private RelativeLayout ui_bar;
+    private LinearLayout ui_nav_bar;
+    private LinearLayout ui_action_bar;
+    private CheckBox ui_action_bar_check;
+    private LinearLayout ui_action_bar_delete;
+    private ImageView ui_action_bar_back;
+    private ImageView ui_menu;
+    private ImageView ui_more;
 
-    private ViewPager2 layout_page;
-    private TabLayout layout_page_tab;
-    private ImageView layout_menu;
-    private ImageView layout_more;
+    private ViewPager2 ui_page;
+    private TabLayout ui_page_tab;
 
     private PopupWindow popupWindowMore;
     private PopupWindow popupWindowEdit;
-    private TextView layout_edit_type;
-    private TextView layout_edit_name;
-    private Button layout_edit_confirm;
 
+    @SuppressLint("InflateParams")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fg_dep, null);
 
         //进行控件变量初始化
-        layout_bar = view.findViewById(R.id.dep_top_bar);
-        layout_nav_bar = view.findViewById(R.id.dep_nav_bar);
+        ui_bar = view.findViewById(R.id.dep_top_bar);
+        ui_nav_bar = view.findViewById(R.id.dep_nav_bar);
 
-        layout_action_bar = view.findViewById(R.id.dep_action_bar);
-        layout_action_bar_back = view.findViewById(R.id.dep_action_bar_back);
-        layout_action_bar_delete = view.findViewById(R.id.dep_action_bar_delete);
-        layout_action_bar_check = view.findViewById(R.id.dep_action_bar_select_all);
+        ui_action_bar = view.findViewById(R.id.dep_action_bar);
+        ui_action_bar_back = view.findViewById(R.id.dep_action_bar_back);
+        ui_action_bar_delete = view.findViewById(R.id.dep_action_bar_delete);
+        ui_action_bar_check = view.findViewById(R.id.dep_action_bar_select_all);
 
-        layout_page = view.findViewById(R.id.dep_page);
-        layout_page_tab = view.findViewById(R.id.dep_page_tab);
-        layout_menu = view.findViewById(R.id.dep_nav_bar_menu);
-        layout_more = view.findViewById(R.id.dep_nav_bar_more);
+        ui_page = view.findViewById(R.id.dep_page);
+        ui_page_tab = view.findViewById(R.id.dep_page_tab);
+        ui_menu = view.findViewById(R.id.dep_nav_bar_menu);
+        ui_more = view.findViewById(R.id.dep_nav_bar_more);
 
         init();
 
@@ -91,20 +93,20 @@ public class DepFragment extends BaseFragment {
     @Override
     public void init() {
         //导航栏回调
-        layout_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
+        ui_menu.setOnClickListener(v -> mMenuClickListener.onMenuClick());
 
         //弹窗-更多
-        layout_more.setOnClickListener(v -> showPopWindowMore());
+        ui_more.setOnClickListener(v -> showPopWindowMenu());
 
         //操作栏-返回
-        layout_action_bar_back.setOnClickListener(v -> showBar(BarType.NAV));
+        ui_action_bar_back.setOnClickListener(v -> showBar(BarType.NAV));
 
         //操作栏-全选
-        layout_action_bar_check.setOnCheckedChangeListener((buttonView, isChecked) -> currentFragment.setAllItemCheck(isChecked));
+        ui_action_bar_check.setOnCheckedChangeListener((buttonView, isChecked) -> mCurrentFragment.setAllItemCheck(isChecked));
 
         //操作栏-删除
-        layout_action_bar_delete.setOnClickListener(v -> {
-            List<String> ids = currentFragment.getCheckedItemIds();
+        ui_action_bar_delete.setOnClickListener(v -> {
+            List<String> ids = mCurrentFragment.getCheckedItemIds();
             if (ids != null && ids.size() > 0) {
                 deleteDependence(ids);
             } else {
@@ -113,27 +115,27 @@ public class DepFragment extends BaseFragment {
         });
 
         //设置界面适配器
-        pagerAdapter = new PagerAdapter(requireActivity());
-        pagerAdapter.setPagerActionListener(() -> {
+        mPagerAdapter = new PagerAdapter(requireActivity());
+        mPagerAdapter.setPagerActionListener(() -> {
             //进入操作栏
             showBar(BarType.ACTION);
         });
 
-        layout_page.setAdapter(pagerAdapter);
-        layout_page.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        ui_page.setAdapter(mPagerAdapter);
+        ui_page.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 //如果处于操作栏则切换至导航栏
-                if (layout_action_bar.getVisibility() == View.VISIBLE) {
+                if (ui_action_bar.getVisibility() == View.VISIBLE) {
                     showBar(BarType.NAV);
-                    currentFragment.setCheckState(false);
+                    mCurrentFragment.setCheckState(false);
                 }
-                currentFragment = pagerAdapter.getCurrentFragment(position);
+                mCurrentFragment = mPagerAdapter.getCurrentFragment(position);
             }
         });
 
         //设置界面联动
-        TabLayoutMediator mediator = new TabLayoutMediator(layout_page_tab, layout_page, (tab, position) -> {
+        TabLayoutMediator mediator = new TabLayoutMediator(ui_page_tab, ui_page, (tab, position) -> {
             switch (position) {
                 case 0:
                     tab.setText("NodeJs");
@@ -169,90 +171,73 @@ public class DepFragment extends BaseFragment {
 
         layout_add.setOnClickListener(v -> {
             popupWindowMore.dismiss();
-            showPopWindowEdit();
+            showEditWindow();
         });
 
         layout_action.setOnClickListener(v -> {
             popupWindowMore.dismiss();
-            currentFragment.setCheckState(true);
+            mCurrentFragment.setCheckState(true);
             showBar(BarType.ACTION);
         });
     }
 
-    private void initPopWindowEdit() {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.pop_fg_dep_edit, null, false);
-        TextView layout_title = view.findViewById(R.id.pop_title);
-        Button layout_edit_cancel = view.findViewById(R.id.pop_edit_cancel);
-        layout_edit_type = view.findViewById(R.id.pop_edit_dep_type);
-        layout_edit_name = view.findViewById(R.id.pop_edit_dep_name);
-        layout_edit_confirm = view.findViewById(R.id.pop_edit_confirm);
+    private void showEditWindow() {
+        EditWindow editWindow = new EditWindow("新建依赖", "取消", "确定");
+        editWindow.setMaxHeight(WindowUnit.getWindowHeightPix() / 3);
+        String type = mPagerAdapter.getCurrentFragment(ui_page.getCurrentItem()).getType();
+        editWindow.addItem(new EditWindowItem("type", type, "类型", null, false, false));
+        editWindow.addItem(new EditWindowItem("name", null, "名称", "请输入依赖名称"));
+        editWindow.setActionListener(new EditWindow.OnActionListener() {
+            @Override
+            public boolean onConfirm(Map<String, String> map) {
+                String type = map.get("type");
+                String name = map.get("name");
 
-        layout_title.setText("新建依赖");
+                if (TextUnit.isEmpty(name)) {
+                    ToastUnit.showShort("请输入依赖名称");
+                    return false;
+                }
 
-        popupWindowEdit = new PopupWindow(getContext());
-        popupWindowEdit.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-        popupWindowEdit.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-        popupWindowEdit.setContentView(view);
-        popupWindowEdit.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        popupWindowEdit.setOutsideTouchable(true);
-        popupWindowEdit.setFocusable(true);
+                List<QLDependence> dependencies = new ArrayList<>();
+                QLDependence dependence = new QLDependence();
+                dependence.setName(name);
+                if (TYPE_NODEJS.equals(type)) {
+                    dependence.setType(0);
+                } else if (TYPE_PYTHON.equals(type)) {
+                    dependence.setType(1);
+                } else {
+                    dependence.setType(2);
+                }
+                dependencies.add(dependence);
 
-        layout_edit_cancel.setOnClickListener(v -> popupWindowEdit.dismiss());
-
-        popupWindowEdit.setOnDismissListener(() -> WindowUnit.setBackgroundAlpha(requireActivity(), 1.0f));
-
-    }
-
-    private void showPopWindowEdit() {
-        if (popupWindowEdit == null) {
-            initPopWindowEdit();
-        }
-
-        //设置依赖类型
-        layout_edit_type.setHint(pagerAdapter.getCurrentFragment(layout_page.getCurrentItem()).getType());
-
-        layout_edit_confirm.setOnClickListener(v -> {
-            String type = layout_edit_type.getHint().toString();
-            String name = layout_edit_name.getText().toString().trim();
-
-            if (name.isEmpty()) {
-                ToastUnit.showShort("请输入依赖名称");
-                return;
+                addDependence(dependencies);
+                return false;
             }
 
-            List<QLDependence> dependencies = new ArrayList<>();
-            QLDependence dependence = new QLDependence();
-            dependence.setName(name);
-            if (type.equals(type_nodejs)) {
-                dependence.setType(0);
-            } else if (type.equals(type_python)) {
-                dependence.setType(1);
-            } else {
-                dependence.setType(2);
+            @Override
+            public boolean onCancel() {
+                return true;
             }
-            dependencies.add(dependence);
-
-            addDependence(dependencies);
         });
-
-        WindowUnit.setBackgroundAlpha(requireActivity(), 0.5f);
-        popupWindowEdit.showAtLocation(getView(), Gravity.CENTER, 0, 0);
+        popupWindowEdit = PopupWindowManager.buildEditWindow(requireActivity(), editWindow);
     }
 
-    public void showPopWindowMore() {
+    public void showPopWindowMenu() {
         if (popupWindowMore == null) {
             initPopWindowMore();
         }
-        popupWindowMore.showAsDropDown(layout_bar, 0, 0, Gravity.END);
+        popupWindowMore.showAsDropDown(ui_bar, 0, 0, Gravity.END);
     }
 
     public void addDependence(List<QLDependence> dependencies) {
-        ApiController.addDependencies(getNetRequestID(), dependencies, new ApiController.BaseCallback() {
+        QLApiController.addDependencies(getNetRequestID(), dependencies, new QLApiController.BaseCallback() {
             @Override
             public void onSuccess() {
-                popupWindowEdit.dismiss();
+                if (popupWindowEdit != null && popupWindowEdit.isShowing()) {
+                    popupWindowEdit.dismiss();
+                }
                 //刷新数据
-                pagerAdapter.getCurrentFragment(layout_page.getCurrentItem()).refreshData();
+                mPagerAdapter.getCurrentFragment(ui_page.getCurrentItem()).refreshData();
             }
 
             @Override
@@ -264,12 +249,12 @@ public class DepFragment extends BaseFragment {
     }
 
     public void deleteDependence(List<String> ids) {
-        ApiController.deleteDependencies(getNetRequestID(), ids, new ApiController.BaseCallback() {
+        QLApiController.deleteDependencies(getNetRequestID(), ids, new QLApiController.BaseCallback() {
             @Override
             public void onSuccess() {
                 showBar(BarType.NAV);
                 //刷新数据
-                pagerAdapter.getCurrentFragment(layout_page.getCurrentItem()).refreshData();
+                mPagerAdapter.getCurrentFragment(ui_page.getCurrentItem()).refreshData();
             }
 
             @Override
@@ -280,31 +265,31 @@ public class DepFragment extends BaseFragment {
     }
 
     public void showBar(BarType barType) {
-        if (layout_action_bar.getVisibility() == View.VISIBLE) {
-            layout_action_bar.setVisibility(View.INVISIBLE);
-            currentFragment.setCheckState(false);
-            layout_action_bar_check.setChecked(false);
+        if (ui_action_bar.getVisibility() == View.VISIBLE) {
+            ui_action_bar.setVisibility(View.INVISIBLE);
+            mCurrentFragment.setCheckState(false);
+            ui_action_bar_check.setChecked(false);
         }
 
-        layout_nav_bar.setVisibility(View.INVISIBLE);
+        ui_nav_bar.setVisibility(View.INVISIBLE);
 
         if (barType == BarType.NAV) {
-            layout_nav_bar.setVisibility(View.VISIBLE);
+            ui_nav_bar.setVisibility(View.VISIBLE);
         } else {
-            layout_action_bar_check.setChecked(false);
-            layout_action_bar.setVisibility(View.VISIBLE);
+            ui_action_bar_check.setChecked(false);
+            ui_action_bar.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public void setMenuClickListener(MenuClickListener menuClickListener) {
-        this.menuClickListener = menuClickListener;
+        this.mMenuClickListener = menuClickListener;
     }
 
     @Override
     public boolean onBackPressed() {
-        if (layout_action_bar.getVisibility() == View.VISIBLE) {
-            layout_action_bar_back.performClick();
+        if (ui_action_bar.getVisibility() == View.VISIBLE) {
+            ui_action_bar_back.performClick();
             return true;
         } else {
             return false;

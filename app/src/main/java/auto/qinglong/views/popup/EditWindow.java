@@ -8,6 +8,7 @@ public class EditWindow {
     private String title;
     private String cancelTip = "取消";
     private String confirmTip = "确定";
+    private int maxHeight = 0;
     private List<EditWindowItem> items;
     private OnActionListener actionListener;
 
@@ -65,6 +66,14 @@ public class EditWindow {
 
     public void setConfirmTip(String confirmTip) {
         this.confirmTip = confirmTip;
+    }
+
+    public int getMaxHeight() {
+        return maxHeight;
+    }
+
+    public void setMaxHeight(int maxHeight) {
+        this.maxHeight = maxHeight;
     }
 
     public interface OnActionListener {

@@ -6,6 +6,8 @@ public class ConfirmWindow {
     private String content;
     private String cancelTip = "取消";
     private String confirmTip = "确定";
+    private boolean isFocusable = true;
+    private int maxHeight = 0;
 
     private OnConfirmListener onConfirmListener;
 
@@ -63,6 +65,22 @@ public class ConfirmWindow {
 
     public void setConfirmInterface(OnConfirmListener onConfirmListener) {
         this.onConfirmListener = onConfirmListener;
+    }
+
+    public int getMaxHeight() {
+        return maxHeight;
+    }
+
+    public void setMaxHeight(int maxHeight) {
+        this.maxHeight = maxHeight;
+    }
+
+    public boolean isFocusable() {
+        return isFocusable;
+    }
+
+    public void setFocusable(boolean focusable) {
+        isFocusable = focusable;
     }
 
     public interface OnConfirmListener {

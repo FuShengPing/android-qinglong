@@ -1,5 +1,6 @@
 package auto.qinglong.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
@@ -33,6 +34,14 @@ public class WindowUnit {
      * Gets window height pix.
      * 获取屏幕高度 pix
      */
+    public static int getWindowHeightPix() {
+        return MyApplication.getContext().getResources().getDisplayMetrics().heightPixels;
+    }
+
+    /**
+     * Gets window height pix.
+     * 获取屏幕高度 pix
+     */
     public static int getWindowHeightPix(Context context) {
         return context.getResources().getDisplayMetrics().heightPixels;
     }
@@ -48,7 +57,7 @@ public class WindowUnit {
      * Gets status bar height.
      * 获取状态栏高度
      */
-
+    @SuppressLint("InternalInsetResource")
     public static int getStatusBarHeight() {
         Resources resources = MyApplication.getContext().getResources();
         int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");//获取状态栏

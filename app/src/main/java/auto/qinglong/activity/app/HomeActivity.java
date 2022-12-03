@@ -1,19 +1,22 @@
 package auto.qinglong.activity.app;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import auto.qinglong.R;
-import auto.qinglong.activity.plugin.web.PluginWebActivity;
-import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.activity.BaseFragment;
+import auto.qinglong.activity.plugin.web.PluginWebActivity;
 import auto.qinglong.activity.ql.config.ConfigFragment;
 import auto.qinglong.activity.ql.dependence.DepFragment;
 import auto.qinglong.activity.ql.environment.EnvFragment;
@@ -21,14 +24,24 @@ import auto.qinglong.activity.ql.log.LogFragment;
 import auto.qinglong.activity.ql.script.ScriptFragment;
 import auto.qinglong.activity.ql.setting.SettingFragment;
 import auto.qinglong.activity.ql.task.TaskFragment;
+import auto.qinglong.bean.app.Version;
+import auto.qinglong.database.sp.AccountSP;
+import auto.qinglong.network.http.ApiController;
+import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.NetUnit;
+import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
+import auto.qinglong.views.popup.ConfirmWindow;
+import auto.qinglong.views.popup.PopupWindowManager;
 
 public class HomeActivity extends BaseActivity {
-    private long lastBackPressed = 0;//上次返回按下时间戳
-    private BaseFragment currentFragment;//当前碎片
-    private String currentMenu = "";//当前菜单名称
-    private BaseFragment.MenuClickListener menuClickListener;
+    public static final String TAG = "HomeActivity";
+
+    private long mLastBackPressedTime = 0;
+    private BaseFragment mCurrentFragment;
+    private String mCurrentMenu = "";
+    private BaseFragment.MenuClickListener mMenuClickListener;
+    private PopupWindow popupWindowNotice;
     // 碎片界面列表
     private TaskFragment fg_task;
     private LogFragment fg_log;
@@ -54,96 +67,90 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (!currentFragment.onBackPressed()) {
+        if (!mCurrentFragment.onBackPressed()) {
             long current = System.currentTimeMillis();
-            if (current - lastBackPressed < 2000) {
+            if (current - mLastBackPressedTime < 2000) {
                 finish();
             } else {
-                lastBackPressed = current;
+                mLastBackPressedTime = current;
                 ToastUnit.showShort("再按一次退出");
             }
         }
     }
 
-    /**
-     * 初始化函数，进行变量和控件的初始化
-     */
     @Override
     protected void init() {
         //变量初始化
-        menuClickListener = () -> ui_drawer.openDrawer(ui_drawer_left);
+        mMenuClickListener = () -> ui_drawer.openDrawer(ui_drawer_left);
 
         //导航栏初始化
         initDrawerBar();
 
         //初始化第一帧页面
         showFragment(TaskFragment.TAG);
+
+        netCheckVersion();
     }
 
-    /**
-     * 显示帧布局 设置监听
-     *
-     * @param menu 帧标签
-     */
     private void showFragment(String menu) {
         //点击当前界面导航则直接返回
-        if (menu.equals(currentMenu)) {
+        if (menu.equals(mCurrentMenu)) {
             return;
         } else {
-            currentMenu = menu;
+            mCurrentMenu = menu;
         }
         //记录之前帧
-        BaseFragment old = currentFragment;
+        BaseFragment old = mCurrentFragment;
 
         if (menu.equals(TaskFragment.TAG)) {
             if (fg_task == null) {
                 fg_task = new TaskFragment();
-                fg_task.setMenuClickListener(menuClickListener);
+                fg_task.setMenuClickListener(mMenuClickListener);
                 getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, fg_task, TaskFragment.TAG).commit();
             }
-            currentFragment = fg_task;
+            mCurrentFragment = fg_task;
         } else if (menu.equals(LogFragment.TAG)) {
             if (fg_log == null) {
                 fg_log = new LogFragment();
-                fg_log.setMenuClickListener(menuClickListener);
+                fg_log.setMenuClickListener(mMenuClickListener);
                 getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, fg_log, LogFragment.TAG).commit();
             }
-            currentFragment = fg_log;
+            mCurrentFragment = fg_log;
         } else if (menu.equals(ConfigFragment.TAG)) {
             if (fg_config == null) {
                 fg_config = new ConfigFragment();
-                fg_config.setMenuClickListener(menuClickListener);
+                fg_config.setMenuClickListener(mMenuClickListener);
                 getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, fg_config, ConfigFragment.TAG).commit();
             }
-            currentFragment = fg_config;
+            mCurrentFragment = fg_config;
         } else if (menu.equals(ScriptFragment.TAG)) {
             if (fg_script == null) {
                 fg_script = new ScriptFragment();
-                fg_script.setMenuClickListener(menuClickListener);
+                fg_script.setMenuClickListener(mMenuClickListener);
                 getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, fg_script, ScriptFragment.TAG).commit();
             }
-            currentFragment = fg_script;
+            mCurrentFragment = fg_script;
         } else if (menu.equals(EnvFragment.TAG)) {
             if (fg_environment == null) {
                 fg_environment = new EnvFragment();
-                fg_environment.setMenuClickListener(menuClickListener);
+                fg_environment.setMenuClickListener(mMenuClickListener);
                 getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, fg_environment, EnvFragment.TAG).commit();
             }
-            currentFragment = fg_environment;
+            mCurrentFragment = fg_environment;
         } else if (menu.equals(DepFragment.TAG)) {
             if (fg_dependence == null) {
                 fg_dependence = new DepFragment();
-                fg_dependence.setMenuClickListener(menuClickListener);
+                fg_dependence.setMenuClickListener(mMenuClickListener);
                 getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, fg_dependence, EnvFragment.TAG).commit();
             }
-            currentFragment = fg_dependence;
+            mCurrentFragment = fg_dependence;
         } else if (menu.equals(SettingFragment.TAG)) {
             if (fg_setting == null) {
                 fg_setting = new SettingFragment();
-                fg_setting.setMenuClickListener(menuClickListener);
+                fg_setting.setMenuClickListener(mMenuClickListener);
                 getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, fg_setting, EnvFragment.TAG).commit();
             }
-            currentFragment = fg_setting;
+            mCurrentFragment = fg_setting;
         }
 
         //隐藏旧页面
@@ -151,17 +158,13 @@ public class HomeActivity extends BaseActivity {
             getSupportFragmentManager().beginTransaction().hide(old).commit();
         }
         //显示新页面
-        getSupportFragmentManager().beginTransaction().show(currentFragment).commit();
+        getSupportFragmentManager().beginTransaction().show(mCurrentFragment).commit();
         //关闭导航栏
         if (ui_drawer.isDrawerOpen(ui_drawer_left)) {
             ui_drawer.closeDrawer(ui_drawer_left);
         }
     }
 
-    /**
-     * 初始化导航栏
-     */
-//    @SuppressLint("SetTextI18n")
     private void initDrawerBar() {
         ui_drawer_left.setVisibility(View.INVISIBLE);
         //用户信息
@@ -223,5 +226,57 @@ public class HomeActivity extends BaseActivity {
 
     }
 
+    private void netCheckVersion() {
+        ApiController.getVersion(getClassName(), new ApiController.VersionCallback() {
+            @Override
+            public void onSuccess(Version version) {
+                try {
+                    PackageManager packageManager = getPackageManager();
+                    PackageInfo packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
+                    if (packageInfo.versionCode < version.getVersionCode()) {
+                        showVersionNotice(version);
+                    }
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
 
+            @Override
+            public void onFailure(String msg) {
+                LogUnit.log(TAG, msg);
+            }
+        });
+    }
+
+    private void showVersionNotice(Version version) {
+        String content = "最新版本：" + version.getVersionName() + "\n\n";
+        content += "更新时间：" + version.getUpdateTime() + "\n\n";
+        content += TextUnit.join(version.getUpdateDetail(), "\n\n");
+
+        ConfirmWindow confirmWindow = new ConfirmWindow("版本更新", content, "取消", "更新");
+        confirmWindow.setFocusable(false);
+        confirmWindow.setConfirmInterface(isConfirm -> {
+            if (isConfirm) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                Uri uri = Uri.parse(version.getDownloadUrl());
+                intent.setData(uri);
+                startActivity(intent);
+                return !version.isForce();
+            } else {
+                if (version.isForce()) {
+                    finish();
+                }
+                return true;
+            }
+        });
+        popupWindowNotice = PopupWindowManager.buildConfirmWindow(this, confirmWindow);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (popupWindowNotice != null && popupWindowNotice.isShowing()) {
+            return false;
+        }
+        return super.dispatchTouchEvent(ev);
+    }
 }

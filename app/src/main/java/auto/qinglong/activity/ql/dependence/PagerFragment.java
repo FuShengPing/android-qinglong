@@ -16,7 +16,7 @@ import java.util.List;
 
 import auto.qinglong.R;
 import auto.qinglong.bean.ql.QLDependence;
-import auto.qinglong.network.http.ApiController;
+import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.bean.ql.response.DependenceRes;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.network.http.RequestManager;
@@ -98,7 +98,7 @@ public class PagerFragment extends BaseFragment {
     }
 
     private void getDependencies() {
-        ApiController.getDependencies(getNetRequestID(), "", this.type, new ApiController.GetDependenciesCallback() {
+        QLApiController.getDependencies(getNetRequestID(), "", this.type, new QLApiController.GetDependenciesCallback() {
             @Override
             public void onSuccess(DependenceRes res) {
                 depItemAdapter.setData(res.getData());
@@ -121,7 +121,7 @@ public class PagerFragment extends BaseFragment {
     }
 
     private void reinstallDependencies(List<String> ids) {
-        ApiController.reinstallDependencies(getNetRequestID(), ids, new ApiController.BaseCallback() {
+        QLApiController.reinstallDependencies(getNetRequestID(), ids, new QLApiController.BaseCallback() {
             @Override
             public void onSuccess() {
                 getDependencies();

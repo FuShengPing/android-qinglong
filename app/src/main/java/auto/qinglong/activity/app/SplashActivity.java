@@ -9,7 +9,7 @@ import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.app.Account;
 import auto.qinglong.database.sp.AccountSP;
-import auto.qinglong.network.http.ApiController;
+import auto.qinglong.network.http.QLApiController;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends BaseActivity {
@@ -43,7 +43,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void checkAccountValid(Account account) {
-        ApiController.checkToken(getClassName(), account, new ApiController.LoginCallback() {
+        QLApiController.checkToken(getClassName(), account, new QLApiController.LoginCallback() {
             @Override
             public void onSuccess(Account account) {
                 enterActivity(true);

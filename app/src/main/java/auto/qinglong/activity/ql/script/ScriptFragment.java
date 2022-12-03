@@ -24,7 +24,7 @@ import java.util.Objects;
 
 import auto.qinglong.R;
 import auto.qinglong.bean.ql.QLScript;
-import auto.qinglong.network.http.ApiController;
+import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.ToastUnit;
@@ -124,7 +124,7 @@ public class ScriptFragment extends BaseFragment {
     }
 
     private void getScripts() {
-        ApiController.getScripts(getNetRequestID(), new ApiController.GetScriptsCallback() {
+        QLApiController.getScripts(getNetRequestID(), new QLApiController.GetScriptsCallback() {
             @Override
             public void onSuccess(List<QLScript> QLScripts) {
                 sortAndSetData(QLScripts, "");

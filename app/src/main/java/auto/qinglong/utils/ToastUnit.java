@@ -1,37 +1,40 @@
 package auto.qinglong.utils;
 
 import android.content.Context;
+import android.os.Handler;
 import android.os.Looper;
+import android.view.View;
 import android.widget.Toast;
 
 import auto.qinglong.MyApplication;
 
 public class ToastUnit {
     public static final String TAG = "ToastUnit";
-    private static Toast shortToast = null;
+    private static Toast mToast = null;
+    private static View mView = null;
+    private static Handler mHandler;
+
+    static {
+        mHandler = new Handler(Looper.myLooper());
+    }
 
     public static void showShort(Context context, String content) {
         showShort(content);
     }
 
     public static void showShort(String content) {
-        boolean flag = false;
-        if (Looper.myLooper() == null) {
-            Looper.prepare();
-            flag = true;
-        }
 
-        if (shortToast != null) {
-            shortToast.cancel();
-            shortToast.setView(null);
-        }
-        shortToast = Toast.makeText(MyApplication.getContext(), content, Toast.LENGTH_SHORT);
-        shortToast.setText(content);
-        shortToast.show();
+        mHandler.post(() -> {
+            if (mToast == null) {
+                mToast = Toast.makeText(MyApplication.getContext(), content, Toast.LENGTH_SHORT);
+                mView = mToast.getView();
+            } else {
+                mToast.setView(mView);
+                mToast.setText(content);
+            }
+            mToast.show();
+        });
 
-        if (flag) {
-            Looper.loop();
-        }
     }
 
     /**
@@ -39,8 +42,8 @@ public class ToastUnit {
      * 取消toast
      */
     public static void cancel() {
-        if (shortToast != null) {
-            shortToast.cancel();
+        if (mToast != null) {
+            mToast.cancel();
         }
     }
 

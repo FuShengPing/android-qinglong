@@ -4,20 +4,27 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.widget.PopupWindow;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import auto.qinglong.network.http.RequestManager;
+import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.ToastUnit;
+import auto.qinglong.views.popup.PopupWindowManager;
 
 public abstract class BaseActivity extends AppCompatActivity {
-    public Context myContext;
+    public static final String TAG = "BaseActivity";
+    public Context mContext;
+    protected PopupWindow popupWindowEdit;
+    protected PopupWindow popupWindowConfirm;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        myContext = getBaseContext();
+        mContext = getBaseContext();
     }
 
     //设置字体大小不随系统变化
@@ -28,13 +35,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         configuration.setToDefaults();
         res.updateConfiguration(configuration, res.getDisplayMetrics());
         return res;
-    }
-
-    @Override
-    protected void onDestroy() {
-        //取消本页面的网络请求
-        RequestManager.cancelCall(getClass().getName());
-        super.onDestroy();
     }
 
     protected String getClassName() {
@@ -48,9 +48,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
+    protected void onDestroy() {
+        //取消本页面的网络请求
+        RequestManager.cancelCall(getClass().getName());
+        super.onDestroy();
     }
 
     protected void init() {

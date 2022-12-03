@@ -24,25 +24,32 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:layout_marginVertical="5dp"
+            android:layout_marginTop="5dp"
             android:background="@color/divide_line" />
 
-        <TextView
-            android:id="@+id/pop_common_tv_content"
+        <auto.qinglong.views.MyScrollView
+            android:id="@+id/pop_common_sl_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:maxHeight="400dp"
-            android:minHeight="100dp"
-            android:paddingHorizontal="10dp"
-            android:textColor="@color/text_color_49"
-            android:textIsSelectable="true"
-            android:textSize="16sp" />
+            android:layout_height="match_parent"
+            android:overScrollMode="never">
+
+            <TextView
+                android:id="@+id/pop_common_tv_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:minHeight="100dp"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="5dp"
+                android:textColor="@color/text_color_49"
+                android:textIsSelectable="true"
+                android:textSize="16sp" />
+        </auto.qinglong.views.MyScrollView>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:layout_marginVertical="10dp"
+            android:layout_marginBottom="5dp"
             android:background="@color/divide_line" />
 
         <LinearLayout

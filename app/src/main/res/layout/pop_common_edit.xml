@@ -27,7 +27,7 @@
             android:layout_marginTop="5dp"
             android:background="@color/divide_line" />
 
-        <ScrollView
+        <auto.qinglong.views.MyScrollView
             android:id="@+id/pop_common_sl_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -40,7 +40,7 @@
                 android:layout_marginVertical="5dp"
                 android:orientation="vertical"
                 android:paddingHorizontal="16dp" />
-        </ScrollView>
+        </auto.qinglong.views.MyScrollView>
 
         <View
             android:layout_width="match_parent"

@@ -10,7 +10,7 @@ import android.widget.ImageView;
 
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
-import auto.qinglong.network.http.ApiController;
+import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.bean.ql.response.SystemRes;
 import auto.qinglong.database.db.AccountDBHelper;
 import auto.qinglong.bean.app.Account;
@@ -61,19 +61,19 @@ public class LoginActivity extends BaseActivity {
             }
             String address = layout_address.getText().toString();
             if (!address.matches("\\d{2,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}:\\d{1,5}")) {
-                ToastUnit.showShort(myContext, "地址格式错误");
+                ToastUnit.showShort(mContext, "地址格式错误");
                 return;
             }
 
             String username = layout_username.getText().toString().trim();
             if (username.isEmpty()) {
-                ToastUnit.showShort(myContext, "账号不能为空");
+                ToastUnit.showShort(mContext, "账号不能为空");
                 return;
             }
 
             String password = layout_password.getText().toString().trim();
             if (password.isEmpty()) {
-                ToastUnit.showShort(myContext, "密码不能为空");
+                ToastUnit.showShort(mContext, "密码不能为空");
                 return;
             }
             WindowUnit.hideKeyboard(layout_password);
@@ -100,19 +100,19 @@ public class LoginActivity extends BaseActivity {
      * 查询系统信息 主要是查看是否已经初始化
      */
     protected void querySystemInfo(Account account) {
-        ApiController.getSystemInfo(this.getClassName(), account, new ApiController.SystemCallback() {
+        QLApiController.getSystemInfo(this.getClassName(), account, new QLApiController.SystemCallback() {
             @Override
             public void onSuccess(SystemRes systemRes) {
                 if (systemRes.getData().isInitialized()) {
                     checkToken(account);
                 } else {
-                    ToastUnit.showShort(myContext, "系统未初始化，无法登录");
+                    ToastUnit.showShort(mContext, "系统未初始化，无法登录");
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort(myContext, msg);
+                ToastUnit.showShort(mContext, msg);
             }
         });
     }
@@ -121,7 +121,7 @@ public class LoginActivity extends BaseActivity {
      * 检查会话是否有效，无效则登录
      */
     protected void checkToken(Account account) {
-        ApiController.checkToken(this.getClassName(), account, new ApiController.LoginCallback() {
+        QLApiController.checkToken(this.getClassName(), account, new QLApiController.LoginCallback() {
             @Override
             public void onSuccess(Account account) {
                 LogUnit.log(account.getAuthorization());
@@ -136,7 +136,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     protected void login(Account account) {
-        ApiController.login(this.getClassName(), account, new ApiController.LoginCallback() {
+        QLApiController.login(this.getClassName(), account, new QLApiController.LoginCallback() {
             @Override
             public void onSuccess(Account account) {
                 enterHome(account);
@@ -144,7 +144,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort(myContext, msg);
+                ToastUnit.showShort(mContext, msg);
             }
         });
     }
@@ -154,7 +154,7 @@ public class LoginActivity extends BaseActivity {
         AccountSP.saveCurrentAccount(account);
         AccountDBHelper.insertAccount(account);
         //进入主界面
-        Intent intent = new Intent(myContext, HomeActivity.class);
+        Intent intent = new Intent(mContext, HomeActivity.class);
         startActivity(intent);
         finish();
     }

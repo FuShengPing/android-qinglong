@@ -25,7 +25,7 @@ public class AccountDBHelper {
     @SuppressLint("Range")
     public static List<Account> getAllAccount() {
         List<Account> accounts = new ArrayList<>();
-        Cursor cursor = DBHelper.getWritableDatabase().query(auto.qinglong.database.db.DBHelper.db_account, null, null, null, null, null, null);
+        Cursor cursor = DBHelper.getWritableDatabase().query(auto.qinglong.database.db.DBHelper.TABLE_ACCOUNT, null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             do {
                 Account account = new Account();
@@ -45,7 +45,7 @@ public class AccountDBHelper {
     public static Account getAccount(String address) {
         Account account = null;
         String sql = "address = ?";
-        Cursor cursor = DBHelper.getWritableDatabase().query(auto.qinglong.database.db.DBHelper.db_account, null, sql, new String[]{address}, null, null, null);
+        Cursor cursor = DBHelper.getWritableDatabase().query(auto.qinglong.database.db.DBHelper.TABLE_ACCOUNT, null, sql, new String[]{address}, null, null, null);
         if (cursor.moveToFirst()) {
             account = new Account();
             account.setAddress(cursor.getString(cursor.getColumnIndex(key_address)));
@@ -68,18 +68,18 @@ public class AccountDBHelper {
         if (isAccountExist(account.getAddress())) {
             deleteAccount(account.getAddress());
         }
-        DBHelper.getWritableDatabase().insert(auto.qinglong.database.db.DBHelper.db_account, null, values);
+        DBHelper.getWritableDatabase().insert(auto.qinglong.database.db.DBHelper.TABLE_ACCOUNT, null, values);
 
     }
 
     public static void deleteAccount(String address) {
         String where = "address = ?";
-        DBHelper.getWritableDatabase().delete(auto.qinglong.database.db.DBHelper.db_account, where, new String[]{address});
+        DBHelper.getWritableDatabase().delete(auto.qinglong.database.db.DBHelper.TABLE_ACCOUNT, where, new String[]{address});
     }
 
     public static boolean isAccountExist(String address) {
         String where = "address = ?";
-        Cursor cursor = DBHelper.getWritableDatabase().query(auto.qinglong.database.db.DBHelper.db_account, null, where, new String[]{address}, null, null, null);
+        Cursor cursor = DBHelper.getWritableDatabase().query(auto.qinglong.database.db.DBHelper.TABLE_ACCOUNT, null, where, new String[]{address}, null, null, null);
         boolean flag = cursor.moveToFirst();
         cursor.close();
         return flag;
