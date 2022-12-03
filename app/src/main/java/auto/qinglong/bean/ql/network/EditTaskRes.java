@@ -1,13 +1,11 @@
-package auto.qinglong.bean.ql.response;
+package auto.qinglong.bean.ql.network;
 
-import java.util.List;
+import auto.qinglong.bean.ql.QLTask;
 
-import auto.qinglong.bean.ql.QLDependence;
-
-public class DependenceRes {
+public class EditTaskRes {
     private int code;
     private String message;
-    private List<QLDependence> data;
+    private QLTask data;
 
     public int getCode() {
         return code;
@@ -25,11 +23,13 @@ public class DependenceRes {
         this.message = message;
     }
 
-    public List<QLDependence> getData() {
+    public QLTask getData() {
         return data;
     }
 
-    public void setData(List<QLDependence> data) {
+    public void setData(QLTask data) {
         this.data = data;
     }
+
+
 }

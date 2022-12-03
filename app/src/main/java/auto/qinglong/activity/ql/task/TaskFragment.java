@@ -36,7 +36,7 @@ import auto.qinglong.R;
 import auto.qinglong.activity.ql.log.LogDetailActivity;
 import auto.qinglong.bean.ql.QLTask;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.bean.ql.response.TasksRes;
+import auto.qinglong.bean.ql.network.TasksRes;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.utils.CronUnit;
 import auto.qinglong.utils.TextUnit;

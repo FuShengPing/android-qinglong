@@ -1,12 +1,14 @@
-package auto.qinglong.bean.ql.response;
+package auto.qinglong.bean.ql.network;
 
-import auto.qinglong.bean.ql.QLSystemData;
+import java.util.List;
 
-public class SystemRes {
+import auto.qinglong.bean.ql.QLDependence;
+
+public class DependenceRes {
     private int code;
     private String message;
-    private QLSystemData data;
-    
+    private List<QLDependence> data;
+
     public int getCode() {
         return code;
     }
@@ -23,13 +25,11 @@ public class SystemRes {
         this.message = message;
     }
 
-    public QLSystemData getData() {
+    public List<QLDependence> getData() {
         return data;
     }
 
-    public void setData(QLSystemData data) {
+    public void setData(List<QLDependence> data) {
         this.data = data;
     }
-
-
 }

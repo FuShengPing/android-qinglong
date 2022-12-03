@@ -12,16 +12,16 @@ import auto.qinglong.bean.ql.QLEnvironment;
 import auto.qinglong.bean.ql.QLLog;
 import auto.qinglong.bean.ql.QLScript;
 import auto.qinglong.bean.ql.QLTask;
-import auto.qinglong.bean.ql.response.BaseRes;
-import auto.qinglong.bean.ql.response.DependenceRes;
-import auto.qinglong.bean.ql.response.EditEnvRes;
-import auto.qinglong.bean.ql.response.EditTaskRes;
-import auto.qinglong.bean.ql.response.EnvironmentRes;
-import auto.qinglong.bean.ql.response.LogRes;
-import auto.qinglong.bean.ql.response.LoginRes;
-import auto.qinglong.bean.ql.response.ScriptRes;
-import auto.qinglong.bean.ql.response.SystemRes;
-import auto.qinglong.bean.ql.response.TasksRes;
+import auto.qinglong.bean.ql.network.BaseRes;
+import auto.qinglong.bean.ql.network.DependenceRes;
+import auto.qinglong.bean.ql.network.EditEnvRes;
+import auto.qinglong.bean.ql.network.EditTaskRes;
+import auto.qinglong.bean.ql.network.EnvironmentRes;
+import auto.qinglong.bean.ql.network.LogRes;
+import auto.qinglong.bean.ql.network.LoginRes;
+import auto.qinglong.bean.ql.network.ScriptRes;
+import auto.qinglong.bean.ql.network.SystemRes;
+import auto.qinglong.bean.ql.network.TasksRes;
 import auto.qinglong.bean.app.Account;
 import auto.qinglong.database.sp.AccountSP;
 import okhttp3.MediaType;
@@ -1185,9 +1185,8 @@ public class QLApiController {
             jsonObject.addProperty("type", QLDependence.getType());
             jsonArray.add(jsonObject);
         }
-        String json = jsonArray.toString();
-
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
+        
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
         Call<BaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())

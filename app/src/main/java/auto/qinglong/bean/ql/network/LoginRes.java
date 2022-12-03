@@ -1,4 +1,4 @@
-package auto.qinglong.bean.ql.response;
+package auto.qinglong.bean.ql.network;
 
 import auto.qinglong.bean.ql.QLLoginData;
 

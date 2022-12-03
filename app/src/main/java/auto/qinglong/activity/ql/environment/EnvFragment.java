@@ -34,7 +34,7 @@ import java.util.Objects;
 import auto.qinglong.R;
 import auto.qinglong.bean.ql.QLEnvironment;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.bean.ql.response.EnvironmentRes;
+import auto.qinglong.bean.ql.network.EnvironmentRes;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.TextUnit;

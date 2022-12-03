@@ -23,27 +23,6 @@
             android:clickable="true"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_menu" />
-
-        <ImageView
-            android:id="@+id/log_search"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@id/log_more"
-            android:background="@drawable/style_press_gray"
-            android:clickable="true"
-            android:src="@drawable/ic_search" />
-
-        <ImageView
-            android:id="@+id/log_more"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
-            android:background="@drawable/style_press_gray"
-            android:clickable="true"
-            android:src="@drawable/ic_more_ver" />
     </RelativeLayout>
 
     <TextView

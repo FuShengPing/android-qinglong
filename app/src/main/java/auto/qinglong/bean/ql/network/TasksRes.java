@@ -1,4 +1,4 @@
-package auto.qinglong.bean.ql.response;
+package auto.qinglong.bean.ql.network;
 
 import java.util.List;
 

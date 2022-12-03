@@ -1,28 +1,18 @@
-package auto.qinglong.bean.ql.response;
+package auto.qinglong.bean.ql.network;
 
-import java.util.List;
+import auto.qinglong.bean.ql.QLSystemData;
 
-import auto.qinglong.bean.ql.QLScript;
-
-public class ScriptRes {
+public class SystemRes {
     private int code;
-    private List<QLScript> data;
     private String message;
-
+    private QLSystemData data;
+    
     public int getCode() {
         return code;
     }
 
     public void setCode(int code) {
         this.code = code;
-    }
-
-    public List<QLScript> getData() {
-        return data;
-    }
-
-    public void setData(List<QLScript> data) {
-        this.data = data;
     }
 
     public String getMessage() {
@@ -32,4 +22,14 @@ public class ScriptRes {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    public QLSystemData getData() {
+        return data;
+    }
+
+    public void setData(QLSystemData data) {
+        this.data = data;
+    }
+
+
 }

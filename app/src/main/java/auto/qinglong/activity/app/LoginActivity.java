@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.bean.ql.response.SystemRes;
+import auto.qinglong.bean.ql.network.SystemRes;
 import auto.qinglong.database.db.AccountDBHelper;
 import auto.qinglong.bean.app.Account;
 import auto.qinglong.database.sp.AccountSP;
@@ -23,12 +23,11 @@ import auto.qinglong.network.http.RequestManager;
 
 public class LoginActivity extends BaseActivity {
 
-    private ImageView layout_logo_ql;
-
-    private Button layout_confirm;
-    private EditText layout_address;
-    private EditText layout_username;
-    private EditText layout_password;
+    private ImageView ui_logo;
+    private Button ui_confirm;
+    private EditText ui_address;
+    private EditText ui_username;
+    private EditText ui_password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,45 +37,48 @@ public class LoginActivity extends BaseActivity {
 
         setContentView(R.layout.activity_login);
 
-        layout_logo_ql = findViewById(R.id.logo_ql);
-        layout_confirm = findViewById(R.id.button_confirm);
-        layout_address = findViewById(R.id.input_address);
-        layout_username = findViewById(R.id.input_username);
-        layout_password = findViewById(R.id.input_password);
+        ui_logo = findViewById(R.id.logo_ql);
+        ui_confirm = findViewById(R.id.button_confirm);
+        ui_address = findViewById(R.id.input_address);
+        ui_username = findViewById(R.id.input_username);
+        ui_password = findViewById(R.id.input_password);
 
         init();
     }
 
     @Override
     protected void init() {
-        layout_logo_ql.setOnClickListener(v -> {
-            Uri uri = Uri.parse(getString(R.string.url_qinglong));
+        ui_logo.setOnClickListener(v -> {
+            Uri uri = Uri.parse(getString(R.string.url_gitee));
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);
         });
 
-        layout_confirm.setOnClickListener(v -> {
+        ui_confirm.setOnClickListener(v -> {
             if (RequestManager.isRequesting(getClassName())) {
                 return;
             }
-            String address = layout_address.getText().toString();
+            String address = ui_address.getText().toString();
             if (!address.matches("\\d{2,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}:\\d{1,5}")) {
                 ToastUnit.showShort(mContext, "地址格式错误");
                 return;
             }
 
-            String username = layout_username.getText().toString().trim();
+            String username = ui_username.getText().toString().trim();
             if (username.isEmpty()) {
                 ToastUnit.showShort(mContext, "账号不能为空");
                 return;
             }
 
-            String password = layout_password.getText().toString().trim();
+            String password = ui_password.getText().toString().trim();
             if (password.isEmpty()) {
                 ToastUnit.showShort(mContext, "密码不能为空");
                 return;
             }
-            WindowUnit.hideKeyboard(layout_password);
+            WindowUnit.hideKeyboard(ui_password);
+
+            ui_confirm.setEnabled(false);
+            ui_confirm.postDelayed(() -> ui_confirm.setEnabled(true), 300);
 
             Account account = new Account(username, password, address, "");
             //账号登录过则设置之前token
@@ -84,27 +86,27 @@ public class LoginActivity extends BaseActivity {
                 account.setToken(AccountDBHelper.getAccount(address).getToken());
             }
             //检测系统是否初始化和版本信息
-            querySystemInfo(account);
+            netQuerySystemInfo(account);
         });
 
-        //初始化账号
+        //显示之前账号
         Account account = AccountSP.getCurrentAccount();
         if (account != null) {
-            layout_address.setText(account.getAddress());
-            layout_username.setText(account.getUsername());
-            layout_password.setText(account.getPassword());
+            ui_address.setText(account.getAddress());
+            ui_username.setText(account.getUsername());
+            ui_password.setText(account.getPassword());
         }
     }
 
     /**
      * 查询系统信息 主要是查看是否已经初始化
      */
-    protected void querySystemInfo(Account account) {
+    protected void netQuerySystemInfo(Account account) {
         QLApiController.getSystemInfo(this.getClassName(), account, new QLApiController.SystemCallback() {
             @Override
             public void onSuccess(SystemRes systemRes) {
                 if (systemRes.getData().isInitialized()) {
-                    checkToken(account);
+                    netCheckToken(account);
                 } else {
                     ToastUnit.showShort(mContext, "系统未初始化，无法登录");
                 }
@@ -120,7 +122,7 @@ public class LoginActivity extends BaseActivity {
     /**
      * 检查会话是否有效，无效则登录
      */
-    protected void checkToken(Account account) {
+    protected void netCheckToken(Account account) {
         QLApiController.checkToken(this.getClassName(), account, new QLApiController.LoginCallback() {
             @Override
             public void onSuccess(Account account) {
@@ -130,12 +132,12 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                login(account);
+                netLogin(account);
             }
         });
     }
 
-    protected void login(Account account) {
+    protected void netLogin(Account account) {
         QLApiController.login(this.getClassName(), account, new QLApiController.LoginCallback() {
             @Override
             public void onSuccess(Account account) {

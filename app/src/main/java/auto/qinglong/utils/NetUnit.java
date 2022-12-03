@@ -6,7 +6,7 @@ import java.net.NetworkInterface;
 import java.util.Enumeration;
 
 public class NetUnit {
-    private static final String TAG = "NetUnit";
+    public static final String TAG = "NetUnit";
 
     /**
      * 获取本机局域网IP
