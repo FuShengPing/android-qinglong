@@ -27,7 +27,7 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
     public static final String TAG = "TaskAdapter";
 
     Context context;
-    private ItemInterface itemInterface;
+    private ItemActionListener itemActionListener;
     private List<QLTask> data;
     private boolean checkState;
     private boolean[] dataCheckState;
@@ -110,7 +110,7 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
         }
 
         //监听
-        if (itemInterface == null) {
+        if (itemActionListener == null) {
             return;
         }
 
@@ -118,15 +118,15 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
             if (this.checkState) {
                 holder.layout_check.setChecked(!holder.layout_check.isChecked());
             } else if (QLTask.getTaskState() != QLTaskState.RUNNING) {
-                itemInterface.onRun(QLTask);
+                itemActionListener.onRun(QLTask);
             } else {
-                itemInterface.onStop(QLTask);
+                itemActionListener.onStop(QLTask);
             }
         });
 
         holder.layout_name.setOnClickListener(v -> {
             if (!this.checkState) {
-                itemInterface.onLog(QLTask);
+                itemActionListener.onLog(QLTask);
             } else {
                 holder.layout_check.setChecked(!holder.layout_check.isChecked());
             }
@@ -134,7 +134,7 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
         holder.layout_name.setOnLongClickListener(v -> {
             if (!this.checkState) {
-                itemInterface.onAction(QLTask, holder.getAdapterPosition());
+                itemActionListener.onMulAction(QLTask, holder.getAdapterPosition());
             }
             return true;
         });
@@ -147,7 +147,7 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
         holder.layout_detail.setOnLongClickListener(v -> {
             if (!this.checkState) {
-                itemInterface.onEdit(QLTask);
+                itemActionListener.onEdit(QLTask);
             }
             return true;
         });
@@ -166,8 +166,8 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
         notifyDataSetChanged();
     }
 
-    public void setTaskInterface(ItemInterface itemInterface) {
-        this.itemInterface = itemInterface;
+    public void setTaskInterface(ItemActionListener itemActionListener) {
+        this.itemActionListener = itemActionListener;
     }
 
     public boolean getCheckState() {
@@ -200,6 +200,18 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
             }
         }
         return QLTasks;
+    }
+
+    public interface ItemActionListener {
+        void onLog(QLTask QLTask);
+
+        void onStop(QLTask QLTask);
+
+        void onRun(QLTask QLTask);
+
+        void onEdit(QLTask QLTask);
+
+        void onMulAction(QLTask QLTask, int position);
     }
 }
 

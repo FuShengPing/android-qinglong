@@ -26,7 +26,7 @@ public class PagerFragment extends BaseFragment {
     private String type;
 
     private DepItemAdapter depItemAdapter;
-    private PagerActionListener pagerActionListener;
+    private PagerAdapter.PagerActionListener pagerActionListener;
 
     private SmartRefreshLayout layout_refresh;
     private RecyclerView layout_recycler;
@@ -56,7 +56,7 @@ public class PagerFragment extends BaseFragment {
         if (!loadSuccessFlag && !RequestManager.isRequesting(getNetRequestID())) {
             new Handler().postDelayed(() -> {
                 if (isVisible()) {
-                    getDependencies();
+                    netGetDependencies();
                 }
             }, 1000);
         }
@@ -71,11 +71,9 @@ public class PagerFragment extends BaseFragment {
 
         depItemAdapter.setItemInterface(new DepItemAdapter.ItemActionListener() {
             @Override
-            public void onAction(QLDependence dependence, int position) {
-                if (!depItemAdapter.getCheckState()) {
-                    depItemAdapter.setCheckState(true, position);
-                    pagerActionListener.onAction();
-                }
+            public void onMulAction(QLDependence dependence, int position) {
+                depItemAdapter.setCheckState(true, -1);
+                pagerActionListener.onMulAction();
             }
 
             @Override
@@ -87,17 +85,17 @@ public class PagerFragment extends BaseFragment {
             public void onReinstall(QLDependence dependence, int position) {
                 List<String> ids = new ArrayList<>();
                 ids.add(dependence.get_id());
-                reinstallDependencies(ids);
+                netReinstallDependencies(ids);
             }
         });
 
         //刷新控件//
         //初始设置处于刷新状态
         layout_refresh.autoRefreshAnimationOnly();
-        layout_refresh.setOnRefreshListener(refreshLayout -> getDependencies());
+        layout_refresh.setOnRefreshListener(refreshLayout -> netGetDependencies());
     }
 
-    private void getDependencies() {
+    private void netGetDependencies() {
         QLApiController.getDependencies(getNetRequestID(), "", this.type, new QLApiController.GetDependenciesCallback() {
             @Override
             public void onSuccess(DependenceRes res) {
@@ -120,32 +118,26 @@ public class PagerFragment extends BaseFragment {
         });
     }
 
-    private void reinstallDependencies(List<String> ids) {
+    private void netReinstallDependencies(List<String> ids) {
         QLApiController.reinstallDependencies(getNetRequestID(), ids, new QLApiController.BaseCallback() {
             @Override
             public void onSuccess() {
-                getDependencies();
+                netGetDependencies();
             }
 
             @Override
             public void onFailure(String msg) {
                 ToastUnit.showShort("请求失败：" + msg);
                 //该接口发送请求成功 但可能会出现响应时间超时问题
-                getDependencies();
+                netGetDependencies();
             }
         });
     }
 
-    /**
-     * 刷新数据 由外部调用
-     */
     public void refreshData() {
-        this.getDependencies();
+        this.netGetDependencies();
     }
 
-    /**
-     * 获取被选择的item ID
-     */
     public List<String> getCheckedItemIds() {
         List<String> ids = new ArrayList<>();
         for (QLDependence dependence : depItemAdapter.getCheckedItems()) {
@@ -154,41 +146,25 @@ public class PagerFragment extends BaseFragment {
         return ids;
     }
 
-    /**
-     * 设置外部回调接口
-     */
-    public void setPagerActionListener(PagerActionListener pagerActionListener) {
+    public void setPagerActionListener(PagerAdapter.PagerActionListener pagerActionListener) {
         this.pagerActionListener = pagerActionListener;
     }
 
-    /**
-     * 设置选择状态，由外部状态栏改变调用
-     */
     public void setCheckState(boolean checkState) {
         depItemAdapter.setCheckState(checkState, -1);
     }
 
-    /**
-     * 设置item全选
-     */
     public void setAllItemCheck(boolean isChecked) {
         if (depItemAdapter.getCheckState()) {
             depItemAdapter.setAllChecked(isChecked);
         }
     }
 
-    /**
-     * 设置依赖类型
-     */
     public void setType(String type) {
         this.type = type;
     }
 
     public String getType() {
         return this.type;
-    }
-
-    public interface PagerActionListener {
-        void onAction();
     }
 }

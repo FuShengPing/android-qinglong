@@ -94,14 +94,14 @@ public class LogFragment extends BaseFragment {
             }
         });
 
-        logAdapter.setLogInterFace(log -> {
-            if (log.isDir()) {
+        logAdapter.setItemActionListener(qlLog -> {
+            if (qlLog.isDir()) {
                 canBack = true;
-                sortAndSetData(log.getChildren(), log.getName());
+                sortAndSetData(qlLog.getChildren(), qlLog.getName());
             } else {
                 Intent intent = new Intent(getContext(), LogDetailActivity.class);
-                intent.putExtra(LogDetailActivity.ExtraName, log.getName());
-                intent.putExtra(LogDetailActivity.ExtraPath, log.getLogPath());
+                intent.putExtra(LogDetailActivity.ExtraName, qlLog.getName());
+                intent.putExtra(LogDetailActivity.ExtraPath, qlLog.getLogPath());
                 startActivity(intent);
             }
         });

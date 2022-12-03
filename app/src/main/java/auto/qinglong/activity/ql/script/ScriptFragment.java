@@ -92,7 +92,7 @@ public class ScriptFragment extends BaseFragment {
         layout_recycler.setAdapter(scriptAdapter);
 
         //item回调
-        scriptAdapter.setScriptInterface(new ScriptItemListener() {
+        scriptAdapter.setScriptInterface(new ScriptAdapter.ItemActionListener() {
             @Override
             public void onEdit(QLScript QLScript) {
                 if (QLScript.getChildren() != null) {
@@ -107,7 +107,7 @@ public class ScriptFragment extends BaseFragment {
             }
 
             @Override
-            public void onAction(QLScript QLScript) {
+            public void onMulAction(QLScript QLScript) {
                 ClipboardManager clipboardManager = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
                 clipboardManager.setPrimaryClip(ClipData.newPlainText(null, QLScript.getKey()));
                 ToastUnit.showShort(requireContext(), getString(R.string.tip_copy_path_ready));
@@ -140,7 +140,7 @@ public class ScriptFragment extends BaseFragment {
                 this.onEnd(false);
             }
 
-            protected void onEnd(boolean isSuccess) {
+            private void onEnd(boolean isSuccess) {
                 if (layout_refresh.isRefreshing()) {
                     layout_refresh.finishRefresh(isSuccess);
                 }

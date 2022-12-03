@@ -19,9 +19,11 @@ import auto.qinglong.bean.ql.QLScript;
 import auto.qinglong.utils.TimeUnit;
 
 public class ScriptAdapter extends RecyclerView.Adapter<MyViewHolder> {
-    private Context context;
+    public static final String TAG = "ScriptAdapter";
+
+    private final Context context;
     private List<QLScript> data;
-    private ScriptItemListener scriptInterface;
+    private ItemActionListener scriptInterface;
 
     public ScriptAdapter(@NonNull Context context) {
         this.context = context;
@@ -62,19 +64,11 @@ public class ScriptAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
         holder.layout_mtime.setText(TimeUnit.formatTimeB((long) QLScript.getMtime()));
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scriptInterface.onEdit(QLScript);
-            }
-        });
+        holder.itemView.setOnClickListener(v -> scriptInterface.onEdit(QLScript));
 
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                scriptInterface.onAction(QLScript);
-                return true;
-            }
+        holder.itemView.setOnLongClickListener(v -> {
+            scriptInterface.onMulAction(QLScript);
+            return true;
         });
     }
 
@@ -90,13 +84,17 @@ public class ScriptAdapter extends RecyclerView.Adapter<MyViewHolder> {
         notifyDataSetChanged();
     }
 
-
-    public void setScriptInterface(ScriptItemListener scriptInterface) {
+    public void setScriptInterface(ItemActionListener scriptInterface) {
         this.scriptInterface = scriptInterface;
     }
 
-}
+    public interface ItemActionListener {
+        void onEdit(QLScript QLScript);
 
+        void onMulAction(QLScript QLScript);
+    }
+
+}
 
 class MyViewHolder extends RecyclerView.ViewHolder {
     public ImageView layout_image;

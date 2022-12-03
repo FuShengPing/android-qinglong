@@ -18,12 +18,15 @@ import java.util.List;
 
 import auto.qinglong.R;
 import auto.qinglong.bean.ql.QLEnvironment;
+import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.TimeUnit;
 
 public class EnvItemAdapter extends RecyclerView.Adapter<MyViewHolder> {
-    private Context context;
+    public static final String TAG = "EnvItemAdapter";
+
+    private final Context context;
     private List<QLEnvironment> data;
-    private OnItemActionListener onItemActionListener;
+    private ItemActionListener itemActionListener;
     private boolean checkState;
     private Boolean[] dataCheckState;
 
@@ -70,13 +73,30 @@ public class EnvItemAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
         holder.layout_createAt.setText(TimeUnit.formatTimeA(environment.getCreated()));
 
+        holder.layout_name.setOnClickListener(v -> {
+            if (this.checkState) {
+                holder.layout_check.setChecked(!holder.layout_check.isChecked());
+            }
+        });
+
         holder.layout_name.setOnLongClickListener(v -> {
-            onItemActionListener.onActions(environment, holder.getAdapterPosition());
+            if (!this.checkState) {
+                itemActionListener.onMulAction(environment, holder.getAdapterPosition());
+            }
             return true;
         });
 
+        holder.layout_body.setOnClickListener(v -> {
+            if (this.checkState) {
+                holder.layout_check.setChecked(!holder.layout_check.isChecked());
+            }
+        });
+
         holder.layout_body.setOnLongClickListener(v -> {
-            onItemActionListener.onEdit(environment, holder.getAdapterPosition());
+            if (!this.checkState) {
+                itemActionListener.onEdit(environment, holder.getAdapterPosition());
+
+            }
             return true;
         });
 
@@ -127,8 +147,14 @@ public class EnvItemAdapter extends RecyclerView.Adapter<MyViewHolder> {
         return environments;
     }
 
-    public void setItemInterface(OnItemActionListener onItemActionListener) {
-        this.onItemActionListener = onItemActionListener;
+    public void setItemInterface(ItemActionListener itemActionListener) {
+        this.itemActionListener = itemActionListener;
+    }
+
+    public interface ItemActionListener {
+        void onEdit(QLEnvironment environment, int position);
+
+        void onMulAction(QLEnvironment environment, int position);
     }
 
 }
@@ -153,10 +179,4 @@ class MyViewHolder extends RecyclerView.ViewHolder {
         layout_remark = itemView.findViewById(R.id.env_remark);
         layout_createAt = itemView.findViewById(R.id.env_create_time);
     }
-}
-
-interface OnItemActionListener {
-    void onEdit(QLEnvironment environment, int position);
-
-    void onActions(QLEnvironment environment, int position);
 }

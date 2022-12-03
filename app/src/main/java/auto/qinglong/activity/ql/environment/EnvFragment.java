@@ -144,17 +144,16 @@ public class EnvFragment extends BaseFragment {
 
     @Override
     public void init() {
-        envItemAdapter.setItemInterface(new OnItemActionListener() {
+        envItemAdapter.setItemInterface(new EnvItemAdapter.ItemActionListener() {
             @Override
             public void onEdit(QLEnvironment environment, int position) {
                 showPopWindowEdit(environment);
             }
 
             @Override
-            public void onActions(QLEnvironment environment, int position) {
-                if (!envItemAdapter.isCheckState()) {
-                    showBar(BarType.ACTIONS);
-                }
+            public void onMulAction(QLEnvironment environment, int position) {
+                envItemAdapter.setCheckState(true, -1);
+                showBar(BarType.ACTIONS);
             }
         });
 

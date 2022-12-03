@@ -8,9 +8,10 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import java.util.HashMap;
 
 public class PagerAdapter extends FragmentStateAdapter {
-    private HashMap<Integer, PagerFragment> fragmentList;
+    public static final String TAG = "PagerAdapter";
 
-    private PagerFragment.PagerActionListener pagerActionListener;
+    private HashMap<Integer, PagerFragment> fragmentList;
+    private PagerActionListener pagerActionListener;
 
     public PagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
@@ -47,8 +48,12 @@ public class PagerAdapter extends FragmentStateAdapter {
         return fragmentList.get(position);
     }
 
-    public void setPagerActionListener(PagerFragment.PagerActionListener pagerActionListener) {
+    public void setPagerActionListener(PagerActionListener pagerActionListener) {
         this.pagerActionListener = pagerActionListener;
+    }
+
+    public interface PagerActionListener {
+        void onMulAction();
     }
 
 

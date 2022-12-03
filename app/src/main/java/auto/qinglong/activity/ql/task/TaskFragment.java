@@ -165,7 +165,7 @@ public class TaskFragment extends BaseFragment {
         layout_recycler.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
 
         //列表item操作接口
-        mTaskAdapter.setTaskInterface(new ItemInterface() {
+        mTaskAdapter.setTaskInterface(new TaskAdapter.ItemActionListener() {
             @Override
             public void onLog(QLTask QLTask) {
                 Intent intent = new Intent(getContext(), LogDetailActivity.class);
@@ -197,11 +197,8 @@ public class TaskFragment extends BaseFragment {
             }
 
             @Override
-            public void onAction(QLTask QLTask, int position) {
-                if (!mTaskAdapter.getCheckState()) {
-                    layout_actions_select.setChecked(false);
-                    showBar(BarType.ACTIONS);
-                }
+            public void onMulAction(QLTask QLTask, int position) {
+                showBar(BarType.ACTIONS);
             }
         });
 

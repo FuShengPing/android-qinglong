@@ -20,7 +20,7 @@ import auto.qinglong.bean.ql.QLLog;
 public class LogAdapter extends RecyclerView.Adapter<MyViewHolder> {
     private Context context;
     private List<QLLog> data;
-    private LogInterFace logInterFace;
+    private ItemActionListener itemActionListener;
 
     public LogAdapter(@NonNull Context context) {
         this.context = context;
@@ -53,12 +53,7 @@ public class LogAdapter extends RecyclerView.Adapter<MyViewHolder> {
             holder.layout_image.setImageResource(R.mipmap.ic_file_txt);
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logInterFace.onItemClick(QLLog);
-            }
-        });
+        holder.itemView.setOnClickListener(v -> itemActionListener.onClick(QLLog));
     }
 
     @Override
@@ -74,13 +69,13 @@ public class LogAdapter extends RecyclerView.Adapter<MyViewHolder> {
     }
 
 
-    public void setLogInterFace(LogInterFace logInterFace) {
-        this.logInterFace = logInterFace;
+    public void setItemActionListener(ItemActionListener itemActionListener) {
+        this.itemActionListener = itemActionListener;
     }
-}
 
-interface LogInterFace {
-    void onItemClick(QLLog QLLog);
+    public interface ItemActionListener {
+        void onClick(QLLog qlLog);
+    }
 }
 
 class MyViewHolder extends RecyclerView.ViewHolder {
