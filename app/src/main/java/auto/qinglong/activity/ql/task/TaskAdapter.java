@@ -24,7 +24,7 @@ import auto.qinglong.utils.CronUnit;
 import auto.qinglong.utils.TimeUnit;
 
 public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
-    private static final String TAG = "TaskAdapter";
+    public static final String TAG = "TaskAdapter";
 
     Context context;
     private ItemInterface itemInterface;
@@ -115,22 +115,40 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
         }
 
         holder.layout_action.setOnClickListener(v -> {
-            if (QLTask.getTaskState() != QLTaskState.RUNNING) {
+            if (this.checkState) {
+                holder.layout_check.setChecked(!holder.layout_check.isChecked());
+            } else if (QLTask.getTaskState() != QLTaskState.RUNNING) {
                 itemInterface.onRun(QLTask);
             } else {
                 itemInterface.onStop(QLTask);
             }
         });
 
-        holder.layout_name.setOnClickListener(v -> itemInterface.onLog(QLTask));
+        holder.layout_name.setOnClickListener(v -> {
+            if (!this.checkState) {
+                itemInterface.onLog(QLTask);
+            } else {
+                holder.layout_check.setChecked(!holder.layout_check.isChecked());
+            }
+        });
 
         holder.layout_name.setOnLongClickListener(v -> {
-            itemInterface.onAction(QLTask, holder.getAdapterPosition());
+            if (!this.checkState) {
+                itemInterface.onAction(QLTask, holder.getAdapterPosition());
+            }
             return true;
         });
 
+        holder.layout_detail.setOnClickListener(v -> {
+            if (this.checkState) {
+                holder.layout_check.setChecked(!holder.layout_check.isChecked());
+            }
+        });
+
         holder.layout_detail.setOnLongClickListener(v -> {
-            itemInterface.onEdit(QLTask);
+            if (!this.checkState) {
+                itemInterface.onEdit(QLTask);
+            }
             return true;
         });
     }
