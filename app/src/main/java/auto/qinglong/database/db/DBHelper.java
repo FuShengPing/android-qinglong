@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 public class DBHelper extends SQLiteOpenHelper {
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
     public static final String DB_NAME = "QingLong";
     public static final String TABLE_ACCOUNT = "account";
     public static final String TABLE_PLUGIN_WEB_RULE = "pluginWebRule";
@@ -26,6 +26,7 @@ public class DBHelper extends SQLiteOpenHelper {
             "url text," +
             "target text," +
             "main text," +
+            "joinChar text," +
             "checked int)";
 
     public DBHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {

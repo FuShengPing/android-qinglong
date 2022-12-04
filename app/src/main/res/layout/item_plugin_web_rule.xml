@@ -125,11 +125,31 @@
                 android:textColor="@color/text_color_49" />
 
             <TextView
-                android:id="@+id/web_rule_item_key"
+                android:id="@+id/web_rule_item_main"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/text_color_49" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="连接符"
+                android:textColor="@color/text_color_49" />
+
+            <TextView
+                android:id="@+id/web_rule_item_join"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
                 android:textAlignment="viewEnd"
                 android:textColor="@color/text_color_49" />
         </LinearLayout>

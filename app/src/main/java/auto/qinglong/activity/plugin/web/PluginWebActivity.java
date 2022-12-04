@@ -17,13 +17,18 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
+import auto.qinglong.activity.ql.environment.EnvFragment;
 import auto.qinglong.bean.app.WebRule;
+import auto.qinglong.bean.ql.QLEnvironment;
+import auto.qinglong.bean.ql.network.EnvironmentRes;
 import auto.qinglong.database.db.WebRuleDBHelper;
+import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
@@ -133,7 +138,7 @@ public class PluginWebActivity extends BaseActivity {
                 //读取cookies
                 String cookies = cookieManager.getCookie(url);
                 //开始导入变量流程
-                startImport(urlLoaded, cookies.trim());
+                startImport(urlLoaded, cookies);
             } else {
                 ToastUnit.showShort(getBaseContext(), "请先加载网页");
             }
@@ -165,15 +170,65 @@ public class PluginWebActivity extends BaseActivity {
         for (WebRule rule : rules) {
             if (rule.match(url, cks)) {
                 ToastUnit.showShort("匹配规则成功：" + rule.getName());
+                netGetEnvironments(rule.buildObject());
                 return;
             }
         }
         ToastUnit.showShort("匹配规则失败");
     }
 
-    /**
-     * 窗体销毁
-     */
+    private void netGetEnvironments(QLEnvironment environment) {
+        QLApiController.getEnvironments(getClassName(), "", new QLApiController.GetEnvironmentsCallback() {
+            @Override
+            public void onSuccess(EnvironmentRes res) {
+                List<QLEnvironment> qlEnvironments = res.getData();
+                for (QLEnvironment qlEnvironment : qlEnvironments) {
+                    if (environment.getName().equals(qlEnvironment.getName()) && environment.getRemarks().equals(qlEnvironment.getRemarks())) {
+                        qlEnvironment.setValue(environment.getValue());
+                        netUpdateEnvironment(qlEnvironment);
+                        return;
+                    }
+                }
+                List<QLEnvironment> envList = new ArrayList<>();
+                envList.add(environment);
+                netAddEnvironments(envList);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort("获取变量列表失败：" + msg);
+            }
+        });
+    }
+
+    public void netUpdateEnvironment(QLEnvironment environment) {
+        QLApiController.updateEnvironment(getClassName(), environment, new QLApiController.EditEnvCallback() {
+            @Override
+            public void onSuccess(QLEnvironment data) {
+                ToastUnit.showShort("导入成功");
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort("导入失败：" + msg);
+            }
+        });
+    }
+
+    public void netAddEnvironments(List<QLEnvironment> environments) {
+        QLApiController.addEnvironment(getClassName(), environments, new QLApiController.GetEnvironmentsCallback() {
+            @Override
+            public void onSuccess(EnvironmentRes res) {
+                ToastUnit.showShort("导入成功");
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort("导入失败：" + msg);
+            }
+        });
+    }
+
     @Override
     protected void onDestroy() {
         WebViewBuilder.destroy(ui_webView);

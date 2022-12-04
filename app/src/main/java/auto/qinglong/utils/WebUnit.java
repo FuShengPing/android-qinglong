@@ -8,19 +8,21 @@ public class WebUnit {
 
     public static Map<String, String> parseCookies(String cookies) {
         Map<String, String> map = new HashMap<>();
-        if (cookies != null && !cookies.isEmpty()) {
+        if (TextUnit.isFull(cookies)) {
+            cookies = cookies.replace(" ", "");
             String[] cks = cookies.split(";");
             for (String ck : cks) {
                 String[] kv = ck.split("=", 2);
                 if (kv.length == 2) {
-                    map.put(kv[0].trim(), kv[1].trim());
+                    map.put(kv[0], kv[1]);
                 } else {
-                    map.put(kv[0].trim(), "");
+                    map.put(kv[0], "");
                 }
             }
         }
         return map;
     }
+
 
     public static String getRoute(String url) {
         if (TextUnit.isFull(url)) {

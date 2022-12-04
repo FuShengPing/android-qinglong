@@ -40,34 +40,34 @@ public class ScriptAdapter extends RecyclerView.Adapter<MyViewHolder> {
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        QLScript QLScript = data.get(position);
+        QLScript qlScript = data.get(position);
 
-        holder.layout_title.setText(QLScript.getTitle());
+        holder.layout_title.setText(qlScript.getTitle());
 
-        if (QLScript.getChildren() == null) {
+        if (qlScript.getChildren() == null) {
             holder.layout_num.setText(null);
         } else {
-            holder.layout_num.setText(QLScript.getChildren().size() + " 项");
+            holder.layout_num.setText(qlScript.getChildren().size() + " 项");
         }
 
-        if (QLScript.getChildren() != null) {
+        if (qlScript.getChildren() != null) {
             holder.layout_image.setImageResource(R.drawable.ic_folder);
-        } else if (QLScript.getTitle().matches(".*\\.(js)|(JS)$")) {
+        } else if (qlScript.getTitle().matches(".*\\.(js)|(JS)$")) {
             holder.layout_image.setImageResource(R.mipmap.ic_file_js);
-        } else if (QLScript.getTitle().matches(".*\\.(py)|(PY)$")) {
+        } else if (qlScript.getTitle().matches(".*\\.(py)|(PY)$")) {
             holder.layout_image.setImageResource(R.mipmap.ic_file_py);
-        } else if (QLScript.getTitle().matches(".*\\.(json)|(JSON)$")) {
+        } else if (qlScript.getTitle().matches(".*\\.(json)|(JSON)$")) {
             holder.layout_image.setImageResource(R.mipmap.ic_file_json);
         } else {
             holder.layout_image.setImageResource(R.mipmap.ic_file_unknow);
         }
 
-        holder.layout_mtime.setText(TimeUnit.formatTimeB((long) QLScript.getMtime()));
+        holder.layout_mtime.setText(TimeUnit.formatTimeB((long) qlScript.getMtime()));
 
-        holder.itemView.setOnClickListener(v -> scriptInterface.onEdit(QLScript));
+        holder.itemView.setOnClickListener(v -> scriptInterface.onEdit(qlScript));
 
         holder.itemView.setOnLongClickListener(v -> {
-            scriptInterface.onMulAction(QLScript);
+            scriptInterface.onMulAction(qlScript);
             return true;
         });
     }

@@ -42,7 +42,8 @@ public class RuleItemAdapter extends RecyclerView.Adapter<RuleItemAdapter.MyView
         holder.ui_name.setText(webRule.getName());
         holder.ui_url.setText(webRule.getUrl());
         holder.ui_target.setText(webRule.getTarget());
-        holder.ui_key.setText(webRule.getMain());
+        holder.ui_main.setText(webRule.getMain());
+        holder.ui_join.setText(webRule.getJoinChar());
         holder.ui_check.setChecked(webRule.isChecked());
 
         holder.ui_check.setOnCheckedChangeListener((buttonView, isChecked) -> actionListener.onCheck(isChecked, holder.getLayoutPosition(), webRule.getId()));
@@ -89,7 +90,8 @@ public class RuleItemAdapter extends RecyclerView.Adapter<RuleItemAdapter.MyView
         protected TextView ui_name;
         protected TextView ui_url;
         protected TextView ui_target;
-        protected TextView ui_key;
+        protected TextView ui_main;
+        protected TextView ui_join;
         protected CheckBox ui_check;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -98,7 +100,8 @@ public class RuleItemAdapter extends RecyclerView.Adapter<RuleItemAdapter.MyView
             ui_name = itemView.findViewById(R.id.web_rule_item_name);
             ui_url = itemView.findViewById(R.id.web_rule_item_url);
             ui_target = itemView.findViewById(R.id.web_rule_item_target);
-            ui_key = itemView.findViewById(R.id.web_rule_item_key);
+            ui_main = itemView.findViewById(R.id.web_rule_item_main);
+            ui_join = itemView.findViewById(R.id.web_rule_item_join);
             ui_check = itemView.findViewById(R.id.web_rule_item_check);
         }
     }

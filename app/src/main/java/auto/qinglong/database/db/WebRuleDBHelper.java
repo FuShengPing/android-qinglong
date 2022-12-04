@@ -20,6 +20,7 @@ public class WebRuleDBHelper {
     public static final String key_url = "url";
     public static final String key_target = "target";
     public static final String key_main = "main";
+    public static final String key_joinChar = "joinChar";
     public static final String key_checked = "checked";
 
     static {
@@ -39,6 +40,7 @@ public class WebRuleDBHelper {
                 webRule.setUrl(cursor.getString(cursor.getColumnIndex(key_url)));
                 webRule.setTarget(cursor.getString(cursor.getColumnIndex(key_target)));
                 webRule.setMain(cursor.getString(cursor.getColumnIndex(key_main)));
+                webRule.setJoinChar(cursor.getString(cursor.getColumnIndex(key_joinChar)));
                 webRule.setChecked(cursor.getInt(cursor.getColumnIndex(key_checked)) > 0);
                 webRules.add(webRule);
             } while (cursor.moveToNext());
@@ -54,6 +56,7 @@ public class WebRuleDBHelper {
         values.put(key_url, webRule.getUrl());
         values.put(key_target, webRule.getTarget());
         values.put(key_main, webRule.getMain());
+        values.put(key_joinChar, webRule.getJoinChar());
         values.put(key_checked, webRule.isChecked() ? 1 : 0);
 
         DBHelper.getWritableDatabase().insert(auto.qinglong.database.db.DBHelper.TABLE_PLUGIN_WEB_RULE, null, values);

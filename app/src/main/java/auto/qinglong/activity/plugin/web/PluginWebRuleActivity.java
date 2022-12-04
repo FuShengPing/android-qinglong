@@ -84,17 +84,27 @@ public class PluginWebRuleActivity extends BaseActivity {
             editWindow.addItem(new EditWindowItem(WebRuleDBHelper.key_url, null, "网址", "", true, true));
             editWindow.addItem(new EditWindowItem(WebRuleDBHelper.key_target, null, "目标键", "选填", true, true));
             editWindow.addItem(new EditWindowItem(WebRuleDBHelper.key_main, null, "主键", "", true, true));
+            editWindow.addItem(new EditWindowItem(WebRuleDBHelper.key_joinChar, null, "连接符", "选填", true, true));
             editWindow.setActionListener(new EditWindow.OnActionListener() {
                 @Override
                 public boolean onConfirm(Map<String, String> map) {
-                    String envName = map.get(WebRuleDBHelper.key_envName);
-                    String name = map.get(WebRuleDBHelper.key_name);
-                    String url = map.get(WebRuleDBHelper.key_url);
-                    String target = map.get(WebRuleDBHelper.key_target);
-                    String main = map.get(WebRuleDBHelper.key_main);
+                    String envName = map.get(WebRuleDBHelper.key_envName).replace(" ", "");
+                    String name = map.get(WebRuleDBHelper.key_name).replace(" ", "");
+                    String url = map.get(WebRuleDBHelper.key_url).replace(" ", "");
+                    String target = map.get(WebRuleDBHelper.key_target).replace(" ", "");
+                    String main = map.get(WebRuleDBHelper.key_main).replace(" ", "");
+                    String joinChar = map.get(WebRuleDBHelper.key_joinChar).replace(" ", "");
 
-                    if (envName.isEmpty()) {
-                        ToastUnit.showShort("环境变量不能为空");
+                    //默认值
+                    if (target.isEmpty()) {
+                        target = "*";
+                    }
+                    if (joinChar.isEmpty()) {
+                        joinChar = ";";
+                    }
+
+                    if (!envName.matches("\\w+")) {
+                        ToastUnit.showShort("非法环境变量");
                         return false;
                     } else if (name.isEmpty()) {
                         ToastUnit.showShort("名称不能为空");
@@ -102,18 +112,19 @@ public class PluginWebRuleActivity extends BaseActivity {
                     } else if (url.isEmpty()) {
                         ToastUnit.showShort("网址不能为空");
                         return false;
+                    } else if (!WebRule.isValid(target)) {
+                        ToastUnit.showShort("非法目标键");
+                        return false;
                     } else if (main.isEmpty()) {
                         ToastUnit.showShort("主键不能为空");
                         return false;
-                    }
-
-                    //默认选择全部键
-                    if (target.isEmpty()) {
-                        envName = "*";
+                    } else if (!joinChar.matches("[;&%#@]")) {
+                        ToastUnit.showShort("非法连接符");
+                        return false;
                     }
 
                     //插入数据库并重新查询显示
-                    WebRuleDBHelper.insert(new WebRule(0, envName, name, url, target, main, true));
+                    WebRuleDBHelper.insert(new WebRule(0, envName, name, url, target, main, joinChar, true));
                     itemAdapter.setData(WebRuleDBHelper.getAllWebRule());
 
                     return true;
