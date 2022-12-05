@@ -1,7 +1,5 @@
 package auto.qinglong.activity.ql.environment;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,14 +12,12 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
@@ -42,6 +38,8 @@ import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.popup.EditWindow;
 import auto.qinglong.views.popup.EditWindowItem;
+import auto.qinglong.views.popup.MiniMoreItem;
+import auto.qinglong.views.popup.MiniMoreWindow;
 import auto.qinglong.views.popup.PopupWindowManager;
 
 public class EnvFragment extends BaseFragment {
@@ -52,7 +50,7 @@ public class EnvFragment extends BaseFragment {
 
     enum QueryType {QUERY, OTHER}
 
-    enum BarType {NAV, SEARCH, ACTIONS}
+    enum BarType {NAV, SEARCH, MUL_ACTION}
 
     private LinearLayout layout_root;
     private RelativeLayout layout_bar;
@@ -111,18 +109,12 @@ public class EnvFragment extends BaseFragment {
         return view;
     }
 
-    /**
-     * fragment中只有第一次载入可见时才会触发该回调
-     */
     @Override
     public void onResume() {
         super.onResume();
         loadFirst();
     }
 
-    /**
-     * 第一次载入页面不会触发 此后页面可见性改变则触发该回调
-     */
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
@@ -147,13 +139,13 @@ public class EnvFragment extends BaseFragment {
         envItemAdapter.setItemInterface(new EnvItemAdapter.ItemActionListener() {
             @Override
             public void onEdit(QLEnvironment environment, int position) {
-                showPopWindowEdit(environment);
+                showCommonPopWindowEdit(environment);
             }
 
             @Override
             public void onMulAction(QLEnvironment environment, int position) {
                 envItemAdapter.setCheckState(true, -1);
-                showBar(BarType.ACTIONS);
+                changeBar(BarType.MUL_ACTION);
             }
         });
 
@@ -166,12 +158,12 @@ public class EnvFragment extends BaseFragment {
         layout_refresh.setOnRefreshListener(refreshLayout -> netGetEnvironments(currentSearchValue, QueryType.QUERY));
 
         //更多操作
-        layout_nav_more.setOnClickListener(v -> showPopWindowMore());
+        layout_nav_more.setOnClickListener(v -> showPopWindowMiniMore());
 
         //搜索栏进入
         layout_nav_search.setOnClickListener(v -> {
             layout_search_value.setText(currentSearchValue);
-            showBar(BarType.SEARCH);
+            changeBar(BarType.SEARCH);
         });
 
         //搜索栏确定
@@ -185,10 +177,10 @@ public class EnvFragment extends BaseFragment {
         });
 
         //搜索栏返回
-        layout_search_back.setOnClickListener(v -> showBar(BarType.NAV));
+        layout_search_back.setOnClickListener(v -> changeBar(BarType.NAV));
 
         //动作栏返回
-        layout_actions_back.setOnClickListener(v -> showBar(BarType.NAV));
+        layout_actions_back.setOnClickListener(v -> changeBar(BarType.NAV));
 
         //全选
         layout_actions_select.setOnCheckedChangeListener((buttonView, isChecked) -> envItemAdapter.setAllChecked(isChecked));
@@ -378,46 +370,30 @@ public class EnvFragment extends BaseFragment {
         envItemAdapter.setData(data);
     }
 
-    private void initPopWindowMore() {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.pop_fg_more, null, false);
-        LinearLayout layout_add = view.findViewById(R.id.pop_fg_more_add);
-        LinearLayout layout_action = view.findViewById(R.id.pop_fg_more_action);
-        TextView layout_add_text = view.findViewById(R.id.pop_fg_more_add_text);
-        TextView layout_action_text = view.findViewById(R.id.pop_fg_more_action_text);
-        layout_add_text.setText("新建变量");
-        layout_action_text.setText(getString(R.string.mul_action));
-
-        popupWindowMore = new PopupWindow(getContext());
-        popupWindowMore.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-        popupWindowMore.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-        popupWindowMore.setContentView(view);
-        popupWindowMore.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        popupWindowMore.setOutsideTouchable(true);
-        popupWindowMore.setFocusable(true);
-
-        layout_add.setOnClickListener(v -> {
-            popupWindowMore.dismiss();
-            showPopWindowEdit(null);
+    public void showPopWindowMiniMore() {
+        MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
+        miniMoreWindow.addItem(new MiniMoreItem("add", "新建变量", R.drawable.ic_add_gray));
+        miniMoreWindow.addItem(new MiniMoreItem("mulAction", "批量操作", R.drawable.ic_mul_action_gray));
+        miniMoreWindow.addItem(new MiniMoreItem("quickAdd", "快捷导入", R.drawable.ic_flash_on_gray));
+        miniMoreWindow.addItem(new MiniMoreItem("deleteMul", "变量去重", R.drawable.ic_delete_gray));
+        miniMoreWindow.setOnActionListener(key -> {
+            if (key.equals("add")) {
+                showCommonPopWindowEdit(null);
+            } else if (key.equals("mulAction")) {
+                changeBar(BarType.MUL_ACTION);
+            } else {
+                showQuickPopWindowEdit();
+            }
+            return true;
         });
-
-        layout_action.setOnClickListener(v -> {
-            popupWindowMore.dismiss();
-            showBar(BarType.ACTIONS);
-        });
+        popupWindowMore = PopupWindowManager.buildMiniMoreWindow(requireActivity(), miniMoreWindow, layout_bar, Gravity.END);
     }
 
-    public void showPopWindowMore() {
-        if (popupWindowMore == null) {
-            initPopWindowMore();
-        }
-        popupWindowMore.showAsDropDown(layout_bar, 0, 0, Gravity.END);
-    }
-
-    private void showPopWindowEdit(QLEnvironment environment) {
+    private void showCommonPopWindowEdit(QLEnvironment environment) {
         EditWindow editWindow = new EditWindow("新建变量", "取消", "确定");
         EditWindowItem itemName = new EditWindowItem("name", null, "名称", "请输入变量名称");
         EditWindowItem itemValue = new EditWindowItem("value", null, "值", "请输入变量值");
-        EditWindowItem itemRemark = new EditWindowItem("remark", null, "定时规则", "请输入备注(可选)");
+        EditWindowItem itemRemark = new EditWindowItem("remark", null, "备注", "请输入备注(可选)");
 
         if (environment != null) {
             editWindow.setTitle("编辑变量");
@@ -473,7 +449,45 @@ public class EnvFragment extends BaseFragment {
         popupWindowEdit = PopupWindowManager.buildEditWindow(requireActivity(), editWindow);
     }
 
-    public void showBar(BarType barType) {
+    private void showQuickPopWindowEdit() {
+        EditWindow editWindow = new EditWindow("新建变量", "取消", "确定");
+        EditWindowItem itemValue = new EditWindowItem("values", null, "文本", "请输入文本");
+        EditWindowItem itemRemark = new EditWindowItem("remark", null, "备注", "请输入备注(可选)");
+
+        editWindow.addItem(itemValue);
+        editWindow.addItem(itemRemark);
+        editWindow.setActionListener(new EditWindow.OnActionListener() {
+            @Override
+            public boolean onConfirm(Map<String, String> map) {
+                String values = map.get("values");
+                String remarks = map.get("remark");
+
+                if (TextUnit.isEmpty(values)) {
+                    ToastUnit.showShort("变量值不能为空");
+                    return false;
+                }
+
+                WindowUnit.hideKeyboard(layout_root);
+
+                List<QLEnvironment> environments = QLEnvironment.parseExport(values, remarks);
+                if (environments.size() == 0) {
+                    ToastUnit.showShort("提取变量失败");
+                } else {
+                    netAddEnvironments(environments);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onCancel() {
+                return true;
+            }
+        });
+
+        popupWindowEdit = PopupWindowManager.buildEditWindow(requireActivity(), editWindow);
+    }
+
+    public void changeBar(BarType barType) {
         if (layout_bar_search.getVisibility() == View.VISIBLE) {
             WindowUnit.hideKeyboard(layout_root);
             layout_bar_search.setVisibility(View.INVISIBLE);
@@ -507,10 +521,10 @@ public class EnvFragment extends BaseFragment {
     @Override
     public boolean onBackPressed() {
         if (layout_bar_search.getVisibility() == View.VISIBLE) {
-            showBar(BarType.NAV);
+            changeBar(BarType.NAV);
             return true;
         } else if (layout_bar_actions.getVisibility() == View.VISIBLE) {
-            showBar(BarType.NAV);
+            changeBar(BarType.NAV);
             return true;
         } else {
             return false;

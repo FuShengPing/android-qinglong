@@ -1,6 +1,15 @@
 package auto.qinglong.bean.ql;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import auto.qinglong.utils.LogUnit;
+
 public class QLEnvironment implements Comparable<QLEnvironment> {
+    public static final String TAG = "QLEnvironment";
+
     private String _id;
     private int status;
     private String name;
@@ -87,5 +96,23 @@ public class QLEnvironment implements Comparable<QLEnvironment> {
     @Override
     public int compareTo(QLEnvironment o) {
         return this.name.toLowerCase().compareTo(o.getName().toLowerCase());
+    }
+
+    public static List<QLEnvironment> parseExport(String str, String remarks) {
+        List<QLEnvironment> qlEnvironments = new ArrayList<>();
+        Pattern pattern = Pattern.compile("export \\w+=\"[^\"]+\"");
+        Matcher matcher = pattern.matcher(str);
+        while (matcher.find()) {
+            QLEnvironment qlEnvironment = new QLEnvironment();
+            String[] ss = matcher.group().split("=", 2);
+            String name = ss[0].split(" ", 2)[1];
+            String value = ss[1].replace("\"", "");
+
+            qlEnvironment.setName(name);
+            qlEnvironment.setValue(value);
+            qlEnvironment.setRemarks(remarks);
+            qlEnvironments.add(qlEnvironment);
+        }
+        return qlEnvironments;
     }
 }

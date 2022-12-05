@@ -1,5 +1,6 @@
 package auto.qinglong.views.popup;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -27,12 +29,38 @@ public class PopupWindowManager {
 
     public static final String TAG = "PopupWindowManager";
 
-    public static PopupWindow buildContentWindow() {
-        return null;
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    public static PopupWindow buildMiniMoreWindow(Activity activity, MiniMoreWindow miniMoreWindow, View targetView, int gravity) {
+        View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_mini_more, null, false);
+        PopupWindow popWindow = build(activity.getBaseContext(), true, view);
+        popWindow.setContentView(view);
+
+        LinearLayout ui_ll_container = view.findViewById(R.id.pop_common_ll_container);
+
+        for (MiniMoreItem item : miniMoreWindow.getItems()) {
+            View itemView = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.item_pop_common_mini_more, null, false);
+            ImageView ui_icon = itemView.findViewById(R.id.pop_common_mini_more_icon);
+            TextView ui_name = itemView.findViewById(R.id.pop_common_mini_more_name);
+            ui_icon.setImageDrawable(activity.getDrawable(item.getIcon()));
+            ui_name.setText(item.getName());
+            itemView.setOnClickListener(v -> {
+                boolean flag = miniMoreWindow.getOnActionListener().onClick(item.getKey());
+                if (flag) {
+                    popWindow.dismiss();
+                }
+            });
+            ui_ll_container.addView(itemView);
+        }
+
+        popWindow.showAsDropDown(targetView, gravity, 0, 0);
+        return popWindow;
     }
 
     public static PopupWindow buildEditWindow(Activity activity, EditWindow editWindow) {
         View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_edit, null, false);
+        PopupWindow popWindow = build(activity.getBaseContext(), true, view);
+        popWindow.setContentView(view);
 
         TextView ui_tv_title = view.findViewById(R.id.pop_common_tv_title);
         Button ui_bt_cancel = view.findViewById(R.id.pop_common_bt_cancel);
@@ -57,12 +85,9 @@ public class PopupWindowManager {
             ui_item_value.setText(item.getValue());
             ui_item_value.setFocusable(item.isFocusable());
             ui_item_value.setEnabled(item.isEditable());
-            ui_ll_container.addView(itemView);
             itemViews.add(ui_item_value);
+            ui_ll_container.addView(itemView);
         }
-
-        PopupWindow popWindow = build(activity.getBaseContext(), true, view);
-        popWindow.setContentView(view);
 
         //取消
         ui_bt_cancel.setOnClickListener(v -> {
@@ -100,6 +125,8 @@ public class PopupWindowManager {
 
     public static PopupWindow buildConfirmWindow(Activity activity, ConfirmWindow confirmWindow) {
         View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_confirm, null, false);
+        PopupWindow popWindow = build(activity.getBaseContext(), confirmWindow.isFocusable(), view);
+        popWindow.setContentView(view);
 
         TextView ui_tv_title = view.findViewById(R.id.pop_common_tv_title);
         TextView ui_tv_content = view.findViewById(R.id.pop_common_tv_content);
@@ -112,9 +139,6 @@ public class PopupWindowManager {
         ui_tv_content.setText(confirmWindow.getContent());
         ui_bt_confirm.setText(confirmWindow.getConfirmTip());
         ui_bt_cancel.setText(confirmWindow.getCancelTip());
-
-        PopupWindow popWindow = build(activity.getBaseContext(), confirmWindow.isFocusable(), view);
-        popWindow.setContentView(view);
 
         //取消
         ui_bt_cancel.setOnClickListener(v -> {

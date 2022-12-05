@@ -1,8 +1,6 @@
 package auto.qinglong.activity.ql.dependence;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.viewpager2.widget.ViewPager2;
@@ -11,13 +9,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -35,6 +31,8 @@ import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.popup.EditWindow;
 import auto.qinglong.views.popup.EditWindowItem;
+import auto.qinglong.views.popup.MiniMoreItem;
+import auto.qinglong.views.popup.MiniMoreWindow;
 import auto.qinglong.views.popup.PopupWindowManager;
 
 
@@ -71,7 +69,6 @@ public class DepFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fg_dep, null);
 
-        //进行控件变量初始化
         ui_bar = view.findViewById(R.id.dep_top_bar);
         ui_nav_bar = view.findViewById(R.id.dep_nav_bar);
 
@@ -96,7 +93,7 @@ public class DepFragment extends BaseFragment {
         ui_menu.setOnClickListener(v -> mMenuClickListener.onMenuClick());
 
         //弹窗-更多
-        ui_more.setOnClickListener(v -> showPopWindowMenu());
+        ui_more.setOnClickListener(v -> showPopWindowMiniMore());
 
         //操作栏-返回
         ui_action_bar_back.setOnClickListener(v -> showBar(BarType.NAV));
@@ -108,7 +105,7 @@ public class DepFragment extends BaseFragment {
         ui_action_bar_delete.setOnClickListener(v -> {
             List<String> ids = mCurrentFragment.getCheckedItemIds();
             if (ids != null && ids.size() > 0) {
-                deleteDependence(ids);
+                netDeleteDependence(ids);
             } else {
                 ToastUnit.showShort(getString(R.string.tip_empty_select));
             }
@@ -152,36 +149,42 @@ public class DepFragment extends BaseFragment {
 
     }
 
-    private void initPopWindowMore() {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.pop_fg_more, null, false);
-        LinearLayout layout_add = view.findViewById(R.id.pop_fg_more_add);
-        LinearLayout layout_action = view.findViewById(R.id.pop_fg_more_action);
-        TextView layout_add_text = view.findViewById(R.id.pop_fg_more_add_text);
-        TextView layout_action_text = view.findViewById(R.id.pop_fg_more_action_text);
-        layout_add_text.setText("新建依赖");
-        layout_action_text.setText(getString(R.string.mul_action));
+    public void netAddDependence(List<QLDependence> dependencies) {
+        QLApiController.addDependencies(getNetRequestID(), dependencies, new QLApiController.BaseCallback() {
+            @Override
+            public void onSuccess() {
+                if (popupWindowEdit != null && popupWindowEdit.isShowing()) {
+                    popupWindowEdit.dismiss();
+                }
+                //刷新数据
+                mPagerAdapter.getCurrentFragment(ui_page.getCurrentItem()).refreshData();
+            }
 
-        popupWindowMore = new PopupWindow(getContext());
-        popupWindowMore.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-        popupWindowMore.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-        popupWindowMore.setContentView(view);
-        popupWindowMore.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        popupWindowMore.setOutsideTouchable(true);
-        popupWindowMore.setFocusable(true);
-
-        layout_add.setOnClickListener(v -> {
-            popupWindowMore.dismiss();
-            showEditWindow();
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort(msg);
+            }
         });
 
-        layout_action.setOnClickListener(v -> {
-            popupWindowMore.dismiss();
-            mCurrentFragment.setCheckState(true);
-            showBar(BarType.ACTION);
+    }
+
+    public void netDeleteDependence(List<String> ids) {
+        QLApiController.deleteDependencies(getNetRequestID(), ids, new QLApiController.BaseCallback() {
+            @Override
+            public void onSuccess() {
+                showBar(BarType.NAV);
+                //刷新数据
+                mPagerAdapter.getCurrentFragment(ui_page.getCurrentItem()).refreshData();
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort(msg);
+            }
         });
     }
 
-    private void showEditWindow() {
+    private void showPopWindowEdit() {
         EditWindow editWindow = new EditWindow("新建依赖", "取消", "确定");
         editWindow.setMaxHeight(WindowUnit.getWindowHeightPix() / 3);
         String type = mPagerAdapter.getCurrentFragment(ui_page.getCurrentItem()).getType();
@@ -210,7 +213,7 @@ public class DepFragment extends BaseFragment {
                 }
                 dependencies.add(dependence);
 
-                addDependence(dependencies);
+                netAddDependence(dependencies);
                 return false;
             }
 
@@ -222,46 +225,19 @@ public class DepFragment extends BaseFragment {
         popupWindowEdit = PopupWindowManager.buildEditWindow(requireActivity(), editWindow);
     }
 
-    public void showPopWindowMenu() {
-        if (popupWindowMore == null) {
-            initPopWindowMore();
-        }
-        popupWindowMore.showAsDropDown(ui_bar, 0, 0, Gravity.END);
-    }
-
-    public void addDependence(List<QLDependence> dependencies) {
-        QLApiController.addDependencies(getNetRequestID(), dependencies, new QLApiController.BaseCallback() {
-            @Override
-            public void onSuccess() {
-                if (popupWindowEdit != null && popupWindowEdit.isShowing()) {
-                    popupWindowEdit.dismiss();
-                }
-                //刷新数据
-                mPagerAdapter.getCurrentFragment(ui_page.getCurrentItem()).refreshData();
+    public void showPopWindowMiniMore() {
+        MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
+        miniMoreWindow.addItem(new MiniMoreItem("add", "新建依赖", R.drawable.ic_add_gray));
+        miniMoreWindow.addItem(new MiniMoreItem("mulAction", "批量操作", R.drawable.ic_mul_action_gray));
+        miniMoreWindow.setOnActionListener(key -> {
+            if (key.equals("add")) {
+                showPopWindowEdit();
+            } else {
+                showBar(BarType.ACTION);
             }
-
-            @Override
-            public void onFailure(String msg) {
-                ToastUnit.showShort(msg);
-            }
+            return true;
         });
-
-    }
-
-    public void deleteDependence(List<String> ids) {
-        QLApiController.deleteDependencies(getNetRequestID(), ids, new QLApiController.BaseCallback() {
-            @Override
-            public void onSuccess() {
-                showBar(BarType.NAV);
-                //刷新数据
-                mPagerAdapter.getCurrentFragment(ui_page.getCurrentItem()).refreshData();
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                ToastUnit.showShort(msg);
-            }
-        });
+        popupWindowMore = PopupWindowManager.buildMiniMoreWindow(requireActivity(), miniMoreWindow, ui_bar, Gravity.END);
     }
 
     public void showBar(BarType barType) {
