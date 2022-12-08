@@ -6,9 +6,7 @@
   "downloadUrl": "https://gitee.com/wsfsp4/QingLong/releases/download/V1.1/app-release_1_1.apk",
   "updateDetail": [
     "(2)环境变量模块增加快捷导入、去重功能",
-    "(3)定时任务模块增加定时修正、去重功能",
-    "(4)脚本管理模块增加删除、新建和调试功能",
-    "(5)依赖管理模块增加日志功能",
+    "(3)定时任务模块增加定时修正",
     "(1)其他细节优化"
   ]
 }

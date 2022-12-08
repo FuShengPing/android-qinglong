@@ -370,11 +370,7 @@ public class TaskFragment extends BaseFragment {
                 List<QLTask> data = res.getData();
                 Collections.sort(data);
                 mTaskAdapter.setData(data);
-                if (queryType == QueryType.QUERY) {
-                    ToastUnit.showShort(getContext(), "加载成功");
-                } else if (queryType == QueryType.SEARCH) {
-                    ToastUnit.showShort(getContext(), "搜索成功");
-                }
+                ToastUnit.showShort(getContext(), "加载成功：" + data.size());
                 layout_refresh.finishRefresh(true);
             }
 
@@ -505,7 +501,7 @@ public class TaskFragment extends BaseFragment {
                 if (layout_actions_back.getVisibility() == View.VISIBLE) {
                     layout_actions_back.performClick();
                 }
-                ToastUnit.showShort(getContext(), "删除成功");
+                ToastUnit.showShort(getContext(), "删除成功：" + ids.size());
                 netGetTasks(mCurrentSearchValue, QueryType.OTHER);
             }
 
@@ -557,7 +553,6 @@ public class TaskFragment extends BaseFragment {
         miniMoreWindow.addItem(new MiniMoreItem("add", "新建任务", R.drawable.ic_add_gray));
         miniMoreWindow.addItem(new MiniMoreItem("mulAction", "批量操作", R.drawable.ic_mul_action_gray));
         miniMoreWindow.addItem(new MiniMoreItem("scheduleFix", "定时修正", R.drawable.ic_build_gray));
-        miniMoreWindow.addItem(new MiniMoreItem("removeMul", "任务去重", R.drawable.ic_delete_gray));
         miniMoreWindow.setOnActionListener(key -> {
             if (key.equals("add")) {
                 showPopWindowEdit(null);

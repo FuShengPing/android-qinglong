@@ -117,6 +117,10 @@ public class EnvItemAdapter extends RecyclerView.Adapter<MyViewHolder> {
         notifyDataSetChanged();
     }
 
+    public List<QLEnvironment> getData() {
+        return this.data;
+    }
+
     public boolean isCheckState() {
         return checkState;
     }

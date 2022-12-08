@@ -23,9 +23,11 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import auto.qinglong.R;
 import auto.qinglong.bean.ql.QLEnvironment;
@@ -246,9 +248,7 @@ public class EnvFragment extends BaseFragment {
             @Override
             public void onSuccess(EnvironmentRes res) {
                 loadSuccessFlag = true;
-                if (queryType == QueryType.QUERY) {
-                    ToastUnit.showShort(requireContext(), "加载成功");
-                }
+                ToastUnit.showShort(requireContext(), "加载成功：" + res.getData().size());
                 sortAndSetData(res.getData());
                 layout_refresh.finishRefresh(true);
             }
@@ -286,7 +286,7 @@ public class EnvFragment extends BaseFragment {
                 if (popupWindowEdit != null && popupWindowEdit.isShowing()) {
                     popupWindowEdit.dismiss();
                 }
-                ToastUnit.showShort(requireContext(), "新建成功");
+                ToastUnit.showShort(requireContext(), "新建成功：" + environments.size());
                 netGetEnvironments(currentSearchValue, QueryType.OTHER);
             }
 
@@ -302,7 +302,7 @@ public class EnvFragment extends BaseFragment {
             @Override
             public void onSuccess() {
                 layout_actions_back.performClick();
-                ToastUnit.showShort(requireContext(), "删除成功");
+                ToastUnit.showShort(requireContext(), "删除成功：" + ids.size());
                 netGetEnvironments(currentSearchValue, QueryType.OTHER);
             }
 
@@ -370,6 +370,25 @@ public class EnvFragment extends BaseFragment {
         envItemAdapter.setData(data);
     }
 
+    public void compareAndDeleteData() {
+        List<String> ids = new ArrayList<>();
+        Set<String> set = new HashSet<>();
+        List<QLEnvironment> qlEnvironments = this.envItemAdapter.getData();
+        for (QLEnvironment qlEnvironment : qlEnvironments) {
+            String key = qlEnvironment.getName() + qlEnvironment.getValue();
+            if (set.contains(key)) {
+                ids.add(qlEnvironment.get_id());
+            } else {
+                set.add(key);
+            }
+        }
+        if (ids.size() == 0) {
+            ToastUnit.showShort("无重复变量");
+        } else {
+            netDeleteEnvironments(ids);
+        }
+    }
+
     public void showPopWindowMiniMore() {
         MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
         miniMoreWindow.addItem(new MiniMoreItem("add", "新建变量", R.drawable.ic_add_gray));
@@ -377,16 +396,23 @@ public class EnvFragment extends BaseFragment {
         miniMoreWindow.addItem(new MiniMoreItem("quickAdd", "快捷导入", R.drawable.ic_flash_on_gray));
         miniMoreWindow.addItem(new MiniMoreItem("deleteMul", "变量去重", R.drawable.ic_delete_gray));
         miniMoreWindow.setOnActionListener(key -> {
-            if (key.equals("add")) {
-                showCommonPopWindowEdit(null);
-            } else if (key.equals("mulAction")) {
-                changeBar(BarType.MUL_ACTION);
-            } else {
-                showQuickPopWindowEdit();
+            switch (key) {
+                case "add":
+                    showCommonPopWindowEdit(null);
+                    break;
+                case "mulAction":
+                    changeBar(BarType.MUL_ACTION);
+                    break;
+                case "quickAdd":
+                    showQuickPopWindowEdit();
+                    break;
+                default:
+                    compareAndDeleteData();
+                    break;
             }
             return true;
         });
-        popupWindowMore = PopupWindowManager.buildMiniMoreWindow(requireActivity(), miniMoreWindow, layout_bar, Gravity.END);
+        PopupWindowManager.buildMiniMoreWindow(requireActivity(), miniMoreWindow, layout_bar, Gravity.END);
     }
 
     private void showCommonPopWindowEdit(QLEnvironment environment) {
