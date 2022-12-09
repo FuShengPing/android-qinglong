@@ -40,6 +40,7 @@ function initEditor() {
         matchBrackets: true,
         readOnly: true,//只读
         lineWrapping: false,//换行
+        maxLength: 100,
     });
     editor.refresh()
 }

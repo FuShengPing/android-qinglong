@@ -4,23 +4,23 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ScrollView;
 
-public class MyScrollView extends ScrollView {
+public class FixScrollView extends ScrollView {
     public static final String TAG = "MyScrollView";
     private int maxHeight = -1;
 
-    public MyScrollView(Context context) {
+    public FixScrollView(Context context) {
         super(context);
     }
 
-    public MyScrollView(Context context, AttributeSet attrs) {
+    public FixScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public MyScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public FixScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public MyScrollView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public FixScrollView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 

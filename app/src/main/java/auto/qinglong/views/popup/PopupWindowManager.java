@@ -23,7 +23,7 @@ import java.util.Map;
 
 import auto.qinglong.R;
 import auto.qinglong.utils.WindowUnit;
-import auto.qinglong.views.MyScrollView;
+import auto.qinglong.views.FixScrollView;
 
 public class PopupWindowManager {
 
@@ -66,7 +66,7 @@ public class PopupWindowManager {
         Button ui_bt_cancel = view.findViewById(R.id.pop_common_bt_cancel);
         Button ui_bt_confirm = view.findViewById(R.id.pop_common_bt_confirm);
         LinearLayout ui_ll_container = view.findViewById(R.id.pop_common_ll_container);
-        MyScrollView ui_sl_container = view.findViewById(R.id.pop_common_sl_container);
+        FixScrollView ui_sl_container = view.findViewById(R.id.pop_common_sl_container);
 
         ui_sl_container.setMaxHeight(editWindow.getMaxHeight());
         ui_tv_title.setText(editWindow.getTitle());
@@ -132,7 +132,7 @@ public class PopupWindowManager {
         TextView ui_tv_content = view.findViewById(R.id.pop_common_tv_content);
         Button ui_bt_cancel = view.findViewById(R.id.pop_common_bt_cancel);
         Button ui_bt_confirm = view.findViewById(R.id.pop_common_bt_confirm);
-        MyScrollView ui_sl_container = view.findViewById(R.id.pop_common_sl_container);
+        FixScrollView ui_sl_container = view.findViewById(R.id.pop_common_sl_container);
 
         ui_sl_container.setMaxHeight(confirmWindow.getMaxHeight());
         ui_tv_title.setText(confirmWindow.getTitle());

@@ -27,7 +27,7 @@
             android:layout_marginTop="5dp"
             android:background="@color/divide_line" />
 
-        <auto.qinglong.views.MyScrollView
+        <auto.qinglong.views.FixScrollView
             android:id="@+id/pop_common_sl_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -44,7 +44,7 @@
                 android:textColor="@color/text_color_49"
                 android:textIsSelectable="true"
                 android:textSize="16sp" />
-        </auto.qinglong.views.MyScrollView>
+        </auto.qinglong.views.FixScrollView>
 
         <View
             android:layout_width="match_parent"
