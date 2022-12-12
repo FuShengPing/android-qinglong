@@ -110,7 +110,7 @@ public class ScriptFragment extends BaseFragment {
             public void onMulAction(QLScript QLScript) {
                 ClipboardManager clipboardManager = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
                 clipboardManager.setPrimaryClip(ClipData.newPlainText(null, QLScript.getKey()));
-                ToastUnit.showShort(requireContext(), getString(R.string.tip_copy_path_ready));
+                ToastUnit.showShort(getString(R.string.tip_copy_path_ready));
             }
         });
 
@@ -136,7 +136,7 @@ public class ScriptFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort(requireContext(), "加载失败：" + msg);
+                ToastUnit.showShort("加载失败：" + msg);
                 this.onEnd(false);
             }
 

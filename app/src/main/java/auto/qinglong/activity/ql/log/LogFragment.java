@@ -126,7 +126,7 @@ public class LogFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort(requireContext(), "加载失败：" + msg);
+                ToastUnit.showShort("加载失败：" + msg);
                 this.onEnd(false);
             }
 

@@ -60,19 +60,19 @@ public class LoginActivity extends BaseActivity {
             }
             String address = ui_address.getText().toString();
             if (!address.matches("\\d{2,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}:\\d{1,5}")) {
-                ToastUnit.showShort(mContext, "地址格式错误");
+                ToastUnit.showShort("地址格式错误");
                 return;
             }
 
             String username = ui_username.getText().toString().trim();
             if (username.isEmpty()) {
-                ToastUnit.showShort(mContext, "账号不能为空");
+                ToastUnit.showShort("账号不能为空");
                 return;
             }
 
             String password = ui_password.getText().toString().trim();
             if (password.isEmpty()) {
-                ToastUnit.showShort(mContext, "密码不能为空");
+                ToastUnit.showShort("密码不能为空");
                 return;
             }
             WindowUnit.hideKeyboard(ui_password);
@@ -108,13 +108,13 @@ public class LoginActivity extends BaseActivity {
                 if (systemRes.getData().isInitialized()) {
                     netCheckToken(account);
                 } else {
-                    ToastUnit.showShort(mContext, "系统未初始化，无法登录");
+                    ToastUnit.showShort("系统未初始化，无法登录");
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort(mContext, msg);
+                ToastUnit.showShort(msg);
             }
         });
     }
@@ -146,7 +146,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort(mContext, msg);
+                ToastUnit.showShort(msg);
             }
         });
     }

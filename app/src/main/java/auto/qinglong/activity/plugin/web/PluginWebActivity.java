@@ -92,7 +92,7 @@ public class PluginWebActivity extends BaseActivity {
                 urlLoaded = url;
                 ui_webView.loadUrl(url);
             } else {
-                ToastUnit.showShort(getBaseContext(), "请输入网页地址");
+                ToastUnit.showShort("请输入网页地址");
             }
         });
 
@@ -105,7 +105,7 @@ public class PluginWebActivity extends BaseActivity {
             if (url != null && !url.isEmpty()) {
                 cookies = cookieManager.getCookie(url);
             } else {
-                ToastUnit.showShort(getBaseContext(), "请先加载网页");
+                ToastUnit.showShort("请先加载网页");
                 return;
             }
 
@@ -140,7 +140,7 @@ public class PluginWebActivity extends BaseActivity {
                 //开始导入变量流程
                 startImport(urlLoaded, cookies);
             } else {
-                ToastUnit.showShort(getBaseContext(), "请先加载网页");
+                ToastUnit.showShort("请先加载网页");
             }
         });
 
