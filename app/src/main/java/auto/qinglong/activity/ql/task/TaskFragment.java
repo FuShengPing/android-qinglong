@@ -148,7 +148,7 @@ public class TaskFragment extends BaseFragment {
         }
         new Handler().postDelayed(() -> {
             if (isVisible()) {
-                netGetTasks(mCurrentSearchValue);
+                netGetTasks(mCurrentSearchValue, true);
             }
         }, 1000);
     }
@@ -203,7 +203,7 @@ public class TaskFragment extends BaseFragment {
         //刷新控件//
         //初始设置处于刷新状态
         layout_refresh.autoRefreshAnimationOnly();
-        layout_refresh.setOnRefreshListener(refreshLayout -> netGetTasks(mCurrentSearchValue));
+        layout_refresh.setOnRefreshListener(refreshLayout -> netGetTasks(mCurrentSearchValue, true));
 
         //导航点击监听
         layout_nav_menu.setOnClickListener(v -> {
@@ -229,11 +229,11 @@ public class TaskFragment extends BaseFragment {
             ToastUnit.showShort(getString(R.string.tip_searching));
             mCurrentSearchValue = layout_search_value.getText().toString();
             WindowUnit.hideKeyboard(layout_search_value);
-            netGetTasks(mCurrentSearchValue);
+            netGetTasks(mCurrentSearchValue, true);
         });
 
         //更多操作按键监听
-        layout_nav_more.setOnClickListener(v -> showMiniPopWindowMore());
+        layout_nav_more.setOnClickListener(v -> showPopWindowMiniMore());
 
         //批量操作返回
         layout_actions_back.setOnClickListener(v -> changeBar(BarType.NAV));
@@ -362,7 +362,7 @@ public class TaskFragment extends BaseFragment {
         this.mMenuClickListener = menuClickListener;
     }
 
-    public void netGetTasks(String searchValue) {
+    public void netGetTasks(String searchValue, boolean needTip) {
         QLApiController.getTasks(getNetRequestID(), searchValue, new QLApiController.GetTasksCallback() {
             @Override
             public void onSuccess(TasksRes res) {
@@ -370,7 +370,9 @@ public class TaskFragment extends BaseFragment {
                 List<QLTask> data = res.getData();
                 Collections.sort(data);
                 mTaskAdapter.setData(data);
-                ToastUnit.showShort("加载成功：" + data.size());
+                if (needTip) {
+                    ToastUnit.showShort("加载成功：" + data.size());
+                }
                 layout_refresh.finishRefresh(true);
             }
 
@@ -393,7 +395,7 @@ public class TaskFragment extends BaseFragment {
                     layout_actions_back.performClick();
                 }
                 ToastUnit.showShort("执行成功");
-                netGetTasks(mCurrentSearchValue);
+                netGetTasks(mCurrentSearchValue, false);
             }
 
             @Override
@@ -412,7 +414,7 @@ public class TaskFragment extends BaseFragment {
                     layout_actions_back.performClick();
                 }
                 ToastUnit.showShort("终止成功");
-                netGetTasks(mCurrentSearchValue);
+                netGetTasks(mCurrentSearchValue, false);
             }
 
             @Override
@@ -430,7 +432,7 @@ public class TaskFragment extends BaseFragment {
                     layout_actions_back.performClick();
                 }
                 ToastUnit.showShort("启用成功");
-                netGetTasks(mCurrentSearchValue);
+                netGetTasks(mCurrentSearchValue, false);
             }
 
             @Override
@@ -448,7 +450,7 @@ public class TaskFragment extends BaseFragment {
                     layout_actions_back.performClick();
                 }
                 ToastUnit.showShort("禁用成功");
-                netGetTasks(mCurrentSearchValue);
+                netGetTasks(mCurrentSearchValue, false);
             }
 
             @Override
@@ -465,8 +467,8 @@ public class TaskFragment extends BaseFragment {
                 if (layout_actions_back.getVisibility() == View.VISIBLE) {
                     layout_actions_back.performClick();
                 }
-                ToastUnit.showShort(getString(R.string.action_pin_success));
-                netGetTasks(mCurrentSearchValue);
+                ToastUnit.showShort("顶置成功");
+                netGetTasks(mCurrentSearchValue, false);
             }
 
             @Override
@@ -484,7 +486,7 @@ public class TaskFragment extends BaseFragment {
                     layout_actions_back.performClick();
                 }
                 ToastUnit.showShort("取消顶置成功");
-                netGetTasks(mCurrentSearchValue);
+                netGetTasks(mCurrentSearchValue, false);
             }
 
             @Override
@@ -502,7 +504,7 @@ public class TaskFragment extends BaseFragment {
                     layout_actions_back.performClick();
                 }
                 ToastUnit.showShort("删除成功：" + ids.size());
-                netGetTasks(mCurrentSearchValue);
+                netGetTasks(mCurrentSearchValue, false);
             }
 
             @Override
@@ -520,7 +522,7 @@ public class TaskFragment extends BaseFragment {
                     popupWindowEdit.dismiss();
                 }
                 ToastUnit.showShort("编辑成功");
-                netGetTasks(mCurrentSearchValue);
+                netGetTasks(mCurrentSearchValue, false);
             }
 
             @Override
@@ -538,7 +540,7 @@ public class TaskFragment extends BaseFragment {
                     popupWindowEdit.dismiss();
                 }
                 ToastUnit.showShort("新建任务成功");
-                netGetTasks(mCurrentSearchValue);
+                netGetTasks(mCurrentSearchValue, false);
             }
 
             @Override
@@ -548,7 +550,7 @@ public class TaskFragment extends BaseFragment {
         });
     }
 
-    public void showMiniPopWindowMore() {
+    public void showPopWindowMiniMore() {
         MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
         miniMoreWindow.addItem(new MiniMoreItem("add", "新建任务", R.drawable.ic_add_gray));
         miniMoreWindow.addItem(new MiniMoreItem("mulAction", "批量操作", R.drawable.ic_mul_action_gray));

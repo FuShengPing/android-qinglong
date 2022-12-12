@@ -131,7 +131,7 @@ public class EnvFragment extends BaseFragment {
         }
         new Handler().postDelayed(() -> {
             if (isVisible()) {
-                netGetEnvironments(currentSearchValue);
+                netGetEnvironments(currentSearchValue, true);
             }
         }, 1000);
     }
@@ -141,7 +141,7 @@ public class EnvFragment extends BaseFragment {
         envItemAdapter.setItemInterface(new EnvItemAdapter.ItemActionListener() {
             @Override
             public void onEdit(QLEnvironment environment, int position) {
-                showCommonPopWindowEdit(environment);
+                showPopWindowCommonEdit(environment);
             }
 
             @Override
@@ -157,7 +157,7 @@ public class EnvFragment extends BaseFragment {
         //刷新控件//
         //初始设置处于刷新状态
         layout_refresh.autoRefreshAnimationOnly();
-        layout_refresh.setOnRefreshListener(refreshLayout -> netGetEnvironments(currentSearchValue));
+        layout_refresh.setOnRefreshListener(refreshLayout -> netGetEnvironments(currentSearchValue, true));
 
         //更多操作
         layout_nav_more.setOnClickListener(v -> showPopWindowMiniMore());
@@ -174,7 +174,7 @@ public class EnvFragment extends BaseFragment {
             if (!value.isEmpty()) {
                 currentSearchValue = value;
                 WindowUnit.hideKeyboard(layout_search_value);
-                netGetEnvironments(currentSearchValue);
+                netGetEnvironments(currentSearchValue, true);
             }
         });
 
@@ -243,12 +243,14 @@ public class EnvFragment extends BaseFragment {
 
     }
 
-    private void netGetEnvironments(String searchValue) {
+    private void netGetEnvironments(String searchValue, boolean needTip) {
         QLApiController.getEnvironments(getNetRequestID(), searchValue, new QLApiController.GetEnvironmentsCallback() {
             @Override
             public void onSuccess(EnvironmentRes res) {
                 loadSuccessFlag = true;
-                ToastUnit.showShort("加载成功：" + res.getData().size());
+                if (needTip) {
+                    ToastUnit.showShort("加载成功：" + res.getData().size());
+                }
                 sortAndSetData(res.getData());
                 layout_refresh.finishRefresh(true);
             }
@@ -269,7 +271,7 @@ public class EnvFragment extends BaseFragment {
                     popupWindowEdit.dismiss();
                 }
                 ToastUnit.showShort("更新成功");
-                netGetEnvironments(currentSearchValue);
+                netGetEnvironments(currentSearchValue, false);
             }
 
             @Override
@@ -287,7 +289,7 @@ public class EnvFragment extends BaseFragment {
                     popupWindowEdit.dismiss();
                 }
                 ToastUnit.showShort("新建成功：" + environments.size());
-                netGetEnvironments(currentSearchValue);
+                netGetEnvironments(currentSearchValue, false);
             }
 
             @Override
@@ -303,7 +305,7 @@ public class EnvFragment extends BaseFragment {
             public void onSuccess() {
                 layout_actions_back.performClick();
                 ToastUnit.showShort("删除成功：" + ids.size());
-                netGetEnvironments(currentSearchValue);
+                netGetEnvironments(currentSearchValue, false);
             }
 
             @Override
@@ -319,7 +321,7 @@ public class EnvFragment extends BaseFragment {
             public void onSuccess() {
                 layout_actions_back.performClick();
                 ToastUnit.showShort("启用成功");
-                netGetEnvironments(currentSearchValue);
+                netGetEnvironments(currentSearchValue, false);
             }
 
             @Override
@@ -336,7 +338,7 @@ public class EnvFragment extends BaseFragment {
             public void onSuccess() {
                 layout_actions_back.performClick();
                 ToastUnit.showShort("禁用成功");
-                netGetEnvironments(currentSearchValue);
+                netGetEnvironments(currentSearchValue, false);
             }
 
             @Override
@@ -392,22 +394,28 @@ public class EnvFragment extends BaseFragment {
     public void showPopWindowMiniMore() {
         MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
         miniMoreWindow.addItem(new MiniMoreItem("add", "新建变量", R.drawable.ic_add_gray));
-        miniMoreWindow.addItem(new MiniMoreItem("mulAction", "批量操作", R.drawable.ic_mul_action_gray));
         miniMoreWindow.addItem(new MiniMoreItem("quickAdd", "快捷导入", R.drawable.ic_flash_on_gray));
+        miniMoreWindow.addItem(new MiniMoreItem("remoteAdd", "远程导入", R.drawable.ic_cloud_download));
         miniMoreWindow.addItem(new MiniMoreItem("deleteMul", "变量去重", R.drawable.ic_delete_gray));
+        miniMoreWindow.addItem(new MiniMoreItem("mulAction", "批量操作", R.drawable.ic_mul_action_gray));
         miniMoreWindow.setOnActionListener(key -> {
             switch (key) {
                 case "add":
-                    showCommonPopWindowEdit(null);
+                    showPopWindowCommonEdit(null);
+                    break;
+                case "quickAdd":
+                    showPopWindowQuickEdit();
+                    break;
+                case "remoteAdd":
+                    showPopWindowRemoteEdit();
+                    break;
+                case "deleteMul":
+                    compareAndDeleteData();
                     break;
                 case "mulAction":
                     changeBar(BarType.MUL_ACTION);
                     break;
-                case "quickAdd":
-                    showQuickPopWindowEdit();
-                    break;
                 default:
-                    compareAndDeleteData();
                     break;
             }
             return true;
@@ -415,7 +423,7 @@ public class EnvFragment extends BaseFragment {
         PopupWindowManager.buildMiniMoreWindow(requireActivity(), miniMoreWindow, layout_bar, Gravity.END);
     }
 
-    private void showCommonPopWindowEdit(QLEnvironment environment) {
+    private void showPopWindowCommonEdit(QLEnvironment environment) {
         EditWindow editWindow = new EditWindow("新建变量", "取消", "确定");
         EditWindowItem itemName = new EditWindowItem("name", null, "名称", "请输入变量名称");
         EditWindowItem itemValue = new EditWindowItem("value", null, "值", "请输入变量值");
@@ -475,8 +483,8 @@ public class EnvFragment extends BaseFragment {
         popupWindowEdit = PopupWindowManager.buildEditWindow(requireActivity(), editWindow);
     }
 
-    private void showQuickPopWindowEdit() {
-        EditWindow editWindow = new EditWindow("新建变量", "取消", "确定");
+    private void showPopWindowQuickEdit() {
+        EditWindow editWindow = new EditWindow("快捷导入", "取消", "确定");
         EditWindowItem itemValue = new EditWindowItem("values", null, "文本", "请输入文本");
         EditWindowItem itemRemark = new EditWindowItem("remark", null, "备注", "请输入备注(可选)");
 
@@ -489,7 +497,7 @@ public class EnvFragment extends BaseFragment {
                 String remarks = map.get("remark");
 
                 if (TextUnit.isEmpty(values)) {
-                    ToastUnit.showShort("变量值不能为空");
+                    ToastUnit.showShort("文本不能为空");
                     return false;
                 }
 
@@ -501,6 +509,35 @@ public class EnvFragment extends BaseFragment {
                 } else {
                     netAddEnvironments(environments);
                 }
+                return false;
+            }
+
+            @Override
+            public boolean onCancel() {
+                return true;
+            }
+        });
+
+        popupWindowEdit = PopupWindowManager.buildEditWindow(requireActivity(), editWindow);
+    }
+
+    private void showPopWindowRemoteEdit() {
+        EditWindow editWindow = new EditWindow("远程导入", "取消", "确定");
+        EditWindowItem itemValue = new EditWindowItem("url", null, "链接", "请输入远程地址");
+
+        editWindow.addItem(itemValue);
+        editWindow.setActionListener(new EditWindow.OnActionListener() {
+            @Override
+            public boolean onConfirm(Map<String, String> map) {
+                String values = map.get("url");
+
+                if (TextUnit.isEmpty(values)) {
+                    ToastUnit.showShort("地址不能为空");
+                    return false;
+                }
+
+                WindowUnit.hideKeyboard(layout_root);
+
                 return false;
             }
 
