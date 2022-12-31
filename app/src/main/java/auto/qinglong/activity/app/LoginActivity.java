@@ -20,6 +20,8 @@ import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.network.http.RequestManager;
+import auto.qinglong.views.popup.PopupWindowManager;
+import auto.qinglong.views.popup.ProgressPopWindow;
 
 public class LoginActivity extends BaseActivity {
 
@@ -28,6 +30,7 @@ public class LoginActivity extends BaseActivity {
     private EditText ui_address;
     private EditText ui_username;
     private EditText ui_password;
+    private ProgressPopWindow ui_progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,8 @@ public class LoginActivity extends BaseActivity {
         ui_address = findViewById(R.id.et_address);
         ui_username = findViewById(R.id.et_username);
         ui_password = findViewById(R.id.et_password);
+
+        ui_progress = PopupWindowManager.buildProgressWindow(this);
 
         init();
     }
@@ -59,7 +64,7 @@ public class LoginActivity extends BaseActivity {
                 return;
             }
             String address = ui_address.getText().toString();
-            if (!address.matches("\\d{2,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}:\\d{1,5}")) {
+            if (!address.matches("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}:\\d{1,5}")) {
                 ToastUnit.showShort("地址格式错误");
                 return;
             }
@@ -80,6 +85,8 @@ public class LoginActivity extends BaseActivity {
             ui_confirm.setEnabled(false);
             ui_confirm.postDelayed(() -> ui_confirm.setEnabled(true), 300);
 
+            ui_progress.setText("登录中...");
+
             Account account = new Account(username, password, address, "");
             //账号登录过则设置之前token
             if (AccountDBHelper.isAccountExist(address)) {
@@ -98,9 +105,6 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    /**
-     * 查询系统信息 主要是查看是否已经初始化
-     */
     protected void netQuerySystemInfo(Account account) {
         QLApiController.getSystemInfo(this.getClassName(), account, new QLApiController.SystemCallback() {
             @Override
@@ -119,9 +123,6 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    /**
-     * 检查会话是否有效，无效则登录
-     */
     protected void netCheckToken(Account account) {
         QLApiController.checkToken(this.getClassName(), account, new QLApiController.LoginCallback() {
             @Override
@@ -152,6 +153,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void enterHome(Account account) {
+        ui_progress.destroy();
         //保存账号信息
         AccountSP.saveCurrentAccount(account);
         AccountDBHelper.insertAccount(account);

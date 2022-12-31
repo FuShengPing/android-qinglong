@@ -167,6 +167,25 @@ public class PopupWindowManager {
         return popWindow;
     }
 
+    public static ProgressPopWindow buildProgressWindow(Activity activity) {
+        View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_loading, null, false);
+        PopupWindow popWindow = build(activity.getBaseContext(), true, view);
+        popWindow.setContentView(view);
+
+        TextView ui_tip = view.findViewById(R.id.pop_common_progress_tip);
+
+        ProgressPopWindow progressPopWindow = new ProgressPopWindow(activity, popWindow, ui_tip);
+
+        //窗体消失监听
+        popWindow.setOnDismissListener(() -> {
+            WindowUnit.setBackgroundAlpha(activity, 1.0f);
+        });
+
+        WindowUnit.setBackgroundAlpha(activity, 0.5f);
+        popWindow.showAtLocation(activity.getWindow().getDecorView().getRootView(), Gravity.CENTER, 0, 0);
+        return progressPopWindow;
+    }
+
     private static PopupWindow build(Context context, boolean isFocusable, View view) {
         PopupWindow popupWindow = new PopupWindow(context);
         popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
