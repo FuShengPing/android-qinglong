@@ -42,7 +42,6 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="酷狗音乐"
             android:textColor="@color/theme_color_shadow"
             android:textSize="17sp" />
 
@@ -50,6 +49,7 @@
             android:id="@+id/task_action_run"
             android:layout_width="25dp"
             android:layout_height="25dp"
+            android:layout_marginStart="10dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_start" />
     </LinearLayout>
