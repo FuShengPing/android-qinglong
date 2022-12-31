@@ -30,13 +30,17 @@ import java.util.Objects;
 import java.util.Set;
 
 import auto.qinglong.R;
+import auto.qinglong.bean.app.network.EnvironmentRes;
 import auto.qinglong.bean.ql.QLEnvironment;
+import auto.qinglong.network.http.Api;
+import auto.qinglong.network.http.ApiController;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.bean.ql.network.EnvironmentRes;
+import auto.qinglong.bean.ql.network.QLEnvironmentRes;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
+import auto.qinglong.utils.WebUnit;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.popup.EditWindow;
 import auto.qinglong.views.popup.EditWindowItem;
@@ -244,9 +248,12 @@ public class EnvFragment extends BaseFragment {
     }
 
     private void netGetEnvironments(String searchValue, boolean needTip) {
+        if (RequestManager.isRequesting(getNetRequestID())) {
+            return;
+        }
         QLApiController.getEnvironments(getNetRequestID(), searchValue, new QLApiController.GetEnvironmentsCallback() {
             @Override
-            public void onSuccess(EnvironmentRes res) {
+            public void onSuccess(QLEnvironmentRes res) {
                 loadSuccessFlag = true;
                 if (needTip) {
                     ToastUnit.showShort("加载成功：" + res.getData().size());
@@ -264,6 +271,9 @@ public class EnvFragment extends BaseFragment {
     }
 
     public void netUpdateEnvironment(QLEnvironment environment) {
+        if (RequestManager.isRequesting(getNetRequestID())) {
+            return;
+        }
         QLApiController.updateEnvironment(getNetRequestID(), environment, new QLApiController.EditEnvCallback() {
             @Override
             public void onSuccess(QLEnvironment data) {
@@ -282,9 +292,12 @@ public class EnvFragment extends BaseFragment {
     }
 
     public void netAddEnvironments(List<QLEnvironment> environments) {
+        if (RequestManager.isRequesting(getNetRequestID())) {
+            return;
+        }
         QLApiController.addEnvironment(getNetRequestID(), environments, new QLApiController.GetEnvironmentsCallback() {
             @Override
-            public void onSuccess(EnvironmentRes res) {
+            public void onSuccess(QLEnvironmentRes res) {
                 if (popupWindowEdit != null && popupWindowEdit.isShowing()) {
                     popupWindowEdit.dismiss();
                 }
@@ -300,6 +313,9 @@ public class EnvFragment extends BaseFragment {
     }
 
     public void netDeleteEnvironments(List<String> ids) {
+        if (RequestManager.isRequesting(getNetRequestID())) {
+            return;
+        }
         QLApiController.deleteEnvironments(getNetRequestID(), ids, new QLApiController.BaseCallback() {
             @Override
             public void onSuccess() {
@@ -316,6 +332,9 @@ public class EnvFragment extends BaseFragment {
     }
 
     public void netEnableEnvironments(List<String> ids) {
+        if (RequestManager.isRequesting(getNetRequestID())) {
+            return;
+        }
         QLApiController.enableEnvironments(getNetRequestID(), ids, new QLApiController.BaseCallback() {
             @Override
             public void onSuccess() {
@@ -333,6 +352,9 @@ public class EnvFragment extends BaseFragment {
     }
 
     public void netDisableEnvironments(List<String> ids) {
+        if (RequestManager.isRequesting(getNetRequestID())) {
+            return;
+        }
         QLApiController.disableEnvironments(getNetRequestID(), ids, new QLApiController.BaseCallback() {
             @Override
             public void onSuccess() {
@@ -343,32 +365,50 @@ public class EnvFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort("禁用失败");
+                ToastUnit.showShort("禁用失败：" + msg);
+            }
+        });
+    }
+
+    public void netGetRemoteEnvironments(String baseUrl, String path) {
+        if (RequestManager.isRequesting(getNetRequestID())) {
+            return;
+        }
+        ApiController.getRemoteEnvironments(getNetRequestID(), baseUrl, path, new ApiController.RemoteEnvCallback() {
+
+            @Override
+            public void onSuccess(EnvironmentRes res) {
+                netAddEnvironments(res.getEnvs());
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort("加载失败：" + msg);
             }
         });
     }
 
     public void sortAndSetData(List<QLEnvironment> data) {
-        //排序
-        Collections.sort(data);
-        //同变量名称设置序号
-        int size = data.size();
-        int current = 0;
-        int index = 1;
-        while (true) {
-            data.get(current).setIndex(index);
-            if (current < size - 1) {
-                if (data.get(current).getName().equals(data.get(current + 1).getName())) {
-                    index += 1;
+        if (data.size() != 0) {
+            Collections.sort(data);
+            //设置序号
+            int size = data.size();
+            int current = 0;
+            int index = 1;
+            while (true) {
+                data.get(current).setIndex(index);
+                if (current < size - 1) {
+                    if (data.get(current).getName().equals(data.get(current + 1).getName())) {
+                        index += 1;
+                    } else {
+                        index = 1;
+                    }
                 } else {
-                    index = 1;
+                    break;
                 }
-            } else {
-                break;
+                current += 1;
             }
-            current += 1;
         }
-
         envItemAdapter.setData(data);
     }
 
@@ -529,14 +569,22 @@ public class EnvFragment extends BaseFragment {
         editWindow.setActionListener(new EditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
-                String values = map.get("url");
+                String url = map.get("url");
 
-                if (TextUnit.isEmpty(values)) {
+                if (TextUnit.isEmpty(url)) {
                     ToastUnit.showShort("地址不能为空");
                     return false;
                 }
 
-                WindowUnit.hideKeyboard(layout_root);
+                if (WebUnit.isValidUrl(url)) {
+                    WindowUnit.hideKeyboard(layout_actions_back);
+                    String baseUrl = WebUnit.getHost(url) + "/";
+                    String path = WebUnit.getPath(url, "");
+                    netGetRemoteEnvironments(baseUrl, path);
+                } else {
+                    ToastUnit.showShort("地址不合法");
+                }
+
 
                 return false;
             }

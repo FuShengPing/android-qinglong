@@ -1,11 +1,8 @@
 package auto.qinglong.bean.ql.network;
 
-import auto.qinglong.bean.ql.QLTask;
-
-public class EditTaskRes {
-    private int code;
-    private String message;
-    private QLTask data;
+public class QLBaseRes {
+    private int code;//响应码
+    private String message;//响应提示
 
     public int getCode() {
         return code;
@@ -22,14 +19,4 @@ public class EditTaskRes {
     public void setMessage(String message) {
         this.message = message;
     }
-
-    public QLTask getData() {
-        return data;
-    }
-
-    public void setData(QLTask data) {
-        this.data = data;
-    }
-
-
 }

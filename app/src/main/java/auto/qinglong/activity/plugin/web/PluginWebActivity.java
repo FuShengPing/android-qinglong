@@ -23,13 +23,11 @@ import java.util.Map;
 
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
-import auto.qinglong.activity.ql.environment.EnvFragment;
 import auto.qinglong.bean.app.WebRule;
 import auto.qinglong.bean.ql.QLEnvironment;
-import auto.qinglong.bean.ql.network.EnvironmentRes;
+import auto.qinglong.bean.ql.network.QLEnvironmentRes;
 import auto.qinglong.database.db.WebRuleDBHelper;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WebUnit;
@@ -180,7 +178,7 @@ public class PluginWebActivity extends BaseActivity {
     private void netGetEnvironments(QLEnvironment environment) {
         QLApiController.getEnvironments(getClassName(), "", new QLApiController.GetEnvironmentsCallback() {
             @Override
-            public void onSuccess(EnvironmentRes res) {
+            public void onSuccess(QLEnvironmentRes res) {
                 List<QLEnvironment> qlEnvironments = res.getData();
                 for (QLEnvironment qlEnvironment : qlEnvironments) {
                     if (environment.getName().equals(qlEnvironment.getName()) && environment.getRemarks().equals(qlEnvironment.getRemarks())) {
@@ -218,7 +216,7 @@ public class PluginWebActivity extends BaseActivity {
     public void netAddEnvironments(List<QLEnvironment> environments) {
         QLApiController.addEnvironment(getClassName(), environments, new QLApiController.GetEnvironmentsCallback() {
             @Override
-            public void onSuccess(EnvironmentRes res) {
+            public void onSuccess(QLEnvironmentRes res) {
                 ToastUnit.showShort("导入成功");
             }
 

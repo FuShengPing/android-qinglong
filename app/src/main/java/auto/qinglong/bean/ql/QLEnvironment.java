@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import auto.qinglong.utils.LogUnit;
-
 public class QLEnvironment implements Comparable<QLEnvironment> {
     public static final String TAG = "QLEnvironment";
 
@@ -15,7 +13,7 @@ public class QLEnvironment implements Comparable<QLEnvironment> {
     private String name;
     private float position;
     private long created;
-    private String remarks;
+    private String remarks = "";
     private String timestamp;
     private String value;
     //自定义序号 同变量名区分用

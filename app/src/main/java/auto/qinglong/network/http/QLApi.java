@@ -1,15 +1,15 @@
 package auto.qinglong.network.http;
 
-import auto.qinglong.bean.ql.network.BaseRes;
-import auto.qinglong.bean.ql.network.DependenceRes;
-import auto.qinglong.bean.ql.network.EditEnvRes;
-import auto.qinglong.bean.ql.network.EditTaskRes;
-import auto.qinglong.bean.ql.network.EnvironmentRes;
-import auto.qinglong.bean.ql.network.LogRes;
-import auto.qinglong.bean.ql.network.LoginRes;
-import auto.qinglong.bean.ql.network.ScriptRes;
-import auto.qinglong.bean.ql.network.SystemRes;
-import auto.qinglong.bean.ql.network.TasksRes;
+import auto.qinglong.bean.ql.network.QLBaseRes;
+import auto.qinglong.bean.ql.network.QLDependenceRes;
+import auto.qinglong.bean.ql.network.QLEditEnvRes;
+import auto.qinglong.bean.ql.network.QLEditTaskRes;
+import auto.qinglong.bean.ql.network.QLEnvironmentRes;
+import auto.qinglong.bean.ql.network.QLLogRes;
+import auto.qinglong.bean.ql.network.QLLoginRes;
+import auto.qinglong.bean.ql.network.QLScriptRes;
+import auto.qinglong.bean.ql.network.QLSystemRes;
+import auto.qinglong.bean.ql.network.QLTasksRes;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -24,119 +24,119 @@ import retrofit2.http.Url;
 public interface QLApi {
     //登录
     @POST("api/user/login")
-    Call<LoginRes> login(@Body RequestBody body);
+    Call<QLLoginRes> login(@Body RequestBody body);
 
     //查询系统信息
     @GET("api/system")
-    Call<SystemRes> getSystemInfo();
+    Call<QLSystemRes> getSystemInfo();
 
     //查询任务列表
     @GET("api/crons")
-    Call<TasksRes> getTasks(@Header("Authorization") String authorization, @Query("searchValue") String searchValue);
+    Call<QLTasksRes> getTasks(@Header("Authorization") String authorization, @Query("searchValue") String searchValue);
 
     //执行任务
     @PUT("api/crons/run")
-    Call<BaseRes> runTasks(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLBaseRes> runTasks(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //终止任务
     @PUT("api/crons/stop")
-    Call<BaseRes> stopTasks(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLBaseRes> stopTasks(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //启用任务
     @PUT("api/crons/enable")
-    Call<BaseRes> enableTasks(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLBaseRes> enableTasks(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //禁用任务
     @PUT("api/crons/disable")
-    Call<BaseRes> disableTasks(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLBaseRes> disableTasks(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //顶置任务
     @PUT("api/crons/pin")
-    Call<BaseRes> pinTasks(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLBaseRes> pinTasks(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //顶置任务
     @PUT("api/crons/unpin")
-    Call<BaseRes> unpinTasks(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLBaseRes> unpinTasks(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //删除任务
     @HTTP(method = "DELETE", path = "api/crons", hasBody = true)
-    Call<BaseRes> deleteTasks(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLBaseRes> deleteTasks(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //编辑任务
     @PUT("api/crons")
-    Call<EditTaskRes> editTask(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLEditTaskRes> editTask(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //新建任务
     @POST("api/crons")
-    Call<EditTaskRes> addTask(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLEditTaskRes> addTask(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //获取环境变量
     @GET("api/envs")
-    Call<EnvironmentRes> getEnvironments(@Header("Authorization") String authorization, @Query("searchValue") String searchValue);
+    Call<QLEnvironmentRes> getEnvironments(@Header("Authorization") String authorization, @Query("searchValue") String searchValue);
 
     //更新环境变量
     @PUT("api/envs")
-    Call<EditEnvRes> updateEnvironment(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLEditEnvRes> updateEnvironment(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //新建环境变量
     @POST("api/envs")
-    Call<EnvironmentRes> addEnvironments(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLEnvironmentRes> addEnvironments(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //删除环境变量
     @HTTP(method = "DELETE", path = "api/envs", hasBody = true)
-    Call<BaseRes> deleteEnvironments(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLBaseRes> deleteEnvironments(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //启用环境变量
     @PUT("api/envs/enable")
-    Call<BaseRes> enableEnv(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLBaseRes> enableEnv(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //禁用环境变量
     @PUT("api/envs/disable")
-    Call<BaseRes> disableEnv(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLBaseRes> disableEnv(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //读取配置文件
     @GET("api/configs/config.sh")
-    Call<BaseRes> getConfig(@Header("Authorization") String authorization);
+    Call<QLBaseRes> getConfig(@Header("Authorization") String authorization);
 
     //保存配置文件
     @POST("api/configs/save")
-    Call<BaseRes> saveConfig(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLBaseRes> saveConfig(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //读取脚本列表
     @GET("api/scripts/files")
-    Call<ScriptRes> getScripts(@Header("Authorization") String authorization);
+    Call<QLScriptRes> getScripts(@Header("Authorization") String authorization);
 
     //获取脚本详细
     @GET
-    Call<BaseRes> getScriptDetail(@Url String url, @Header("Authorization") String authorization);
+    Call<QLBaseRes> getScriptDetail(@Url String url, @Header("Authorization") String authorization);
 
     //保存脚本
     @PUT("api/scripts")
-    Call<BaseRes> saveScript(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLBaseRes> saveScript(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //获取依赖
     @GET("api/dependencies")
-    Call<DependenceRes> getDependencies(@Header("Authorization") String authorization, @Query("searchValue") String searchValue, @Query("type") String type);
+    Call<QLDependenceRes> getDependencies(@Header("Authorization") String authorization, @Query("searchValue") String searchValue, @Query("type") String type);
 
     //新建依赖
     @POST("api/dependencies")
-    Call<BaseRes> addDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLBaseRes> addDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //删除依赖
     @HTTP(method = "DELETE", path = "api/dependencies", hasBody = true)
-    Call<BaseRes> deleteDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLBaseRes> deleteDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //重装依赖
     @PUT("api/dependencies/reinstall?t=1662824091642")
-    Call<BaseRes> reinstallDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLBaseRes> reinstallDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //获取日志列表
     @GET("api/logs")
-    Call<LogRes> getLogs(@Header("Authorization") String authorization);
+    Call<QLLogRes> getLogs(@Header("Authorization") String authorization);
 
     //读取日志信息
     @GET
-    Call<BaseRes> getLogDetail(@Url String url, @Header("Authorization") String authorization);
+    Call<QLBaseRes> getLogDetail(@Url String url, @Header("Authorization") String authorization);
 
 
 }

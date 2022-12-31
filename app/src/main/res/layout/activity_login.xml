@@ -10,7 +10,7 @@
     tools:context=".activity.app.LoginActivity">
 
     <ImageView
-        android:id="@+id/logo_ql"
+        android:id="@+id/img_logo"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
@@ -21,20 +21,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/logo_ql"
+        android:layout_below="@id/img_logo"
         android:background="@drawable/style_radius_8_white"
         android:orientation="vertical"
         android:paddingHorizontal="15dp"
         android:paddingVertical="20dp">
 
         <EditText
-            android:id="@+id/input_address"
+            android:id="@+id/et_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:background="@drawable/style_input"
             android:fontFamily="sans-serif-light"
-            android:hint="地址"
+            android:hint="127.0.0.1:5700"
             android:lines="1"
             android:paddingHorizontal="6dp"
             android:paddingVertical="7dp"
@@ -44,7 +44,7 @@
             android:textSize="18sp" />
 
         <EditText
-            android:id="@+id/input_username"
+            android:id="@+id/et_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
@@ -60,7 +60,7 @@
             android:textSize="18sp" />
 
         <EditText
-            android:id="@+id/input_password"
+            android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
@@ -76,7 +76,7 @@
             android:textSize="18sp" />
 
         <Button
-            android:id="@+id/button_confirm"
+            android:id="@+id/bt_confirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/style_button_blue"

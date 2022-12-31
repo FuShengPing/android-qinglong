@@ -2,12 +2,12 @@ package auto.qinglong.bean.ql.network;
 
 import java.util.List;
 
-import auto.qinglong.bean.ql.QLDependence;
+import auto.qinglong.bean.ql.QLEnvironment;
 
-public class DependenceRes {
+public class QLEnvironmentRes {
     private int code;
     private String message;
-    private List<QLDependence> data;
+    private List<QLEnvironment> data;
 
     public int getCode() {
         return code;
@@ -25,11 +25,13 @@ public class DependenceRes {
         this.message = message;
     }
 
-    public List<QLDependence> getData() {
+    public List<QLEnvironment> getData() {
         return data;
     }
 
-    public void setData(List<QLDependence> data) {
+    public void setData(List<QLEnvironment> data) {
         this.data = data;
     }
+
+
 }

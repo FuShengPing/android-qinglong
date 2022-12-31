@@ -4,7 +4,7 @@ import java.util.List;
 
 import auto.qinglong.bean.ql.QLTask;
 
-public class TasksRes {
+public class QLTasksRes {
     private int code;
     private String message;
     private List<QLTask> data;

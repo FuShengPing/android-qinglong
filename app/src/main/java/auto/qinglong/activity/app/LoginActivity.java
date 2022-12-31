@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.bean.ql.network.SystemRes;
+import auto.qinglong.bean.ql.network.QLSystemRes;
 import auto.qinglong.database.db.AccountDBHelper;
 import auto.qinglong.bean.app.Account;
 import auto.qinglong.database.sp.AccountSP;
@@ -37,11 +37,11 @@ public class LoginActivity extends BaseActivity {
 
         setContentView(R.layout.activity_login);
 
-        ui_logo = findViewById(R.id.logo_ql);
-        ui_confirm = findViewById(R.id.button_confirm);
-        ui_address = findViewById(R.id.input_address);
-        ui_username = findViewById(R.id.input_username);
-        ui_password = findViewById(R.id.input_password);
+        ui_logo = findViewById(R.id.img_logo);
+        ui_confirm = findViewById(R.id.bt_confirm);
+        ui_address = findViewById(R.id.et_address);
+        ui_username = findViewById(R.id.et_username);
+        ui_password = findViewById(R.id.et_password);
 
         init();
     }
@@ -104,7 +104,7 @@ public class LoginActivity extends BaseActivity {
     protected void netQuerySystemInfo(Account account) {
         QLApiController.getSystemInfo(this.getClassName(), account, new QLApiController.SystemCallback() {
             @Override
-            public void onSuccess(SystemRes systemRes) {
+            public void onSuccess(QLSystemRes systemRes) {
                 if (systemRes.getData().isInitialized()) {
                     netCheckToken(account);
                 } else {

@@ -1,13 +1,11 @@
 package auto.qinglong.bean.ql.network;
 
-import java.util.List;
+import auto.qinglong.bean.ql.QLTask;
 
-import auto.qinglong.bean.ql.QLEnvironment;
-
-public class EnvironmentRes {
+public class QLEditTaskRes {
     private int code;
     private String message;
-    private List<QLEnvironment> data;
+    private QLTask data;
 
     public int getCode() {
         return code;
@@ -25,11 +23,11 @@ public class EnvironmentRes {
         this.message = message;
     }
 
-    public List<QLEnvironment> getData() {
+    public QLTask getData() {
         return data;
     }
 
-    public void setData(List<QLEnvironment> data) {
+    public void setData(QLTask data) {
         this.data = data;
     }
 

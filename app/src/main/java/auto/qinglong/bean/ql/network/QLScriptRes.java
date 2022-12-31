@@ -4,7 +4,7 @@ import java.util.List;
 
 import auto.qinglong.bean.ql.QLScript;
 
-public class ScriptRes {
+public class QLScriptRes {
     private int code;
     private List<QLScript> data;
     private String message;

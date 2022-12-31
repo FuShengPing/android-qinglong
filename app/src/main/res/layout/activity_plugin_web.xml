@@ -6,51 +6,44 @@
     android:orientation="vertical"
     tools:context=".activity.plugin.web.PluginWebActivity">
 
-    <RelativeLayout
-        android:id="@+id/common_bar"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/theme_color"
         android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:paddingHorizontal="15dp"
         android:paddingVertical="8dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/common_bar_back"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/style_press_gray"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_arrow_back" />
+
+        <TextView
+            android:id="@+id/common_bar_title"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_marginHorizontal="20dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:lines="1"
+            android:singleLine="true"
+            android:text="CK助手"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
 
-            <ImageView
-                android:id="@+id/common_bar_back"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/style_press_gray"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_arrow_back" />
-
-            <TextView
-                android:id="@+id/common_bar_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:lines="1"
-                android:singleLine="true"
-                android:text="CK助手"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
-
-            <ImageView
-                android:id="@+id/bar_rule"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/style_press_gray"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_view_list_white" />
-        </LinearLayout>
-    </RelativeLayout>
+        <ImageView
+            android:id="@+id/bar_rule"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/style_press_gray"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_view_list_white" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -81,9 +74,9 @@
             <Button
                 android:id="@+id/bt_load"
                 style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="60dp"
+                android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="15dp"
                 android:background="@drawable/style_button_blue"
                 android:text="@string/str_load"
                 android:textColor="@color/white" />
@@ -91,20 +84,30 @@
             <Button
                 android:id="@+id/bt_read"
                 style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="60dp"
+                android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="15dp"
                 android:background="@drawable/style_button_blue"
-                android:text="@string/str_read"
+                android:text="常规读取"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/bt_read_rule"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/style_button_blue"
+                android:text="规则读取"
                 android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/bt_import"
                 style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="60dp"
+                android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:background="@drawable/style_button_blue"
-                android:text="@string/str_import"
+                android:text="导入变量"
                 android:textColor="@color/white" />
         </LinearLayout>
     </LinearLayout>

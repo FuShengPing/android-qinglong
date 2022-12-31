@@ -1,8 +1,14 @@
 package auto.qinglong.bean.ql.network;
 
-import auto.qinglong.bean.ql.QLEnvironment;
+import java.util.List;
 
-public class EditEnvRes {
+import auto.qinglong.bean.ql.QLDependence;
+
+public class QLDependenceRes {
+    private int code;
+    private String message;
+    private List<QLDependence> data;
+
     public int getCode() {
         return code;
     }
@@ -19,15 +25,11 @@ public class EditEnvRes {
         this.message = message;
     }
 
-    public QLEnvironment getData() {
+    public List<QLDependence> getData() {
         return data;
     }
 
-    public void setData(QLEnvironment data) {
+    public void setData(List<QLDependence> data) {
         this.data = data;
     }
-
-    private int code;
-    private String message;
-    private QLEnvironment data;
 }

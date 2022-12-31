@@ -2,7 +2,7 @@ package auto.qinglong.bean.ql.network;
 
 import auto.qinglong.bean.ql.QLSystemData;
 
-public class SystemRes {
+public class QLSystemRes {
     private int code;
     private String message;
     private QLSystemData data;

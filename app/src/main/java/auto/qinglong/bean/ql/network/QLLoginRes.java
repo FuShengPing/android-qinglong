@@ -1,8 +1,11 @@
 package auto.qinglong.bean.ql.network;
 
-public class BaseRes {
-    private int code;//响应码
-    private String message;//响应提示
+import auto.qinglong.bean.ql.QLLoginData;
+
+public class QLLoginRes {
+    private int code;
+    private QLLoginData data;
+    private String message;
 
     public int getCode() {
         return code;
@@ -18,5 +21,13 @@ public class BaseRes {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public QLLoginData getData() {
+        return data;
+    }
+
+    public void setData(QLLoginData data) {
+        this.data = data;
     }
 }

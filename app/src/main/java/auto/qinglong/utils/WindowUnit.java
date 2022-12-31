@@ -19,7 +19,6 @@ public class WindowUnit {
         if (imm.isActive()) {
             imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
         }
-
     }
 
     /**

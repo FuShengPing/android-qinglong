@@ -12,16 +12,16 @@ import auto.qinglong.bean.ql.QLEnvironment;
 import auto.qinglong.bean.ql.QLLog;
 import auto.qinglong.bean.ql.QLScript;
 import auto.qinglong.bean.ql.QLTask;
-import auto.qinglong.bean.ql.network.BaseRes;
-import auto.qinglong.bean.ql.network.DependenceRes;
-import auto.qinglong.bean.ql.network.EditEnvRes;
-import auto.qinglong.bean.ql.network.EditTaskRes;
-import auto.qinglong.bean.ql.network.EnvironmentRes;
-import auto.qinglong.bean.ql.network.LogRes;
-import auto.qinglong.bean.ql.network.LoginRes;
-import auto.qinglong.bean.ql.network.ScriptRes;
-import auto.qinglong.bean.ql.network.SystemRes;
-import auto.qinglong.bean.ql.network.TasksRes;
+import auto.qinglong.bean.ql.network.QLBaseRes;
+import auto.qinglong.bean.ql.network.QLDependenceRes;
+import auto.qinglong.bean.ql.network.QLEditEnvRes;
+import auto.qinglong.bean.ql.network.QLEditTaskRes;
+import auto.qinglong.bean.ql.network.QLEnvironmentRes;
+import auto.qinglong.bean.ql.network.QLLogRes;
+import auto.qinglong.bean.ql.network.QLLoginRes;
+import auto.qinglong.bean.ql.network.QLScriptRes;
+import auto.qinglong.bean.ql.network.QLSystemRes;
+import auto.qinglong.bean.ql.network.QLTasksRes;
 import auto.qinglong.bean.app.Account;
 import auto.qinglong.database.sp.AccountSP;
 import okhttp3.MediaType;
@@ -43,17 +43,17 @@ public class QLApiController {
     private static final String ERROR_INVALID_AUTH = "无效会话";
 
     public static void getSystemInfo(@NonNull String requestId, @NonNull Account account, @NonNull SystemCallback callback) {
-        Call<SystemRes> call = new Retrofit.Builder()
+        Call<QLSystemRes> call = new Retrofit.Builder()
                 .baseUrl(account.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .getSystemInfo();
 
-        call.enqueue(new Callback<SystemRes>() {
+        call.enqueue(new Callback<QLSystemRes>() {
             @Override
-            public void onResponse(Call<SystemRes> call, Response<SystemRes> response) {
-                SystemRes systemRes = response.body();
+            public void onResponse(Call<QLSystemRes> call, Response<QLSystemRes> response) {
+                QLSystemRes systemRes = response.body();
                 if (systemRes == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -72,7 +72,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<SystemRes> call, Throwable t) {
+            public void onFailure(Call<QLSystemRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -82,17 +82,17 @@ public class QLApiController {
     }
 
     public static void checkToken(@NonNull String requestId, @NonNull Account account, @NonNull LoginCallback callback) {
-        Call<TasksRes> call = new Retrofit.Builder()
+        Call<QLTasksRes> call = new Retrofit.Builder()
                 .baseUrl(account.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .getTasks(account.getAuthorization(), "");
 
-        call.enqueue(new Callback<TasksRes>() {
+        call.enqueue(new Callback<QLTasksRes>() {
             @Override
-            public void onResponse(Call<TasksRes> call, Response<TasksRes> response) {
-                TasksRes tasksRes = response.body();
+            public void onResponse(Call<QLTasksRes> call, Response<QLTasksRes> response) {
+                QLTasksRes tasksRes = response.body();
                 if (tasksRes == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -111,7 +111,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<TasksRes> call, Throwable t) {
+            public void onFailure(Call<QLTasksRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -127,16 +127,16 @@ public class QLApiController {
         String json = jsonObject.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
 
-        Call<LoginRes> call = new Retrofit.Builder()
+        Call<QLLoginRes> call = new Retrofit.Builder()
                 .baseUrl(account.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .login(body);
 
-        call.enqueue(new Callback<LoginRes>() {
+        call.enqueue(new Callback<QLLoginRes>() {
             @Override
-            public void onResponse(Call<LoginRes> call, Response<LoginRes> response) {
+            public void onResponse(Call<QLLoginRes> call, Response<QLLoginRes> response) {
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -144,7 +144,7 @@ public class QLApiController {
                         callback.onFailure(ERROR_NO_BODY);
                     }
                 } else {
-                    LoginRes loginRes = response.body();
+                    QLLoginRes loginRes = response.body();
                     if (loginRes.getCode() == 200) {
                         //设置会话信息
                         account.setToken(loginRes.getData().getToken());
@@ -157,7 +157,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<LoginRes> call, Throwable t) {
+            public void onFailure(Call<QLLoginRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -166,16 +166,16 @@ public class QLApiController {
     }
 
     public static void getTasks(@NonNull String requestId, @NonNull String searchValue, @NonNull GetTasksCallback callback) {
-        Call<TasksRes> call = new Retrofit.Builder()
+        Call<QLTasksRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .getTasks(AccountSP.getCurrentAccount().getAuthorization(), searchValue);
-        call.enqueue(new Callback<TasksRes>() {
+        call.enqueue(new Callback<QLTasksRes>() {
             @Override
-            public void onResponse(Call<TasksRes> call, Response<TasksRes> response) {
-                TasksRes tasksRes = response.body();
+            public void onResponse(Call<QLTasksRes> call, Response<QLTasksRes> response) {
+                QLTasksRes tasksRes = response.body();
                 if (tasksRes == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -194,7 +194,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<TasksRes> call, Throwable t) {
+            public void onFailure(Call<QLTasksRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -211,16 +211,16 @@ public class QLApiController {
 
         String json = jsonArray.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<BaseRes> call = new Retrofit.Builder()
+        Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .runTasks(AccountSP.getCurrentAccount().getAuthorization(), body);
 
-        call.enqueue(new Callback<BaseRes>() {
+        call.enqueue(new Callback<QLBaseRes>() {
             @Override
-            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+            public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -234,7 +234,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<BaseRes> call, Throwable t) {
+            public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -252,16 +252,16 @@ public class QLApiController {
 
         String json = jsonArray.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<BaseRes> call = new Retrofit.Builder()
+        Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .stopTasks(AccountSP.getCurrentAccount().getAuthorization(), body);
 
-        call.enqueue(new Callback<BaseRes>() {
+        call.enqueue(new Callback<QLBaseRes>() {
             @Override
-            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+            public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -280,7 +280,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<BaseRes> call, Throwable t) {
+            public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -298,16 +298,16 @@ public class QLApiController {
 
         String json = jsonArray.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<BaseRes> call = new Retrofit.Builder()
+        Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .enableTasks(AccountSP.getCurrentAccount().getAuthorization(), body);
 
-        call.enqueue(new Callback<BaseRes>() {
+        call.enqueue(new Callback<QLBaseRes>() {
             @Override
-            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+            public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -326,7 +326,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<BaseRes> call, Throwable t) {
+            public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -344,16 +344,16 @@ public class QLApiController {
 
         String json = jsonArray.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<BaseRes> call = new Retrofit.Builder()
+        Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .disableTasks(AccountSP.getCurrentAccount().getAuthorization(), body);
 
-        call.enqueue(new Callback<BaseRes>() {
+        call.enqueue(new Callback<QLBaseRes>() {
             @Override
-            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+            public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -372,7 +372,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<BaseRes> call, Throwable t) {
+            public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -390,16 +390,16 @@ public class QLApiController {
 
         String json = jsonArray.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<BaseRes> call = new Retrofit.Builder()
+        Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .pinTasks(AccountSP.getCurrentAccount().getAuthorization(), body);
 
-        call.enqueue(new Callback<BaseRes>() {
+        call.enqueue(new Callback<QLBaseRes>() {
             @Override
-            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+            public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -418,7 +418,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<BaseRes> call, Throwable t) {
+            public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -436,16 +436,16 @@ public class QLApiController {
 
         String json = jsonArray.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<BaseRes> call = new Retrofit.Builder()
+        Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .unpinTasks(AccountSP.getCurrentAccount().getAuthorization(), body);
 
-        call.enqueue(new Callback<BaseRes>() {
+        call.enqueue(new Callback<QLBaseRes>() {
             @Override
-            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+            public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -464,7 +464,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<BaseRes> call, Throwable t) {
+            public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -482,16 +482,16 @@ public class QLApiController {
 
         String json = jsonArray.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<BaseRes> call = new Retrofit.Builder()
+        Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .deleteTasks(AccountSP.getCurrentAccount().getAuthorization(), body);
 
-        call.enqueue(new Callback<BaseRes>() {
+        call.enqueue(new Callback<QLBaseRes>() {
             @Override
-            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+            public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -510,7 +510,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<BaseRes> call, Throwable t) {
+            public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -530,16 +530,16 @@ public class QLApiController {
         String json = jsonObject.toString();
 
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<EditTaskRes> call = new Retrofit.Builder()
+        Call<QLEditTaskRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .editTask(AccountSP.getCurrentAccount().getAuthorization(), body);
 
-        call.enqueue(new Callback<EditTaskRes>() {
+        call.enqueue(new Callback<QLEditTaskRes>() {
             @Override
-            public void onResponse(Call<EditTaskRes> call, Response<EditTaskRes> response) {
+            public void onResponse(Call<QLEditTaskRes> call, Response<QLEditTaskRes> response) {
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -558,7 +558,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<EditTaskRes> call, Throwable t) {
+            public void onFailure(Call<QLEditTaskRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -575,16 +575,16 @@ public class QLApiController {
 
         String json = jsonObject.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<EditTaskRes> call = new Retrofit.Builder()
+        Call<QLEditTaskRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .addTask(AccountSP.getCurrentAccount().getAuthorization(), body);
 
-        call.enqueue(new Callback<EditTaskRes>() {
+        call.enqueue(new Callback<QLEditTaskRes>() {
             @Override
-            public void onResponse(Call<EditTaskRes> call, Response<EditTaskRes> response) {
+            public void onResponse(Call<QLEditTaskRes> call, Response<QLEditTaskRes> response) {
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -603,7 +603,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<EditTaskRes> call, Throwable t) {
+            public void onFailure(Call<QLEditTaskRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -613,16 +613,16 @@ public class QLApiController {
     }
 
     public static void getEnvironments(@NonNull String requestId, @NonNull String searchValue, @NonNull GetEnvironmentsCallback callback) {
-        Call<EnvironmentRes> call = new Retrofit.Builder()
+        Call<QLEnvironmentRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .getEnvironments(AccountSP.getCurrentAccount().getAuthorization(), searchValue);
-        call.enqueue(new Callback<EnvironmentRes>() {
+        call.enqueue(new Callback<QLEnvironmentRes>() {
             @Override
-            public void onResponse(Call<EnvironmentRes> call, Response<EnvironmentRes> response) {
-                EnvironmentRes environmentRes = response.body();
+            public void onResponse(Call<QLEnvironmentRes> call, Response<QLEnvironmentRes> response) {
+                QLEnvironmentRes environmentRes = response.body();
                 if (environmentRes == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -641,7 +641,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<EnvironmentRes> call, Throwable t) {
+            public void onFailure(Call<QLEnvironmentRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -663,17 +663,17 @@ public class QLApiController {
         String json = jsonArray.toString();
 
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<EnvironmentRes> call = new Retrofit.Builder()
+        Call<QLEnvironmentRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .addEnvironments(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
 
-        call.enqueue(new Callback<EnvironmentRes>() {
+        call.enqueue(new Callback<QLEnvironmentRes>() {
             @Override
-            public void onResponse(Call<EnvironmentRes> call, Response<EnvironmentRes> response) {
-                EnvironmentRes environmentRes = response.body();
+            public void onResponse(Call<QLEnvironmentRes> call, Response<QLEnvironmentRes> response) {
+                QLEnvironmentRes environmentRes = response.body();
                 if (environmentRes == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -692,7 +692,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<EnvironmentRes> call, Throwable t) {
+            public void onFailure(Call<QLEnvironmentRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -711,17 +711,17 @@ public class QLApiController {
 
         String json = jsonObject.toString();
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<EditEnvRes> call = new Retrofit.Builder()
+        Call<QLEditEnvRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .updateEnvironment(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
 
-        call.enqueue(new Callback<EditEnvRes>() {
+        call.enqueue(new Callback<QLEditEnvRes>() {
             @Override
-            public void onResponse(Call<EditEnvRes> call, Response<EditEnvRes> response) {
-                EditEnvRes editEnvRes = response.body();
+            public void onResponse(Call<QLEditEnvRes> call, Response<QLEditEnvRes> response) {
+                QLEditEnvRes editEnvRes = response.body();
                 if (editEnvRes == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -740,7 +740,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<EditEnvRes> call, Throwable t) {
+            public void onFailure(Call<QLEditEnvRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -757,17 +757,17 @@ public class QLApiController {
 
         String json = jsonArray.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<BaseRes> call = new Retrofit.Builder()
+        Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .deleteEnvironments(AccountSP.getCurrentAccount().getAuthorization(), body);
 
-        call.enqueue(new Callback<BaseRes>() {
+        call.enqueue(new Callback<QLBaseRes>() {
             @Override
-            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
-                BaseRes baseRes = response.body();
+            public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                QLBaseRes baseRes = response.body();
                 if (baseRes == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -786,7 +786,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<BaseRes> call, Throwable t) {
+            public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -804,17 +804,17 @@ public class QLApiController {
 
         String json = jsonArray.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<BaseRes> call = new Retrofit.Builder()
+        Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .enableEnv(AccountSP.getCurrentAccount().getAuthorization(), body);
 
-        call.enqueue(new Callback<BaseRes>() {
+        call.enqueue(new Callback<QLBaseRes>() {
             @Override
-            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
-                BaseRes baseRes = response.body();
+            public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                QLBaseRes baseRes = response.body();
                 if (baseRes == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -833,7 +833,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<BaseRes> call, Throwable t) {
+            public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -851,17 +851,17 @@ public class QLApiController {
 
         String json = jsonArray.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<BaseRes> call = new Retrofit.Builder()
+        Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .disableEnv(AccountSP.getCurrentAccount().getAuthorization(), body);
 
-        call.enqueue(new Callback<BaseRes>() {
+        call.enqueue(new Callback<QLBaseRes>() {
             @Override
-            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
-                BaseRes baseRes = response.body();
+            public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                QLBaseRes baseRes = response.body();
                 if (baseRes == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -880,7 +880,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<BaseRes> call, Throwable t) {
+            public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -891,16 +891,16 @@ public class QLApiController {
     }
 
     public static void getLogs(@NonNull String requestId, @NonNull GetLogsCallback callback) {
-        Call<LogRes> call = new Retrofit.Builder()
+        Call<QLLogRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .getLogs(AccountSP.getCurrentAccount().getAuthorization());
-        call.enqueue(new Callback<LogRes>() {
+        call.enqueue(new Callback<QLLogRes>() {
             @Override
-            public void onResponse(Call<LogRes> call, Response<LogRes> response) {
-                LogRes logRes = response.body();
+            public void onResponse(Call<QLLogRes> call, Response<QLLogRes> response) {
+                QLLogRes logRes = response.body();
                 if (logRes == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -919,7 +919,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<LogRes> call, Throwable t) {
+            public void onFailure(Call<QLLogRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -929,16 +929,16 @@ public class QLApiController {
     }
 
     public static void getLogDetail(@NonNull String requestId, @NonNull String logPath, @NonNull BaseCallback callback) {
-        Call<BaseRes> call = new Retrofit.Builder()
+        Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .getLogDetail(logPath, AccountSP.getCurrentAccount().getAuthorization());
 
-        call.enqueue(new Callback<BaseRes>() {
+        call.enqueue(new Callback<QLBaseRes>() {
             @Override
-            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+            public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -952,7 +952,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<BaseRes> call, Throwable t) {
+            public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -961,16 +961,16 @@ public class QLApiController {
     }
 
     public static void getConfigDetail(@NonNull String requestId, @NonNull BaseCallback callback) {
-        Call<BaseRes> call = new Retrofit.Builder()
+        Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .getConfig(AccountSP.getCurrentAccount().getAuthorization());
 
-        call.enqueue(new Callback<BaseRes>() {
+        call.enqueue(new Callback<QLBaseRes>() {
             @Override
-            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+            public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -984,7 +984,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<BaseRes> call, Throwable t) {
+            public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -1000,16 +1000,16 @@ public class QLApiController {
         String json = jsonObject.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
 
-        Call<BaseRes> call = new Retrofit.Builder()
+        Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .saveConfig(AccountSP.getCurrentAccount().getAuthorization(), body);
 
-        call.enqueue(new Callback<BaseRes>() {
+        call.enqueue(new Callback<QLBaseRes>() {
             @Override
-            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+            public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -1023,7 +1023,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<BaseRes> call, Throwable t) {
+            public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -1033,16 +1033,16 @@ public class QLApiController {
     }
 
     public static void getScripts(@NonNull String requestId, @NonNull GetScriptsCallback callback) {
-        Call<ScriptRes> call = new Retrofit.Builder()
+        Call<QLScriptRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .getScripts(AccountSP.getCurrentAccount().getAuthorization());
-        call.enqueue(new Callback<ScriptRes>() {
+        call.enqueue(new Callback<QLScriptRes>() {
             @Override
-            public void onResponse(Call<ScriptRes> call, Response<ScriptRes> response) {
-                ScriptRes scriptRes = response.body();
+            public void onResponse(Call<QLScriptRes> call, Response<QLScriptRes> response) {
+                QLScriptRes scriptRes = response.body();
                 if (scriptRes == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -1061,7 +1061,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<ScriptRes> call, Throwable t) {
+            public void onFailure(Call<QLScriptRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -1071,16 +1071,16 @@ public class QLApiController {
     }
 
     public static void getScriptDetail(@NonNull String requestId, @NonNull String scriptPath, @NonNull BaseCallback callback) {
-        Call<BaseRes> call = new Retrofit.Builder()
+        Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .getScriptDetail(scriptPath, AccountSP.getCurrentAccount().getAuthorization());
 
-        call.enqueue(new Callback<BaseRes>() {
+        call.enqueue(new Callback<QLBaseRes>() {
             @Override
-            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+            public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -1094,7 +1094,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<BaseRes> call, Throwable t) {
+            public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -1111,16 +1111,16 @@ public class QLApiController {
         String json = jsonObject.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
 
-        Call<BaseRes> call = new Retrofit.Builder()
+        Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .saveScript(AccountSP.getCurrentAccount().getAuthorization(), body);
 
-        call.enqueue(new Callback<BaseRes>() {
+        call.enqueue(new Callback<QLBaseRes>() {
             @Override
-            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+            public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -1134,7 +1134,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<BaseRes> call, Throwable t) {
+            public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -1144,16 +1144,16 @@ public class QLApiController {
     }
 
     public static void getDependencies(@NonNull String requestId, String searchValue, String type, @NonNull GetDependenciesCallback callback) {
-        Call<DependenceRes> call = new Retrofit.Builder()
+        Call<QLDependenceRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .getDependencies(AccountSP.getCurrentAccount().getAuthorization(), searchValue, type);
 
-        call.enqueue(new Callback<DependenceRes>() {
+        call.enqueue(new Callback<QLDependenceRes>() {
             @Override
-            public void onResponse(Call<DependenceRes> call, Response<DependenceRes> response) {
+            public void onResponse(Call<QLDependenceRes> call, Response<QLDependenceRes> response) {
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -1167,7 +1167,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<DependenceRes> call, Throwable t) {
+            public void onFailure(Call<QLDependenceRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -1187,17 +1187,17 @@ public class QLApiController {
         }
         
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
-        Call<BaseRes> call = new Retrofit.Builder()
+        Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .addDependencies(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
 
-        call.enqueue(new Callback<BaseRes>() {
+        call.enqueue(new Callback<QLBaseRes>() {
             @Override
-            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
-                BaseRes baseRes = response.body();
+            public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                QLBaseRes baseRes = response.body();
                 if (baseRes == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -1216,7 +1216,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<BaseRes> call, Throwable t) {
+            public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -1233,17 +1233,17 @@ public class QLApiController {
         String json = jsonArray.toString();
 
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<BaseRes> call = new Retrofit.Builder()
+        Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .deleteDependencies(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
 
-        call.enqueue(new Callback<BaseRes>() {
+        call.enqueue(new Callback<QLBaseRes>() {
             @Override
-            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
-                BaseRes baseRes = response.body();
+            public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                QLBaseRes baseRes = response.body();
                 if (baseRes == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -1262,7 +1262,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<BaseRes> call, Throwable t) {
+            public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -1279,17 +1279,17 @@ public class QLApiController {
         String json = jsonArray.toString();
 
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<BaseRes> call = new Retrofit.Builder()
+        Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .reinstallDependencies(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
 
-        call.enqueue(new Callback<BaseRes>() {
+        call.enqueue(new Callback<QLBaseRes>() {
             @Override
-            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
-                BaseRes baseRes = response.body();
+            public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                QLBaseRes baseRes = response.body();
                 if (baseRes == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -1308,7 +1308,7 @@ public class QLApiController {
             }
 
             @Override
-            public void onFailure(Call<BaseRes> call, Throwable t) {
+            public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
             }
@@ -1319,7 +1319,7 @@ public class QLApiController {
 
 
     public interface SystemCallback {
-        void onSuccess(SystemRes systemRes);
+        void onSuccess(QLSystemRes systemRes);
 
         void onFailure(String msg);
     }
@@ -1349,7 +1349,7 @@ public class QLApiController {
     }
 
     public interface GetTasksCallback {
-        void onSuccess(TasksRes data);
+        void onSuccess(QLTasksRes data);
 
         void onFailure(String msg);
     }
@@ -1367,13 +1367,13 @@ public class QLApiController {
     }
 
     public interface GetEnvironmentsCallback {
-        void onSuccess(EnvironmentRes res);
+        void onSuccess(QLEnvironmentRes res);
 
         void onFailure(String msg);
     }
 
     public interface GetDependenciesCallback {
-        void onSuccess(DependenceRes res);
+        void onSuccess(QLDependenceRes res);
 
         void onFailure(String msg);
     }

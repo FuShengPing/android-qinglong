@@ -4,7 +4,7 @@ import java.util.List;
 
 import auto.qinglong.bean.ql.QLLog;
 
-public class LogRes {
+public class QLLogRes {
     int code;
     List<QLLog> dirs;
     String message;
