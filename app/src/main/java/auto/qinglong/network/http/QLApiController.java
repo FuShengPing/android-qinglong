@@ -40,7 +40,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class QLApiController {
     private static final String ERROR_NO_BODY = "响应异常";
-    private static final String ERROR_INVALID_AUTH = "无效会话";
+    private static final String ERROR_INVALID_AUTH = "登录失效";
 
     public static void getSystemInfo(@NonNull String requestId, @NonNull Account account, @NonNull SystemCallback callback) {
         Call<QLSystemRes> call = new Retrofit.Builder()
@@ -53,6 +53,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLSystemRes>() {
             @Override
             public void onResponse(Call<QLSystemRes> call, Response<QLSystemRes> response) {
+                RequestManager.finishCall(requestId);
                 QLSystemRes systemRes = response.body();
                 if (systemRes == null) {
                     if (response.code() == 401) {
@@ -68,13 +69,12 @@ public class QLApiController {
                         callback.onFailure(systemRes.getMessage());
                     }
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLSystemRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -92,6 +92,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLTasksRes>() {
             @Override
             public void onResponse(Call<QLTasksRes> call, Response<QLTasksRes> response) {
+                RequestManager.finishCall(requestId);
                 QLTasksRes tasksRes = response.body();
                 if (tasksRes == null) {
                     if (response.code() == 401) {
@@ -100,20 +101,18 @@ public class QLApiController {
                         callback.onFailure(ERROR_NO_BODY + response.code());
                     }
                 } else {
-
                     if (tasksRes.getCode() == 200) {
                         callback.onSuccess(account);
                     } else {
                         callback.onFailure(tasksRes.getMessage());
                     }
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLTasksRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -137,6 +136,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLLoginRes>() {
             @Override
             public void onResponse(Call<QLLoginRes> call, Response<QLLoginRes> response) {
+                RequestManager.finishCall(requestId);
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -153,13 +153,12 @@ public class QLApiController {
                         callback.onFailure(loginRes.getMessage());
                     }
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLLoginRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
         RequestManager.addCall(call, requestId);
@@ -175,6 +174,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLTasksRes>() {
             @Override
             public void onResponse(Call<QLTasksRes> call, Response<QLTasksRes> response) {
+                RequestManager.finishCall(requestId);
                 QLTasksRes tasksRes = response.body();
                 if (tasksRes == null) {
                     if (response.code() == 401) {
@@ -190,13 +190,12 @@ public class QLApiController {
                         callback.onFailure(tasksRes.getMessage());
                     }
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLTasksRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -221,6 +220,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                RequestManager.finishCall(requestId);
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -230,13 +230,12 @@ public class QLApiController {
                 } else {
                     callback.onSuccess(response.body().getMessage());
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -262,6 +261,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                RequestManager.finishCall(requestId);
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -274,15 +274,13 @@ public class QLApiController {
                     } else {
                         callback.onFailure(response.body().getMessage());
                     }
-
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -308,6 +306,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                RequestManager.finishCall(requestId);
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -320,15 +319,13 @@ public class QLApiController {
                     } else {
                         callback.onFailure(response.body().getMessage());
                     }
-
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -354,6 +351,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                RequestManager.finishCall(requestId);
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -366,15 +364,13 @@ public class QLApiController {
                     } else {
                         callback.onFailure(response.body().getMessage());
                     }
-
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -400,6 +396,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                RequestManager.finishCall(requestId);
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -412,15 +409,13 @@ public class QLApiController {
                     } else {
                         callback.onFailure(response.body().getMessage());
                     }
-
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -446,6 +441,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                RequestManager.finishCall(requestId);
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -458,15 +454,13 @@ public class QLApiController {
                     } else {
                         callback.onFailure(response.body().getMessage());
                     }
-
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -492,6 +486,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                RequestManager.finishCall(requestId);
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -504,15 +499,13 @@ public class QLApiController {
                     } else {
                         callback.onFailure(response.body().getMessage());
                     }
-
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -540,6 +533,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLEditTaskRes>() {
             @Override
             public void onResponse(Call<QLEditTaskRes> call, Response<QLEditTaskRes> response) {
+                RequestManager.finishCall(requestId);
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -552,15 +546,13 @@ public class QLApiController {
                     } else {
                         callback.onFailure(response.body().getMessage());
                     }
-
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLEditTaskRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -585,6 +577,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLEditTaskRes>() {
             @Override
             public void onResponse(Call<QLEditTaskRes> call, Response<QLEditTaskRes> response) {
+                RequestManager.finishCall(requestId);
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -597,15 +590,13 @@ public class QLApiController {
                     } else {
                         callback.onFailure(response.body().getMessage());
                     }
-
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLEditTaskRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -622,6 +613,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLEnvironmentRes>() {
             @Override
             public void onResponse(Call<QLEnvironmentRes> call, Response<QLEnvironmentRes> response) {
+                RequestManager.finishCall(requestId);
                 QLEnvironmentRes environmentRes = response.body();
                 if (environmentRes == null) {
                     if (response.code() == 401) {
@@ -629,7 +621,6 @@ public class QLApiController {
                     } else {
                         callback.onFailure(ERROR_NO_BODY);
                     }
-
                 } else {
                     if (environmentRes.getCode() == 200) {
                         callback.onSuccess(environmentRes);
@@ -637,13 +628,12 @@ public class QLApiController {
                         callback.onFailure(environmentRes.getMessage());
                     }
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLEnvironmentRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -673,6 +663,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLEnvironmentRes>() {
             @Override
             public void onResponse(Call<QLEnvironmentRes> call, Response<QLEnvironmentRes> response) {
+                RequestManager.finishCall(requestId);
                 QLEnvironmentRes environmentRes = response.body();
                 if (environmentRes == null) {
                     if (response.code() == 401) {
@@ -680,7 +671,6 @@ public class QLApiController {
                     } else {
                         callback.onFailure(ERROR_NO_BODY);
                     }
-
                 } else {
                     if (environmentRes.getCode() == 200) {
                         callback.onSuccess(environmentRes);
@@ -688,13 +678,12 @@ public class QLApiController {
                         callback.onFailure(environmentRes.getMessage());
                     }
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLEnvironmentRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -721,6 +710,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLEditEnvRes>() {
             @Override
             public void onResponse(Call<QLEditEnvRes> call, Response<QLEditEnvRes> response) {
+                RequestManager.finishCall(requestId);
                 QLEditEnvRes editEnvRes = response.body();
                 if (editEnvRes == null) {
                     if (response.code() == 401) {
@@ -728,7 +718,6 @@ public class QLApiController {
                     } else {
                         callback.onFailure(ERROR_NO_BODY);
                     }
-
                 } else {
                     if (editEnvRes.getCode() == 200) {
                         callback.onSuccess(editEnvRes.getData());
@@ -736,13 +725,12 @@ public class QLApiController {
                         callback.onFailure(editEnvRes.getMessage());
                     }
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLEditEnvRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -767,6 +755,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                RequestManager.finishCall(requestId);
                 QLBaseRes baseRes = response.body();
                 if (baseRes == null) {
                     if (response.code() == 401) {
@@ -780,15 +769,13 @@ public class QLApiController {
                     } else {
                         callback.onFailure(baseRes.getMessage());
                     }
-
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -814,6 +801,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                RequestManager.finishCall(requestId);
                 QLBaseRes baseRes = response.body();
                 if (baseRes == null) {
                     if (response.code() == 401) {
@@ -827,15 +815,13 @@ public class QLApiController {
                     } else {
                         callback.onFailure(baseRes.getMessage());
                     }
-
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -861,6 +847,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                RequestManager.finishCall(requestId);
                 QLBaseRes baseRes = response.body();
                 if (baseRes == null) {
                     if (response.code() == 401) {
@@ -874,15 +861,13 @@ public class QLApiController {
                     } else {
                         callback.onFailure(baseRes.getMessage());
                     }
-
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -900,6 +885,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLLogRes>() {
             @Override
             public void onResponse(Call<QLLogRes> call, Response<QLLogRes> response) {
+                RequestManager.finishCall(requestId);
                 QLLogRes logRes = response.body();
                 if (logRes == null) {
                     if (response.code() == 401) {
@@ -907,7 +893,6 @@ public class QLApiController {
                     } else {
                         callback.onFailure(ERROR_NO_BODY);
                     }
-
                 } else {
                     if (logRes.getCode() == 200) {
                         callback.onSuccess(logRes.getDirs());
@@ -915,13 +900,12 @@ public class QLApiController {
                         callback.onFailure(logRes.getMessage());
                     }
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLLogRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -939,6 +923,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                RequestManager.finishCall(requestId);
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -948,13 +933,12 @@ public class QLApiController {
                 } else {
                     callback.onSuccess();
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
         RequestManager.addCall(call, requestId);
@@ -971,6 +955,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                RequestManager.finishCall(requestId);
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -980,13 +965,12 @@ public class QLApiController {
                 } else {
                     callback.onSuccess();
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
         RequestManager.addCall(call, requestId);
@@ -1010,6 +994,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                RequestManager.finishCall(requestId);
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -1019,13 +1004,12 @@ public class QLApiController {
                 } else {
                     callback.onSuccess();
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -1042,6 +1026,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLScriptRes>() {
             @Override
             public void onResponse(Call<QLScriptRes> call, Response<QLScriptRes> response) {
+                RequestManager.finishCall(requestId);
                 QLScriptRes scriptRes = response.body();
                 if (scriptRes == null) {
                     if (response.code() == 401) {
@@ -1049,7 +1034,6 @@ public class QLApiController {
                     } else {
                         callback.onFailure(ERROR_NO_BODY);
                     }
-
                 } else {
                     if (scriptRes.getCode() == 200) {
                         callback.onSuccess(scriptRes.getData());
@@ -1057,13 +1041,12 @@ public class QLApiController {
                         callback.onFailure(scriptRes.getMessage());
                     }
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLScriptRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -1081,6 +1064,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                RequestManager.finishCall(requestId);
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -1090,13 +1074,12 @@ public class QLApiController {
                 } else {
                     callback.onSuccess();
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
         RequestManager.addCall(call, requestId);
@@ -1121,6 +1104,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                RequestManager.finishCall(requestId);
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -1130,13 +1114,12 @@ public class QLApiController {
                 } else {
                     callback.onSuccess();
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -1154,6 +1137,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLDependenceRes>() {
             @Override
             public void onResponse(Call<QLDependenceRes> call, Response<QLDependenceRes> response) {
+                RequestManager.finishCall(requestId);
                 if (response.body() == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -1163,13 +1147,12 @@ public class QLApiController {
                 } else {
                     callback.onSuccess(response.body());
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLDependenceRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
         RequestManager.addCall(call, requestId);
@@ -1185,7 +1168,7 @@ public class QLApiController {
             jsonObject.addProperty("type", QLDependence.getType());
             jsonArray.add(jsonObject);
         }
-        
+
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
         Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
@@ -1197,6 +1180,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                RequestManager.finishCall(requestId);
                 QLBaseRes baseRes = response.body();
                 if (baseRes == null) {
                     if (response.code() == 401) {
@@ -1204,7 +1188,6 @@ public class QLApiController {
                     } else {
                         callback.onFailure(ERROR_NO_BODY);
                     }
-
                 } else {
                     if (baseRes.getCode() == 200) {
                         callback.onSuccess();
@@ -1212,13 +1195,12 @@ public class QLApiController {
                         callback.onFailure(baseRes.getMessage());
                     }
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -1243,6 +1225,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                RequestManager.finishCall(requestId);
                 QLBaseRes baseRes = response.body();
                 if (baseRes == null) {
                     if (response.code() == 401) {
@@ -1250,7 +1233,6 @@ public class QLApiController {
                     } else {
                         callback.onFailure(ERROR_NO_BODY);
                     }
-
                 } else {
                     if (baseRes.getCode() == 200) {
                         callback.onSuccess();
@@ -1258,13 +1240,12 @@ public class QLApiController {
                         callback.onFailure(baseRes.getMessage());
                     }
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
@@ -1289,6 +1270,7 @@ public class QLApiController {
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
             public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                RequestManager.finishCall(requestId);
                 QLBaseRes baseRes = response.body();
                 if (baseRes == null) {
                     if (response.code() == 401) {
@@ -1296,7 +1278,6 @@ public class QLApiController {
                     } else {
                         callback.onFailure(ERROR_NO_BODY);
                     }
-
                 } else {
                     if (baseRes.getCode() == 200) {
                         callback.onSuccess();
@@ -1304,13 +1285,12 @@ public class QLApiController {
                         callback.onFailure(baseRes.getMessage());
                     }
                 }
-                RequestManager.finishCall(requestId);
             }
 
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
-                callback.onFailure(t.getLocalizedMessage());
                 RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
 
