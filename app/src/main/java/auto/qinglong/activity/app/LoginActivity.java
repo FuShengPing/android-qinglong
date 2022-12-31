@@ -46,8 +46,6 @@ public class LoginActivity extends BaseActivity {
         ui_username = findViewById(R.id.et_username);
         ui_password = findViewById(R.id.et_password);
 
-        ui_progress = PopupWindowManager.buildProgressWindow(this);
-
         init();
     }
 
@@ -85,6 +83,9 @@ public class LoginActivity extends BaseActivity {
             ui_confirm.setEnabled(false);
             ui_confirm.postDelayed(() -> ui_confirm.setEnabled(true), 300);
 
+            if (ui_progress == null) {
+                ui_progress = PopupWindowManager.buildProgressWindow(this);
+            }
             ui_progress.setText("登录中...");
 
             Account account = new Account(username, password, address, "");
@@ -153,7 +154,6 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void enterHome(Account account) {
-        ui_progress.destroy();
         //保存账号信息
         AccountSP.saveCurrentAccount(account);
         AccountDBHelper.insertAccount(account);

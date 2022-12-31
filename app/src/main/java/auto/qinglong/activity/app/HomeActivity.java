@@ -1,5 +1,6 @@
 package auto.qinglong.activity.app;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -17,6 +18,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
+
+import java.util.Objects;
 
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
@@ -41,6 +44,7 @@ import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.views.popup.ConfirmWindow;
 import auto.qinglong.views.popup.PopupWindowManager;
+import auto.qinglong.views.popup.ProgressPopWindow;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -80,34 +84,79 @@ public class HomeActivity extends BaseActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        if (!mCurrentFragment.onBackPressed()) {
-            long current = System.currentTimeMillis();
-            if (current - mLastBackPressedTime < 2000) {
-                finish();
-            } else {
-                mLastBackPressedTime = current;
-                ToastUnit.showShort("再按一次退出");
-            }
-        }
-    }
-
-    @Override
     protected void init() {
         //变量初始化
         mMenuClickListener = () -> ui_drawer.openDrawer(ui_drawer_left);
-
         //导航栏初始化
         initDrawerBar();
-
         //初始化第一帧页面
         showFragment(TaskFragment.TAG);
-
         //版本检查
         netCheckVersion();
-
         //日志上报
         netLogReport();
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void initDrawerBar() {
+        ui_drawer_left.setVisibility(View.INVISIBLE);
+        //用户信息
+        TextView layout_username = ui_drawer_left.findViewById(R.id.menu_top_info_username);
+        TextView layout_address = ui_drawer_left.findViewById(R.id.menu_top_info_address);
+        layout_username.setText(Objects.requireNonNull(AccountSP.getCurrentAccount()).getUsername());
+        layout_address.setText(AccountSP.getCurrentAccount().getAddress());
+        String ip = NetUnit.getIP();
+        if (ip != null) {
+            TextView layout_ip = ui_drawer_left.findViewById(R.id.menu_top_info_inner_ip);
+            layout_ip.setText("本地：" + ip);
+            layout_ip.setVisibility(View.VISIBLE);
+        }
+
+        //导航监听
+        LinearLayout menu_task = ui_drawer_left.findViewById(R.id.menu_task);
+        LinearLayout menu_log = ui_drawer_left.findViewById(R.id.menu_log);
+        LinearLayout menu_config = ui_drawer_left.findViewById(R.id.menu_config);
+        LinearLayout menu_script = ui_drawer_left.findViewById(R.id.menu_script);
+        LinearLayout menu_env = ui_drawer_left.findViewById(R.id.menu_env);
+        LinearLayout menu_setting = ui_drawer_left.findViewById(R.id.menu_setting);
+        LinearLayout menu_dep = ui_drawer_left.findViewById(R.id.menu_dep);
+        LinearLayout menu_exit = ui_drawer_left.findViewById(R.id.menu_exit);
+        LinearLayout menu_extension_webck = ui_drawer_left.findViewById(R.id.menu_extension_webck);
+        LinearLayout menu_app_setting = ui_drawer_left.findViewById(R.id.menu_app_setting);
+
+        menu_task.setOnClickListener(v -> showFragment(TaskFragment.TAG));
+
+        menu_log.setOnClickListener(v -> showFragment(LogFragment.TAG));
+
+        menu_config.setOnClickListener(v -> showFragment(ConfigFragment.TAG));
+
+        menu_script.setOnClickListener(v -> showFragment(ScriptFragment.TAG));
+
+        menu_env.setOnClickListener(v -> showFragment(EnvFragment.TAG));
+
+        menu_dep.setOnClickListener(v -> showFragment(DepFragment.TAG));
+
+        menu_setting.setOnClickListener(v -> {
+            ToastUnit.showShort("暂未开放");
+        });
+
+        menu_exit.setOnClickListener(v -> {
+            Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.activity_alpha_enter, R.anim.activity_alpha_out);
+            finish();
+        });
+
+        menu_extension_webck.setOnClickListener(v -> {
+            Intent intent = new Intent(getBaseContext(), PluginWebActivity.class);
+            startActivity(intent);
+        });
+
+        menu_app_setting.setOnClickListener(v -> {
+            ToastUnit.showShort("暂未开放");
+        });
+
+
     }
 
     private void showFragment(String menu) {
@@ -183,67 +232,6 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-    private void initDrawerBar() {
-        ui_drawer_left.setVisibility(View.INVISIBLE);
-        //用户信息
-        TextView layout_username = ui_drawer_left.findViewById(R.id.menu_top_info_username);
-        TextView layout_address = ui_drawer_left.findViewById(R.id.menu_top_info_address);
-        layout_username.setText(AccountSP.getCurrentAccount().getUsername());
-        layout_address.setText(AccountSP.getCurrentAccount().getAddress());
-        String ip = NetUnit.getIP();
-        if (ip != null) {
-            TextView layout_ip = ui_drawer_left.findViewById(R.id.menu_top_info_inner_ip);
-            layout_ip.setText("本地：" + ip);
-            layout_ip.setVisibility(View.VISIBLE);
-        }
-
-        //导航监听
-        LinearLayout menu_task = ui_drawer_left.findViewById(R.id.menu_task);
-        LinearLayout menu_log = ui_drawer_left.findViewById(R.id.menu_log);
-        LinearLayout menu_config = ui_drawer_left.findViewById(R.id.menu_config);
-        LinearLayout menu_script = ui_drawer_left.findViewById(R.id.menu_script);
-        LinearLayout menu_env = ui_drawer_left.findViewById(R.id.menu_env);
-        LinearLayout menu_setting = ui_drawer_left.findViewById(R.id.menu_setting);
-        LinearLayout menu_dep = ui_drawer_left.findViewById(R.id.menu_dep);
-        LinearLayout menu_exit = ui_drawer_left.findViewById(R.id.menu_exit);
-        LinearLayout menu_extension_webck = ui_drawer_left.findViewById(R.id.menu_extension_webck);
-        LinearLayout menu_app_setting = ui_drawer_left.findViewById(R.id.menu_app_setting);
-
-        menu_task.setOnClickListener(v -> showFragment(TaskFragment.TAG));
-
-        menu_log.setOnClickListener(v -> showFragment(LogFragment.TAG));
-
-        menu_config.setOnClickListener(v -> showFragment(ConfigFragment.TAG));
-
-        menu_script.setOnClickListener(v -> showFragment(ScriptFragment.TAG));
-
-        menu_env.setOnClickListener(v -> showFragment(EnvFragment.TAG));
-
-        menu_dep.setOnClickListener(v -> showFragment(DepFragment.TAG));
-
-        menu_setting.setOnClickListener(v -> {
-            ToastUnit.showShort("暂未开放");
-        });
-
-        menu_exit.setOnClickListener(v -> {
-            Intent intent = new Intent(getBaseContext(), LoginActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.activity_alpha_enter, R.anim.activity_alpha_out);
-            finish();
-        });
-
-        menu_extension_webck.setOnClickListener(v -> {
-            Intent intent = new Intent(getBaseContext(), PluginWebActivity.class);
-            startActivity(intent);
-        });
-
-        menu_app_setting.setOnClickListener(v -> {
-            ToastUnit.showShort("暂未开放");
-        });
-
-
-    }
-
     private void netCheckVersion() {
         ApiController.getVersion(getClassName(), new ApiController.VersionCallback() {
             @Override
@@ -306,6 +294,19 @@ public class HomeActivity extends BaseActivity {
             }
         });
         popupWindowNotice = PopupWindowManager.buildConfirmWindow(this, confirmWindow);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!mCurrentFragment.onBackPressed()) {
+            long current = System.currentTimeMillis();
+            if (current - mLastBackPressedTime < 2000) {
+                finish();
+            } else {
+                mLastBackPressedTime = current;
+                ToastUnit.showShort("再按一次退出");
+            }
+        }
     }
 
     @Override
