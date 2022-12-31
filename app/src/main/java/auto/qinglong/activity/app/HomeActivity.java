@@ -2,7 +2,6 @@ package auto.qinglong.activity.app;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,10 +13,7 @@ import android.widget.TextView;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-
-import org.json.JSONObject;
 
 import java.util.Objects;
 
@@ -35,7 +31,6 @@ import auto.qinglong.activity.ql.task.TaskFragment;
 import auto.qinglong.bean.app.Version;
 import auto.qinglong.bean.app.network.BaseRes;
 import auto.qinglong.database.sp.AccountSP;
-import auto.qinglong.network.http.Api;
 import auto.qinglong.network.http.ApiController;
 import auto.qinglong.utils.DeviceUnit;
 import auto.qinglong.utils.LogUnit;
@@ -44,22 +39,15 @@ import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.views.popup.ConfirmWindow;
 import auto.qinglong.views.popup.PopupWindowManager;
-import auto.qinglong.views.popup.ProgressPopWindow;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.http.Body;
-import retrofit2.http.Tag;
 
 public class HomeActivity extends BaseActivity {
     public static final String TAG = "HomeActivity";
-
     private long mLastBackPressedTime = 0;
     private BaseFragment mCurrentFragment;
     private String mCurrentMenu = "";
     private BaseFragment.MenuClickListener mMenuClickListener;
-    private PopupWindow popupWindowNotice;
     // 碎片界面列表
     private TaskFragment fg_task;
     private LogFragment fg_log;
@@ -71,6 +59,7 @@ public class HomeActivity extends BaseActivity {
     //布局变量
     private DrawerLayout ui_drawer;
     private LinearLayout ui_drawer_left;
+    private PopupWindow ui_pop_notice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -293,7 +282,7 @@ public class HomeActivity extends BaseActivity {
                 return true;
             }
         });
-        popupWindowNotice = PopupWindowManager.buildConfirmWindow(this, confirmWindow);
+        ui_pop_notice = PopupWindowManager.buildConfirmWindow(this, confirmWindow);
     }
 
     @Override
@@ -311,7 +300,7 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (popupWindowNotice != null && popupWindowNotice.isShowing()) {
+        if (ui_pop_notice != null && ui_pop_notice.isShowing()) {
             return false;
         }
         return super.dispatchTouchEvent(ev);
