@@ -3,10 +3,13 @@
   "versionName": "1.2",
   "isForce": true,
   "updateTime": "2022-12-04",
-  "downloadUrl": "https://gitee.com/wsfsp4/QingLong/releases/download/V1.1/app-release_1_1.apk",
+  "downloadUrl": "https://gitee.com/wsfsp4/QingLong/releases/download/V1.2/app-release.apk",
   "updateDetail": [
-    "(2)环境变量模块增加快捷导入、去重功能",
-    "(3)定时任务模块增加定时修正",
-    "(1)其他细节优化"
+    "(1)修复部分功能异常闪退问题",
+    "(2)环境变量模块新增快捷导入、变量去重和远程导入功能",
+    "(3)CK助手模块新增规则提取、远程导入功能",
+    "(4)支持IPV6地址登录",
+    "(4)优化提示",
+    "(5)其他细节优化"
   ]
 }

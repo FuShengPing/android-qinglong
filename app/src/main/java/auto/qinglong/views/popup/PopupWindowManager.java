@@ -177,9 +177,7 @@ public class PopupWindowManager {
         ProgressPopWindow progressPopWindow = new ProgressPopWindow(activity, popWindow, ui_tip);
 
         //窗体消失监听
-        popWindow.setOnDismissListener(() -> {
-            WindowUnit.setBackgroundAlpha(activity, 1.0f);
-        });
+        popWindow.setOnDismissListener(() -> WindowUnit.setBackgroundAlpha(activity, 1.0f));
 
         WindowUnit.setBackgroundAlpha(activity, 0.5f);
         popWindow.showAtLocation(activity.getWindow().getDecorView().getRootView(), Gravity.CENTER, 0, 0);

@@ -62,7 +62,8 @@ public class LoginActivity extends BaseActivity {
                 return;
             }
             String address = ui_address.getText().toString();
-            if (!address.matches("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}:\\d{1,5}")) {
+
+            if (!address.matches("((\\d{1,3}\\.){3})\\d{1,3}:\\d{1,5}")) {
                 ToastUnit.showShort("地址格式错误");
                 return;
             }
