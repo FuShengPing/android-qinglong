@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,6 +30,21 @@ public class WebUnit {
             }
         }
         return map;
+    }
+
+    public static String joinMap(Map<String, String> map, String split) {
+        StringJoiner result = new StringJoiner(split);
+        boolean first = true;
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if (first) {
+                result = new StringJoiner(split, entry.getKey() + "=" + entry.getValue(), "");
+                first = false;
+            } else {
+                result.add(entry.getKey() + "=" + entry.getValue());
+            }
+        }
+        return result.toString();
+
     }
 
     public static boolean isValidUrl(String url) {

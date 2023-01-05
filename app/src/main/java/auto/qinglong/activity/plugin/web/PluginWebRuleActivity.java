@@ -11,18 +11,13 @@ import android.widget.ImageView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
-import javax.xml.validation.Validator;
 
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.app.WebRule;
 import auto.qinglong.database.db.WebRuleDBHelper;
-import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.popup.EditWindow;
@@ -112,7 +107,7 @@ public class PluginWebRuleActivity extends BaseActivity {
                     } else if (url.isEmpty()) {
                         ToastUnit.showShort("网址不能为空");
                         return false;
-                    } else if (!WebRule.isValid(target)) {
+                    } else if (!WebRule.isTargetValid(target)) {
                         ToastUnit.showShort("非法目标键");
                         return false;
                     } else if (main.isEmpty()) {

@@ -9,6 +9,7 @@ import java.util.Map;
 
 import auto.qinglong.bean.ql.QLEnvironment;
 import auto.qinglong.utils.TextUnit;
+import auto.qinglong.utils.WebUnit;
 
 public class WebRule {
     private int id;
@@ -101,6 +102,10 @@ public class WebRule {
         this.joinChar = joinChar;
     }
 
+    public String getEnvValue() {
+        return envValue;
+    }
+
     public QLEnvironment buildObject() {
         QLEnvironment qlEnvironment = new QLEnvironment();
         qlEnvironment.setName(this.envName);
@@ -111,17 +116,19 @@ public class WebRule {
 
     public boolean match(String url, Map<String, String> ckMap) {
         boolean flag = url.contains(this.url) && TextUnit.isFull(ckMap.get(this.main));
-
         if (!flag) {
             return false;
         }
-
+        //主键
         this.mainValue = ckMap.get(this.main);
 
+        //*
         if (this.target.equals("*")) {
-            this.envValue = TextUnit.joinMap(ckMap, this.joinChar);
+            this.envValue = WebUnit.joinMap(ckMap, this.joinChar);
             return true;
-        } else if (this.target.matches("\\*;((\\w+>>\\w+);?)+")) {
+        }
+        //*;keyA=>keyB
+        if (this.target.matches("\\*;((\\w+>>\\w+);?)+")) {
             String[] keys = this.target.split(";");
             for (String key : keys) {
                 if (!key.equals("*")) {
@@ -135,9 +142,11 @@ public class WebRule {
                     }
                 }
             }
-            this.envValue = TextUnit.joinMap(ckMap, this.joinChar);
+            this.envValue = WebUnit.joinMap(ckMap, this.joinChar);
             return true;
-        } else if (this.target.matches("(((\\w+=)|(\\w+>>\\w+=));?)+")) {
+        }
+        //keyA=;[keyA=>keyB]
+        if (this.target.matches("(((\\w+=)|(\\w+>>\\w+=));?)+")) {
             Map<String, String> targetMap = new HashMap<>();
             String[] keys = this.target.split(";");
             for (String key : keys) {
@@ -158,9 +167,11 @@ public class WebRule {
                     }
                 }
             }
-            this.envValue = TextUnit.joinMap(targetMap, this.joinChar);
+            this.envValue = WebUnit.joinMap(targetMap, this.joinChar);
             return true;
-        } else if (this.target.matches("(\\w+;?)+")) {
+        }
+        //keyA
+        if (this.target.matches("(\\w+;?)+")) {
             List<String> targetValue = new ArrayList<>();
             String[] keys = this.target.split(";");
             for (String key : keys) {
@@ -172,12 +183,11 @@ public class WebRule {
             }
             this.envValue = TextUnit.join(targetValue, this.joinChar);
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
-    public static boolean isValid(String target) {
+    public static boolean isTargetValid(String target) {
         return target.equals("*")
                 || target.matches("\\*;((\\w+>>\\w+);?)+")
                 || target.matches("(((\\w+=)|(\\w+>>\\w+=));?)+")
