@@ -47,16 +47,25 @@ public class WebUnit {
 
     }
 
-    public static boolean isValidUrl(String url) {
-        return url != null && url.matches("^(https|http)://([\\w-]+\\.)+[\\w-]+(/[\\w-./?%&=]*)?$");
+    public static boolean isValidUrl(String urlString) {
+        try {
+            URL url = new URL(urlString);
+            url.toURI();
+            LogUnit.log(url.getProtocol());
+            LogUnit.log(url.getHost());
+            LogUnit.log(url.getPath());
+            LogUnit.log(url.getQuery());
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
-    public static String getHost(@NonNull String url) {
-        Pattern pattern = Pattern.compile("^(https|http)://[^/]+");
-        Matcher matcher = pattern.matcher(url);
-        if (matcher.find()) {
-            return matcher.group();
-        } else {
+    public static String getHost(@NonNull String urlString) {
+        try {
+            URL url = new URL(urlString);
+            return url.getProtocol() + "://" + url.getHost();
+        } catch (Exception e) {
             return null;
         }
     }
