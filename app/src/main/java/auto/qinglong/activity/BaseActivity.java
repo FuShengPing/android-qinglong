@@ -4,16 +4,13 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.widget.PopupWindow;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import auto.qinglong.network.http.RequestManager;
-import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.ToastUnit;
-import auto.qinglong.views.popup.PopupWindowManager;
 
 public abstract class BaseActivity extends AppCompatActivity {
     public static final String TAG = "BaseActivity";

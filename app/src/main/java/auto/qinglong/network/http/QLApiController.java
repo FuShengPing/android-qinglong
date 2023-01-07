@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 
 import java.util.List;
 
+import auto.qinglong.bean.app.Account;
 import auto.qinglong.bean.ql.QLDependence;
 import auto.qinglong.bean.ql.QLEnvironment;
 import auto.qinglong.bean.ql.QLLog;
@@ -22,7 +23,6 @@ import auto.qinglong.bean.ql.network.QLLoginRes;
 import auto.qinglong.bean.ql.network.QLScriptRes;
 import auto.qinglong.bean.ql.network.QLSystemRes;
 import auto.qinglong.bean.ql.network.QLTasksRes;
-import auto.qinglong.bean.app.Account;
 import auto.qinglong.database.sp.AccountSP;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;

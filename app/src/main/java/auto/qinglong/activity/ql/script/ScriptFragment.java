@@ -5,16 +5,15 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
@@ -23,9 +22,9 @@ import java.util.List;
 import java.util.Objects;
 
 import auto.qinglong.R;
+import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.bean.ql.QLScript;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.ToastUnit;
 

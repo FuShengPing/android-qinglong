@@ -10,10 +10,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import auto.qinglong.R;
-import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.activity.BaseActivity;
-import auto.qinglong.network.web.CommonJSInterface;
+import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.network.http.RequestManager;
+import auto.qinglong.network.web.CommonJSInterface;
 import auto.qinglong.network.web.QLWebJsManager;
 import auto.qinglong.views.WebViewBuilder;
 

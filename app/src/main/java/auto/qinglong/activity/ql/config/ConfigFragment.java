@@ -16,11 +16,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import auto.qinglong.R;
-import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.activity.BaseFragment;
+import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.network.web.CommonJSInterface;
-import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.network.web.QLWebJsManager;
+import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.WebViewBuilder;
 
 public class ConfigFragment extends BaseFragment {

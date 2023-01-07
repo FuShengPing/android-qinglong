@@ -2,9 +2,6 @@ package auto.qinglong.activity.ql.dependence;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-
-import androidx.viewpager2.widget.ViewPager2;
-
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
+import androidx.viewpager2.widget.ViewPager2;
+
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -23,9 +22,9 @@ import java.util.List;
 import java.util.Map;
 
 import auto.qinglong.R;
+import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.bean.ql.QLDependence;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;

@@ -22,9 +22,9 @@ import java.util.List;
 import java.util.Objects;
 
 import auto.qinglong.R;
+import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.bean.ql.QLLog;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.ToastUnit;
 

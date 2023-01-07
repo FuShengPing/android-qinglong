@@ -7,19 +7,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
-import auto.qinglong.network.http.QLApiController;
+import auto.qinglong.bean.app.Account;
 import auto.qinglong.bean.ql.network.QLSystemRes;
 import auto.qinglong.database.db.AccountDBHelper;
-import auto.qinglong.bean.app.Account;
 import auto.qinglong.database.sp.AccountSP;
-
+import auto.qinglong.network.http.QLApiController;
+import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;
-import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.views.popup.PopupWindowManager;
 import auto.qinglong.views.popup.ProgressPopWindow;
 

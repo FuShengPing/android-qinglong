@@ -9,7 +9,6 @@ import java.util.List;
 
 import auto.qinglong.MyApplication;
 import auto.qinglong.bean.app.WebRule;
-import auto.qinglong.utils.LogUnit;
 
 public class WebRuleDBHelper {
     public static final String TAG = "WebRuleDBHelper";

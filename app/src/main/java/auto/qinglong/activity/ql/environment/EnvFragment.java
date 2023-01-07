@@ -1,12 +1,6 @@
 package auto.qinglong.activity.ql.environment;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,6 +13,11 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
@@ -30,11 +29,11 @@ import java.util.Objects;
 import java.util.Set;
 
 import auto.qinglong.R;
+import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.bean.ql.QLEnvironment;
+import auto.qinglong.bean.ql.network.QLEnvironmentRes;
 import auto.qinglong.network.http.ApiController;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.bean.ql.network.QLEnvironmentRes;
-import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.TextUnit;
