@@ -127,17 +127,6 @@ public class EnvFragment extends BaseFragment {
         }
     }
 
-    private void loadFirst() {
-        if (loadSuccessFlag || RequestManager.isRequesting(getNetRequestID())) {
-            return;
-        }
-        new Handler().postDelayed(() -> {
-            if (isVisible()) {
-                netGetEnvironments(currentSearchValue, true);
-            }
-        }, 1000);
-    }
-
     @Override
     public void init() {
         envItemAdapter.setItemInterface(new EnvItemAdapter.ItemActionListener() {
@@ -243,6 +232,265 @@ public class EnvFragment extends BaseFragment {
             netEnableEnvironments(ids);
         });
 
+    }
+
+    @Override
+    public void setMenuClickListener(MenuClickListener menuClickListener) {
+        this.menuClickListener = menuClickListener;
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if (layout_bar_search.getVisibility() == View.VISIBLE) {
+            changeBar(BarType.NAV);
+            return true;
+        } else if (layout_bar_actions.getVisibility() == View.VISIBLE) {
+            changeBar(BarType.NAV);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void loadFirst() {
+        if (loadSuccessFlag || RequestManager.isRequesting(getNetRequestID())) {
+            return;
+        }
+        new Handler().postDelayed(() -> {
+            if (isVisible()) {
+                netGetEnvironments(currentSearchValue, true);
+            }
+        }, 1000);
+    }
+
+    public void sortAndSetData(List<QLEnvironment> data) {
+        if (data.size() != 0) {
+            Collections.sort(data);
+            //设置序号
+            int size = data.size();
+            int current = 0;
+            int index = 1;
+            while (true) {
+                data.get(current).setIndex(index);
+                if (current < size - 1) {
+                    if (data.get(current).getName().equals(data.get(current + 1).getName())) {
+                        index += 1;
+                    } else {
+                        index = 1;
+                    }
+                } else {
+                    break;
+                }
+                current += 1;
+            }
+        }
+        envItemAdapter.setData(data);
+    }
+
+    public void compareAndDeleteData() {
+        List<String> ids = new ArrayList<>();
+        Set<String> set = new HashSet<>();
+        List<QLEnvironment> qlEnvironments = this.envItemAdapter.getData();
+        for (QLEnvironment qlEnvironment : qlEnvironments) {
+            String key = qlEnvironment.getName() + qlEnvironment.getValue();
+            if (set.contains(key)) {
+                ids.add(qlEnvironment.get_id());
+            } else {
+                set.add(key);
+            }
+        }
+        if (ids.size() == 0) {
+            ToastUnit.showShort("无重复变量");
+        } else {
+            netDeleteEnvironments(ids);
+        }
+    }
+
+    public void showPopWindowMiniMore() {
+        MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
+        miniMoreWindow.addItem(new MiniMoreItem("add", "新建变量", R.drawable.ic_add_gray));
+        miniMoreWindow.addItem(new MiniMoreItem("quickAdd", "快捷导入", R.drawable.ic_flash_on_gray));
+        miniMoreWindow.addItem(new MiniMoreItem("remoteAdd", "远程导入", R.drawable.ic_cloud_download));
+        miniMoreWindow.addItem(new MiniMoreItem("deleteMul", "变量去重", R.drawable.ic_delete_gray));
+        miniMoreWindow.addItem(new MiniMoreItem("mulAction", "批量操作", R.drawable.ic_mul_action_gray));
+        miniMoreWindow.setOnActionListener(key -> {
+            switch (key) {
+                case "add":
+                    showPopWindowCommonEdit(null);
+                    break;
+                case "quickAdd":
+                    showPopWindowQuickEdit();
+                    break;
+                case "remoteAdd":
+                    showPopWindowRemoteEdit();
+                    break;
+                case "deleteMul":
+                    compareAndDeleteData();
+                    break;
+                case "mulAction":
+                    changeBar(BarType.MUL_ACTION);
+                    break;
+                default:
+                    break;
+            }
+            return true;
+        });
+        PopupWindowManager.buildMiniMoreWindow(requireActivity(), miniMoreWindow, layout_bar, Gravity.END);
+    }
+
+    private void showPopWindowCommonEdit(QLEnvironment environment) {
+        EditWindow editWindow = new EditWindow("新建变量", "取消", "确定");
+        EditWindowItem itemName = new EditWindowItem("name", null, "名称", "请输入变量名称");
+        EditWindowItem itemValue = new EditWindowItem("value", null, "值", "请输入变量值");
+        EditWindowItem itemRemark = new EditWindowItem("remark", null, "备注", "请输入备注(可选)");
+
+        if (environment != null) {
+            editWindow.setTitle("编辑变量");
+            itemName.setValue(environment.getName());
+            itemValue.setValue(environment.getValue());
+            itemRemark.setValue(environment.getRemarks());
+        }
+
+        editWindow.addItem(itemName);
+        editWindow.addItem(itemValue);
+        editWindow.addItem(itemRemark);
+        editWindow.setActionListener(new EditWindow.OnActionListener() {
+            @Override
+            public boolean onConfirm(Map<String, String> map) {
+                String name = map.get("name");
+                String value = map.get("value");
+                String remarks = map.get("remark");
+
+                if (TextUnit.isEmpty(name)) {
+                    ToastUnit.showShort("变量名称不能为空");
+                    return false;
+                }
+                if (TextUnit.isEmpty(value)) {
+                    ToastUnit.showShort("变量值不能为空");
+                    return false;
+                }
+
+                WindowUnit.hideKeyboard(editWindow.getView());
+
+                List<QLEnvironment> environments = new ArrayList<>();
+                QLEnvironment newEnv;
+                newEnv = new QLEnvironment();
+                newEnv.setName(name);
+                newEnv.setValue(value);
+                newEnv.setRemarks(remarks);
+                environments.add(newEnv);
+                if (environment == null) {
+                    netAddEnvironments(environments);
+                } else {
+                    newEnv.set_id(environment.get_id());
+                    netUpdateEnvironment(newEnv);
+                }
+
+                return false;
+            }
+
+            @Override
+            public boolean onCancel() {
+                return true;
+            }
+        });
+
+        popupWindowEdit = PopupWindowManager.buildEditWindow(requireActivity(), editWindow);
+    }
+
+    private void showPopWindowQuickEdit() {
+        EditWindow editWindow = new EditWindow("快捷导入", "取消", "确定");
+        EditWindowItem itemValue = new EditWindowItem("values", null, "文本", "请输入文本");
+        EditWindowItem itemRemark = new EditWindowItem("remark", null, "备注", "请输入备注(可选)");
+
+        editWindow.addItem(itemValue);
+        editWindow.addItem(itemRemark);
+        editWindow.setActionListener(new EditWindow.OnActionListener() {
+            @Override
+            public boolean onConfirm(Map<String, String> map) {
+                String values = map.get("values");
+                String remarks = map.get("remark");
+
+                if (TextUnit.isEmpty(values)) {
+                    ToastUnit.showShort("文本不能为空");
+                    return false;
+                }
+
+                WindowUnit.hideKeyboard(editWindow.getView());
+
+                List<QLEnvironment> environments = QLEnvironment.parseExport(values, remarks);
+                if (environments.size() == 0) {
+                    ToastUnit.showShort("提取变量失败");
+                } else {
+                    netAddEnvironments(environments);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onCancel() {
+                return true;
+            }
+        });
+
+        popupWindowEdit = PopupWindowManager.buildEditWindow(requireActivity(), editWindow);
+    }
+
+    private void showPopWindowRemoteEdit() {
+        EditWindow editWindow = new EditWindow("远程导入", "取消", "确定");
+        EditWindowItem itemValue = new EditWindowItem("url", null, "链接", "请输入远程地址");
+        editWindow.addItem(itemValue);
+        editWindow.setActionListener(new EditWindow.OnActionListener() {
+            @Override
+            public boolean onConfirm(Map<String, String> map) {
+                String url = map.get("url");
+
+                if (!WebUnit.isValidUrl(url)) {
+                    ToastUnit.showShort("地址不合法");
+                    return false;
+                }
+
+                WindowUnit.hideKeyboard(editWindow.getView());
+                String baseUrl = WebUnit.getHost(url) + "/";
+                String path = WebUnit.getPath(url, "");
+                netGetRemoteEnvironments(baseUrl, path);
+
+                return false;
+            }
+
+            @Override
+            public boolean onCancel() {
+                return true;
+            }
+        });
+
+        popupWindowEdit = PopupWindowManager.buildEditWindow(requireActivity(), editWindow);
+    }
+
+    public void changeBar(BarType barType) {
+        if (layout_bar_search.getVisibility() == View.VISIBLE) {
+            WindowUnit.hideKeyboard(layout_root);
+            layout_bar_search.setVisibility(View.INVISIBLE);
+            currentSearchValue = "";
+        }
+
+        if (layout_bar_actions.getVisibility() == View.VISIBLE) {
+            layout_bar_actions.setVisibility(View.INVISIBLE);
+            envItemAdapter.setCheckState(false, -1);
+            layout_actions_select.setChecked(false);
+        }
+
+        layout_bar_nav.setVisibility(View.INVISIBLE);
+
+        if (barType == BarType.NAV) {
+            layout_bar_nav.setVisibility(View.VISIBLE);
+        } else if (barType == BarType.SEARCH) {
+            layout_bar_search.setVisibility(View.VISIBLE);
+        } else {
+            layout_actions_select.setChecked(false);
+            envItemAdapter.setCheckState(true, -1);
+            layout_bar_actions.setVisibility(View.VISIBLE);
+        }
     }
 
     private void netGetEnvironments(String searchValue, boolean needTip) {
@@ -390,255 +638,4 @@ public class EnvFragment extends BaseFragment {
         });
     }
 
-    public void sortAndSetData(List<QLEnvironment> data) {
-        if (data.size() != 0) {
-            Collections.sort(data);
-            //设置序号
-            int size = data.size();
-            int current = 0;
-            int index = 1;
-            while (true) {
-                data.get(current).setIndex(index);
-                if (current < size - 1) {
-                    if (data.get(current).getName().equals(data.get(current + 1).getName())) {
-                        index += 1;
-                    } else {
-                        index = 1;
-                    }
-                } else {
-                    break;
-                }
-                current += 1;
-            }
-        }
-        envItemAdapter.setData(data);
-    }
-
-    public void compareAndDeleteData() {
-        List<String> ids = new ArrayList<>();
-        Set<String> set = new HashSet<>();
-        List<QLEnvironment> qlEnvironments = this.envItemAdapter.getData();
-        for (QLEnvironment qlEnvironment : qlEnvironments) {
-            String key = qlEnvironment.getName() + qlEnvironment.getValue();
-            if (set.contains(key)) {
-                ids.add(qlEnvironment.get_id());
-            } else {
-                set.add(key);
-            }
-        }
-        if (ids.size() == 0) {
-            ToastUnit.showShort("无重复变量");
-        } else {
-            netDeleteEnvironments(ids);
-        }
-    }
-
-    public void showPopWindowMiniMore() {
-        MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
-        miniMoreWindow.addItem(new MiniMoreItem("add", "新建变量", R.drawable.ic_add_gray));
-        miniMoreWindow.addItem(new MiniMoreItem("quickAdd", "快捷导入", R.drawable.ic_flash_on_gray));
-        miniMoreWindow.addItem(new MiniMoreItem("remoteAdd", "远程导入", R.drawable.ic_cloud_download));
-        miniMoreWindow.addItem(new MiniMoreItem("deleteMul", "变量去重", R.drawable.ic_delete_gray));
-        miniMoreWindow.addItem(new MiniMoreItem("mulAction", "批量操作", R.drawable.ic_mul_action_gray));
-        miniMoreWindow.setOnActionListener(key -> {
-            switch (key) {
-                case "add":
-                    showPopWindowCommonEdit(null);
-                    break;
-                case "quickAdd":
-                    showPopWindowQuickEdit();
-                    break;
-                case "remoteAdd":
-                    showPopWindowRemoteEdit();
-                    break;
-                case "deleteMul":
-                    compareAndDeleteData();
-                    break;
-                case "mulAction":
-                    changeBar(BarType.MUL_ACTION);
-                    break;
-                default:
-                    break;
-            }
-            return true;
-        });
-        PopupWindowManager.buildMiniMoreWindow(requireActivity(), miniMoreWindow, layout_bar, Gravity.END);
-    }
-
-    private void showPopWindowCommonEdit(QLEnvironment environment) {
-        EditWindow editWindow = new EditWindow("新建变量", "取消", "确定");
-        EditWindowItem itemName = new EditWindowItem("name", null, "名称", "请输入变量名称");
-        EditWindowItem itemValue = new EditWindowItem("value", null, "值", "请输入变量值");
-        EditWindowItem itemRemark = new EditWindowItem("remark", null, "备注", "请输入备注(可选)");
-
-        if (environment != null) {
-            editWindow.setTitle("编辑变量");
-            itemName.setValue(environment.getName());
-            itemValue.setValue(environment.getValue());
-            itemRemark.setValue(environment.getRemarks());
-        }
-
-        editWindow.addItem(itemName);
-        editWindow.addItem(itemValue);
-        editWindow.addItem(itemRemark);
-        editWindow.setActionListener(new EditWindow.OnActionListener() {
-            @Override
-            public boolean onConfirm(Map<String, String> map) {
-                String name = map.get("name");
-                String value = map.get("value");
-                String remarks = map.get("remark");
-
-                if (TextUnit.isEmpty(name)) {
-                    ToastUnit.showShort("变量名称不能为空");
-                    return false;
-                }
-                if (TextUnit.isEmpty(value)) {
-                    ToastUnit.showShort("变量值不能为空");
-                    return false;
-                }
-
-                WindowUnit.hideKeyboard(layout_root);
-
-                List<QLEnvironment> environments = new ArrayList<>();
-                QLEnvironment newEnv;
-                newEnv = new QLEnvironment();
-                newEnv.setName(name);
-                newEnv.setValue(value);
-                newEnv.setRemarks(remarks);
-                environments.add(newEnv);
-                if (environment == null) {
-                    netAddEnvironments(environments);
-                } else {
-                    newEnv.set_id(environment.get_id());
-                    netUpdateEnvironment(newEnv);
-                }
-
-                return false;
-            }
-
-            @Override
-            public boolean onCancel() {
-                return true;
-            }
-        });
-
-        popupWindowEdit = PopupWindowManager.buildEditWindow(requireActivity(), editWindow);
-    }
-
-    private void showPopWindowQuickEdit() {
-        EditWindow editWindow = new EditWindow("快捷导入", "取消", "确定");
-        EditWindowItem itemValue = new EditWindowItem("values", null, "文本", "请输入文本");
-        EditWindowItem itemRemark = new EditWindowItem("remark", null, "备注", "请输入备注(可选)");
-
-        editWindow.addItem(itemValue);
-        editWindow.addItem(itemRemark);
-        editWindow.setActionListener(new EditWindow.OnActionListener() {
-            @Override
-            public boolean onConfirm(Map<String, String> map) {
-                String values = map.get("values");
-                String remarks = map.get("remark");
-
-                if (TextUnit.isEmpty(values)) {
-                    ToastUnit.showShort("文本不能为空");
-                    return false;
-                }
-
-                WindowUnit.hideKeyboard(layout_root);
-
-                List<QLEnvironment> environments = QLEnvironment.parseExport(values, remarks);
-                if (environments.size() == 0) {
-                    ToastUnit.showShort("提取变量失败");
-                } else {
-                    netAddEnvironments(environments);
-                }
-                return false;
-            }
-
-            @Override
-            public boolean onCancel() {
-                return true;
-            }
-        });
-
-        popupWindowEdit = PopupWindowManager.buildEditWindow(requireActivity(), editWindow);
-    }
-
-    private void showPopWindowRemoteEdit() {
-        EditWindow editWindow = new EditWindow("远程导入", "取消", "确定");
-        EditWindowItem itemValue = new EditWindowItem("url", null, "链接", "请输入远程地址");
-        editWindow.addItem(itemValue);
-        editWindow.setActionListener(new EditWindow.OnActionListener() {
-            @Override
-            public boolean onConfirm(Map<String, String> map) {
-                String url = map.get("url");
-
-                if (TextUnit.isEmpty(url)) {
-                    ToastUnit.showShort("地址不能为空");
-                    return false;
-                }
-
-                if (WebUnit.isValidUrl(url)) {
-                    WindowUnit.hideKeyboard(layout_actions_back);
-                    String baseUrl = WebUnit.getHost(url) + "/";
-                    String path = WebUnit.getPath(url, "");
-                    netGetRemoteEnvironments(baseUrl, path);
-                } else {
-                    ToastUnit.showShort("地址不合法");
-                }
-
-                return false;
-            }
-
-            @Override
-            public boolean onCancel() {
-                return true;
-            }
-        });
-
-        popupWindowEdit = PopupWindowManager.buildEditWindow(requireActivity(), editWindow);
-    }
-
-    public void changeBar(BarType barType) {
-        if (layout_bar_search.getVisibility() == View.VISIBLE) {
-            WindowUnit.hideKeyboard(layout_root);
-            layout_bar_search.setVisibility(View.INVISIBLE);
-            currentSearchValue = "";
-        }
-
-        if (layout_bar_actions.getVisibility() == View.VISIBLE) {
-            layout_bar_actions.setVisibility(View.INVISIBLE);
-            envItemAdapter.setCheckState(false, -1);
-            layout_actions_select.setChecked(false);
-        }
-
-        layout_bar_nav.setVisibility(View.INVISIBLE);
-
-        if (barType == BarType.NAV) {
-            layout_bar_nav.setVisibility(View.VISIBLE);
-        } else if (barType == BarType.SEARCH) {
-            layout_bar_search.setVisibility(View.VISIBLE);
-        } else {
-            layout_actions_select.setChecked(false);
-            envItemAdapter.setCheckState(true, -1);
-            layout_bar_actions.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
-    public void setMenuClickListener(MenuClickListener menuClickListener) {
-        this.menuClickListener = menuClickListener;
-    }
-
-    @Override
-    public boolean onBackPressed() {
-        if (layout_bar_search.getVisibility() == View.VISIBLE) {
-            changeBar(BarType.NAV);
-            return true;
-        } else if (layout_bar_actions.getVisibility() == View.VISIBLE) {
-            changeBar(BarType.NAV);
-            return true;
-        } else {
-            return false;
-        }
-    }
 }
