@@ -4,6 +4,7 @@ package auto.qinglong.activity.plugin.web;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.View;
 import android.widget.ImageView;
@@ -64,8 +65,9 @@ public class PluginWebRuleActivity extends BaseActivity {
                 WebRuleDBHelper.delete(rule.getId());
                 itemAdapter.removeItem(position);
                 //震动
-                @SuppressLint("ServiceCast") Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                vibrator.vibrate(100L);
+                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                VibrationEffect effect = VibrationEffect.createOneShot(100L, VibrationEffect.DEFAULT_AMPLITUDE);
+                vibrator.vibrate(effect);
             }
         });
 
