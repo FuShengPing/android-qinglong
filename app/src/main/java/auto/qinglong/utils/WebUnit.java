@@ -51,10 +51,6 @@ public class WebUnit {
         try {
             URL url = new URL(urlString);
             url.toURI();
-            LogUnit.log(url.getProtocol());
-            LogUnit.log(url.getHost());
-            LogUnit.log(url.getPath());
-            LogUnit.log(url.getQuery());
             return true;
         } catch (Exception e) {
             return false;
@@ -70,13 +66,19 @@ public class WebUnit {
         }
     }
 
-    public static String getPath(@NonNull String url, String def) {
-        String mUrl = url.replaceFirst("//", "");
-        Pattern pattern = Pattern.compile("/.+");
-        Matcher matcher = pattern.matcher(mUrl);
-        if (matcher.find()) {
-            return matcher.group();
-        } else {
+    public static String getPath(@NonNull String urlString, String def) {
+        try {
+            URL url = new URL(urlString);
+            String path = url.getPath();
+            String query = url.getQuery();
+            if (path != null && query != null) {
+                return path + "?" + query;
+            } else if (path != null) {
+                return path;
+            } else {
+                return def;
+            }
+        } catch (Exception e) {
             return def;
         }
     }

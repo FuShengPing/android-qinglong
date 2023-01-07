@@ -7,7 +7,8 @@ import java.util.regex.Pattern;
 
 public class QLEnvironment implements Comparable<QLEnvironment> {
     public static final String TAG = "QLEnvironment";
-
+    private int index = -1;//自定义序号 同变量名区分用
+    //原生字段
     private String _id;
     private int status;
     private String name;
@@ -16,8 +17,6 @@ public class QLEnvironment implements Comparable<QLEnvironment> {
     private String remarks = "";
     private String timestamp;
     private String value;
-    //自定义序号 同变量名区分用
-    private int index = -1;
 
     public int getStatus() {
         return status;

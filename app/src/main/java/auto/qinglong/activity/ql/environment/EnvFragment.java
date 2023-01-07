@@ -30,14 +30,13 @@ import java.util.Objects;
 import java.util.Set;
 
 import auto.qinglong.R;
-import auto.qinglong.bean.app.network.EnvironmentRes;
 import auto.qinglong.bean.ql.QLEnvironment;
-import auto.qinglong.network.http.Api;
 import auto.qinglong.network.http.ApiController;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.bean.ql.network.QLEnvironmentRes;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.network.http.RequestManager;
+import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WebUnit;
@@ -377,8 +376,9 @@ public class EnvFragment extends BaseFragment {
         ApiController.getRemoteEnvironments(getNetRequestID(), baseUrl, path, new ApiController.RemoteEnvCallback() {
 
             @Override
-            public void onSuccess(EnvironmentRes res) {
-                netAddEnvironments(res.getEnvs());
+            public void onSuccess(List<QLEnvironment> environments) {
+                LogUnit.log("size：" + environments.size());
+//                netAddEnvironments(res.getEnvs());
             }
 
             @Override
@@ -564,7 +564,6 @@ public class EnvFragment extends BaseFragment {
     private void showPopWindowRemoteEdit() {
         EditWindow editWindow = new EditWindow("远程导入", "取消", "确定");
         EditWindowItem itemValue = new EditWindowItem("url", null, "链接", "请输入远程地址");
-
         editWindow.addItem(itemValue);
         editWindow.setActionListener(new EditWindow.OnActionListener() {
             @Override
@@ -584,7 +583,6 @@ public class EnvFragment extends BaseFragment {
                 } else {
                     ToastUnit.showShort("地址不合法");
                 }
-
 
                 return false;
             }

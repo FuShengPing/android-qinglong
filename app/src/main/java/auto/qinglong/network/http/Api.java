@@ -1,10 +1,11 @@
 package auto.qinglong.network.http;
 
+import java.util.List;
+
 import auto.qinglong.bean.app.Version;
 import auto.qinglong.bean.app.network.BaseRes;
-import auto.qinglong.bean.app.network.EnvironmentRes;
 import auto.qinglong.bean.app.network.WebRuleRes;
-import auto.qinglong.bean.ql.network.QLEnvironmentRes;
+import auto.qinglong.bean.ql.QLEnvironment;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -26,5 +27,5 @@ public interface Api {
     Call<WebRuleRes> getRemoteWebRules(@Url String url);
 
     @GET
-    Call<EnvironmentRes> getRemoteEnvironments(@Url String url);
+    Call<List<QLEnvironment>> getRemoteEnvironments(@Url String url);
 }

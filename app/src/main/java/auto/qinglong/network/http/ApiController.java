@@ -2,9 +2,11 @@ package auto.qinglong.network.http;
 
 import androidx.annotation.NonNull;
 
+import java.util.List;
+
 import auto.qinglong.bean.app.Version;
 import auto.qinglong.bean.app.network.BaseRes;
-import auto.qinglong.bean.app.network.EnvironmentRes;
+import auto.qinglong.bean.ql.QLEnvironment;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -77,31 +79,23 @@ public class ApiController {
     }
 
     public static void getRemoteEnvironments(@NonNull String requestId, @NonNull String baseUrl, @NonNull String path, @NonNull RemoteEnvCallback callback) {
-        Call<EnvironmentRes> call = new Retrofit.Builder()
+        Call<List<QLEnvironment>> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
                 .getRemoteEnvironments(path);
 
-        call.enqueue(new Callback<EnvironmentRes>() {
+        call.enqueue(new Callback<List<QLEnvironment>>() {
             @Override
-            public void onResponse(Call<EnvironmentRes> call, Response<EnvironmentRes> response) {
+            public void onResponse(Call<List<QLEnvironment>> call, Response<List<QLEnvironment>> response) {
                 RequestManager.finishCall(requestId);
-                EnvironmentRes res = response.body();
-                if (res != null) {
-                    if (res.getCode() == 200) {
-                        callback.onSuccess(res);
-                    } else {
-                        callback.onFailure(res.getMsg());
-                    }
-                } else {
-                    callback.onFailure(ERROR_NO_BODY);
-                }
+                List<QLEnvironment> res = response.body();
+                callback.onSuccess(res);
             }
 
             @Override
-            public void onFailure(Call<EnvironmentRes> call, Throwable t) {
+            public void onFailure(Call<List<QLEnvironment>> call, Throwable t) {
                 RequestManager.finishCall(requestId);
                 callback.onFailure(t.getLocalizedMessage());
             }
@@ -123,7 +117,7 @@ public class ApiController {
     }
 
     public interface RemoteEnvCallback {
-        void onSuccess(EnvironmentRes res);
+        void onSuccess(List<QLEnvironment> environments);
 
         void onFailure(String msg);
     }
