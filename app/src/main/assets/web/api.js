@@ -36,11 +36,11 @@ function initEditor() {
         },
         theme: "solarized",//主题风格
         lineNumbers: true,//显示行号
-        indentUnit: 4,
-        matchBrackets: true,
         readOnly: true,//只读
-        lineWrapping: false,//换行
-        maxLength: 100,
+        lineWrapping: false,//超出不换行
+        maxHighlightLength: 200,//单行高亮显示的内容长度
+        indentUnit: 4,//缩进大小
+        matchBrackets: true,
     });
     editor.refresh()
 }
