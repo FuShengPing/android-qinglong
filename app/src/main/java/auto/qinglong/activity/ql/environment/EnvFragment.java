@@ -376,8 +376,11 @@ public class EnvFragment extends BaseFragment {
 
             @Override
             public void onSuccess(List<QLEnvironment> environments) {
-                LogUnit.log("size：" + environments.size());
-//                netAddEnvironments(res.getEnvs());
+                if (environments.size() == 0) {
+                    ToastUnit.showShort("变量为空");
+                } else {
+                    netAddEnvironments(environments);
+                }
             }
 
             @Override
