@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import java.util.List;
 
 import auto.qinglong.bean.app.Version;
+import auto.qinglong.bean.app.WebRule;
 import auto.qinglong.bean.app.network.BaseRes;
 import auto.qinglong.bean.ql.QLEnvironment;
 import okhttp3.RequestBody;
@@ -104,6 +105,33 @@ public class ApiController {
         RequestManager.addCall(call, requestId);
     }
 
+    public static void getRemoteWebRules(@NonNull String requestId, @NonNull String baseUrl, @NonNull String path, @NonNull RemoteWebRuleCallback callback) {
+        Call<List<WebRule>> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .getRemoteWebRules(path);
+
+        call.enqueue(new Callback<List<WebRule>>() {
+            @Override
+            public void onResponse(Call<List<WebRule>> call, Response<List<WebRule>> response) {
+                RequestManager.finishCall(requestId);
+                List<WebRule> res = response.body();
+                callback.onSuccess(res);
+            }
+
+            @Override
+            public void onFailure(Call<List<WebRule>> call, Throwable t) {
+                RequestManager.finishCall(requestId);
+                callback.onFailure(t.getLocalizedMessage());
+            }
+        });
+
+        RequestManager.addCall(call, requestId);
+    }
+
+
     public interface VersionCallback {
         void onSuccess(Version version);
 
@@ -118,6 +146,12 @@ public class ApiController {
 
     public interface RemoteEnvCallback {
         void onSuccess(List<QLEnvironment> environments);
+
+        void onFailure(String msg);
+    }
+
+    public interface RemoteWebRuleCallback {
+        void onSuccess(List<WebRule> rules);
 
         void onFailure(String msg);
     }

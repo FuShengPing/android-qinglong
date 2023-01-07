@@ -3,8 +3,8 @@ package auto.qinglong.network.http;
 import java.util.List;
 
 import auto.qinglong.bean.app.Version;
+import auto.qinglong.bean.app.WebRule;
 import auto.qinglong.bean.app.network.BaseRes;
-import auto.qinglong.bean.app.network.WebRuleRes;
 import auto.qinglong.bean.ql.QLEnvironment;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -24,7 +24,7 @@ public interface Api {
     Call<BaseRes> logReport(@Body RequestBody body);
 
     @GET
-    Call<WebRuleRes> getRemoteWebRules(@Url String url);
+    Call<List<WebRule>> getRemoteWebRules(@Url String url);
 
     @GET
     Call<List<QLEnvironment>> getRemoteEnvironments(@Url String url);

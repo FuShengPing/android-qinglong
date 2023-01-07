@@ -1,5 +1,8 @@
 package auto.qinglong.views.popup;
 
+import android.view.View;
+import android.widget.PopupWindow;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +14,7 @@ public class EditWindow {
     private int maxHeight = 0;
     private List<EditWindowItem> items;
     private OnActionListener actionListener;
+    private View view;
 
 
     public EditWindow() {
@@ -74,6 +78,14 @@ public class EditWindow {
 
     public void setMaxHeight(int maxHeight) {
         this.maxHeight = maxHeight;
+    }
+
+    public View getView() {
+        return view;
+    }
+
+    public void setView(View view) {
+        this.view = view;
     }
 
     public interface OnActionListener {

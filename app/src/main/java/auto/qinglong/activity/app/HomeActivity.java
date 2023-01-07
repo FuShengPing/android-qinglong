@@ -222,7 +222,7 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void netCheckVersion() {
-        ApiController.getVersion(getClassName(), new ApiController.VersionCallback() {
+        ApiController.getVersion(getNetRequestID(), new ApiController.VersionCallback() {
             @Override
             public void onSuccess(Version version) {
                 try {
@@ -248,7 +248,7 @@ public class HomeActivity extends BaseActivity {
 
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json.toString());
 
-        ApiController.logReport(getClassName(), requestBody, new ApiController.BaseCallback() {
+        ApiController.logReport(getNetRequestID(), requestBody, new ApiController.BaseCallback() {
             @Override
             public void onSuccess(BaseRes baseRes) {
 

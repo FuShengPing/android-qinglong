@@ -21,6 +21,11 @@ public class WindowUnit {
         }
     }
 
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getWindow().getDecorView().getRootView().getWindowToken(), 0);
+    }
+
     /**
      * Get window height dp float.
      * 获取屏幕高度 dp

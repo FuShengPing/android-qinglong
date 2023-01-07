@@ -56,7 +56,7 @@ public class LoginActivity extends BaseActivity {
         });
 
         ui_confirm.setOnClickListener(v -> {
-            if (RequestManager.isRequesting(getClassName())) {
+            if (RequestManager.isRequesting(getNetRequestID())) {
                 return;
             }
             String address = ui_address.getText().toString();
@@ -106,7 +106,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     protected void netQuerySystemInfo(Account account) {
-        QLApiController.getSystemInfo(this.getClassName(), account, new QLApiController.SystemCallback() {
+        QLApiController.getSystemInfo(this.getNetRequestID(), account, new QLApiController.SystemCallback() {
             @Override
             public void onSuccess(QLSystemRes systemRes) {
                 if (systemRes.getData().isInitialized()) {
@@ -124,7 +124,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     protected void netCheckToken(Account account) {
-        QLApiController.checkToken(this.getClassName(), account, new QLApiController.LoginCallback() {
+        QLApiController.checkToken(this.getNetRequestID(), account, new QLApiController.LoginCallback() {
             @Override
             public void onSuccess(Account account) {
                 LogUnit.log(account.getAuthorization());
@@ -139,7 +139,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     protected void netLogin(Account account) {
-        QLApiController.login(this.getClassName(), account, new QLApiController.LoginCallback() {
+        QLApiController.login(this.getNetRequestID(), account, new QLApiController.LoginCallback() {
             @Override
             public void onSuccess(Account account) {
                 enterHome(account);

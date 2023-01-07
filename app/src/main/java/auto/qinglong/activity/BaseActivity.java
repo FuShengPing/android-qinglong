@@ -1,5 +1,6 @@
 package auto.qinglong.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -14,7 +15,8 @@ import auto.qinglong.utils.ToastUnit;
 
 public abstract class BaseActivity extends AppCompatActivity {
     public static final String TAG = "BaseActivity";
-    public Context mContext;
+    protected  Activity self;
+    protected  Context mContext;
     protected PopupWindow popupWindowEdit;
     protected PopupWindow popupWindowConfirm;
 
@@ -22,6 +24,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getBaseContext();
+        self = this;
     }
 
     //设置字体大小不随系统变化
@@ -34,7 +37,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         return res;
     }
 
-    protected String getClassName() {
+    protected String getNetRequestID() {
         return getClass().getName();
     }
 

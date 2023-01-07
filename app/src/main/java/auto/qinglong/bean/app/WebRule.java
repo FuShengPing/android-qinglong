@@ -9,6 +9,7 @@ import java.util.Map;
 
 import auto.qinglong.bean.ql.QLEnvironment;
 import auto.qinglong.utils.TextUnit;
+import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WebUnit;
 
 public class WebRule {
@@ -187,12 +188,20 @@ public class WebRule {
         return false;
     }
 
+    public boolean isValid() {
+        return TextUnit.isFull(name) && TextUnit.isFull(url) && TextUnit.isFull(main)
+                && TextUnit.isFull(target) && isTargetValid(target)
+                && TextUnit.isFull(envName) && envName.matches("\\w+")
+                && TextUnit.isFull(joinChar) && joinChar.matches("[;&%#@]");
+    }
+
     public static boolean isTargetValid(String target) {
         return target.equals("*")
                 || target.matches("\\*;((\\w+>>\\w+);?)+")
                 || target.matches("(((\\w+=)|(\\w+>>\\w+=));?)+")
                 || target.matches("(\\w+;?)+");
     }
+
 
     @NonNull
     public String toString() {

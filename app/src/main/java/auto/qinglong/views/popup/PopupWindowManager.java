@@ -61,6 +61,7 @@ public class PopupWindowManager {
         View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_edit, null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), true, view);
         popWindow.setContentView(view);
+        editWindow.setView(view);
 
         TextView ui_tv_title = view.findViewById(R.id.pop_common_tv_title);
         Button ui_bt_cancel = view.findViewById(R.id.pop_common_bt_cancel);

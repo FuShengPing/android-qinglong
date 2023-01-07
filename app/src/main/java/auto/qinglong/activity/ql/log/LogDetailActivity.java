@@ -56,7 +56,7 @@ public class LogDetailActivity extends BaseActivity {
 
         //刷新监听
         ui_refresh.setOnClickListener(v -> {
-            if (RequestManager.isRequesting(getClassName())) {
+            if (RequestManager.isRequesting(getNetRequestID())) {
                 return;
             }
             //禁用点击

@@ -57,7 +57,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void checkAccountValid(Account account) {
-        QLApiController.checkToken(getClassName(), account, new QLApiController.LoginCallback() {
+        QLApiController.checkToken(getNetRequestID(), account, new QLApiController.LoginCallback() {
             @Override
             public void onSuccess(Account account) {
                 enterActivity(true);

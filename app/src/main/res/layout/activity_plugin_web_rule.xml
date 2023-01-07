@@ -43,12 +43,12 @@
                 android:textSize="18sp" />
 
             <ImageView
-                android:id="@+id/bar_add"
+                android:id="@+id/bar_more"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:background="@drawable/style_press_gray"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_add_white" />
+                android:src="@drawable/ic_more_ver" />
         </LinearLayout>
     </RelativeLayout>
 
