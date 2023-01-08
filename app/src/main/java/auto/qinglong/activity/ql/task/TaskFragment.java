@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
@@ -53,8 +52,7 @@ public class TaskFragment extends BaseFragment {
     private TaskAdapter mTaskAdapter;
 
     //PopupWindow
-    private PopupWindow popupWindowMore;
-    private PopupWindow popupWindowEdit;
+    private EditWindow editWindow;
     //主导航栏
     private LinearLayout layout_bar_main;
     private ImageView layout_nav_menu;
@@ -387,11 +385,11 @@ public class TaskFragment extends BaseFragment {
             }
             return true;
         });
-        popupWindowMore = PopupWindowBuilder.buildMiniMoreWindow(requireActivity(), miniMoreWindow);
+        PopupWindowBuilder.buildMiniMoreWindow(requireActivity(), miniMoreWindow);
     }
 
     public void showPopWindowEdit(QLTask qlTask) {
-        EditWindow editWindow = new EditWindow("新建任务", "取消", "确定");
+        editWindow = new EditWindow("新建任务", "取消", "确定");
         EditWindowItem itemName = new EditWindowItem("name", null, "名称", "请输入任务名称");
         EditWindowItem itemCommand = new EditWindowItem("command", null, "命令", "请输入要执行的命令");
         EditWindowItem itemSchedule = new EditWindowItem("schedule", null, "定时规则", "秒(可选) 分 时 天 月 周");
@@ -451,7 +449,7 @@ public class TaskFragment extends BaseFragment {
             }
         });
 
-        popupWindowEdit = PopupWindowBuilder.buildEditWindow(requireActivity(), editWindow);
+        PopupWindowBuilder.buildEditWindow(requireActivity(), editWindow);
     }
 
     public void changeBar(BarType barType) {
@@ -639,9 +637,7 @@ public class TaskFragment extends BaseFragment {
         QLApiController.editTask(getNetRequestID(), QLTask, new QLApiController.EditTaskCallback() {
             @Override
             public void onSuccess(QLTask QLTask) {
-                if (popupWindowEdit != null && popupWindowEdit.isShowing()) {
-                    popupWindowEdit.dismiss();
-                }
+                editWindow.dismiss();
                 ToastUnit.showShort("编辑成功");
                 netGetTasks(mCurrentSearchValue, false);
             }
@@ -657,9 +653,7 @@ public class TaskFragment extends BaseFragment {
         QLApiController.addTask(getNetRequestID(), QLTask, new QLApiController.EditTaskCallback() {
             @Override
             public void onSuccess(QLTask QLTask) {
-                if (popupWindowEdit != null && popupWindowEdit.isShowing()) {
-                    popupWindowEdit.dismiss();
-                }
+                editWindow.dismiss();
                 ToastUnit.showShort("新建任务成功");
                 netGetTasks(mCurrentSearchValue, false);
             }

@@ -30,7 +30,7 @@ public class PopupWindowBuilder {
     public static final String TAG = "PopupWindowManager";
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    public static PopupWindow buildMiniMoreWindow(Activity activity, MiniMoreWindow miniMoreWindow) {
+    public static void buildMiniMoreWindow(Activity activity, MiniMoreWindow miniMoreWindow) {
         View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_mini_more, null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), true);
         popWindow.setContentView(view);
@@ -53,14 +53,14 @@ public class PopupWindowBuilder {
         }
 
         popWindow.showAsDropDown(miniMoreWindow.getTargetView(), miniMoreWindow.getGravity(), 0, 0);
-        return popWindow;
     }
 
-    public static PopupWindow buildEditWindow(Activity activity, EditWindow editWindow) {
+    public static void buildEditWindow(Activity activity, EditWindow editWindow) {
         View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_edit, null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), true);
         popWindow.setContentView(view);
         editWindow.setView(view);
+        editWindow.setPopupWindow(popWindow);
 
         TextView ui_tv_title = view.findViewById(R.id.pop_common_tv_title);
         Button ui_bt_cancel = view.findViewById(R.id.pop_common_bt_cancel);
@@ -120,7 +120,6 @@ public class PopupWindowBuilder {
 
         WindowUnit.setBackgroundAlpha(activity, 0.5f);
         popWindow.showAtLocation(activity.getWindow().getDecorView().getRootView(), Gravity.CENTER, 0, 0);
-        return popWindow;
     }
 
     public static PopupWindow buildConfirmWindow(Activity activity, ConfirmWindow confirmWindow) {

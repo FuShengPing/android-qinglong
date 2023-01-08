@@ -1,6 +1,7 @@
 package auto.qinglong.views.popup;
 
 import android.view.View;
+import android.widget.PopupWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +12,10 @@ public class EditWindow {
     private String cancelTip = "取消";
     private String confirmTip = "确定";
     private int maxHeight = 0;
+    private PopupWindow popupWindow;
+    private View view;
     private List<EditWindowItem> items;
     private OnActionListener actionListener;
-    private View view;
-
 
     public EditWindow() {
         this.items = new ArrayList<>();
@@ -85,6 +86,20 @@ public class EditWindow {
 
     public void setView(View view) {
         this.view = view;
+    }
+
+    public PopupWindow getPopupWindow() {
+        return popupWindow;
+    }
+
+    public void setPopupWindow(PopupWindow popupWindow) {
+        this.popupWindow = popupWindow;
+    }
+
+    public void dismiss() {
+        if (this.popupWindow != null && popupWindow.isShowing()) {
+            popupWindow.dismiss();
+        }
     }
 
     public interface OnActionListener {

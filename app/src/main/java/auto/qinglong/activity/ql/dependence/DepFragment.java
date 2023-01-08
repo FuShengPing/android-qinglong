@@ -60,8 +60,7 @@ public class DepFragment extends BaseFragment {
     private ViewPager2 ui_page;
     private TabLayout ui_page_tab;
 
-    private PopupWindow popupWindowMore;
-    private PopupWindow popupWindowEdit;
+    private EditWindow ui_pop_edit;
 
     @SuppressLint("InflateParams")
     @Override
@@ -152,9 +151,7 @@ public class DepFragment extends BaseFragment {
         QLApiController.addDependencies(getNetRequestID(), dependencies, new QLApiController.BaseCallback() {
             @Override
             public void onSuccess() {
-                if (popupWindowEdit != null && popupWindowEdit.isShowing()) {
-                    popupWindowEdit.dismiss();
-                }
+                ui_pop_edit.dismiss();
                 //刷新数据
                 mPagerAdapter.getCurrentFragment(ui_page.getCurrentItem()).refreshData();
             }
@@ -184,12 +181,12 @@ public class DepFragment extends BaseFragment {
     }
 
     private void showPopWindowEdit() {
-        EditWindow editWindow = new EditWindow("新建依赖", "取消", "确定");
-        editWindow.setMaxHeight(WindowUnit.getWindowHeightPix() / 3);
+        ui_pop_edit = new EditWindow("新建依赖", "取消", "确定");
+        ui_pop_edit.setMaxHeight(WindowUnit.getWindowHeightPix() / 3);
         String type = mPagerAdapter.getCurrentFragment(ui_page.getCurrentItem()).getType();
-        editWindow.addItem(new EditWindowItem("type", type, "类型", null, false, false));
-        editWindow.addItem(new EditWindowItem("name", null, "名称", "请输入依赖名称"));
-        editWindow.setActionListener(new EditWindow.OnActionListener() {
+        ui_pop_edit.addItem(new EditWindowItem("type", type, "类型", null, false, false));
+        ui_pop_edit.addItem(new EditWindowItem("name", null, "名称", "请输入依赖名称"));
+        ui_pop_edit.setActionListener(new EditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 String type = map.get("type");
@@ -221,7 +218,7 @@ public class DepFragment extends BaseFragment {
                 return true;
             }
         });
-        popupWindowEdit = PopupWindowBuilder.buildEditWindow(requireActivity(), editWindow);
+        PopupWindowBuilder.buildEditWindow(requireActivity(), ui_pop_edit);
     }
 
     public void showPopWindowMiniMore() {
@@ -238,7 +235,6 @@ public class DepFragment extends BaseFragment {
             }
             return true;
         });
-        popupWindowMore = PopupWindowBuilder.buildMiniMoreWindow(requireActivity(), miniMoreWindow);
     }
 
     public void showBar(BarType barType) {

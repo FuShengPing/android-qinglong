@@ -37,11 +37,11 @@ public class PluginWebRuleActivity extends BaseActivity {
     public static final String TAG = "PluginWebRuleActivity";
 
     private RuleItemAdapter itemAdapter;
-
     private RelativeLayout ui_bar;
     private ImageView ui_bar_back;
     private ImageView ui_bar_more;
     private RecyclerView ui_rv_list;
+    private EditWindow ui_pop_edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,10 +138,10 @@ public class PluginWebRuleActivity extends BaseActivity {
     }
 
     private void showPopWindowRemoteEdit() {
-        EditWindow editWindow = new EditWindow("远程导入", "取消", "确定");
+        ui_pop_edit = new EditWindow("远程导入", "取消", "确定");
         EditWindowItem itemValue = new EditWindowItem("url", null, "链接", "请输入远程地址");
-        editWindow.addItem(itemValue);
-        editWindow.setActionListener(new EditWindow.OnActionListener() {
+        ui_pop_edit.addItem(itemValue);
+        ui_pop_edit.setActionListener(new EditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 String url = map.get("url");
@@ -151,7 +151,7 @@ public class PluginWebRuleActivity extends BaseActivity {
                     return false;
                 }
 
-                WindowUnit.hideKeyboard(editWindow.getView());
+                WindowUnit.hideKeyboard(ui_pop_edit.getView());
                 String baseUrl = WebUnit.getHost(url) + "/";
                 String path = WebUnit.getPath(url, "");
                 netGetRemoteWebRules(baseUrl, path);
@@ -165,7 +165,7 @@ public class PluginWebRuleActivity extends BaseActivity {
             }
         });
 
-        popupWindowEdit = PopupWindowBuilder.buildEditWindow(this, editWindow);
+        PopupWindowBuilder.buildEditWindow(this, ui_pop_edit);
     }
 
     private void showPopWindowMiniMore() {
@@ -203,6 +203,7 @@ public class PluginWebRuleActivity extends BaseActivity {
         if (num > 0) {
             itemAdapter.setData(WebRuleDBHelper.getAllWebRule());
         }
+        ui_pop_edit.dismiss();
     }
 
     private void netGetRemoteWebRules(String baseUrl, String path) {
@@ -213,11 +214,7 @@ public class PluginWebRuleActivity extends BaseActivity {
 
             @Override
             public void onSuccess(List<WebRule> environments) {
-                if (environments.size() == 0) {
-                    ToastUnit.showShort("规则为空");
-                } else {
-                    addRuleToDB(environments);
-                }
+                addRuleToDB(environments);
             }
 
             @Override
