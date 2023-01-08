@@ -62,5 +62,5 @@ dependencies {
     implementation 'io.github.scwang90:refresh-footer-classics:2.0.5'    //经典加载
 
     //leakcanary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 }
