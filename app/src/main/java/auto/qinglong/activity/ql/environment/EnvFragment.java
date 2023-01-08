@@ -43,7 +43,7 @@ import auto.qinglong.views.popup.EditWindow;
 import auto.qinglong.views.popup.EditWindowItem;
 import auto.qinglong.views.popup.MiniMoreItem;
 import auto.qinglong.views.popup.MiniMoreWindow;
-import auto.qinglong.views.popup.PopupWindowManager;
+import auto.qinglong.views.popup.PopupWindowBuilder;
 
 public class EnvFragment extends BaseFragment {
     public static String TAG = "EnvFragment";
@@ -334,7 +334,7 @@ public class EnvFragment extends BaseFragment {
             }
             return true;
         });
-        PopupWindowManager.buildMiniMoreWindow(requireActivity(), miniMoreWindow, layout_bar, Gravity.END);
+        PopupWindowBuilder.buildMiniMoreWindow(requireActivity(), miniMoreWindow, layout_bar, Gravity.END);
     }
 
     private void showPopWindowCommonEdit(QLEnvironment environment) {
@@ -394,7 +394,7 @@ public class EnvFragment extends BaseFragment {
             }
         });
 
-        popupWindowEdit = PopupWindowManager.buildEditWindow(requireActivity(), editWindow);
+        popupWindowEdit = PopupWindowBuilder.buildEditWindow(requireActivity(), editWindow);
     }
 
     private void showPopWindowQuickEdit() {
@@ -432,7 +432,7 @@ public class EnvFragment extends BaseFragment {
             }
         });
 
-        popupWindowEdit = PopupWindowManager.buildEditWindow(requireActivity(), editWindow);
+        popupWindowEdit = PopupWindowBuilder.buildEditWindow(requireActivity(), editWindow);
     }
 
     private void showPopWindowRemoteEdit() {
@@ -463,7 +463,7 @@ public class EnvFragment extends BaseFragment {
             }
         });
 
-        popupWindowEdit = PopupWindowManager.buildEditWindow(requireActivity(), editWindow);
+        popupWindowEdit = PopupWindowBuilder.buildEditWindow(requireActivity(), editWindow);
     }
 
     public void changeBar(BarType barType) {

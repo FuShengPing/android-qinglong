@@ -43,7 +43,7 @@ import auto.qinglong.views.popup.EditWindow;
 import auto.qinglong.views.popup.EditWindowItem;
 import auto.qinglong.views.popup.MiniMoreItem;
 import auto.qinglong.views.popup.MiniMoreWindow;
-import auto.qinglong.views.popup.PopupWindowManager;
+import auto.qinglong.views.popup.PopupWindowBuilder;
 
 public class TaskFragment extends BaseFragment {
     public static String TAG = "TaskFragment";
@@ -385,7 +385,7 @@ public class TaskFragment extends BaseFragment {
             }
             return true;
         });
-        popupWindowMore = PopupWindowManager.buildMiniMoreWindow(requireActivity(), miniMoreWindow, layout_bar, Gravity.END);
+        popupWindowMore = PopupWindowBuilder.buildMiniMoreWindow(requireActivity(), miniMoreWindow, layout_bar, Gravity.END);
     }
 
     public void showPopWindowEdit(QLTask qlTask) {
@@ -449,7 +449,7 @@ public class TaskFragment extends BaseFragment {
             }
         });
 
-        popupWindowEdit = PopupWindowManager.buildEditWindow(requireActivity(), editWindow);
+        popupWindowEdit = PopupWindowBuilder.buildEditWindow(requireActivity(), editWindow);
     }
 
     public void changeBar(BarType barType) {

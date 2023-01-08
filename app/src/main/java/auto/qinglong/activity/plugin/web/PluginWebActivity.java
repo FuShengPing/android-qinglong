@@ -34,7 +34,7 @@ import auto.qinglong.utils.WebUnit;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.WebViewBuilder;
 import auto.qinglong.views.popup.ConfirmWindow;
-import auto.qinglong.views.popup.PopupWindowManager;
+import auto.qinglong.views.popup.PopupWindowBuilder;
 
 public class PluginWebActivity extends BaseActivity {
     public static final String TAG = "PluginWebActivity";
@@ -208,7 +208,7 @@ public class PluginWebActivity extends BaseActivity {
             return true;
         });
         //构建并显示pop窗体
-        PopupWindowManager.buildConfirmWindow(this, confirmWindow);
+        PopupWindowBuilder.buildConfirmWindow(this, confirmWindow);
     }
 
     private void netGetEnvironments(QLEnvironment environment) {

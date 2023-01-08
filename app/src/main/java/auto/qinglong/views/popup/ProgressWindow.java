@@ -5,12 +5,12 @@ import android.view.Gravity;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-public class ProgressPopWindow {
+public class ProgressWindow {
     private final Activity mActivity;
     private final PopupWindow ui_popupWindow;
     private final TextView ui_tip;
 
-    ProgressPopWindow(Activity activity, PopupWindow popupWindow, TextView textView) {
+    ProgressWindow(Activity activity, PopupWindow popupWindow, TextView textView) {
         mActivity = activity;
         ui_popupWindow = popupWindow;
         ui_tip = textView;

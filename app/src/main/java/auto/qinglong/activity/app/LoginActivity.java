@@ -18,8 +18,8 @@ import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;
-import auto.qinglong.views.popup.PopupWindowManager;
-import auto.qinglong.views.popup.ProgressPopWindow;
+import auto.qinglong.views.popup.PopupWindowBuilder;
+import auto.qinglong.views.popup.ProgressWindow;
 
 public class LoginActivity extends BaseActivity {
 
@@ -28,7 +28,7 @@ public class LoginActivity extends BaseActivity {
     private EditText ui_address;
     private EditText ui_username;
     private EditText ui_password;
-    private ProgressPopWindow ui_progress;
+    private ProgressWindow ui_progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +83,7 @@ public class LoginActivity extends BaseActivity {
             ui_confirm.postDelayed(() -> ui_confirm.setEnabled(true), 300);
 
             if (ui_progress == null) {
-                ui_progress = PopupWindowManager.buildProgressWindow(this);
+                ui_progress = PopupWindowBuilder.buildProgressWindow(this);
             }
             ui_progress.setText("登录中...");
 

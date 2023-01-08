@@ -31,7 +31,7 @@ import auto.qinglong.views.popup.EditWindow;
 import auto.qinglong.views.popup.EditWindowItem;
 import auto.qinglong.views.popup.MiniMoreItem;
 import auto.qinglong.views.popup.MiniMoreWindow;
-import auto.qinglong.views.popup.PopupWindowManager;
+import auto.qinglong.views.popup.PopupWindowBuilder;
 
 public class PluginWebRuleActivity extends BaseActivity {
     public static final String TAG = "PluginWebRuleActivity";
@@ -134,7 +134,7 @@ public class PluginWebRuleActivity extends BaseActivity {
                 return true;
             }
         });
-        PopupWindowManager.buildEditWindow(this, editWindow);
+        PopupWindowBuilder.buildEditWindow(this, editWindow);
     }
 
     private void showPopWindowRemoteEdit() {
@@ -165,7 +165,7 @@ public class PluginWebRuleActivity extends BaseActivity {
             }
         });
 
-        popupWindowEdit = PopupWindowManager.buildEditWindow(this, editWindow);
+        popupWindowEdit = PopupWindowBuilder.buildEditWindow(this, editWindow);
     }
 
     private void showPopWindowMiniMore() {
@@ -185,7 +185,7 @@ public class PluginWebRuleActivity extends BaseActivity {
             }
             return true;
         });
-        PopupWindowManager.buildMiniMoreWindow(this, miniMoreWindow, ui_bar, Gravity.END);
+        PopupWindowBuilder.buildMiniMoreWindow(this, miniMoreWindow, ui_bar, Gravity.END);
     }
 
     private void addRuleToDB(List<WebRule> rules) {

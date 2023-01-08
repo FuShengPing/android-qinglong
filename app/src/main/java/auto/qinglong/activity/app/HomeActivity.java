@@ -34,7 +34,7 @@ import auto.qinglong.utils.NetUnit;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.views.popup.ConfirmWindow;
-import auto.qinglong.views.popup.PopupWindowManager;
+import auto.qinglong.views.popup.PopupWindowBuilder;
 
 public class HomeActivity extends BaseActivity {
     public static final String TAG = "HomeActivity";
@@ -255,7 +255,7 @@ public class HomeActivity extends BaseActivity {
                 return true;
             }
         });
-        ui_pop_notice = PopupWindowManager.buildConfirmWindow(this, confirmWindow);
+        ui_pop_notice = PopupWindowBuilder.buildConfirmWindow(this, confirmWindow);
     }
 
     private void netGetVersion() {

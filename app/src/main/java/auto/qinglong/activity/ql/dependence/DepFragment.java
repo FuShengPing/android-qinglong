@@ -32,7 +32,7 @@ import auto.qinglong.views.popup.EditWindow;
 import auto.qinglong.views.popup.EditWindowItem;
 import auto.qinglong.views.popup.MiniMoreItem;
 import auto.qinglong.views.popup.MiniMoreWindow;
-import auto.qinglong.views.popup.PopupWindowManager;
+import auto.qinglong.views.popup.PopupWindowBuilder;
 
 
 public class DepFragment extends BaseFragment {
@@ -221,7 +221,7 @@ public class DepFragment extends BaseFragment {
                 return true;
             }
         });
-        popupWindowEdit = PopupWindowManager.buildEditWindow(requireActivity(), editWindow);
+        popupWindowEdit = PopupWindowBuilder.buildEditWindow(requireActivity(), editWindow);
     }
 
     public void showPopWindowMiniMore() {
@@ -236,7 +236,7 @@ public class DepFragment extends BaseFragment {
             }
             return true;
         });
-        popupWindowMore = PopupWindowManager.buildMiniMoreWindow(requireActivity(), miniMoreWindow, ui_bar, Gravity.END);
+        popupWindowMore = PopupWindowBuilder.buildMiniMoreWindow(requireActivity(), miniMoreWindow, ui_bar, Gravity.END);
     }
 
     public void showBar(BarType barType) {

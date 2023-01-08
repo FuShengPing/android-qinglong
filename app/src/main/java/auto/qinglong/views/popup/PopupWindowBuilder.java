@@ -25,7 +25,7 @@ import auto.qinglong.R;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.FixScrollView;
 
-public class PopupWindowManager {
+public class PopupWindowBuilder {
 
     public static final String TAG = "PopupWindowManager";
 
@@ -168,14 +168,14 @@ public class PopupWindowManager {
         return popWindow;
     }
 
-    public static ProgressPopWindow buildProgressWindow(Activity activity) {
+    public static ProgressWindow buildProgressWindow(Activity activity) {
         View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_loading, null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), true, view);
         popWindow.setContentView(view);
 
         TextView ui_tip = view.findViewById(R.id.pop_common_progress_tip);
 
-        ProgressPopWindow progressPopWindow = new ProgressPopWindow(activity, popWindow, ui_tip);
+        ProgressWindow progressPopWindow = new ProgressWindow(activity, popWindow, ui_tip);
 
         //窗体消失监听
         popWindow.setOnDismissListener(() -> WindowUnit.setBackgroundAlpha(activity, 1.0f));
@@ -189,11 +189,12 @@ public class PopupWindowManager {
         PopupWindow popupWindow = new PopupWindow(context);
         popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
         popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        popupWindow.setAnimationStyle(R.style.anim_pop_common);
         popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         popupWindow.setOutsideTouchable(false);
         popupWindow.setFocusable(isFocusable);
         popupWindow.setTouchable(true);
-        popupWindow.setAnimationStyle(R.style.anim_pop_common);
+
 
         view.setFocusable(true);
         view.setClickable(true);
