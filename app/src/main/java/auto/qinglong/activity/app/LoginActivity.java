@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
@@ -17,7 +16,6 @@ import auto.qinglong.database.db.AccountDBHelper;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.http.RequestManager;
-import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;
