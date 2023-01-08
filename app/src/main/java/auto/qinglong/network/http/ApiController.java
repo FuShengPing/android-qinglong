@@ -9,6 +9,7 @@ import auto.qinglong.bean.app.WebRule;
 import auto.qinglong.bean.app.network.BaseRes;
 import auto.qinglong.bean.ql.QLEnvironment;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,31 +49,23 @@ public class ApiController {
         RequestManager.addCall(call, requestId);
     }
 
-    public static void logReport(@NonNull String requestId, @NonNull RequestBody body, @NonNull BaseCallback callback) {
-
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(Api.URL_LOG_REPORT_BASE)
+    public static void getProject(@NonNull String requestId) {
+        Call<ResponseBody> call = new Retrofit.Builder()
+                .baseUrl(Api.URL_VERSION_BASE)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .logReport(body);
+                .getProject();
 
-        call.enqueue(new Callback<BaseRes>() {
+        call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 RequestManager.finishCall(requestId);
-                BaseRes baseRes = response.body();
-                if (baseRes != null) {
-                    callback.onSuccess(baseRes);
-                } else {
-                    callback.onFailure(ERROR_NO_BODY);
-                }
             }
 
             @Override
-            public void onFailure(Call<BaseRes> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 RequestManager.finishCall(requestId);
-                callback.onFailure(t.getLocalizedMessage());
             }
         });
 

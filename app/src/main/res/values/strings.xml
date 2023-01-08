@@ -1,9 +1,8 @@
 <resources>
     <string name="app_name">青龙面板</string>
-    <string name="url_qinglong">https://github.com/whyour/qinglong</string>
     <string name="url_gitee">https://gitee.com/wsfsp4/QingLong</string>
+    <string name="url_readme">https://gitee.com/wsfsp4/QingLong/blob/master/README.md</string>
     <string name="url_version">https://gitee.com/wsfsp4/QingLong/raw/master/version.json</string>
-    <string name="url_github">null</string>
     <!-- 主页菜单栏 -->
     <string name="menu_task">定时任务</string>
     <string name="menu_environment">环境变量</string>

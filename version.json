@@ -5,7 +5,7 @@
   "updateTime": "2022-12-04",
   "downloadUrl": "https://gitee.com/wsfsp4/QingLong/releases/download/V1.2/app-release.apk",
   "updateDetail": [
-    "(1)修复部分功能异常闪退问题",
+    "(1)修复环境变量搜索异常闪退问题",
     "(2)环境变量：新增快捷导入、变量去重和远程导入功能",
     "(3)CK助手：新增规则提取、远程导入功能",
     "(4)优化信息提示",

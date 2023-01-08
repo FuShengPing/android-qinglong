@@ -13,8 +13,6 @@ import android.widget.TextView;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.google.gson.JsonObject;
-
 import java.util.Objects;
 
 import auto.qinglong.R;
@@ -29,18 +27,14 @@ import auto.qinglong.activity.ql.script.ScriptFragment;
 import auto.qinglong.activity.ql.setting.SettingFragment;
 import auto.qinglong.activity.ql.task.TaskFragment;
 import auto.qinglong.bean.app.Version;
-import auto.qinglong.bean.app.network.BaseRes;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.network.http.ApiController;
-import auto.qinglong.utils.DeviceUnit;
 import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.NetUnit;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.views.popup.ConfirmWindow;
 import auto.qinglong.views.popup.PopupWindowManager;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 
 public class HomeActivity extends BaseActivity {
     public static final String TAG = "HomeActivity";
@@ -81,9 +75,7 @@ public class HomeActivity extends BaseActivity {
         //初始化第一帧页面
         showFragment(TaskFragment.TAG);
         //版本检查
-        netCheckVersion();
-        //日志上报
-        netLogReport();
+        netGetVersion();
     }
 
     @SuppressLint("SetTextI18n")
@@ -146,6 +138,27 @@ public class HomeActivity extends BaseActivity {
         });
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!mCurrentFragment.onBackPressed()) {
+            long current = System.currentTimeMillis();
+            if (current - mLastBackPressedTime < 2000) {
+                finish();
+            } else {
+                mLastBackPressedTime = current;
+                ToastUnit.showShort("再按一次退出");
+            }
+        }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ui_pop_notice != null && ui_pop_notice.isShowing()) {
+            return false;
+        }
+        return super.dispatchTouchEvent(ev);
     }
 
     private void showFragment(String menu) {
@@ -221,46 +234,6 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-    private void netCheckVersion() {
-        ApiController.getVersion(getNetRequestID(), new ApiController.VersionCallback() {
-            @Override
-            public void onSuccess(Version version) {
-                try {
-                    int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-                    if (versionCode < version.getVersionCode()) {
-                        showVersionNotice(version);
-                    }
-                } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                LogUnit.log(TAG, msg);
-            }
-        });
-    }
-
-    private void netLogReport() {
-        JsonObject json = new JsonObject();
-        json.addProperty("uuid", DeviceUnit.getAndroidID(this));
-
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json.toString());
-
-        ApiController.logReport(getNetRequestID(), requestBody, new ApiController.BaseCallback() {
-            @Override
-            public void onSuccess(BaseRes baseRes) {
-
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                LogUnit.log(TAG, msg);
-            }
-        });
-    }
-
     private void showVersionNotice(Version version) {
         String content = "最新版本：" + version.getVersionName() + "\n\n";
         content += "更新时间：" + version.getUpdateTime() + "\n\n";
@@ -285,24 +258,25 @@ public class HomeActivity extends BaseActivity {
         ui_pop_notice = PopupWindowManager.buildConfirmWindow(this, confirmWindow);
     }
 
-    @Override
-    public void onBackPressed() {
-        if (!mCurrentFragment.onBackPressed()) {
-            long current = System.currentTimeMillis();
-            if (current - mLastBackPressedTime < 2000) {
-                finish();
-            } else {
-                mLastBackPressedTime = current;
-                ToastUnit.showShort("再按一次退出");
+    private void netGetVersion() {
+        ApiController.getProject(getNetRequestID());
+        ApiController.getVersion(getNetRequestID(), new ApiController.VersionCallback() {
+            @Override
+            public void onSuccess(Version version) {
+                try {
+                    int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+                    if (versionCode < version.getVersionCode()) {
+                        showVersionNotice(version);
+                    }
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
-        }
-    }
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (ui_pop_notice != null && ui_pop_notice.isShowing()) {
-            return false;
-        }
-        return super.dispatchTouchEvent(ev);
+            @Override
+            public void onFailure(String msg) {
+                LogUnit.log(TAG, msg);
+            }
+        });
     }
 }
