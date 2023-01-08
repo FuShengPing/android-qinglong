@@ -23,7 +23,7 @@
 5. 依赖管理：支持新建依赖和依赖操作；
 6. 任务日志：支持查看任务日志；
 
-***注：变量远程导入格式可参考examples/envs.json文件，测试地址为***
+***注：变量远程导入格式可参考examples/envs.json文件，测试地址为https://gitee.com/wsfsp4/QingLong/raw/master/examples/envs.json***
 
 ### 3.2.拓展模块
 
@@ -31,7 +31,7 @@
 
 提供网页cookies提取和导入变量功能，导入变量功能需要进行规则配置，同时规则支持远程导入。
 
-***注：规则远程导入格式可参考examples/rules.json文件，测试地址为***
+***注：规则远程导入格式可参考examples/rules.json文件，测试地址为https://gitee.com/wsfsp4/QingLong/raw/master/examples/rules.json***
 
 ##### 3.2.1.1 规则配置个字段说明
 
@@ -45,7 +45,6 @@
    | *;a>>aa;b>>bb   | 提取cookies全部键值，并将a键重命名为aa,b重命名为bb   | aa=1;bb=2;c=3;  |
    | a=;b>>bb=  | 提取cookies中a键值和b键值，并将b键重命名为bb   | a=1;bb=2;   |
    | a;b | 提取cookies中a值和b值   | 1;2;   |
-   |----------|
    |***如果提取具体字段，只要一个字段不存在将匹配失败***|
 5. 主键：cookies中的键，其值将作为面板环境变量的备注，匹配规则成功时若环境变量该值相同则进行更新操作，否则进行新建变量操作；
 6. 连接符：拼接目标键值的符号，支持';'、'#'、'&'、'@'和'%'符号;
