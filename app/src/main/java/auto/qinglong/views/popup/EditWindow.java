@@ -1,7 +1,6 @@
 package auto.qinglong.views.popup;
 
 import android.view.View;
-import android.widget.PopupWindow;
 
 import java.util.ArrayList;
 import java.util.List;

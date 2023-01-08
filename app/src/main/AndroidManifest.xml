@@ -21,13 +21,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.main">
         <activity
-            android:name=".activity.app.CodeEditorActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".activity.app.SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.white">

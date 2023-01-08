@@ -9,7 +9,6 @@ import java.util.Map;
 
 import auto.qinglong.bean.ql.QLEnvironment;
 import auto.qinglong.utils.TextUnit;
-import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WebUnit;
 
 public class WebRule {
