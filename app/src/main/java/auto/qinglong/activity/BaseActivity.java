@@ -50,7 +50,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         //取消本页面的网络请求
-        RequestManager.cancelCall(getClass().getName());
+        RequestManager.cancelAllCall(getClass().getName());
         super.onDestroy();
     }
 

@@ -167,7 +167,7 @@ public class PopupWindowBuilder {
         return popWindow;
     }
 
-    public static ProgressWindow buildProgressWindow(Activity activity) {
+    public static ProgressWindow buildProgressWindow(Activity activity, PopupWindow.OnDismissListener dismissListener) {
         View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_loading, null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), false);
         popWindow.setContentView(view);
@@ -177,7 +177,12 @@ public class PopupWindowBuilder {
         ProgressWindow progressPopWindow = new ProgressWindow(activity, popWindow, ui_tip);
 
         //窗体消失监听
-        popWindow.setOnDismissListener(() -> WindowUnit.setBackgroundAlpha(activity, 1.0f));
+        popWindow.setOnDismissListener(() -> {
+            if (dismissListener != null) {
+                dismissListener.onDismiss();
+            }
+            WindowUnit.setBackgroundAlpha(activity, 1.0f);
+        });
 
         WindowUnit.setBackgroundAlpha(activity, 0.5f);
         popWindow.showAtLocation(activity.getWindow().getDecorView().getRootView(), Gravity.CENTER, 0, 0);

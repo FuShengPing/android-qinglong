@@ -4,9 +4,12 @@ import android.widget.PopupWindow;
 
 public class PopupWindowManager {
 
-    public static void dismiss(PopupWindow popupWindow) {
+    public static boolean dismiss(PopupWindow popupWindow) {
         if (popupWindow != null && popupWindow.isShowing()) {
             popupWindow.dismiss();
+            return true;
+        } else {
+            return false;
         }
     }
 }

@@ -3,10 +3,10 @@ package auto.qinglong.activity.app;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
@@ -49,6 +49,15 @@ public class LoginActivity extends BaseActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        if (ui_pop_progress != null && ui_pop_progress.isShowing()) {
+            ui_pop_progress.dismiss();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     protected void init() {
         ui_logo.setOnClickListener(v -> {
             Uri uri = Uri.parse(getString(R.string.url_gitee));
@@ -84,7 +93,7 @@ public class LoginActivity extends BaseActivity {
             ui_confirm.postDelayed(() -> ui_confirm.setEnabled(true), 300);
 
             if (ui_pop_progress == null) {
-                ui_pop_progress = PopupWindowBuilder.buildProgressWindow(this);
+                ui_pop_progress = PopupWindowBuilder.buildProgressWindow(this, () -> RequestManager.cancelAllCall(getNetRequestID()));
             }
             ui_pop_progress.setTextAndShow("登录中...");
 
@@ -123,12 +132,14 @@ public class LoginActivity extends BaseActivity {
                 if (systemRes.getData().isInitialized()) {
                     netCheckToken(account);
                 } else {
+                    ui_pop_progress.dismiss();
                     ToastUnit.showShort("系统未初始化，无法登录");
                 }
             }
 
             @Override
             public void onFailure(String msg) {
+                ui_pop_progress.dismiss();
                 ToastUnit.showShort(msg);
             }
         });
@@ -138,7 +149,6 @@ public class LoginActivity extends BaseActivity {
         QLApiController.checkToken(this.getNetRequestID(), account, new QLApiController.LoginCallback() {
             @Override
             public void onSuccess(Account account) {
-                LogUnit.log(account.getAuthorization());
                 enterHome(account);
             }
 
@@ -158,6 +168,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
+                ui_pop_progress.dismiss();
                 ToastUnit.showShort(msg);
             }
         });

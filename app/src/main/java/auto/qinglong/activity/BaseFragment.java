@@ -16,7 +16,7 @@ public abstract class BaseFragment extends Fragment {
     public void onStop() {
         super.onStop();
         //请求本页面的网络请求
-        RequestManager.cancelCall(getClass().getName());
+        RequestManager.cancelAllCall(getClass().getName());
     }
 
     public boolean onBackPressed() {
