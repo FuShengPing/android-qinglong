@@ -29,11 +29,10 @@ public class PopupWindowBuilder {
 
     public static final String TAG = "PopupWindowManager";
 
-
     @SuppressLint("UseCompatLoadingForDrawables")
     public static PopupWindow buildMiniMoreWindow(Activity activity, MiniMoreWindow miniMoreWindow) {
         View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_mini_more, null, false);
-        PopupWindow popWindow = build(activity.getBaseContext(), true, view);
+        PopupWindow popWindow = build(activity.getBaseContext(), true);
         popWindow.setContentView(view);
 
         LinearLayout ui_ll_container = view.findViewById(R.id.pop_common_ll_container);
@@ -59,7 +58,7 @@ public class PopupWindowBuilder {
 
     public static PopupWindow buildEditWindow(Activity activity, EditWindow editWindow) {
         View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_edit, null, false);
-        PopupWindow popWindow = build(activity.getBaseContext(), true, view);
+        PopupWindow popWindow = build(activity.getBaseContext(), true);
         popWindow.setContentView(view);
         editWindow.setView(view);
 
@@ -126,7 +125,7 @@ public class PopupWindowBuilder {
 
     public static PopupWindow buildConfirmWindow(Activity activity, ConfirmWindow confirmWindow) {
         View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_confirm, null, false);
-        PopupWindow popWindow = build(activity.getBaseContext(), confirmWindow.isFocusable(), view);
+        PopupWindow popWindow = build(activity.getBaseContext(), confirmWindow.isFocusable());
         popWindow.setContentView(view);
 
         TextView ui_tv_title = view.findViewById(R.id.pop_common_tv_title);
@@ -170,7 +169,7 @@ public class PopupWindowBuilder {
 
     public static ProgressWindow buildProgressWindow(Activity activity) {
         View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_loading, null, false);
-        PopupWindow popWindow = build(activity.getBaseContext(), false, view);
+        PopupWindow popWindow = build(activity.getBaseContext(), false);
         popWindow.setContentView(view);
 
         TextView ui_tip = view.findViewById(R.id.pop_common_progress_tip);
@@ -185,7 +184,7 @@ public class PopupWindowBuilder {
         return progressPopWindow;
     }
 
-    private static PopupWindow build(Context context, boolean isFocusable, View view) {
+    private static PopupWindow build(Context context, boolean isFocusable) {
         PopupWindow popupWindow = new PopupWindow(context);
         popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
         popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
