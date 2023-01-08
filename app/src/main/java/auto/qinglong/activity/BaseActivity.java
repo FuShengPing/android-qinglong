@@ -17,8 +17,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     public static final String TAG = "BaseActivity";
     protected  Activity self;
     protected  Context mContext;
-    protected PopupWindow popupWindowEdit;
-    protected PopupWindow popupWindowConfirm;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
