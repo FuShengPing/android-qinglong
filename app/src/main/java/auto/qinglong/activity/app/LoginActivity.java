@@ -3,6 +3,7 @@ package auto.qinglong.activity.app;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,6 +18,7 @@ import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.LogUnit;
+import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.popup.PopupWindowBuilder;
@@ -98,12 +100,13 @@ public class LoginActivity extends BaseActivity {
             ui_pop_progress.setTextAndShow("登录中...");
 
             Account account = new Account(username, password, address, "");
-            //账号登录过则设置之前token
+            //账号存在本地则尝试旧token 避免重复登录
             if (AccountDBHelper.isAccountExist(address)) {
                 account.setToken(AccountDBHelper.getAccount(address).getToken());
             }
-            //检测系统是否初始化和版本信息
-            netQuerySystemInfo(account);
+            //检测系统是否初始化和版本信息(延迟500ms)
+            new Handler().postDelayed(() -> netQuerySystemInfo(account), 500);
+
         });
 
         //显示之前账号
@@ -130,7 +133,11 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onSuccess(QLSystemRes systemRes) {
                 if (systemRes.getData().isInitialized()) {
-                    netCheckToken(account);
+                    if (TextUnit.isFull(account.getToken())) {
+                        netCheckToken(account);
+                    } else {
+                        netLogin(account);
+                    }
                 } else {
                     ui_pop_progress.dismiss();
                     ToastUnit.showShort("系统未初始化，无法登录");
