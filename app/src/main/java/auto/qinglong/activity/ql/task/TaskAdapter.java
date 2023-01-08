@@ -45,19 +45,19 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
         return new MyViewHolder(view);
     }
 
-    @SuppressLint("DefaultLocale")
+    @SuppressLint({"DefaultLocale", "SetTextI18n"})
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        QLTask QLTask = data.get(position);
-        holder.layout_name.setText(QLTask.getName());
-        holder.layout_command.setText(QLTask.getCommand());
-        holder.layout_schedule.setText(QLTask.getSchedule());
+        QLTask qlTask = data.get(position);
+        holder.layout_name.setText("[" + qlTask.getIndex() + "]" + qlTask.getName());
+        holder.layout_command.setText(qlTask.getCommand());
+        holder.layout_schedule.setText(qlTask.getSchedule());
         //运行状态
-        if (QLTask.getTaskState() == QLTaskState.RUNNING) {
+        if (qlTask.getTaskState() == QLTaskState.RUNNING) {
             holder.layout_state.setText("运行中");
             holder.layout_state.setTextColor(context.getColor(R.color.theme_color_shadow));
             holder.layout_action.setImageResource(R.drawable.ic_pause);
-        } else if (QLTask.getTaskState() == QLTaskState.LIMIT) {
+        } else if (qlTask.getTaskState() == QLTaskState.LIMIT) {
             holder.layout_state.setText("禁止中");
             holder.layout_state.setTextColor(context.getColor(R.color.text_color_red));
             holder.layout_action.setImageResource(R.drawable.ic_start);
@@ -69,26 +69,26 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
         //上次运行时长
         @SuppressLint("DefaultLocale") String str;
-        if (QLTask.getLast_running_time() >= 60) {
-            str = String.format("%d分%d秒", QLTask.getLast_running_time() / 60, QLTask.getLast_running_time() % 60);
-        } else if (QLTask.getLast_running_time() > 0) {
-            str = String.format("%d秒", QLTask.getLast_running_time());
+        if (qlTask.getLast_running_time() >= 60) {
+            str = String.format("%d分%d秒", qlTask.getLast_running_time() / 60, qlTask.getLast_running_time() % 60);
+        } else if (qlTask.getLast_running_time() > 0) {
+            str = String.format("%d秒", qlTask.getLast_running_time());
         } else {
             str = "--";
         }
         holder.layout_last_run_time.setText(str);
 
         //上次运行时间
-        if (QLTask.getLast_execution_time() > 0) {
-            str = TimeUnit.formatTimeA(QLTask.getLast_execution_time() * 1000);
+        if (qlTask.getLast_execution_time() > 0) {
+            str = TimeUnit.formatTimeA(qlTask.getLast_execution_time() * 1000);
         } else {
             str = "--";
         }
         holder.layout_last_execution_time.setText(str);
 
         //下次运行时间(判断定时规则是否合法)
-        if (CronUnit.isValid(QLTask.getSchedule())) {
-            holder.layout_next_execution_time.setText(CronUnit.nextExecutionTime(QLTask.getSchedule()));
+        if (CronUnit.isValid(qlTask.getSchedule())) {
+            holder.layout_next_execution_time.setText(CronUnit.nextExecutionTime(qlTask.getSchedule()));
         } else {
             holder.layout_next_execution_time.setText("--");
         }
@@ -103,7 +103,7 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
         }
 
         //顶置
-        if (QLTask.getIsPinned() == 1) {
+        if (qlTask.getIsPinned() == 1) {
             holder.layout_pinned.setVisibility(View.VISIBLE);
         } else {
             holder.layout_pinned.setVisibility(View.GONE);
@@ -117,16 +117,16 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
         holder.layout_action.setOnClickListener(v -> {
             if (this.checkState) {
                 holder.layout_check.setChecked(!holder.layout_check.isChecked());
-            } else if (QLTask.getTaskState() != QLTaskState.RUNNING) {
-                itemActionListener.onRun(QLTask);
+            } else if (qlTask.getTaskState() != QLTaskState.RUNNING) {
+                itemActionListener.onRun(qlTask);
             } else {
-                itemActionListener.onStop(QLTask);
+                itemActionListener.onStop(qlTask);
             }
         });
 
         holder.layout_name.setOnClickListener(v -> {
             if (!this.checkState) {
-                itemActionListener.onLog(QLTask);
+                itemActionListener.onLog(qlTask);
             } else {
                 holder.layout_check.setChecked(!holder.layout_check.isChecked());
             }
@@ -134,7 +134,7 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
         holder.layout_name.setOnLongClickListener(v -> {
             if (!this.checkState) {
-                itemActionListener.onMulAction(QLTask, holder.getAdapterPosition());
+                itemActionListener.onMulAction(qlTask, holder.getAdapterPosition());
             }
             return true;
         });
@@ -147,7 +147,7 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
         holder.layout_detail.setOnLongClickListener(v -> {
             if (!this.checkState) {
-                itemActionListener.onEdit(QLTask);
+                itemActionListener.onEdit(qlTask);
             }
             return true;
         });

@@ -178,14 +178,14 @@ public class TaskFragment extends BaseFragment {
                     return;
                 }
                 List<String> ids = new ArrayList<>();
-                ids.add(QLTask.get_id());
+                ids.add(QLTask.getId());
                 netStopTasks(ids, false);
             }
 
             @Override
             public void onRun(QLTask QLTask) {
                 List<String> ids = new ArrayList<>();
-                ids.add(QLTask.get_id());
+                ids.add(QLTask.getId());
                 netRunTasks(ids, false);
             }
 
@@ -254,7 +254,7 @@ public class TaskFragment extends BaseFragment {
                 } else {
                     List<String> ids = new ArrayList<>();
                     for (QLTask QLTask : QLTasks) {
-                        ids.add(QLTask.get_id());
+                        ids.add(QLTask.getId());
                     }
                     netRunTasks(ids, true);
                 }
@@ -270,7 +270,7 @@ public class TaskFragment extends BaseFragment {
                 } else {
                     List<String> ids = new ArrayList<>();
                     for (QLTask QLTask : QLTasks) {
-                        ids.add(QLTask.get_id());
+                        ids.add(QLTask.getId());
                     }
                     netStopTasks(ids, true);
                 }
@@ -286,7 +286,7 @@ public class TaskFragment extends BaseFragment {
                 } else {
                     List<String> ids = new ArrayList<>();
                     for (QLTask QLTask : QLTasks) {
-                        ids.add(QLTask.get_id());
+                        ids.add(QLTask.getId());
                     }
                     netPinTasks(ids);
                 }
@@ -302,7 +302,7 @@ public class TaskFragment extends BaseFragment {
                 } else {
                     List<String> ids = new ArrayList<>();
                     for (QLTask QLTask : QLTasks) {
-                        ids.add(QLTask.get_id());
+                        ids.add(QLTask.getId());
                     }
                     netUnpinTasks(ids);
                 }
@@ -318,7 +318,7 @@ public class TaskFragment extends BaseFragment {
                 } else {
                     List<String> ids = new ArrayList<>();
                     for (QLTask QLTask : QLTasks) {
-                        ids.add(QLTask.get_id());
+                        ids.add(QLTask.getId());
                     }
                     netEnableTasks(ids);
                 }
@@ -334,7 +334,7 @@ public class TaskFragment extends BaseFragment {
                 } else {
                     List<String> ids = new ArrayList<>();
                     for (QLTask QLTask : QLTasks) {
-                        ids.add(QLTask.get_id());
+                        ids.add(QLTask.getId());
                     }
                     netDisableTasks(ids);
                 }
@@ -350,7 +350,7 @@ public class TaskFragment extends BaseFragment {
                 } else {
                     List<String> ids = new ArrayList<>();
                     for (QLTask QLTask : QLTasks) {
-                        ids.add(QLTask.get_id());
+                        ids.add(QLTask.getId());
                     }
                     netDeleteTasks(ids);
                 }
@@ -613,7 +613,7 @@ public class TaskFragment extends BaseFragment {
                     newQLTask.setName(name);
                     newQLTask.setCommand(command);
                     newQLTask.setSchedule(schedule);
-                    newQLTask.set_id(qlTask.get_id());
+                    newQLTask.setId(qlTask.getId());
                     netEditTask(newQLTask);
                 }
 

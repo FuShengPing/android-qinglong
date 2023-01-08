@@ -1,7 +1,7 @@
 package auto.qinglong.bean.ql;
 
 public class QLTask implements Comparable<QLTask> {
-    private int id;
+    private int index;//自定义序号
     private String _id;
     private String name;
     private String command;
@@ -19,13 +19,6 @@ public class QLTask implements Comparable<QLTask> {
     private String createdAt;
     private String updatedAt;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -157,11 +150,11 @@ public class QLTask implements Comparable<QLTask> {
         }
     }
 
-    public String get_id() {
+    public String getId() {
         return _id;
     }
 
-    public void set_id(String _id) {
+    public void setId(String _id) {
         this._id = _id;
     }
 
@@ -172,6 +165,13 @@ public class QLTask implements Comparable<QLTask> {
         return "api/crons/" + _id + "/log";
     }
 
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
 
     /**
      * @param o
