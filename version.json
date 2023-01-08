@@ -1,8 +1,8 @@
 {
-  "versionCode": 3,
-  "versionName": "1.2",
+  "versionCode": 4,
+  "versionName": "1.3",
   "isForce": true,
-  "updateTime": "2022-12-04",
+  "updateTime": "2023-01-08",
   "downloadUrl": "https://gitee.com/wsfsp4/QingLong/releases/download/V1.2/app-release.apk",
   "updateDetail": [
     "(1)修复环境变量搜索异常闪退问题",
