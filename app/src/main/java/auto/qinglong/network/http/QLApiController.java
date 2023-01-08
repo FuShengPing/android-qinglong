@@ -516,7 +516,7 @@ public class QLApiController {
     public static void editTask(@NonNull String requestId, @NonNull QLTask QLTask, @NonNull EditTaskCallback callback) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("name", QLTask.getName());
-        jsonObject.addProperty("_id", QLTask.get_id());
+        jsonObject.addProperty("_id", QLTask.getId());
         jsonObject.addProperty("command", QLTask.getCommand());
         jsonObject.addProperty("schedule", QLTask.getSchedule());
 
