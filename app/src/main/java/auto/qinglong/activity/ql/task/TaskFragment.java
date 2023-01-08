@@ -52,12 +52,12 @@ public class TaskFragment extends BaseFragment {
     private TaskAdapter mTaskAdapter;
 
     //PopupWindow
-    private EditWindow editWindow;
+    private EditWindow ui_pop_edit;
     //主导航栏
-    private LinearLayout layout_bar_main;
-    private ImageView layout_nav_menu;
-    private ImageView layout_nav_search;
-    private ImageView layout_nav_more;
+    private LinearLayout ui_bar_main;
+    private ImageView ui_nav_menu;
+    private ImageView ui_nav_search;
+    private ImageView ui_nav_more;
     //搜索导航栏
     private LinearLayout layout_bar_search;
     private ImageView layout_search_back;
@@ -91,10 +91,10 @@ public class TaskFragment extends BaseFragment {
         layout_root = view.findViewById(R.id.root);
 
         layout_bar = view.findViewById(R.id.task_bar);
-        layout_bar_main = view.findViewById(R.id.task_bar_nav);
-        layout_nav_search = view.findViewById(R.id.task_bar_nav_search);
-        layout_nav_more = view.findViewById(R.id.task_bar_nav_more);
-        layout_nav_menu = view.findViewById(R.id.task_bar_nav_menu);
+        ui_bar_main = view.findViewById(R.id.task_bar_nav);
+        ui_nav_search = view.findViewById(R.id.task_bar_nav_search);
+        ui_nav_more = view.findViewById(R.id.task_bar_nav_more);
+        ui_nav_menu = view.findViewById(R.id.task_bar_nav_menu);
 
         layout_bar_search = view.findViewById(R.id.task_bar_search);
         layout_search_back = view.findViewById(R.id.task_bar_search_back);
@@ -215,14 +215,14 @@ public class TaskFragment extends BaseFragment {
         layout_refresh.setOnRefreshListener(refreshLayout -> netGetTasks(mCurrentSearchValue, true));
 
         //导航点击监听
-        layout_nav_menu.setOnClickListener(v -> {
+        ui_nav_menu.setOnClickListener(v -> {
             if (mMenuClickListener != null) {
                 mMenuClickListener.onMenuClick();
             }
         });
 
         //搜索按键监听
-        layout_nav_search.setOnClickListener(v -> {
+        ui_nav_search.setOnClickListener(v -> {
             layout_search_value.setText(mCurrentSearchValue);
             changeBar(BarType.SEARCH);
         });
@@ -242,7 +242,7 @@ public class TaskFragment extends BaseFragment {
         });
 
         //更多操作按键监听
-        layout_nav_more.setOnClickListener(v -> showPopWindowMiniMore());
+        ui_nav_more.setOnClickListener(v -> showPopWindowMiniMore());
 
         //批量操作返回
         layout_actions_back.setOnClickListener(v -> changeBar(BarType.NAV));
@@ -389,22 +389,22 @@ public class TaskFragment extends BaseFragment {
     }
 
     public void showPopWindowEdit(QLTask qlTask) {
-        editWindow = new EditWindow("新建任务", "取消", "确定");
+        ui_pop_edit = new EditWindow("新建任务", "取消", "确定");
         EditWindowItem itemName = new EditWindowItem("name", null, "名称", "请输入任务名称");
         EditWindowItem itemCommand = new EditWindowItem("command", null, "命令", "请输入要执行的命令");
         EditWindowItem itemSchedule = new EditWindowItem("schedule", null, "定时规则", "秒(可选) 分 时 天 月 周");
 
         if (qlTask != null) {
-            editWindow.setTitle("编辑任务");
+            ui_pop_edit.setTitle("编辑任务");
             itemName.setValue(qlTask.getName());
             itemCommand.setValue(qlTask.getCommand());
             itemSchedule.setValue(qlTask.getSchedule());
         }
 
-        editWindow.addItem(itemName);
-        editWindow.addItem(itemCommand);
-        editWindow.addItem(itemSchedule);
-        editWindow.setActionListener(new EditWindow.OnActionListener() {
+        ui_pop_edit.addItem(itemName);
+        ui_pop_edit.addItem(itemCommand);
+        ui_pop_edit.addItem(itemSchedule);
+        ui_pop_edit.setActionListener(new EditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 String name = map.get("name");
@@ -449,7 +449,7 @@ public class TaskFragment extends BaseFragment {
             }
         });
 
-        PopupWindowBuilder.buildEditWindow(requireActivity(), editWindow);
+        PopupWindowBuilder.buildEditWindow(requireActivity(), ui_pop_edit);
     }
 
     public void changeBar(BarType barType) {
@@ -465,10 +465,10 @@ public class TaskFragment extends BaseFragment {
             layout_actions_select.setChecked(false);
         }
 
-        layout_bar_main.setVisibility(View.INVISIBLE);
+        ui_bar_main.setVisibility(View.INVISIBLE);
 
         if (barType == BarType.NAV) {
-            layout_bar_main.setVisibility(View.VISIBLE);
+            ui_bar_main.setVisibility(View.VISIBLE);
         } else if (barType == BarType.SEARCH) {
             layout_bar_search.setVisibility(View.VISIBLE);
         } else {
@@ -637,7 +637,7 @@ public class TaskFragment extends BaseFragment {
         QLApiController.editTask(getNetRequestID(), QLTask, new QLApiController.EditTaskCallback() {
             @Override
             public void onSuccess(QLTask QLTask) {
-                editWindow.dismiss();
+                ui_pop_edit.dismiss();
                 ToastUnit.showShort("编辑成功");
                 netGetTasks(mCurrentSearchValue, false);
             }
@@ -653,7 +653,7 @@ public class TaskFragment extends BaseFragment {
         QLApiController.addTask(getNetRequestID(), QLTask, new QLApiController.EditTaskCallback() {
             @Override
             public void onSuccess(QLTask QLTask) {
-                editWindow.dismiss();
+                ui_pop_edit.dismiss();
                 ToastUnit.showShort("新建任务成功");
                 netGetTasks(mCurrentSearchValue, false);
             }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.widget.PopupWindow;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
