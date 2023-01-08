@@ -49,7 +49,7 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         QLTask qlTask = data.get(position);
-        holder.layout_name.setText("[" + qlTask.getIndex() + "]" + qlTask.getName());
+        holder.layout_name.setText("[" + qlTask.getIndex() + "] " + qlTask.getName());
         holder.layout_command.setText(qlTask.getCommand());
         holder.layout_schedule.setText(qlTask.getSchedule());
         //运行状态

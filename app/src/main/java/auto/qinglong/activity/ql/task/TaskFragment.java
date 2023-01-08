@@ -83,8 +83,6 @@ public class TaskFragment extends BaseFragment {
     private SmartRefreshLayout layout_refresh;
     private RecyclerView layout_recycler;
 
-    private enum QueryType {QUERY, SEARCH, OTHER}
-
     private enum BarType {NAV, SEARCH, MUL_ACTION}
 
     @Nullable
@@ -136,6 +134,19 @@ public class TaskFragment extends BaseFragment {
         super.onHiddenChanged(hidden);
         if (!hidden) {
             checkFirstLoad();
+        }
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if (layout_bar_actions.getVisibility() == View.VISIBLE) {
+            changeBar(BarType.NAV);
+            return true;
+        } else if (layout_bar_search.getVisibility() == View.VISIBLE) {
+            changeBar(BarType.NAV);
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -362,6 +373,111 @@ public class TaskFragment extends BaseFragment {
         this.mMenuClickListener = menuClickListener;
     }
 
+    public void showPopWindowMiniMore() {
+        MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
+        miniMoreWindow.addItem(new MiniMoreItem("add", "新建任务", R.drawable.ic_add_gray));
+        miniMoreWindow.addItem(new MiniMoreItem("mulAction", "批量操作", R.drawable.ic_mul_action_gray));
+        miniMoreWindow.setOnActionListener(key -> {
+            if (key.equals("add")) {
+                showPopWindowEdit(null);
+            } else {
+                changeBar(BarType.MUL_ACTION);
+            }
+            return true;
+        });
+        popupWindowMore = PopupWindowManager.buildMiniMoreWindow(requireActivity(), miniMoreWindow, layout_bar, Gravity.END);
+    }
+
+    public void showPopWindowEdit(QLTask qlTask) {
+        EditWindow editWindow = new EditWindow("新建任务", "取消", "确定");
+        EditWindowItem itemName = new EditWindowItem("name", null, "名称", "请输入任务名称");
+        EditWindowItem itemCommand = new EditWindowItem("command", null, "命令", "请输入要执行的命令");
+        EditWindowItem itemSchedule = new EditWindowItem("schedule", null, "定时规则", "秒(可选) 分 时 天 月 周");
+
+        if (qlTask != null) {
+            editWindow.setTitle("编辑任务");
+            itemName.setValue(qlTask.getName());
+            itemCommand.setValue(qlTask.getCommand());
+            itemSchedule.setValue(qlTask.getSchedule());
+        }
+
+        editWindow.addItem(itemName);
+        editWindow.addItem(itemCommand);
+        editWindow.addItem(itemSchedule);
+        editWindow.setActionListener(new EditWindow.OnActionListener() {
+            @Override
+            public boolean onConfirm(Map<String, String> map) {
+                String name = map.get("name");
+                String command = map.get("command");
+                String schedule = map.get("schedule");
+
+                if (TextUnit.isEmpty(name)) {
+                    ToastUnit.showShort(getString(R.string.tip_empty_task_name));
+                    return false;
+                }
+                if (TextUnit.isEmpty(command)) {
+                    ToastUnit.showShort(getString(R.string.tip_empty_command));
+                    return false;
+                }
+                if (!CronUnit.isValid(schedule)) {
+                    ToastUnit.showShort(getString(R.string.tip_invalid_schedule));
+                    return false;
+                }
+
+                WindowUnit.hideKeyboard(layout_root);
+
+                QLTask newQLTask = new QLTask();
+                if (qlTask == null) {
+                    newQLTask.setName(name);
+                    newQLTask.setCommand(command);
+                    newQLTask.setSchedule(schedule);
+                    netAddTask(newQLTask);
+                } else {
+                    newQLTask.setName(name);
+                    newQLTask.setCommand(command);
+                    newQLTask.setSchedule(schedule);
+                    newQLTask.setId(qlTask.getId());
+                    netEditTask(newQLTask);
+                }
+
+                return false;
+            }
+
+            @Override
+            public boolean onCancel() {
+                return true;
+            }
+        });
+
+        popupWindowEdit = PopupWindowManager.buildEditWindow(requireActivity(), editWindow);
+    }
+
+    public void changeBar(BarType barType) {
+        if (layout_bar_search.getVisibility() == View.VISIBLE) {
+            WindowUnit.hideKeyboard(layout_root);
+            layout_bar_search.setVisibility(View.INVISIBLE);
+            mCurrentSearchValue = "";
+        }
+
+        if (layout_bar_actions.getVisibility() == View.VISIBLE) {
+            layout_bar_actions.setVisibility(View.INVISIBLE);
+            mTaskAdapter.setCheckState(false, -1);
+            layout_actions_select.setChecked(false);
+        }
+
+        layout_bar_main.setVisibility(View.INVISIBLE);
+
+        if (barType == BarType.NAV) {
+            layout_bar_main.setVisibility(View.VISIBLE);
+        } else if (barType == BarType.SEARCH) {
+            layout_bar_search.setVisibility(View.VISIBLE);
+        } else {
+            layout_actions_scroll.scrollTo(0, 0);
+            mTaskAdapter.setCheckState(true, -1);
+            layout_bar_actions.setVisibility(View.VISIBLE);
+        }
+    }
+
     public void netGetTasks(String searchValue, boolean needTip) {
         QLApiController.getTasks(getNetRequestID(), searchValue, new QLApiController.GetTasksCallback() {
             @Override
@@ -369,6 +485,9 @@ public class TaskFragment extends BaseFragment {
                 loadSuccessFlag = true;
                 List<QLTask> data = res.getData();
                 Collections.sort(data);
+                for (int k = 0; k < data.size(); k++) {
+                    data.get(k).setIndex(k + 1);
+                }
                 mTaskAdapter.setData(data);
                 if (needTip) {
                     ToastUnit.showShort("加载成功：" + data.size());
@@ -550,121 +669,5 @@ public class TaskFragment extends BaseFragment {
         });
     }
 
-    public void showPopWindowMiniMore() {
-        MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
-        miniMoreWindow.addItem(new MiniMoreItem("add", "新建任务", R.drawable.ic_add_gray));
-        miniMoreWindow.addItem(new MiniMoreItem("mulAction", "批量操作", R.drawable.ic_mul_action_gray));
-        miniMoreWindow.setOnActionListener(key -> {
-            if (key.equals("add")) {
-                showPopWindowEdit(null);
-            } else {
-                changeBar(BarType.MUL_ACTION);
-            }
-            return true;
-        });
-        popupWindowMore = PopupWindowManager.buildMiniMoreWindow(requireActivity(), miniMoreWindow, layout_bar, Gravity.END);
-    }
 
-    public void showPopWindowEdit(QLTask qlTask) {
-        EditWindow editWindow = new EditWindow("新建任务", "取消", "确定");
-        EditWindowItem itemName = new EditWindowItem("name", null, "名称", "请输入任务名称");
-        EditWindowItem itemCommand = new EditWindowItem("command", null, "命令", "请输入要执行的命令");
-        EditWindowItem itemSchedule = new EditWindowItem("schedule", null, "定时规则", "秒(可选) 分 时 天 月 周");
-
-        if (qlTask != null) {
-            editWindow.setTitle("编辑任务");
-            itemName.setValue(qlTask.getName());
-            itemCommand.setValue(qlTask.getCommand());
-            itemSchedule.setValue(qlTask.getSchedule());
-        }
-
-        editWindow.addItem(itemName);
-        editWindow.addItem(itemCommand);
-        editWindow.addItem(itemSchedule);
-        editWindow.setActionListener(new EditWindow.OnActionListener() {
-            @Override
-            public boolean onConfirm(Map<String, String> map) {
-                String name = map.get("name");
-                String command = map.get("command");
-                String schedule = map.get("schedule");
-
-                if (TextUnit.isEmpty(name)) {
-                    ToastUnit.showShort(getString(R.string.tip_empty_task_name));
-                    return false;
-                }
-                if (TextUnit.isEmpty(command)) {
-                    ToastUnit.showShort(getString(R.string.tip_empty_command));
-                    return false;
-                }
-                if (!CronUnit.isValid(schedule)) {
-                    ToastUnit.showShort(getString(R.string.tip_invalid_schedule));
-                    return false;
-                }
-
-                WindowUnit.hideKeyboard(layout_root);
-
-                QLTask newQLTask = new QLTask();
-                if (qlTask == null) {
-                    newQLTask.setName(name);
-                    newQLTask.setCommand(command);
-                    newQLTask.setSchedule(schedule);
-                    netAddTask(newQLTask);
-                } else {
-                    newQLTask.setName(name);
-                    newQLTask.setCommand(command);
-                    newQLTask.setSchedule(schedule);
-                    newQLTask.setId(qlTask.getId());
-                    netEditTask(newQLTask);
-                }
-
-                return false;
-            }
-
-            @Override
-            public boolean onCancel() {
-                return true;
-            }
-        });
-
-        popupWindowEdit = PopupWindowManager.buildEditWindow(requireActivity(), editWindow);
-    }
-
-    public void changeBar(BarType barType) {
-        if (layout_bar_search.getVisibility() == View.VISIBLE) {
-            WindowUnit.hideKeyboard(layout_root);
-            layout_bar_search.setVisibility(View.INVISIBLE);
-            mCurrentSearchValue = "";
-        }
-
-        if (layout_bar_actions.getVisibility() == View.VISIBLE) {
-            layout_bar_actions.setVisibility(View.INVISIBLE);
-            mTaskAdapter.setCheckState(false, -1);
-            layout_actions_select.setChecked(false);
-        }
-
-        layout_bar_main.setVisibility(View.INVISIBLE);
-
-        if (barType == BarType.NAV) {
-            layout_bar_main.setVisibility(View.VISIBLE);
-        } else if (barType == BarType.SEARCH) {
-            layout_bar_search.setVisibility(View.VISIBLE);
-        } else {
-            layout_actions_scroll.scrollTo(0, 0);
-            mTaskAdapter.setCheckState(true, -1);
-            layout_bar_actions.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
-    public boolean onBackPressed() {
-        if (layout_bar_actions.getVisibility() == View.VISIBLE) {
-            changeBar(BarType.NAV);
-            return true;
-        } else if (layout_bar_search.getVisibility() == View.VISIBLE) {
-            changeBar(BarType.NAV);
-            return true;
-        } else {
-            return false;
-        }
-    }
 }
