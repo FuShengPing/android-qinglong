@@ -226,6 +226,8 @@ public class DepFragment extends BaseFragment {
 
     public void showPopWindowMiniMore() {
         MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
+        miniMoreWindow.setTargetView(ui_bar);
+        miniMoreWindow.setGravity(Gravity.END);
         miniMoreWindow.addItem(new MiniMoreItem("add", "新建依赖", R.drawable.ic_add_gray));
         miniMoreWindow.addItem(new MiniMoreItem("mulAction", "批量操作", R.drawable.ic_mul_action_gray));
         miniMoreWindow.setOnActionListener(key -> {
@@ -236,7 +238,7 @@ public class DepFragment extends BaseFragment {
             }
             return true;
         });
-        popupWindowMore = PopupWindowBuilder.buildMiniMoreWindow(requireActivity(), miniMoreWindow, ui_bar, Gravity.END);
+        popupWindowMore = PopupWindowBuilder.buildMiniMoreWindow(requireActivity(), miniMoreWindow);
     }
 
     public void showBar(BarType barType) {

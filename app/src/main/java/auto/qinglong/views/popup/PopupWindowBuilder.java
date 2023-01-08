@@ -31,7 +31,7 @@ public class PopupWindowBuilder {
 
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    public static PopupWindow buildMiniMoreWindow(Activity activity, MiniMoreWindow miniMoreWindow, View targetView, int gravity) {
+    public static PopupWindow buildMiniMoreWindow(Activity activity, MiniMoreWindow miniMoreWindow) {
         View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_mini_more, null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), true, view);
         popWindow.setContentView(view);
@@ -53,7 +53,7 @@ public class PopupWindowBuilder {
             ui_ll_container.addView(itemView);
         }
 
-        popWindow.showAsDropDown(targetView, gravity, 0, 0);
+        popWindow.showAsDropDown(miniMoreWindow.getTargetView(), miniMoreWindow.getGravity(), 0, 0);
         return popWindow;
     }
 
@@ -170,7 +170,7 @@ public class PopupWindowBuilder {
 
     public static ProgressWindow buildProgressWindow(Activity activity) {
         View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_loading, null, false);
-        PopupWindow popWindow = build(activity.getBaseContext(), true, view);
+        PopupWindow popWindow = build(activity.getBaseContext(), false, view);
         popWindow.setContentView(view);
 
         TextView ui_tip = view.findViewById(R.id.pop_common_progress_tip);
@@ -194,10 +194,6 @@ public class PopupWindowBuilder {
         popupWindow.setOutsideTouchable(false);
         popupWindow.setFocusable(isFocusable);
         popupWindow.setTouchable(true);
-
-
-        view.setFocusable(true);
-        view.setClickable(true);
 
         return popupWindow;
     }

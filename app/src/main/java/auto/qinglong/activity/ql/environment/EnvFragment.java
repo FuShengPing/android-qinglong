@@ -307,6 +307,8 @@ public class EnvFragment extends BaseFragment {
 
     public void showPopWindowMiniMore() {
         MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
+        miniMoreWindow.setTargetView(layout_bar);
+        miniMoreWindow.setGravity(Gravity.END);
         miniMoreWindow.addItem(new MiniMoreItem("add", "新建变量", R.drawable.ic_add_gray));
         miniMoreWindow.addItem(new MiniMoreItem("quickAdd", "快捷导入", R.drawable.ic_flash_on_gray));
         miniMoreWindow.addItem(new MiniMoreItem("remoteAdd", "远程导入", R.drawable.ic_cloud_download));
@@ -334,7 +336,7 @@ public class EnvFragment extends BaseFragment {
             }
             return true;
         });
-        PopupWindowBuilder.buildMiniMoreWindow(requireActivity(), miniMoreWindow, layout_bar, Gravity.END);
+        PopupWindowBuilder.buildMiniMoreWindow(requireActivity(), miniMoreWindow);
     }
 
     private void showPopWindowCommonEdit(QLEnvironment environment) {

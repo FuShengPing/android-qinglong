@@ -170,6 +170,8 @@ public class PluginWebRuleActivity extends BaseActivity {
 
     private void showPopWindowMiniMore() {
         MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
+        miniMoreWindow.setTargetView(ui_bar);
+        miniMoreWindow.setGravity(Gravity.END);
         miniMoreWindow.addItem(new MiniMoreItem("add", "新建规则", R.drawable.ic_add_gray));
         miniMoreWindow.addItem(new MiniMoreItem("remoteAdd", "远程导入", R.drawable.ic_cloud_download));
         miniMoreWindow.setOnActionListener(key -> {
@@ -185,7 +187,7 @@ public class PluginWebRuleActivity extends BaseActivity {
             }
             return true;
         });
-        PopupWindowBuilder.buildMiniMoreWindow(this, miniMoreWindow, ui_bar, Gravity.END);
+        PopupWindowBuilder.buildMiniMoreWindow(this, miniMoreWindow);
     }
 
     private void addRuleToDB(List<WebRule> rules) {

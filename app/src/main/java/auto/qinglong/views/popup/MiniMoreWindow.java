@@ -1,11 +1,15 @@
 package auto.qinglong.views.popup;
 
+import android.view.View;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MiniMoreWindow {
     private List<MiniMoreItem> items = new ArrayList<>();
     private OnActionListener onActionListener;
+    private View targetView;
+    private int gravity;
 
     public List<MiniMoreItem> getItems() {
         return items;
@@ -25,6 +29,22 @@ public class MiniMoreWindow {
 
     public void setOnActionListener(OnActionListener onActionListener) {
         this.onActionListener = onActionListener;
+    }
+
+    public View getTargetView() {
+        return targetView;
+    }
+
+    public void setTargetView(View targetView) {
+        this.targetView = targetView;
+    }
+
+    public int getGravity() {
+        return gravity;
+    }
+
+    public void setGravity(int gravity) {
+        this.gravity = gravity;
     }
 
     public interface OnActionListener {

@@ -3,6 +3,7 @@ package auto.qinglong.activity.app;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -28,7 +29,7 @@ public class LoginActivity extends BaseActivity {
     private EditText ui_address;
     private EditText ui_username;
     private EditText ui_password;
-    private ProgressWindow ui_progress;
+    private ProgressWindow ui_pop_progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,10 +83,10 @@ public class LoginActivity extends BaseActivity {
             ui_confirm.setEnabled(false);
             ui_confirm.postDelayed(() -> ui_confirm.setEnabled(true), 300);
 
-            if (ui_progress == null) {
-                ui_progress = PopupWindowBuilder.buildProgressWindow(this);
+            if (ui_pop_progress == null) {
+                ui_pop_progress = PopupWindowBuilder.buildProgressWindow(this);
             }
-            ui_progress.setText("登录中...");
+            ui_pop_progress.setTextAndShow("登录中...");
 
             Account account = new Account(username, password, address, "");
             //账号登录过则设置之前token
@@ -103,6 +104,16 @@ public class LoginActivity extends BaseActivity {
             ui_username.setText(account.getUsername());
             ui_password.setText(account.getPassword());
         }
+    }
+
+    private void enterHome(Account account) {
+        //保存账号信息
+        AccountSP.saveCurrentAccount(account);
+        AccountDBHelper.insertAccount(account);
+        //进入主界面
+        Intent intent = new Intent(mContext, HomeActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     protected void netQuerySystemInfo(Account account) {
@@ -150,15 +161,5 @@ public class LoginActivity extends BaseActivity {
                 ToastUnit.showShort(msg);
             }
         });
-    }
-
-    private void enterHome(Account account) {
-        //保存账号信息
-        AccountSP.saveCurrentAccount(account);
-        AccountDBHelper.insertAccount(account);
-        //进入主界面
-        Intent intent = new Intent(mContext, HomeActivity.class);
-        startActivity(intent);
-        finish();
     }
 }

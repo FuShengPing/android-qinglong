@@ -5,6 +5,8 @@ import android.view.Gravity;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import auto.qinglong.utils.WindowUnit;
+
 public class ProgressWindow {
     private final Activity mActivity;
     private final PopupWindow ui_popupWindow;
@@ -22,11 +24,16 @@ public class ProgressWindow {
 
     public void setTextAndShow(String text) {
         this.setText(text);
+        WindowUnit.setBackgroundAlpha(mActivity, 0.5f);
         ui_popupWindow.showAtLocation(mActivity.getWindow().getDecorView().getRootView(), Gravity.CENTER, 0, 0);
     }
 
+    public boolean isShowing() {
+        return ui_popupWindow != null && ui_popupWindow.isShowing();
+    }
+
     public void dismiss() {
-        if (ui_popupWindow.isShowing()) {
+        if (ui_popupWindow != null && ui_popupWindow.isShowing()) {
             ui_popupWindow.dismiss();
         }
     }
