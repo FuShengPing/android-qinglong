@@ -66,9 +66,10 @@ public class LoginActivity extends BaseActivity {
         });
 
         ui_confirm.setOnClickListener(v -> {
-            if (RequestManager.isRequesting(getNetRequestID())) {
+            if (ui_pop_progress != null && ui_pop_progress.isShowing()) {
                 return;
             }
+
             String address = ui_address.getText().toString();
 
             if (!address.matches("(([0-9a-zA-Z])|([.:/_-]))+")) {
@@ -132,6 +133,7 @@ public class LoginActivity extends BaseActivity {
             public void onSuccess(QLSystemRes systemRes) {
                 if (!systemRes.getData().getVersion().startsWith("2.10")) {
                     ToastUnit.showShort("仅支持2.10.x面板");
+                    ui_pop_progress.dismiss();
                     return;
                 }
                 if (systemRes.getData().isInitialized()) {

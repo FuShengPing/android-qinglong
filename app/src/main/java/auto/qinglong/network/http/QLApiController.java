@@ -1302,6 +1302,7 @@ public class QLApiController {
         void onSuccess(QLSystemRes systemRes);
 
         void onFailure(String msg);
+
     }
 
     public interface BaseCallback {
