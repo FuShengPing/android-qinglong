@@ -20,13 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.main">
-        <activity
-            android:name=".LinkActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+
         <activity
             android:name=".activity.app.SplashActivity"
             android:exported="true"
@@ -37,6 +31,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.plugin.link.PluginLinkActivity"
+            android:exported="false"
+            android:launchMode="singleTask" />
         <activity
             android:name=".activity.plugin.web.PluginWebRuleActivity"
             android:exported="false"

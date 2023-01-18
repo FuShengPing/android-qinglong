@@ -18,6 +18,7 @@ import java.util.Objects;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.activity.BaseFragment;
+import auto.qinglong.activity.plugin.link.PluginLinkActivity;
 import auto.qinglong.activity.plugin.web.PluginWebActivity;
 import auto.qinglong.activity.ql.config.ConfigFragment;
 import auto.qinglong.activity.ql.dependence.DepFragment;
@@ -78,6 +79,27 @@ public class HomeActivity extends BaseActivity {
         netGetVersion();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (!mCurrentFragment.onBackPressed()) {
+            long current = System.currentTimeMillis();
+            if (current - mLastBackPressedTime < 2000) {
+                finish();
+            } else {
+                mLastBackPressedTime = current;
+                ToastUnit.showShort("再按一次退出");
+            }
+        }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ui_pop_notice != null && ui_pop_notice.isShowing()) {
+            return false;
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
     @SuppressLint("SetTextI18n")
     private void initDrawerBar() {
         ui_drawer_left.setVisibility(View.INVISIBLE);
@@ -101,8 +123,9 @@ public class HomeActivity extends BaseActivity {
         LinearLayout menu_env = ui_drawer_left.findViewById(R.id.menu_env);
         LinearLayout menu_setting = ui_drawer_left.findViewById(R.id.menu_setting);
         LinearLayout menu_dep = ui_drawer_left.findViewById(R.id.menu_dep);
-        LinearLayout menu_exit = ui_drawer_left.findViewById(R.id.menu_exit);
-        LinearLayout menu_extension_webck = ui_drawer_left.findViewById(R.id.menu_extension_web);
+        LinearLayout menu_extension_web = ui_drawer_left.findViewById(R.id.menu_extension_web);
+        LinearLayout menu_extension_link = ui_drawer_left.findViewById(R.id.menu_extension_link);
+        LinearLayout menu_app_exit = ui_drawer_left.findViewById(R.id.menu_exit);
         LinearLayout menu_app_setting = ui_drawer_left.findViewById(R.id.menu_app_setting);
 
         menu_task.setOnClickListener(v -> showFragment(TaskFragment.TAG));
@@ -121,16 +144,21 @@ public class HomeActivity extends BaseActivity {
             ToastUnit.showShort("暂未开放");
         });
 
-        menu_exit.setOnClickListener(v -> {
+        menu_extension_web.setOnClickListener(v -> {
+            Intent intent = new Intent(getBaseContext(), PluginWebActivity.class);
+            startActivity(intent);
+        });
+
+        menu_extension_link.setOnClickListener(v -> {
+            Intent intent = new Intent(getBaseContext(), PluginLinkActivity.class);
+            startActivity(intent);
+        });
+
+        menu_app_exit.setOnClickListener(v -> {
             Intent intent = new Intent(getBaseContext(), LoginActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.activity_alpha_enter, R.anim.activity_alpha_out);
             finish();
-        });
-
-        menu_extension_webck.setOnClickListener(v -> {
-            Intent intent = new Intent(getBaseContext(), PluginWebActivity.class);
-            startActivity(intent);
         });
 
         menu_app_setting.setOnClickListener(v -> {
@@ -138,27 +166,6 @@ public class HomeActivity extends BaseActivity {
         });
 
 
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (!mCurrentFragment.onBackPressed()) {
-            long current = System.currentTimeMillis();
-            if (current - mLastBackPressedTime < 2000) {
-                finish();
-            } else {
-                mLastBackPressedTime = current;
-                ToastUnit.showShort("再按一次退出");
-            }
-        }
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (ui_pop_notice != null && ui_pop_notice.isShowing()) {
-            return false;
-        }
-        return super.dispatchTouchEvent(ev);
     }
 
     private void showFragment(String menu) {
