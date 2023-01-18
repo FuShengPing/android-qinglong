@@ -71,7 +71,7 @@ public class LoginActivity extends BaseActivity {
             }
             String address = ui_address.getText().toString();
 
-            if (!address.matches("((\\d{1,3}\\.){3})\\d{1,3}:\\d{1,5}")) {
+            if (!address.matches("(([0-9a-zA-Z])|([.:/_-]))+")) {
                 ToastUnit.showShort("地址格式错误");
                 return;
             }
@@ -130,6 +130,10 @@ public class LoginActivity extends BaseActivity {
         QLApiController.getSystemInfo(this.getNetRequestID(), account, new QLApiController.SystemCallback() {
             @Override
             public void onSuccess(QLSystemRes systemRes) {
+                if (!systemRes.getData().getVersion().startsWith("2.10")) {
+                    ToastUnit.showShort("仅支持2.10.x面板");
+                    return;
+                }
                 if (systemRes.getData().isInitialized()) {
                     if (TextUnit.isFull(account.getToken())) {
                         netCheckToken(account);
