@@ -102,7 +102,7 @@ public class HomeActivity extends BaseActivity {
         LinearLayout menu_setting = ui_drawer_left.findViewById(R.id.menu_setting);
         LinearLayout menu_dep = ui_drawer_left.findViewById(R.id.menu_dep);
         LinearLayout menu_exit = ui_drawer_left.findViewById(R.id.menu_exit);
-        LinearLayout menu_extension_webck = ui_drawer_left.findViewById(R.id.menu_extension_webck);
+        LinearLayout menu_extension_webck = ui_drawer_left.findViewById(R.id.menu_extension_web);
         LinearLayout menu_app_setting = ui_drawer_left.findViewById(R.id.menu_app_setting);
 
         menu_task.setOnClickListener(v -> showFragment(TaskFragment.TAG));
