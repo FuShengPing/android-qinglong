@@ -17,6 +17,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiController {
     private static final String ERROR_NO_BODY = "响应异常";
+    public static final String API_GET_VERSION = "ApiController_getVersion";
+    public static final String API_GET_PROJECT = "ApiController_getProject";
+    public static final String API_GET_REMOTE_ENVS = "ApiController_getRemoteEnvironments";
+    public static final String API_GET_REMOTE_RULES = "ApiController_getRemoteWebRules";
 
     public static void getVersion(@NonNull String requestId, @NonNull VersionCallback callback) {
         Call<Version> call = new Retrofit.Builder()
@@ -41,6 +45,9 @@ public class ApiController {
             @Override
             public void onFailure(Call<Version> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -90,6 +97,9 @@ public class ApiController {
             @Override
             public void onFailure(Call<List<QLEnvironment>> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -116,6 +126,9 @@ public class ApiController {
             @Override
             public void onFailure(Call<List<WebRule>> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
