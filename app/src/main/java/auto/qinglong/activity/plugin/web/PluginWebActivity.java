@@ -73,6 +73,21 @@ public class PluginWebActivity extends BaseActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        WebViewBuilder.destroy(ui_webView);
+        super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (ui_webView != null && ui_webView.canGoBack()) {
+            ui_webView.goBack();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     protected void init() {
         ui_bar_back.setOnClickListener(v -> finish());
 
@@ -263,9 +278,5 @@ public class PluginWebActivity extends BaseActivity {
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        WebViewBuilder.destroy(ui_webView);
-        super.onDestroy();
-    }
+
 }
