@@ -1,0 +1,26 @@
+[
+  {
+    "url": "https://mp.csdn.net/mp_blog/creation/editor/128366173",
+    "title": "青龙面板教程（五）：代理设置",
+    "from": "开发者",
+    "type": "通用教程",
+    "isOfficial": true,
+    "level": 0
+  },
+  {
+    "url": "https://gitee.com/wsfsp4/QingLong/blob/master/README.md",
+    "title": "青龙面板APP：2.10.x",
+    "from": "开发者",
+    "type": "软件工具",
+    "isOfficial": true,
+    "level": 1
+  },
+  {
+    "url": "https://gitee.com/wsfsp4/QingLong/blob/master/README.md",
+    "title": "青龙面板APP：2.15.x+",
+    "from": "开发者",
+    "type": "软件工具",
+    "isOfficial": true,
+    "level": 1
+  }
+]

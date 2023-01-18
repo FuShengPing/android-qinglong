@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
+import auto.qinglong.bean.app.Link;
 import auto.qinglong.bean.app.Version;
 import auto.qinglong.bean.app.WebRule;
 import auto.qinglong.bean.app.network.BaseRes;
@@ -136,6 +137,35 @@ public class ApiController {
         RequestManager.addCall(call, requestId);
     }
 
+    public static void getLinks(@NonNull String requestId, @NonNull String baseUrl, @NonNull String path, @NonNull LinkCallback callback) {
+        Call<List<Link>> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .getLinks(path);
+
+        call.enqueue(new Callback<List<Link>>() {
+            @Override
+            public void onResponse(Call<List<Link>> call, Response<List<Link>> response) {
+                RequestManager.finishCall(requestId);
+                List<Link> res = response.body();
+                callback.onSuccess(res);
+            }
+
+            @Override
+            public void onFailure(Call<List<Link>> call, Throwable t) {
+                RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
+                callback.onFailure(t.getLocalizedMessage());
+            }
+        });
+
+        RequestManager.addCall(call, requestId);
+    }
+
 
     public interface VersionCallback {
         void onSuccess(Version version);
@@ -157,6 +187,12 @@ public class ApiController {
 
     public interface RemoteWebRuleCallback {
         void onSuccess(List<WebRule> rules);
+
+        void onFailure(String msg);
+    }
+
+    public interface LinkCallback {
+        void onSuccess(List<Link> links);
 
         void onFailure(String msg);
     }

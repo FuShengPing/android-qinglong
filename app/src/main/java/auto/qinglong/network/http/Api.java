@@ -2,6 +2,7 @@ package auto.qinglong.network.http;
 
 import java.util.List;
 
+import auto.qinglong.bean.app.Link;
 import auto.qinglong.bean.app.Version;
 import auto.qinglong.bean.app.WebRule;
 import auto.qinglong.bean.ql.QLEnvironment;
@@ -24,4 +25,7 @@ public interface Api {
 
     @GET
     Call<List<QLEnvironment>> getRemoteEnvironments(@Url String url);
+
+    @GET
+    Call<List<Link>> getLinks(@Url String url);
 }

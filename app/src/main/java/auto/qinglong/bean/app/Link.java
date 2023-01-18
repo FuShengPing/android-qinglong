@@ -5,6 +5,7 @@ public class Link {
     private String title;
     private String from;
     private boolean isOfficial;
+    private int level;
 
     public String getUrl() {
         return url;
@@ -36,5 +37,13 @@ public class Link {
 
     public void setOfficial(boolean official) {
         isOfficial = official;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }
