@@ -50,6 +50,15 @@ public class LoginActivity extends BaseActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        //关闭pop 防止内存泄漏
+        if (ui_pop_progress != null) {
+            ui_pop_progress.dismiss();
+        }
+        super.onDestroy();
+    }
+
+    @Override
     public void onBackPressed() {
         if (ui_pop_progress != null && ui_pop_progress.isShowing()) {
             ui_pop_progress.dismiss();
