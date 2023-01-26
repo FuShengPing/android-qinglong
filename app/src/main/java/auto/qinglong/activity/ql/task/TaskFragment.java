@@ -89,7 +89,6 @@ public class TaskFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fg_task, null);
 
         ui_root = view.findViewById(R.id.root);
-
         ui_bar = view.findViewById(R.id.task_bar);
         ui_bar_main = view.findViewById(R.id.task_bar_nav);
         ui_nav_search = view.findViewById(R.id.task_bar_nav_search);
@@ -167,9 +166,9 @@ public class TaskFragment extends BaseFragment {
         //item容器配置
         mTaskAdapter = new TaskAdapter(getContext());
         //取消更新动画，避免刷新闪烁
-        Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
-        ui_recycler.setAdapter(mTaskAdapter);
+        ui_recycler.getItemAnimator().setChangeDuration(0);
         ui_recycler.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        ui_recycler.setAdapter(mTaskAdapter);
 
         //列表item操作接口
         mTaskAdapter.setTaskInterface(new TaskAdapter.ItemActionListener() {
