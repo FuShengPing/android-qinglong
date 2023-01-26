@@ -37,18 +37,6 @@ public class SplashActivity extends BaseActivity {
         start();
     }
 
-    @Override
-    protected void init() {
-        File externalStorage = Environment.getExternalStorageDirectory();
-        String path = externalStorage.getAbsolutePath();
-        LogUnit.log("externalStorage："+path);
-        File internalStorage = getFilesDir();
-        path = internalStorage.getAbsolutePath();
-        LogUnit.log("internalStorage："+path);
-        path = getCacheDir().getAbsolutePath();
-        LogUnit.log("CacheDir："+path);
-    }
-
     private void start() {
         //网络状态
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

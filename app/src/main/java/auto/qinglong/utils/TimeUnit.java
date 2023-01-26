@@ -1,15 +1,16 @@
 package auto.qinglong.utils;
 
-import android.annotation.SuppressLint;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class TimeUnit {
-    private static @SuppressLint("SimpleDateFormat")
-    SimpleDateFormat formatterA = new SimpleDateFormat("yyyy/M/d HH:mm:ss");
-    private static @SuppressLint("SimpleDateFormat")
-    SimpleDateFormat formatterB = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+    private static final
+    SimpleDateFormat formatterA = new SimpleDateFormat("yyyy/M/d HH:mm:ss", Locale.CHINA);
+    private static final
+    SimpleDateFormat formatterB = new SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.CHINA);
+    private static final
+    SimpleDateFormat formatterC = new SimpleDateFormat("yyyy_MM_dd_HH_mm", Locale.CHINA);
 
     /**
      * @param timestamp 毫秒级时间戳
@@ -27,7 +28,11 @@ public class TimeUnit {
         return formatterB.format(new Date(timestamp));
     }
 
-    public static long getMilliTimestamp() {
-        return new Date().getTime();
+    /**
+     * @return yyyy_MM_dd_HH_mm 当前格式日期
+     */
+    public static String formatCurrentTime() {
+        return formatterC.format(new Date());
     }
+
 }
