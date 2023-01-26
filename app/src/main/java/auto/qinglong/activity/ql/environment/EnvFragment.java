@@ -111,14 +111,14 @@ public class EnvFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        loadFirst();
+        initData();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            loadFirst();
+            initData();
         }
     }
 
@@ -247,7 +247,7 @@ public class EnvFragment extends BaseFragment {
         this.menuClickListener = menuClickListener;
     }
 
-    private void loadFirst() {
+    private void initData() {
         if (loadSuccessFlag || RequestManager.isRequesting(getNetRequestID())) {
             return;
         }
@@ -258,50 +258,7 @@ public class EnvFragment extends BaseFragment {
         }, 1000);
     }
 
-    public void sortAndSetData(List<QLEnvironment> data) {
-        if (data.size() != 0) {
-            Collections.sort(data);
-            //设置序号
-            int size = data.size();
-            int current = 0;
-            int index = 1;
-            while (true) {
-                data.get(current).setIndex(index);
-                if (current < size - 1) {
-                    if (data.get(current).getName().equals(data.get(current + 1).getName())) {
-                        index += 1;
-                    } else {
-                        index = 1;
-                    }
-                } else {
-                    break;
-                }
-                current += 1;
-            }
-        }
-        envItemAdapter.setData(data);
-    }
-
-    public void compareAndDeleteData() {
-        List<String> ids = new ArrayList<>();
-        Set<String> set = new HashSet<>();
-        List<QLEnvironment> qlEnvironments = this.envItemAdapter.getData();
-        for (QLEnvironment qlEnvironment : qlEnvironments) {
-            String key = qlEnvironment.getName() + qlEnvironment.getValue();
-            if (set.contains(key)) {
-                ids.add(qlEnvironment.get_id());
-            } else {
-                set.add(key);
-            }
-        }
-        if (ids.size() == 0) {
-            ToastUnit.showShort("无重复变量");
-        } else {
-            netDeleteEnvironments(ids);
-        }
-    }
-
-    public void showPopWindowMiniMore() {
+    private void showPopWindowMiniMore() {
         MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
         miniMoreWindow.setTargetView(ui_bar);
         miniMoreWindow.setGravity(Gravity.END);
@@ -465,7 +422,7 @@ public class EnvFragment extends BaseFragment {
         PopupWindowBuilder.buildEditWindow(requireActivity(), editWindow);
     }
 
-    public void changeBar(BarType barType) {
+    private void changeBar(BarType barType) {
         if (ui_bar_search.getVisibility() == View.VISIBLE) {
             WindowUnit.hideKeyboard(ui_root);
             ui_bar_search.setVisibility(View.INVISIBLE);
@@ -488,6 +445,49 @@ public class EnvFragment extends BaseFragment {
             ui_actions_select.setChecked(false);
             envItemAdapter.setCheckState(true, -1);
             ui_bar_actions.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void sortAndSetData(List<QLEnvironment> data) {
+        if (data.size() != 0) {
+            Collections.sort(data);
+            //设置序号
+            int size = data.size();
+            int current = 0;
+            int index = 1;
+            while (true) {
+                data.get(current).setIndex(index);
+                if (current < size - 1) {
+                    if (data.get(current).getName().equals(data.get(current + 1).getName())) {
+                        index += 1;
+                    } else {
+                        index = 1;
+                    }
+                } else {
+                    break;
+                }
+                current += 1;
+            }
+        }
+        envItemAdapter.setData(data);
+    }
+
+    private void compareAndDeleteData() {
+        List<String> ids = new ArrayList<>();
+        Set<String> set = new HashSet<>();
+        List<QLEnvironment> qlEnvironments = this.envItemAdapter.getData();
+        for (QLEnvironment qlEnvironment : qlEnvironments) {
+            String key = qlEnvironment.getName() + qlEnvironment.getValue();
+            if (set.contains(key)) {
+                ids.add(qlEnvironment.get_id());
+            } else {
+                set.add(key);
+            }
+        }
+        if (ids.size() == 0) {
+            ToastUnit.showShort("无重复变量");
+        } else {
+            netDeleteEnvironments(ids);
         }
     }
 
@@ -514,7 +514,7 @@ public class EnvFragment extends BaseFragment {
         });
     }
 
-    public void netUpdateEnvironment(QLEnvironment environment) {
+    private void netUpdateEnvironment(QLEnvironment environment) {
         if (RequestManager.isRequesting(getNetRequestID())) {
             return;
         }
@@ -533,7 +533,7 @@ public class EnvFragment extends BaseFragment {
         });
     }
 
-    public void netAddEnvironments(List<QLEnvironment> environments) {
+    private void netAddEnvironments(List<QLEnvironment> environments) {
         if (RequestManager.isRequesting(getNetRequestID())) {
             return;
         }
@@ -552,7 +552,7 @@ public class EnvFragment extends BaseFragment {
         });
     }
 
-    public void netDeleteEnvironments(List<String> ids) {
+    private void netDeleteEnvironments(List<String> ids) {
         if (RequestManager.isRequesting(getNetRequestID())) {
             return;
         }
@@ -571,7 +571,7 @@ public class EnvFragment extends BaseFragment {
         });
     }
 
-    public void netEnableEnvironments(List<String> ids) {
+    private void netEnableEnvironments(List<String> ids) {
         if (RequestManager.isRequesting(getNetRequestID())) {
             return;
         }
@@ -591,7 +591,7 @@ public class EnvFragment extends BaseFragment {
 
     }
 
-    public void netDisableEnvironments(List<String> ids) {
+    private void netDisableEnvironments(List<String> ids) {
         if (RequestManager.isRequesting(getNetRequestID())) {
             return;
         }
@@ -610,7 +610,7 @@ public class EnvFragment extends BaseFragment {
         });
     }
 
-    public void netGetRemoteEnvironments(String baseUrl, String path) {
+    private void netGetRemoteEnvironments(String baseUrl, String path) {
         if (RequestManager.isRequesting(getNetRequestID())) {
             return;
         }
