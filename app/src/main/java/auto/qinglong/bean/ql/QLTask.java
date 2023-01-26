@@ -143,6 +143,8 @@ public class QLTask implements Comparable<QLTask> {
     public QLTaskState getTaskState() {
         if (this.status == 0) {
             return QLTaskState.RUNNING;
+        } else if (this.status == 3) {
+            return QLTaskState.WAITING;
         } else if (this.isDisabled == 1) {
             return QLTaskState.LIMIT;
         } else {
@@ -174,29 +176,23 @@ public class QLTask implements Comparable<QLTask> {
     }
 
     /**
-     * @param o
-     * @return 排序：运行>顶置>空闲>禁止
+     * @return 排序：运行>队列>顶置>空闲>禁止
      */
     @Override
     public int compareTo(QLTask o) {
         if (this.getTaskState() == o.getTaskState()) {
-            return compareByPinned(o);
-        } else if (this.getTaskState() == QLTaskState.RUNNING && o.getTaskState() != QLTaskState.RUNNING) {
+            return o.getIsPinned() - this.isPinned;
+        } else if (this.getTaskState() == QLTaskState.RUNNING && o.getTaskState() == QLTaskState.WAITING) {
             return -1;
-        } else if (this.getTaskState() != QLTaskState.RUNNING && o.getTaskState() == QLTaskState.RUNNING) {
+        } else if (this.getTaskState() == QLTaskState.WAITING && o.getTaskState() == QLTaskState.RUNNING) {
+            return 1;
+        } else if ((this.getTaskState() == QLTaskState.RUNNING || this.getTaskState() == QLTaskState.WAITING) && (o.getTaskState() == QLTaskState.LIMIT || o.getTaskState() == QLTaskState.FREE)) {
+            return -1;
+        } else if ((this.getTaskState() == QLTaskState.LIMIT || this.getTaskState() == QLTaskState.FREE) && (o.getTaskState() == QLTaskState.RUNNING || o.getTaskState() == QLTaskState.WAITING)) {
             return 1;
         } else {
-            return compareByPinned(o);
+            return o.getIsPinned() - this.isPinned;
         }
     }
 
-    private int compareByPinned(QLTask o) {
-        if (this.isPinned == o.isPinned) {
-            return 0;
-        } else if (this.isPinned == 1 && o.isPinned == 0) {
-            return -1;
-        } else {
-            return 1;
-        }
-    }
 }

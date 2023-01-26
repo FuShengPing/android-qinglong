@@ -57,6 +57,10 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
             holder.layout_state.setText("运行中");
             holder.layout_state.setTextColor(context.getColor(R.color.theme_color_shadow));
             holder.layout_action.setImageResource(R.drawable.ic_pause);
+        } else if (qlTask.getTaskState() == QLTaskState.WAITING) {
+            holder.layout_state.setText("队列中");
+            holder.layout_state.setTextColor(context.getColor(R.color.theme_color_shadow));
+            holder.layout_action.setImageResource(R.drawable.ic_pause);
         } else if (qlTask.getTaskState() == QLTaskState.LIMIT) {
             holder.layout_state.setText("禁止中");
             holder.layout_state.setTextColor(context.getColor(R.color.text_color_red));
@@ -117,7 +121,7 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
         holder.layout_action.setOnClickListener(v -> {
             if (this.checkState) {
                 holder.layout_check.setChecked(!holder.layout_check.isChecked());
-            } else if (qlTask.getTaskState() != QLTaskState.RUNNING) {
+            } else if (qlTask.getTaskState() == QLTaskState.LIMIT || qlTask.getTaskState() == QLTaskState.FREE) {
                 itemActionListener.onRun(qlTask);
             } else {
                 itemActionListener.onStop(qlTask);
