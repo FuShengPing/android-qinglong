@@ -73,6 +73,7 @@
                 android:src="@drawable/ic_arrow_back" />
 
             <EditText
+                android:background="@drawable/style_input_bottom"
                 android:id="@+id/env_bar_search_value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
