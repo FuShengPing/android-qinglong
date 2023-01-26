@@ -147,7 +147,7 @@ public class DepFragment extends BaseFragment {
     }
 
     public void netAddDependence(List<QLDependence> dependencies) {
-        QLApiController.addDependencies(getNetRequestID(), dependencies, new QLApiController.BaseCallback() {
+        QLApiController.addDependencies(getNetRequestID(), dependencies, new QLApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
                 ui_pop_edit.dismiss();
@@ -164,7 +164,7 @@ public class DepFragment extends BaseFragment {
     }
 
     public void netDeleteDependence(List<String> ids) {
-        QLApiController.deleteDependencies(getNetRequestID(), ids, new QLApiController.BaseCallback() {
+        QLApiController.deleteDependencies(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
                 showBar(BarType.NAV);

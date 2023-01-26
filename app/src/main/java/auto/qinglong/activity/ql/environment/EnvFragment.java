@@ -493,7 +493,7 @@ public class EnvFragment extends BaseFragment {
         if (RequestManager.isRequesting(getNetRequestID())) {
             return;
         }
-        QLApiController.getEnvironments(getNetRequestID(), searchValue, new QLApiController.GetEnvironmentsCallback() {
+        QLApiController.getEnvironments(getNetRequestID(), searchValue, new QLApiController.NetGetEnvironmentsCallback() {
             @Override
             public void onSuccess(QLEnvironmentRes res) {
                 loadSuccessFlag = true;
@@ -516,7 +516,7 @@ public class EnvFragment extends BaseFragment {
         if (RequestManager.isRequesting(getNetRequestID())) {
             return;
         }
-        QLApiController.updateEnvironment(getNetRequestID(), environment, new QLApiController.EditEnvCallback() {
+        QLApiController.updateEnvironment(getNetRequestID(), environment, new QLApiController.NetEditEnvCallback() {
             @Override
             public void onSuccess(QLEnvironment data) {
                 editWindow.dismiss();
@@ -535,7 +535,7 @@ public class EnvFragment extends BaseFragment {
         if (RequestManager.isRequesting(getNetRequestID())) {
             return;
         }
-        QLApiController.addEnvironment(getNetRequestID(), environments, new QLApiController.GetEnvironmentsCallback() {
+        QLApiController.addEnvironment(getNetRequestID(), environments, new QLApiController.NetGetEnvironmentsCallback() {
             @Override
             public void onSuccess(QLEnvironmentRes res) {
                 editWindow.dismiss();
@@ -554,7 +554,7 @@ public class EnvFragment extends BaseFragment {
         if (RequestManager.isRequesting(getNetRequestID())) {
             return;
         }
-        QLApiController.deleteEnvironments(getNetRequestID(), ids, new QLApiController.BaseCallback() {
+        QLApiController.deleteEnvironments(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
                 layout_actions_back.performClick();
@@ -573,7 +573,7 @@ public class EnvFragment extends BaseFragment {
         if (RequestManager.isRequesting(getNetRequestID())) {
             return;
         }
-        QLApiController.enableEnvironments(getNetRequestID(), ids, new QLApiController.BaseCallback() {
+        QLApiController.enableEnvironments(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
                 layout_actions_back.performClick();
@@ -593,7 +593,7 @@ public class EnvFragment extends BaseFragment {
         if (RequestManager.isRequesting(getNetRequestID())) {
             return;
         }
-        QLApiController.disableEnvironments(getNetRequestID(), ids, new QLApiController.BaseCallback() {
+        QLApiController.disableEnvironments(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
                 layout_actions_back.performClick();
@@ -612,7 +612,7 @@ public class EnvFragment extends BaseFragment {
         if (RequestManager.isRequesting(getNetRequestID())) {
             return;
         }
-        ApiController.getRemoteEnvironments(getNetRequestID(), baseUrl, path, new ApiController.RemoteEnvCallback() {
+        ApiController.getRemoteEnvironments(getNetRequestID(), baseUrl, path, new ApiController.NetRemoteEnvCallback() {
 
             @Override
             public void onSuccess(List<QLEnvironment> environments) {

@@ -479,7 +479,7 @@ public class TaskFragment extends BaseFragment {
     }
 
     public void netGetTasks(String searchValue, boolean needTip) {
-        QLApiController.getTasks(getNetRequestID(), searchValue, new QLApiController.GetTasksCallback() {
+        QLApiController.getTasks(getNetRequestID(), searchValue, new QLApiController.NetGetTasksCallback() {
             @Override
             public void onSuccess(QLTasksRes res) {
                 loadSuccessFlag = true;
@@ -507,7 +507,7 @@ public class TaskFragment extends BaseFragment {
         if (RequestManager.isRequesting(getNetRequestID())) {
             return;
         }
-        QLApiController.runTasks(getNetRequestID(), ids, new QLApiController.RunTaskCallback() {
+        QLApiController.runTasks(getNetRequestID(), ids, new QLApiController.NetRunTaskCallback() {
             @Override
             public void onSuccess(String msg) {
                 if (isFromBar && layout_bar_actions.getVisibility() == View.VISIBLE) {
@@ -526,7 +526,7 @@ public class TaskFragment extends BaseFragment {
     }
 
     public void netStopTasks(List<String> ids, boolean isFromBar) {
-        QLApiController.stopTasks(getNetRequestID(), ids, new QLApiController.RunTaskCallback() {
+        QLApiController.stopTasks(getNetRequestID(), ids, new QLApiController.NetRunTaskCallback() {
             @Override
             public void onSuccess(String msg) {
                 if (isFromBar && layout_bar_actions.getVisibility() == View.VISIBLE) {
@@ -544,7 +544,7 @@ public class TaskFragment extends BaseFragment {
     }
 
     public void netEnableTasks(List<String> ids) {
-        QLApiController.enableTasks(getNetRequestID(), ids, new QLApiController.RunTaskCallback() {
+        QLApiController.enableTasks(getNetRequestID(), ids, new QLApiController.NetRunTaskCallback() {
             @Override
             public void onSuccess(String msg) {
                 if (layout_actions_back.getVisibility() == View.VISIBLE) {
@@ -562,7 +562,7 @@ public class TaskFragment extends BaseFragment {
     }
 
     public void netDisableTasks(List<String> ids) {
-        QLApiController.disableTasks(getNetRequestID(), ids, new QLApiController.RunTaskCallback() {
+        QLApiController.disableTasks(getNetRequestID(), ids, new QLApiController.NetRunTaskCallback() {
             @Override
             public void onSuccess(String msg) {
                 if (layout_actions_back.getVisibility() == View.VISIBLE) {
@@ -580,7 +580,7 @@ public class TaskFragment extends BaseFragment {
     }
 
     public void netPinTasks(List<String> ids) {
-        QLApiController.pinTasks(getNetRequestID(), ids, new QLApiController.RunTaskCallback() {
+        QLApiController.pinTasks(getNetRequestID(), ids, new QLApiController.NetRunTaskCallback() {
             @Override
             public void onSuccess(String msg) {
                 if (layout_actions_back.getVisibility() == View.VISIBLE) {
@@ -598,7 +598,7 @@ public class TaskFragment extends BaseFragment {
     }
 
     public void netUnpinTasks(List<String> ids) {
-        QLApiController.unpinTasks(getNetRequestID(), ids, new QLApiController.RunTaskCallback() {
+        QLApiController.unpinTasks(getNetRequestID(), ids, new QLApiController.NetRunTaskCallback() {
             @Override
             public void onSuccess(String msg) {
                 if (layout_actions_back.getVisibility() == View.VISIBLE) {
@@ -616,7 +616,7 @@ public class TaskFragment extends BaseFragment {
     }
 
     public void netDeleteTasks(List<String> ids) {
-        QLApiController.deleteTasks(getNetRequestID(), ids, new QLApiController.BaseCallback() {
+        QLApiController.deleteTasks(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
                 if (layout_actions_back.getVisibility() == View.VISIBLE) {
@@ -634,7 +634,7 @@ public class TaskFragment extends BaseFragment {
     }
 
     public void netEditTask(QLTask QLTask) {
-        QLApiController.editTask(getNetRequestID(), QLTask, new QLApiController.EditTaskCallback() {
+        QLApiController.editTask(getNetRequestID(), QLTask, new QLApiController.NetEditTaskCallback() {
             @Override
             public void onSuccess(QLTask QLTask) {
                 ui_pop_edit.dismiss();
@@ -650,7 +650,7 @@ public class TaskFragment extends BaseFragment {
     }
 
     public void netAddTask(QLTask QLTask) {
-        QLApiController.addTask(getNetRequestID(), QLTask, new QLApiController.EditTaskCallback() {
+        QLApiController.addTask(getNetRequestID(), QLTask, new QLApiController.NetEditTaskCallback() {
             @Override
             public void onSuccess(QLTask QLTask) {
                 ui_pop_edit.dismiss();

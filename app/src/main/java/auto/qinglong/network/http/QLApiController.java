@@ -42,7 +42,7 @@ public class QLApiController {
     private static final String ERROR_NO_BODY = "响应异常";
     private static final String ERROR_INVALID_AUTH = "登录失效";
 
-    public static void getSystemInfo(@NonNull String requestId, @NonNull Account account, @NonNull SystemCallback callback) {
+    public static void getSystemInfo(@NonNull String requestId, @NonNull Account account, @NonNull NetSystemCallback callback) {
         Call<QLSystemRes> call = new Retrofit.Builder()
                 .baseUrl(account.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -74,6 +74,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLSystemRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -81,7 +84,7 @@ public class QLApiController {
         RequestManager.addCall(call, requestId);
     }
 
-    public static void checkToken(@NonNull String requestId, @NonNull Account account, @NonNull LoginCallback callback) {
+    public static void checkToken(@NonNull String requestId, @NonNull Account account, @NonNull NetLoginCallback callback) {
         Call<QLTasksRes> call = new Retrofit.Builder()
                 .baseUrl(account.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -112,6 +115,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLTasksRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -119,7 +125,7 @@ public class QLApiController {
         RequestManager.addCall(call, requestId);
     }
 
-    public static void login(@NonNull String requestId, @NonNull Account account, @NonNull LoginCallback callback) {
+    public static void login(@NonNull String requestId, @NonNull Account account, @NonNull NetLoginCallback callback) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("username", account.getUsername());
         jsonObject.addProperty("password", account.getPassword());
@@ -158,13 +164,16 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLLoginRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
         RequestManager.addCall(call, requestId);
     }
 
-    public static void getTasks(@NonNull String requestId, @NonNull String searchValue, @NonNull GetTasksCallback callback) {
+    public static void getTasks(@NonNull String requestId, @NonNull String searchValue, @NonNull NetGetTasksCallback callback) {
         Call<QLTasksRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -195,6 +204,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLTasksRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -202,7 +214,7 @@ public class QLApiController {
         RequestManager.addCall(call, requestId);
     }
 
-    public static void runTasks(@NonNull String requestId, @NonNull List<String> taskIds, @NonNull RunTaskCallback callback) {
+    public static void runTasks(@NonNull String requestId, @NonNull List<String> taskIds, @NonNull NetRunTaskCallback callback) {
         JsonArray jsonArray = new JsonArray();
         for (int i = 0; i < taskIds.size(); i++) {
             jsonArray.add(taskIds.get(i));
@@ -235,6 +247,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -243,7 +258,7 @@ public class QLApiController {
 
     }
 
-    public static void stopTasks(@NonNull String requestId, @NonNull List<String> taskIds, @NonNull RunTaskCallback callback) {
+    public static void stopTasks(@NonNull String requestId, @NonNull List<String> taskIds, @NonNull NetRunTaskCallback callback) {
         JsonArray jsonArray = new JsonArray();
         for (int i = 0; i < taskIds.size(); i++) {
             jsonArray.add(taskIds.get(i));
@@ -280,6 +295,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -288,7 +306,7 @@ public class QLApiController {
 
     }
 
-    public static void enableTasks(@NonNull String requestId, @NonNull List<String> taskIds, @NonNull RunTaskCallback callback) {
+    public static void enableTasks(@NonNull String requestId, @NonNull List<String> taskIds, @NonNull NetRunTaskCallback callback) {
         JsonArray jsonArray = new JsonArray();
         for (int i = 0; i < taskIds.size(); i++) {
             jsonArray.add(taskIds.get(i));
@@ -325,6 +343,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -333,7 +354,7 @@ public class QLApiController {
 
     }
 
-    public static void disableTasks(@NonNull String requestId, @NonNull List<String> taskIds, @NonNull RunTaskCallback callback) {
+    public static void disableTasks(@NonNull String requestId, @NonNull List<String> taskIds, @NonNull NetRunTaskCallback callback) {
         JsonArray jsonArray = new JsonArray();
         for (int i = 0; i < taskIds.size(); i++) {
             jsonArray.add(taskIds.get(i));
@@ -370,6 +391,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -378,7 +402,7 @@ public class QLApiController {
 
     }
 
-    public static void pinTasks(@NonNull String requestId, @NonNull List<String> taskIds, @NonNull RunTaskCallback callback) {
+    public static void pinTasks(@NonNull String requestId, @NonNull List<String> taskIds, @NonNull NetRunTaskCallback callback) {
         JsonArray jsonArray = new JsonArray();
         for (int i = 0; i < taskIds.size(); i++) {
             jsonArray.add(taskIds.get(i));
@@ -415,6 +439,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -423,7 +450,7 @@ public class QLApiController {
 
     }
 
-    public static void unpinTasks(@NonNull String requestId, @NonNull List<String> taskIds, @NonNull RunTaskCallback callback) {
+    public static void unpinTasks(@NonNull String requestId, @NonNull List<String> taskIds, @NonNull NetRunTaskCallback callback) {
         JsonArray jsonArray = new JsonArray();
         for (int i = 0; i < taskIds.size(); i++) {
             jsonArray.add(taskIds.get(i));
@@ -460,6 +487,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -468,7 +498,7 @@ public class QLApiController {
 
     }
 
-    public static void deleteTasks(@NonNull String requestId, @NonNull List<String> taskIds, @NonNull BaseCallback callback) {
+    public static void deleteTasks(@NonNull String requestId, @NonNull List<String> taskIds, @NonNull NetBaseCallback callback) {
         JsonArray jsonArray = new JsonArray();
         for (int i = 0; i < taskIds.size(); i++) {
             jsonArray.add(taskIds.get(i));
@@ -505,6 +535,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -513,7 +546,7 @@ public class QLApiController {
 
     }
 
-    public static void editTask(@NonNull String requestId, @NonNull QLTask QLTask, @NonNull EditTaskCallback callback) {
+    public static void editTask(@NonNull String requestId, @NonNull QLTask QLTask, @NonNull NetEditTaskCallback callback) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("name", QLTask.getName());
         jsonObject.addProperty("_id", QLTask.getId());
@@ -552,6 +585,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLEditTaskRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -559,7 +595,7 @@ public class QLApiController {
         RequestManager.addCall(call, requestId);
     }
 
-    public static void addTask(@NonNull String requestId, @NonNull QLTask QLTask, @NonNull EditTaskCallback callback) {
+    public static void addTask(@NonNull String requestId, @NonNull QLTask QLTask, @NonNull NetEditTaskCallback callback) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("name", QLTask.getName());
         jsonObject.addProperty("command", QLTask.getCommand());
@@ -596,6 +632,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLEditTaskRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -603,7 +642,7 @@ public class QLApiController {
         RequestManager.addCall(call, requestId);
     }
 
-    public static void getEnvironments(@NonNull String requestId, @NonNull String searchValue, @NonNull GetEnvironmentsCallback callback) {
+    public static void getEnvironments(@NonNull String requestId, @NonNull String searchValue, @NonNull NetGetEnvironmentsCallback callback) {
         Call<QLEnvironmentRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -633,6 +672,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLEnvironmentRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -640,7 +682,7 @@ public class QLApiController {
         RequestManager.addCall(call, requestId);
     }
 
-    public static void addEnvironment(@NonNull String requestId, @NonNull List<QLEnvironment> environments, @NonNull GetEnvironmentsCallback callback) {
+    public static void addEnvironment(@NonNull String requestId, @NonNull List<QLEnvironment> environments, @NonNull NetGetEnvironmentsCallback callback) {
         JsonArray jsonArray = new JsonArray();
         JsonObject jsonObject;
         for (QLEnvironment environment : environments) {
@@ -683,6 +725,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLEnvironmentRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -690,7 +735,7 @@ public class QLApiController {
         RequestManager.addCall(call, requestId);
     }
 
-    public static void updateEnvironment(@NonNull String requestId, @NonNull QLEnvironment environment, @NonNull EditEnvCallback callback) {
+    public static void updateEnvironment(@NonNull String requestId, @NonNull QLEnvironment environment, @NonNull NetEditEnvCallback callback) {
         JsonObject jsonObject;
         jsonObject = new JsonObject();
         jsonObject.addProperty("name", environment.getName());
@@ -730,6 +775,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLEditEnvRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -737,7 +785,7 @@ public class QLApiController {
         RequestManager.addCall(call, requestId);
     }
 
-    public static void deleteEnvironments(@NonNull String requestId, @NonNull List<String> envIds, @NonNull BaseCallback callback) {
+    public static void deleteEnvironments(@NonNull String requestId, @NonNull List<String> envIds, @NonNull NetBaseCallback callback) {
         JsonArray jsonArray = new JsonArray();
         for (int i = 0; i < envIds.size(); i++) {
             jsonArray.add(envIds.get(i));
@@ -775,6 +823,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -783,7 +834,7 @@ public class QLApiController {
 
     }
 
-    public static void enableEnvironments(@NonNull String requestId, @NonNull List<String> envIds, @NonNull BaseCallback callback) {
+    public static void enableEnvironments(@NonNull String requestId, @NonNull List<String> envIds, @NonNull NetBaseCallback callback) {
         JsonArray jsonArray = new JsonArray();
         for (int i = 0; i < envIds.size(); i++) {
             jsonArray.add(envIds.get(i));
@@ -821,6 +872,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -829,7 +883,7 @@ public class QLApiController {
 
     }
 
-    public static void disableEnvironments(@NonNull String requestId, @NonNull List<String> envIds, @NonNull BaseCallback callback) {
+    public static void disableEnvironments(@NonNull String requestId, @NonNull List<String> envIds, @NonNull NetBaseCallback callback) {
         JsonArray jsonArray = new JsonArray();
         for (int i = 0; i < envIds.size(); i++) {
             jsonArray.add(envIds.get(i));
@@ -867,6 +921,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -875,7 +932,7 @@ public class QLApiController {
 
     }
 
-    public static void getLogs(@NonNull String requestId, @NonNull GetLogsCallback callback) {
+    public static void getLogs(@NonNull String requestId, @NonNull NetGetLogsCallback callback) {
         Call<QLLogRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -905,6 +962,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLLogRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -912,7 +972,7 @@ public class QLApiController {
         RequestManager.addCall(call, requestId);
     }
 
-    public static void getLogDetail(@NonNull String requestId, @NonNull String logPath, @NonNull BaseCallback callback) {
+    public static void getLogDetail(@NonNull String requestId, @NonNull String logPath, @NonNull NetBaseCallback callback) {
         Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -938,13 +998,16 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
         RequestManager.addCall(call, requestId);
     }
 
-    public static void getConfigDetail(@NonNull String requestId, @NonNull BaseCallback callback) {
+    public static void getConfigDetail(@NonNull String requestId, @NonNull NetBaseCallback callback) {
         Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -970,13 +1033,16 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
         RequestManager.addCall(call, requestId);
     }
 
-    public static void saveConfig(@NonNull String requestId, @NonNull String content, @NonNull BaseCallback callback) {
+    public static void saveConfig(@NonNull String requestId, @NonNull String content, @NonNull NetBaseCallback callback) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("content", content);
         jsonObject.addProperty("name", "config.sh");
@@ -1009,6 +1075,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -1016,7 +1085,7 @@ public class QLApiController {
         RequestManager.addCall(call, requestId);
     }
 
-    public static void getScripts(@NonNull String requestId, @NonNull GetScriptsCallback callback) {
+    public static void getScripts(@NonNull String requestId, @NonNull NetGetScriptsCallback callback) {
         Call<QLScriptRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -1046,6 +1115,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLScriptRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -1053,7 +1125,7 @@ public class QLApiController {
         RequestManager.addCall(call, requestId);
     }
 
-    public static void getScriptDetail(@NonNull String requestId, @NonNull String scriptPath, @NonNull BaseCallback callback) {
+    public static void getScriptDetail(@NonNull String requestId, @NonNull String scriptPath, @NonNull NetBaseCallback callback) {
         Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -1079,13 +1151,16 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
         RequestManager.addCall(call, requestId);
     }
 
-    public static void saveScript(@NonNull String requestId, @NonNull String content, @NonNull String filename, String path, @NonNull BaseCallback callback) {
+    public static void saveScript(@NonNull String requestId, @NonNull String content, @NonNull String filename, String path, @NonNull NetBaseCallback callback) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("content", content);
         jsonObject.addProperty("filename", filename);
@@ -1119,6 +1194,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -1126,7 +1204,7 @@ public class QLApiController {
         RequestManager.addCall(call, requestId);
     }
 
-    public static void getDependencies(@NonNull String requestId, String searchValue, String type, @NonNull GetDependenciesCallback callback) {
+    public static void getDependencies(@NonNull String requestId, String searchValue, String type, @NonNull NetGetDependenciesCallback callback) {
         Call<QLDependenceRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -1152,6 +1230,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLDependenceRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -1159,7 +1240,7 @@ public class QLApiController {
 
     }
 
-    public static void addDependencies(@NonNull String requestId, @NonNull List<QLDependence> dependencies, @NonNull BaseCallback callback) {
+    public static void addDependencies(@NonNull String requestId, @NonNull List<QLDependence> dependencies, @NonNull NetBaseCallback callback) {
         JsonArray jsonArray = new JsonArray();
         JsonObject jsonObject;
         for (QLDependence QLDependence : dependencies) {
@@ -1200,6 +1281,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -1207,7 +1291,7 @@ public class QLApiController {
         RequestManager.addCall(call, requestId);
     }
 
-    public static void deleteDependencies(@NonNull String requestId, @NonNull List<String> ids, @NonNull BaseCallback callback) {
+    public static void deleteDependencies(@NonNull String requestId, @NonNull List<String> ids, @NonNull NetBaseCallback callback) {
         JsonArray jsonArray = new JsonArray();
         for (String id : ids) {
             jsonArray.add(id);
@@ -1245,6 +1329,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -1252,7 +1339,7 @@ public class QLApiController {
         RequestManager.addCall(call, requestId);
     }
 
-    public static void reinstallDependencies(@NonNull String requestId, @NonNull List<String> ids, @NonNull BaseCallback callback) {
+    public static void reinstallDependencies(@NonNull String requestId, @NonNull List<String> ids, @NonNull NetBaseCallback callback) {
         JsonArray jsonArray = new JsonArray();
         for (String id : ids) {
             jsonArray.add(id);
@@ -1290,6 +1377,9 @@ public class QLApiController {
             @Override
             public void onFailure(Call<QLBaseRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
@@ -1298,68 +1388,68 @@ public class QLApiController {
     }
 
 
-    public interface SystemCallback {
+    public interface NetSystemCallback {
         void onSuccess(QLSystemRes systemRes);
 
         void onFailure(String msg);
 
     }
 
-    public interface BaseCallback {
+    public interface NetBaseCallback {
         void onSuccess();
 
         void onFailure(String msg);
     }
 
-    public interface LoginCallback {
+    public interface NetLoginCallback {
         void onSuccess(Account account);
 
         void onFailure(String msg);
     }
 
-    public interface RunTaskCallback {
+    public interface NetRunTaskCallback {
         void onSuccess(String msg);
 
         void onFailure(String msg);
     }
 
-    public interface EditTaskCallback {
+    public interface NetEditTaskCallback {
         void onSuccess(QLTask QLTask);
 
         void onFailure(String msg);
     }
 
-    public interface GetTasksCallback {
+    public interface NetGetTasksCallback {
         void onSuccess(QLTasksRes data);
 
         void onFailure(String msg);
     }
 
-    public interface GetScriptsCallback {
+    public interface NetGetScriptsCallback {
         void onSuccess(List<QLScript> QLScripts);
 
         void onFailure(String msg);
     }
 
-    public interface GetLogsCallback {
+    public interface NetGetLogsCallback {
         void onSuccess(List<QLLog> QLLogs);
 
         void onFailure(String msg);
     }
 
-    public interface GetEnvironmentsCallback {
+    public interface NetGetEnvironmentsCallback {
         void onSuccess(QLEnvironmentRes res);
 
         void onFailure(String msg);
     }
 
-    public interface GetDependenciesCallback {
+    public interface NetGetDependenciesCallback {
         void onSuccess(QLDependenceRes res);
 
         void onFailure(String msg);
     }
 
-    public interface EditEnvCallback {
+    public interface NetEditEnvCallback {
         void onSuccess(QLEnvironment QLEnvironment);
 
         void onFailure(String msg);

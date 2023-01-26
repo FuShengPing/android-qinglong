@@ -227,7 +227,7 @@ public class PluginWebActivity extends BaseActivity {
     }
 
     private void netGetEnvironments(QLEnvironment environment) {
-        QLApiController.getEnvironments(getNetRequestID(), "", new QLApiController.GetEnvironmentsCallback() {
+        QLApiController.getEnvironments(getNetRequestID(), "", new QLApiController.NetGetEnvironmentsCallback() {
             @Override
             public void onSuccess(QLEnvironmentRes res) {
                 List<QLEnvironment> qlEnvironments = res.getData();
@@ -251,7 +251,7 @@ public class PluginWebActivity extends BaseActivity {
     }
 
     public void netUpdateEnvironment(QLEnvironment environment) {
-        QLApiController.updateEnvironment(getNetRequestID(), environment, new QLApiController.EditEnvCallback() {
+        QLApiController.updateEnvironment(getNetRequestID(), environment, new QLApiController.NetEditEnvCallback() {
             @Override
             public void onSuccess(QLEnvironment data) {
                 ToastUnit.showShort("导入成功");
@@ -265,7 +265,7 @@ public class PluginWebActivity extends BaseActivity {
     }
 
     public void netAddEnvironments(List<QLEnvironment> environments) {
-        QLApiController.addEnvironment(getNetRequestID(), environments, new QLApiController.GetEnvironmentsCallback() {
+        QLApiController.addEnvironment(getNetRequestID(), environments, new QLApiController.NetGetEnvironmentsCallback() {
             @Override
             public void onSuccess(QLEnvironmentRes res) {
                 ToastUnit.showShort("导入成功");

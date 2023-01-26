@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">青龙面板</string>
-    <string name="url_gitee">https://gitee.com/wsfsp4/QingLong</string>
+    <string name="url_project">https://gitee.com/wsfsp4/QingLong</string>
     <string name="url_readme">https://gitee.com/wsfsp4/QingLong/blob/master/README.md</string>
     <string name="url_version">https://gitee.com/wsfsp4/QingLong/raw/master/version.json</string>
     <string name="url_extension_link">http://service-m1nufffu-1306746806.gz.apigw.tencentcs.com/link</string>

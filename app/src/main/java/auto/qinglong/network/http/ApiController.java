@@ -79,7 +79,7 @@ public class ApiController {
         RequestManager.addCall(call, requestId);
     }
 
-    public static void getRemoteEnvironments(@NonNull String requestId, @NonNull String baseUrl, @NonNull String path, @NonNull RemoteEnvCallback callback) {
+    public static void getRemoteEnvironments(@NonNull String requestId, @NonNull String baseUrl, @NonNull String path, @NonNull NetRemoteEnvCallback callback) {
         Call<List<QLEnvironment>> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -108,7 +108,7 @@ public class ApiController {
         RequestManager.addCall(call, requestId);
     }
 
-    public static void getRemoteWebRules(@NonNull String requestId, @NonNull String baseUrl, @NonNull String path, @NonNull RemoteWebRuleCallback callback) {
+    public static void getRemoteWebRules(@NonNull String requestId, @NonNull String baseUrl, @NonNull String path, @NonNull NetRemoteWebRuleCallback callback) {
         Call<List<WebRule>> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -137,7 +137,7 @@ public class ApiController {
         RequestManager.addCall(call, requestId);
     }
 
-    public static void getLinks(@NonNull String requestId, @NonNull String baseUrl, @NonNull String path, @NonNull LinkCallback callback) {
+    public static void getLinks(@NonNull String requestId, @NonNull String baseUrl, @NonNull String path, @NonNull NetLinkCallback callback) {
         Call<List<Link>> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -173,25 +173,25 @@ public class ApiController {
         void onFailure(String msg);
     }
 
-    public interface BaseCallback {
+    public interface NetBaseCallback {
         void onSuccess(BaseRes baseRes);
 
         void onFailure(String msg);
     }
 
-    public interface RemoteEnvCallback {
+    public interface NetRemoteEnvCallback {
         void onSuccess(List<QLEnvironment> environments);
 
         void onFailure(String msg);
     }
 
-    public interface RemoteWebRuleCallback {
+    public interface NetRemoteWebRuleCallback {
         void onSuccess(List<WebRule> rules);
 
         void onFailure(String msg);
     }
 
-    public interface LinkCallback {
+    public interface NetLinkCallback {
         void onSuccess(List<Link> links);
 
         void onFailure(String msg);

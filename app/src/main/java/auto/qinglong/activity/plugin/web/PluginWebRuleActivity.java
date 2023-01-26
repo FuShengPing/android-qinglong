@@ -210,7 +210,7 @@ public class PluginWebRuleActivity extends BaseActivity {
         if (RequestManager.isRequesting(getNetRequestID())) {
             return;
         }
-        ApiController.getRemoteWebRules(getNetRequestID(), baseUrl, path, new ApiController.RemoteWebRuleCallback() {
+        ApiController.getRemoteWebRules(getNetRequestID(), baseUrl, path, new ApiController.NetRemoteWebRuleCallback() {
 
             @Override
             public void onSuccess(List<WebRule> environments) {

@@ -96,7 +96,7 @@ public class PagerFragment extends BaseFragment {
     }
 
     private void netGetDependencies() {
-        QLApiController.getDependencies(getNetRequestID(), "", this.type, new QLApiController.GetDependenciesCallback() {
+        QLApiController.getDependencies(getNetRequestID(), "", this.type, new QLApiController.NetGetDependenciesCallback() {
             @Override
             public void onSuccess(QLDependenceRes res) {
                 depItemAdapter.setData(res.getData());
@@ -119,7 +119,7 @@ public class PagerFragment extends BaseFragment {
     }
 
     private void netReinstallDependencies(List<String> ids) {
-        QLApiController.reinstallDependencies(getNetRequestID(), ids, new QLApiController.BaseCallback() {
+        QLApiController.reinstallDependencies(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
                 netGetDependencies();

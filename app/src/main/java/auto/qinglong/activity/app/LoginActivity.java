@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -58,9 +59,17 @@ public class LoginActivity extends BaseActivity {
     }
 
     @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ui_pop_progress != null && ui_pop_progress.isShowing()) {
+            return false;
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
     protected void init() {
         ui_logo.setOnClickListener(v -> {
-            Uri uri = Uri.parse(getString(R.string.url_gitee));
+            Uri uri = Uri.parse(getString(R.string.url_project));
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);
         });
@@ -128,7 +137,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     protected void netQuerySystemInfo(Account account) {
-        QLApiController.getSystemInfo(this.getNetRequestID(), account, new QLApiController.SystemCallback() {
+        QLApiController.getSystemInfo(this.getNetRequestID(), account, new QLApiController.NetSystemCallback() {
             @Override
             public void onSuccess(QLSystemRes systemRes) {
                 if (!systemRes.getData().getVersion().startsWith("2.10")) {
@@ -157,7 +166,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     protected void netCheckToken(Account account) {
-        QLApiController.checkToken(this.getNetRequestID(), account, new QLApiController.LoginCallback() {
+        QLApiController.checkToken(this.getNetRequestID(), account, new QLApiController.NetLoginCallback() {
             @Override
             public void onSuccess(Account account) {
                 enterHome(account);
@@ -171,7 +180,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     protected void netLogin(Account account) {
-        QLApiController.login(this.getNetRequestID(), account, new QLApiController.LoginCallback() {
+        QLApiController.login(this.getNetRequestID(), account, new QLApiController.NetLoginCallback() {
             @Override
             public void onSuccess(Account account) {
                 enterHome(account);

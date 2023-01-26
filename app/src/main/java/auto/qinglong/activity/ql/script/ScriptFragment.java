@@ -123,7 +123,7 @@ public class ScriptFragment extends BaseFragment {
     }
 
     private void getScripts() {
-        QLApiController.getScripts(getNetRequestID(), new QLApiController.GetScriptsCallback() {
+        QLApiController.getScripts(getNetRequestID(), new QLApiController.NetGetScriptsCallback() {
             @Override
             public void onSuccess(List<QLScript> QLScripts) {
                 sortAndSetData(QLScripts, "");

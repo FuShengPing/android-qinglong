@@ -48,7 +48,7 @@ public class PluginLinkActivity extends BaseActivity {
 
     protected void netGetLinks() {
         String url = getString(R.string.url_extension_link);
-        ApiController.getLinks(this.getNetRequestID(), WebUnit.getHost(url), WebUnit.getPath(url, ""), new ApiController.LinkCallback() {
+        ApiController.getLinks(this.getNetRequestID(), WebUnit.getHost(url), WebUnit.getPath(url, ""), new ApiController.NetLinkCallback() {
             @Override
             public void onSuccess(List<Link> links) {
                 ToastUnit.showShort(links.get(0).getTitle());
