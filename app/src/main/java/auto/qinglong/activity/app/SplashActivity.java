@@ -6,13 +6,17 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+
+import java.io.File;
 
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.app.Account;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.network.http.QLApiController;
+import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.ToastUnit;
 
 @SuppressLint("CustomSplashScreen")
@@ -22,19 +26,27 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //避免点击icon重新打开
-        if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
-            finish();
-            return;
-        }
-
         setContentView(R.layout.activity_splash);
+
+        init();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         start();
+    }
+
+    @Override
+    protected void init() {
+        File externalStorage = Environment.getExternalStorageDirectory();
+        String path = externalStorage.getAbsolutePath();
+        LogUnit.log("externalStorage："+path);
+        File internalStorage = getFilesDir();
+        path = internalStorage.getAbsolutePath();
+        LogUnit.log("internalStorage："+path);
+        path = getCacheDir().getAbsolutePath();
+        LogUnit.log("CacheDir："+path);
     }
 
     private void start() {
@@ -84,9 +96,6 @@ public class SplashActivity extends BaseActivity {
         }, 1000);
     }
 
-    @Override
-    protected void init() {
 
-    }
 
 }
