@@ -173,7 +173,7 @@ public class PluginWebRuleActivity extends BaseActivity {
         miniMoreWindow.setTargetView(ui_bar);
         miniMoreWindow.setGravity(Gravity.END);
         miniMoreWindow.addItem(new MiniMoreItem("add", "新建规则", R.drawable.ic_add_gray));
-        miniMoreWindow.addItem(new MiniMoreItem("remoteAdd", "远程导入", R.drawable.ic_cloud_download));
+        miniMoreWindow.addItem(new MiniMoreItem("remoteAdd", "远程导入", R.drawable.ic_download_gray));
         miniMoreWindow.setOnActionListener(key -> {
             switch (key) {
                 case "add":

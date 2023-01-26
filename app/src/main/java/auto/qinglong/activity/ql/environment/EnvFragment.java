@@ -52,56 +52,56 @@ public class EnvFragment extends BaseFragment {
 
     enum BarType {NAV, SEARCH, MUL_ACTION}
 
-    private LinearLayout layout_root;
-    private RelativeLayout layout_bar;
-    private LinearLayout layout_bar_nav;
-    private ImageView layout_nav_menu;
-    private ImageView layout_nav_search;
-    private ImageView layout_nav_more;
-    private LinearLayout layout_bar_search;
-    private ImageView layout_search_back;
-    private EditText layout_search_value;
-    private ImageView layout_search_confirm;
-    private LinearLayout layout_bar_actions;
-    private ImageView layout_actions_back;
-    private CheckBox layout_actions_select;
-    private LinearLayout layout_actions_enable;
-    private LinearLayout layout_actions_disable;
-    private LinearLayout layout_actions_delete;
+    private LinearLayout ui_root;
+    private RelativeLayout ui_bar;
+    private LinearLayout ui_bar_nav;
+    private ImageView ui_nav_menu;
+    private ImageView ui_nav_search;
+    private ImageView ui_nav_more;
+    private LinearLayout ui_bar_search;
+    private ImageView ui_search_back;
+    private EditText ui_search_value;
+    private ImageView ui_search_confirm;
+    private LinearLayout ui_bar_actions;
+    private ImageView ui_actions_back;
+    private CheckBox ui_actions_select;
+    private LinearLayout ui_actions_enable;
+    private LinearLayout ui_actions_disable;
+    private LinearLayout ui_actions_delete;
+
+    private SmartRefreshLayout ui_refresh;
 
     private EditWindow editWindow;
-
-    private SmartRefreshLayout layout_refresh;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fg_env, null);
 
-        layout_root = view.findViewById(R.id.root);
-        layout_bar = view.findViewById(R.id.env_top_bar);
-        layout_bar_nav = view.findViewById(R.id.env_bar_nav);
-        layout_nav_menu = view.findViewById(R.id.env_menu);
-        layout_nav_search = view.findViewById(R.id.env_search);
-        layout_nav_more = view.findViewById(R.id.env_more);
-        layout_bar_search = view.findViewById(R.id.env_bar_search);
-        layout_search_back = view.findViewById(R.id.env_bar_search_back);
-        layout_search_value = view.findViewById(R.id.env_bar_search_value);
-        layout_search_confirm = view.findViewById(R.id.env_bar_search_confirm);
-        layout_bar_actions = view.findViewById(R.id.env_bar_actions);
-        layout_actions_back = view.findViewById(R.id.env_bar_actions_back);
-        layout_actions_select = view.findViewById(R.id.env_bar_actions_select_all);
-        layout_actions_enable = view.findViewById(R.id.env_bar_actions_enable);
-        layout_actions_disable = view.findViewById(R.id.env_bar_actions_disable);
-        layout_actions_delete = view.findViewById(R.id.env_bar_actions_delete);
+        ui_root = view.findViewById(R.id.root);
+        ui_bar = view.findViewById(R.id.env_top_bar);
+        ui_bar_nav = view.findViewById(R.id.env_bar_nav);
+        ui_nav_menu = view.findViewById(R.id.env_menu);
+        ui_nav_search = view.findViewById(R.id.env_search);
+        ui_nav_more = view.findViewById(R.id.env_more);
+        ui_bar_search = view.findViewById(R.id.env_bar_search);
+        ui_search_back = view.findViewById(R.id.env_bar_search_back);
+        ui_search_value = view.findViewById(R.id.env_bar_search_value);
+        ui_search_confirm = view.findViewById(R.id.env_bar_search_confirm);
+        ui_bar_actions = view.findViewById(R.id.env_bar_actions);
+        ui_actions_back = view.findViewById(R.id.env_bar_actions_back);
+        ui_actions_select = view.findViewById(R.id.env_bar_actions_select_all);
+        ui_actions_enable = view.findViewById(R.id.env_bar_actions_enable);
+        ui_actions_disable = view.findViewById(R.id.env_bar_actions_disable);
+        ui_actions_delete = view.findViewById(R.id.env_bar_actions_delete);
 
-        layout_refresh = view.findViewById(R.id.refreshLayout);
-        RecyclerView layout_recycler = view.findViewById(R.id.recyclerView);
+        ui_refresh = view.findViewById(R.id.refreshLayout);
+        RecyclerView ui_recycler = view.findViewById(R.id.recyclerView);
 
         envItemAdapter = new EnvItemAdapter(requireContext());
-        layout_recycler.setAdapter(envItemAdapter);
-        layout_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
-        Objects.requireNonNull(layout_recycler.getItemAnimator()).setChangeDuration(0);
+        ui_recycler.setAdapter(envItemAdapter);
+        ui_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
+        Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
 
         init();
 
@@ -123,6 +123,19 @@ public class EnvFragment extends BaseFragment {
     }
 
     @Override
+    public boolean onBackPressed() {
+        if (ui_bar_search.getVisibility() == View.VISIBLE) {
+            changeBar(BarType.NAV);
+            return true;
+        } else if (ui_bar_actions.getVisibility() == View.VISIBLE) {
+            changeBar(BarType.NAV);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public void init() {
         envItemAdapter.setItemInterface(new EnvItemAdapter.ItemActionListener() {
             @Override
@@ -138,43 +151,43 @@ public class EnvFragment extends BaseFragment {
         });
 
         //导航栏
-        layout_nav_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
+        ui_nav_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
 
         //刷新控件//
         //初始设置处于刷新状态
-        layout_refresh.autoRefreshAnimationOnly();
-        layout_refresh.setOnRefreshListener(refreshLayout -> netGetEnvironments(currentSearchValue, true));
+        ui_refresh.autoRefreshAnimationOnly();
+        ui_refresh.setOnRefreshListener(refreshLayout -> netGetEnvironments(currentSearchValue, true));
 
         //更多操作
-        layout_nav_more.setOnClickListener(v -> showPopWindowMiniMore());
+        ui_nav_more.setOnClickListener(v -> showPopWindowMiniMore());
 
         //搜索栏进入
-        layout_nav_search.setOnClickListener(v -> {
-            layout_search_value.setText(currentSearchValue);
+        ui_nav_search.setOnClickListener(v -> {
+            ui_search_value.setText(currentSearchValue);
             changeBar(BarType.SEARCH);
         });
 
         //搜索栏确定
-        layout_search_confirm.setOnClickListener(v -> {
-            String value = layout_search_value.getText().toString().trim();
+        ui_search_confirm.setOnClickListener(v -> {
+            String value = ui_search_value.getText().toString().trim();
             if (!value.isEmpty()) {
                 currentSearchValue = value;
-                WindowUnit.hideKeyboard(layout_search_value);
+                WindowUnit.hideKeyboard(ui_search_value);
                 netGetEnvironments(currentSearchValue, true);
             }
         });
 
         //搜索栏返回
-        layout_search_back.setOnClickListener(v -> changeBar(BarType.NAV));
+        ui_search_back.setOnClickListener(v -> changeBar(BarType.NAV));
 
         //动作栏返回
-        layout_actions_back.setOnClickListener(v -> changeBar(BarType.NAV));
+        ui_actions_back.setOnClickListener(v -> changeBar(BarType.NAV));
 
         //全选
-        layout_actions_select.setOnCheckedChangeListener((buttonView, isChecked) -> envItemAdapter.setAllChecked(isChecked));
+        ui_actions_select.setOnCheckedChangeListener((buttonView, isChecked) -> envItemAdapter.setAllChecked(isChecked));
 
         //删除
-        layout_actions_delete.setOnClickListener(v -> {
+        ui_actions_delete.setOnClickListener(v -> {
             if (RequestManager.isRequesting(getNetRequestID())) {
                 return;
             }
@@ -192,7 +205,7 @@ public class EnvFragment extends BaseFragment {
         });
 
         //禁用
-        layout_actions_disable.setOnClickListener(v -> {
+        ui_actions_disable.setOnClickListener(v -> {
             if (RequestManager.isRequesting(getNetRequestID())) {
                 return;
             }
@@ -210,7 +223,7 @@ public class EnvFragment extends BaseFragment {
         });
 
         //启用
-        layout_actions_enable.setOnClickListener(v -> {
+        ui_actions_enable.setOnClickListener(v -> {
             if (RequestManager.isRequesting(getNetRequestID())) {
                 return;
             }
@@ -232,19 +245,6 @@ public class EnvFragment extends BaseFragment {
     @Override
     public void setMenuClickListener(MenuClickListener menuClickListener) {
         this.menuClickListener = menuClickListener;
-    }
-
-    @Override
-    public boolean onBackPressed() {
-        if (layout_bar_search.getVisibility() == View.VISIBLE) {
-            changeBar(BarType.NAV);
-            return true;
-        } else if (layout_bar_actions.getVisibility() == View.VISIBLE) {
-            changeBar(BarType.NAV);
-            return true;
-        } else {
-            return false;
-        }
     }
 
     private void loadFirst() {
@@ -303,11 +303,13 @@ public class EnvFragment extends BaseFragment {
 
     public void showPopWindowMiniMore() {
         MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
-        miniMoreWindow.setTargetView(layout_bar);
+        miniMoreWindow.setTargetView(ui_bar);
         miniMoreWindow.setGravity(Gravity.END);
         miniMoreWindow.addItem(new MiniMoreItem("add", "新建变量", R.drawable.ic_add_gray));
         miniMoreWindow.addItem(new MiniMoreItem("quickAdd", "快捷导入", R.drawable.ic_flash_on_gray));
-        miniMoreWindow.addItem(new MiniMoreItem("remoteAdd", "远程导入", R.drawable.ic_cloud_download));
+        miniMoreWindow.addItem(new MiniMoreItem("localAdd", "本地导入", R.drawable.ic_file_gray));
+        miniMoreWindow.addItem(new MiniMoreItem("remoteAdd", "远程导入", R.drawable.ic_download_gray));
+        miniMoreWindow.addItem(new MiniMoreItem("backup", "变量备份", R.drawable.ic_backup_gray));
         miniMoreWindow.addItem(new MiniMoreItem("deleteMul", "变量去重", R.drawable.ic_delete_gray));
         miniMoreWindow.addItem(new MiniMoreItem("mulAction", "批量操作", R.drawable.ic_mul_action_gray));
         miniMoreWindow.setOnActionListener(key -> {
@@ -464,28 +466,28 @@ public class EnvFragment extends BaseFragment {
     }
 
     public void changeBar(BarType barType) {
-        if (layout_bar_search.getVisibility() == View.VISIBLE) {
-            WindowUnit.hideKeyboard(layout_root);
-            layout_bar_search.setVisibility(View.INVISIBLE);
+        if (ui_bar_search.getVisibility() == View.VISIBLE) {
+            WindowUnit.hideKeyboard(ui_root);
+            ui_bar_search.setVisibility(View.INVISIBLE);
             currentSearchValue = "";
         }
 
-        if (layout_bar_actions.getVisibility() == View.VISIBLE) {
-            layout_bar_actions.setVisibility(View.INVISIBLE);
+        if (ui_bar_actions.getVisibility() == View.VISIBLE) {
+            ui_bar_actions.setVisibility(View.INVISIBLE);
             envItemAdapter.setCheckState(false, -1);
-            layout_actions_select.setChecked(false);
+            ui_actions_select.setChecked(false);
         }
 
-        layout_bar_nav.setVisibility(View.INVISIBLE);
+        ui_bar_nav.setVisibility(View.INVISIBLE);
 
         if (barType == BarType.NAV) {
-            layout_bar_nav.setVisibility(View.VISIBLE);
+            ui_bar_nav.setVisibility(View.VISIBLE);
         } else if (barType == BarType.SEARCH) {
-            layout_bar_search.setVisibility(View.VISIBLE);
+            ui_bar_search.setVisibility(View.VISIBLE);
         } else {
-            layout_actions_select.setChecked(false);
+            ui_actions_select.setChecked(false);
             envItemAdapter.setCheckState(true, -1);
-            layout_bar_actions.setVisibility(View.VISIBLE);
+            ui_bar_actions.setVisibility(View.VISIBLE);
         }
     }
 
@@ -501,13 +503,13 @@ public class EnvFragment extends BaseFragment {
                     ToastUnit.showShort("加载成功：" + res.getData().size());
                 }
                 sortAndSetData(res.getData());
-                layout_refresh.finishRefresh(true);
+                ui_refresh.finishRefresh(true);
             }
 
             @Override
             public void onFailure(String msg) {
                 ToastUnit.showShort("加载失败：" + msg);
-                layout_refresh.finishRefresh(false);
+                ui_refresh.finishRefresh(false);
             }
         });
     }
@@ -557,7 +559,7 @@ public class EnvFragment extends BaseFragment {
         QLApiController.deleteEnvironments(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
-                layout_actions_back.performClick();
+                ui_actions_back.performClick();
                 ToastUnit.showShort("删除成功：" + ids.size());
                 netGetEnvironments(currentSearchValue, false);
             }
@@ -576,7 +578,7 @@ public class EnvFragment extends BaseFragment {
         QLApiController.enableEnvironments(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
-                layout_actions_back.performClick();
+                ui_actions_back.performClick();
                 ToastUnit.showShort("启用成功");
                 netGetEnvironments(currentSearchValue, false);
             }
@@ -596,7 +598,7 @@ public class EnvFragment extends BaseFragment {
         QLApiController.disableEnvironments(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
-                layout_actions_back.performClick();
+                ui_actions_back.performClick();
                 ToastUnit.showShort("禁用成功");
                 netGetEnvironments(currentSearchValue, false);
             }

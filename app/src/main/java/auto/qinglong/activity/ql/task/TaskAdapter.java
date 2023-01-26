@@ -49,26 +49,26 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         QLTask qlTask = data.get(position);
-        holder.layout_name.setText("[" + qlTask.getIndex() + "] " + qlTask.getName());
-        holder.layout_command.setText(qlTask.getCommand());
-        holder.layout_schedule.setText(qlTask.getSchedule());
+        holder.ui_name.setText("[" + qlTask.getIndex() + "] " + qlTask.getName());
+        holder.ui_command.setText(qlTask.getCommand());
+        holder.ui_schedule.setText(qlTask.getSchedule());
         //运行状态
         if (qlTask.getTaskState() == QLTaskState.RUNNING) {
-            holder.layout_state.setText("运行中");
-            holder.layout_state.setTextColor(context.getColor(R.color.theme_color_shadow));
-            holder.layout_action.setImageResource(R.drawable.ic_pause);
+            holder.ui_state.setText("运行中");
+            holder.ui_state.setTextColor(context.getColor(R.color.theme_color_shadow));
+            holder.ui_action.setImageResource(R.drawable.ic_pause);
         } else if (qlTask.getTaskState() == QLTaskState.WAITING) {
-            holder.layout_state.setText("队列中");
-            holder.layout_state.setTextColor(context.getColor(R.color.theme_color_shadow));
-            holder.layout_action.setImageResource(R.drawable.ic_pause);
+            holder.ui_state.setText("队列中");
+            holder.ui_state.setTextColor(context.getColor(R.color.theme_color_shadow));
+            holder.ui_action.setImageResource(R.drawable.ic_pause);
         } else if (qlTask.getTaskState() == QLTaskState.LIMIT) {
-            holder.layout_state.setText("禁止中");
-            holder.layout_state.setTextColor(context.getColor(R.color.text_color_red));
-            holder.layout_action.setImageResource(R.drawable.ic_start);
+            holder.ui_state.setText("禁止中");
+            holder.ui_state.setTextColor(context.getColor(R.color.text_color_red));
+            holder.ui_action.setImageResource(R.drawable.ic_start);
         } else {
-            holder.layout_state.setText("空闲中");
-            holder.layout_state.setTextColor(context.getColor(R.color.text_color_49));
-            holder.layout_action.setImageResource(R.drawable.ic_start);
+            holder.ui_state.setText("空闲中");
+            holder.ui_state.setTextColor(context.getColor(R.color.text_color_49));
+            holder.ui_action.setImageResource(R.drawable.ic_start);
         }
 
         //上次运行时长
@@ -80,7 +80,7 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
         } else {
             str = "--";
         }
-        holder.layout_last_run_time.setText(str);
+        holder.ui_last_run_time.setText(str);
 
         //上次运行时间
         if (qlTask.getLast_execution_time() > 0) {
@@ -88,29 +88,29 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
         } else {
             str = "--";
         }
-        holder.layout_last_execution_time.setText(str);
+        holder.ui_last_execution_time.setText(str);
 
         //下次运行时间(判断定时规则是否合法)
         if (CronUnit.isValid(qlTask.getSchedule())) {
-            holder.layout_next_execution_time.setText(CronUnit.nextExecutionTime(qlTask.getSchedule()));
+            holder.ui_next_execution_time.setText(CronUnit.nextExecutionTime(qlTask.getSchedule()));
         } else {
-            holder.layout_next_execution_time.setText("--");
+            holder.ui_next_execution_time.setText("--");
         }
 
         //复选框
         if (checkState) {
-            holder.layout_check.setChecked(dataCheckState[position]);
-            holder.layout_check.setOnCheckedChangeListener((buttonView, isChecked) -> dataCheckState[holder.getAdapterPosition()] = isChecked);
-            holder.layout_check.setVisibility(View.VISIBLE);
+            holder.ui_check.setChecked(dataCheckState[position]);
+            holder.ui_check.setOnCheckedChangeListener((buttonView, isChecked) -> dataCheckState[holder.getAdapterPosition()] = isChecked);
+            holder.ui_check.setVisibility(View.VISIBLE);
         } else {
-            holder.layout_check.setVisibility(View.GONE);
+            holder.ui_check.setVisibility(View.GONE);
         }
 
         //顶置
         if (qlTask.getIsPinned() == 1) {
-            holder.layout_pinned.setVisibility(View.VISIBLE);
+            holder.ui_pinned.setVisibility(View.VISIBLE);
         } else {
-            holder.layout_pinned.setVisibility(View.GONE);
+            holder.ui_pinned.setVisibility(View.GONE);
         }
 
         //监听
@@ -118,9 +118,9 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
             return;
         }
 
-        holder.layout_action.setOnClickListener(v -> {
+        holder.ui_action.setOnClickListener(v -> {
             if (this.checkState) {
-                holder.layout_check.setChecked(!holder.layout_check.isChecked());
+                holder.ui_check.setChecked(!holder.ui_check.isChecked());
             } else if (qlTask.getTaskState() == QLTaskState.LIMIT || qlTask.getTaskState() == QLTaskState.FREE) {
                 itemActionListener.onRun(qlTask);
             } else {
@@ -128,28 +128,28 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
             }
         });
 
-        holder.layout_name.setOnClickListener(v -> {
+        holder.ui_name.setOnClickListener(v -> {
             if (!this.checkState) {
                 itemActionListener.onLog(qlTask);
             } else {
-                holder.layout_check.setChecked(!holder.layout_check.isChecked());
+                holder.ui_check.setChecked(!holder.ui_check.isChecked());
             }
         });
 
-        holder.layout_name.setOnLongClickListener(v -> {
+        holder.ui_name.setOnLongClickListener(v -> {
             if (!this.checkState) {
                 itemActionListener.onMulAction(qlTask, holder.getAdapterPosition());
             }
             return true;
         });
 
-        holder.layout_detail.setOnClickListener(v -> {
+        holder.ui_detail.setOnClickListener(v -> {
             if (this.checkState) {
-                holder.layout_check.setChecked(!holder.layout_check.isChecked());
+                holder.ui_check.setChecked(!holder.ui_check.isChecked());
             }
         });
 
-        holder.layout_detail.setOnLongClickListener(v -> {
+        holder.ui_detail.setOnLongClickListener(v -> {
             if (!this.checkState) {
                 itemActionListener.onEdit(qlTask);
             }
@@ -220,30 +220,30 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
 }
 
 class MyViewHolder extends RecyclerView.ViewHolder {
-    public TextView layout_name;
-    public LinearLayout layout_detail;
-    public TextView layout_command;
-    public TextView layout_schedule;
-    public TextView layout_state;
-    public CheckBox layout_check;
-    public ImageView layout_action;
-    public ImageView layout_pinned;
-    public TextView layout_last_run_time;
-    public TextView layout_last_execution_time;
-    public TextView layout_next_execution_time;
+    public TextView ui_name;
+    public LinearLayout ui_detail;
+    public TextView ui_command;
+    public TextView ui_schedule;
+    public TextView ui_state;
+    public CheckBox ui_check;
+    public ImageView ui_action;
+    public ImageView ui_pinned;
+    public TextView ui_last_run_time;
+    public TextView ui_last_execution_time;
+    public TextView ui_next_execution_time;
 
     public MyViewHolder(@NonNull View itemView) {
         super(itemView);
-        layout_name = itemView.findViewById(R.id.task_name);
-        layout_detail = itemView.findViewById(R.id.task_detail);
-        layout_command = itemView.findViewById(R.id.task_command);
-        layout_schedule = itemView.findViewById(R.id.task_schedule);
-        layout_state = itemView.findViewById(R.id.task_state);
-        layout_action = itemView.findViewById(R.id.task_action_run);
-        layout_check = itemView.findViewById(R.id.task_check);
-        layout_pinned = itemView.findViewById(R.id.task_pinned);
-        layout_last_run_time = itemView.findViewById(R.id.task_last_running_time);
-        layout_last_execution_time = itemView.findViewById(R.id.task_last_execution_time);
-        layout_next_execution_time = itemView.findViewById(R.id.task_next_execution_time);
+        ui_name = itemView.findViewById(R.id.task_name);
+        ui_detail = itemView.findViewById(R.id.task_detail);
+        ui_command = itemView.findViewById(R.id.task_command);
+        ui_schedule = itemView.findViewById(R.id.task_schedule);
+        ui_state = itemView.findViewById(R.id.task_state);
+        ui_action = itemView.findViewById(R.id.task_action_run);
+        ui_check = itemView.findViewById(R.id.task_check);
+        ui_pinned = itemView.findViewById(R.id.task_pinned);
+        ui_last_run_time = itemView.findViewById(R.id.task_last_running_time);
+        ui_last_execution_time = itemView.findViewById(R.id.task_last_execution_time);
+        ui_next_execution_time = itemView.findViewById(R.id.task_next_execution_time);
     }
 }
