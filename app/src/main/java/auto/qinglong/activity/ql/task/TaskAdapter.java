@@ -170,6 +170,10 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
         notifyDataSetChanged();
     }
 
+    public List<QLTask> getData() {
+        return this.data;
+    }
+
     public void setTaskInterface(ItemActionListener itemActionListener) {
         this.itemActionListener = itemActionListener;
     }
