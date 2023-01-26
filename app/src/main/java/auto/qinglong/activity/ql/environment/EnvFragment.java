@@ -17,6 +17,10 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
@@ -34,7 +38,9 @@ import auto.qinglong.bean.ql.network.QLEnvironmentRes;
 import auto.qinglong.network.http.ApiController;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.http.RequestManager;
+import auto.qinglong.utils.FileUtil;
 import auto.qinglong.utils.TextUnit;
+import auto.qinglong.utils.TimeUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WebUnit;
 import auto.qinglong.utils.WindowUnit;
@@ -286,6 +292,9 @@ public class EnvFragment extends BaseFragment {
                 case "mulAction":
                     changeBar(BarType.MUL_ACTION);
                     break;
+                case "backup":
+                    backupData();
+                    break;
                 default:
                     break;
             }
@@ -489,6 +498,44 @@ public class EnvFragment extends BaseFragment {
         } else {
             netDeleteEnvironments(ids);
         }
+    }
+
+    private void backupData() {
+        if (!FileUtil.checkPermission()) {
+            ToastUnit.showShort("请授予应用获取存储权限");
+            FileUtil.requestPermission(requireActivity());
+            return;
+        }
+        List<QLEnvironment> environments = envItemAdapter.getData();
+        if (environments == null || environments.size() == 0) {
+            ToastUnit.showShort("数据为空,无需备份");
+            return;
+        }
+
+        JsonArray jsonArray = new JsonArray();
+        for (QLEnvironment environment : environments) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("name", environment.getName());
+            jsonObject.addProperty("value", environment.getValue());
+            jsonObject.addProperty("remarks", environment.getRemarks());
+            jsonArray.add(jsonObject);
+        }
+
+        String fileName = TimeUnit.formatCurrentTime() + ".json";
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String content = gson.toJson(jsonArray);
+
+        try {
+            boolean result = FileUtil.save(FileUtil.getEnvPath(), fileName, content);
+            if (result) {
+                ToastUnit.showShort("备份成功：" + fileName);
+            } else {
+                ToastUnit.showShort("备份失败");
+            }
+        } catch (Exception e) {
+            ToastUnit.showShort("备份失败：" + e.getMessage());
+        }
+
     }
 
     private void netGetEnvironments(String searchValue, boolean needTip) {

@@ -19,6 +19,10 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
@@ -34,7 +38,9 @@ import auto.qinglong.bean.ql.network.QLTasksRes;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.CronUnit;
+import auto.qinglong.utils.FileUtil;
 import auto.qinglong.utils.TextUnit;
+import auto.qinglong.utils.TimeUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.popup.EditWindow;
@@ -122,14 +128,14 @@ public class TaskFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        checkFirstLoad();
+        initData();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            checkFirstLoad();
+            initData();
         }
     }
 
@@ -144,20 +150,6 @@ public class TaskFragment extends BaseFragment {
         } else {
             return false;
         }
-    }
-
-    /***
-     * 首次加载数据(直至成功加载一次) 页面转入可见时调用
-     */
-    private void checkFirstLoad() {
-        if (loadSuccessFlag || RequestManager.isRequesting(this.getNetRequestID())) {
-            return;
-        }
-        new Handler().postDelayed(() -> {
-            if (isVisible()) {
-                netGetTasks(mCurrentSearchValue, true);
-            }
-        }, 1000);
     }
 
     @Override
@@ -365,6 +357,17 @@ public class TaskFragment extends BaseFragment {
         });
     }
 
+    private void initData() {
+        if (loadSuccessFlag || RequestManager.isRequesting(this.getNetRequestID())) {
+            return;
+        }
+        new Handler().postDelayed(() -> {
+            if (isVisible()) {
+                netGetTasks(mCurrentSearchValue, true);
+            }
+        }, 1000);
+    }
+
     public void setMenuClickListener(MenuClickListener menuClickListener) {
         this.mMenuClickListener = menuClickListener;
     }
@@ -375,13 +378,20 @@ public class TaskFragment extends BaseFragment {
         miniMoreWindow.setGravity(Gravity.END);
         miniMoreWindow.addItem(new MiniMoreItem("add", "新建任务", R.drawable.ic_add_gray));
         miniMoreWindow.addItem(new MiniMoreItem("localAdd", "本地导入", R.drawable.ic_file_gray));
-        miniMoreWindow.addItem(new MiniMoreItem("mulAction", "任务备份", R.drawable.ic_backup_gray));
+        miniMoreWindow.addItem(new MiniMoreItem("backup", "任务备份", R.drawable.ic_backup_gray));
         miniMoreWindow.addItem(new MiniMoreItem("mulAction", "批量操作", R.drawable.ic_mul_action_gray));
         miniMoreWindow.setOnActionListener(key -> {
-            if (key.equals("add")) {
-                showPopWindowEdit(null);
-            } else {
-                changeBar(BarType.MUL_ACTION);
+            switch (key) {
+                case "add":
+                    showPopWindowEdit(null);
+                    break;
+                case "localAdd":
+                    break;
+                case "backup":
+                    backupData();
+                    break;
+                default:
+                    changeBar(BarType.MUL_ACTION);
             }
             return true;
         });
@@ -476,6 +486,43 @@ public class TaskFragment extends BaseFragment {
             mTaskAdapter.setCheckState(true, -1);
             ui_bar_actions.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void backupData() {
+        if (!FileUtil.checkPermission()) {
+            ToastUnit.showShort("请授予应用读写存储权限");
+            FileUtil.requestPermission(requireActivity());
+            return;
+        }
+        List<QLTask> tasks = mTaskAdapter.getData();
+        if (tasks == null || tasks.size() == 0) {
+            ToastUnit.showShort("数据为空,无需备份");
+            return;
+        }
+
+        JsonArray jsonArray = new JsonArray();
+        for (QLTask task : tasks) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("name", task.getName());
+            jsonObject.addProperty("command", task.getCommand());
+            jsonObject.addProperty("schedule", task.getSchedule());
+            jsonArray.add(jsonObject);
+        }
+
+        String fileName = TimeUnit.formatCurrentTime() + ".json";
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String content = gson.toJson(jsonArray);
+        try {
+            boolean result = FileUtil.save(FileUtil.getScriptPath(), fileName, content);
+            if (result) {
+                ToastUnit.showShort("备份成功：" + fileName);
+            } else {
+                ToastUnit.showShort("备份失败");
+            }
+        } catch (Exception e) {
+            ToastUnit.showShort("备份失败：" + e.getMessage());
+        }
+
     }
 
     public void netGetTasks(String searchValue, boolean needTip) {
