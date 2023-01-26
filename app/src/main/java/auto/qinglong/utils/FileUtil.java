@@ -36,6 +36,9 @@ public class FileUtil {
             LogUnit.log(file.getAbsolutePath());
             dir.mkdirs();
         }
+        if (!file.exists()) {
+            file.createNewFile();
+        }
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         fileOutputStream.write(content.getBytes(StandardCharsets.UTF_8));
         fileOutputStream.close();
@@ -55,8 +58,7 @@ public class FileUtil {
     }
 
     public static boolean checkPermission() {
-        return ContextCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        return ContextCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
     public static void requestPermission(Activity activity) {
