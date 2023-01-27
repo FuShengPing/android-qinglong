@@ -126,7 +126,7 @@ public class PopupWindowBuilder {
         popWindow.showAtLocation(activity.getWindow().getDecorView().getRootView(), Gravity.CENTER, 0, 0);
     }
 
-    public static void buildListWindow(Activity activity, ListWindow listWindow) {
+    public static PopupWindow buildListWindow(Activity activity, ListWindow listWindow) {
         View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_list, null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), true);
         popWindow.setContentView(view);
@@ -155,6 +155,8 @@ public class PopupWindowBuilder {
 
         WindowUnit.setBackgroundAlpha(activity, 0.5f);
         popWindow.showAtLocation(activity.getWindow().getDecorView().getRootView(), Gravity.CENTER, 0, 0);
+
+        return popWindow;
     }
 
     public static PopupWindow buildConfirmWindow(Activity activity, ConfirmWindow confirmWindow) {

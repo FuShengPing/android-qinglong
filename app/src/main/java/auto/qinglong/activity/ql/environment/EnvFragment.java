@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,7 @@ import com.google.gson.JsonObject;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -551,14 +553,24 @@ public class EnvFragment extends BaseFragment {
             ToastUnit.showShort("无本地备份数据");
             return;
         }
+
+        ListWindow<LocalFileAdapter> listWindow = new ListWindow<>("选择文件");
         LocalFileAdapter fileAdapter = new LocalFileAdapter(getContext());
         fileAdapter.setData(files);
+        listWindow.setAdapter(fileAdapter);
+
+        PopupWindow popupWindow = PopupWindowBuilder.buildListWindow(requireActivity(), listWindow);
+
         fileAdapter.setListener(file -> {
             LogUnit.log(file.getName());
+            try {
+                FileInputStream fileInputStream = new FileInputStream(file);
+                
+                popupWindow.dismiss();
+            } catch (Exception e) {
+                ToastUnit.showShort("读取文件失败：" + e.getLocalizedMessage());
+            }
         });
-        ListWindow listWindow = new ListWindow("选择文件");
-        listWindow.setAdapter(fileAdapter);
-        PopupWindowBuilder.buildListWindow(requireActivity(), listWindow);
     }
 
     private void netGetEnvironments(String searchValue, boolean needTip) {
