@@ -234,21 +234,20 @@ public class DepFragment extends BaseFragment {
             }
             return true;
         });
+
+        PopupWindowBuilder.buildMiniMoreWindow(requireActivity(), miniMoreWindow);
     }
 
     public void showBar(BarType barType) {
-        if (ui_action_bar.getVisibility() == View.VISIBLE) {
+        if (barType == BarType.NAV) {
             ui_action_bar.setVisibility(View.INVISIBLE);
             mCurrentFragment.setCheckState(false);
             ui_action_bar_check.setChecked(false);
-        }
-
-        ui_nav_bar.setVisibility(View.INVISIBLE);
-
-        if (barType == BarType.NAV) {
             ui_nav_bar.setVisibility(View.VISIBLE);
         } else {
+            ui_nav_bar.setVisibility(View.INVISIBLE);
             ui_action_bar_check.setChecked(false);
+            mCurrentFragment.setCheckState(true);
             ui_action_bar.setVisibility(View.VISIBLE);
         }
     }
