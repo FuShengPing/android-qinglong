@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Objects;
+
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.database.sp.AccountSP;
@@ -23,7 +25,6 @@ public class CodeWebActivity extends BaseActivity {
 
     public static final String EXTRA_TITLE = "title";
     public static final String EXTRA_TYPE = "type";
-    public static final String EXTRA_LOG_NAME = "logName";
     public static final String EXTRA_LOG_PATH = "logPath";
     public static final String EXTRA_SCRIPT_NAME = "scriptName";
     public static final String EXTRA_SCRIPT_PARENT = "scriptParent";
@@ -34,14 +35,12 @@ public class CodeWebActivity extends BaseActivity {
     public static final String TYPE_DEPENDENCE = "dependence";
 
     private String title;
-    private int type;
+    private String type;
     private boolean canRefresh;
     private boolean canEdit;
     private String scriptName;
     private String scriptParent;
     private String logPath;
-    private String logName;
-
 
     private LinearLayout ui_nav_bar;
     private ImageView ui_back;
@@ -60,14 +59,12 @@ public class CodeWebActivity extends BaseActivity {
         setContentView(R.layout.activity_code_web);
 
         title = getIntent().getStringExtra(EXTRA_TITLE);
-        type = getIntent().getIntExtra(EXTRA_TYPE, 0);
+        type = getIntent().getStringExtra(EXTRA_TYPE);
         canRefresh = getIntent().getBooleanExtra(EXTRA_CAN_REFRESH, true);
         canEdit = getIntent().getBooleanExtra(EXTRA_CAN_EDIT, false);
         scriptName = getIntent().getStringExtra(EXTRA_SCRIPT_NAME);
         scriptParent = getIntent().getStringExtra(EXTRA_SCRIPT_PARENT);
-        logPath = getIntent().getStringExtra(EXTRA_LOG_NAME);
-        logName = getIntent().getStringExtra(EXTRA_LOG_PATH);
-
+        logPath = getIntent().getStringExtra(EXTRA_LOG_PATH);
 
         ui_nav_bar = findViewById(R.id.script_bar);
         ui_back = findViewById(R.id.script_back);
@@ -117,8 +114,17 @@ public class CodeWebActivity extends BaseActivity {
                 });
                 animation.setDuration(1000);
                 ui_refresh.startAnimation(animation);
-                //加载
-                QLWebJsManager.refreshScript(ui_webView);
+
+                switch (type) {
+                    case TYPE_SCRIPT:
+                        QLWebJsManager.refreshScript(ui_webView);
+                        break;
+                    case TYPE_LOG:
+                        QLWebJsManager.refreshLog(ui_webView);
+                        break;
+                    default:
+                        break;
+                }
             });
         }
 
@@ -144,7 +150,16 @@ public class CodeWebActivity extends BaseActivity {
         ui_webView = WebViewBuilder.build(getBaseContext(), ui_web_container, new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
-                QLWebJsManager.initScript(ui_webView, AccountSP.getCurrentAccount().getBaseUrl(), AccountSP.getCurrentAccount().getAuthorization(), scriptName, scriptParent);
+                switch (type) {
+                    case TYPE_SCRIPT:
+                        QLWebJsManager.initScript(ui_webView, Objects.requireNonNull(AccountSP.getCurrentAccount()).getBaseUrl(), AccountSP.getCurrentAccount().getAuthorization(), scriptName, scriptParent);
+                        break;
+                    case TYPE_LOG:
+                        QLWebJsManager.initLog(ui_webView, Objects.requireNonNull(AccountSP.getCurrentAccount()).getBaseUrl(), AccountSP.getCurrentAccount().getAuthorization(), logPath);
+                        break;
+                    default:
+                        break;
+                }
             }
         }, new CommonJSInterface());
         //加载本地网页

@@ -23,6 +23,7 @@ import java.util.Objects;
 
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
+import auto.qinglong.activity.ql.CodeWebActivity;
 import auto.qinglong.bean.ql.QLLog;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.http.RequestManager;
@@ -36,10 +37,10 @@ public class LogFragment extends BaseFragment {
     private MenuClickListener menuClickListener;
     private LogAdapter logAdapter;
 
-    private ImageView layout_nav;
-    private SmartRefreshLayout layout_refresh;
-    private TextView layout_dir;
-    private RecyclerView layout_recycler;
+    private ImageView ui_nav;
+    private SmartRefreshLayout ui_refresh;
+    private TextView ui_dir;
+    private RecyclerView ui_recycler;
 
     @SuppressLint("InflateParams")
     @Nullable
@@ -47,10 +48,10 @@ public class LogFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fg_log, null);
 
-        layout_nav = view.findViewById(R.id.log_nav);
-        layout_refresh = view.findViewById(R.id.refreshLayout);
-        layout_dir = view.findViewById(R.id.log_dir_tip);
-        layout_recycler = view.findViewById(R.id.recyclerView);
+        ui_nav = view.findViewById(R.id.log_nav);
+        ui_refresh = view.findViewById(R.id.refreshLayout);
+        ui_dir = view.findViewById(R.id.log_dir_tip);
+        ui_recycler = view.findViewById(R.id.recyclerView);
 
         init();
         return view;
@@ -84,11 +85,11 @@ public class LogFragment extends BaseFragment {
     @Override
     public void init() {
         logAdapter = new LogAdapter(requireContext());
-        layout_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
-        Objects.requireNonNull(layout_recycler.getItemAnimator()).setChangeDuration(0);
-        layout_recycler.setAdapter(logAdapter);
+        ui_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
+        Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
+        ui_recycler.setAdapter(logAdapter);
 
-        layout_nav.setOnClickListener(v -> {
+        ui_nav.setOnClickListener(v -> {
             if (menuClickListener != null) {
                 menuClickListener.onMenuClick();
             }
@@ -99,17 +100,18 @@ public class LogFragment extends BaseFragment {
                 canBack = true;
                 sortAndSetData(qlLog.getChildren(), qlLog.getName());
             } else {
-                Intent intent = new Intent(getContext(), LogDetailActivity.class);
-                intent.putExtra(LogDetailActivity.ExtraName, qlLog.getName());
-                intent.putExtra(LogDetailActivity.ExtraPath, qlLog.getLogPath());
+                Intent intent = new Intent(getContext(), CodeWebActivity.class);
+                intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_LOG);
+                intent.putExtra(CodeWebActivity.EXTRA_TITLE, qlLog.getName());
+                intent.putExtra(CodeWebActivity.EXTRA_LOG_PATH, qlLog.getLogPath());
                 startActivity(intent);
             }
         });
 
         //刷新控件//
         //初始设置处于刷新状态
-        layout_refresh.autoRefreshAnimationOnly();
-        layout_refresh.setOnRefreshListener(refreshLayout -> getLogs());
+        ui_refresh.autoRefreshAnimationOnly();
+        ui_refresh.setOnRefreshListener(refreshLayout -> getLogs());
     }
 
 
@@ -131,8 +133,8 @@ public class LogFragment extends BaseFragment {
             }
 
             protected void onEnd(boolean isSuccess) {
-                if (layout_refresh.isRefreshing()) {
-                    layout_refresh.finishRefresh(isSuccess);
+                if (ui_refresh.isRefreshing()) {
+                    ui_refresh.finishRefresh(isSuccess);
                 }
             }
         });
@@ -142,7 +144,7 @@ public class LogFragment extends BaseFragment {
     private void sortAndSetData(List<QLLog> data, String dir) {
         Collections.sort(data);
         logAdapter.setData(data);
-        layout_dir.setText(getString(R.string.char_path_split) + dir);
+        ui_dir.setText(getString(R.string.char_path_split) + dir);
     }
 
     public void setMenuClickListener(MenuClickListener menuClickListener) {
@@ -153,7 +155,7 @@ public class LogFragment extends BaseFragment {
     public boolean onBackPressed() {
         if (canBack) {
             logAdapter.setData(oData);
-            layout_dir.setText(getString(R.string.char_path_split));
+            ui_dir.setText(getString(R.string.char_path_split));
             canBack = false;
             return true;
         } else {

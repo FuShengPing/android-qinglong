@@ -39,18 +39,18 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.MyViewHolder> {
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         QLLog QLLog = data.get(position);
 
-        holder.layout_title.setText(QLLog.getName());
+        holder.ui_title.setText(QLLog.getName());
 
         if (QLLog.isDir()) {
-            holder.layout_num.setText(QLLog.getFiles().size() + " 项");
+            holder.ui_num.setText(QLLog.getFiles().size() + " 项");
         } else {
-            holder.layout_num.setText(null);
+            holder.ui_num.setText(null);
         }
 
         if (QLLog.isDir()) {
-            holder.layout_image.setImageResource(R.drawable.ic_folder);
+            holder.ui_image.setImageResource(R.drawable.ic_folder);
         } else {
-            holder.layout_image.setImageResource(R.mipmap.ic_file_txt);
+            holder.ui_image.setImageResource(R.mipmap.ic_file_txt);
         }
 
         holder.itemView.setOnClickListener(v -> itemActionListener.onClick(QLLog));
@@ -78,17 +78,17 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.MyViewHolder> {
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        public ImageView layout_image;
-        public TextView layout_title;
-        public TextView layout_num;
-        public TextView layout_time;
+        public ImageView ui_image;
+        public TextView ui_title;
+        public TextView ui_num;
+        public TextView ui_time;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            layout_image = itemView.findViewById(R.id.item_file_image);
-            layout_title = itemView.findViewById(R.id.item_file_title);
-            layout_num = itemView.findViewById(R.id.item_file_num);
-            layout_time = itemView.findViewById(R.id.item_file_time);
+            ui_image = itemView.findViewById(R.id.item_file_image);
+            ui_title = itemView.findViewById(R.id.item_file_title);
+            ui_num = itemView.findViewById(R.id.item_file_num);
+            ui_time = itemView.findViewById(R.id.item_file_time);
         }
     }
 }

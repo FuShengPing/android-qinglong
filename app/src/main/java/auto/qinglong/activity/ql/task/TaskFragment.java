@@ -40,9 +40,8 @@ import java.util.Set;
 
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
+import auto.qinglong.activity.ql.CodeWebActivity;
 import auto.qinglong.activity.ql.LocalFileAdapter;
-import auto.qinglong.activity.ql.log.LogDetailActivity;
-import auto.qinglong.bean.ql.QLEnvironment;
 import auto.qinglong.bean.ql.QLTask;
 import auto.qinglong.bean.ql.network.QLTasksRes;
 import auto.qinglong.network.http.QLApiController;
@@ -178,10 +177,11 @@ public class TaskFragment extends BaseFragment {
         //列表item操作接口
         mTaskAdapter.setTaskInterface(new TaskAdapter.ItemActionListener() {
             @Override
-            public void onLog(QLTask QLTask) {
-                Intent intent = new Intent(getContext(), LogDetailActivity.class);
-                intent.putExtra(LogDetailActivity.ExtraName, QLTask.getName());
-                intent.putExtra(LogDetailActivity.ExtraPath, QLTask.getLogPath());
+            public void onLog(QLTask task) {
+                Intent intent = new Intent(getContext(), CodeWebActivity.class);
+                intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_LOG);
+                intent.putExtra(CodeWebActivity.EXTRA_TITLE, task.getName());
+                intent.putExtra(CodeWebActivity.EXTRA_LOG_PATH, task.getLogPath());
                 startActivity(intent);
             }
 

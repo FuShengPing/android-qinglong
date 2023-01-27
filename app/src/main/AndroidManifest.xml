@@ -51,10 +51,6 @@
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activity.ql.log.LogDetailActivity"
-            android:exported="false"
-            android:launchMode="singleTask" />
-        <activity
             android:name=".activity.app.HomeActivity"
             android:exported="false"
             android:launchMode="singleTop" />
