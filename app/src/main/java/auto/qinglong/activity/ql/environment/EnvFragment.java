@@ -46,7 +46,6 @@ import auto.qinglong.network.http.ApiController;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.FileUtil;
-import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.TimeUnit;
 import auto.qinglong.utils.ToastUnit;
@@ -65,8 +64,6 @@ public class EnvFragment extends BaseFragment {
     private String currentSearchValue = "";
     private MenuClickListener menuClickListener;
     private EnvItemAdapter envItemAdapter;
-
-    enum BarType {NAV, SEARCH, MUL_ACTION}
 
     private LinearLayout ui_root;
     private RelativeLayout ui_bar;
@@ -87,8 +84,10 @@ public class EnvFragment extends BaseFragment {
 
     private SmartRefreshLayout ui_refresh;
 
-    private EditWindow editWindow;
-    private ProgressWindow progressWindow;
+    private EditWindow pop_edit;
+    private ProgressWindow pop_progress;
+
+    enum BarType {NAV, SEARCH, MUL_ACTION}
 
     @Nullable
     @Override
@@ -266,7 +265,7 @@ public class EnvFragment extends BaseFragment {
 
     @Override
     public boolean onDispatchTouchEvent() {
-        if (progressWindow != null && progressWindow.isShowing()) {
+        if (pop_progress != null && pop_progress.isShowing()) {
             return true;
         }
         return super.onDispatchTouchEvent();
@@ -326,22 +325,22 @@ public class EnvFragment extends BaseFragment {
     }
 
     private void showPopWindowCommonEdit(QLEnvironment environment) {
-        editWindow = new EditWindow("新建变量", "取消", "确定");
+        pop_edit = new EditWindow("新建变量", "取消", "确定");
         EditWindowItem itemName = new EditWindowItem("name", null, "名称", "请输入变量名称");
         EditWindowItem itemValue = new EditWindowItem("value", null, "值", "请输入变量值");
         EditWindowItem itemRemark = new EditWindowItem("remark", null, "备注", "请输入备注(可选)");
 
         if (environment != null) {
-            editWindow.setTitle("编辑变量");
+            pop_edit.setTitle("编辑变量");
             itemName.setValue(environment.getName());
             itemValue.setValue(environment.getValue());
             itemRemark.setValue(environment.getRemarks());
         }
 
-        editWindow.addItem(itemName);
-        editWindow.addItem(itemValue);
-        editWindow.addItem(itemRemark);
-        editWindow.setActionListener(new EditWindow.OnActionListener() {
+        pop_edit.addItem(itemName);
+        pop_edit.addItem(itemValue);
+        pop_edit.addItem(itemRemark);
+        pop_edit.setActionListener(new EditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 String name = map.get("name");
@@ -357,7 +356,7 @@ public class EnvFragment extends BaseFragment {
                     return false;
                 }
 
-                WindowUnit.hideKeyboard(editWindow.getView());
+                WindowUnit.hideKeyboard(pop_edit.getView());
 
                 List<QLEnvironment> environments = new ArrayList<>();
                 QLEnvironment newEnv;
@@ -382,17 +381,17 @@ public class EnvFragment extends BaseFragment {
             }
         });
 
-        PopupWindowBuilder.buildEditWindow(requireActivity(), editWindow);
+        PopupWindowBuilder.buildEditWindow(requireActivity(), pop_edit);
     }
 
     private void showPopWindowQuickEdit() {
-        editWindow = new EditWindow("快捷导入", "取消", "确定");
+        pop_edit = new EditWindow("快捷导入", "取消", "确定");
         EditWindowItem itemValue = new EditWindowItem("values", null, "文本", "请输入文本");
         EditWindowItem itemRemark = new EditWindowItem("remark", null, "备注", "请输入备注(可选)");
 
-        editWindow.addItem(itemValue);
-        editWindow.addItem(itemRemark);
-        editWindow.setActionListener(new EditWindow.OnActionListener() {
+        pop_edit.addItem(itemValue);
+        pop_edit.addItem(itemRemark);
+        pop_edit.setActionListener(new EditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 String values = map.get("values");
@@ -403,7 +402,7 @@ public class EnvFragment extends BaseFragment {
                     return false;
                 }
 
-                WindowUnit.hideKeyboard(editWindow.getView());
+                WindowUnit.hideKeyboard(pop_edit.getView());
 
                 List<QLEnvironment> environments = QLEnvironment.parseExport(values, remarks);
                 if (environments.size() == 0) {
@@ -420,14 +419,14 @@ public class EnvFragment extends BaseFragment {
             }
         });
 
-        PopupWindowBuilder.buildEditWindow(requireActivity(), editWindow);
+        PopupWindowBuilder.buildEditWindow(requireActivity(), pop_edit);
     }
 
     private void showPopWindowRemoteEdit() {
-        editWindow = new EditWindow("远程导入", "取消", "确定");
+        pop_edit = new EditWindow("远程导入", "取消", "确定");
         EditWindowItem itemValue = new EditWindowItem("url", null, "链接", "请输入远程地址");
-        editWindow.addItem(itemValue);
-        editWindow.setActionListener(new EditWindow.OnActionListener() {
+        pop_edit.addItem(itemValue);
+        pop_edit.setActionListener(new EditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 String url = map.get("url");
@@ -450,7 +449,7 @@ public class EnvFragment extends BaseFragment {
             }
         });
 
-        PopupWindowBuilder.buildEditWindow(requireActivity(), editWindow);
+        PopupWindowBuilder.buildEditWindow(requireActivity(), pop_edit);
     }
 
     private void changeBar(BarType barType) {
@@ -577,21 +576,21 @@ public class EnvFragment extends BaseFragment {
         fileAdapter.setListener(file -> {
             try {
                 popupWindow.dismiss();
-                if (progressWindow == null) {
-                    progressWindow = PopupWindowBuilder.buildProgressWindow(requireActivity(), null);
+                if (pop_progress == null) {
+                    pop_progress = PopupWindowBuilder.buildProgressWindow(requireActivity(), null);
                 }
-                progressWindow.setTextAndShow("加载文件中...");
+                pop_progress.setTextAndShow("加载文件中...");
                 BufferedReader bufferedInputStream = new BufferedReader(new FileReader(file));
                 StringBuilder stringBuilder = new StringBuilder();
                 String line;
                 while ((line = bufferedInputStream.readLine()) != null) {
                     stringBuilder.append(line);
                 }
-                progressWindow.setTextAndShow("解析文件中...");
+                pop_progress.setTextAndShow("解析文件中...");
                 Type type = new TypeToken<List<QLEnvironment>>() {
                 }.getType();
                 List<QLEnvironment> environments = new Gson().fromJson(stringBuilder.toString(), type);
-                progressWindow.setTextAndShow("导入变量中...");
+                pop_progress.setTextAndShow("导入变量中...");
                 netAddEnvironments(environments);
             } catch (Exception e) {
                 ToastUnit.showShort("导入失败：" + e.getLocalizedMessage());
@@ -629,7 +628,7 @@ public class EnvFragment extends BaseFragment {
         QLApiController.updateEnvironment(getNetRequestID(), environment, new QLApiController.NetEditEnvCallback() {
             @Override
             public void onSuccess(QLEnvironment data) {
-                editWindow.dismiss();
+                pop_edit.dismiss();
                 ToastUnit.showShort("更新成功");
                 netGetEnvironments(currentSearchValue, false);
             }
@@ -648,11 +647,11 @@ public class EnvFragment extends BaseFragment {
         QLApiController.addEnvironment(getNetRequestID(), environments, new QLApiController.NetGetEnvironmentsCallback() {
             @Override
             public void onSuccess(QLEnvironmentRes res) {
-                if (editWindow != null) {
-                    editWindow.dismiss();
+                if (pop_edit != null) {
+                    pop_edit.dismiss();
                 }
-                if (progressWindow != null) {
-                    progressWindow.dismiss();
+                if (pop_progress != null) {
+                    pop_progress.dismiss();
                 }
                 ToastUnit.showShort("新建成功：" + environments.size());
                 netGetEnvironments(currentSearchValue, false);
