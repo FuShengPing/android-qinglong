@@ -501,7 +501,7 @@ public class EnvFragment extends BaseFragment {
     }
 
     private void backupData() {
-        if (!FileUtil.checkPermission()) {
+        if (FileUtil.isNeedRequestPermission()) {
             ToastUnit.showShort("请授予应用获取存储权限");
             FileUtil.requestPermission(requireActivity());
             return;

@@ -491,7 +491,7 @@ public class TaskFragment extends BaseFragment {
 
 
     private void backupData() {
-        if (!FileUtil.checkPermission()) {
+        if (FileUtil.isNeedRequestPermission()) {
             ToastUnit.showShort("请授予应用读写存储权限");
             FileUtil.requestPermission(requireActivity());
             return;

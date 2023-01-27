@@ -32,12 +32,7 @@ public class FileUtil {
         File file = new File(parentPath, fileName);
         File dir = new File(parentPath);
         if (!dir.exists()) {
-            LogUnit.log(dir.getAbsolutePath());
-            LogUnit.log(file.getAbsolutePath());
             dir.mkdirs();
-        }
-        if (!file.exists()) {
-            file.createNewFile();
         }
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         fileOutputStream.write(content.getBytes(StandardCharsets.UTF_8));
@@ -57,8 +52,8 @@ public class FileUtil {
         return externalStorage + "/" + packageName + "/" + taskPath;
     }
 
-    public static boolean checkPermission() {
-        return ContextCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    public static boolean isNeedRequestPermission() {
+        return ContextCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED;
     }
 
     public static void requestPermission(Activity activity) {
