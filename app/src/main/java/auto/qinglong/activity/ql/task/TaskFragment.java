@@ -365,7 +365,7 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void initData() {
-        if (loadSuccessFlag || RequestManager.isRequesting(this.getNetRequestID())) {
+        if (initDataFlag || RequestManager.isRequesting(this.getNetRequestID())) {
             return;
         }
         new Handler().postDelayed(() -> {
@@ -544,7 +544,7 @@ public class TaskFragment extends BaseFragment {
         QLApiController.getTasks(getNetRequestID(), searchValue, new QLApiController.NetGetTasksCallback() {
             @Override
             public void onSuccess(QLTasksRes res) {
-                loadSuccessFlag = true;
+                initDataFlag = true;
                 List<QLTask> data = res.getData();
                 Collections.sort(data);
                 for (int k = 0; k < data.size(); k++) {

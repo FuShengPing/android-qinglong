@@ -73,7 +73,7 @@ public class ScriptFragment extends BaseFragment {
     }
 
     private void firstLoad() {
-        if (!loadSuccessFlag && !RequestManager.isRequesting(getNetRequestID())) {
+        if (!initDataFlag && !RequestManager.isRequesting(getNetRequestID())) {
             new Handler().postDelayed(() -> {
                 if (isVisible()) {
                     getScripts();
@@ -129,7 +129,7 @@ public class ScriptFragment extends BaseFragment {
                 sortAndSetData(QLScripts, "");
                 oData = QLScripts;
                 canBack = false;
-                loadSuccessFlag = true;
+                initDataFlag = true;
                 this.onEnd(true);
             }
 

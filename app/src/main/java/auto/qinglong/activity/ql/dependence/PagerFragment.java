@@ -53,7 +53,7 @@ public class PagerFragment extends BaseFragment {
     }
 
     private void firstLoad() {
-        if (!loadSuccessFlag && !RequestManager.isRequesting(getNetRequestID())) {
+        if (!initDataFlag && !RequestManager.isRequesting(getNetRequestID())) {
             new Handler().postDelayed(() -> {
                 if (isVisible()) {
                     netGetDependencies();
@@ -100,7 +100,7 @@ public class PagerFragment extends BaseFragment {
             @Override
             public void onSuccess(QLDependenceRes res) {
                 depItemAdapter.setData(res.getData());
-                loadSuccessFlag = true;
+                initDataFlag = true;
                 this.onEnd(true);
             }
 

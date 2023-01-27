@@ -94,7 +94,12 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
+        //进度pop存在阻止点击
         if (ui_pop_notice != null && ui_pop_notice.isShowing()) {
+            return false;
+        }
+        //询问当前帧是否阻止点击
+        if (mCurrentFragment != null && mCurrentFragment.onDispatchTouchEvent()) {
             return false;
         }
         return super.dispatchTouchEvent(ev);

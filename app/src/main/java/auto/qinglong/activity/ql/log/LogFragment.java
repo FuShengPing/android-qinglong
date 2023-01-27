@@ -71,7 +71,7 @@ public class LogFragment extends BaseFragment {
     }
 
     private void firstLoad() {
-        if (!loadSuccessFlag && !RequestManager.isRequesting(getNetRequestID())) {
+        if (!initDataFlag && !RequestManager.isRequesting(getNetRequestID())) {
             new Handler().postDelayed(() -> {
                 if (isVisible()) {
                     getLogs();
@@ -120,7 +120,7 @@ public class LogFragment extends BaseFragment {
                 sortAndSetData(QLLogs, "");
                 oData = QLLogs;
                 canBack = false;
-                loadSuccessFlag = true;
+                initDataFlag = true;
                 this.onEnd(true);
             }
 

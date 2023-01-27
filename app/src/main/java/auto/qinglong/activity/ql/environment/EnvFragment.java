@@ -22,10 +22,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileReader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -55,6 +58,7 @@ import auto.qinglong.views.popup.ListWindow;
 import auto.qinglong.views.popup.MiniMoreItem;
 import auto.qinglong.views.popup.MiniMoreWindow;
 import auto.qinglong.views.popup.PopupWindowBuilder;
+import auto.qinglong.views.popup.ProgressWindow;
 
 public class EnvFragment extends BaseFragment {
     public static String TAG = "EnvFragment";
@@ -84,6 +88,7 @@ public class EnvFragment extends BaseFragment {
     private SmartRefreshLayout ui_refresh;
 
     private EditWindow editWindow;
+    private ProgressWindow progressWindow;
 
     @Nullable
     @Override
@@ -259,8 +264,16 @@ public class EnvFragment extends BaseFragment {
         this.menuClickListener = menuClickListener;
     }
 
+    @Override
+    public boolean onDispatchTouchEvent() {
+        if (progressWindow != null && progressWindow.isShowing()) {
+            return true;
+        }
+        return super.onDispatchTouchEvent();
+    }
+
     private void initData() {
-        if (loadSuccessFlag || RequestManager.isRequesting(getNetRequestID())) {
+        if (initDataFlag || RequestManager.isRequesting(getNetRequestID())) {
             return;
         }
         new Handler().postDelayed(() -> {
@@ -564,9 +577,23 @@ public class EnvFragment extends BaseFragment {
         fileAdapter.setListener(file -> {
             LogUnit.log(file.getName());
             try {
-                FileInputStream fileInputStream = new FileInputStream(file);
-                
                 popupWindow.dismiss();
+                if (progressWindow == null) {
+                    progressWindow = PopupWindowBuilder.buildProgressWindow(requireActivity(), null);
+                }
+                progressWindow.setTextAndShow("加载文件中...");
+                BufferedReader bufferedInputStream = new BufferedReader(new FileReader(file));
+                StringBuilder stringBuilder = new StringBuilder();
+                String line;
+                while ((line = bufferedInputStream.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+                progressWindow.setTextAndShow("解析文件中...");
+                Type type = new TypeToken<List<QLEnvironment>>() {
+                }.getType();
+                List<QLEnvironment> environments = new Gson().fromJson(stringBuilder.toString(), type);
+                progressWindow.setTextAndShow("上传变量中...");
+                LogUnit.log(environments.size());
             } catch (Exception e) {
                 ToastUnit.showShort("读取文件失败：" + e.getLocalizedMessage());
             }
@@ -580,7 +607,7 @@ public class EnvFragment extends BaseFragment {
         QLApiController.getEnvironments(getNetRequestID(), searchValue, new QLApiController.NetGetEnvironmentsCallback() {
             @Override
             public void onSuccess(QLEnvironmentRes res) {
-                loadSuccessFlag = true;
+                initDataFlag = true;
                 if (needTip) {
                     ToastUnit.showShort("加载成功：" + res.getData().size());
                 }
