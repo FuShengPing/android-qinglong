@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
@@ -23,33 +24,42 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
+import auto.qinglong.activity.ql.LocalFileAdapter;
 import auto.qinglong.activity.ql.log.LogDetailActivity;
+import auto.qinglong.bean.ql.QLEnvironment;
 import auto.qinglong.bean.ql.QLTask;
 import auto.qinglong.bean.ql.network.QLTasksRes;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.CronUnit;
 import auto.qinglong.utils.FileUtil;
-import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.TimeUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.popup.EditWindow;
 import auto.qinglong.views.popup.EditWindowItem;
+import auto.qinglong.views.popup.ListWindow;
 import auto.qinglong.views.popup.MiniMoreItem;
 import auto.qinglong.views.popup.MiniMoreWindow;
 import auto.qinglong.views.popup.PopupWindowBuilder;
+import auto.qinglong.views.popup.ProgressWindow;
 
 public class TaskFragment extends BaseFragment {
     public static String TAG = "TaskFragment";
@@ -57,8 +67,6 @@ public class TaskFragment extends BaseFragment {
     private String mCurrentSearchValue = "";
     private MenuClickListener mMenuClickListener;
     private TaskAdapter mTaskAdapter;
-
-    private enum BarType {NAV, SEARCH, MUL_ACTION}
 
     //主导航栏
     private LinearLayout ui_bar_main;
@@ -89,6 +97,9 @@ public class TaskFragment extends BaseFragment {
     private SmartRefreshLayout ui_refresh;
 
     private EditWindow ui_pop_edit;
+    private ProgressWindow ui_pop_progress;
+
+    private enum BarType {NAV, SEARCH, MUL_ACTION}
 
     @Nullable
     @Override
@@ -382,6 +393,7 @@ public class TaskFragment extends BaseFragment {
         miniMoreWindow.addItem(new MiniMoreItem("add", "新建任务", R.drawable.ic_add_gray));
         miniMoreWindow.addItem(new MiniMoreItem("localAdd", "本地导入", R.drawable.ic_file_gray));
         miniMoreWindow.addItem(new MiniMoreItem("backup", "任务备份", R.drawable.ic_backup_gray));
+        miniMoreWindow.addItem(new MiniMoreItem("deleteMul", "任务去重", R.drawable.ic_delete_gray));
         miniMoreWindow.addItem(new MiniMoreItem("mulAction", "批量操作", R.drawable.ic_mul_action_gray));
         miniMoreWindow.setOnActionListener(key -> {
             switch (key) {
@@ -393,6 +405,9 @@ public class TaskFragment extends BaseFragment {
                     break;
                 case "backup":
                     backupData();
+                    break;
+                case "deleteMul":
+                    compareAndDeleteData();
                     break;
                 default:
                     changeBar(BarType.MUL_ACTION);
@@ -492,15 +507,63 @@ public class TaskFragment extends BaseFragment {
         }
     }
 
+    private void compareAndDeleteData() {
+        List<String> ids = new ArrayList<>();
+        Set<String> set = new HashSet<>();
+        List<QLTask> tasks = this.mTaskAdapter.getData();
+        for (QLTask task : tasks) {
+            String key = task.getCommand();
+            if (set.contains(key)) {
+                ids.add(task.getId());
+            } else {
+                set.add(key);
+            }
+        }
+        if (ids.size() == 0) {
+            ToastUnit.showShort("无重复任务");
+        } else {
+            netDeleteTasks(ids);
+        }
+    }
+
     private void localAddData() {
         List<File> files = FileUtil.getFiles(FileUtil.getTaskPath(), (dir, name) -> name.endsWith(".json"));
         if (files.size() == 0) {
             ToastUnit.showShort("无本地备份数据");
             return;
         }
-        for (File file : files) {
-            LogUnit.log(file.getName());
-        }
+
+        ListWindow<LocalFileAdapter> listWindow = new ListWindow<>("选择文件");
+        LocalFileAdapter fileAdapter = new LocalFileAdapter(getContext());
+        fileAdapter.setData(files);
+        listWindow.setAdapter(fileAdapter);
+
+        PopupWindow popupWindow = PopupWindowBuilder.buildListWindow(requireActivity(), listWindow);
+
+        fileAdapter.setListener(file -> {
+            try {
+                popupWindow.dismiss();
+                if (ui_pop_progress == null) {
+                    ui_pop_progress = PopupWindowBuilder.buildProgressWindow(requireActivity(), null);
+                }
+                ui_pop_progress.setTextAndShow("加载文件中...");
+                BufferedReader bufferedInputStream = new BufferedReader(new FileReader(file));
+                StringBuilder stringBuilder = new StringBuilder();
+                String line;
+                while ((line = bufferedInputStream.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+
+                ui_pop_progress.setTextAndShow("解析文件中...");
+                Type type = new TypeToken<List<QLTask>>() {
+                }.getType();
+                List<QLTask> tasks = new Gson().fromJson(stringBuilder.toString(), type);
+
+                netMulAddTask(tasks);
+            } catch (Exception e) {
+                ToastUnit.showShort("导入失败：" + e.getLocalizedMessage());
+            }
+        });
     }
 
     private void backupData() {
@@ -695,8 +758,8 @@ public class TaskFragment extends BaseFragment {
         });
     }
 
-    private void netEditTask(QLTask QLTask) {
-        QLApiController.editTask(getNetRequestID(), QLTask, new QLApiController.NetEditTaskCallback() {
+    private void netEditTask(QLTask task) {
+        QLApiController.editTask(getNetRequestID(), task, new QLApiController.NetEditTaskCallback() {
             @Override
             public void onSuccess(QLTask QLTask) {
                 ui_pop_edit.dismiss();
@@ -711,8 +774,8 @@ public class TaskFragment extends BaseFragment {
         });
     }
 
-    private void netAddTask(QLTask QLTask) {
-        QLApiController.addTask(getNetRequestID(), QLTask, new QLApiController.NetEditTaskCallback() {
+    private void netAddTask(QLTask task) {
+        QLApiController.addTask(getNetRequestID(), task, new QLApiController.NetEditTaskCallback() {
             @Override
             public void onSuccess(QLTask QLTask) {
                 ui_pop_edit.dismiss();
@@ -725,6 +788,40 @@ public class TaskFragment extends BaseFragment {
                 ToastUnit.showShort("新建任务失败：" + msg);
             }
         });
+    }
+
+    private void netMulAddTask(List<QLTask> tasks) {
+        new Thread(() -> {
+            final int[] num_success = {0};
+            final int[] num_failure = {0};
+            final boolean[] isEnd = {false};
+
+            for (int k = 0; k < tasks.size(); k++) {
+                ui_pop_progress.setText("导入任务中 " + k + "/" + tasks.size());
+                QLApiController.addTask(getNetRequestID(), tasks.get(k), new QLApiController.NetEditTaskCallback() {
+                    @Override
+                    public void onSuccess(QLTask QLTask) {
+                        isEnd[0] = true;
+                        num_success[0] += 1;
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        isEnd[0] = true;
+                        num_failure[0] += 1;
+                    }
+                });
+                while (!isEnd[0]) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            ui_pop_progress.dismiss();
+            ToastUnit.showShort("成功：" + num_success[0] + ",失败：" + num_failure[0]);
+        }).start();
     }
 
 

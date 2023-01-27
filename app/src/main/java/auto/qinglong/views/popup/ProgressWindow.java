@@ -23,9 +23,15 @@ public class ProgressWindow {
     }
 
     public void setTextAndShow(String text) {
-        this.setText(text);
-        WindowUnit.setBackgroundAlpha(mActivity, 0.5f);
-        ui_popupWindow.showAtLocation(mActivity.getWindow().getDecorView().getRootView(), Gravity.CENTER, 0, 0);
+        if (this.ui_popupWindow.isShowing()) {
+            this.setText(text);
+        } else {
+            mActivity.runOnUiThread(() -> {
+                ui_tip.setText(text);
+                WindowUnit.setBackgroundAlpha(mActivity, 0.5f);
+                ui_popupWindow.showAtLocation(mActivity.getWindow().getDecorView().getRootView(), Gravity.CENTER, 0, 0);
+            });
+        }
     }
 
     public boolean isShowing() {
@@ -34,7 +40,7 @@ public class ProgressWindow {
 
     public void dismiss() {
         if (ui_popupWindow != null && ui_popupWindow.isShowing()) {
-            ui_popupWindow.dismiss();
+            mActivity.runOnUiThread(ui_popupWindow::dismiss);
         }
     }
 }
