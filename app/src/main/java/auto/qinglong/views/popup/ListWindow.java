@@ -45,7 +45,5 @@ public class ListWindow<T> {
 
     public interface OnActionListener {
         boolean onCancel();
-
-        boolean onSelect(int index);
     }
 }

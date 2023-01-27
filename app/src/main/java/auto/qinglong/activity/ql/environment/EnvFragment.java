@@ -36,6 +36,7 @@ import java.util.Set;
 
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
+import auto.qinglong.activity.ql.LocalFileAdapter;
 import auto.qinglong.bean.ql.QLEnvironment;
 import auto.qinglong.bean.ql.network.QLEnvironmentRes;
 import auto.qinglong.network.http.ApiController;
@@ -440,7 +441,13 @@ public class EnvFragment extends BaseFragment {
     }
 
     private void showPopWindowLocalAdd(List<File> data) {
+        LocalFileAdapter fileAdapter = new LocalFileAdapter(getContext());
+        fileAdapter.setData(data);
+        fileAdapter.setListener(file -> {
 
+        });
+        ListWindow<LocalFileAdapter> listWindow = new ListWindow<>("选择文件");
+        listWindow.setAdapter(fileAdapter);
     }
 
     private void changeBar(BarType barType) {
