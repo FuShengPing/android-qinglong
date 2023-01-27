@@ -575,7 +575,6 @@ public class EnvFragment extends BaseFragment {
         PopupWindow popupWindow = PopupWindowBuilder.buildListWindow(requireActivity(), listWindow);
 
         fileAdapter.setListener(file -> {
-            LogUnit.log(file.getName());
             try {
                 popupWindow.dismiss();
                 if (progressWindow == null) {
@@ -592,10 +591,10 @@ public class EnvFragment extends BaseFragment {
                 Type type = new TypeToken<List<QLEnvironment>>() {
                 }.getType();
                 List<QLEnvironment> environments = new Gson().fromJson(stringBuilder.toString(), type);
-                progressWindow.setTextAndShow("上传变量中...");
-                LogUnit.log(environments.size());
+                progressWindow.setTextAndShow("导入变量中...");
+                netAddEnvironments(environments);
             } catch (Exception e) {
-                ToastUnit.showShort("读取文件失败：" + e.getLocalizedMessage());
+                ToastUnit.showShort("导入失败：" + e.getLocalizedMessage());
             }
         });
     }
@@ -649,7 +648,12 @@ public class EnvFragment extends BaseFragment {
         QLApiController.addEnvironment(getNetRequestID(), environments, new QLApiController.NetGetEnvironmentsCallback() {
             @Override
             public void onSuccess(QLEnvironmentRes res) {
-                editWindow.dismiss();
+                if (editWindow != null) {
+                    editWindow.dismiss();
+                }
+                if (progressWindow != null) {
+                    progressWindow.dismiss();
+                }
                 ToastUnit.showShort("新建成功：" + environments.size());
                 netGetEnvironments(currentSearchValue, false);
             }
