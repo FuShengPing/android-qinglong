@@ -49,6 +49,7 @@ import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.CronUnit;
 import auto.qinglong.utils.FileUtil;
+import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.TimeUnit;
 import auto.qinglong.utils.ToastUnit;
@@ -792,8 +793,6 @@ public class TaskFragment extends BaseFragment {
 
     private void netMulAddTask(List<QLTask> tasks) {
         new Thread(() -> {
-            final int[] num_success = {0};
-            final int[] num_failure = {0};
             final boolean[] isEnd = {false};
 
             for (int k = 0; k < tasks.size(); k++) {
@@ -802,13 +801,12 @@ public class TaskFragment extends BaseFragment {
                     @Override
                     public void onSuccess(QLTask QLTask) {
                         isEnd[0] = true;
-                        num_success[0] += 1;
                     }
 
                     @Override
                     public void onFailure(String msg) {
                         isEnd[0] = true;
-                        num_failure[0] += 1;
+                        LogUnit.log(TAG, msg);
                     }
                 });
                 while (!isEnd[0]) {
@@ -820,7 +818,7 @@ public class TaskFragment extends BaseFragment {
                 }
             }
             ui_pop_progress.dismiss();
-            ToastUnit.showShort("成功：" + num_success[0] + ",失败：" + num_failure[0]);
+            netGetTasks(mCurrentSearchValue, true);
         }).start();
     }
 
