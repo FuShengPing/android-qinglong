@@ -16,6 +16,10 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +59,7 @@ public class PopupWindowBuilder {
         popWindow.showAsDropDown(miniMoreWindow.getTargetView(), miniMoreWindow.getGravity(), 0, 0);
     }
 
-    public static void buildEditWindow(Activity activity, EditWindow editWindow) {
+    public static void buildEditWindow(@NonNull Activity activity, EditWindow editWindow) {
         View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_edit, null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), true);
         popWindow.setContentView(view);
@@ -116,6 +120,36 @@ public class PopupWindowBuilder {
             itemViews.clear();
             items.clear();
             editWindow.setActionListener(null);
+        });
+
+        WindowUnit.setBackgroundAlpha(activity, 0.5f);
+        popWindow.showAtLocation(activity.getWindow().getDecorView().getRootView(), Gravity.CENTER, 0, 0);
+    }
+
+    public static void buildListWindow(Activity activity, ListWindow listWindow) {
+        View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_common_list, null, false);
+        PopupWindow popWindow = build(activity.getBaseContext(), true);
+        popWindow.setContentView(view);
+
+        TextView ui_title = view.findViewById(R.id.pop_common_tv_title);
+        RecyclerView ui_recyclerView = view.findViewById(R.id.recyclerView);
+        Button ui_cancel = view.findViewById(R.id.pop_common_bt_cancel);
+
+        ui_title.setText(listWindow.getTitle());
+        ui_recyclerView.setLayoutManager(new LinearLayoutManager(activity, RecyclerView.VERTICAL, false));
+        ui_recyclerView.setAdapter((RecyclerView.Adapter) listWindow.getAdapter());
+
+        ui_cancel.setOnClickListener(v -> {
+            boolean flag = listWindow.getListener() == null || listWindow.getListener().onCancel();
+            if (flag) {
+                popWindow.dismiss();
+            }
+        });
+
+        popWindow.setOnDismissListener(() -> {
+            WindowUnit.setBackgroundAlpha(activity, 1.0f);
+            ui_recyclerView.setAdapter(null);
+            listWindow.setListener(null);
         });
 
         WindowUnit.setBackgroundAlpha(activity, 0.5f);

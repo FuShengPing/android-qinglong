@@ -2,6 +2,7 @@ package auto.qinglong.activity.ql;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -28,7 +29,7 @@ public class LocalFileAdapter extends RecyclerView.Adapter<LocalFileAdapter.MyVi
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = View.inflate(this.context, R.layout.item_pop_common_local_file, parent);
+        View view = LayoutInflater.from(this.context).inflate(R.layout.item_pop_common_local_file, parent,false);
         return new MyViewHolder(view);
     }
 

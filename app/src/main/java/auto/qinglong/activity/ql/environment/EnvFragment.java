@@ -10,7 +10,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListPopupWindow;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
@@ -25,7 +24,6 @@ import com.google.gson.JsonObject;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -440,16 +438,6 @@ public class EnvFragment extends BaseFragment {
         PopupWindowBuilder.buildEditWindow(requireActivity(), editWindow);
     }
 
-    private void showPopWindowLocalAdd(List<File> data) {
-        LocalFileAdapter fileAdapter = new LocalFileAdapter(getContext());
-        fileAdapter.setData(data);
-        fileAdapter.setListener(file -> {
-
-        });
-        ListWindow<LocalFileAdapter> listWindow = new ListWindow<>("选择文件");
-        listWindow.setAdapter(fileAdapter);
-    }
-
     private void changeBar(BarType barType) {
         if (ui_bar_search.getVisibility() == View.VISIBLE) {
             WindowUnit.hideKeyboard(ui_root);
@@ -563,9 +551,14 @@ public class EnvFragment extends BaseFragment {
             ToastUnit.showShort("无本地备份数据");
             return;
         }
-        for (File file : files) {
+        LocalFileAdapter fileAdapter = new LocalFileAdapter(getContext());
+        fileAdapter.setData(files);
+        fileAdapter.setListener(file -> {
             LogUnit.log(file.getName());
-        }
+        });
+        ListWindow listWindow = new ListWindow("选择文件");
+        listWindow.setAdapter(fileAdapter);
+        PopupWindowBuilder.buildListWindow(requireActivity(), listWindow);
     }
 
     private void netGetEnvironments(String searchValue, boolean needTip) {
