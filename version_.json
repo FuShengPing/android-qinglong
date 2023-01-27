@@ -5,7 +5,7 @@
   "updateTime": "2023-01-08",
   "downloadUrl": "https://gitee.com/wsfsp4/QingLong/releases/download/V1.3/app-release.apk",
   "updateDetail": [
-    "1限制2.10.x版本可用",
+    "1限制2.10.x面板版本可用",
     "1修复无法使用域名方式登录问题",
     "1修复CK助手页面不支持回退问题",
     "新增精选导航模块",

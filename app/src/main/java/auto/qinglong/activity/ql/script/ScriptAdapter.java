@@ -18,7 +18,7 @@ import auto.qinglong.R;
 import auto.qinglong.bean.ql.QLScript;
 import auto.qinglong.utils.TimeUnit;
 
-public class ScriptAdapter extends RecyclerView.Adapter<MyViewHolder> {
+public class ScriptAdapter extends RecyclerView.Adapter<ScriptAdapter.MyViewHolder> {
     public static final String TAG = "ScriptAdapter";
 
     private final Context context;
@@ -94,21 +94,21 @@ public class ScriptAdapter extends RecyclerView.Adapter<MyViewHolder> {
         void onMulAction(QLScript QLScript);
     }
 
-}
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        public ImageView layout_image;
+        public TextView layout_title;
+        public TextView layout_num;
+        public TextView layout_mtime;
 
-class MyViewHolder extends RecyclerView.ViewHolder {
-    public ImageView layout_image;
-    public TextView layout_title;
-    public TextView layout_num;
-    public TextView layout_mtime;
-
-    public MyViewHolder(@NonNull View itemView) {
-        super(itemView);
-        layout_image = itemView.findViewById(R.id.item_file_image);
-        layout_title = itemView.findViewById(R.id.item_file_title);
-        layout_num = itemView.findViewById(R.id.item_file_num);
-        layout_mtime = itemView.findViewById(R.id.item_file_time);
+        public MyViewHolder(@NonNull View itemView) {
+            super(itemView);
+            layout_image = itemView.findViewById(R.id.item_file_image);
+            layout_title = itemView.findViewById(R.id.item_file_title);
+            layout_num = itemView.findViewById(R.id.item_file_num);
+            layout_mtime = itemView.findViewById(R.id.item_file_time);
+        }
     }
+
 }
 
 

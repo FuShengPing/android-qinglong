@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListPopupWindow;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
@@ -49,6 +50,7 @@ import auto.qinglong.utils.WebUnit;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.popup.EditWindow;
 import auto.qinglong.views.popup.EditWindowItem;
+import auto.qinglong.views.popup.ListWindow;
 import auto.qinglong.views.popup.MiniMoreItem;
 import auto.qinglong.views.popup.MiniMoreWindow;
 import auto.qinglong.views.popup.PopupWindowBuilder;

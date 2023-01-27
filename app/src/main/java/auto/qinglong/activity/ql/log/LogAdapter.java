@@ -17,7 +17,7 @@ import java.util.List;
 import auto.qinglong.R;
 import auto.qinglong.bean.ql.QLLog;
 
-public class LogAdapter extends RecyclerView.Adapter<MyViewHolder> {
+public class LogAdapter extends RecyclerView.Adapter<LogAdapter.MyViewHolder> {
     private Context context;
     private List<QLLog> data;
     private ItemActionListener itemActionListener;
@@ -76,21 +76,23 @@ public class LogAdapter extends RecyclerView.Adapter<MyViewHolder> {
     public interface ItemActionListener {
         void onClick(QLLog qlLog);
     }
-}
 
-class MyViewHolder extends RecyclerView.ViewHolder {
-    public ImageView layout_image;
-    public TextView layout_title;
-    public TextView layout_num;
-    public TextView layout_time;
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        public ImageView layout_image;
+        public TextView layout_title;
+        public TextView layout_num;
+        public TextView layout_time;
 
-    public MyViewHolder(@NonNull View itemView) {
-        super(itemView);
-        layout_image = itemView.findViewById(R.id.item_file_image);
-        layout_title = itemView.findViewById(R.id.item_file_title);
-        layout_num = itemView.findViewById(R.id.item_file_num);
-        layout_time = itemView.findViewById(R.id.item_file_time);
+        public MyViewHolder(@NonNull View itemView) {
+            super(itemView);
+            layout_image = itemView.findViewById(R.id.item_file_image);
+            layout_title = itemView.findViewById(R.id.item_file_title);
+            layout_num = itemView.findViewById(R.id.item_file_num);
+            layout_time = itemView.findViewById(R.id.item_file_time);
+        }
     }
 }
+
+
 
 

@@ -20,7 +20,7 @@ import auto.qinglong.R;
 import auto.qinglong.bean.ql.QLEnvironment;
 import auto.qinglong.utils.TimeUnit;
 
-public class EnvItemAdapter extends RecyclerView.Adapter<MyViewHolder> {
+public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHolder> {
     public static final String TAG = "EnvItemAdapter";
 
     private final Context context;
@@ -160,26 +160,28 @@ public class EnvItemAdapter extends RecyclerView.Adapter<MyViewHolder> {
         void onMulAction(QLEnvironment environment, int position);
     }
 
-}
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        public LinearLayout ui_body;
+        public CheckBox ui_check;
+        public TextView ui_name;
+        public TextView ui_value;
+        public TextView ui_remark;
+        public TextView ui_status;
+        public TextView ui_createAt;
 
-
-class MyViewHolder extends RecyclerView.ViewHolder {
-    public LinearLayout ui_body;
-    public CheckBox ui_check;
-    public TextView ui_name;
-    public TextView ui_value;
-    public TextView ui_remark;
-    public TextView ui_status;
-    public TextView ui_createAt;
-
-    public MyViewHolder(@NonNull View itemView) {
-        super(itemView);
-        ui_body = itemView.findViewById(R.id.env_detail);
-        ui_check = itemView.findViewById(R.id.env_check);
-        ui_name = itemView.findViewById(R.id.env_name);
-        ui_value = itemView.findViewById(R.id.env_value);
-        ui_status = itemView.findViewById(R.id.env_status);
-        ui_remark = itemView.findViewById(R.id.env_remark);
-        ui_createAt = itemView.findViewById(R.id.env_create_time);
+        public MyViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ui_body = itemView.findViewById(R.id.env_detail);
+            ui_check = itemView.findViewById(R.id.env_check);
+            ui_name = itemView.findViewById(R.id.env_name);
+            ui_value = itemView.findViewById(R.id.env_value);
+            ui_status = itemView.findViewById(R.id.env_status);
+            ui_remark = itemView.findViewById(R.id.env_remark);
+            ui_createAt = itemView.findViewById(R.id.env_create_time);
+        }
     }
+
 }
+
+
+

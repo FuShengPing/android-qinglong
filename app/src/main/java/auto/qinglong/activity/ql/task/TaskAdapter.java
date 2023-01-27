@@ -23,7 +23,7 @@ import auto.qinglong.bean.ql.QLTaskState;
 import auto.qinglong.utils.CronUnit;
 import auto.qinglong.utils.TimeUnit;
 
-public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> {
     public static final String TAG = "TaskAdapter";
 
     Context context;
@@ -221,33 +221,35 @@ public class TaskAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
         void onMulAction(QLTask QLTask, int position);
     }
-}
 
-class MyViewHolder extends RecyclerView.ViewHolder {
-    public TextView ui_name;
-    public LinearLayout ui_detail;
-    public TextView ui_command;
-    public TextView ui_schedule;
-    public TextView ui_state;
-    public CheckBox ui_check;
-    public ImageView ui_action;
-    public ImageView ui_pinned;
-    public TextView ui_last_run_time;
-    public TextView ui_last_execution_time;
-    public TextView ui_next_execution_time;
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView ui_name;
+        public LinearLayout ui_detail;
+        public TextView ui_command;
+        public TextView ui_schedule;
+        public TextView ui_state;
+        public CheckBox ui_check;
+        public ImageView ui_action;
+        public ImageView ui_pinned;
+        public TextView ui_last_run_time;
+        public TextView ui_last_execution_time;
+        public TextView ui_next_execution_time;
 
-    public MyViewHolder(@NonNull View itemView) {
-        super(itemView);
-        ui_name = itemView.findViewById(R.id.task_name);
-        ui_detail = itemView.findViewById(R.id.task_detail);
-        ui_command = itemView.findViewById(R.id.task_command);
-        ui_schedule = itemView.findViewById(R.id.task_schedule);
-        ui_state = itemView.findViewById(R.id.task_state);
-        ui_action = itemView.findViewById(R.id.task_action_run);
-        ui_check = itemView.findViewById(R.id.task_check);
-        ui_pinned = itemView.findViewById(R.id.task_pinned);
-        ui_last_run_time = itemView.findViewById(R.id.task_last_running_time);
-        ui_last_execution_time = itemView.findViewById(R.id.task_last_execution_time);
-        ui_next_execution_time = itemView.findViewById(R.id.task_next_execution_time);
+        public MyViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ui_name = itemView.findViewById(R.id.task_name);
+            ui_detail = itemView.findViewById(R.id.task_detail);
+            ui_command = itemView.findViewById(R.id.task_command);
+            ui_schedule = itemView.findViewById(R.id.task_schedule);
+            ui_state = itemView.findViewById(R.id.task_state);
+            ui_action = itemView.findViewById(R.id.task_action_run);
+            ui_check = itemView.findViewById(R.id.task_check);
+            ui_pinned = itemView.findViewById(R.id.task_pinned);
+            ui_last_run_time = itemView.findViewById(R.id.task_last_running_time);
+            ui_last_execution_time = itemView.findViewById(R.id.task_last_execution_time);
+            ui_next_execution_time = itemView.findViewById(R.id.task_next_execution_time);
+        }
     }
 }
+
+
