@@ -13,6 +13,7 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
@@ -28,46 +29,34 @@ public class PagerFragment extends BaseFragment {
     private DepItemAdapter depItemAdapter;
     private PagerAdapter.PagerActionListener pagerActionListener;
 
-    private SmartRefreshLayout layout_refresh;
-    private RecyclerView layout_recycler;
+    private SmartRefreshLayout ui_refresh;
+    private RecyclerView ui_recycler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fg_dep_pager, container, false);
 
-        layout_refresh = view.findViewById(R.id.refreshLayout);
-        layout_recycler = view.findViewById(R.id.recyclerView);
+        ui_refresh = view.findViewById(R.id.refreshLayout);
+        ui_recycler = view.findViewById(R.id.recyclerView);
 
         init();
 
         return view;
     }
 
-    /**
-     * viewPager中切换fragment会触发该回调 而fragmentLayout则不会
-     */
     @Override
     public void onResume() {
         super.onResume();
-        firstLoad();
-    }
-
-    private void firstLoad() {
-        if (!initDataFlag && !RequestManager.isRequesting(getNetRequestID())) {
-            new Handler().postDelayed(() -> {
-                if (isVisible()) {
-                    netGetDependencies();
-                }
-            }, 1000);
-        }
+        initData();
     }
 
     @Override
     protected void init() {
         //适配器
         depItemAdapter = new DepItemAdapter(requireContext());
-        layout_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
-        layout_recycler.setAdapter(depItemAdapter);
+        ui_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
+        Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
+        ui_recycler.setAdapter(depItemAdapter);
 
         depItemAdapter.setItemInterface(new DepItemAdapter.ItemActionListener() {
             @Override
@@ -91,47 +80,18 @@ public class PagerFragment extends BaseFragment {
 
         //刷新控件//
         //初始设置处于刷新状态
-        layout_refresh.autoRefreshAnimationOnly();
-        layout_refresh.setOnRefreshListener(refreshLayout -> netGetDependencies());
+        ui_refresh.autoRefreshAnimationOnly();
+        ui_refresh.setOnRefreshListener(refreshLayout -> netGetDependencies());
     }
 
-    private void netGetDependencies() {
-        QLApiController.getDependencies(getNetRequestID(), "", this.type, new QLApiController.NetGetDependenciesCallback() {
-            @Override
-            public void onSuccess(QLDependenceRes res) {
-                depItemAdapter.setData(res.getData());
-                initDataFlag = true;
-                this.onEnd(true);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                ToastUnit.showShort("加载失败：" + msg);
-                this.onEnd(false);
-            }
-
-            protected void onEnd(boolean isSuccess) {
-                if (layout_refresh.isRefreshing()) {
-                    layout_refresh.finishRefresh(isSuccess);
+    private void initData() {
+        if (!initDataFlag && !RequestManager.isRequesting(getNetRequestID())) {
+            new Handler().postDelayed(() -> {
+                if (isVisible()) {
+                    netGetDependencies();
                 }
-            }
-        });
-    }
-
-    private void netReinstallDependencies(List<String> ids) {
-        QLApiController.reinstallDependencies(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
-            @Override
-            public void onSuccess() {
-                netGetDependencies();
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                ToastUnit.showShort("请求失败：" + msg);
-                //该接口发送请求成功 但可能会出现响应时间超时问题
-                netGetDependencies();
-            }
-        });
+            }, 1000);
+        }
     }
 
     public void refreshData() {
@@ -166,5 +126,44 @@ public class PagerFragment extends BaseFragment {
 
     public String getType() {
         return this.type;
+    }
+
+    private void netGetDependencies() {
+        QLApiController.getDependencies(getNetRequestID(), "", this.type, new QLApiController.NetGetDependenciesCallback() {
+            @Override
+            public void onSuccess(QLDependenceRes res) {
+                depItemAdapter.setData(res.getData());
+                initDataFlag = true;
+                this.onEnd(true);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort("加载失败：" + msg);
+                this.onEnd(false);
+            }
+
+            protected void onEnd(boolean isSuccess) {
+                if (ui_refresh.isRefreshing()) {
+                    ui_refresh.finishRefresh(isSuccess);
+                }
+            }
+        });
+    }
+
+    private void netReinstallDependencies(List<String> ids) {
+        QLApiController.reinstallDependencies(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
+            @Override
+            public void onSuccess() {
+                netGetDependencies();
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort("请求失败：" + msg);
+                //该接口发送请求成功 但可能会出现响应时间超时问题
+                netGetDependencies();
+            }
+        });
     }
 }

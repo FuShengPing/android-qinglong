@@ -45,58 +45,58 @@ public class DepItemAdapter extends RecyclerView.Adapter<DepItemAdapter.MyViewHo
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         QLDependence dependence = data.get(position);
 
-        holder.layout_title.setText(dependence.getName());
-        holder.layout_time.setText(TimeUnit.formatTimeA(dependence.getCreated()));
+        holder.ui_title.setText(dependence.getName());
+        holder.ui_time.setText(TimeUnit.formatTimeA(dependence.getCreated()));
 
         if (dependence.getStatus() == 0) {
-            holder.layout_status.setText("安装中");
-            holder.layout_status.setTextColor(context.getColor(R.color.text_color_49));
+            holder.ui_status.setText("安装中");
+            holder.ui_status.setTextColor(context.getColor(R.color.text_color_49));
         } else if (dependence.getStatus() == 1) {
-            holder.layout_status.setText("已安装");
-            holder.layout_status.setTextColor(context.getColor(R.color.theme_color_shadow));
+            holder.ui_status.setText("已安装");
+            holder.ui_status.setTextColor(context.getColor(R.color.theme_color_shadow));
         } else if (dependence.getStatus() == 2) {
-            holder.layout_status.setText("安装失败");
-            holder.layout_status.setTextColor(context.getColor(R.color.text_color_red));
+            holder.ui_status.setText("安装失败");
+            holder.ui_status.setTextColor(context.getColor(R.color.text_color_red));
         } else {
-            holder.layout_status.setText("卸载中");
-            holder.layout_status.setTextColor(context.getColor(R.color.text_color_49));
+            holder.ui_status.setText("卸载中");
+            holder.ui_status.setTextColor(context.getColor(R.color.text_color_49));
         }
 
         //处于选择状态
         if (this.checkState) {
-            holder.layout_check.setChecked(this.dataCheckState != null && this.dataCheckState[position]);
-            holder.layout_check.setOnCheckedChangeListener((buttonView, isChecked) -> dataCheckState[holder.getAdapterPosition()] = isChecked);
-            holder.layout_check.setVisibility(View.VISIBLE);
+            holder.ui_check.setChecked(this.dataCheckState != null && this.dataCheckState[position]);
+            holder.ui_check.setOnCheckedChangeListener((buttonView, isChecked) -> dataCheckState[holder.getAdapterPosition()] = isChecked);
+            holder.ui_check.setVisibility(View.VISIBLE);
         } else {
-            holder.layout_check.setVisibility(View.GONE);
+            holder.ui_check.setVisibility(View.GONE);
         }
 
         holder.itemView.setOnClickListener(v -> {
             if (this.checkState) {
-                holder.layout_check.setChecked(!holder.layout_check.isChecked());
+                holder.ui_check.setChecked(!holder.ui_check.isChecked());
             }
         });
 
-        holder.layout_title.setOnClickListener(v -> {
+        holder.ui_title.setOnClickListener(v -> {
             if (this.checkState) {
-                holder.layout_check.setChecked(!holder.layout_check.isChecked());
+                holder.ui_check.setChecked(!holder.ui_check.isChecked());
             } else {
                 itemActionListener.onDetail(dependence, holder.getAdapterPosition());
             }
         });
 
-        holder.layout_title.setOnLongClickListener(v -> {
+        holder.ui_title.setOnLongClickListener(v -> {
             if (!this.checkState) {
                 itemActionListener.onMulAction(dependence, holder.getAdapterPosition());
             }
             return true;
         });
 
-        holder.layout_bug.setOnClickListener(v -> {
+        holder.ui_bug.setOnClickListener(v -> {
             if (!this.checkState) {
                 itemActionListener.onReinstall(dependence, holder.getAdapterPosition());
             } else {
-                holder.layout_check.setChecked(!holder.layout_check.isChecked());
+                holder.ui_check.setChecked(!holder.ui_check.isChecked());
             }
         });
 
@@ -170,20 +170,20 @@ public class DepItemAdapter extends RecyclerView.Adapter<DepItemAdapter.MyViewHo
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView layout_title;
-        public TextView layout_time;
-        public TextView layout_status;
-        public CheckBox layout_check;
-        public ImageView layout_bug;
+        public TextView ui_title;
+        public TextView ui_time;
+        public TextView ui_status;
+        public CheckBox ui_check;
+        public ImageView ui_bug;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            layout_title = itemView.findViewById(R.id.item_title);
-            layout_time = itemView.findViewById(R.id.dep_item_time);
-            layout_status = itemView.findViewById(R.id.dep_item_status);
-            layout_check = itemView.findViewById(R.id.item_check);
-            layout_bug = itemView.findViewById(R.id.dep_action_bug);
+            ui_title = itemView.findViewById(R.id.item_title);
+            ui_time = itemView.findViewById(R.id.dep_item_time);
+            ui_status = itemView.findViewById(R.id.dep_item_status);
+            ui_check = itemView.findViewById(R.id.item_check);
+            ui_bug = itemView.findViewById(R.id.dep_action_bug);
 
         }
     }
