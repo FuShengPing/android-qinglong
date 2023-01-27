@@ -136,6 +136,7 @@ public class PopupWindowBuilder {
         Button ui_cancel = view.findViewById(R.id.pop_common_bt_cancel);
 
         ui_title.setText(listWindow.getTitle());
+        ui_cancel.setText(listWindow.getCancelTip());
         ui_recyclerView.setLayoutManager(new LinearLayoutManager(activity, RecyclerView.VERTICAL, false));
         ui_recyclerView.setAdapter((RecyclerView.Adapter) listWindow.getAdapter());
 

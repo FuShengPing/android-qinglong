@@ -2,6 +2,7 @@ package auto.qinglong.views.popup;
 
 public class ListWindow<T> {
     private String title;
+    private String cancelTip = "取消";
     private T adapter;
     private OnActionListener listener;
 
@@ -33,6 +34,14 @@ public class ListWindow<T> {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getCancelTip() {
+        return cancelTip;
+    }
+
+    public void setCancelTip(String cancelTip) {
+        this.cancelTip = cancelTip;
     }
 
     public OnActionListener getListener() {
