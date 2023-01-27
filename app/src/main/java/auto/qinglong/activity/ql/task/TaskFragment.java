@@ -357,6 +357,11 @@ public class TaskFragment extends BaseFragment {
         });
     }
 
+    @Override
+    public void setMenuClickListener(MenuClickListener menuClickListener) {
+        this.mMenuClickListener = menuClickListener;
+    }
+
     private void initData() {
         if (loadSuccessFlag || RequestManager.isRequesting(this.getNetRequestID())) {
             return;
@@ -368,11 +373,7 @@ public class TaskFragment extends BaseFragment {
         }, 1000);
     }
 
-    public void setMenuClickListener(MenuClickListener menuClickListener) {
-        this.mMenuClickListener = menuClickListener;
-    }
-
-    public void showPopWindowMiniMore() {
+    private void showPopWindowMiniMore() {
         MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
         miniMoreWindow.setTargetView(ui_bar);
         miniMoreWindow.setGravity(Gravity.END);
@@ -398,7 +399,7 @@ public class TaskFragment extends BaseFragment {
         PopupWindowBuilder.buildMiniMoreWindow(requireActivity(), miniMoreWindow);
     }
 
-    public void showPopWindowEdit(QLTask qlTask) {
+    private void showPopWindowEdit(QLTask qlTask) {
         ui_pop_edit = new EditWindow("新建任务", "取消", "确定");
         EditWindowItem itemName = new EditWindowItem("name", null, "名称", "请输入任务名称");
         EditWindowItem itemCommand = new EditWindowItem("command", null, "命令", "请输入要执行的命令");
@@ -462,7 +463,7 @@ public class TaskFragment extends BaseFragment {
         PopupWindowBuilder.buildEditWindow(requireActivity(), ui_pop_edit);
     }
 
-    public void changeBar(BarType barType) {
+    private void changeBar(BarType barType) {
         if (ui_bar_search.getVisibility() == View.VISIBLE) {
             WindowUnit.hideKeyboard(ui_root);
             ui_bar_search.setVisibility(View.INVISIBLE);
@@ -487,6 +488,7 @@ public class TaskFragment extends BaseFragment {
             ui_bar_actions.setVisibility(View.VISIBLE);
         }
     }
+
 
     private void backupData() {
         if (!FileUtil.checkPermission()) {
@@ -513,7 +515,7 @@ public class TaskFragment extends BaseFragment {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String content = gson.toJson(jsonArray);
         try {
-            boolean result = FileUtil.save(FileUtil.getScriptPath(), fileName, content);
+            boolean result = FileUtil.save(FileUtil.getTaskPath(), fileName, content);
             if (result) {
                 ToastUnit.showShort("备份成功：" + fileName);
             } else {
@@ -525,7 +527,7 @@ public class TaskFragment extends BaseFragment {
 
     }
 
-    public void netGetTasks(String searchValue, boolean needTip) {
+    private void netGetTasks(String searchValue, boolean needTip) {
         QLApiController.getTasks(getNetRequestID(), searchValue, new QLApiController.NetGetTasksCallback() {
             @Override
             public void onSuccess(QLTasksRes res) {
@@ -550,7 +552,7 @@ public class TaskFragment extends BaseFragment {
         });
     }
 
-    public void netRunTasks(List<String> ids, boolean isFromBar) {
+    private void netRunTasks(List<String> ids, boolean isFromBar) {
         if (RequestManager.isRequesting(getNetRequestID())) {
             return;
         }
@@ -572,7 +574,7 @@ public class TaskFragment extends BaseFragment {
 
     }
 
-    public void netStopTasks(List<String> ids, boolean isFromBar) {
+    private void netStopTasks(List<String> ids, boolean isFromBar) {
         QLApiController.stopTasks(getNetRequestID(), ids, new QLApiController.NetRunTaskCallback() {
             @Override
             public void onSuccess(String msg) {
@@ -590,7 +592,7 @@ public class TaskFragment extends BaseFragment {
         });
     }
 
-    public void netEnableTasks(List<String> ids) {
+    private void netEnableTasks(List<String> ids) {
         QLApiController.enableTasks(getNetRequestID(), ids, new QLApiController.NetRunTaskCallback() {
             @Override
             public void onSuccess(String msg) {
@@ -608,7 +610,7 @@ public class TaskFragment extends BaseFragment {
         });
     }
 
-    public void netDisableTasks(List<String> ids) {
+    private void netDisableTasks(List<String> ids) {
         QLApiController.disableTasks(getNetRequestID(), ids, new QLApiController.NetRunTaskCallback() {
             @Override
             public void onSuccess(String msg) {
@@ -626,7 +628,7 @@ public class TaskFragment extends BaseFragment {
         });
     }
 
-    public void netPinTasks(List<String> ids) {
+    private void netPinTasks(List<String> ids) {
         QLApiController.pinTasks(getNetRequestID(), ids, new QLApiController.NetRunTaskCallback() {
             @Override
             public void onSuccess(String msg) {
@@ -644,7 +646,7 @@ public class TaskFragment extends BaseFragment {
         });
     }
 
-    public void netUnpinTasks(List<String> ids) {
+    private void netUnpinTasks(List<String> ids) {
         QLApiController.unpinTasks(getNetRequestID(), ids, new QLApiController.NetRunTaskCallback() {
             @Override
             public void onSuccess(String msg) {
@@ -662,7 +664,7 @@ public class TaskFragment extends BaseFragment {
         });
     }
 
-    public void netDeleteTasks(List<String> ids) {
+    private void netDeleteTasks(List<String> ids) {
         QLApiController.deleteTasks(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
@@ -680,7 +682,7 @@ public class TaskFragment extends BaseFragment {
         });
     }
 
-    public void netEditTask(QLTask QLTask) {
+    private void netEditTask(QLTask QLTask) {
         QLApiController.editTask(getNetRequestID(), QLTask, new QLApiController.NetEditTaskCallback() {
             @Override
             public void onSuccess(QLTask QLTask) {
@@ -696,7 +698,7 @@ public class TaskFragment extends BaseFragment {
         });
     }
 
-    public void netAddTask(QLTask QLTask) {
+    private void netAddTask(QLTask QLTask) {
         QLApiController.addTask(getNetRequestID(), QLTask, new QLApiController.NetEditTaskCallback() {
             @Override
             public void onSuccess(QLTask QLTask) {
