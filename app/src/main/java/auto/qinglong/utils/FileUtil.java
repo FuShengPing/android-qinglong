@@ -9,8 +9,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import auto.qinglong.MyApplication;
 
@@ -28,9 +33,9 @@ public class FileUtil {
         internalStorage = MyApplication.getContext().getFilesDir().getAbsolutePath();
     }
 
-    public static boolean save(String parentPath, String fileName, String content) throws Exception {
-        File file = new File(parentPath, fileName);
-        File dir = new File(parentPath);
+    public static boolean save(String dirPath, String fileName, String content) throws Exception {
+        File file = new File(dirPath, fileName);
+        File dir = new File(dirPath);
         if (!dir.exists()) {
             dir.mkdirs();
         }
@@ -38,6 +43,17 @@ public class FileUtil {
         fileOutputStream.write(content.getBytes(StandardCharsets.UTF_8));
         fileOutputStream.close();
         return true;
+    }
+
+    public static List<File> getFiles(String dir, FilenameFilter filter) {
+        File file = new File(dir);
+        if (file.exists() && file.isDirectory()) {
+            File[] list = file.listFiles(filter);
+            if (list != null) {
+                return Arrays.asList(list);
+            }
+        }
+        return new ArrayList<>();
     }
 
     public static String getEnvPath() {

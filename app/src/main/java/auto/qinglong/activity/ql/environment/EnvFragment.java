@@ -23,6 +23,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -39,6 +41,7 @@ import auto.qinglong.network.http.ApiController;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.FileUtil;
+import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.TimeUnit;
 import auto.qinglong.utils.ToastUnit;
@@ -283,6 +286,9 @@ public class EnvFragment extends BaseFragment {
                 case "quickAdd":
                     showPopWindowQuickEdit();
                     break;
+                case "localAdd":
+                    localAddData();
+                    break;
                 case "remoteAdd":
                     showPopWindowRemoteEdit();
                     break;
@@ -431,6 +437,10 @@ public class EnvFragment extends BaseFragment {
         PopupWindowBuilder.buildEditWindow(requireActivity(), editWindow);
     }
 
+    private void showPopWindowLocalAdd(List<File> data) {
+
+    }
+
     private void changeBar(BarType barType) {
         if (ui_bar_search.getVisibility() == View.VISIBLE) {
             WindowUnit.hideKeyboard(ui_root);
@@ -536,6 +546,17 @@ public class EnvFragment extends BaseFragment {
             ToastUnit.showShort("备份失败：" + e.getMessage());
         }
 
+    }
+
+    private void localAddData() {
+        List<File> files = FileUtil.getFiles(FileUtil.getEnvPath(), (dir, name) -> name.endsWith(".json"));
+        if (files.size() == 0) {
+            ToastUnit.showShort("无本地备份数据");
+            return;
+        }
+        for (File file : files) {
+            LogUnit.log(file.getName());
+        }
     }
 
     private void netGetEnvironments(String searchValue, boolean needTip) {

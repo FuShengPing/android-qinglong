@@ -25,6 +25,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +40,7 @@ import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.CronUnit;
 import auto.qinglong.utils.FileUtil;
+import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.TimeUnit;
 import auto.qinglong.utils.ToastUnit;
@@ -387,6 +389,7 @@ public class TaskFragment extends BaseFragment {
                     showPopWindowEdit(null);
                     break;
                 case "localAdd":
+                    localAddData();
                     break;
                 case "backup":
                     backupData();
@@ -489,6 +492,16 @@ public class TaskFragment extends BaseFragment {
         }
     }
 
+    private void localAddData() {
+        List<File> files = FileUtil.getFiles(FileUtil.getTaskPath(), (dir, name) -> name.endsWith(".json"));
+        if (files.size() == 0) {
+            ToastUnit.showShort("无本地备份数据");
+            return;
+        }
+        for (File file : files) {
+            LogUnit.log(file.getName());
+        }
+    }
 
     private void backupData() {
         if (FileUtil.isNeedRequestPermission()) {
