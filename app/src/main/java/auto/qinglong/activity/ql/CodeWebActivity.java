@@ -141,10 +141,17 @@ public class CodeWebActivity extends BaseActivity {
                 ui_nav_bar.setVisibility(View.VISIBLE);
                 WindowUnit.hideKeyboard(ui_webView);
                 QLWebJsManager.setEditable(ui_webView, false);
-                QLWebJsManager.backScript(ui_webView);
+
+                if (TYPE_SCRIPT.equals(type)) {
+                    QLWebJsManager.backScript(ui_webView);
+                }
             });
 
-            ui_edit_save.setOnClickListener(v -> QLWebJsManager.saveScript(ui_webView));
+            ui_edit_save.setOnClickListener(v -> {
+                if (TYPE_SCRIPT.equals(type)) {
+                    QLWebJsManager.saveScript(ui_webView);
+                }
+            });
         }
 
         ui_webView = WebViewBuilder.build(getBaseContext(), ui_web_container, new WebViewClient() {
