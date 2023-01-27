@@ -23,6 +23,7 @@ import java.util.Objects;
 
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
+import auto.qinglong.activity.ql.CodeWebActivity;
 import auto.qinglong.bean.ql.QLScript;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.http.RequestManager;
@@ -34,24 +35,24 @@ public class ScriptFragment extends BaseFragment {
 
     private MenuClickListener menuClickListener;
     private ScriptAdapter scriptAdapter;
-    //原始数据
+    //根数据
     private List<QLScript> oData;
     //可返回操作
     private boolean canBack = false;
 
-    private ImageView layout_menu;
-    private SmartRefreshLayout layout_refresh;
-    private TextView layout_dir_tip;
-    private RecyclerView layout_recycler;
+    private ImageView ui_menu;
+    private SmartRefreshLayout ui_refresh;
+    private TextView ui_dir_tip;
+    private RecyclerView ui_recycler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fg_script, null, false);
 
-        layout_dir_tip = view.findViewById(R.id.script_dir_tip);
-        layout_menu = view.findViewById(R.id.scrip_menu);
-        layout_refresh = view.findViewById(R.id.refreshLayout);
-        layout_recycler = view.findViewById(R.id.recyclerView);
+        ui_dir_tip = view.findViewById(R.id.script_dir_tip);
+        ui_menu = view.findViewById(R.id.scrip_menu);
+        ui_refresh = view.findViewById(R.id.refreshLayout);
+        ui_recycler = view.findViewById(R.id.recyclerView);
 
         init();
 
@@ -61,46 +62,55 @@ public class ScriptFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        firstLoad();
+        initData();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            firstLoad();
+            initData();
         }
     }
 
-    private void firstLoad() {
-        if (!initDataFlag && !RequestManager.isRequesting(getNetRequestID())) {
-            new Handler().postDelayed(() -> {
-                if (isVisible()) {
-                    getScripts();
-                }
-            }, 1000);
-        }
+    @Override
+    public void setMenuClickListener(MenuClickListener menuClickListener) {
+        this.menuClickListener = menuClickListener;
+    }
 
+    @Override
+    public boolean onBackPressed() {
+        if (canBack) {
+            scriptAdapter.setData(oData);
+            ui_dir_tip.setText(getString(R.string.char_path_split));
+            canBack = false;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public void init() {
         scriptAdapter = new ScriptAdapter(requireContext());
-        layout_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
-        Objects.requireNonNull(layout_recycler.getItemAnimator()).setChangeDuration(0);
-        layout_recycler.setAdapter(scriptAdapter);
+        ui_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
+        Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
+        ui_recycler.setAdapter(scriptAdapter);
 
         //item回调
         scriptAdapter.setScriptInterface(new ScriptAdapter.ItemActionListener() {
             @Override
-            public void onEdit(QLScript QLScript) {
-                if (QLScript.getChildren() != null) {
+            public void onEdit(QLScript script) {
+                if (script.getChildren() != null) {
                     canBack = true;
-                    sortAndSetData(QLScript.getChildren(), QLScript.getTitle());
+                    sortAndSetData(script.getChildren(), script.getTitle());
                 } else {
-                    Intent intent = new Intent(getContext(), ScriptDetailActivity.class);
-                    intent.putExtra(ScriptDetailActivity.EXTRA_NAME, QLScript.getTitle());
-                    intent.putExtra(ScriptDetailActivity.EXTRA_PARENT, QLScript.getParent());
+                    Intent intent = new Intent(getContext(), CodeWebActivity.class);
+                    intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_NAME, script.getTitle());
+                    intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_PARENT, script.getParent());
+                    intent.putExtra(CodeWebActivity.EXTRA_TITLE, script.getTitle());
+                    intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_SCRIPT);
+                    intent.putExtra(CodeWebActivity.EXTRA_CAN_EDIT,true);
                     startActivity(intent);
                 }
             }
@@ -115,14 +125,32 @@ public class ScriptFragment extends BaseFragment {
 
         //刷新控件//
         //初始设置处于刷新状态
-        layout_refresh.autoRefreshAnimationOnly();
-        layout_refresh.setOnRefreshListener(refreshLayout -> getScripts());
+        ui_refresh.autoRefreshAnimationOnly();
+        ui_refresh.setOnRefreshListener(refreshLayout -> netGetScripts());
 
         //唤起主导航栏
-        layout_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
+        ui_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
     }
 
-    private void getScripts() {
+    private void initData() {
+        if (!initDataFlag && !RequestManager.isRequesting(getNetRequestID())) {
+            new Handler().postDelayed(() -> {
+                if (isVisible()) {
+                    netGetScripts();
+                }
+            }, 1000);
+        }
+
+    }
+
+    private void sortAndSetData(List<QLScript> data, String dir) {
+        Collections.sort(data);
+        scriptAdapter.setData(data);
+        String text = getString(R.string.char_path_split) + dir;
+        ui_dir_tip.setText(text);
+    }
+
+    private void netGetScripts() {
         QLApiController.getScripts(getNetRequestID(), new QLApiController.NetGetScriptsCallback() {
             @Override
             public void onSuccess(List<QLScript> QLScripts) {
@@ -140,34 +168,11 @@ public class ScriptFragment extends BaseFragment {
             }
 
             private void onEnd(boolean isSuccess) {
-                if (layout_refresh.isRefreshing()) {
-                    layout_refresh.finishRefresh(isSuccess);
+                if (ui_refresh.isRefreshing()) {
+                    ui_refresh.finishRefresh(isSuccess);
                 }
             }
         });
     }
 
-    private void sortAndSetData(List<QLScript> data, String dir) {
-        Collections.sort(data);
-        scriptAdapter.setData(data);
-        String text = getString(R.string.char_path_split) + dir;
-        layout_dir_tip.setText(text);
-    }
-
-    @Override
-    public void setMenuClickListener(MenuClickListener menuClickListener) {
-        this.menuClickListener = menuClickListener;
-    }
-
-    @Override
-    public boolean onBackPressed() {
-        if (canBack) {
-            scriptAdapter.setData(oData);
-            layout_dir_tip.setText(getString(R.string.char_path_split));
-            canBack = false;
-            return true;
-        } else {
-            return false;
-        }
-    }
 }

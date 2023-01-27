@@ -47,7 +47,7 @@
                 android:background="@drawable/style_press_gray"
                 android:clickable="true"
                 android:src="@drawable/ic_write_white"
-                android:visibility="visible" />
+                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/script_refresh"
@@ -56,7 +56,7 @@
                 android:background="@drawable/style_press_gray"
                 android:clickable="true"
                 android:src="@drawable/ic_refresh"
-                android:visibility="visible" />
+                android:visibility="invisible" />
         </LinearLayout>
 
         <LinearLayout

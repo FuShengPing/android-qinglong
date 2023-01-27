@@ -35,6 +35,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activity.ql.CodeWebActivity"
+            android:exported="false"
+            android:launchMode="singleTask" />
+        <activity
             android:name=".activity.plugin.link.PluginLinkActivity"
             android:exported="false"
             android:launchMode="singleTask" />
@@ -48,10 +52,6 @@
             android:launchMode="singleTask" />
         <activity
             android:name=".activity.ql.log.LogDetailActivity"
-            android:exported="false"
-            android:launchMode="singleTask" />
-        <activity
-            android:name=".activity.ql.script.ScriptDetailActivity"
             android:exported="false"
             android:launchMode="singleTask" />
         <activity

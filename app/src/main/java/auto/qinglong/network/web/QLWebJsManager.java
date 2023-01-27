@@ -52,7 +52,6 @@ public class QLWebJsManager {
         webView.evaluateJavascript(script, null);
     }
 
-
     public static void initLog(WebView webView, String host, String authorization, String path) {
         if (webView == null) {
             return;
@@ -68,7 +67,6 @@ public class QLWebJsManager {
         String script = "javascript:refreshLog()";
         webView.evaluateJavascript(script, null);
     }
-
 
     public static void initScript(WebView webView, String host, String authorization, String filename, String path) {
         if (webView == null) {

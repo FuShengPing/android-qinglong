@@ -42,27 +42,27 @@ public class ScriptAdapter extends RecyclerView.Adapter<ScriptAdapter.MyViewHold
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         QLScript qlScript = data.get(position);
 
-        holder.layout_title.setText(qlScript.getTitle());
+        holder.ui_title.setText(qlScript.getTitle());
 
         if (qlScript.getChildren() == null) {
-            holder.layout_num.setText(null);
+            holder.ui_num.setText(null);
         } else {
-            holder.layout_num.setText(qlScript.getChildren().size() + " 项");
+            holder.ui_num.setText(qlScript.getChildren().size() + " 项");
         }
 
         if (qlScript.getChildren() != null) {
-            holder.layout_image.setImageResource(R.drawable.ic_folder);
+            holder.ui_image.setImageResource(R.drawable.ic_folder);
         } else if (qlScript.getTitle().matches(".*\\.(js)|(JS)$")) {
-            holder.layout_image.setImageResource(R.mipmap.ic_file_js);
+            holder.ui_image.setImageResource(R.mipmap.ic_file_js);
         } else if (qlScript.getTitle().matches(".*\\.(py)|(PY)$")) {
-            holder.layout_image.setImageResource(R.mipmap.ic_file_py);
+            holder.ui_image.setImageResource(R.mipmap.ic_file_py);
         } else if (qlScript.getTitle().matches(".*\\.(json)|(JSON)$")) {
-            holder.layout_image.setImageResource(R.mipmap.ic_file_json);
+            holder.ui_image.setImageResource(R.mipmap.ic_file_json);
         } else {
-            holder.layout_image.setImageResource(R.mipmap.ic_file_unknow);
+            holder.ui_image.setImageResource(R.mipmap.ic_file_unknow);
         }
 
-        holder.layout_mtime.setText(TimeUnit.formatTimeB((long) qlScript.getMtime()));
+        holder.ui_mtime.setText(TimeUnit.formatTimeB((long) qlScript.getMtime()));
 
         holder.itemView.setOnClickListener(v -> scriptInterface.onEdit(qlScript));
 
@@ -95,17 +95,17 @@ public class ScriptAdapter extends RecyclerView.Adapter<ScriptAdapter.MyViewHold
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        public ImageView layout_image;
-        public TextView layout_title;
-        public TextView layout_num;
-        public TextView layout_mtime;
+        public ImageView ui_image;
+        public TextView ui_title;
+        public TextView ui_num;
+        public TextView ui_mtime;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            layout_image = itemView.findViewById(R.id.item_file_image);
-            layout_title = itemView.findViewById(R.id.item_file_title);
-            layout_num = itemView.findViewById(R.id.item_file_num);
-            layout_mtime = itemView.findViewById(R.id.item_file_time);
+            ui_image = itemView.findViewById(R.id.item_file_image);
+            ui_title = itemView.findViewById(R.id.item_file_title);
+            ui_num = itemView.findViewById(R.id.item_file_num);
+            ui_mtime = itemView.findViewById(R.id.item_file_time);
         }
     }
 
