@@ -528,6 +528,12 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void localAddData() {
+        if (FileUtil.isNeedRequestPermission()) {
+            ToastUnit.showShort("请授予应用读写存储权限");
+            FileUtil.requestPermission(requireActivity());
+            return;
+        }
+
         List<File> files = FileUtil.getFiles(FileUtil.getTaskPath(), (dir, name) -> name.endsWith(".json"));
         if (files.size() == 0) {
             ToastUnit.showShort("无本地备份数据");
