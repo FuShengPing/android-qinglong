@@ -28,6 +28,7 @@ public class CodeWebActivity extends BaseActivity {
     public static final String EXTRA_LOG_PATH = "logPath";
     public static final String EXTRA_SCRIPT_NAME = "scriptName";
     public static final String EXTRA_SCRIPT_PARENT = "scriptParent";
+    public static final String EXTRA_DEPENDENCE_ID = "dependenceId";
     public static final String EXTRA_CAN_REFRESH = "canRefresh";
     public static final String EXTRA_CAN_EDIT = "canEdit";
     public static final String TYPE_LOG = "log";
@@ -41,6 +42,7 @@ public class CodeWebActivity extends BaseActivity {
     private String scriptName;
     private String scriptParent;
     private String logPath;
+    private String dependenceId;
 
     private LinearLayout ui_nav_bar;
     private ImageView ui_back;
@@ -65,6 +67,7 @@ public class CodeWebActivity extends BaseActivity {
         scriptName = getIntent().getStringExtra(EXTRA_SCRIPT_NAME);
         scriptParent = getIntent().getStringExtra(EXTRA_SCRIPT_PARENT);
         logPath = getIntent().getStringExtra(EXTRA_LOG_PATH);
+        dependenceId = getIntent().getStringExtra(EXTRA_DEPENDENCE_ID);
 
         ui_nav_bar = findViewById(R.id.script_bar);
         ui_back = findViewById(R.id.script_back);
@@ -122,6 +125,9 @@ public class CodeWebActivity extends BaseActivity {
                     case TYPE_LOG:
                         QLWebJsManager.refreshLog(ui_webView);
                         break;
+                    case TYPE_DEPENDENCE:
+                        QLWebJsManager.refreshDependence(ui_webView);
+                        break;
                     default:
                         break;
                 }
@@ -163,6 +169,9 @@ public class CodeWebActivity extends BaseActivity {
                         break;
                     case TYPE_LOG:
                         QLWebJsManager.initLog(ui_webView, Objects.requireNonNull(AccountSP.getCurrentAccount()).getBaseUrl(), AccountSP.getCurrentAccount().getAuthorization(), logPath);
+                        break;
+                    case TYPE_DEPENDENCE:
+                        QLWebJsManager.initDependence(ui_webView, Objects.requireNonNull(AccountSP.getCurrentAccount()).getBaseUrl(), AccountSP.getCurrentAccount().getAuthorization(), dependenceId);
                         break;
                     default:
                         break;

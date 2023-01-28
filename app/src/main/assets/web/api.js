@@ -26,6 +26,9 @@ var config_isValid;
 //log
 var log_path;
 
+//dependence
+var dependence_id
+
 
 function initEditor() {
     editor = CodeMirror.fromTextArea(document.getElementById("code"), {
@@ -245,4 +248,43 @@ function backScript() {
     }
 }
 
+/*
+依赖日志模块
+*/
+function initDependence(host, authorization,id) {
+    _host = host;//主址
+    _authorization = authorization;//授权码
+    dependence_id = id;
+
+    getDependenceLog()
+}
+
+function getDependenceLog() {
+    url = _host + "api/dependencies/"+dependence_id
+    headers = { "Authorization": _authorization }
+
+    axios.get(url, { headers: headers })
+        .then(function (response) {
+            body = response.data
+            if (body['code'] == 200) {
+                var log = ""
+                for(var i=0;i<body['data']['log'].length;i++){
+                    log += body['data']['log'][i]
+                }
+                setCode(log);
+                Android.toast(SUCCESS_LOAD);
+            } else if (body['code'] == 401) {
+                setCode(ERROR_AUTHORIZATION);
+            } else {
+                setCode(ERROR_RESPONSE);
+            }
+        }).catch(function (error) {
+            setCode("请求异常：" + error['message'])
+        })
+}
+
+
+function refreshDependence() {
+    getDependenceLog()
+}
 

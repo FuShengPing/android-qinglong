@@ -68,6 +68,22 @@ public class QLWebJsManager {
         webView.evaluateJavascript(script, null);
     }
 
+    public static void initDependence(WebView webView, String host, String authorization, String id) {
+        if (webView == null) {
+            return;
+        }
+        String script = String.format("javascript:initDependence('%1$s','%2$s','%3$s')", host, authorization, id);
+        webView.evaluateJavascript(script, null);
+    }
+
+    public static void refreshDependence(WebView webView) {
+        if (webView == null) {
+            return;
+        }
+        String script = "javascript:refreshDependence()";
+        webView.evaluateJavascript(script, null);
+    }
+
     public static void initScript(WebView webView, String host, String authorization, String filename, String path) {
         if (webView == null) {
             return;

@@ -1,5 +1,6 @@
 package auto.qinglong.activity.ql.dependence;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import java.util.Objects;
 
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
+import auto.qinglong.activity.ql.CodeWebActivity;
 import auto.qinglong.bean.ql.QLDependence;
 import auto.qinglong.bean.ql.network.QLDependenceRes;
 import auto.qinglong.network.http.QLApiController;
@@ -67,13 +69,18 @@ public class PagerFragment extends BaseFragment {
 
             @Override
             public void onDetail(QLDependence dependence, int position) {
+                Intent intent = new Intent(getContext(), CodeWebActivity.class);
+                intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_DEPENDENCE);
+                intent.putExtra(CodeWebActivity.EXTRA_TITLE, dependence.getName());
+                intent.putExtra(CodeWebActivity.EXTRA_DEPENDENCE_ID, dependence.getId());
 
+                startActivity(intent);
             }
 
             @Override
             public void onReinstall(QLDependence dependence, int position) {
                 List<String> ids = new ArrayList<>();
-                ids.add(dependence.get_id());
+                ids.add(dependence.getId());
                 netReinstallDependencies(ids);
             }
         });
@@ -101,7 +108,7 @@ public class PagerFragment extends BaseFragment {
     public List<String> getCheckedItemIds() {
         List<String> ids = new ArrayList<>();
         for (QLDependence dependence : depItemAdapter.getCheckedItems()) {
-            ids.add(dependence.get_id());
+            ids.add(dependence.getId());
         }
         return ids;
     }

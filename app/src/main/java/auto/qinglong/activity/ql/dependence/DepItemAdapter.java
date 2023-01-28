@@ -50,15 +50,21 @@ public class DepItemAdapter extends RecyclerView.Adapter<DepItemAdapter.MyViewHo
 
         if (dependence.getStatus() == 0) {
             holder.ui_status.setText("安装中");
-            holder.ui_status.setTextColor(context.getColor(R.color.text_color_49));
+            holder.ui_status.setTextColor(context.getColor(R.color.theme_color_shadow));
         } else if (dependence.getStatus() == 1) {
             holder.ui_status.setText("已安装");
             holder.ui_status.setTextColor(context.getColor(R.color.theme_color_shadow));
         } else if (dependence.getStatus() == 2) {
             holder.ui_status.setText("安装失败");
             holder.ui_status.setTextColor(context.getColor(R.color.text_color_red));
+        } else if (dependence.getStatus() == 3) {
+            holder.ui_status.setText("删除中");
+            holder.ui_status.setTextColor(context.getColor(R.color.text_color_red));
+        } else if (dependence.getStatus() == 5) {
+            holder.ui_status.setText("卸载失败");
+            holder.ui_status.setTextColor(context.getColor(R.color.text_color_red));
         } else {
-            holder.ui_status.setText("卸载中");
+            holder.ui_status.setText("未知");
             holder.ui_status.setTextColor(context.getColor(R.color.text_color_49));
         }
 
@@ -169,7 +175,7 @@ public class DepItemAdapter extends RecyclerView.Adapter<DepItemAdapter.MyViewHo
         void onReinstall(QLDependence dependence, int position);
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView ui_title;
         public TextView ui_time;
         public TextView ui_status;
