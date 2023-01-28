@@ -127,7 +127,7 @@ public interface QLApi {
     Call<QLBaseRes> deleteDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //重装依赖
-    @PUT("api/dependencies/reinstall?t=1662824091642")
+    @PUT("api/dependencies/reinstall")
     Call<QLBaseRes> reinstallDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
 
     //获取日志列表

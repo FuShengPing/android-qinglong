@@ -141,6 +141,7 @@ public class PagerFragment extends BaseFragment {
             public void onSuccess(QLDependenceRes res) {
                 depItemAdapter.setData(res.getData());
                 initDataFlag = true;
+                ToastUnit.showShort("加载成功：" + res.getData().size());
                 this.onEnd(true);
             }
 
@@ -150,7 +151,7 @@ public class PagerFragment extends BaseFragment {
                 this.onEnd(false);
             }
 
-            protected void onEnd(boolean isSuccess) {
+            private void onEnd(boolean isSuccess) {
                 if (ui_refresh.isRefreshing()) {
                     ui_refresh.finishRefresh(isSuccess);
                 }
@@ -168,7 +169,6 @@ public class PagerFragment extends BaseFragment {
             @Override
             public void onFailure(String msg) {
                 ToastUnit.showShort("请求失败：" + msg);
-                //该接口发送请求成功 但可能会出现响应时间超时问题
                 netGetDependencies();
             }
         });
