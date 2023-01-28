@@ -3,7 +3,7 @@
   "versionName": "1.4",
   "isForce": true,
   "updateTime": "2023-01-28",
-  "downloadUrl": "https://gitee.com/wsfsp4/QingLong/releases/download/V1.3/app-release.apk",
+  "downloadUrl": "https://gitee.com/wsfsp4/QingLong/releases/download/V1.4/app-release.apk",
   "updateDetail": [
     "(1)限制面板版本2.10.x可用",
     "(2)修复无法使用域名方式登录问题",
