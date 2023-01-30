@@ -1,6 +1,7 @@
 package auto.qinglong.network.http;
 
 import auto.qinglong.bean.ql.network.QLBaseRes;
+import auto.qinglong.bean.ql.network.QLConfigRes;
 import auto.qinglong.bean.ql.network.QLDependenceRes;
 import auto.qinglong.bean.ql.network.QLEditEnvRes;
 import auto.qinglong.bean.ql.network.QLEditTaskRes;
@@ -96,7 +97,7 @@ public interface QLApi {
 
     //读取配置文件
     @GET("api/configs/config.sh")
-    Call<QLBaseRes> getConfig(@Header("Authorization") String authorization);
+    Call<QLConfigRes> getConfig(@Header("Authorization") String authorization);
 
     //保存配置文件
     @POST("api/configs/save")

@@ -14,6 +14,7 @@ import auto.qinglong.bean.ql.QLLog;
 import auto.qinglong.bean.ql.QLScript;
 import auto.qinglong.bean.ql.QLTask;
 import auto.qinglong.bean.ql.network.QLBaseRes;
+import auto.qinglong.bean.ql.network.QLConfigRes;
 import auto.qinglong.bean.ql.network.QLDependenceRes;
 import auto.qinglong.bean.ql.network.QLEditEnvRes;
 import auto.qinglong.bean.ql.network.QLEditTaskRes;
@@ -1008,34 +1009,35 @@ public class QLApiController {
     }
 
     public static void getConfigDetail(@NonNull String requestId, @NonNull NetConfigCallback callback) {
-        Call<QLBaseRes> call = new Retrofit.Builder()
+        Call<QLConfigRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
                 .getConfig(AccountSP.getCurrentAccount().getAuthorization());
 
-        call.enqueue(new Callback<QLBaseRes>() {
+        call.enqueue(new Callback<QLConfigRes>() {
             @Override
-            public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+            public void onResponse(Call<QLConfigRes> call, Response<QLConfigRes> response) {
                 RequestManager.finishCall(requestId);
-                if (response.body() == null) {
+                QLConfigRes res = response.body();
+                if (res == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
                     } else {
                         callback.onFailure(ERROR_NO_BODY);
                     }
                 } else {
-//                    if (scriptRes.getCode() == 200) {
-//                        callback.onSuccess(scriptRes.getData());
-//                    } else {
-//                        callback.onFailure(scriptRes.getMessage());
-//                    }
+                    if (res.getCode() == 200) {
+                        callback.onSuccess(res.getData());
+                    } else {
+                        callback.onFailure(res.getMessage());
+                    }
                 }
             }
 
             @Override
-            public void onFailure(Call<QLBaseRes> call, Throwable t) {
+            public void onFailure(Call<QLConfigRes> call, Throwable t) {
                 RequestManager.finishCall(requestId);
                 if (call.isCanceled()) {
                     return;
