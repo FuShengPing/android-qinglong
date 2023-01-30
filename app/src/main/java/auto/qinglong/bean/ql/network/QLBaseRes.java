@@ -19,4 +19,5 @@ public class QLBaseRes {
     public void setMessage(String message) {
         this.message = message;
     }
+
 }

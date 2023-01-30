@@ -2,26 +2,8 @@ package auto.qinglong.bean.ql.network;
 
 import auto.qinglong.bean.ql.QLTask;
 
-public class QLEditTaskRes {
-    private int code;
-    private String message;
+public class QLEditTaskRes extends QLBaseRes{
     private QLTask data;
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
     public QLTask getData() {
         return data;

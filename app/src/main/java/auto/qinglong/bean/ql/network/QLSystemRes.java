@@ -2,26 +2,8 @@ package auto.qinglong.bean.ql.network;
 
 import auto.qinglong.bean.ql.QLSystemData;
 
-public class QLSystemRes {
-    private int code;
-    private String message;
+public class QLSystemRes extends QLBaseRes{
     private QLSystemData data;
-    
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
     public QLSystemData getData() {
         return data;

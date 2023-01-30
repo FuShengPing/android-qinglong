@@ -1007,7 +1007,7 @@ public class QLApiController {
         RequestManager.addCall(call, requestId);
     }
 
-    public static void getConfigDetail(@NonNull String requestId, @NonNull NetBaseCallback callback) {
+    public static void getConfigDetail(@NonNull String requestId, @NonNull NetConfigCallback callback) {
         Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -1026,7 +1026,11 @@ public class QLApiController {
                         callback.onFailure(ERROR_NO_BODY);
                     }
                 } else {
-                    callback.onSuccess();
+//                    if (scriptRes.getCode() == 200) {
+//                        callback.onSuccess(scriptRes.getData());
+//                    } else {
+//                        callback.onFailure(scriptRes.getMessage());
+//                    }
                 }
             }
 
@@ -1387,6 +1391,11 @@ public class QLApiController {
         RequestManager.addCall(call, requestId);
     }
 
+    public interface NetBaseCallback {
+        void onSuccess();
+
+        void onFailure(String msg);
+    }
 
     public interface NetSystemCallback {
         void onSuccess(QLSystemRes systemRes);
@@ -1395,8 +1404,8 @@ public class QLApiController {
 
     }
 
-    public interface NetBaseCallback {
-        void onSuccess();
+    public interface NetConfigCallback {
+        void onSuccess(String content);
 
         void onFailure(String msg);
     }

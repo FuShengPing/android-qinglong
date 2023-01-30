@@ -4,19 +4,8 @@ import java.util.List;
 
 import auto.qinglong.bean.ql.QLTask;
 
-public class QLTasksRes {
-    private int code;
-    private String message;
+public class QLTasksRes extends QLBaseRes {
     private List<QLTask> data;
-
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
 
     public List<QLTask> getData() {
         return data;
@@ -24,13 +13,5 @@ public class QLTasksRes {
 
     public void setData(List<QLTask> data) {
         this.data = data;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 }
