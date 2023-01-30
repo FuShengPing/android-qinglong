@@ -30,7 +30,7 @@ public class CronUnit {
      */
     public static boolean isValid(String expression) {
         try {
-            if (expression == null || expression.isEmpty()) {
+            if (TextUnit.isEmpty(expression)) {
                 return false;
             }
             String[] values = expression.split(" ");
