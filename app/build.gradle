@@ -41,6 +41,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
+    implementation fileTree(dir: 'libs', include: ['*.aar'])
+
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
     //retrofit
@@ -51,7 +53,7 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.15.3'
 
     //gson
-    implementation 'com.google.code.gson:gson:2.9.1'
+    implementation 'com.google.code.gson:gson:2.10.1'
 
     //cron
     implementation 'com.cronutils:cron-utils:9.2.0'
@@ -60,7 +62,4 @@ dependencies {
     implementation 'io.github.scwang90:refresh-layout-kernel:2.0.5'      //核心必须依赖
     implementation 'io.github.scwang90:refresh-header-classics:2.0.5'    //经典刷新头
     implementation 'io.github.scwang90:refresh-footer-classics:2.0.5'    //经典加载
-
-    //leakcanary
-//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 }
