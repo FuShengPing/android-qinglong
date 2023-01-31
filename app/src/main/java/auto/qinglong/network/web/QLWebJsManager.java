@@ -20,6 +20,14 @@ public class QLWebJsManager {
         webView.evaluateJavascript(script, null);
     }
 
+    public static void setContent(WebView webView, String content) {
+        if (webView == null) {
+            return;
+        }
+        String script = String.format("javascript:setCode('%1$s')", content);
+        webView.evaluateJavascript(script, null);
+    }
+
     public static void initConfig(WebView webView, String host, String authorization) {
         if (webView == null) {
             return;

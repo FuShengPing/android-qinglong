@@ -2,8 +2,8 @@
 
 ## 1.软件介绍
 
-青龙面板是支持python3、javaScript、shell、typescript 的定时任务管理面板。本APP基于青龙面板***2.10.13***
-接口开发，支持面板大部分原生功能，同时提供拓展模块，帮助用户快捷管理。
+青龙面板是支持python3、javaScript、shell、typescript 的定时任务管理面板。
+本APP基于青龙面板***2.10.13***接口开发，支持面板大部分原生功能，同时提供拓展模块，帮助用户快捷管理。
 
 ## 2.使用环境
 
@@ -25,9 +25,8 @@
 
 备注：
 1. 部分编辑功能需要长按详细信息位置唤醒；
-2. 变量快捷导入将从输入文本中提取'export xx="xxxx"'内容作为一个变量,支持提取多个变量；
-3. 变量远程导入文件内容格式可参考***examples/envs.json***
-   文件，测试地址为https://gitee.com/wsfsp4/QingLong/raw/master/examples/envs.json；
+2. 变量快捷导入将从输入文本中提取'***export xx="xxxx"***'格式内容作为一个变量,支持同时提取多个变量；
+3. 变量远程导入文件内容格式可参考***examples/envs.json***文件，测试地址为<https://gitee.com/wsfsp4/QingLong/raw/master/examples/envs.json>；
 4. 变量去重将删除相同名称和值的变量；
 5. 任务去重将删除相同命令的任务；
 6. 本地备份文件将保存在外部存储***qinglong***文件夹下；
@@ -42,7 +41,7 @@
 
 备注：
 1. 导入变量功能需要先配置规则，支持手动添加或远程导入；
-2. 规则远程导入文件内容格式可参考examples/rules.json文件，测试地址为https://gitee.com/wsfsp4/QingLong/raw/master/examples/rules.json；
+2. 规则远程导入文件内容格式可参考examples/rules.json文件，测试地址为<https://gitee.com/wsfsp4/QingLong/raw/master/examples/rules.json>；
 
 ##### 3.2.1.1 规则配置个字段说明
 
@@ -65,7 +64,13 @@
 2. 如果规则中提取具体字段，只要一个字段不存在将匹配失败；
 3. 规则中的网址只和原始加载的网址相比较，尽管加载后用户点击页面跳转到其他页面；
 
-## 4.意见反馈
+## 4.下载地址
+[最新版本](https://gitee.com/wsfsp4/QingLong/releases/tag/V1.4)
+[历史版本](https://gitee.com/wsfsp4/QingLong/releases)
+
+## 5.意见反馈
 
 APP还在开发，后续尝试加入更多拓展模块,提供更加强大的功能，有问题和功能需求可以提issue，有空就解决。
+
+如果你有Android开发基础，并且有对该项目有自己的创意，欢迎加入！
 

@@ -18,7 +18,7 @@ public class WebViewBuilder {
         webView.setLayoutParams(layoutParams);
 
         WebSettings webSettings = webView.getSettings();
-        //设置适应Html5
+        //适应Html5
         webSettings.setDomStorageEnabled(true);
         //允许执行js脚本
         webSettings.setJavaScriptEnabled(true);

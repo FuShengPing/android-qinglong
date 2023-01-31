@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.database.sp.AccountSP;
+import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.web.CommonJSInterface;
 import auto.qinglong.network.web.QLWebJsManager;
 import auto.qinglong.utils.WindowUnit;
@@ -127,5 +128,18 @@ public class ConfigFragment extends BaseFragment {
     public void onDestroy() {
         WebViewBuilder.destroy(ui_webView);
         super.onDestroy();
+    }
+
+    private void netGetConfig() {
+        QLApiController.getConfigDetail(getNetRequestID(), new QLApiController.NetConfigCallback() {
+            @Override
+            public void onSuccess(String content) {
+            }
+
+            @Override
+            public void onFailure(String msg) {
+
+            }
+        });
     }
 }
