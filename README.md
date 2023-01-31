@@ -66,6 +66,7 @@
 
 ## 4.下载地址
 [最新版本](https://gitee.com/wsfsp4/QingLong/releases/tag/V1.4)
+
 [历史版本](https://gitee.com/wsfsp4/QingLong/releases)
 
 ## 5.意见反馈

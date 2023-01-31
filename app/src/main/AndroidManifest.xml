@@ -34,6 +34,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activity.app.SettingActivity"
+            android:exported="false"
+            android:launchMode="singleTask" />
+        <activity
             android:name=".activity.ql.CodeWebActivity"
             android:exported="false"
             android:launchMode="singleTask" />

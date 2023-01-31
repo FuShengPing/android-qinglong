@@ -109,15 +109,15 @@ public class HomeActivity extends BaseActivity {
     private void initDrawerBar() {
         ui_drawer_left.setVisibility(View.INVISIBLE);
         //用户信息
-        TextView layout_username = ui_drawer_left.findViewById(R.id.menu_top_info_username);
-        TextView layout_address = ui_drawer_left.findViewById(R.id.menu_top_info_address);
-        layout_username.setText(Objects.requireNonNull(AccountSP.getCurrentAccount()).getUsername());
-        layout_address.setText(AccountSP.getCurrentAccount().getAddress());
+        TextView ui_username = ui_drawer_left.findViewById(R.id.menu_top_info_username);
+        TextView ui_address = ui_drawer_left.findViewById(R.id.menu_top_info_address);
+        ui_username.setText(Objects.requireNonNull(AccountSP.getCurrentAccount()).getUsername());
+        ui_address.setText(AccountSP.getCurrentAccount().getAddress());
         String ip = NetUnit.getIP();
         if (ip != null) {
-            TextView layout_ip = ui_drawer_left.findViewById(R.id.menu_top_info_inner_ip);
-            layout_ip.setText("本地：" + ip);
-            layout_ip.setVisibility(View.VISIBLE);
+            TextView ui_ip = ui_drawer_left.findViewById(R.id.menu_top_info_inner_ip);
+            ui_ip.setText("本地：" + ip);
+            ui_ip.setVisibility(View.VISIBLE);
         }
 
         //导航监听
@@ -133,6 +133,7 @@ public class HomeActivity extends BaseActivity {
         LinearLayout menu_app_exit = ui_drawer_left.findViewById(R.id.menu_exit);
         LinearLayout menu_app_setting = ui_drawer_left.findViewById(R.id.menu_app_setting);
 
+        //面板功能
         menu_task.setOnClickListener(v -> showFragment(TaskFragment.TAG));
 
         menu_log.setOnClickListener(v -> showFragment(LogFragment.TAG));
@@ -149,6 +150,7 @@ public class HomeActivity extends BaseActivity {
             ToastUnit.showShort("暂未开放");
         });
 
+        //拓展模块
         menu_extension_web.setOnClickListener(v -> {
             Intent intent = new Intent(getBaseContext(), PluginWebActivity.class);
             startActivity(intent);
@@ -159,6 +161,7 @@ public class HomeActivity extends BaseActivity {
             startActivity(intent);
         });
 
+        //应用功能
         menu_app_exit.setOnClickListener(v -> {
             Intent intent = new Intent(getBaseContext(), LoginActivity.class);
             startActivity(intent);
@@ -167,7 +170,8 @@ public class HomeActivity extends BaseActivity {
         });
 
         menu_app_setting.setOnClickListener(v -> {
-            ToastUnit.showShort("暂未开放");
+            Intent intent = new Intent(getBaseContext(), SettingActivity.class);
+            startActivity(intent);
         });
 
 
