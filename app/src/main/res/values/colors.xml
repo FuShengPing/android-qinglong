@@ -15,11 +15,14 @@
     <color name="divide_line">#dddddd</color>
     <color name="press_gray">#4ADDDDDD</color>
     <color name="icon_gray">#8B8B8B</color>
-
+    <color name="ripple">#22000000</color>
+    
     <color name="text_color_49">#494949</color>
     <color name="text_color_4">#444444</color>
     <color name="text_color_80">#808080</color>
     <color name="text_color_dd">#bbbbbb</color>
     <color name="text_color_red">#ff4d4f</color>
     <color name="text_script">#40ACA3</color>
+
+
 </resources>

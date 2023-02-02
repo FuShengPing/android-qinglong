@@ -48,7 +48,7 @@
                 android:layout_height="30dp"
                 android:background="@drawable/style_press_gray"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_more_ver" />
+                android:src="@drawable/ic_more_options" />
         </LinearLayout>
     </RelativeLayout>
 

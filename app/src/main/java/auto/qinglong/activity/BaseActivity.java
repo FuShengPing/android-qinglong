@@ -14,8 +14,8 @@ import auto.qinglong.utils.ToastUnit;
 
 public abstract class BaseActivity extends AppCompatActivity {
     public static final String TAG = "BaseActivity";
-    protected  Activity self;
-    protected  Context mContext;
+    protected Activity self;
+    protected Context mContext;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -24,7 +24,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         self = this;
     }
 
-    //设置字体大小不随系统变化
     @Override
     public Resources getResources() {
         Resources res = super.getResources();
@@ -46,7 +45,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        //取消本页面的网络请求
         RequestManager.cancelAllCall(getClass().getName());
         super.onDestroy();
     }

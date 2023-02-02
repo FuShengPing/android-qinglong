@@ -181,7 +181,7 @@ public class DepFragment extends BaseFragment {
 
     private void showPopWindowEdit() {
         ui_pop_edit = new EditWindow("新建依赖", "取消", "确定");
-        ui_pop_edit.setMaxHeight(WindowUnit.getWindowHeightPix() / 3);
+        ui_pop_edit.setMaxHeight(WindowUnit.getWindowHeightPix(requireContext()) / 3);
         String type = mPagerAdapter.getCurrentFragment(ui_page.getCurrentItem()).getType();
         ui_pop_edit.addItem(new EditWindowItem("type", type, "类型", null, false, false));
         ui_pop_edit.addItem(new EditWindowItem("name", null, "名称", "请输入依赖名称"));

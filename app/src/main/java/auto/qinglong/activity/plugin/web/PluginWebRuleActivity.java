@@ -90,7 +90,7 @@ public class PluginWebRuleActivity extends BaseActivity {
 
     private void showPopWindowCommonEdit() {
         EditWindow editWindow = new EditWindow("新建规则", "取消", "确定");
-        editWindow.setMaxHeight(WindowUnit.getWindowHeightPix() / 3);//限制最大高度
+        editWindow.setMaxHeight(WindowUnit.getWindowHeightPix(getBaseContext()) / 3);//限制最大高度
         editWindow.addItem(new EditWindowItem(WebRuleDBHelper.key_envName, null, "环境变量", "", true, true));
         editWindow.addItem(new EditWindowItem(WebRuleDBHelper.key_name, null, "规则名称", "", true, true));
         editWindow.addItem(new EditWindowItem(WebRuleDBHelper.key_url, null, "网址", "", true, true));

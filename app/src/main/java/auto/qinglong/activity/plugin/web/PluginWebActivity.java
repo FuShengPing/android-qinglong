@@ -209,7 +209,7 @@ public class PluginWebActivity extends BaseActivity {
     private void showCookies(String cookies) {
         //配置pop窗体信息
         ConfirmWindow confirmWindow = new ConfirmWindow();
-        confirmWindow.setMaxHeight(WindowUnit.getWindowHeightPix() / 3);//限制最大高度
+        confirmWindow.setMaxHeight(WindowUnit.getWindowHeightPix(getBaseContext()) / 3);//限制最大高度
         confirmWindow.setConfirmTip("拷贝");
         confirmWindow.setCancelTip("取消");
         confirmWindow.setTitle("Cookies");
