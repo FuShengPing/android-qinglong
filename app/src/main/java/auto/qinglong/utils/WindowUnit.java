@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
-import auto.qinglong.MyApplication;
-
 public class WindowUnit {
     /**
      * 隐藏虚拟键盘
@@ -30,16 +28,8 @@ public class WindowUnit {
      * Get window height dp float.
      * 获取屏幕高度 dp
      */
-    public static float getWindowHeightDp() {
-        return px2dip(MyApplication.getContext().getResources().getDisplayMetrics().heightPixels);
-    }
-
-    /**
-     * Gets window height pix.
-     * 获取屏幕高度 pix
-     */
-    public static int getWindowHeightPix() {
-        return MyApplication.getContext().getResources().getDisplayMetrics().heightPixels;
+    public static float getWindowHeightDp(Context context) {
+        return px2dip(context, context.getResources().getDisplayMetrics().heightPixels);
     }
 
     /**
@@ -53,8 +43,8 @@ public class WindowUnit {
     /**
      * 获取屏幕宽度 pix
      */
-    public static int getWindowWidthPix() {
-        return MyApplication.getContext().getResources().getDisplayMetrics().widthPixels;
+    public static int getWindowWidthPix(Context context) {
+        return context.getResources().getDisplayMetrics().widthPixels;
     }
 
     /**
@@ -62,8 +52,8 @@ public class WindowUnit {
      * 获取状态栏高度
      */
     @SuppressLint("InternalInsetResource")
-    public static int getStatusBarHeight() {
-        Resources resources = MyApplication.getContext().getResources();
+    public static int getStatusBarHeight(Context context) {
+        Resources resources = context.getResources();
         int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");//获取状态栏
         int height = resources.getDimensionPixelSize(resourceId);
 
@@ -124,8 +114,8 @@ public class WindowUnit {
      * Dip 2 px int.
      * dp转化成px
      */
-    public static int dip2px(float dp) {
-        final float scale = MyApplication.getContext().getResources().getDisplayMetrics().density;
+    public static int dip2px(Context context, float dp) {
+        final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
     }
 
@@ -136,8 +126,8 @@ public class WindowUnit {
      * @param px the px
      * @return the int
      */
-    public static float px2dip(int px) {
-        final float scale = MyApplication.getContext().getResources().getDisplayMetrics().density;
+    public static float px2dip(Context context, int px) {
+        final float scale = context.getResources().getDisplayMetrics().density;
         return (px / scale + 0.5f);
     }
 }
