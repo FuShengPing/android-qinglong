@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/task_bar"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/height_action_bar"
         android:background="@color/theme_color"
         android:paddingHorizontal="15dp"
         android:paddingVertical="8dp">
