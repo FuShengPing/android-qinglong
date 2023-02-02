@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_action_bar"
+        android:layout_height="@dimen/action_bar_height"
         android:background="@color/theme_color"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -17,9 +17,9 @@
 
         <ImageView
             android:id="@+id/common_bar_back"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@drawable/style_press_gray"
+            android:layout_width="@dimen/action_bar_icon_size"
+            android:layout_height="@dimen/action_bar_icon_size"
+            android:background="@drawable/style_button_ripple"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_arrow_back" />
 
@@ -32,15 +32,15 @@
             android:ellipsize="end"
             android:lines="1"
             android:singleLine="true"
-            android:text="CK助手"
+            android:text="Web助手"
             android:textColor="@color/white"
             android:textSize="18sp" />
 
         <ImageView
             android:id="@+id/bar_rule"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@drawable/style_press_gray"
+            android:layout_width="@dimen/action_bar_icon_size"
+            android:layout_height="@dimen/action_bar_icon_size"
+            android:background="@drawable/style_button_ripple"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_view_list_white" />
     </LinearLayout>

@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/common_bar"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/action_bar_height"
         android:background="@color/theme_color"
         android:gravity="center_vertical"
         android:paddingHorizontal="15dp"
@@ -23,9 +23,9 @@
 
             <ImageView
                 android:id="@+id/common_bar_back"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/style_press_gray"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
+                android:background="@drawable/style_button_ripple"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_arrow_back" />
 
@@ -44,9 +44,9 @@
 
             <ImageView
                 android:id="@+id/bar_more"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/style_press_gray"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
+                android:background="@drawable/style_button_ripple"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_more_options" />
         </LinearLayout>

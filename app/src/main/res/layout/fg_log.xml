@@ -8,7 +8,7 @@
     <RelativeLayout
         android:id="@+id/log_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_action_bar"
+        android:layout_height="@dimen/action_bar_height"
         android:background="@color/theme_color"
         android:clickable="true"
         android:paddingHorizontal="15dp"

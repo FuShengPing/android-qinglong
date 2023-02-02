@@ -21,7 +21,7 @@
             android:id="@+id/menu_top"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/style_press_gray"
+            android:background="@drawable/style_bg_gradient_blue_315"
             android:clickable="true"
             android:gravity="center_vertical"
             android:orientation="vertical"

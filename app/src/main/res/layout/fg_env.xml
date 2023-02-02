@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/env_top_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_action_bar"
+        android:layout_height="@dimen/action_bar_height"
         android:background="@color/theme_color"
         android:paddingHorizontal="15dp"
         android:paddingVertical="8dp">
@@ -25,9 +25,9 @@
 
             <ImageView
                 android:id="@+id/env_menu"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/style_press_gray"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
+                android:background="@drawable/style_button_ripple"
                 android:clickable="true"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_menu" />
@@ -35,22 +35,23 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="1px"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/env_search"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/style_press_gray"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
+                android:background="@drawable/style_button_ripple"
                 android:clickable="true"
                 android:src="@drawable/ic_search" />
 
             <ImageView
                 android:id="@+id/env_more"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
                 android:layout_marginStart="10dp"
-                android:background="@drawable/style_press_gray"
+                android:background="@drawable/style_button_ripple"
                 android:clickable="true"
                 android:src="@drawable/ic_more_options" />
         </LinearLayout>
@@ -66,19 +67,19 @@
 
             <ImageView
                 android:id="@+id/env_bar_search_back"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/style_press_gray"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
+                android:background="@drawable/style_button_ripple"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_arrow_back" />
 
             <EditText
-                android:background="@drawable/style_input_bottom"
                 android:id="@+id/env_bar_search_value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_weight="1"
+                android:background="@drawable/style_input_bottom"
                 android:maxLength="15"
                 android:paddingHorizontal="5dp"
                 android:singleLine="true"
@@ -87,9 +88,9 @@
 
             <ImageView
                 android:id="@+id/env_bar_search_confirm"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/style_press_gray"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
+                android:background="@drawable/style_button_ripple"
                 android:clickable="true"
                 android:src="@drawable/ic_search" />
         </LinearLayout>
@@ -105,16 +106,17 @@
 
             <ImageView
                 android:id="@+id/env_bar_actions_back"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
                 android:layout_marginEnd="40dp"
-                android:background="@drawable/style_press_gray"
+                android:background="@drawable/style_button_ripple"
                 android:src="@drawable/ic_arrow_back" />
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="1px"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:visibility="invisible" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -125,8 +127,8 @@
 
                 <CheckBox
                     android:id="@+id/env_bar_actions_select_all"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/action_bar_icon_size_small"
+                    android:layout_height="@dimen/action_bar_icon_size_small"
                     android:background="@drawable/style_check_box_white"
                     android:button="@null"
                     android:gravity="center"
@@ -152,8 +154,8 @@
                 android:paddingHorizontal="5dp">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/action_bar_icon_size_small"
+                    android:layout_height="@dimen/action_bar_icon_size_small"
                     android:src="@drawable/ic_circle_enable_white" />
 
                 <TextView
@@ -176,8 +178,8 @@
                 android:paddingHorizontal="5dp">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/action_bar_icon_size_small"
+                    android:layout_height="@dimen/action_bar_icon_size_small"
                     android:src="@drawable/ic_circle_disable_white" />
 
                 <TextView
@@ -200,8 +202,8 @@
                 android:paddingHorizontal="5dp">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/action_bar_icon_size_small"
+                    android:layout_height="@dimen/action_bar_icon_size_small"
                     android:src="@drawable/ic_delete_white" />
 
                 <TextView

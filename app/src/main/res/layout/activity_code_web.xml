@@ -6,7 +6,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/action_bar_height"
         android:background="@color/theme_color"
         android:gravity="center_vertical"
         android:paddingHorizontal="15dp"
@@ -21,9 +21,9 @@
 
             <ImageView
                 android:id="@+id/script_back"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/style_press_gray"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
+                android:background="@drawable/style_button_ripple"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_arrow_back" />
 
@@ -41,50 +41,51 @@
 
             <ImageView
                 android:id="@+id/script_edit"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/style_press_gray"
+                android:background="@drawable/style_button_ripple"
                 android:clickable="true"
                 android:src="@drawable/ic_write_white"
                 android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/script_refresh"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/style_press_gray"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
+                android:background="@drawable/style_button_ripple"
                 android:clickable="true"
                 android:src="@drawable/ic_refresh"
                 android:visibility="invisible" />
         </LinearLayout>
 
         <LinearLayout
-            android:visibility="invisible"
             android:id="@+id/script_edit_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="invisible">
 
             <ImageView
                 android:id="@+id/script_edit_back"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/style_press_gray"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
+                android:background="@drawable/style_button_ripple"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_arrow_back" />
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/script_edit_save"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/style_press_gray"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
+                android:background="@drawable/style_button_ripple"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_save_white" />
         </LinearLayout>

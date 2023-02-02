@@ -51,7 +51,7 @@ public class ConfigFragment extends BaseFragment {
         ui_edit_bar = view.findViewById(R.id.config_edit_bar);
         ui_edit_back = view.findViewById(R.id.config_edit_back);
         ui_edit_save = view.findViewById(R.id.config_edit_save);
-        ui_web_container = view.findViewById(R.id.config_web_container);
+        ui_web_container = view.findViewById(R.id.web_container);
 
         init();
 
