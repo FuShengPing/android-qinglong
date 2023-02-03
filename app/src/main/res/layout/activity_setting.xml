@@ -1,8 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activity.app.SettingActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/action_bar_height"
+        android:background="@color/theme_color"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/action_bar_padding_horizontal"
+        tools:ignore="UselessParent">
+
+        <ImageView
+            android:id="@+id/bar_back"
+            android:layout_width="@dimen/action_bar_icon_size"
+            android:layout_height="@dimen/action_bar_icon_size"
+            android:background="@drawable/style_button_ripple"
+            android:contentDescription="@string/bar_back"
+            android:src="@drawable/ic_arrow_back" />
+    </LinearLayout>
+
+</LinearLayout>

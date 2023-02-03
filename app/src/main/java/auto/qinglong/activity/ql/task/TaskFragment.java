@@ -405,7 +405,7 @@ public class TaskFragment extends BaseFragment {
                     localAddData();
                     break;
                 case "backup":
-                    backupData();
+                    showPopWindowBackupEdit();
                     break;
                 case "deleteMul":
                     compareAndDeleteData();
@@ -454,7 +454,7 @@ public class TaskFragment extends BaseFragment {
                     return false;
                 }
 
-                WindowUnit.hideKeyboard(ui_root);
+                WindowUnit.hideKeyboard(ui_pop_edit.getView());
 
                 QLTask newQLTask = new QLTask();
                 if (qlTask == null) {
@@ -471,6 +471,30 @@ public class TaskFragment extends BaseFragment {
                 }
 
                 return false;
+            }
+
+            @Override
+            public boolean onCancel() {
+                return true;
+            }
+        });
+
+        PopupWindowBuilder.buildEditWindow(requireActivity(), ui_pop_edit);
+    }
+
+    private void showPopWindowBackupEdit() {
+        ui_pop_edit = new EditWindow("任务备份", "取消", "确定");
+        EditWindowItem itemName = new EditWindowItem("file_name", null, "文件名", "选填");
+
+        ui_pop_edit.addItem(itemName);
+
+        ui_pop_edit.setActionListener(new EditWindow.OnActionListener() {
+            @Override
+            public boolean onConfirm(Map<String, String> map) {
+                String fileName = map.get("file_name");
+                WindowUnit.hideKeyboard(ui_pop_edit.getView());
+                backupData(fileName);
+                return true;
             }
 
             @Override
@@ -573,12 +597,13 @@ public class TaskFragment extends BaseFragment {
         });
     }
 
-    private void backupData() {
+    private void backupData(String fileName) {
         if (FileUtil.isNeedRequestPermission()) {
             ToastUnit.showShort("请授予应用读写存储权限");
             FileUtil.requestPermission(requireActivity());
             return;
         }
+
         List<QLTask> tasks = mTaskAdapter.getData();
         if (tasks == null || tasks.size() == 0) {
             ToastUnit.showShort("数据为空,无需备份");
@@ -594,7 +619,12 @@ public class TaskFragment extends BaseFragment {
             jsonArray.add(jsonObject);
         }
 
-        String fileName = TimeUnit.formatCurrentTime() + ".json";
+        if (fileName == null) {
+            fileName = TimeUnit.formatCurrentTime() + ".json";
+        } else {
+            fileName += ".json";
+        }
+
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String content = gson.toJson(jsonArray);
         try {

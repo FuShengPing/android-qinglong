@@ -3,4 +3,5 @@
     <dimen name="action_bar_height">56dp</dimen>
     <dimen name="action_bar_icon_size">28dp</dimen>
     <dimen name="action_bar_icon_size_small">24dp</dimen>
+    <dimen name="action_bar_padding_horizontal">14dp</dimen>
 </resources>

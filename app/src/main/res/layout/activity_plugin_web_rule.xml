@@ -12,8 +12,7 @@
         android:layout_height="@dimen/action_bar_height"
         android:background="@color/theme_color"
         android:gravity="center_vertical"
-        android:paddingHorizontal="15dp"
-        android:paddingVertical="8dp">
+        android:paddingHorizontal="@dimen/action_bar_padding_horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"

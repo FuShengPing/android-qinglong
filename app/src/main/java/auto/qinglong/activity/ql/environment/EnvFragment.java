@@ -314,7 +314,7 @@ public class EnvFragment extends BaseFragment {
                     changeBar(BarType.MUL_ACTION);
                     break;
                 case "backup":
-                    backupData();
+                    showPopWindowBackupEdit();
                     break;
                 default:
                     break;
@@ -452,6 +452,30 @@ public class EnvFragment extends BaseFragment {
         PopupWindowBuilder.buildEditWindow(requireActivity(), ui_pop_edit);
     }
 
+    private void showPopWindowBackupEdit() {
+        ui_pop_edit = new EditWindow("变量备份", "取消", "确定");
+        EditWindowItem itemName = new EditWindowItem("file_name", null, "文件名", "选填");
+
+        ui_pop_edit.addItem(itemName);
+
+        ui_pop_edit.setActionListener(new EditWindow.OnActionListener() {
+            @Override
+            public boolean onConfirm(Map<String, String> map) {
+                String fileName = map.get("file_name");
+                WindowUnit.hideKeyboard(ui_pop_edit.getView());
+                backupData(fileName);
+                return true;
+            }
+
+            @Override
+            public boolean onCancel() {
+                return true;
+            }
+        });
+
+        PopupWindowBuilder.buildEditWindow(requireActivity(), ui_pop_edit);
+    }
+    
     private void changeBar(BarType barType) {
         if (ui_bar_search.getVisibility() == View.VISIBLE) {
             WindowUnit.hideKeyboard(ui_root);
@@ -521,12 +545,13 @@ public class EnvFragment extends BaseFragment {
         }
     }
 
-    private void backupData() {
+    private void backupData(String fileName) {
         if (FileUtil.isNeedRequestPermission()) {
             ToastUnit.showShort("请授予应用获取存储权限");
             FileUtil.requestPermission(requireActivity());
             return;
         }
+
         List<QLEnvironment> environments = envItemAdapter.getData();
         if (environments == null || environments.size() == 0) {
             ToastUnit.showShort("数据为空,无需备份");
@@ -542,7 +567,12 @@ public class EnvFragment extends BaseFragment {
             jsonArray.add(jsonObject);
         }
 
-        String fileName = TimeUnit.formatCurrentTime() + ".json";
+        if (fileName == null) {
+            fileName = TimeUnit.formatCurrentTime() + ".json";
+        } else {
+            fileName += ".json";
+        }
+
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String content = gson.toJson(jsonArray);
 
