@@ -4,6 +4,9 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ScrollView;
 
+/**
+ * 支持设置最大高度的滚动控件 主要用于PopupWindow中.
+ */
 public class FixScrollView extends ScrollView {
     public static final String TAG = "MyScrollView";
     private int maxHeight = -1;
