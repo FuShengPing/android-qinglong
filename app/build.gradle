@@ -51,17 +51,14 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.aar'])
 
-    //retrofit
+    //retrofit 网络请求
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
-    //jsoup
-    implementation 'org.jsoup:jsoup:1.15.3'
-
-    //gson
+    //gson 实现json数据的转化
     implementation 'com.google.code.gson:gson:2.10.1'
 
-    //cron
+    //cron 定时规则
     implementation 'com.cronutils:cron-utils:9.2.0'
 
     //智能下拉刷新框架
