@@ -8,11 +8,11 @@ import auto.qinglong.bean.app.Account;
 
 public class AccountSP {
     private static final String TABLE = "ACCOUNT";
-    private static final String field_username = "username";
-    private static final String field_password = "password";
-    private static final String field_address = "address";
-    private static final String field_token = "token";
-    private static final String defaultValue = "";
+    public static final String FIELD_USERNAME = "username";
+    public static final String FIELD_PASSWORD = "password";
+    public static final String FIELD_ADDRESS = "address";
+    public static final String FIELD_TOKEN = "token";
+    public static final String DEFAULT_VALUE = "";
 
     private static final SharedPreferences sp;
 
@@ -24,13 +24,13 @@ public class AccountSP {
      * @return 当前账号
      */
     public static Account getCurrentAccount() {
-        String address = sp.getString(field_address, defaultValue);
+        String address = sp.getString(FIELD_ADDRESS, DEFAULT_VALUE);
         if (address.isEmpty()) {
             return null;
         }
-        String username = sp.getString(field_username, defaultValue);
-        String password = sp.getString(field_password, defaultValue);
-        String token = sp.getString(field_token, defaultValue);
+        String username = sp.getString(FIELD_USERNAME, DEFAULT_VALUE);
+        String password = sp.getString(FIELD_PASSWORD, DEFAULT_VALUE);
+        String token = sp.getString(FIELD_TOKEN, DEFAULT_VALUE);
         Account account = new Account(username, password, address, token);
         account.setCurrent(true);
         return account;
@@ -41,10 +41,10 @@ public class AccountSP {
      */
     public static void saveCurrentAccount(Account account) {
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString(field_username, account.getUsername());
-        editor.putString(field_password, account.getPassword());
-        editor.putString(field_address, account.getAddress());
-        editor.putString(field_token, account.getToken());
+        editor.putString(FIELD_USERNAME, account.getUsername());
+        editor.putString(FIELD_PASSWORD, account.getPassword());
+        editor.putString(FIELD_ADDRESS, account.getAddress());
+        editor.putString(FIELD_TOKEN, account.getToken());
         editor.apply();
     }
 

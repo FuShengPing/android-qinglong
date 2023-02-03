@@ -29,11 +29,13 @@ import auto.qinglong.activity.ql.setting.SettingFragment;
 import auto.qinglong.activity.ql.task.TaskFragment;
 import auto.qinglong.bean.app.Version;
 import auto.qinglong.database.sp.AccountSP;
+import auto.qinglong.database.sp.SettingSP;
 import auto.qinglong.network.http.ApiController;
 import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.NetUnit;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
+import auto.qinglong.utils.WebUnit;
 import auto.qinglong.views.popup.ConfirmWindow;
 import auto.qinglong.views.popup.PopupWindowBuilder;
 
@@ -259,10 +261,7 @@ public class HomeActivity extends BaseActivity {
         confirmWindow.setFocusable(false);
         confirmWindow.setConfirmInterface(isConfirm -> {
             if (isConfirm) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                Uri uri = Uri.parse(version.getDownloadUrl());
-                intent.setData(uri);
-                startActivity(intent);
+                WebUnit.open(this, version.getDownloadUrl());
                 return !version.isForce();
             } else {
                 if (version.isForce()) {
@@ -281,7 +280,8 @@ public class HomeActivity extends BaseActivity {
             public void onSuccess(Version version) {
                 try {
                     int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-                    if (versionCode < version.getVersionCode()) {
+                    //若版本强制更新 即使停用更新推送仍会要求更新
+                    if (version.getVersionCode() > versionCode && (version.isForce() || SettingSP.isNotify())) {
                         showVersionNotice(version);
                     }
                 } catch (PackageManager.NameNotFoundException e) {

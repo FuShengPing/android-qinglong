@@ -4,6 +4,8 @@
     <dimen name="action_bar_icon_size">28dp</dimen>
     <dimen name="action_bar_icon_size_small">24dp</dimen>
     <dimen name="action_bar_padding_horizontal">14dp</dimen>
+    <dimen name="action_bar_title_size">18sp</dimen>
+    <dimen name="action_bar_title_margin_horizontal">16dp</dimen>
     <dimen name="app_setting_text_size">16sp</dimen>
     <dimen name="app_setting_text_margin_vertical">14dp</dimen>
 </resources>

@@ -53,4 +53,9 @@
     <string name="app_setting_issue">意见反馈</string>
     <string name="app_setting_share">分享应用</string>
     <string name="app_share_description">我正在使用这个APP来管理青龙面板，方便快捷，你也来试试吧！下载地址：https://gitee.com/wsfsp4/QingLong</string>
+    <string name="app_setting_notify">更新推送</string>
+
+    <string name="action_title_plugin_web">Web助手</string>
+    <string name="action_bar_title_app_setting">应用设置</string>
+    <string name="action_bar_title_plugin_web_rule">规则列表</string>
 </resources>
