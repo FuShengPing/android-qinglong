@@ -2,6 +2,9 @@ package auto.qinglong.network.web;
 
 import android.webkit.WebView;
 
+/**
+ * WebView与JS交互辅助类 实现代码显示和编辑功能.
+ */
 public class QLWebJsManager {
 
     /**
