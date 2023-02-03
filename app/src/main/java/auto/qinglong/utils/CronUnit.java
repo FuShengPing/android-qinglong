@@ -12,6 +12,7 @@ import java.util.Optional;
 
 public class CronUnit {
     static String TAG = "CronUnit";
+    private static final String PATTERN = "yyyy/M/d HH:mm:ss";
     private static final CronParser cronParser6;
     private static final CronParser cronParser5;
     private static final DateTimeFormatter dateTimeFormatter;
@@ -19,7 +20,7 @@ public class CronUnit {
     static {
         cronParser5 = getParser(5);
         cronParser6 = getParser(6);
-        dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/M/d HH:mm:ss");
+        dateTimeFormatter = DateTimeFormatter.ofPattern(PATTERN);
     }
 
     /**

@@ -7,7 +7,7 @@ import auto.qinglong.MyApplication;
 import auto.qinglong.bean.app.Account;
 
 public class AccountSP {
-    private static final String TAG = "ACCOUNT";
+    private static final String TABLE = "ACCOUNT";
     private static final String field_username = "username";
     private static final String field_password = "password";
     private static final String field_address = "address";
@@ -17,7 +17,7 @@ public class AccountSP {
     private static final SharedPreferences sp;
 
     static {
-        sp = MyApplication.getContext().getSharedPreferences(TAG, Context.MODE_PRIVATE);
+        sp = MyApplication.getContext().getSharedPreferences(TABLE, Context.MODE_PRIVATE);
     }
 
     /**
