@@ -132,7 +132,7 @@ public class PopupWindowBuilder {
         popWindow.setContentView(view);
 
         TextView ui_title = view.findViewById(R.id.pop_common_tv_title);
-        RecyclerView ui_recyclerView = view.findViewById(R.id.recyclerView);
+        RecyclerView ui_recyclerView = view.findViewById(R.id.recycler_view);
         Button ui_cancel = view.findViewById(R.id.pop_common_bt_cancel);
 
         ui_title.setText(listWindow.getTitle());

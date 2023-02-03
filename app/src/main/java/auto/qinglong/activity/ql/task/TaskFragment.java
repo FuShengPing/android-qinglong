@@ -130,8 +130,8 @@ public class TaskFragment extends BaseFragment {
         ui_actions_disable = view.findViewById(R.id.task_bar_actions_disable);
         ui_actions_delete = view.findViewById(R.id.task_bar_actions_delete);
 
-        ui_refresh = view.findViewById(R.id.refreshLayout);
-        ui_recycler = view.findViewById(R.id.recyclerView);
+        ui_refresh = view.findViewById(R.id.refresh_layout);
+        ui_recycler = view.findViewById(R.id.recycler_view);
 
         init();
 

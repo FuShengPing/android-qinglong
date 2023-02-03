@@ -51,8 +51,8 @@ public class ScriptFragment extends BaseFragment {
 
         ui_dir_tip = view.findViewById(R.id.script_dir_tip);
         ui_menu = view.findViewById(R.id.scrip_menu);
-        ui_refresh = view.findViewById(R.id.refreshLayout);
-        ui_recycler = view.findViewById(R.id.recyclerView);
+        ui_refresh = view.findViewById(R.id.refresh_layout);
+        ui_recycler = view.findViewById(R.id.recycler_view);
 
         init();
 

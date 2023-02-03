@@ -216,7 +216,7 @@
     </RelativeLayout>
 
     <com.scwang.smart.refresh.layout.SmartRefreshLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/refreshLayout"
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg_gray"
@@ -226,7 +226,7 @@
         app:srlPrimaryColor="@color/white">
 
         <com.scwang.smart.refresh.header.ClassicsHeader
-            android:id="@+id/refreshHeader"
+            android:id="@+id/refresh_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:srlDrawableMarginRight="10dp"
@@ -235,7 +235,7 @@
             app:srlTextSizeTitle="13sp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never"

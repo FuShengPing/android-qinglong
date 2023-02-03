@@ -74,8 +74,8 @@ public class DepFragment extends BaseFragment {
         ui_action_bar_delete = view.findViewById(R.id.dep_action_bar_delete);
         ui_action_bar_check = view.findViewById(R.id.dep_action_bar_select_all);
 
-        ui_page = view.findViewById(R.id.dep_page);
-        ui_page_tab = view.findViewById(R.id.dep_page_tab);
+        ui_page = view.findViewById(R.id.view_page);
+        ui_page_tab = view.findViewById(R.id.page_tab);
         ui_menu = view.findViewById(R.id.dep_nav_bar_menu);
         ui_more = view.findViewById(R.id.dep_nav_bar_more);
 
@@ -144,6 +144,21 @@ public class DepFragment extends BaseFragment {
         });
         mediator.attach();
 
+    }
+
+    @Override
+    public void setMenuClickListener(MenuClickListener menuClickListener) {
+        this.mMenuClickListener = menuClickListener;
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if (ui_action_bar.getVisibility() == View.VISIBLE) {
+            ui_action_bar_back.performClick();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void netAddDependence(List<QLDependence> dependencies) {
@@ -252,18 +267,5 @@ public class DepFragment extends BaseFragment {
         }
     }
 
-    @Override
-    public void setMenuClickListener(MenuClickListener menuClickListener) {
-        this.mMenuClickListener = menuClickListener;
-    }
 
-    @Override
-    public boolean onBackPressed() {
-        if (ui_action_bar.getVisibility() == View.VISIBLE) {
-            ui_action_bar_back.performClick();
-            return true;
-        } else {
-            return false;
-        }
-    }
 }

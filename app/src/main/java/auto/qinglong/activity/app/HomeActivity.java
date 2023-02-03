@@ -3,7 +3,6 @@ package auto.qinglong.activity.app;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -148,9 +147,7 @@ public class HomeActivity extends BaseActivity {
 
         menu_dep.setOnClickListener(v -> showFragment(DepFragment.TAG));
 
-        menu_setting.setOnClickListener(v -> {
-            ToastUnit.showShort("暂未开放");
-        });
+        menu_setting.setOnClickListener(v -> showFragment(SettingFragment.TAG));
 
         //拓展模块
         menu_extension_web.setOnClickListener(v -> {

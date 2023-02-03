@@ -49,9 +49,9 @@ public class LogFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fg_log, null);
 
         ui_nav = view.findViewById(R.id.log_nav);
-        ui_refresh = view.findViewById(R.id.refreshLayout);
+        ui_refresh = view.findViewById(R.id.refresh_layout);
         ui_dir = view.findViewById(R.id.log_dir_tip);
-        ui_recycler = view.findViewById(R.id.recyclerView);
+        ui_recycler = view.findViewById(R.id.recycler_view);
 
         init();
         return view;

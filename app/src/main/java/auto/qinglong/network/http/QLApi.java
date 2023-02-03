@@ -7,6 +7,7 @@ import auto.qinglong.bean.ql.network.QLEditEnvRes;
 import auto.qinglong.bean.ql.network.QLEditTaskRes;
 import auto.qinglong.bean.ql.network.QLEnvironmentRes;
 import auto.qinglong.bean.ql.network.QLLogRes;
+import auto.qinglong.bean.ql.network.QLLoginLogRes;
 import auto.qinglong.bean.ql.network.QLLoginRes;
 import auto.qinglong.bean.ql.network.QLScriptRes;
 import auto.qinglong.bean.ql.network.QLSystemRes;
@@ -311,5 +312,7 @@ public interface QLApi {
     @GET
     Call<QLBaseRes> getLogDetail(@Url String url, @Header("Authorization") String authorization);
 
+    @GET("api/user/login-log")
+    Call<QLLoginLogRes> getLoginLogs(@Header("Authorization") String authorization);
 
 }

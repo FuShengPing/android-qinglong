@@ -6,11 +6,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.List;
+import java.util.Objects;
 
 import auto.qinglong.bean.app.Account;
 import auto.qinglong.bean.ql.QLDependence;
 import auto.qinglong.bean.ql.QLEnvironment;
 import auto.qinglong.bean.ql.QLLog;
+import auto.qinglong.bean.ql.QLLoginLog;
 import auto.qinglong.bean.ql.QLScript;
 import auto.qinglong.bean.ql.QLTask;
 import auto.qinglong.bean.ql.network.QLBaseRes;
@@ -20,6 +22,7 @@ import auto.qinglong.bean.ql.network.QLEditEnvRes;
 import auto.qinglong.bean.ql.network.QLEditTaskRes;
 import auto.qinglong.bean.ql.network.QLEnvironmentRes;
 import auto.qinglong.bean.ql.network.QLLogRes;
+import auto.qinglong.bean.ql.network.QLLoginLogRes;
 import auto.qinglong.bean.ql.network.QLLoginRes;
 import auto.qinglong.bean.ql.network.QLScriptRes;
 import auto.qinglong.bean.ql.network.QLSystemRes;
@@ -1393,6 +1396,47 @@ public class QLApiController {
         RequestManager.addCall(call, requestId);
     }
 
+    public static void getLoginLogs(@NonNull String requestId, @NonNull NetGetLoginLogsCallback callback) {
+        Call<QLLoginLogRes> call = new Retrofit.Builder()
+                .baseUrl(Objects.requireNonNull(AccountSP.getCurrentAccount()).getBaseUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(QLApi.class)
+                .getLoginLogs(AccountSP.getCurrentAccount().getAuthorization());
+
+        call.enqueue(new Callback<QLLoginLogRes>() {
+            @Override
+            public void onResponse(Call<QLLoginLogRes> call, Response<QLLoginLogRes> response) {
+                RequestManager.finishCall(requestId);
+                QLLoginLogRes loginLogRes = response.body();
+                if (loginLogRes == null) {
+                    if (response.code() == 401) {
+                        callback.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callback.onFailure(ERROR_NO_BODY);
+                    }
+                } else {
+                    if (loginLogRes.getCode() == 200) {
+                        callback.onSuccess(loginLogRes.getData());
+                    } else {
+                        callback.onFailure(loginLogRes.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<QLLoginLogRes> call, Throwable t) {
+                RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
+                callback.onFailure(t.getLocalizedMessage());
+            }
+        });
+
+        RequestManager.addCall(call, requestId);
+    }
+
     public interface NetBaseCallback {
         void onSuccess();
 
@@ -1462,6 +1506,12 @@ public class QLApiController {
 
     public interface NetEditEnvCallback {
         void onSuccess(QLEnvironment QLEnvironment);
+
+        void onFailure(String msg);
+    }
+
+    public interface NetGetLoginLogsCallback {
+        void onSuccess(List<QLLoginLog> logs);
 
         void onFailure(String msg);
     }

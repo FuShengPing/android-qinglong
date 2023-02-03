@@ -11,8 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
 
-import auto.qinglong.R;
-
 
 public class WebUnit {
     public static final String TAG = "WebUnit";

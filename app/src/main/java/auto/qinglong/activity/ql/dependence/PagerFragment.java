@@ -38,8 +38,8 @@ public class PagerFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fg_dep_pager, container, false);
 
-        ui_refresh = view.findViewById(R.id.refreshLayout);
-        ui_recycler = view.findViewById(R.id.recyclerView);
+        ui_refresh = view.findViewById(R.id.refresh_layout);
+        ui_recycler = view.findViewById(R.id.recycler_view);
 
         init();
 

@@ -1,7 +1,6 @@
 package auto.qinglong.activity.app;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;

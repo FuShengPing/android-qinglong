@@ -111,8 +111,8 @@ public class EnvFragment extends BaseFragment {
         ui_actions_disable = view.findViewById(R.id.env_bar_actions_disable);
         ui_actions_delete = view.findViewById(R.id.env_bar_actions_delete);
 
-        ui_refresh = view.findViewById(R.id.refreshLayout);
-        RecyclerView ui_recycler = view.findViewById(R.id.recyclerView);
+        ui_refresh = view.findViewById(R.id.refresh_layout);
+        RecyclerView ui_recycler = view.findViewById(R.id.recycler_view);
 
         envItemAdapter = new EnvItemAdapter(requireContext());
         ui_recycler.setAdapter(envItemAdapter);

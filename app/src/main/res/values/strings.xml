@@ -58,4 +58,10 @@
     <string name="action_title_plugin_web">Web助手</string>
     <string name="action_bar_title_app_setting">应用设置</string>
     <string name="action_bar_title_plugin_web_rule">规则列表</string>
+    <string name="item_login_log_time">登录时间</string>
+    <string name="item_login_log_address">登录地址</string>
+    <string name="item_login_log_ip">登录IP</string>
+    <string name="item_login_log_platform">登录设备</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
