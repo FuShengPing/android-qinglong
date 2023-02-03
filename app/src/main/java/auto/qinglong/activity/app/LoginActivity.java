@@ -19,6 +19,7 @@ import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.http.RequestManager;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
+import auto.qinglong.utils.WebUnit;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.popup.PopupWindowBuilder;
 import auto.qinglong.views.popup.ProgressWindow;
@@ -77,11 +78,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void init() {
-        ui_logo.setOnClickListener(v -> {
-            Uri uri = Uri.parse(getString(R.string.url_project));
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            startActivity(intent);
-        });
+        ui_logo.setOnClickListener(v -> WebUnit.open(this, getString(R.string.url_project)));
 
         ui_confirm.setOnClickListener(v -> {
             if (ui_pop_progress != null && ui_pop_progress.isShowing()) {

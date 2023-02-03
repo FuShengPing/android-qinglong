@@ -2,6 +2,7 @@
     <string name="app_name">青龙面板</string>
     <string name="url_project">https://gitee.com/wsfsp4/QingLong</string>
     <string name="url_readme">https://gitee.com/wsfsp4/QingLong/blob/master/README.md</string>
+    <string name="url_issue">https://gitee.com/wsfsp4/QingLong/issues</string>
     <string name="url_version">https://gitee.com/wsfsp4/QingLong/raw/master/version.json</string>
     <string name="url_extension_link">http://service-m1nufffu-1306746806.gz.apigw.tencentcs.com/link</string>
     <!-- 主页菜单栏 -->
@@ -47,13 +48,9 @@
     <string name="str_loading">加载中…</string>
     <string name="str_read">读取</string>
     <string name="str_import">导入</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="bar_back">bar_back</string>
+    <string name="app_setting_document">使用手册</string>
+    <string name="app_setting_issue">意见反馈</string>
+    <string name="app_setting_share">分享应用</string>
+    <string name="app_share_description">我正在使用这个APP来管理青龙面板，方便快捷，你也来试试吧！下载地址：https://gitee.com/wsfsp4/QingLong</string>
 </resources>

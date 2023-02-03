@@ -146,7 +146,7 @@ public class PluginWebRuleActivity extends BaseActivity {
             public boolean onConfirm(Map<String, String> map) {
                 String url = map.get("url");
 
-                if (!WebUnit.isValidUrl(url)) {
+                if (WebUnit.isInvalid(url)) {
                     ToastUnit.showShort("地址不合法");
                     return false;
                 }

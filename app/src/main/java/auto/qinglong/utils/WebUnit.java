@@ -1,11 +1,17 @@
 package auto.qinglong.utils;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+
 import androidx.annotation.NonNull;
 
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
+
+import auto.qinglong.R;
 
 
 public class WebUnit {
@@ -43,13 +49,13 @@ public class WebUnit {
 
     }
 
-    public static boolean isValidUrl(String urlString) {
+    public static boolean isInvalid(String urlString) {
         try {
             URL url = new URL(urlString);
             url.toURI();
-            return true;
-        } catch (Exception e) {
             return false;
+        } catch (Exception e) {
+            return true;
         }
     }
 
@@ -77,5 +83,15 @@ public class WebUnit {
         } catch (Exception e) {
             return def;
         }
+    }
+
+    /**
+     * 通过手机浏览器打开指定网页.
+     *
+     * @param url the url
+     */
+    public static void open(Activity activity, String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        activity.startActivity(intent);
     }
 }
