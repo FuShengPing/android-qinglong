@@ -23,18 +23,21 @@
             android:scaleType="centerCrop"
             android:src="@drawable/ic_arrow_back" />
 
-        <TextView
-            android:id="@+id/common_bar_title"
+        <EditText
+            android:id="@+id/et_url"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/action_bar_title_margin_horizontal"
+            android:layout_height="34dp"
+            android:layout_marginHorizontal="10dp"
             android:layout_weight="1"
-            android:ellipsize="end"
+            android:background="@drawable/style_input_gray"
+            android:hint="@string/url_input_hint"
+            android:imeOptions="actionGo"
             android:lines="1"
+            android:paddingHorizontal="5dp"
             android:singleLine="true"
-            android:text="@string/action_title_plugin_web"
-            android:textColor="@color/white"
-            android:textSize="@dimen/action_bar_title_size" />
+            android:textColor="@color/text_color_49"
+            android:textCursorDrawable="@drawable/style_cursor_blue"
+            android:textSize="18sp" />
 
         <ImageView
             android:id="@+id/bar_rule"
@@ -42,29 +45,14 @@
             android:layout_height="@dimen/action_bar_icon_size"
             android:background="@drawable/style_button_ripple"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_view_list_white" />
+            android:src="@drawable/ic_more_options" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="8dp"
-        android:paddingVertical="5dp">
-
-        <EditText
-            android:id="@+id/et_url"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginBottom="10dp"
-            android:autofillHints="Url"
-            android:background="@drawable/style_input"
-            android:hint="请输入网址"
-            android:lines="1"
-            android:paddingHorizontal="5dp"
-            android:singleLine="true"
-            android:textCursorDrawable="@drawable/style_cursor_blue"
-            android:textIsSelectable="true" />
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -116,6 +104,5 @@
         android:id="@+id/web_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
         android:background="@color/bg_gray" />
 </LinearLayout>

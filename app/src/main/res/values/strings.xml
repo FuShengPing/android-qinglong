@@ -80,4 +80,5 @@
     <string name="status">状态</string>
     <string name="created_time">创建时间</string>
     <string name="environment">变量</string>
+    <string name="url_input_hint">请输入网址</string>
 </resources>

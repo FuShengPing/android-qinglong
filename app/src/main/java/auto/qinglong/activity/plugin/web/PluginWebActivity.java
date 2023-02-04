@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.http.SslError;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
 import android.webkit.CookieManager;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceRequest;
@@ -16,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,17 +101,23 @@ public class PluginWebActivity extends BaseActivity {
         });
 
         //加载网页操作 同时清除所有cookies
-        ui_bt_load.setOnClickListener(v -> {
-            WindowUnit.hideKeyboard(ui_bt_load);
+        ui_et_url.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId != EditorInfo.IME_ACTION_GO) {
+                return false;
+            }
+
             cookieManager.removeAllCookies(null);
             String url = ui_et_url.getText().toString().trim();
 
             if (TextUnit.isFull(url)) {
+                ui_et_url.clearFocus();
+                WindowUnit.hideKeyboard(ui_et_url);
                 urlLoaded = url;
                 ui_webView.loadUrl(url);
             } else {
                 ToastUnit.showShort("请输入网页地址");
             }
+            return true;
         });
 
         //常规读取Cookies操作

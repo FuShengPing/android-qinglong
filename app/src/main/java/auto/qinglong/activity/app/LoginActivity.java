@@ -3,10 +3,13 @@ package auto.qinglong.activity.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
@@ -77,6 +80,15 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void init() {
         ui_logo.setOnClickListener(v -> WebUnit.open(this, getString(R.string.url_project)));
+
+        ui_password.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                ui_password.clearFocus();
+                ui_confirm.performClick();
+                return true;
+            }
+            return false;
+        });
 
         ui_confirm.setOnClickListener(v -> {
             if (ui_pop_progress != null && ui_pop_progress.isShowing()) {
