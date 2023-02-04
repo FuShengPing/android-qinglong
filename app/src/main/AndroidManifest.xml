@@ -42,10 +42,6 @@
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activity.plugin.link.PluginLinkActivity"
-            android:exported="false"
-            android:launchMode="singleTask" />
-        <activity
             android:name=".activity.plugin.web.PluginWebRuleActivity"
             android:exported="false"
             android:launchMode="singleTask" />

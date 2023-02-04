@@ -17,7 +17,6 @@ import java.util.Objects;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.activity.BaseFragment;
-import auto.qinglong.activity.plugin.link.PluginLinkActivity;
 import auto.qinglong.activity.plugin.web.PluginWebActivity;
 import auto.qinglong.activity.ql.config.ConfigFragment;
 import auto.qinglong.activity.ql.dependence.DepFragment;
@@ -130,7 +129,6 @@ public class HomeActivity extends BaseActivity {
         LinearLayout menu_setting = ui_drawer_left.findViewById(R.id.menu_setting);
         LinearLayout menu_dep = ui_drawer_left.findViewById(R.id.menu_dep);
         LinearLayout menu_extension_web = ui_drawer_left.findViewById(R.id.menu_extension_web);
-        LinearLayout menu_extension_link = ui_drawer_left.findViewById(R.id.menu_extension_link);
         LinearLayout menu_app_exit = ui_drawer_left.findViewById(R.id.menu_exit);
         LinearLayout menu_app_setting = ui_drawer_left.findViewById(R.id.menu_app_setting);
 
@@ -152,11 +150,6 @@ public class HomeActivity extends BaseActivity {
         //拓展模块
         menu_extension_web.setOnClickListener(v -> {
             Intent intent = new Intent(getBaseContext(), PluginWebActivity.class);
-            startActivity(intent);
-        });
-
-        menu_extension_link.setOnClickListener(v -> {
-            Intent intent = new Intent(getBaseContext(), PluginLinkActivity.class);
             startActivity(intent);
         });
 

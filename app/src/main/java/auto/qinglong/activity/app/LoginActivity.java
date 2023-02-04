@@ -113,7 +113,7 @@ public class LoginActivity extends BaseActivity {
 
             Account account = new Account(username, password, address, "");
             //账号存在本地则尝试旧token 避免重复登录
-            account.setToken(AccountSP.getAuthorization(address));
+            account.setToken(AccountSP.getAuthorization(address, username, password));
             //检测系统是否初始化和版本信息(延迟500ms)
             new Handler().postDelayed(() -> netQuerySystemInfo(account), 500);
 

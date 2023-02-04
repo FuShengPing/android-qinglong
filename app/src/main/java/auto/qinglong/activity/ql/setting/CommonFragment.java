@@ -25,7 +25,7 @@ public class CommonFragment extends BaseFragment {
     private EditText ui_security_password;
     private Button ui_security_save;
 
-    private int oldFrequency = -1;
+    private int mOldFrequency = -1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,7 +51,24 @@ public class CommonFragment extends BaseFragment {
                 return;
             }
             WindowUnit.hideKeyboard(ui_log);
-            netUpdateLogRemove(Integer.parseInt(value), oldFrequency);
+            netUpdateLogRemove(Integer.parseInt(value), mOldFrequency);
+        });
+
+        ui_security_save.setOnClickListener(v -> {
+            String username = ui_security_username.getText().toString();
+            String password = ui_security_password.getText().toString();
+
+            if (username.isEmpty()) {
+                ToastUnit.showShort("请输入用户名");
+                return;
+            }
+            if (password.isEmpty()) {
+                ToastUnit.showShort("请输入密码");
+                return;
+            }
+
+            Account account = new Account(username, password, null, null);
+            netUpdateUser(account);
         });
 
         netGetLogRemove();
@@ -76,6 +93,7 @@ public class CommonFragment extends BaseFragment {
             @Override
             public void onSuccess() {
                 ui_log.clearFocus();
+                mOldFrequency = newFrequency;
                 ToastUnit.showShort("保存成功");
             }
 

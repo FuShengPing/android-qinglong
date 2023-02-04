@@ -53,14 +53,17 @@ public class AccountSP {
     }
 
     /**
-     * 获取指定地址的会话.
+     * 获取指定地址的会话 登录前调用检验是否有效 避免重复登录.
      *
      * @param address the address
      * @return the authorization 指定地址的会话
      */
-    public static String getAuthorization(String address) {
-        String current = sp.getString(FIELD_ADDRESS, DEFAULT_VALUE);
-        if (current.equals(address)) {
+    public static String getAuthorization(String address, String username, String password) {
+        String curAddress = sp.getString(FIELD_ADDRESS, DEFAULT_VALUE);
+        String curUsername = sp.getString(FIELD_USERNAME, DEFAULT_VALUE);
+        String curPassword = sp.getString(FIELD_PASSWORD, DEFAULT_VALUE);
+        boolean flag = curAddress.equals(address) && curPassword.equals(password) && curUsername.equals(username);
+        if (flag) {
             return sp.getString(FIELD_TOKEN, DEFAULT_VALUE);
         } else {
             return null;

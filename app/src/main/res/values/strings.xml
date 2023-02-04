@@ -74,4 +74,7 @@
     <string name="setting_other">其他设置</string>
     <string name="setting_delete_frequency">日志删除频率</string>
     <string name="day">天</string>
+    <string name="password">密码</string>
+    <string name="username">账号</string>
+    <string name="address_hint">127.0.0.1:5700</string>
 </resources>
