@@ -179,7 +179,7 @@ public class CodeWebActivity extends BaseActivity {
                 }
             }
         }, new CommonJSInterface());
-        //加载本地网页
+
         ui_webView.loadUrl("file:///android_asset/web/editor.html");
 
     }

@@ -75,6 +75,7 @@ public class LoginLogFragment extends BaseFragment {
             @Override
             public void onSuccess(List<QLLoginLog> logs) {
                 itemAdapter.setData(logs);
+                initDataFlag = true;
                 this.onEnd(true);
             }
 
