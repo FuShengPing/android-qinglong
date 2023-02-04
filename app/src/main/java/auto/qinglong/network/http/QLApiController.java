@@ -38,10 +38,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * API统一请求类
- * 1.响应码 200-300 响应成功 GSON解析响应体
- * 2.响应码 >300 响应失败 GSON不解析响应体 body为null
- * 3.每个请求都返回请求对象call
+ * QL API统一请求类
  */
 public class QLApiController {
     private static final String ERROR_NO_BODY = "响应异常";
