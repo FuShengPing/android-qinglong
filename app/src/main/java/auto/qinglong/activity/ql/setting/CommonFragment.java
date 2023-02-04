@@ -14,6 +14,7 @@ import auto.qinglong.activity.app.LoginActivity;
 import auto.qinglong.bean.app.Account;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.network.http.QLApiController;
+import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WindowUnit;
@@ -67,7 +68,8 @@ public class CommonFragment extends BaseFragment {
                 return;
             }
 
-            Account account = new Account(username, password, null, null);
+            WindowUnit.hideKeyboard(ui_security_username);
+            Account account = new Account(username, password, AccountSP.getAddress(), null);
             netUpdateUser(account);
         });
 
@@ -130,6 +132,8 @@ public class CommonFragment extends BaseFragment {
         QLApiController.login(this.getNetRequestID(), account, new QLApiController.NetLoginCallback() {
             @Override
             public void onSuccess(Account account) {
+                ui_security_username.setText(null);
+                ui_security_password.setText(null);
                 AccountSP.updateCurrentAccount(account);
                 ToastUnit.showShort("更新成功");
             }
@@ -139,6 +143,7 @@ public class CommonFragment extends BaseFragment {
                 Intent intent = new Intent(requireActivity(), LoginActivity.class);
                 requireActivity().startActivity(intent);
                 requireActivity().finish();
+                LogUnit.log(msg);
             }
         });
     }

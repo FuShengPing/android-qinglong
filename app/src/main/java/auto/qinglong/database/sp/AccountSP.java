@@ -77,6 +77,10 @@ public class AccountSP {
         return mBaseUrl;
     }
 
+    public static String getAddress() {
+        return sp.getString(FIELD_ADDRESS, DEFAULT_VALUE);
+    }
+
     /**
      * 更新当前账号信息
      * 改密场景：只更新用户名和密码,同时清除token
