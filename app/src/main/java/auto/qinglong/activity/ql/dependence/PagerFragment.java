@@ -85,20 +85,19 @@ public class PagerFragment extends BaseFragment {
             }
         });
 
-        //刷新控件//
-        //初始设置处于刷新状态
-        ui_refresh.autoRefreshAnimationOnly();
         ui_refresh.setOnRefreshListener(refreshLayout -> netGetDependencies());
     }
 
     private void initData() {
-        if (!initDataFlag && !RequestManager.isRequesting(getNetRequestID())) {
-            new Handler().postDelayed(() -> {
-                if (isVisible()) {
-                    netGetDependencies();
-                }
-            }, 1000);
+        if (initDataFlag || RequestManager.isRequesting(getNetRequestID())) {
+            return;
         }
+        ui_refresh.autoRefreshAnimationOnly();
+        new Handler().postDelayed(() -> {
+            if (isVisible()) {
+                netGetDependencies();
+            }
+        }, 1000);
     }
 
     public void refreshData() {

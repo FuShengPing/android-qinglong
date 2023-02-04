@@ -97,7 +97,8 @@ public class ScriptFragment extends BaseFragment {
         Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
         ui_recycler.setAdapter(scriptAdapter);
 
-        //item回调
+        ui_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
+
         scriptAdapter.setScriptInterface(new ScriptAdapter.ItemActionListener() {
             @Override
             public void onEdit(QLScript script) {
@@ -110,7 +111,7 @@ public class ScriptFragment extends BaseFragment {
                     intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_PARENT, script.getParent());
                     intent.putExtra(CodeWebActivity.EXTRA_TITLE, script.getTitle());
                     intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_SCRIPT);
-                    intent.putExtra(CodeWebActivity.EXTRA_CAN_EDIT,true);
+                    intent.putExtra(CodeWebActivity.EXTRA_CAN_EDIT, true);
                     startActivity(intent);
                 }
             }
@@ -123,23 +124,19 @@ public class ScriptFragment extends BaseFragment {
             }
         });
 
-        //刷新控件//
-        //初始设置处于刷新状态
-        ui_refresh.autoRefreshAnimationOnly();
         ui_refresh.setOnRefreshListener(refreshLayout -> netGetScripts());
-
-        //唤起主导航栏
-        ui_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
     }
 
     private void initData() {
-        if (!initDataFlag && !RequestManager.isRequesting(getNetRequestID())) {
-            new Handler().postDelayed(() -> {
-                if (isVisible()) {
-                    netGetScripts();
-                }
-            }, 1000);
+        if (initDataFlag || RequestManager.isRequesting(getNetRequestID())) {
+            return;
         }
+        ui_refresh.autoRefreshAnimationOnly();
+        new Handler().postDelayed(() -> {
+            if (isVisible()) {
+                netGetScripts();
+            }
+        }, 1000);
 
     }
 

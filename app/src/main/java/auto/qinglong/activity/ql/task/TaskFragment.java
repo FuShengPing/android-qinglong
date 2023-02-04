@@ -36,6 +36,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import auto.qinglong.R;
@@ -170,7 +171,7 @@ public class TaskFragment extends BaseFragment {
         //item容器配置
         mTaskAdapter = new TaskAdapter(getContext());
         //取消更新动画，避免刷新闪烁
-        ui_recycler.getItemAnimator().setChangeDuration(0);
+        Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
         ui_recycler.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         ui_recycler.setAdapter(mTaskAdapter);
 
@@ -213,9 +214,6 @@ public class TaskFragment extends BaseFragment {
             }
         });
 
-        //刷新控件//
-        //初始设置处于刷新状态
-        ui_refresh.autoRefreshAnimationOnly();
         ui_refresh.setOnRefreshListener(refreshLayout -> netGetTasks(mCurrentSearchValue, true));
 
         //导航点击监听
@@ -380,6 +378,7 @@ public class TaskFragment extends BaseFragment {
         if (initDataFlag || RequestManager.isRequesting(this.getNetRequestID())) {
             return;
         }
+        ui_refresh.autoRefreshAnimationOnly();
         new Handler().postDelayed(() -> {
             if (isVisible()) {
                 netGetTasks(mCurrentSearchValue, true);

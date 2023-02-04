@@ -60,26 +60,27 @@ public class LogFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        firstLoad();
+        initData();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            firstLoad();
+            initData();
         }
     }
 
-    private void firstLoad() {
-        if (!initDataFlag && !RequestManager.isRequesting(getNetRequestID())) {
-            new Handler().postDelayed(() -> {
-                if (isVisible()) {
-                    getLogs();
-                }
-            }, 1000);
+    private void initData() {
+        if (initDataFlag || RequestManager.isRequesting(getNetRequestID())) {
+            return;
         }
-
+        ui_refresh.autoRefreshAnimationOnly();
+        new Handler().postDelayed(() -> {
+            if (isVisible()) {
+                getLogs();
+            }
+        }, 1000);
     }
 
     @Override
@@ -108,9 +109,6 @@ public class LogFragment extends BaseFragment {
             }
         });
 
-        //刷新控件//
-        //初始设置处于刷新状态
-        ui_refresh.autoRefreshAnimationOnly();
         ui_refresh.setOnRefreshListener(refreshLayout -> getLogs());
     }
 

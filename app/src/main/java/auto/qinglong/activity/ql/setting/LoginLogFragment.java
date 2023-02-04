@@ -55,20 +55,19 @@ public class LoginLogFragment extends BaseFragment {
         ui_recycler.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         ui_recycler.setAdapter(itemAdapter);
 
-        //刷新控件//
-        //初始设置处于刷新状态
-        ui_refresh.autoRefreshAnimationOnly();
         ui_refresh.setOnRefreshListener(refreshLayout -> netGetLoginLogs());
     }
 
     private void initData() {
-        if (!initDataFlag && !RequestManager.isRequesting(getNetRequestID())) {
-            new Handler().postDelayed(() -> {
-                if (isVisible()) {
-                    netGetLoginLogs();
-                }
-            }, 1000);
+        if (initDataFlag || RequestManager.isRequesting(this.getNetRequestID())) {
+            return;
         }
+        ui_refresh.autoRefreshAnimationOnly();
+        new Handler().postDelayed(() -> {
+            if (isVisible()) {
+                netGetLoginLogs();
+            }
+        }, 1000);
     }
 
     private void netGetLoginLogs() {

@@ -169,9 +169,6 @@ public class EnvFragment extends BaseFragment {
         //导航栏
         ui_nav_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
 
-        //刷新控件//
-        //初始设置处于刷新状态
-        ui_refresh.autoRefreshAnimationOnly();
         ui_refresh.setOnRefreshListener(refreshLayout -> netGetEnvironments(currentSearchValue, true));
 
         //更多操作
@@ -275,6 +272,7 @@ public class EnvFragment extends BaseFragment {
         if (initDataFlag || RequestManager.isRequesting(getNetRequestID())) {
             return;
         }
+        ui_refresh.autoRefreshAnimationOnly();
         new Handler().postDelayed(() -> {
             if (isVisible()) {
                 netGetEnvironments(currentSearchValue, true);
@@ -475,7 +473,7 @@ public class EnvFragment extends BaseFragment {
 
         PopupWindowBuilder.buildEditWindow(requireActivity(), ui_pop_edit);
     }
-    
+
     private void changeBar(BarType barType) {
         if (ui_bar_search.getVisibility() == View.VISIBLE) {
             WindowUnit.hideKeyboard(ui_root);
