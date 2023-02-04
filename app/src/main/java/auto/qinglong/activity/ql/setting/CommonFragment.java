@@ -1,5 +1,6 @@
 package auto.qinglong.activity.ql.setting;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,8 +8,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.Objects;
+
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
+import auto.qinglong.activity.app.LoginActivity;
+import auto.qinglong.bean.app.Account;
+import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
@@ -25,7 +31,7 @@ public class CommonFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fg_setting_common, container, false);
+        View view = inflater.inflate(R.layout.fragment_setting_common, container, false);
         ui_log = view.findViewById(R.id.setting_log);
         ui_log_save = view.findViewById(R.id.setting_log_save);
         ui_security_username = view.findViewById(R.id.setting_security_username);
@@ -85,6 +91,38 @@ public class CommonFragment extends BaseFragment {
                     ui_log.setText("");
                 }
                 ToastUnit.showShort(msg);
+            }
+        });
+    }
+
+    private void netUpdateUser(Account account) {
+        QLApiController.updateUser(getNetRequestID(), account, new QLApiController.NetBaseCallback() {
+            @Override
+            public void onSuccess() {
+                AccountSP.updateCurrentAccount(account);
+                netLogin(account);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort(msg);
+            }
+        });
+    }
+
+    protected void netLogin(Account account) {
+        QLApiController.login(this.getNetRequestID(), account, new QLApiController.NetLoginCallback() {
+            @Override
+            public void onSuccess(Account account) {
+                AccountSP.updateCurrentAccount(account);
+                ToastUnit.showShort("更新成功");
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                Intent intent = new Intent(requireActivity(), LoginActivity.class);
+                requireActivity().startActivity(intent);
+                requireActivity().finish();
             }
         });
     }

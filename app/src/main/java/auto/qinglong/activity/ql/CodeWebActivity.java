@@ -6,6 +6,7 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -52,7 +53,7 @@ public class CodeWebActivity extends BaseActivity {
     private LinearLayout ui_edit_bar;
     private ImageView ui_edit_back;
     private ImageView ui_edit_save;
-    private LinearLayout ui_web_container;
+    private FrameLayout ui_web_container;
     private WebView ui_webView;
 
     @Override
@@ -165,13 +166,13 @@ public class CodeWebActivity extends BaseActivity {
             public void onPageFinished(WebView view, String url) {
                 switch (type) {
                     case TYPE_SCRIPT:
-                        QLWebJsManager.initScript(ui_webView, Objects.requireNonNull(AccountSP.getCurrentAccount()).getBaseUrl(), AccountSP.getCurrentAccount().getAuthorization(), scriptName, scriptParent);
+                        QLWebJsManager.initScript(ui_webView, Objects.requireNonNull(AccountSP.getCurrentAccount()).getBaseUrl(), AccountSP.getAuthorization(), scriptName, scriptParent);
                         break;
                     case TYPE_LOG:
-                        QLWebJsManager.initLog(ui_webView, Objects.requireNonNull(AccountSP.getCurrentAccount()).getBaseUrl(), AccountSP.getCurrentAccount().getAuthorization(), logPath);
+                        QLWebJsManager.initLog(ui_webView, Objects.requireNonNull(AccountSP.getCurrentAccount()).getBaseUrl(), AccountSP.getAuthorization(), logPath);
                         break;
                     case TYPE_DEPENDENCE:
-                        QLWebJsManager.initDependence(ui_webView, Objects.requireNonNull(AccountSP.getCurrentAccount()).getBaseUrl(), AccountSP.getCurrentAccount().getAuthorization(), dependenceId);
+                        QLWebJsManager.initDependence(ui_webView, Objects.requireNonNull(AccountSP.getCurrentAccount()).getBaseUrl(), AccountSP.getAuthorization(), dependenceId);
                         break;
                     default:
                         break;

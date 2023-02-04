@@ -133,7 +133,7 @@ public interface QLApi {
      * @return the call
      */
     @PUT("api/crons")
-    Call<QLEditTaskRes> editTask(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLEditTaskRes> updateTask(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
      * 新建任务.
@@ -222,7 +222,7 @@ public interface QLApi {
      * @return the call
      */
     @POST("api/configs/save")
-    Call<QLBaseRes> saveConfig(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLBaseRes> updateConfig(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
      * 读取脚本列表.
@@ -251,7 +251,7 @@ public interface QLApi {
      * @return the call
      */
     @PUT("api/scripts")
-    Call<QLBaseRes> saveScript(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<QLBaseRes> updateScript(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
      * 获取依赖.
@@ -313,12 +313,41 @@ public interface QLApi {
     @GET
     Call<QLBaseRes> getLogDetail(@Url String url, @Header("Authorization") String authorization);
 
+    /**
+     * 获取登录日志.
+     *
+     * @param authorization the authorization
+     * @return the login logs
+     */
     @GET("api/user/login-log")
     Call<QLLoginLogRes> getLoginLogs(@Header("Authorization") String authorization);
 
+    /**
+     * 获取日志删除频率.
+     *
+     * @param authorization the authorization
+     * @return the log remove
+     */
     @GET("api/system/log/remove")
     Call<QLLogRemoveRes> getLogRemove(@Header("Authorization") String authorization);
 
+    /**
+     * 更新日志删除频率.
+     *
+     * @param authorization the authorization
+     * @param body          the body
+     * @return the call
+     */
     @PUT("api/system/log/remove")
     Call<QLBaseRes> updateLogRemove(@Header("Authorization") String authorization, @Body RequestBody body);
+
+    /**
+     * 更新账号密码.
+     *
+     * @param authorization the authorization
+     * @param body          the body
+     * @return the call
+     */
+    @PUT("api/user")
+    Call<QLBaseRes> updateUser(@Header("Authorization") String authorization, @Body RequestBody body);
 }

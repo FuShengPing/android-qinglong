@@ -12,7 +12,6 @@ import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.app.Account;
 import auto.qinglong.bean.ql.network.QLSystemRes;
-import auto.qinglong.database.db.AccountDBHelper;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.http.RequestManager;
@@ -114,9 +113,7 @@ public class LoginActivity extends BaseActivity {
 
             Account account = new Account(username, password, address, "");
             //账号存在本地则尝试旧token 避免重复登录
-            if (AccountDBHelper.isAccountExist(address)) {
-                account.setToken(AccountDBHelper.getAccount(address).getToken());
-            }
+            account.setToken(AccountSP.getAuthorization(address));
             //检测系统是否初始化和版本信息(延迟500ms)
             new Handler().postDelayed(() -> netQuerySystemInfo(account), 500);
 
@@ -131,10 +128,7 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    private void enterHome(Account account) {
-        //保存账号信息
-        AccountSP.saveCurrentAccount(account);
-        AccountDBHelper.insertAccount(account);
+    private void enterHome() {
         //进入主界面
         Intent intent = new Intent(mContext, HomeActivity.class);
         startActivity(intent);
@@ -174,7 +168,7 @@ public class LoginActivity extends BaseActivity {
         QLApiController.checkToken(this.getNetRequestID(), account, new QLApiController.NetLoginCallback() {
             @Override
             public void onSuccess(Account account) {
-                enterHome(account);
+                enterHome();
             }
 
             @Override
@@ -188,7 +182,8 @@ public class LoginActivity extends BaseActivity {
         QLApiController.login(this.getNetRequestID(), account, new QLApiController.NetLoginCallback() {
             @Override
             public void onSuccess(Account account) {
-                enterHome(account);
+                AccountSP.updateCurrentAccount(account);
+                enterHome();
             }
 
             @Override

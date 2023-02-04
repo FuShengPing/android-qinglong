@@ -8,8 +8,8 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
@@ -36,7 +36,7 @@ public class ConfigFragment extends BaseFragment {
     private RelativeLayout ui_edit_bar;
     private ImageView ui_edit_back;
     private ImageView ui_edit_save;
-    private LinearLayout ui_web_container;
+    private FrameLayout ui_web_container;
     private WebView ui_webView;
 
     @Nullable
@@ -112,7 +112,7 @@ public class ConfigFragment extends BaseFragment {
         ui_webView = WebViewBuilder.build(getContext(), ui_web_container, new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
-                QLWebJsManager.initConfig(ui_webView, AccountSP.getCurrentAccount().getBaseUrl(), AccountSP.getCurrentAccount().getAuthorization());
+                QLWebJsManager.initConfig(ui_webView, AccountSP.getCurrentAccount().getBaseUrl(), AccountSP.getAuthorization());
             }
         }, new CommonJSInterface());
         //加载本地网页

@@ -180,11 +180,11 @@ public class QLApiController {
 
     public static void getTasks(@NonNull String requestId, @NonNull String searchValue, @NonNull NetGetTasksCallback callback) {
         Call<QLTasksRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .getTasks(AccountSP.getCurrentAccount().getAuthorization(), searchValue);
+                .getTasks(AccountSP.getAuthorization(), searchValue);
         call.enqueue(new Callback<QLTasksRes>() {
             @Override
             public void onResponse(Call<QLTasksRes> call, Response<QLTasksRes> response) {
@@ -228,11 +228,11 @@ public class QLApiController {
         String json = jsonArray.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         Call<QLBaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .runTasks(AccountSP.getCurrentAccount().getAuthorization(), body);
+                .runTasks(AccountSP.getAuthorization(), body);
 
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
@@ -272,11 +272,11 @@ public class QLApiController {
         String json = jsonArray.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         Call<QLBaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .stopTasks(AccountSP.getCurrentAccount().getAuthorization(), body);
+                .stopTasks(AccountSP.getAuthorization(), body);
 
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
@@ -320,11 +320,11 @@ public class QLApiController {
         String json = jsonArray.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         Call<QLBaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .enableTasks(AccountSP.getCurrentAccount().getAuthorization(), body);
+                .enableTasks(AccountSP.getAuthorization(), body);
 
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
@@ -368,11 +368,11 @@ public class QLApiController {
         String json = jsonArray.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         Call<QLBaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .disableTasks(AccountSP.getCurrentAccount().getAuthorization(), body);
+                .disableTasks(AccountSP.getAuthorization(), body);
 
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
@@ -416,11 +416,11 @@ public class QLApiController {
         String json = jsonArray.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         Call<QLBaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .pinTasks(AccountSP.getCurrentAccount().getAuthorization(), body);
+                .pinTasks(AccountSP.getAuthorization(), body);
 
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
@@ -464,11 +464,11 @@ public class QLApiController {
         String json = jsonArray.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         Call<QLBaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .unpinTasks(AccountSP.getCurrentAccount().getAuthorization(), body);
+                .unpinTasks(AccountSP.getAuthorization(), body);
 
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
@@ -512,11 +512,11 @@ public class QLApiController {
         String json = jsonArray.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         Call<QLBaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .deleteTasks(AccountSP.getCurrentAccount().getAuthorization(), body);
+                .deleteTasks(AccountSP.getAuthorization(), body);
 
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
@@ -562,11 +562,11 @@ public class QLApiController {
 
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         Call<QLEditTaskRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .editTask(AccountSP.getCurrentAccount().getAuthorization(), body);
+                .updateTask(AccountSP.getAuthorization(), body);
 
         call.enqueue(new Callback<QLEditTaskRes>() {
             @Override
@@ -609,11 +609,11 @@ public class QLApiController {
         String json = jsonObject.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         Call<QLEditTaskRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .addTask(AccountSP.getCurrentAccount().getAuthorization(), body);
+                .addTask(AccountSP.getAuthorization(), body);
 
         call.enqueue(new Callback<QLEditTaskRes>() {
             @Override
@@ -649,11 +649,11 @@ public class QLApiController {
 
     public static void getEnvironments(@NonNull String requestId, @NonNull String searchValue, @NonNull NetGetEnvironmentsCallback callback) {
         Call<QLEnvironmentRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .getEnvironments(AccountSP.getCurrentAccount().getAuthorization(), searchValue);
+                .getEnvironments(AccountSP.getAuthorization(), searchValue);
         call.enqueue(new Callback<QLEnvironmentRes>() {
             @Override
             public void onResponse(Call<QLEnvironmentRes> call, Response<QLEnvironmentRes> response) {
@@ -701,11 +701,11 @@ public class QLApiController {
 
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
         Call<QLEnvironmentRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .addEnvironments(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
+                .addEnvironments(AccountSP.getAuthorization(), requestBody);
 
         call.enqueue(new Callback<QLEnvironmentRes>() {
             @Override
@@ -751,11 +751,11 @@ public class QLApiController {
         String json = jsonObject.toString();
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
         Call<QLEditEnvRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .updateEnvironment(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
+                .updateEnvironment(AccountSP.getAuthorization(), requestBody);
 
         call.enqueue(new Callback<QLEditEnvRes>() {
             @Override
@@ -799,11 +799,11 @@ public class QLApiController {
         String json = jsonArray.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         Call<QLBaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .deleteEnvironments(AccountSP.getCurrentAccount().getAuthorization(), body);
+                .deleteEnvironments(AccountSP.getAuthorization(), body);
 
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
@@ -848,11 +848,11 @@ public class QLApiController {
         String json = jsonArray.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         Call<QLBaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .enableEnv(AccountSP.getCurrentAccount().getAuthorization(), body);
+                .enableEnv(AccountSP.getAuthorization(), body);
 
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
@@ -897,11 +897,11 @@ public class QLApiController {
         String json = jsonArray.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         Call<QLBaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .disableEnv(AccountSP.getCurrentAccount().getAuthorization(), body);
+                .disableEnv(AccountSP.getAuthorization(), body);
 
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
@@ -939,11 +939,11 @@ public class QLApiController {
 
     public static void getLogs(@NonNull String requestId, @NonNull NetGetLogsCallback callback) {
         Call<QLLogRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .getLogs(AccountSP.getCurrentAccount().getAuthorization());
+                .getLogs(AccountSP.getAuthorization());
         call.enqueue(new Callback<QLLogRes>() {
             @Override
             public void onResponse(Call<QLLogRes> call, Response<QLLogRes> response) {
@@ -979,11 +979,11 @@ public class QLApiController {
 
     public static void getLogDetail(@NonNull String requestId, @NonNull String logPath, @NonNull NetBaseCallback callback) {
         Call<QLBaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .getLogDetail(logPath, AccountSP.getCurrentAccount().getAuthorization());
+                .getLogDetail(logPath, AccountSP.getAuthorization());
 
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
@@ -1014,11 +1014,11 @@ public class QLApiController {
 
     public static void getConfigDetail(@NonNull String requestId, @NonNull NetConfigCallback callback) {
         Call<QLConfigRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .getConfig(AccountSP.getCurrentAccount().getAuthorization());
+                .getConfig(AccountSP.getAuthorization());
 
         call.enqueue(new Callback<QLConfigRes>() {
             @Override
@@ -1061,11 +1061,11 @@ public class QLApiController {
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
 
         Call<QLBaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .saveConfig(AccountSP.getCurrentAccount().getAuthorization(), body);
+                .updateConfig(AccountSP.getAuthorization(), body);
 
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
@@ -1097,11 +1097,11 @@ public class QLApiController {
 
     public static void getScripts(@NonNull String requestId, @NonNull NetGetScriptsCallback callback) {
         Call<QLScriptRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .getScripts(AccountSP.getCurrentAccount().getAuthorization());
+                .getScripts(AccountSP.getAuthorization());
         call.enqueue(new Callback<QLScriptRes>() {
             @Override
             public void onResponse(Call<QLScriptRes> call, Response<QLScriptRes> response) {
@@ -1137,11 +1137,11 @@ public class QLApiController {
 
     public static void getScriptDetail(@NonNull String requestId, @NonNull String scriptPath, @NonNull NetBaseCallback callback) {
         Call<QLBaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .getScriptDetail(scriptPath, AccountSP.getCurrentAccount().getAuthorization());
+                .getScriptDetail(scriptPath, AccountSP.getAuthorization());
 
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
@@ -1180,11 +1180,11 @@ public class QLApiController {
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
 
         Call<QLBaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .saveScript(AccountSP.getCurrentAccount().getAuthorization(), body);
+                .updateScript(AccountSP.getAuthorization(), body);
 
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
@@ -1216,11 +1216,11 @@ public class QLApiController {
 
     public static void getDependencies(@NonNull String requestId, String searchValue, String type, @NonNull NetGetDependenciesCallback callback) {
         Call<QLDependenceRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .getDependencies(AccountSP.getCurrentAccount().getAuthorization(), searchValue, type);
+                .getDependencies(AccountSP.getAuthorization(), searchValue, type);
 
         call.enqueue(new Callback<QLDependenceRes>() {
             @Override
@@ -1262,11 +1262,11 @@ public class QLApiController {
 
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
         Call<QLBaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .addDependencies(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
+                .addDependencies(AccountSP.getAuthorization(), requestBody);
 
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
@@ -1310,11 +1310,11 @@ public class QLApiController {
 
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
         Call<QLBaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .deleteDependencies(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
+                .deleteDependencies(AccountSP.getAuthorization(), requestBody);
 
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
@@ -1357,11 +1357,11 @@ public class QLApiController {
 
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
         Call<QLBaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .reinstallDependencies(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
+                .reinstallDependencies(AccountSP.getAuthorization(), requestBody);
 
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
@@ -1402,7 +1402,7 @@ public class QLApiController {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .getLoginLogs(AccountSP.getCurrentAccount().getAuthorization());
+                .getLoginLogs(AccountSP.getAuthorization());
 
         call.enqueue(new Callback<QLLoginLogRes>() {
             @Override
@@ -1443,7 +1443,7 @@ public class QLApiController {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .getLogRemove(AccountSP.getCurrentAccount().getAuthorization());
+                .getLogRemove(AccountSP.getAuthorization());
 
         call.enqueue(new Callback<QLLogRemoveRes>() {
             @Override
@@ -1484,11 +1484,11 @@ public class QLApiController {
 
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
         Call<QLBaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .baseUrl(AccountSP.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(QLApi.class)
-                .updateLogRemove(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
+                .updateLogRemove(AccountSP.getAuthorization(), requestBody);
 
         call.enqueue(new Callback<QLBaseRes>() {
             @Override
@@ -1523,6 +1523,54 @@ public class QLApiController {
         RequestManager.addCall(call, requestId);
 
     }
+
+    public static void updateUser(@NonNull String requestId, Account account, @NonNull NetBaseCallback callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("username", account.getUsername());
+        jsonObject.addProperty("password", account.getPassword());
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
+        Call<QLBaseRes> call = new Retrofit.Builder()
+                .baseUrl(AccountSP.getBaseUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(QLApi.class)
+                .updateUser(AccountSP.getAuthorization(), requestBody);
+
+        call.enqueue(new Callback<QLBaseRes>() {
+            @Override
+            public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                RequestManager.finishCall(requestId);
+                QLBaseRes baseRes = response.body();
+                if (baseRes == null) {
+                    if (response.code() == 401) {
+                        callback.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callback.onFailure(ERROR_NO_BODY);
+                    }
+                } else {
+                    if (baseRes.getCode() == 200) {
+                        callback.onSuccess();
+                    } else {
+                        callback.onFailure(baseRes.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<QLBaseRes> call, Throwable t) {
+                RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
+                callback.onFailure(t.getLocalizedMessage());
+            }
+        });
+
+        RequestManager.addCall(call, requestId);
+
+    }
+
 
     public interface NetBaseCallback {
         void onSuccess();
