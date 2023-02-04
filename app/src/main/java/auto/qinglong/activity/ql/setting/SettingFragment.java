@@ -59,10 +59,11 @@ public class SettingFragment extends BaseFragment {
                     tab.setText("常规设置");
                     break;
                 case 1:
-                    tab.setText("应用设置");
+                    tab.setText("登录日志");
+
                     break;
                 case 2:
-                    tab.setText("登录日志");
+                    tab.setText("应用设置");
                     break;
             }
         }).attach();

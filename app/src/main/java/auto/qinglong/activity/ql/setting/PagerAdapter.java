@@ -19,9 +19,9 @@ public class PagerAdapter extends FragmentStateAdapter {
             case 0:
                 return new CommonFragment();
             case 1:
-                return new AppFragment();
-            default:
                 return new LoginLogFragment();
+            default:
+                return new AppFragment();
         }
     }
 
