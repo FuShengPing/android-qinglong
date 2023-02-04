@@ -44,86 +44,57 @@
         app:srlEnableOverScrollDrag="true"
         app:srlEnableRefresh="false">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:background="@color/white"
                 android:orientation="vertical">
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@color/divide_line" />
-
                 <LinearLayout
-                    android:id="@+id/app_setting_notify"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="@dimen/action_bar_padding_horizontal">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="@dimen/app_setting_text_margin_vertical"
-                        android:text="@string/app_setting_notify"
-                        android:textColor="@color/app_setting_text_color"
-                        android:textSize="@dimen/app_setting_text_size" />
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/white"
+                    android:orientation="vertical">
 
                     <View
-                        android:layout_width="0dp"
-                        android:layout_height="0px"
-                        android:layout_weight="1"
-                        android:visibility="invisible" />
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/divide_line" />
 
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/app_setting_notify_switch"
+                    <LinearLayout
+                        android:id="@+id/app_setting_notify"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="true" />
-                </LinearLayout>
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="@dimen/action_bar_padding_horizontal">
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@color/divide_line" />
-            </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="@dimen/app_setting_text_margin_vertical"
+                            android:text="@string/app_setting_notify"
+                            android:textColor="@color/app_setting_text_color"
+                            android:textSize="@dimen/app_setting_text_size" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:background="@color/white"
-                android:orientation="vertical">
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0px"
+                            android:layout_weight="1"
+                            android:visibility="invisible" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@color/divide_line" />
-
-                <LinearLayout
-                    android:id="@+id/app_setting_document"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/style_press_gray"
-                    android:clickable="true"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="@dimen/action_bar_padding_horizontal">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="@dimen/app_setting_text_margin_vertical"
-                        android:text="@string/app_setting_document"
-                        android:textColor="@color/app_setting_text_color"
-                        android:textSize="@dimen/app_setting_text_size" />
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/app_setting_notify_switch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true" />
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
@@ -132,65 +103,102 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/app_setting_issue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/style_press_gray"
-                    android:clickable="true"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="@dimen/action_bar_padding_horizontal">
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/white"
+                    android:orientation="vertical">
 
-                    <TextView
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/divide_line" />
+
+                    <LinearLayout
+                        android:id="@+id/app_setting_document"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="@dimen/app_setting_text_margin_vertical"
-                        android:text="@string/app_setting_issue"
-                        android:textColor="@color/app_setting_text_color"
-                        android:textSize="@dimen/app_setting_text_size" />
+                        android:background="@drawable/style_press_gray"
+                        android:clickable="true"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="@dimen/action_bar_padding_horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="@dimen/app_setting_text_margin_vertical"
+                            android:text="@string/app_setting_document"
+                            android:textColor="@color/app_setting_text_color"
+                            android:textSize="@dimen/app_setting_text_size" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:background="@color/divide_line" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/app_setting_issue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/style_press_gray"
+                        android:clickable="true"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="@dimen/action_bar_padding_horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="@dimen/app_setting_text_margin_vertical"
+                            android:text="@string/app_setting_issue"
+                            android:textColor="@color/app_setting_text_color"
+                            android:textSize="@dimen/app_setting_text_size" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/divide_line" />
                 </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@color/divide_line" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:background="@color/white"
-                android:orientation="vertical">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@color/divide_line" />
 
                 <LinearLayout
-                    android:id="@+id/app_setting_share"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/style_press_gray"
-                    android:clickable="true"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="@dimen/action_bar_padding_horizontal">
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/white"
+                    android:orientation="vertical">
 
-                    <TextView
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/divide_line" />
+
+                    <LinearLayout
+                        android:id="@+id/app_setting_share"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="@dimen/app_setting_text_margin_vertical"
-                        android:text="@string/app_setting_share"
-                        android:textColor="@color/app_setting_text_color"
-                        android:textSize="@dimen/app_setting_text_size" />
-                </LinearLayout>
+                        android:background="@drawable/style_press_gray"
+                        android:clickable="true"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="@dimen/action_bar_padding_horizontal">
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@color/divide_line" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="@dimen/app_setting_text_margin_vertical"
+                            android:text="@string/app_setting_share"
+                            android:textColor="@color/app_setting_text_color"
+                            android:textSize="@dimen/app_setting_text_size" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/divide_line" />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+        </ScrollView>
+
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
 

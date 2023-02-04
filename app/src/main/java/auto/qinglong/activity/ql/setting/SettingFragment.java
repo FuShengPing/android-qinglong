@@ -27,7 +27,7 @@ public class SettingFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fg_setting, null);
+        View view = inflater.inflate(R.layout.fragment_setting, null);
 
         ui_menu = view.findViewById(R.id.action_nav_bar_menu);
         ui_tab = view.findViewById(R.id.page_tab);
@@ -42,10 +42,10 @@ public class SettingFragment extends BaseFragment {
     public void init() {
         ui_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
 
-        //设置界面适配器
-        mPagerAdapter = new PagerAdapter(requireActivity());
 
+        mPagerAdapter = new PagerAdapter(requireActivity());//界面适配器
         ui_page.setAdapter(mPagerAdapter);
+        ui_page.setUserInputEnabled(false);//禁用用户左右滑动页面
         ui_page.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -56,13 +56,13 @@ public class SettingFragment extends BaseFragment {
         new TabLayoutMediator(ui_tab, ui_page, (tab, position) -> {
             switch (position) {
                 case 0:
-                    tab.setText("登录日志");
+                    tab.setText("常规设置");
                     break;
                 case 1:
                     tab.setText("应用设置");
                     break;
                 case 2:
-                    tab.setText("常规设置");
+                    tab.setText("登录日志");
                     break;
             }
         }).attach();

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">青龙面板</string>
+    <!-- 链接区 -->
     <string name="url_project">https://gitee.com/wsfsp4/QingLong</string>
     <string name="url_readme">https://gitee.com/wsfsp4/QingLong/blob/master/README.md</string>
     <string name="url_issue">https://gitee.com/wsfsp4/QingLong/issues</string>
@@ -64,4 +65,13 @@
     <string name="item_login_log_platform">登录设备</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="setting_security_username">用户名</string>
+    <string name="setting_security_password">密码</string>
+    <string name="setting_common_security">安全设置</string>
+    <string name="save">保存</string>
+    <string name="login">登录</string>
+    <string name="save_space">保 存</string>
+    <string name="setting_other">其他设置</string>
+    <string name="setting_delete_frequency">日志删除频率</string>
+    <string name="day">天</string>
 </resources>

@@ -1,14 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.scwang.smart.refresh.layout.SmartRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_gray"
+    app:srlEnableAutoLoadMore="false"
+    app:srlEnableLoadMore="false"
+    app:srlEnableOverScrollBounce="true"
+    app:srlEnableOverScrollDrag="true"
+    app:srlEnableRefresh="false"
     tools:context=".activity.ql.setting.CommonFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:overScrollMode="never"
+        android:scrollbars="none">
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/bg_gray"
+            android:orientation="vertical"
+            android:paddingHorizontal="8dp"
+            android:paddingTop="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@color/white"
+                android:elevation="2dp"
+                android:orientation="vertical"
+                android:paddingHorizontal="6dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setting_common_security"
+                    android:textColor="@color/text_color_49"
+                    android:textSize="18sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginVertical="8dp"
+                    android:background="@color/divide_line" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/setting_security_username"
+                    android:textColor="@color/text_color_49"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/setting_security_username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/style_input"
+                    android:hint="@string/setting_security_username"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="5dp"
+                    android:singleLine="true"
+                    android:textColor="@color/text_color_49"
+                    android:textCursorDrawable="@drawable/style_cursor_blue"
+                    android:textIsSelectable="true"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/setting_security_password"
+                    android:textColor="@color/text_color_49"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/setting_security_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/style_input"
+                    android:hint="@string/setting_security_password"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="5dp"
+                    android:singleLine="true"
+                    android:textColor="@color/text_color_49"
+                    android:textCursorDrawable="@drawable/style_cursor_blue"
+                    android:textIsSelectable="true"
+                    android:textSize="15sp" />
+
+                <Button
+                    android:id="@+id/setting_security_save"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/style_button_blue"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/save_space"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@color/white"
+                android:elevation="2dp"
+                android:orientation="vertical"
+                android:paddingHorizontal="6dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setting_other"
+                    android:textColor="@color/text_color_49"
+                    android:textSize="18sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginVertical="8dp"
+                    android:background="@color/divide_line" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/setting_delete_frequency"
+                    android:textColor="@color/text_color_49"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/setting_log"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/style_input"
+                    android:hint="@string/day"
+                    android:inputType="numberSigned"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="5dp"
+                    android:singleLine="true"
+                    android:textColor="@color/text_color_49"
+                    android:textCursorDrawable="@drawable/style_cursor_blue"
+                    android:textIsSelectable="true"
+                    android:textSize="15sp" />
+
+                <Button
+                    android:id="@+id/setting_log_save"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/style_button_blue"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/save_space"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+
+</com.scwang.smart.refresh.layout.SmartRefreshLayout>

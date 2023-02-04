@@ -92,7 +92,7 @@ public class EnvFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fg_env, null);
+        View view = inflater.inflate(R.layout.fragment_env, null);
 
         ui_root = view.findViewById(R.id.root);
         ui_bar = view.findViewById(R.id.env_top_bar);

@@ -31,7 +31,7 @@ public class LoginLogFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fg_setting_login_log, container, false);
+        View view = inflater.inflate(R.layout.fragment_setting_login_log, container, false);
 
         ui_refresh = view.findViewById(R.id.refresh_layout);
         ui_recycler = view.findViewById(R.id.recycler_view);

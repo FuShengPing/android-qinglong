@@ -42,7 +42,7 @@ public class ConfigFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fg_config, null);
+        View view = inflater.inflate(R.layout.fragment_config, null);
 
         ui_menu_bar = view.findViewById(R.id.config_menu_bar);
         ui_menu = view.findViewById(R.id.config_menu);

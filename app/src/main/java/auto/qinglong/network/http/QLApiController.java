@@ -21,6 +21,7 @@ import auto.qinglong.bean.ql.network.QLDependenceRes;
 import auto.qinglong.bean.ql.network.QLEditEnvRes;
 import auto.qinglong.bean.ql.network.QLEditTaskRes;
 import auto.qinglong.bean.ql.network.QLEnvironmentRes;
+import auto.qinglong.bean.ql.network.QLLogRemoveRes;
 import auto.qinglong.bean.ql.network.QLLogRes;
 import auto.qinglong.bean.ql.network.QLLoginLogRes;
 import auto.qinglong.bean.ql.network.QLLoginRes;
@@ -1353,9 +1354,8 @@ public class QLApiController {
         for (String id : ids) {
             jsonArray.add(id);
         }
-        String json = jsonArray.toString();
 
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
         Call<QLBaseRes> call = new Retrofit.Builder()
                 .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -1437,6 +1437,93 @@ public class QLApiController {
         RequestManager.addCall(call, requestId);
     }
 
+    public static void getLogRemove(@NonNull String requestId, @NonNull NetGetLogRemoveCallback callback) {
+        Call<QLLogRemoveRes> call = new Retrofit.Builder()
+                .baseUrl(Objects.requireNonNull(AccountSP.getCurrentAccount()).getBaseUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(QLApi.class)
+                .getLogRemove(AccountSP.getCurrentAccount().getAuthorization());
+
+        call.enqueue(new Callback<QLLogRemoveRes>() {
+            @Override
+            public void onResponse(Call<QLLogRemoveRes> call, Response<QLLogRemoveRes> response) {
+                RequestManager.finishCall(requestId);
+                QLLogRemoveRes logRemoveRes = response.body();
+                if (logRemoveRes == null) {
+                    if (response.code() == 401) {
+                        callback.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callback.onFailure(ERROR_NO_BODY);
+                    }
+                } else {
+                    if (logRemoveRes.getCode() == 200) {
+                        callback.onSuccess(logRemoveRes.getData().getFrequency());
+                    } else {
+                        callback.onFailure(logRemoveRes.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<QLLogRemoveRes> call, Throwable t) {
+                RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
+                callback.onFailure(t.getLocalizedMessage());
+            }
+        });
+
+        RequestManager.addCall(call, requestId);
+    }
+
+    public static void updateLogRemove(@NonNull String requestId, int frequency, @NonNull NetBaseCallback callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("frequency", frequency);
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
+        Call<QLBaseRes> call = new Retrofit.Builder()
+                .baseUrl(AccountSP.getCurrentAccount().getBaseUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(QLApi.class)
+                .updateLogRemove(AccountSP.getCurrentAccount().getAuthorization(), requestBody);
+
+        call.enqueue(new Callback<QLBaseRes>() {
+            @Override
+            public void onResponse(Call<QLBaseRes> call, Response<QLBaseRes> response) {
+                RequestManager.finishCall(requestId);
+                QLBaseRes baseRes = response.body();
+                if (baseRes == null) {
+                    if (response.code() == 401) {
+                        callback.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callback.onFailure(ERROR_NO_BODY);
+                    }
+                } else {
+                    if (baseRes.getCode() == 200) {
+                        callback.onSuccess();
+                    } else {
+                        callback.onFailure(baseRes.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<QLBaseRes> call, Throwable t) {
+                RequestManager.finishCall(requestId);
+                if (call.isCanceled()) {
+                    return;
+                }
+                callback.onFailure(t.getLocalizedMessage());
+            }
+        });
+
+        RequestManager.addCall(call, requestId);
+
+    }
+
     public interface NetBaseCallback {
         void onSuccess();
 
@@ -1512,6 +1599,12 @@ public class QLApiController {
 
     public interface NetGetLoginLogsCallback {
         void onSuccess(List<QLLoginLog> logs);
+
+        void onFailure(String msg);
+    }
+
+    public interface NetGetLogRemoveCallback {
+        void onSuccess(int frequency);
 
         void onFailure(String msg);
     }

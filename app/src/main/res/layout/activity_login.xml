@@ -83,7 +83,7 @@
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:paddingVertical="8dp"
-            android:text="登录"
+            android:text="@string/login"
             android:textColor="@color/white"
             android:textSize="18sp" />
     </LinearLayout>

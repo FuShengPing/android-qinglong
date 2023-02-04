@@ -6,6 +6,7 @@ import auto.qinglong.bean.ql.network.QLDependenceRes;
 import auto.qinglong.bean.ql.network.QLEditEnvRes;
 import auto.qinglong.bean.ql.network.QLEditTaskRes;
 import auto.qinglong.bean.ql.network.QLEnvironmentRes;
+import auto.qinglong.bean.ql.network.QLLogRemoveRes;
 import auto.qinglong.bean.ql.network.QLLogRes;
 import auto.qinglong.bean.ql.network.QLLoginLogRes;
 import auto.qinglong.bean.ql.network.QLLoginRes;
@@ -315,4 +316,9 @@ public interface QLApi {
     @GET("api/user/login-log")
     Call<QLLoginLogRes> getLoginLogs(@Header("Authorization") String authorization);
 
+    @GET("api/system/log/remove")
+    Call<QLLogRemoveRes> getLogRemove(@Header("Authorization") String authorization);
+
+    @PUT("api/system/log/remove")
+    Call<QLBaseRes> updateLogRemove(@Header("Authorization") String authorization, @Body RequestBody body);
 }

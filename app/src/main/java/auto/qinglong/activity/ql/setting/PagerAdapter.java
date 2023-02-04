@@ -17,11 +17,11 @@ public class PagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                return new LoginLogFragment();
+                return new CommonFragment();
             case 1:
                 return new AppFragment();
             default:
-                return new CommonFragment();
+                return new LoginLogFragment();
         }
     }
 

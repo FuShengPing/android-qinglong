@@ -64,7 +64,7 @@ public class DepFragment extends BaseFragment {
     @SuppressLint("InflateParams")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fg_dep, null);
+        View view = inflater.inflate(R.layout.fragment_dep, null);
 
         ui_bar = view.findViewById(R.id.dep_top_bar);
         ui_nav_bar = view.findViewById(R.id.dep_nav_bar);
@@ -108,14 +108,14 @@ public class DepFragment extends BaseFragment {
             }
         });
 
-        //设置界面适配器
-        mPagerAdapter = new PagerAdapter(requireActivity());
+
+        mPagerAdapter = new PagerAdapter(requireActivity());//界面适配器
         mPagerAdapter.setPagerActionListener(() -> {
-            //进入操作栏
-            showBar(BarType.ACTION);
+            showBar(BarType.ACTION);//进入操作栏
         });
 
         ui_page.setAdapter(mPagerAdapter);
+        ui_page.setUserInputEnabled(false);//禁用用户左右滑动页面
         ui_page.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
