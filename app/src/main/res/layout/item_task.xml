@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="5dp"
-    android:layout_marginTop="5dp"
+    android:layout_marginHorizontal="@dimen/common_item_margin_horizontal"
+    android:layout_marginTop="@dimen/common_item_margin_top"
     android:background="@color/white"
+    android:elevation="@dimen/common_item_elevation"
     android:orientation="vertical"
-    android:paddingHorizontal="7dp"
-    android:paddingTop="7dp"
-    android:paddingBottom="10dp">
+    android:paddingHorizontal="@dimen/common_item_padding_horizontal"
+    android:paddingTop="@dimen/common_item_padding_top"
+    android:paddingBottom="@dimen/common_item_padding_bottom">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -62,128 +63,120 @@
         android:background="@color/divide_line" />
 
     <LinearLayout
-        android:id="@+id/task_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginVertical="5dp">
 
-        <LinearLayout
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="任务"
+            android:textColor="@color/text_color_49" />
+
+        <TextView
+            android:id="@+id/task_command"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="5dp">
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="任务"
-                android:textColor="@color/text_color_49" />
-
-            <TextView
-                android:id="@+id/task_command"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textAlignment="viewEnd"
-                android:textColor="@color/text_color_49" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="5dp">
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="状态"
-                android:textColor="@color/text_color_49" />
-
-            <TextView
-                android:id="@+id/task_state"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textAlignment="viewEnd"
-                android:textColor="@color/text_color_49" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="5dp">
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="任务定时"
-                android:textColor="@color/text_color_49" />
-
-            <TextView
-                android:id="@+id/task_schedule"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="viewEnd"
-                android:textColor="@color/text_color_49" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="5dp">
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="最后运行时间"
-                android:textColor="@color/text_color_49" />
-
-            <TextView
-                android:id="@+id/task_last_execution_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="viewEnd"
-                android:textColor="@color/text_color_49" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="5dp">
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="最后运行时长"
-                android:textColor="@color/text_color_49" />
-
-            <TextView
-                android:id="@+id/task_last_running_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="viewEnd"
-                android:textColor="@color/text_color_49" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="5dp">
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="下次运行时间"
-                android:textColor="@color/text_color_49" />
-
-            <TextView
-                android:id="@+id/task_next_execution_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="viewEnd"
-                android:textColor="@color/text_color_49" />
-        </LinearLayout>
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/text_color_49" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="5dp">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="状态"
+            android:textColor="@color/text_color_49" />
+
+        <TextView
+            android:id="@+id/task_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/text_color_49" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="5dp">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="任务定时"
+            android:textColor="@color/text_color_49" />
+
+        <TextView
+            android:id="@+id/task_schedule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/text_color_49" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="5dp">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="最后运行时间"
+            android:textColor="@color/text_color_49" />
+
+        <TextView
+            android:id="@+id/task_last_execution_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/text_color_49" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="5dp">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="最后运行时长"
+            android:textColor="@color/text_color_49" />
+
+        <TextView
+            android:id="@+id/task_last_running_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/text_color_49" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="5dp">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="下次运行时间"
+            android:textColor="@color/text_color_49" />
+
+        <TextView
+            android:id="@+id/task_next_execution_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/text_color_49" />
+    </LinearLayout>
 </LinearLayout>

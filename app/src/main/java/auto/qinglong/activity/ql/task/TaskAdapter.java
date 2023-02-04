@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -113,11 +112,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
             holder.ui_pinned.setVisibility(View.GONE);
         }
 
-        //监听
-        if (itemActionListener == null) {
-            return;
-        }
-
         holder.ui_action.setOnClickListener(v -> {
             if (this.checkState) {
                 holder.ui_check.setChecked(!holder.ui_check.isChecked());
@@ -138,22 +132,22 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
 
         holder.ui_name.setOnLongClickListener(v -> {
             if (!this.checkState) {
-                itemActionListener.onMulAction(qlTask, holder.getAdapterPosition());
+                itemActionListener.onMulAction();
             }
             return true;
         });
 
-        holder.ui_detail.setOnClickListener(v -> {
-            if (this.checkState) {
-                holder.ui_check.setChecked(!holder.ui_check.isChecked());
-            }
-        });
-
-        holder.ui_detail.setOnLongClickListener(v -> {
+        holder.itemView.setOnLongClickListener(v -> {
             if (!this.checkState) {
                 itemActionListener.onEdit(qlTask);
             }
             return true;
+        });
+
+        holder.itemView.setOnClickListener(v -> {
+            if (this.checkState) {
+                holder.ui_check.setChecked(!holder.ui_check.isChecked());
+            }
         });
     }
 
@@ -182,12 +176,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
         return checkState;
     }
 
-    public void setCheckState(boolean checkState, int position) {
+    public void setCheckState(boolean checkState) {
         this.checkState = checkState;
         Arrays.fill(this.dataCheckState, false);
-        if (checkState && position > -1) {
-            this.dataCheckState[position] = true;
-        }
         notifyItemRangeChanged(0, getItemCount());
     }
 
@@ -219,12 +210,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
 
         void onEdit(QLTask QLTask);
 
-        void onMulAction(QLTask QLTask, int position);
+        void onMulAction();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView ui_name;
-        public LinearLayout ui_detail;
         public TextView ui_command;
         public TextView ui_schedule;
         public TextView ui_state;
@@ -238,7 +228,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             ui_name = itemView.findViewById(R.id.task_name);
-            ui_detail = itemView.findViewById(R.id.task_detail);
             ui_command = itemView.findViewById(R.id.task_command);
             ui_schedule = itemView.findViewById(R.id.task_schedule);
             ui_state = itemView.findViewById(R.id.task_state);

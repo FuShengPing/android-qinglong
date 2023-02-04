@@ -160,8 +160,8 @@ public class EnvFragment extends BaseFragment {
             }
 
             @Override
-            public void onMulAction(QLEnvironment environment, int position) {
-                envItemAdapter.setCheckState(true, -1);
+            public void onMulAction() {
+                envItemAdapter.setCheckState(true);
                 changeBar(BarType.MUL_ACTION);
             }
         });
@@ -483,7 +483,7 @@ public class EnvFragment extends BaseFragment {
 
         if (ui_bar_actions.getVisibility() == View.VISIBLE) {
             ui_bar_actions.setVisibility(View.INVISIBLE);
-            envItemAdapter.setCheckState(false, -1);
+            envItemAdapter.setCheckState(false);
             ui_actions_select.setChecked(false);
         }
 
@@ -495,7 +495,7 @@ public class EnvFragment extends BaseFragment {
             ui_bar_search.setVisibility(View.VISIBLE);
         } else {
             ui_actions_select.setChecked(false);
-            envItemAdapter.setCheckState(true, -1);
+            envItemAdapter.setCheckState(true);
             ui_bar_actions.setVisibility(View.VISIBLE);
         }
     }

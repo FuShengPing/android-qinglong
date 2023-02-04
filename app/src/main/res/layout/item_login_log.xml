@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="5dp"
-    android:layout_marginTop="5dp"
+    android:layout_marginHorizontal="@dimen/common_item_margin_horizontal"
+    android:layout_marginTop="@dimen/common_item_margin_top"
     android:background="@color/white"
+    android:elevation="@dimen/common_item_elevation"
     android:orientation="vertical"
-    android:paddingHorizontal="7dp"
-    android:paddingTop="7dp"
-    android:paddingBottom="10dp">
+    android:paddingHorizontal="@dimen/common_item_padding_horizontal"
+    android:paddingTop="@dimen/common_item_padding_top"
+    android:paddingBottom="@dimen/common_item_padding_bottom">
 
     <TextView
         android:id="@+id/login_log_title"

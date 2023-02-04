@@ -62,8 +62,8 @@ public class PagerFragment extends BaseFragment {
 
         depItemAdapter.setItemInterface(new DepItemAdapter.ItemActionListener() {
             @Override
-            public void onMulAction(QLDependence dependence, int position) {
-                depItemAdapter.setCheckState(true, -1);
+            public void onMulAction() {
+                depItemAdapter.setCheckState(true);
                 pagerActionListener.onMulAction();
             }
 
@@ -117,7 +117,7 @@ public class PagerFragment extends BaseFragment {
     }
 
     public void setCheckState(boolean checkState) {
-        depItemAdapter.setCheckState(checkState, -1);
+        depItemAdapter.setCheckState(checkState);
     }
 
     public void setAllItemCheck(boolean isChecked) {

@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/action_bar_height"
         android:background="@color/theme_color"
-        android:clickable="true"
         android:paddingHorizontal="@dimen/action_bar_padding_horizontal">
 
         <LinearLayout
@@ -73,6 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
+                android:background="@drawable/style_button_ripple"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
@@ -99,7 +99,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/style_button_ripple"
-                android:clickable="true"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
                 android:paddingHorizontal="5dp">

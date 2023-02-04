@@ -93,7 +93,7 @@ public class DepItemAdapter extends RecyclerView.Adapter<DepItemAdapter.MyViewHo
 
         holder.ui_title.setOnLongClickListener(v -> {
             if (!this.checkState) {
-                itemActionListener.onMulAction(dependence, holder.getAdapterPosition());
+                itemActionListener.onMulAction();
             }
             return true;
         });
@@ -133,12 +133,9 @@ public class DepItemAdapter extends RecyclerView.Adapter<DepItemAdapter.MyViewHo
     /**
      * 设置是否进入选择状态
      */
-    public void setCheckState(boolean isChecked, int position) {
+    public void setCheckState(boolean isChecked) {
         this.checkState = isChecked;
         Arrays.fill(this.dataCheckState, false);
-        if (isChecked && position > -1) {
-            this.dataCheckState[position] = true;
-        }
         notifyItemRangeChanged(0, getItemCount());
     }
 
@@ -168,7 +165,7 @@ public class DepItemAdapter extends RecyclerView.Adapter<DepItemAdapter.MyViewHo
     }
 
     public interface ItemActionListener {
-        void onMulAction(QLDependence dependence, int position);
+        void onMulAction();
 
         void onDetail(QLDependence dependence, int position);
 

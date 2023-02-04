@@ -17,7 +17,7 @@
             android:id="@+id/item_file_image"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:src="@drawable/ic_folder" />
 
         <LinearLayout

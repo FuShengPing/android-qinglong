@@ -8,4 +8,10 @@
     <dimen name="action_bar_title_margin_horizontal">16dp</dimen>
     <dimen name="app_setting_text_size">16sp</dimen>
     <dimen name="app_setting_text_margin_vertical">14dp</dimen>
+    <dimen name="common_item_padding_horizontal">7dp</dimen>
+    <dimen name="common_item_padding_top">7dp</dimen>
+    <dimen name="common_item_padding_bottom">10dp</dimen>
+    <dimen name="common_item_margin_horizontal">5dp</dimen>
+    <dimen name="common_item_margin_top">5dp</dimen>
+    <dimen name="common_item_elevation">1dp</dimen>
 </resources>

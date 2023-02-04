@@ -209,7 +209,7 @@ public class TaskFragment extends BaseFragment {
             }
 
             @Override
-            public void onMulAction(QLTask QLTask, int position) {
+            public void onMulAction() {
                 changeBar(BarType.MUL_ACTION);
             }
         });
@@ -514,7 +514,7 @@ public class TaskFragment extends BaseFragment {
 
         if (ui_bar_actions.getVisibility() == View.VISIBLE) {
             ui_bar_actions.setVisibility(View.INVISIBLE);
-            mTaskAdapter.setCheckState(false, -1);
+            mTaskAdapter.setCheckState(false);
             ui_actions_select.setChecked(false);
         }
 
@@ -526,7 +526,7 @@ public class TaskFragment extends BaseFragment {
             ui_bar_search.setVisibility(View.VISIBLE);
         } else {
             ui_actions_scroll.scrollTo(0, 0);
-            mTaskAdapter.setCheckState(true, -1);
+            mTaskAdapter.setCheckState(true);
             ui_bar_actions.setVisibility(View.VISIBLE);
         }
     }

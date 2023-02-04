@@ -21,7 +21,7 @@ public class RuleItemAdapter extends RecyclerView.Adapter<RuleItemAdapter.MyView
     public static final String TAG = "RuleItemAdapter";
     private List<WebRule> data;
     private OnActionListener actionListener;
-    private Context context;
+    private final Context context;
 
     public RuleItemAdapter(Context context) {
         this.context = context;
@@ -47,8 +47,6 @@ public class RuleItemAdapter extends RecyclerView.Adapter<RuleItemAdapter.MyView
         holder.ui_check.setChecked(webRule.isChecked());
 
         holder.ui_check.setOnCheckedChangeListener((buttonView, isChecked) -> actionListener.onCheck(isChecked, holder.getLayoutPosition(), webRule.getId()));
-
-        holder.itemView.setOnClickListener(v -> holder.ui_check.setChecked(!holder.ui_check.isChecked()));
 
         holder.itemView.setOnLongClickListener(v -> {
             actionListener.onAction(v, holder.getLayoutPosition(), webRule);
@@ -85,7 +83,7 @@ public class RuleItemAdapter extends RecyclerView.Adapter<RuleItemAdapter.MyView
         this.actionListener = actionListener;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         protected TextView ui_env;
         protected TextView ui_name;
         protected TextView ui_url;

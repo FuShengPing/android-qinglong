@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -80,21 +79,20 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
 
         holder.ui_name.setOnLongClickListener(v -> {
             if (!this.checkState) {
-                itemActionListener.onMulAction(environment, holder.getAdapterPosition());
+                itemActionListener.onMulAction();
             }
             return true;
         });
 
-        holder.ui_body.setOnClickListener(v -> {
+        holder.itemView.setOnClickListener(v -> {
             if (this.checkState) {
                 holder.ui_check.setChecked(!holder.ui_check.isChecked());
             }
         });
 
-        holder.ui_body.setOnLongClickListener(v -> {
+        holder.itemView.setOnLongClickListener(v -> {
             if (!this.checkState) {
                 itemActionListener.onEdit(environment, holder.getAdapterPosition());
-
             }
             return true;
         });
@@ -124,12 +122,9 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
         return checkState;
     }
 
-    public void setCheckState(boolean checkState, int position) {
+    public void setCheckState(boolean checkState) {
         this.checkState = checkState;
         Arrays.fill(this.dataCheckState, false);
-        if (checkState && position > -1) {
-            this.dataCheckState[position] = true;
-        }
         notifyItemRangeChanged(0, getItemCount());
     }
 
@@ -157,11 +152,10 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
     public interface ItemActionListener {
         void onEdit(QLEnvironment environment, int position);
 
-        void onMulAction(QLEnvironment environment, int position);
+        void onMulAction();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
-        public LinearLayout ui_body;
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         public CheckBox ui_check;
         public TextView ui_name;
         public TextView ui_value;
@@ -171,7 +165,6 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            ui_body = itemView.findViewById(R.id.env_detail);
             ui_check = itemView.findViewById(R.id.env_check);
             ui_name = itemView.findViewById(R.id.env_name);
             ui_value = itemView.findViewById(R.id.env_value);

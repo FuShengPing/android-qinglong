@@ -8,7 +8,7 @@ import android.os.Vibrator;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,11 +37,10 @@ public class PluginWebRuleActivity extends BaseActivity {
     public static final String TAG = "PluginWebRuleActivity";
 
     private RuleItemAdapter itemAdapter;
-    private RelativeLayout ui_bar;
+    private LinearLayout ui_bar;
     private ImageView ui_bar_back;
     private ImageView ui_bar_more;
-    private RecyclerView ui_rv_list;
-    private EditWindow ui_pop_edit;
+    private RecyclerView ui_recycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,18 +50,18 @@ public class PluginWebRuleActivity extends BaseActivity {
         ui_bar = findViewById(R.id.common_bar);
         ui_bar_back = findViewById(R.id.common_bar_back);
         ui_bar_more = findViewById(R.id.bar_more);
-        ui_rv_list = findViewById(R.id.plugin_web_rule_recycler);
-
-        itemAdapter = new RuleItemAdapter(getBaseContext());
-        ui_rv_list.setAdapter(itemAdapter);
-        ui_rv_list.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false));
-        Objects.requireNonNull(ui_rv_list.getItemAnimator()).setChangeDuration(0);
+        ui_recycler = findViewById(R.id.plugin_web_rule_recycler);
 
         init();
     }
 
     @Override
     protected void init() {
+        itemAdapter = new RuleItemAdapter(getBaseContext());
+        ui_recycler.setAdapter(itemAdapter);
+        ui_recycler.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false));
+        Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
+
         itemAdapter.setActionListener(new RuleItemAdapter.OnActionListener() {
 
             @Override
@@ -117,7 +116,7 @@ public class PluginWebRuleActivity extends BaseActivity {
                 WebRule rule = new WebRule(0, envName, name, url, target, main, joinChar, true);
 
                 if (!rule.isValid()) {
-                    ToastUnit.showShort("非法配置,请参考文档说明");
+                    ToastUnit.showShort("非法配置,请参考使用手册");
                     return false;
                 }
 
@@ -138,10 +137,10 @@ public class PluginWebRuleActivity extends BaseActivity {
     }
 
     private void showPopWindowRemoteEdit() {
-        ui_pop_edit = new EditWindow("远程导入", "取消", "确定");
+        EditWindow editWindow = new EditWindow("远程导入", "取消", "确定");
         EditWindowItem itemValue = new EditWindowItem("url", null, "链接", "请输入远程地址");
-        ui_pop_edit.addItem(itemValue);
-        ui_pop_edit.setActionListener(new EditWindow.OnActionListener() {
+        editWindow.addItem(itemValue);
+        editWindow.setActionListener(new EditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 String url = map.get("url");
@@ -151,7 +150,7 @@ public class PluginWebRuleActivity extends BaseActivity {
                     return false;
                 }
 
-                WindowUnit.hideKeyboard(ui_pop_edit.getView());
+                WindowUnit.hideKeyboard(editWindow.getView());
                 String baseUrl = WebUnit.getHost(url) + "/";
                 String path = WebUnit.getPath(url, "");
                 netGetRemoteWebRules(baseUrl, path);
@@ -165,7 +164,7 @@ public class PluginWebRuleActivity extends BaseActivity {
             }
         });
 
-        PopupWindowBuilder.buildEditWindow(this, ui_pop_edit);
+        PopupWindowBuilder.buildEditWindow(this, editWindow);
     }
 
     private void showPopWindowMiniMore() {
@@ -203,7 +202,6 @@ public class PluginWebRuleActivity extends BaseActivity {
         if (num > 0) {
             itemAdapter.setData(WebRuleDBHelper.getAllWebRule());
         }
-        ui_pop_edit.dismiss();
     }
 
     private void netGetRemoteWebRules(String baseUrl, String path) {

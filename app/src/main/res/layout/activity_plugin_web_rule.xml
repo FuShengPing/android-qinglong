@@ -6,50 +6,44 @@
     android:orientation="vertical"
     tools:context=".activity.plugin.web.PluginWebActivity">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/common_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/action_bar_height"
         android:background="@color/theme_color"
         android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:paddingHorizontal="@dimen/action_bar_padding_horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/common_bar_back"
+            android:layout_width="@dimen/action_bar_icon_size"
+            android:layout_height="@dimen/action_bar_icon_size"
+            android:background="@drawable/style_button_ripple"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_arrow_back" />
+
+        <TextView
+            android:id="@+id/common_bar_title"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_marginHorizontal="@dimen/action_bar_title_margin_horizontal"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:lines="1"
+            android:singleLine="true"
+            android:text="@string/action_bar_title_plugin_web_rule"
+            android:textColor="@color/white"
+            android:textSize="@dimen/action_bar_title_size" />
 
-            <ImageView
-                android:id="@+id/common_bar_back"
-                android:layout_width="@dimen/action_bar_icon_size"
-                android:layout_height="@dimen/action_bar_icon_size"
-                android:background="@drawable/style_button_ripple"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_arrow_back" />
-
-            <TextView
-                android:id="@+id/common_bar_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/action_bar_title_margin_horizontal"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:lines="1"
-                android:singleLine="true"
-                android:text="@string/action_bar_title_plugin_web_rule"
-                android:textColor="@color/white"
-                android:textSize="@dimen/action_bar_title_size" />
-
-            <ImageView
-                android:id="@+id/bar_more"
-                android:layout_width="@dimen/action_bar_icon_size"
-                android:layout_height="@dimen/action_bar_icon_size"
-                android:background="@drawable/style_button_ripple"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_more_options" />
-        </LinearLayout>
-    </RelativeLayout>
+        <ImageView
+            android:id="@+id/bar_more"
+            android:layout_width="@dimen/action_bar_icon_size"
+            android:layout_height="@dimen/action_bar_icon_size"
+            android:background="@drawable/style_button_ripple"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_more_options" />
+    </LinearLayout>
 
     <com.scwang.smart.refresh.layout.SmartRefreshLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/refresh_layout"
