@@ -63,9 +63,12 @@
 
 
 ## 4.界面预览
-![模块导航](https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/preview_1.png)
-![代码编辑](https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/preview_2.png)
-![系统设置](https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/preview_2.png)
+
+![模块导航](https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/preview_1.jpg)
+
+![代码编辑](https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/preview_2.jpg)
+
+![系统设置](https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/preview_2.jpg)
 
 ## 5.下载地址
 [最新版本](https://gitee.com/wsfsp4/QingLong/releases/tag/V1.4)
@@ -84,5 +87,6 @@ APP还在开发，后续尝试加入更多拓展模块,提供更加强大的功�
 ## 8.支持项目
 开发不易，如果APP对你有所帮助，可以考虑支持下项目开发，非常感谢!
 ![微信打赏](https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/donate_wx.png)  
-![支付宝打赏](https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/donate_zfb.png)
+
+![支付宝打赏](https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/donate_zfb.jpg)
 
