@@ -181,13 +181,11 @@ public class DepItemAdapter extends RecyclerView.Adapter<DepItemAdapter.MyViewHo
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-
             ui_title = itemView.findViewById(R.id.item_title);
             ui_time = itemView.findViewById(R.id.dep_item_time);
             ui_status = itemView.findViewById(R.id.dep_item_status);
             ui_check = itemView.findViewById(R.id.item_check);
             ui_bug = itemView.findViewById(R.id.dep_action_bug);
-
         }
     }
 }

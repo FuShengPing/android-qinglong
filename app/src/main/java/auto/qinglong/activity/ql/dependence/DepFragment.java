@@ -108,7 +108,6 @@ public class DepFragment extends BaseFragment {
             }
         });
 
-
         mPagerAdapter = new PagerAdapter(requireActivity());//界面适配器
         mPagerAdapter.setPagerActionListener(() -> {
             showBar(BarType.ACTION);//进入操作栏
@@ -129,7 +128,7 @@ public class DepFragment extends BaseFragment {
         });
 
         //设置界面联动
-        TabLayoutMediator mediator = new TabLayoutMediator(ui_page_tab, ui_page, (tab, position) -> {
+        new TabLayoutMediator(ui_page_tab, ui_page, (tab, position) -> {
             switch (position) {
                 case 0:
                     tab.setText("NodeJs");
@@ -141,9 +140,7 @@ public class DepFragment extends BaseFragment {
                     tab.setText("Linux");
                     break;
             }
-        });
-        mediator.attach();
-
+        }).attach();
     }
 
     @Override
@@ -159,39 +156,6 @@ public class DepFragment extends BaseFragment {
         } else {
             return false;
         }
-    }
-
-    public void netAddDependence(List<QLDependence> dependencies) {
-        QLApiController.addDependencies(getNetRequestID(), dependencies, new QLApiController.NetBaseCallback() {
-            @Override
-            public void onSuccess() {
-                ui_pop_edit.dismiss();
-                //刷新数据
-                mPagerAdapter.getCurrentFragment(ui_page.getCurrentItem()).refreshData();
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                ToastUnit.showShort(msg);
-            }
-        });
-
-    }
-
-    public void netDeleteDependence(List<String> ids) {
-        QLApiController.deleteDependencies(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
-            @Override
-            public void onSuccess() {
-                showBar(BarType.NAV);
-                //刷新数据
-                mPagerAdapter.getCurrentFragment(ui_page.getCurrentItem()).refreshData();
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                ToastUnit.showShort(msg);
-            }
-        });
     }
 
     private void showPopWindowEdit() {
@@ -235,7 +199,7 @@ public class DepFragment extends BaseFragment {
         PopupWindowBuilder.buildEditWindow(requireActivity(), ui_pop_edit);
     }
 
-    public void showPopWindowMiniMore() {
+    private void showPopWindowMiniMore() {
         MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
         miniMoreWindow.setTargetView(ui_bar);
         miniMoreWindow.setGravity(Gravity.END);
@@ -253,7 +217,7 @@ public class DepFragment extends BaseFragment {
         PopupWindowBuilder.buildMiniMoreWindow(requireActivity(), miniMoreWindow);
     }
 
-    public void showBar(BarType barType) {
+    private void showBar(BarType barType) {
         if (barType == BarType.NAV) {
             ui_action_bar.setVisibility(View.INVISIBLE);
             mCurrentFragment.setCheckState(false);
@@ -265,6 +229,39 @@ public class DepFragment extends BaseFragment {
             mCurrentFragment.setCheckState(true);
             ui_action_bar.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void netAddDependence(List<QLDependence> dependencies) {
+        QLApiController.addDependencies(getNetRequestID(), dependencies, new QLApiController.NetBaseCallback() {
+            @Override
+            public void onSuccess() {
+                ui_pop_edit.dismiss();
+                //刷新数据
+                mPagerAdapter.getCurrentFragment(ui_page.getCurrentItem()).refreshData();
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort(msg);
+            }
+        });
+
+    }
+
+    private void netDeleteDependence(List<String> ids) {
+        QLApiController.deleteDependencies(getNetRequestID(), ids, new QLApiController.NetBaseCallback() {
+            @Override
+            public void onSuccess() {
+                showBar(BarType.NAV);
+                //刷新数据
+                mPagerAdapter.getCurrentFragment(ui_page.getCurrentItem()).refreshData();
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort(msg);
+            }
+        });
     }
 
 
