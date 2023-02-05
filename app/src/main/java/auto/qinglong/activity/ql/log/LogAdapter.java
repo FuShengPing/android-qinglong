@@ -48,7 +48,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.MyViewHolder> {
         }
 
         if (QLLog.isDir()) {
-            holder.ui_image.setImageResource(R.drawable.ic_folder);
+            holder.ui_image.setImageResource(R.drawable.ic_blue_folder);
         } else {
             holder.ui_image.setImageResource(R.mipmap.ic_file_txt);
         }

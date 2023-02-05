@@ -48,7 +48,7 @@ public class PluginWebRuleActivity extends BaseActivity {
         setContentView(R.layout.activity_plugin_web_rule);
 
         ui_bar = findViewById(R.id.common_bar);
-        ui_bar_back = findViewById(R.id.common_bar_back);
+        ui_bar_back = findViewById(R.id.action_bar_back);
         ui_bar_more = findViewById(R.id.bar_more);
         ui_recycler = findViewById(R.id.plugin_web_rule_recycler);
 
@@ -171,8 +171,8 @@ public class PluginWebRuleActivity extends BaseActivity {
         MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
         miniMoreWindow.setTargetView(ui_bar);
         miniMoreWindow.setGravity(Gravity.END);
-        miniMoreWindow.addItem(new MiniMoreItem("add", "新建规则", R.drawable.ic_add_gray));
-        miniMoreWindow.addItem(new MiniMoreItem("remoteAdd", "远程导入", R.drawable.ic_download_gray));
+        miniMoreWindow.addItem(new MiniMoreItem("add", "新建规则", R.drawable.ic_gray_add));
+        miniMoreWindow.addItem(new MiniMoreItem("remoteAdd", "远程导入", R.drawable.ic_gray_download));
         miniMoreWindow.setOnActionListener(key -> {
             switch (key) {
                 case "add":

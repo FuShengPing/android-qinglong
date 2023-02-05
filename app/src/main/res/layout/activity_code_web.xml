@@ -24,7 +24,7 @@
                 android:layout_height="@dimen/action_bar_icon_size"
                 android:background="@drawable/style_button_ripple"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_arrow_back" />
+                android:src="@drawable/ic_white_arrow_back" />
 
             <TextView
                 android:id="@+id/script_name"
@@ -45,7 +45,7 @@
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/style_button_ripple"
                 android:clickable="true"
-                android:src="@drawable/ic_write_white"
+                android:src="@drawable/ic_white_write"
                 android:visibility="invisible" />
 
             <ImageView
@@ -54,7 +54,7 @@
                 android:layout_height="@dimen/action_bar_icon_size"
                 android:background="@drawable/style_button_ripple"
                 android:clickable="true"
-                android:src="@drawable/ic_refresh"
+                android:src="@drawable/ic_white_refresh"
                 android:visibility="invisible" />
         </LinearLayout>
 
@@ -72,7 +72,7 @@
                 android:layout_height="@dimen/action_bar_icon_size"
                 android:background="@drawable/style_button_ripple"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_arrow_back" />
+                android:src="@drawable/ic_white_arrow_back" />
 
             <View
                 android:layout_width="0dp"
@@ -86,7 +86,7 @@
                 android:layout_height="@dimen/action_bar_icon_size"
                 android:background="@drawable/style_button_ripple"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_save_white" />
+                android:src="@drawable/ic_white_save" />
         </LinearLayout>
     </RelativeLayout>
 

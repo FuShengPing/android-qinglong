@@ -7,18 +7,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.http.SslError;
 import android.os.Bundle;
-import android.view.KeyEvent;
+import android.view.Gravity;
 import android.view.inputmethod.EditorInfo;
 import android.webkit.CookieManager;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +36,8 @@ import auto.qinglong.utils.WebUnit;
 import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.WebViewBuilder;
 import auto.qinglong.views.popup.ConfirmWindow;
+import auto.qinglong.views.popup.MiniMoreItem;
+import auto.qinglong.views.popup.MiniMoreWindow;
 import auto.qinglong.views.popup.PopupWindowBuilder;
 
 public class PluginWebActivity extends BaseActivity {
@@ -45,30 +46,23 @@ public class PluginWebActivity extends BaseActivity {
     private String urlLoaded = "";
     private CookieManager cookieManager;
 
-    private ImageView ui_bar_back;
-    private ImageView ui_bar_rule;
+    private LinearLayout ui_bar;
+    private ImageView ui_back;
+    private ImageView ui_options;
+    private EditText ui_et_url;
     private FrameLayout ui_webView_container;
     private WebView ui_webView;
-    private EditText ui_et_url;
-    private Button ui_bt_load;
-    private Button ui_bt_read;
-    private Button ui_bt_read_rule;
-    private Button ui_bt_import;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plugin_web);
 
-        ui_bar_back = findViewById(R.id.common_bar_back);
-        ui_bar_rule = findViewById(R.id.bar_rule);
+        ui_bar = findViewById(R.id.action_bar);
+        ui_back = findViewById(R.id.action_bar_back);
+        ui_options = findViewById(R.id.action_bar_options);
         ui_webView_container = findViewById(R.id.web_container);
         ui_et_url = findViewById(R.id.et_url);
-        ui_bt_load = findViewById(R.id.bt_load);
-        ui_bt_read = findViewById(R.id.bt_read);
-        ui_bt_read_rule = findViewById(R.id.bt_read_rule);
-        ui_bt_import = findViewById(R.id.bt_import);
 
         cookieManager = CookieManager.getInstance();
 
@@ -92,12 +86,12 @@ public class PluginWebActivity extends BaseActivity {
 
     @Override
     protected void init() {
-        ui_bar_back.setOnClickListener(v -> finish());
+        ui_back.setOnClickListener(v -> finish());
 
-        //规则列表界面
-        ui_bar_rule.setOnClickListener(v -> {
-            Intent intent = new Intent(getBaseContext(), PluginWebRuleActivity.class);
-            startActivity(intent);
+        ui_options.setOnClickListener(v -> {
+            ui_et_url.clearFocus();
+            WindowUnit.hideKeyboard(ui_et_url);
+            showPopWindowMiniMore();
         });
 
         //加载网页操作 同时清除所有cookies
@@ -120,55 +114,6 @@ public class PluginWebActivity extends BaseActivity {
             return true;
         });
 
-        //常规读取Cookies操作
-        ui_bt_read.setOnClickListener(v -> {
-            WindowUnit.hideKeyboard(ui_bt_load);
-            String cookies, url;
-            url = ui_webView.getOriginalUrl();
-
-            if (url != null && !url.isEmpty()) {
-                cookies = cookieManager.getCookie(url);
-            } else {
-                ToastUnit.showShort("请先加载网页");
-                return;
-            }
-            showCookies(cookies);
-
-        });
-
-        //规则读取Cookies操作
-        ui_bt_read_rule.setOnClickListener(v -> {
-            WindowUnit.hideKeyboard(ui_bt_load);
-            String url = ui_webView.getOriginalUrl();
-            if (TextUnit.isFull(url)) {
-                //删除URL参数
-                url = url.split("\\?", 2)[0];
-                //读取cookies
-                String cookies = cookieManager.getCookie(url);
-                //开始读取变量流程
-                startRead(urlLoaded, cookies);
-            } else {
-                ToastUnit.showShort("请先加载网页");
-            }
-
-        });
-
-        //导入变量操作
-        ui_bt_import.setOnClickListener(v -> {
-            WindowUnit.hideKeyboard(ui_bt_load);
-            String url = ui_webView.getOriginalUrl();
-            if (TextUnit.isFull(url)) {
-                //删除URL参数
-                url = url.split("\\?", 2)[0];
-                //读取cookies
-                String cookies = cookieManager.getCookie(url);
-                //开始导入变量流程
-                startImport(urlLoaded, cookies);
-            } else {
-                ToastUnit.showShort("请先加载网页");
-            }
-        });
-
         //构建web控件
         ui_webView = WebViewBuilder.build(getBaseContext(), ui_webView_container, new WebViewClient() {
             @SuppressLint("WebViewClientOnReceivedSslError")
@@ -183,10 +128,85 @@ public class PluginWebActivity extends BaseActivity {
                 return !url.startsWith("https") && !url.startsWith("http");
             }
         }, null);
-        ui_webView.setBackgroundColor(getColor(R.color.bg_gray));
     }
 
-    private void startRead(String url, String cookies) {
+    private void showPopWindowConfirm(String content) {
+        //配置pop窗体信息
+        ConfirmWindow confirmWindow = new ConfirmWindow();
+        confirmWindow.setMaxHeight(WindowUnit.getWindowHeightPix(getBaseContext()) / 3);//限制最大高度
+        confirmWindow.setConfirmTip("拷贝");
+        confirmWindow.setCancelTip("取消");
+        confirmWindow.setTitle("Cookies");
+        confirmWindow.setContent(content);
+        confirmWindow.setConfirmInterface(isConfirm -> {
+            if (isConfirm) {
+                ClipboardManager clipboardManager = (ClipboardManager) getBaseContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                clipboardManager.setPrimaryClip(ClipData.newPlainText(null, content));
+                ToastUnit.showShort("已复制到剪切板");
+            }
+            return true;
+        });
+        //构建并显示pop窗体
+        PopupWindowBuilder.buildConfirmWindow(this, confirmWindow);
+    }
+
+    private void showPopWindowMiniMore() {
+        MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
+        miniMoreWindow.setTargetView(ui_bar);
+        miniMoreWindow.setGravity(Gravity.END);
+        miniMoreWindow.addItem(new MiniMoreItem("rule", "规则配置", R.drawable.ic_gray_mul_setting));
+        miniMoreWindow.addItem(new MiniMoreItem("read_normal", "常规提取", R.drawable.ic_gray_crop_free));
+        miniMoreWindow.addItem(new MiniMoreItem("read_rule", "规则提取", R.drawable.ic_gray_rule));
+        miniMoreWindow.addItem(new MiniMoreItem("import", "导入变量", R.drawable.ic_gray_backup));
+
+        miniMoreWindow.setOnActionListener(key -> {
+            switch (key) {
+                case "rule":
+                    Intent intent = new Intent(getBaseContext(), PluginWebRuleActivity.class);
+                    startActivity(intent);
+                    break;
+                case "read_normal":
+                    readNormal();
+                    break;
+                case "read_rule":
+                    readRule();
+                    break;
+                default:
+                    startImport();
+            }
+            return true;
+        });
+
+        PopupWindowBuilder.buildMiniMoreWindow(this, miniMoreWindow);
+    }
+
+    private void readNormal() {
+        WindowUnit.hideKeyboard(ui_et_url);
+        String cookies, url;
+        url = ui_webView.getOriginalUrl();
+
+        if (url != null && !url.isEmpty()) {
+            cookies = cookieManager.getCookie(url);
+            showPopWindowConfirm(cookies);
+        } else {
+            ToastUnit.showShort("请先加载网页");
+        }
+
+    }
+
+    private void readRule() {
+        WindowUnit.hideKeyboard(ui_et_url);
+        String url = ui_webView.getOriginalUrl();
+        if (TextUnit.isEmpty(url)) {
+            ToastUnit.showShort("请先加载网页");
+            return;
+        }
+
+        //删除URL参数
+        url = url.split("\\?", 2)[0];
+        //读取cookies
+        String cookies = cookieManager.getCookie(url);
+
         //获取键值对
         Map<String, String> cks = WebUnit.parseCookies(cookies);
         //获取规则列表
@@ -194,15 +214,27 @@ public class PluginWebActivity extends BaseActivity {
         //规则匹配 取第一个匹配成功规则
         for (WebRule rule : rules) {
             if (rule.match(url, cks)) {
-                ToastUnit.showShort("匹配规则成功：" + rule.getName());
-                showCookies(rule.getEnvValue());
+                ToastUnit.showShort("匹配成功：" + rule.getName());
+                showPopWindowConfirm(rule.getEnvValue());
                 return;
             }
         }
-        ToastUnit.showShort("匹配规则失败");
+        ToastUnit.showShort("无匹配规则");
     }
 
-    private void startImport(String url, String cookies) {
+    private void startImport() {
+        WindowUnit.hideKeyboard(ui_et_url);
+        String url = ui_webView.getOriginalUrl();
+        if (TextUnit.isEmpty(url)) {
+            ToastUnit.showShort("请先加载网页");
+            return;
+        }
+
+        //删除URL参数
+        url = url.split("\\?", 2)[0];
+        //读取cookies
+        String cookies = cookieManager.getCookie(url);
+
         Map<String, String> cks = WebUnit.parseCookies(cookies);
         List<WebRule> rules = WebRuleDBHelper.getAllWebRule();
         for (WebRule rule : rules) {
@@ -213,26 +245,6 @@ public class PluginWebActivity extends BaseActivity {
             }
         }
         ToastUnit.showShort("匹配规则失败");
-    }
-
-    private void showCookies(String cookies) {
-        //配置pop窗体信息
-        ConfirmWindow confirmWindow = new ConfirmWindow();
-        confirmWindow.setMaxHeight(WindowUnit.getWindowHeightPix(getBaseContext()) / 3);//限制最大高度
-        confirmWindow.setConfirmTip("拷贝");
-        confirmWindow.setCancelTip("取消");
-        confirmWindow.setTitle("Cookies");
-        confirmWindow.setContent(cookies);
-        confirmWindow.setConfirmInterface(isConfirm -> {
-            if (isConfirm) {
-                ClipboardManager clipboardManager = (ClipboardManager) getBaseContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                clipboardManager.setPrimaryClip(ClipData.newPlainText(null, cookies));
-                ToastUnit.showShort("已复制到剪切板");
-            }
-            return true;
-        });
-        //构建并显示pop窗体
-        PopupWindowBuilder.buildConfirmWindow(this, confirmWindow);
     }
 
     private void netGetEnvironments(QLEnvironment environment) {

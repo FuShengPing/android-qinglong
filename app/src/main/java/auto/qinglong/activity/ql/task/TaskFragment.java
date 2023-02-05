@@ -390,11 +390,11 @@ public class TaskFragment extends BaseFragment {
         MiniMoreWindow miniMoreWindow = new MiniMoreWindow();
         miniMoreWindow.setTargetView(ui_bar);
         miniMoreWindow.setGravity(Gravity.END);
-        miniMoreWindow.addItem(new MiniMoreItem("add", "新建任务", R.drawable.ic_add_gray));
-        miniMoreWindow.addItem(new MiniMoreItem("localAdd", "本地导入", R.drawable.ic_file_gray));
-        miniMoreWindow.addItem(new MiniMoreItem("backup", "任务备份", R.drawable.ic_backup_gray));
-        miniMoreWindow.addItem(new MiniMoreItem("deleteMul", "任务去重", R.drawable.ic_delete_gray));
-        miniMoreWindow.addItem(new MiniMoreItem("mulAction", "批量操作", R.drawable.ic_mul_action_gray));
+        miniMoreWindow.addItem(new MiniMoreItem("add", "新建任务", R.drawable.ic_gray_add));
+        miniMoreWindow.addItem(new MiniMoreItem("localAdd", "本地导入", R.drawable.ic_gray_file));
+        miniMoreWindow.addItem(new MiniMoreItem("backup", "任务备份", R.drawable.ic_gray_backup));
+        miniMoreWindow.addItem(new MiniMoreItem("deleteMul", "任务去重", R.drawable.ic_gray_delete));
+        miniMoreWindow.addItem(new MiniMoreItem("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
         miniMoreWindow.setOnActionListener(key -> {
             switch (key) {
                 case "add":

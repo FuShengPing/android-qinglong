@@ -23,7 +23,7 @@
             android:background="@drawable/style_button_ripple"
             android:clickable="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_menu" />
+            android:src="@drawable/ic_white_menu" />
     </LinearLayout>
 
 

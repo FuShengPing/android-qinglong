@@ -45,7 +45,7 @@
             android:layout_height="25dp"
             android:background="@drawable/style_button_ripple"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_bug" />
+            android:src="@drawable/ic_blue_bug" />
     </LinearLayout>
 
     <View

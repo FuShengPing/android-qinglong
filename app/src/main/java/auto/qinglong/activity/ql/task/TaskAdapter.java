@@ -55,19 +55,19 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
         if (qlTask.getTaskState() == QLTaskState.RUNNING) {
             holder.ui_state.setText("运行中");
             holder.ui_state.setTextColor(context.getColor(R.color.theme_color_shadow));
-            holder.ui_action.setImageResource(R.drawable.ic_pause);
+            holder.ui_action.setImageResource(R.drawable.ic_blue_pause);
         } else if (qlTask.getTaskState() == QLTaskState.WAITING) {
             holder.ui_state.setText("队列中");
             holder.ui_state.setTextColor(context.getColor(R.color.theme_color_shadow));
-            holder.ui_action.setImageResource(R.drawable.ic_pause);
+            holder.ui_action.setImageResource(R.drawable.ic_blue_pause);
         } else if (qlTask.getTaskState() == QLTaskState.LIMIT) {
             holder.ui_state.setText("禁止中");
             holder.ui_state.setTextColor(context.getColor(R.color.text_color_red));
-            holder.ui_action.setImageResource(R.drawable.ic_start);
+            holder.ui_action.setImageResource(R.drawable.ic_blue_start);
         } else {
             holder.ui_state.setText("空闲中");
             holder.ui_state.setTextColor(context.getColor(R.color.text_color_49));
-            holder.ui_action.setImageResource(R.drawable.ic_start);
+            holder.ui_action.setImageResource(R.drawable.ic_blue_start);
         }
 
         //上次运行时长

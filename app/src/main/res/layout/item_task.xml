@@ -33,7 +33,7 @@
             android:id="@+id/task_pinned"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:src="@drawable/ic_pinned"
+            android:src="@drawable/ic_blue_pinned"
             android:visibility="gone" />
 
         <TextView
@@ -53,7 +53,7 @@
             android:layout_marginStart="10dp"
             android:background="@drawable/style_button_ripple"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_start" />
+            android:src="@drawable/ic_blue_start" />
     </LinearLayout>
 
     <View

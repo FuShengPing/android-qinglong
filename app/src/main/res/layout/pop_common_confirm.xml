@@ -38,7 +38,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusable="true"
-                android:minHeight="100dp"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="5dp"
                 android:textColor="@color/text_color_49"

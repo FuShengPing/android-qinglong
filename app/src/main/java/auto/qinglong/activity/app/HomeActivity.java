@@ -34,6 +34,7 @@ import auto.qinglong.utils.NetUnit;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WebUnit;
+import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.popup.ConfirmWindow;
 import auto.qinglong.views.popup.PopupWindowBuilder;
 
@@ -248,6 +249,7 @@ public class HomeActivity extends BaseActivity {
         content += TextUnit.join(version.getUpdateDetail(), "\n\n");
 
         ConfirmWindow confirmWindow = new ConfirmWindow("版本更新", content, "取消", "更新");
+        confirmWindow.setMaxHeight(WindowUnit.getWindowHeightPix(getBaseContext()) / 3);
         confirmWindow.setFocusable(false);
         confirmWindow.setConfirmInterface(isConfirm -> {
             if (isConfirm) {

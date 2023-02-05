@@ -51,7 +51,7 @@ public class ScriptAdapter extends RecyclerView.Adapter<ScriptAdapter.MyViewHold
         }
 
         if (qlScript.getChildren() != null) {
-            holder.ui_image.setImageResource(R.drawable.ic_folder);
+            holder.ui_image.setImageResource(R.drawable.ic_blue_folder);
         } else if (qlScript.getTitle().matches(".*\\.(js)|(JS)$")) {
             holder.ui_image.setImageResource(R.mipmap.ic_file_js);
         } else if (qlScript.getTitle().matches(".*\\.(py)|(PY)$")) {

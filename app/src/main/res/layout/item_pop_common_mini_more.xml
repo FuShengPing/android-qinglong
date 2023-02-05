@@ -16,7 +16,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginEnd="5dp"
-        android:src="@drawable/ic_add_gray" />
+        android:src="@drawable/ic_gray_add" />
 
     <TextView
         android:id="@+id/pop_common_mini_more_name"

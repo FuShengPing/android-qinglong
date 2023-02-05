@@ -88,7 +88,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginEnd="10dp"
-                        android:src="@drawable/ic_menu_task" />
+                        android:src="@drawable/ic_gray_menu_task" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -115,7 +115,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginEnd="10dp"
-                        android:src="@drawable/ic_menu_environment" />
+                        android:src="@drawable/ic_gray_menu_environment" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -140,7 +140,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_menu_config" />
+                        android:src="@drawable/ic_gray_menu_config" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -165,7 +165,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_menu_script" />
+                        android:src="@drawable/ic_gray_menu_script" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -190,7 +190,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginEnd="10dp"
-                        android:src="@drawable/ic_menu_dependence" />
+                        android:src="@drawable/ic_gray_menu_dependence" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -215,7 +215,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_menu_log" />
+                        android:src="@drawable/ic_gray_menu_log" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -240,7 +240,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_menu_setting" />
+                        android:src="@drawable/ic_gray_menu_setting" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -271,7 +271,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_menu_extension_web" />
+                        android:src="@drawable/ic_gray_menu_extension_web" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -310,7 +310,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_marginBottom="5dp"
-                    android:src="@drawable/ic_exit" />
+                    android:src="@drawable/ic_gray_exit" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -335,7 +335,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_marginBottom="5dp"
-                    android:src="@drawable/ic_menu_setting" />
+                    android:src="@drawable/ic_gray_menu_setting" />
 
                 <TextView
                     android:layout_width="wrap_content"

@@ -28,7 +28,7 @@
                 android:background="@drawable/style_button_ripple"
                 android:clickable="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_menu" />
+                android:src="@drawable/ic_white_menu" />
 
             <ImageView
                 android:id="@+id/config_edit"
@@ -38,7 +38,7 @@
                 android:layout_toStartOf="@id/config_refresh"
                 android:background="@drawable/style_button_ripple"
                 android:clickable="true"
-                android:src="@drawable/ic_write_white"
+                android:src="@drawable/ic_white_write"
                 android:visibility="visible" />
 
             <ImageView
@@ -50,7 +50,7 @@
                 android:layout_marginStart="10dp"
                 android:background="@drawable/style_button_ripple"
                 android:clickable="true"
-                android:src="@drawable/ic_refresh"
+                android:src="@drawable/ic_white_refresh"
                 android:visibility="visible" />
         </RelativeLayout>
 
@@ -69,7 +69,7 @@
                 android:background="@drawable/style_button_ripple"
                 android:clickable="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_arrow_back" />
+                android:src="@drawable/ic_white_arrow_back" />
 
             <ImageView
                 android:id="@+id/config_edit_save"
@@ -79,7 +79,7 @@
                 android:layout_centerVertical="true"
                 android:background="@drawable/style_button_ripple"
                 android:clickable="true"
-                android:src="@drawable/ic_save_white" />
+                android:src="@drawable/ic_white_save" />
         </RelativeLayout>
     </RelativeLayout>
 
