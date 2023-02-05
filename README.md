@@ -68,7 +68,7 @@
 
 ![代码编辑](https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/preview_2.jpg)
 
-![系统设置](https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/preview_2.jpg)
+![系统设置](https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/preview_3.jpg)
 
 ## 5.下载地址
 [最新版本](https://gitee.com/wsfsp4/QingLong/releases/tag/V1.4)
