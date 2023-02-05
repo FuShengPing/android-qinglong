@@ -19,13 +19,11 @@ import auto.qinglong.utils.WebUnit;
 
 public class SettingActivity extends BaseActivity {
     private ImageView ui_back;
-
     private SwitchCompat ui_notify_switch;
     private LinearLayout ui_document;
     private LinearLayout ui_issue;
     private LinearLayout ui_donate;
     private LinearLayout ui_share;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
