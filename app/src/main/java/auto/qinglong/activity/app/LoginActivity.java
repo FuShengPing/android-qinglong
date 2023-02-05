@@ -3,13 +3,11 @@ package auto.qinglong.activity.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;

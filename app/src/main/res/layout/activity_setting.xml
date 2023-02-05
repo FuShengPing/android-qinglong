@@ -174,6 +174,29 @@
                         android:background="@color/divide_line" />
 
                     <LinearLayout
+                        android:id="@+id/app_setting_donate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/style_press_gray"
+                        android:clickable="true"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="@dimen/action_bar_padding_horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="@dimen/app_setting_text_margin_vertical"
+                            android:text="@string/app_setting_donate"
+                            android:textColor="@color/app_setting_text_color"
+                            android:textSize="@dimen/app_setting_text_size" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:background="@color/divide_line" />
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:id="@+id/app_setting_share"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
