@@ -1,8 +1,6 @@
 # 青龙面板APP
 
 ## 1.软件介绍
-
-青龙面板是支持python3、javaScript、shell、typescript 的定时任务管理面板。  
 本APP基于青龙面板***2.10.13***接口开发，支持面板大部分原生功能，同时提供拓展模块，帮助用户快捷管理。  
 
 ## 2.使用环境
@@ -26,7 +24,7 @@
 
 >1. 部分编辑功能需要长按详细信息位置唤醒；
 >2. 变量快捷导入将从输入文本中提取'***export xx="xxxx"***'格式内容作为一个变量,支持同时提取多个变量；
->3. 远程导入变量需要输入远程接口地址，具体查看[开发者文档](https://gitee.com/wsfsp4/QingLong/raw/master/developer.md) ；
+>3. 远程导入变量需要输入远程接口地址，具体查看[开发者文档](https://gitee.com/wsfsp4/QingLong/blob/master/developer.md) ；
 >4. 变量去重将删除相同名称和值的变量；
 >5. 任务去重将删除相同命令的任务；
 >6. 本地备份文件将保存在外部存储***qinglong***文件夹下；
@@ -40,7 +38,7 @@
 提供网页ck提取和导入变量功能。  
 
 >1. 导入变量功能需要先配置规则，支持手动添加或远程导入；  
->2. 远程导入规则需要输入远程接口地址，具体查看[开发者文档](https://gitee.com/wsfsp4/QingLong/raw/master/developer.md) ；
+>2. 远程导入规则需要输入远程接口地址，具体查看[开发者文档](https://gitee.com/wsfsp4/QingLong/blob/master/developer.md) ；
 
 ##### 3.2.1.1 规则配置个字段说明
 
@@ -75,7 +73,7 @@
 [历史版本](https://gitee.com/wsfsp4/QingLong/releases)
 
 ## 6.开发者文档
-为了增强应用拓展性，APP为用户提供自定义接口功能。如果你有网络编程基础，可根据这份[开发者文档](https://gitee.com/wsfsp4/QingLong/raw/master/developer.md) 来开发接口，然后发布给其他用户使用。
+为了增强应用拓展性，APP为用户提供自定义接口功能。如果你有网络编程基础，可根据这份[开发者文档](https://gitee.com/wsfsp4/QingLong/blob/master/developer.md) 来开发接口，然后发布给其他用户使用。
 
 ## 7.意见反馈
 
@@ -85,6 +83,6 @@ APP还在开发，后续尝试加入更多拓展模块,提供更加强大的功�
 
 ## 8.支持项目
 开发不易，如果APP对你有所帮助，可以考虑支持下项目开发，非常感谢!
-![微信打赏](https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/donate_wx.png)
+![微信打赏](https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/donate_wx.png)  
 ![支付宝打赏](https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/donate_zfb.png)
 
