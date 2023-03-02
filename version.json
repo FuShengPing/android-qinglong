@@ -1,15 +1,15 @@
 {
-  "versionCode": 6,
-  "versionName": "1.5",
+  "versionCode": 7,
+  "versionName": "1.6",
   "isForce": true,
-  "updateTime": "2023-02-05",
-  "downloadUrl": "https://gitee.com/wsfsp4/QingLong/releases/download/V1.5/app-release.apk",
+  "updateTime": "2023-03-02",
+  "downloadUrl": "https://gitee.com/wsfsp4/QingLong/releases/download/V1.6/app-release.apk",
   "updateDetail": [
-    "(1)CK助手：更名为Web助手,功能调整",
-    "(2)环境变量：本地备份支持自定义文件名",
-    "(3)定时任务：本地备份支持自定义文件名",
-    "(4)系统设置：新增常规设置和登录日志功能",
-    "(5)应用设置：新增常规设置功能",
+    "(1)修复预览大文件代码崩溃问题",
+    "(2)修复Android 11+本地备份功能异常问题",
+    "(3)定时任务：支持跳转脚本",
+    "(4)环境变量：支持变量排序",
+    "(5)脚本管理：支持删除脚本",
     "(6)优化代码和其他细节"
   ]
 }
