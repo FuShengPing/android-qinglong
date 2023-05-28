@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="codemirror.css">
+<link rel="stylesheet" href="solarized.css">
+<Script src="codemirror.js"></Script>
+<Script src="python.js"></Script>
+<Script src="api.js"></Script>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    html {
+        height: 100%;
+    }
+
+    body {
+        height: 100%;
+    }
+
+    .CodeMirror {
+        height: 100%;
+        width: 100%;
+    }
+
+    .CodeMirror-scroll {
+        height: 100%;
+        overflow: hidden;
+        overflow-x: auto;
+    }
+</style>
+
+<body>
+    <textarea id="code" name="code">加载中...</textarea>
+</body>
+<Script>
+    initEditor()
+</Script>
+
+</html>

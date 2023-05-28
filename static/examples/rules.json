@@ -1,0 +1,26 @@
+[
+  {
+    "name": "ELM",
+    "url": "h5.ele.me",
+    "envName": "elmck",
+    "target": "*",
+    "main": "USERID",
+    "joinChar": ";"
+  },
+  {
+    "name": "JD",
+    "url": "m.jd.com",
+    "envName": "JD_COOKIE",
+    "target": "pt_pin=;pt_key=",
+    "main": "pt_pin",
+    "joinChar": ";"
+  },
+  {
+    "name": "baidu",
+    "url": "www.baidu.com",
+    "envName": "baiduck",
+    "target": "*",
+    "main": "BAIDUID",
+    "joinChar": ";"
+  }
+]

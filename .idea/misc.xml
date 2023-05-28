@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable-anydpi/ic_nav.xml" value="0.19" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable-anydpi/ic_search.xml" value="0.19" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.19" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/ic_add_blue.xml" value="0.196" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/ic_add_circle_gray.xml" value="0.196" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/ic_check_box_blue_true.xml" value="0.208" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/ic_folder.xml" value="0.19" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/ic_nav.xml" value="0.2" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_bg_gradient.xml" value="0.19" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_bg_gradient_blue_90.xml" value="0.19" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_border_bottom_white.xml" value="0.196" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_button_blue.xml" value="0.19" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_button_white.xml" value="0.19" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_check_box.xml" value="0.19" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_check_box_blue.xml" value="0.194" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_check_box_white.xml" value="0.194" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_cursor.xml" value="0.19" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_cursor_white.xml" value="0.19" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_home_list.xml" value="0.19" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_input.xml" value="0.19" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_login_button.xml" value="0.19" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_login_container.xml" value="0.19" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_login_input.xml" value="0.19" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_press_gray.xml" value="0.19" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_radius_4_white.xml" value="0.196" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_ripple_gray.xml" value="0.19" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/drawable/style_splash.xml" value="0.1925" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/activity_account.xml" value="0.25" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/activity_home.xml" value="0.33" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/activity_log.xml" value="0.22" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/activity_login.xml" value="0.5" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/activity_preview.xml" value="0.1" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/activity_script.xml" value="0.1921875" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/activity_setting.xml" value="0.33" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/activity_splash.xml" value="0.25" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/fg_config.xml" value="0.18699186991869918" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/fg_dep.xml" value="0.25" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/fg_dep_pager.xml" value="0.33" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/fg_env.xml" value="0.33" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/fg_log.xml" value="0.33" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/fg_script.xml" value="0.4188422247446084" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/fg_setting.xml" value="0.1921875" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/fg_task.xml" value="0.4188422247446084" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/item_account.xml" value="0.33" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/item_dep.xml" value="0.33" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/item_env.xml" value="0.33" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/item_file.xml" value="0.1921875" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/item_script.xml" value="0.33" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/item_task.xml" value="0.5" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/pop_confirm.xml" value="0.33" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/pop_fg_dep_edit.xml" value="0.33" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/pop_fg_env_edit.xml" value="0.33" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/pop_fg_env_more.xml" value="0.5" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/pop_fg_more.xml" value="0.9" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/pop_fg_task_edit.xml" value="0.25" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/pop_fg_task_more.xml" value="0.67" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/layout/pop_home_nav.xml" value="0.33" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.19" />
+        <entry key="..\:/Editor/Android/QingLong/app/src/main/res/xml/network_security_config.xml" value="0.1921875" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

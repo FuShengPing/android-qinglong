@@ -1,0 +1,107 @@
+<resources>
+    <string name="app_name">青龙面板</string>
+    <!-- 链接区 -->
+    <string name="url_project">https://gitee.com/wsfsp4/QingLong</string>
+    <string name="url_readme">https://gitee.com/wsfsp4/QingLong/blob/master/README.md</string>
+    <string name="url_issue">https://gitee.com/wsfsp4/QingLong/issues</string>
+    <string name="url_version">https://gitee.com/wsfsp4/QingLong/raw/master/version.json</string>
+    <string name="url_extension_link">http://service-m1nufffu-1306746806.gz.apigw.tencentcs.com/link</string>
+    <string name="url_alipay_scheme">alipays://platformapi/startapp?saId=10000007&amp;qrcode=</string>
+    <string name="url_alipay_qrcode">https://qr.alipay.com/fkx11773tmx6hbszzxlp460</string>
+    <!-- 导航 -->
+    <string name="menu_task">定时任务</string>
+    <string name="menu_environment">环境变量</string>
+    <string name="menu_config">配置文件</string>
+    <string name="menu_script">脚本管理</string>
+    <string name="menu_dependence">依赖管理</string>
+    <string name="menu_log">任务日志</string>
+    <string name="menu_setting">系统设置</string>
+    <string name="menu_extension_web">Web助手</string>
+    <string name="menu_extension_ai">AI助手</string>
+    <string name="menu_extension_link">精选导航</string>
+    <string name="menu_account_exit">退出</string>
+    <string name="menu_app_setting">设置</string>
+
+    <string name="app_setting_notify">更新推送</string>
+    <string name="app_setting_vibrate">震动反馈</string>
+    <string name="action_title_plugin_web">Web助手</string>
+    <string name="action_bar_title_app_setting">应用设置</string>
+    <string name="action_bar_title_plugin_web_rule">规则配置</string>
+    <string name="app_setting_document">使用手册</string>
+    <string name="app_setting_donate">支持应用</string>
+    <string name="app_setting_issue">意见反馈</string>
+    <string name="app_setting_share">分享应用</string>
+    <string name="item_login_log_time">登录时间</string>
+    <string name="item_login_log_address">登录地址</string>
+    <string name="item_login_log_ip">登录IP</string>
+    <string name="item_login_log_platform">登录设备</string>
+    <!-- 操作 -->
+    <string name="action_select_all">全选</string>
+    <string name="action_edit">编辑</string>
+    <string name="action_run">运行</string>
+    <string name="action_stop">停止</string>
+    <string name="action_pin">顶置</string>
+    <string name="action_unpin">下置</string>
+    <string name="action_enable">启用</string>
+    <string name="action_disable">禁用</string>
+    <string name="action_delete">删除</string>
+    <string name="action_back">返回</string>
+    <string name="action_refresh">刷新</string>
+    <string name="action_save">保存</string>
+    <string name="action_save_space">保 存</string>
+    <string name="action_login">登录</string>
+    <string name="action_load">加载</string>
+    <string name="action_read">读取</string>
+    <string name="action_import">导入</string>
+    <string name="action_new_task">新建任务</string>
+    <string name="action_edit_task">编辑任务</string>
+    <string name="action_bulk_operation">批量操作</string>
+    <!-- 提示 -->
+    <string name="tip_loading">加载中…</string>
+    <string name="tip_load_success">加载成功</string>
+    <string name="tip_load_success_header">加载成功：</string>
+    <string name="tip_load_failure">加载失败</string>
+    <string name="tip_load_failure_header">加载失败：</string>
+    <string name="tip_delete_success">删除成功</string>
+    <string name="tip_delete_failure_header">删除失败：</string>
+    <string name="tip_move_success">移动成功</string>
+    <string name="tip_move_failure_header">移动失败：</string>
+    <string name="tip_reinstall_failure_header">重装失败：</string>
+    <string name="tip_searching">搜索中…</string>
+    <string name="tip_pin_success">顶置成功</string>
+    <string name="tip_pin_failure">顶置失败</string>
+    <string name="tip_unpin_success">取消顶置成功</string>
+    <string name="tip_unpin_failure">取消顶置失败</string>
+    <string name="tip_back_en">back</string>
+    <string name="tip_empty_task_name">任务名称不能为空</string>
+    <string name="tip_empty_task_command">任务命令不能为空</string>
+    <string name="tip_empty_dependence_name">依赖名称不能为空</string>
+    <string name="tip_empty_select">至少选择一项</string>
+    <string name="tip_invalid_task_schedule">任务定时规则不合法</string>
+    <string name="tip_invalid_url">网址不合法</string>
+    <string name="tip_text_too_long">内容过大，无法显示</string>
+    <string name="tip_copy_path_ready">已复制路径到粘贴板</string>
+    <string name="tip_exit_app">再按一次退出</string>
+    <!-- 字符 -->
+    <string name="char_path_split">/</string>
+    <!-- 字符串 -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_share_description">我正在使用这个APP来管理青龙面板，方便快捷，你也来试试吧！下载地址：https://gitee.com/wsfsp4/QingLong</string>
+    <string name="str_username">账号</string>
+    <string name="str_password">密码</string>
+    <string name="setting_common_security">安全设置</string>
+    <string name="setting_other">其他设置</string>
+    <string name="setting_delete_frequency">日志删除频率</string>
+    <string name="str_day">天</string>
+    <string name="str_status">状态</string>
+    <string name="str_environment">变量</string>
+    <string name="str_created_time">创建时间</string>
+    <string name="str_input_hint_ip">127.0.0.1:5700</string>
+    <string name="str_input_hint_url">请输入网址</string>
+    <string name="str_input_hint_task">请输入名称或关键词</string>
+    <string name="str_input_hint_environment">请输入名称/值/备注</string>
+
+    <!-- 格式化 -->
+    <string name="format_tip_ip">本地：%1$s</string>
+    <string name="format_tip_version">v%1$s</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="anim_pop_common" parent="android:Animation">
+        <item name="android:windowExitAnimation">@anim/fg_pop_edit_exit</item>
+        <item name="android:windowEnterAnimation">@anim/fg_pop_edit_enter</item>
+    </style>
+</resources>

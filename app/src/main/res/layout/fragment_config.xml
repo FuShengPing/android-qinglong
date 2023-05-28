@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/config_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/action_bar_height"
+        android:background="@color/theme_color"
+        android:clickable="true"
+        android:paddingHorizontal="@dimen/action_bar_padding_horizontal">
+
+        <RelativeLayout
+            android:id="@+id/config_menu_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/config_menu"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
+                android:layout_centerVertical="true"
+                android:background="@drawable/style_button_ripple"
+                android:clickable="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_white_menu" />
+
+            <ImageView
+                android:id="@+id/config_edit"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/config_refresh"
+                android:background="@drawable/style_button_ripple"
+                android:clickable="true"
+                android:src="@drawable/ic_white_write"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/config_refresh"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/style_button_ripple"
+                android:clickable="true"
+                android:src="@drawable/ic_white_refresh"
+                android:visibility="visible" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/config_edit_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/config_edit_back"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
+                android:layout_centerVertical="true"
+                android:background="@drawable/style_button_ripple"
+                android:clickable="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_white_arrow_back" />
+
+            <ImageView
+                android:id="@+id/config_edit_save"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/style_button_ripple"
+                android:clickable="true"
+                android:src="@drawable/ic_white_save" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/web_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" />
+</LinearLayout>

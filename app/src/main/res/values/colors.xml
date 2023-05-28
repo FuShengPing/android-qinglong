@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ic_launcher_background">@color/white</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="theme_color">#2273E6</color>
+    <color name="theme_color_shadow">#40a9ff</color>
+
+    <color name="divider">#EEEEEE</color>
+    <color name="divider_heavy">#E0E0E0</color>
+    <color name="gray_press">#4ADDDDDD</color>
+    <color name="gray_icon">#8B8B8B</color>
+    <color name="gray_background">#F5F6F8</color>
+    <color name="ripple">#22000000</color>
+
+    <color name="text_color_19">#191919</color>
+    <color name="text_color_49">#494949</color>
+    <color name="text_color_44">#444444</color>
+    <color name="text_color_80">#808080</color>
+    <color name="text_color_dd">#bbbbbb</color>
+    <color name="text_color_red">#ff4d4f</color>
+
+</resources>

@@ -1,0 +1,32 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Theme.App" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
+        <!-- 导航栏颜色 -->
+        <item name="colorPrimary">@color/theme_color</item>
+        <item name="colorPrimaryVariant">@color/theme_color</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/theme_color</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="colorControlActivated">@color/theme_color_shadow</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <!-- 背景颜色 -->
+        <item name="android:windowBackground">@color/gray_background</item>
+    </style>
+
+    <style name="Theme.App.Splash" parent="Theme.App">
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/white</item>
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+
+    <style name="Theme.App.Login" parent="Theme.App">
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="colorPrimary">@color/gray_background</item>
+        <item name="colorPrimaryVariant">@color/gray_background</item>
+        <item name="android:windowBackground">@color/gray_background</item>
+    </style>
+
+</resources>
