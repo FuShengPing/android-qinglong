@@ -16,11 +16,6 @@ android {
     }
 
     buildTypes {
-//        release {
-//            minifyEnabled false
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//        }
-
         release {
             minifyEnabled true
             shrinkResources true
@@ -72,10 +67,10 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
 
     //cron 定时规则
-    implementation 'com.cronutils:cron-utils:9.2.0'
+    implementation 'com.cronutils:cron-utils:9.2.1'
 
     //智能下拉刷新框架
-    implementation 'io.github.scwang90:refresh-layout-kernel:2.0.5'      //核心必须依赖
-    implementation 'io.github.scwang90:refresh-header-classics:2.0.5'    //经典刷新头
-    implementation 'io.github.scwang90:refresh-footer-classics:2.0.5'    //经典加载
+    implementation 'io.github.scwang90:refresh-layout-kernel:2.0.6'      //核心必须依赖
+    implementation 'io.github.scwang90:refresh-header-classics:2.0.6'    //经典刷新头
+    implementation 'io.github.scwang90:refresh-footer-classics:2.0.6'    //经典加载
 }

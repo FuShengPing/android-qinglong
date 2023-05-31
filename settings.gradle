@@ -56,4 +56,3 @@ dependencyResolutionManagement {
 }
 rootProject.name = "QingLong"
 include ':app'
-include ':app:ssh'
