@@ -1,22 +1,10 @@
 package auto.qinglong;
 
-import android.app.Application;
-import android.content.Context;
+import auto.base.BaseApplication;
 
-public class MyApplication extends Application {
-    private static Context context;
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        context = getApplicationContext();
-    }
-
-    /**
-     * @return 全局context
-     */
-    public static Context getContext() {
-        return context;
-    }
-
+/**
+ * @author wsfsp4
+ * @version 2023.06.01
+ */
+public class MyApplication extends BaseApplication {
 }

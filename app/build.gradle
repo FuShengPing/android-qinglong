@@ -3,6 +3,7 @@ plugins {
 }
 
 android {
+    namespace 'auto.qinglong'
     compileSdk 32
 
     defaultConfig {
@@ -35,7 +36,11 @@ android {
     buildFeatures {
         viewBinding true
     }
-    namespace 'auto.qinglong'
+
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
+
 }
 
 dependencies {
@@ -74,6 +79,7 @@ dependencies {
     implementation 'io.github.scwang90:refresh-header-classics:2.0.6'    //经典刷新头
     implementation 'io.github.scwang90:refresh-footer-classics:2.0.6'    //经典加载
 
+    implementation project(":base")
     implementation project(":web")
     implementation project(":ui")
 }

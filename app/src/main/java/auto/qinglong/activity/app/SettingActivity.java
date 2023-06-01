@@ -23,7 +23,7 @@ public class SettingActivity extends BaseActivity {
     private ImageView ui_back;
     private SwitchCompat ui_notify_switch;
     private SwitchCompat ui_vibrate_switch;
-    private LinearLayout ui_document;
+    private LinearLayout ui_help;
     private LinearLayout ui_issue;
     private LinearLayout ui_donate;
     private LinearLayout ui_share;
@@ -36,7 +36,7 @@ public class SettingActivity extends BaseActivity {
         ui_back = findViewById(R.id.bar_back);
         ui_notify_switch = findViewById(R.id.app_setting_notify_switch);
         ui_vibrate_switch = findViewById(R.id.app_setting_vibrate_switch);
-        ui_document = findViewById(R.id.app_setting_document);
+        ui_help = findViewById(R.id.app_setting_document);
         ui_issue = findViewById(R.id.app_setting_issue);
         ui_share = findViewById(R.id.app_setting_share);
         ui_donate = findViewById(R.id.app_setting_donate);
@@ -53,7 +53,7 @@ public class SettingActivity extends BaseActivity {
         ui_vibrate_switch.setChecked(SettingSP.isVibrate());
         ui_vibrate_switch.setOnCheckedChangeListener((buttonView, isChecked) -> SettingSP.setBoolean(SettingSP.FIELD_VIBRATE, isChecked));
 
-        ui_document.setOnClickListener(v -> WebUnit.open(this, getString(R.string.url_readme)));
+        ui_help.setOnClickListener(v -> WebUnit.open(this, getString(R.string.url_readme)));
 
         ui_issue.setOnClickListener(v -> WebUnit.open(this, getString(R.string.url_issue)));
 
