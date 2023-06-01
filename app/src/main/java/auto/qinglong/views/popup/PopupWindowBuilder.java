@@ -27,7 +27,7 @@ import java.util.Map;
 
 import auto.qinglong.R;
 import auto.qinglong.utils.WindowUnit;
-import auto.qinglong.views.FixScrollView;
+import auto.ui.FixScrollView;
 
 public class PopupWindowBuilder {
     public static final String TAG = "PopupWindowManager";

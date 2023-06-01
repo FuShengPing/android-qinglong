@@ -1,4 +1,4 @@
-package auto.qinglong.views;
+package auto.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -6,6 +6,9 @@ import android.widget.ScrollView;
 
 /**
  * 支持设置最大高度的滚动控件 主要用于PopupWindow中.
+ *
+ * @author wsfsp4
+ * @version 2023.06.01
  */
 public class FixScrollView extends ScrollView {
     public static final String TAG = "MyScrollView";
