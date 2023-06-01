@@ -1,4 +1,4 @@
-package auto.qinglong.activity;
+package auto.web;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,10 +13,13 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import auto.qinglong.network.http.NetManager;
-import auto.qinglong.utils.ToastUnit;
-
-public abstract class BaseActivity extends AppCompatActivity {
+/**
+ * 基础Activity
+ *
+ * @author wsfsp4
+ * @version 2023.06.01
+ */
+public class BaseActivity extends AppCompatActivity {
     public static final String TAG = "BaseActivity";
     protected Activity mSelf;
     protected Context mContext;
@@ -31,13 +34,20 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        ToastUnit.cancel();
     }
 
     @Override
     protected void onDestroy() {
-        NetManager.cancelAllCall(getClass().getName());
         super.onDestroy();
+    }
+
+    @Override
+    public Resources getResources() {
+        Resources res = super.getResources();
+        Configuration configuration = new Configuration();
+        configuration.setToDefaults();
+        res.updateConfiguration(configuration, res.getDisplayMetrics());
+        return res;
     }
 
     @Override
@@ -63,21 +73,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         return false;
     }
 
-    @Override
-    public Resources getResources() {
-        Resources res = super.getResources();
-        Configuration configuration = new Configuration();
-        configuration.setToDefaults();
-        res.updateConfiguration(configuration, res.getDisplayMetrics());
-        return res;
-    }
-
-    protected String getNetRequestID() {
-        return getClass().getName();
-    }
-
     protected void init() {
 
     }
-
 }

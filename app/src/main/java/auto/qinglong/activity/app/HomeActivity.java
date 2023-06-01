@@ -14,7 +14,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import java.util.Objects;
 
 import auto.qinglong.R;
-import auto.web.MainActivity;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.activity.extension.web.PluginWebActivity;
