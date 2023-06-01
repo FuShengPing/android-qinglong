@@ -1,0 +1,1511 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 7.3.1" type="baseline" client="gradle" dependencies="false" name="AGP (7.3.1)" variant="fatal" version="7.3.1">
+
+    <issue
+        id="MissingDefaultResource"
+        message="The color &quot;ic_launcher_background&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;color name=&quot;ic_launcher_background&quot;>@color/white&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/colors.xml"
+            line="3"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The color &quot;purple_200&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;color name=&quot;purple_200&quot;>#FFBB86FC&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/colors.xml"
+            line="4"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The color &quot;purple_500&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;color name=&quot;purple_500&quot;>#FF6200EE&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/colors.xml"
+            line="5"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The color &quot;purple_700&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;color name=&quot;purple_700&quot;>#FF3700B3&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/colors.xml"
+            line="6"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The color &quot;teal_200&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;color name=&quot;teal_200&quot;>#FF03DAC5&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/colors.xml"
+            line="7"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The color &quot;teal_700&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;color name=&quot;teal_700&quot;>#FF018786&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/colors.xml"
+            line="8"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The color &quot;black&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;color name=&quot;black&quot;>#FF000000&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/colors.xml"
+            line="9"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The color &quot;white&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;color name=&quot;white&quot;>#FFFFFFFF&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/colors.xml"
+            line="10"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The color &quot;transparent&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;color name=&quot;transparent&quot;>#00000000&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/colors.xml"
+            line="11"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The color &quot;theme_color&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;color name=&quot;theme_color&quot;>#2273E6&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/colors.xml"
+            line="13"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The color &quot;theme_color_shadow&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;color name=&quot;theme_color_shadow&quot;>#40a9ff&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/colors.xml"
+            line="14"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The color &quot;divider&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;color name=&quot;divider&quot;>#EEEEEE&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/colors.xml"
+            line="16"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The color &quot;divider_heavy&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;color name=&quot;divider_heavy&quot;>#E0E0E0&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/colors.xml"
+            line="17"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The color &quot;gray_press&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;color name=&quot;gray_press&quot;>#4ADDDDDD&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/colors.xml"
+            line="18"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The color &quot;gray_icon&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;color name=&quot;gray_icon&quot;>#8B8B8B&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/colors.xml"
+            line="19"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The color &quot;gray_background&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;color name=&quot;gray_background&quot;>#F5F6F8&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/colors.xml"
+            line="20"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The color &quot;ripple&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;color name=&quot;ripple&quot;>#22000000&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/colors.xml"
+            line="21"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The color &quot;text_color_19&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;color name=&quot;text_color_19&quot;>#191919&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/colors.xml"
+            line="23"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The color &quot;text_color_49&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;color name=&quot;text_color_49&quot;>#494949&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/colors.xml"
+            line="24"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The color &quot;text_color_44&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;color name=&quot;text_color_44&quot;>#444444&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/colors.xml"
+            line="25"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The color &quot;text_color_80&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;color name=&quot;text_color_80&quot;>#808080&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/colors.xml"
+            line="26"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The color &quot;text_color_dd&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;color name=&quot;text_color_dd&quot;>#bbbbbb&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/colors.xml"
+            line="27"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The color &quot;text_color_red&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;color name=&quot;text_color_red&quot;>#ff4d4f&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/colors.xml"
+            line="28"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The dimen &quot;fab_margin&quot; in values-land has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;dimen name=&quot;fab_margin&quot;>48dp&lt;/dimen>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/dimens.xml"
+            line="2"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The dimen &quot;fab_margin&quot; in values-w1240dp has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;dimen name=&quot;fab_margin&quot;>200dp&lt;/dimen>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-w1240dp/dimens.xml"
+            line="2"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The dimen &quot;fab_margin&quot; in values-w600dp has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;dimen name=&quot;fab_margin&quot;>16dp&lt;/dimen>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-w600dp/dimens.xml"
+            line="2"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The dimen &quot;action_bar_height&quot; in values-w600dp has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;dimen name=&quot;action_bar_height&quot;>56dp&lt;/dimen>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-w600dp/dimens.xml"
+            line="3"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The dimen &quot;action_bar_icon_size&quot; in values-w600dp has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;dimen name=&quot;action_bar_icon_size&quot;>28dp&lt;/dimen>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-w600dp/dimens.xml"
+            line="4"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The dimen &quot;action_bar_icon_size_small&quot; in values-w600dp has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;dimen name=&quot;action_bar_icon_size_small&quot;>24dp&lt;/dimen>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-w600dp/dimens.xml"
+            line="5"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The dimen &quot;action_bar_padding_horizontal&quot; in values-w600dp has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;dimen name=&quot;action_bar_padding_horizontal&quot;>14dp&lt;/dimen>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-w600dp/dimens.xml"
+            line="6"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The dimen &quot;action_bar_title_size&quot; in values-w600dp has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;dimen name=&quot;action_bar_title_size&quot;>18sp&lt;/dimen>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-w600dp/dimens.xml"
+            line="7"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The dimen &quot;action_bar_title_margin_horizontal&quot; in values-w600dp has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;dimen name=&quot;action_bar_title_margin_horizontal&quot;>16dp&lt;/dimen>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-w600dp/dimens.xml"
+            line="8"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The dimen &quot;app_setting_text_size&quot; in values-w600dp has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;dimen name=&quot;app_setting_text_size&quot;>16sp&lt;/dimen>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-w600dp/dimens.xml"
+            line="9"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The dimen &quot;app_setting_text_margin_vertical&quot; in values-w600dp has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;dimen name=&quot;app_setting_text_margin_vertical&quot;>14dp&lt;/dimen>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-w600dp/dimens.xml"
+            line="10"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The dimen &quot;common_item_padding_horizontal&quot; in values-w600dp has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;dimen name=&quot;common_item_padding_horizontal&quot;>7dp&lt;/dimen>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-w600dp/dimens.xml"
+            line="11"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The dimen &quot;common_item_padding_top&quot; in values-w600dp has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;dimen name=&quot;common_item_padding_top&quot;>7dp&lt;/dimen>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-w600dp/dimens.xml"
+            line="12"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The dimen &quot;common_item_padding_bottom&quot; in values-w600dp has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;dimen name=&quot;common_item_padding_bottom&quot;>10dp&lt;/dimen>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-w600dp/dimens.xml"
+            line="13"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The dimen &quot;common_item_margin_horizontal&quot; in values-w600dp has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;dimen name=&quot;common_item_margin_horizontal&quot;>5dp&lt;/dimen>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-w600dp/dimens.xml"
+            line="14"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The dimen &quot;common_item_margin_top&quot; in values-w600dp has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;dimen name=&quot;common_item_margin_top&quot;>5dp&lt;/dimen>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-w600dp/dimens.xml"
+            line="15"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The dimen &quot;common_item_elevation&quot; in values-w600dp has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;dimen name=&quot;common_item_elevation&quot;>1dp&lt;/dimen>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-w600dp/dimens.xml"
+            line="16"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The dimen &quot;divider_thickness&quot; in values-w600dp has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier"
+        errorLine1="    &lt;dimen name=&quot;divider_thickness&quot;>1dp&lt;/dimen>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-w600dp/dimens.xml"
+            line="17"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;app_name&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;app_name&quot;>青龙面板&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="2"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;url_project&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;url_project&quot;>https://gitee.com/wsfsp4/QingLong&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="4"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;url_readme&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;url_readme&quot;>https://gitee.com/wsfsp4/QingLong/blob/master/README.md&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="5"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;url_issue&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;url_issue&quot;>https://gitee.com/wsfsp4/QingLong/issues&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="6"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;url_version&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;url_version&quot;>https://gitee.com/wsfsp4/QingLong/raw/master/version.json&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="7"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;url_extension_link&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;url_extension_link&quot;>http://service-m1nufffu-1306746806.gz.apigw.tencentcs.com/link&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="8"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;url_alipay_scheme&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;url_alipay_scheme&quot;>alipays://platformapi/startapp?saId=10000007&amp;amp;qrcode=&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="9"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;url_alipay_qrcode&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;url_alipay_qrcode&quot;>https://qr.alipay.com/fkx11773tmx6hbszzxlp460&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="10"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;menu_task&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;menu_task&quot;>定时任务&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="12"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;menu_environment&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;menu_environment&quot;>环境变量&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="13"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;menu_config&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;menu_config&quot;>配置文件&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="14"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;menu_script&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;menu_script&quot;>脚本管理&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="15"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;menu_dependence&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;menu_dependence&quot;>依赖管理&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="16"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;menu_log&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;menu_log&quot;>任务日志&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="17"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;menu_setting&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;menu_setting&quot;>系统设置&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="18"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;menu_extension_web&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;menu_extension_web&quot;>Web助手&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="19"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;menu_extension_ai&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;menu_extension_ai&quot;>AI助手&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="20"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;menu_extension_link&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;menu_extension_link&quot;>精选导航&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="21"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;menu_account_exit&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;menu_account_exit&quot;>退出&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="22"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;menu_app_setting&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;menu_app_setting&quot;>设置&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="23"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;app_setting_notify&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;app_setting_notify&quot;>更新推送&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="25"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;app_setting_vibrate&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;app_setting_vibrate&quot;>震动反馈&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="26"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;action_title_plugin_web&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;action_title_plugin_web&quot;>Web助手&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="27"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;action_bar_title_app_setting&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;action_bar_title_app_setting&quot;>应用设置&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="28"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;action_bar_title_plugin_web_rule&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;action_bar_title_plugin_web_rule&quot;>规则配置&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="29"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;app_setting_document&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;app_setting_document&quot;>使用手册&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="30"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;app_setting_donate&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;app_setting_donate&quot;>支持应用&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="31"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;app_setting_issue&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;app_setting_issue&quot;>意见反馈&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="32"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;app_setting_share&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;app_setting_share&quot;>分享应用&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="33"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;item_login_log_time&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;item_login_log_time&quot;>登录时间&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="34"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;item_login_log_address&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;item_login_log_address&quot;>登录地址&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="35"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;item_login_log_ip&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;item_login_log_ip&quot;>登录IP&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="36"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;item_login_log_platform&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;item_login_log_platform&quot;>登录设备&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="37"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;action_select_all&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;action_select_all&quot;>全选&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="39"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;action_edit&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;action_edit&quot;>编辑&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="40"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;action_run&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;action_run&quot;>运行&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="41"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;action_stop&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;action_stop&quot;>停止&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="42"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;action_pin&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;action_pin&quot;>顶置&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="43"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;action_unpin&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;action_unpin&quot;>下置&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="44"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;action_enable&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;action_enable&quot;>启用&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="45"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;action_disable&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;action_disable&quot;>禁用&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="46"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;action_delete&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;action_delete&quot;>删除&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="47"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;action_back&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;action_back&quot;>返回&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="48"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;action_refresh&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;action_refresh&quot;>刷新&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="49"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;action_save&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;action_save&quot;>保存&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="50"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;action_save_space&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;action_save_space&quot;>保 存&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="51"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;action_login&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;action_login&quot;>登录&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="52"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;action_load&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;action_load&quot;>加载&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="53"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;action_read&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;action_read&quot;>读取&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="54"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;action_import&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;action_import&quot;>导入&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="55"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;action_new_task&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;action_new_task&quot;>新建任务&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="56"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;action_edit_task&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;action_edit_task&quot;>编辑任务&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="57"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;action_bulk_operation&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;action_bulk_operation&quot;>批量操作&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="58"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_loading&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_loading&quot;>加载中…&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="60"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_load_success&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_load_success&quot;>加载成功&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="61"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_load_success_header&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_load_success_header&quot;>加载成功：&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="62"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_load_failure&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_load_failure&quot;>加载失败&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="63"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_load_failure_header&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_load_failure_header&quot;>加载失败：&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="64"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_delete_success&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_delete_success&quot;>删除成功&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="65"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_delete_failure_header&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_delete_failure_header&quot;>删除失败：&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="66"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_move_success&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_move_success&quot;>移动成功&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="67"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_move_failure_header&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_move_failure_header&quot;>移动失败：&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="68"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_reinstall_failure_header&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_reinstall_failure_header&quot;>重装失败：&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="69"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_searching&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_searching&quot;>搜索中…&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="70"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_pin_success&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_pin_success&quot;>顶置成功&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="71"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_pin_failure&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_pin_failure&quot;>顶置失败&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="72"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_unpin_success&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_unpin_success&quot;>取消顶置成功&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="73"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_unpin_failure&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_unpin_failure&quot;>取消顶置失败&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="74"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_back_en&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_back_en&quot;>back&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="75"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_empty_task_name&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_empty_task_name&quot;>任务名称不能为空&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="76"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_empty_task_command&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_empty_task_command&quot;>任务命令不能为空&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="77"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_empty_dependence_name&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_empty_dependence_name&quot;>依赖名称不能为空&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="78"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_empty_select&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_empty_select&quot;>至少选择一项&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="79"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_invalid_task_schedule&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_invalid_task_schedule&quot;>任务定时规则不合法&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="80"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_invalid_url&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_invalid_url&quot;>网址不合法&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="81"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_text_too_long&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_text_too_long&quot;>内容过大，无法显示&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="82"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_copy_path_ready&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_copy_path_ready&quot;>已复制路径到粘贴板&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="83"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;tip_exit_app&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;tip_exit_app&quot;>再按一次退出&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="84"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;char_path_split&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;char_path_split&quot;>/&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="86"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;hello_blank_fragment&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;hello_blank_fragment&quot;>Hello blank fragment&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="88"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;app_share_description&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;app_share_description&quot;>我正在使用这个APP来管理青龙面板，方便快捷，你也来试试吧！https://gitee.com/wsfsp4/QingLong&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="89"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;str_username&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;str_username&quot;>账号&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="90"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;str_password&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;str_password&quot;>密码&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="91"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;setting_common_security&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;setting_common_security&quot;>安全设置&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="92"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;setting_other&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;setting_other&quot;>其他设置&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="93"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;setting_delete_frequency&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;setting_delete_frequency&quot;>日志删除频率&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="94"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;str_day&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;str_day&quot;>天&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="95"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;str_status&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;str_status&quot;>状态&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="96"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;str_environment&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;str_environment&quot;>变量&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="97"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;str_created_time&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;str_created_time&quot;>创建时间&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="98"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;str_input_hint_ip&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;str_input_hint_ip&quot;>127.0.0.1:5700&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="99"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;str_input_hint_url&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;str_input_hint_url&quot;>请输入网址&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="100"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;str_input_hint_task&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;str_input_hint_task&quot;>请输入名称或关键词&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="101"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;str_input_hint_environment&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;str_input_hint_environment&quot;>请输入名称/值/备注&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="102"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;format_tip_ip&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;format_tip_ip&quot;>本地：%1$s&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="105"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ExtraTranslation"
+        message="&quot;format_tip_version&quot; is translated here but not found in default locale"
+        errorLine1="    &lt;string name=&quot;format_tip_version&quot;>v%1$s&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-land/strings.xml"
+            line="106"
+            column="13"/>
+    </issue>
+
+</issues>
