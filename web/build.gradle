@@ -1,0 +1,80 @@
+// 集成化环境切换类型
+if (isRelease.toBoolean()) {
+    apply plugin:"com.android.library"
+} else {
+    apply plugin:"com.android.application"
+}
+
+android {
+    namespace 'auto.web'
+    compileSdk 32
+
+    defaultConfig {
+        // 集成化模式不能有applicationId，组件化模式能独立运行才能有applicationId
+        if (!isRelease) {
+            applicationId "auto.web"
+        }
+
+        // 配置资源路径
+        sourceSets {
+            main {
+                if (!isRelease.toBoolean()) {
+                    // 如果是组件化模式，需要单独运行时
+                    manifest.srcFile 'src/main/debug/AndroidManifest.xml'
+                } else {
+                    // 集成化模式，整个项目打包apk
+                    manifest.srcFile 'src/main/AndroidManifest.xml'
+                    java {
+                        exclude '**/debug/**'
+                    }
+                }
+            }
+        }
+
+        minSdk 26
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    //解决类重复问题
+    configurations {
+        all {
+            exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel-ktx'
+        }
+    }
+
+    implementation 'androidx.appcompat:appcompat:1.5.0'
+    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'androidx.navigation:navigation-fragment:2.4.1'
+    implementation 'androidx.navigation:navigation-ui:2.4.1'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}

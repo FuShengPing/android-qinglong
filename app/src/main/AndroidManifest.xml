@@ -25,7 +25,8 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.App"
-        tools:ignore="DataExtractionRules">
+        tools:ignore="DataExtractionRules"
+        tools:replace="android:theme">
 
         <activity
             android:name=".activity.app.SplashActivity"
@@ -43,10 +44,6 @@
             android:launchMode="singleTask" />
         <activity
             android:name=".activity.ql.CodeWebActivity"
-            android:exported="false"
-            android:launchMode="singleTask" />
-        <activity
-            android:name=".activity.extension.ai.PluginAIActivity"
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
