@@ -74,4 +74,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     implementation 'com.hierynomus:sshj:0.35.0'
+
+    implementation project(':base')
 }
