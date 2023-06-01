@@ -1,6 +1,6 @@
 package auto.qinglong.utils;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
@@ -88,8 +88,8 @@ public class WebUnit {
      *
      * @param url the url
      */
-    public static void open(Activity activity, String url) {
+    public static void open(Context context, String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        activity.startActivity(intent);
+        context.startActivity(intent);
     }
 }
