@@ -56,3 +56,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "QingLong"
 include ':app'
+
