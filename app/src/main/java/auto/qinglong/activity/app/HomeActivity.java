@@ -34,7 +34,7 @@ import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WebUnit;
-import auto.qinglong.utils.WindowUnit;
+import auto.base.util.WindowUnit;
 import auto.qinglong.views.popup.PopConfirmWindow;
 import auto.qinglong.views.popup.PopupWindowBuilder;
 

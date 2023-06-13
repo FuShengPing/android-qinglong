@@ -2,14 +2,14 @@
     <!-- Base application theme. -->
     <style name="Theme.App" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
         <!-- 导航栏颜色 -->
-        <item name="colorPrimary">@color/theme_color</item>
-        <item name="colorPrimaryVariant">@color/theme_color</item>
+        <item name="colorPrimary">@color/theme_blue_color</item>
+        <item name="colorPrimaryVariant">@color/theme_blue_color</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/theme_color</item>
+        <item name="colorSecondaryVariant">@color/theme_blue_color</item>
         <item name="colorOnSecondary">@color/black</item>
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <item name="colorControlActivated">@color/theme_color_shadow</item>
+        <item name="colorControlActivated">@color/theme_blue_color_shadow</item>
         <item name="android:windowLightStatusBar">false</item>
         <!-- 背景颜色 -->
         <item name="android:windowBackground">@color/gray_background</item>

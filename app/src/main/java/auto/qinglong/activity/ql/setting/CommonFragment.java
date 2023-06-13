@@ -17,7 +17,7 @@ import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.utils.LogUnit;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
-import auto.qinglong.utils.WindowUnit;
+import auto.base.util.WindowUnit;
 
 public class CommonFragment extends BaseFragment {
     private EditText ui_log;

@@ -8,7 +8,7 @@
         android:id="@+id/action_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/action_bar_height"
-        android:background="@color/theme_color"
+        android:background="@color/theme_blue_color"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingHorizontal="@dimen/action_bar_padding_horizontal">

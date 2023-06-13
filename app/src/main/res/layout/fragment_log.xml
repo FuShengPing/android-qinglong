@@ -9,7 +9,7 @@
         android:id="@+id/log_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/action_bar_height"
-        android:background="@color/theme_color"
+        android:background="@color/theme_blue_color"
         android:clickable="true"
         android:paddingHorizontal="@dimen/action_bar_padding_horizontal">
 
@@ -33,7 +33,7 @@
         android:paddingVertical="2dp"
         android:paddingStart="15dp"
         android:text="@string/char_path_split"
-        android:textColor="@color/theme_color_shadow"
+        android:textColor="@color/theme_blue_color_shadow"
         android:textSize="12sp"
         tools:ignore="RtlSymmetry" />
 

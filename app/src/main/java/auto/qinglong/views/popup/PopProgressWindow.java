@@ -5,7 +5,7 @@ import android.view.Gravity;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import auto.qinglong.utils.WindowUnit;
+import auto.base.util.WindowUnit;
 
 public class PopProgressWindow {
     private final Activity mActivity;

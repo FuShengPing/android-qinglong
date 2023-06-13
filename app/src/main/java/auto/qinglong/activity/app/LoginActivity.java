@@ -19,7 +19,7 @@ import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WebUnit;
-import auto.qinglong.utils.WindowUnit;
+import auto.base.util.WindowUnit;
 import auto.qinglong.views.popup.PopProgressWindow;
 import auto.qinglong.views.popup.PopupWindowBuilder;
 

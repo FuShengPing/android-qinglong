@@ -50,7 +50,7 @@ import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.TimeUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.WebUnit;
-import auto.qinglong.utils.WindowUnit;
+import auto.base.util.WindowUnit;
 import auto.qinglong.views.popup.PopEditItem;
 import auto.qinglong.views.popup.PopEditWindow;
 import auto.qinglong.views.popup.PopListWindow;

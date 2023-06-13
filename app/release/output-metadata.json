@@ -4,16 +4,16 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "auto.qinglong",
+  "applicationId": "auto.web",
   "variantName": "release",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 8,
-      "versionName": "1.7",
-      "outputFile": "app-release.apk"
+      "versionCode": 1,
+      "versionName": "1.0",
+      "outputFile": "web-release.apk"
     }
   ],
   "elementType": "File"

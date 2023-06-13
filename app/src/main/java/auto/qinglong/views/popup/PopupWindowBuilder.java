@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import auto.qinglong.R;
-import auto.qinglong.utils.WindowUnit;
+import auto.base.util.WindowUnit;
 import auto.ui.FixScrollView;
 
 public class PopupWindowBuilder {

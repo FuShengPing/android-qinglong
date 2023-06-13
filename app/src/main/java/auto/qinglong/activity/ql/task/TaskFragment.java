@@ -38,6 +38,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import auto.base.util.WindowUnit;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.activity.ql.CodeWebActivity;
@@ -52,7 +53,6 @@ import auto.qinglong.utils.TextUnit;
 import auto.qinglong.utils.TimeUnit;
 import auto.qinglong.utils.ToastUnit;
 import auto.qinglong.utils.VibratorUtil;
-import auto.qinglong.utils.WindowUnit;
 import auto.qinglong.views.popup.PopEditItem;
 import auto.qinglong.views.popup.PopEditWindow;
 import auto.qinglong.views.popup.PopListWindow;

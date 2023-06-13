@@ -21,7 +21,7 @@ import auto.qinglong.bean.ql.QLDependence;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.web.QLWebJsManager;
 import auto.qinglong.utils.ToastUnit;
-import auto.qinglong.utils.WindowUnit;
+import auto.base.util.WindowUnit;
 import auto.qinglong.views.WebViewBuilder;
 
 public class CodeWebActivity extends BaseActivity {

@@ -13,6 +13,8 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import auto.base.util.WindowUnit;
+
 /**
  * 基础Activity
  *
@@ -29,6 +31,7 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mContext = getBaseContext();
         mSelf = this;
+        WindowUnit.setStatusBarTextColor(this,false);
     }
 
     @Override

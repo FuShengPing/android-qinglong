@@ -18,15 +18,13 @@ android {
         // 配置资源路径
         sourceSets {
             main {
-                if (!isRelease.toBoolean()) {
-                    // 如果是组件化模式，需要单独运行时
-                    manifest.srcFile 'src/main/debug/AndroidManifest.xml'
-                } else {
-                    // 集成化模式，整个项目打包apk
-                    manifest.srcFile 'src/main/AndroidManifest.xml'
+                if(isRelease.toBoolean()){ //集成模式
+                    manifest.srcFile 'src/main/release/AndroidManifest.xml'
                     java {
                         exclude '**/debug/**'
                     }
+                }else{//组件模式
+                    manifest.srcFile 'src/main/AndroidManifest.xml'
                 }
             }
         }
