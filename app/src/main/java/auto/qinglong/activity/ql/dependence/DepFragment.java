@@ -22,7 +22,7 @@ import auto.qinglong.activity.ql.CodeWebActivity;
 import auto.qinglong.bean.ql.QLDependence;
 import auto.qinglong.network.http.NetManager;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.utils.ToastUnit;
+import auto.base.util.ToastUnit;
 
 public class DepFragment extends BaseFragment {
     private String type;

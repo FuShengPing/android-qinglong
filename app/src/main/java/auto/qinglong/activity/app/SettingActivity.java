@@ -13,8 +13,8 @@ import java.net.URLEncoder;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.database.sp.SettingSP;
-import auto.qinglong.utils.DeviceUnit;
-import auto.qinglong.utils.ToastUnit;
+import auto.base.util.DeviceUnit;
+import auto.base.util.ToastUnit;
 import auto.qinglong.utils.WebUnit;
 
 public class SettingActivity extends BaseActivity {

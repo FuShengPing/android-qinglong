@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import auto.base.util.WindowUnit;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.app.Account;
@@ -16,12 +17,11 @@ import auto.qinglong.bean.ql.QLSystem;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.network.http.NetManager;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.utils.TextUnit;
-import auto.qinglong.utils.ToastUnit;
+import auto.base.util.TextUnit;
+import auto.base.util.ToastUnit;
 import auto.qinglong.utils.WebUnit;
-import auto.base.util.WindowUnit;
-import auto.qinglong.views.popup.PopProgressWindow;
-import auto.qinglong.views.popup.PopupWindowBuilder;
+import auto.base.view.popup.PopProgressWindow;
+import auto.base.view.popup.PopupWindowBuilder;
 
 public class LoginActivity extends BaseActivity {
     public static final String TAG = "LoginActivity";

@@ -13,6 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import java.util.Objects;
 
+import auto.base.util.WindowUnit;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.activity.BaseFragment;
@@ -30,13 +31,12 @@ import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.database.sp.SettingSP;
 import auto.qinglong.network.http.ApiController;
 import auto.qinglong.utils.EncryptUtil;
-import auto.qinglong.utils.LogUnit;
-import auto.qinglong.utils.TextUnit;
-import auto.qinglong.utils.ToastUnit;
+import auto.base.util.LogUnit;
+import auto.base.util.TextUnit;
+import auto.base.util.ToastUnit;
 import auto.qinglong.utils.WebUnit;
-import auto.base.util.WindowUnit;
-import auto.qinglong.views.popup.PopConfirmWindow;
-import auto.qinglong.views.popup.PopupWindowBuilder;
+import auto.base.view.popup.PopConfirmWindow;
+import auto.base.view.popup.PopupWindowBuilder;
 
 public class HomeActivity extends BaseActivity {
     public static final String TAG = "HomeActivity";

@@ -6,7 +6,7 @@ import android.webkit.WebView;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import auto.qinglong.utils.ToastUnit;
+import auto.base.util.ToastUnit;
 
 /**
  * WebView与JS交互辅助类 实现代码显示和编辑功能.

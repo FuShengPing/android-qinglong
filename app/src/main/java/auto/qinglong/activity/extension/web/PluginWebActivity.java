@@ -23,21 +23,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import auto.base.util.WindowUnit;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.app.WebRule;
 import auto.qinglong.bean.ql.QLEnvironment;
 import auto.qinglong.database.db.WebRuleDBHelper;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.utils.TextUnit;
-import auto.qinglong.utils.ToastUnit;
+import auto.base.util.TextUnit;
+import auto.base.util.ToastUnit;
 import auto.qinglong.utils.WebUnit;
-import auto.base.util.WindowUnit;
-import auto.qinglong.views.WebViewBuilder;
-import auto.qinglong.views.popup.PopConfirmWindow;
-import auto.qinglong.views.popup.PopMenuItem;
-import auto.qinglong.views.popup.PopMenuWindow;
-import auto.qinglong.views.popup.PopupWindowBuilder;
+import auto.qinglong.bean.views.WebViewBuilder;
+import auto.base.view.popup.PopConfirmWindow;
+import auto.base.view.popup.PopMenuItem;
+import auto.base.view.popup.PopMenuWindow;
+import auto.base.view.popup.PopupWindowBuilder;
 
 public class PluginWebActivity extends BaseActivity {
     public static final String TAG = "PluginWebActivity";

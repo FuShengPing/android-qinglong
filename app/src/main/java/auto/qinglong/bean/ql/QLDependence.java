@@ -2,8 +2,8 @@ package auto.qinglong.bean.ql;
 
 import java.util.List;
 
-import auto.qinglong.utils.TextUnit;
-import auto.qinglong.utils.TimeUnit;
+import auto.base.util.TextUnit;
+import auto.base.util.TimeUnit;
 
 public class QLDependence {
     /*接口属性*/

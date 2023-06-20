@@ -19,7 +19,7 @@ import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.bean.ql.QLLoginLog;
 import auto.qinglong.network.http.NetManager;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.utils.ToastUnit;
+import auto.base.util.ToastUnit;
 
 
 public class LoginLogFragment extends BaseFragment {

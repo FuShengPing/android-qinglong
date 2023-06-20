@@ -29,10 +29,10 @@ import auto.qinglong.activity.ql.CodeWebActivity;
 import auto.qinglong.bean.ql.QLScript;
 import auto.qinglong.network.http.NetManager;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.utils.ToastUnit;
-import auto.qinglong.views.popup.PopMenuItem;
-import auto.qinglong.views.popup.PopMenuWindow;
-import auto.qinglong.views.popup.PopupWindowBuilder;
+import auto.base.util.ToastUnit;
+import auto.base.view.popup.PopMenuItem;
+import auto.base.view.popup.PopMenuWindow;
+import auto.base.view.popup.PopupWindowBuilder;
 
 
 public class ScriptFragment extends BaseFragment {

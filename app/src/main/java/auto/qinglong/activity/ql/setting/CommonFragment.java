@@ -8,16 +8,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import auto.base.util.WindowUnit;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.activity.app.LoginActivity;
 import auto.qinglong.bean.app.Account;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.utils.LogUnit;
-import auto.qinglong.utils.TextUnit;
-import auto.qinglong.utils.ToastUnit;
-import auto.base.util.WindowUnit;
+import auto.base.util.LogUnit;
+import auto.base.util.TextUnit;
+import auto.base.util.ToastUnit;
 
 public class CommonFragment extends BaseFragment {
     private EditText ui_log;

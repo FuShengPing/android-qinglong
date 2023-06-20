@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import auto.qinglong.network.http.NetManager;
-import auto.qinglong.utils.ToastUnit;
+import auto.base.util.ToastUnit;
 
 public abstract class BaseActivity extends AppCompatActivity {
     public static final String TAG = "BaseActivity";

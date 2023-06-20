@@ -32,7 +32,7 @@ import auto.qinglong.bean.ql.network.QLSystemRes;
 import auto.qinglong.bean.ql.network.QLTaskEditRes;
 import auto.qinglong.bean.ql.network.QLTasksRes;
 import auto.qinglong.database.sp.AccountSP;
-import auto.qinglong.utils.LogUnit;
+import auto.base.util.LogUnit;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;

@@ -26,12 +26,11 @@
         android:paddingHorizontal="15dp"
         android:paddingVertical="20dp">
 
-        <EditText
+        <auto.base.view.EditText
             android:id="@+id/et_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:background="@drawable/style_input"
             android:fontFamily="sans-serif-light"
             android:hint="@string/str_input_hint_ip"
             android:imeOptions="actionNext"
@@ -40,15 +39,13 @@
             android:paddingVertical="7dp"
             android:singleLine="true"
             android:textColor="@color/text_color_49"
-            android:textCursorDrawable="@drawable/style_cursor_blue"
             android:textSize="18sp" />
 
-        <EditText
+        <auto.base.view.EditText
             android:id="@+id/et_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:background="@drawable/style_input"
             android:fontFamily="sans-serif-light"
             android:hint="@string/str_username"
             android:imeOptions="actionNext"
@@ -58,15 +55,13 @@
             android:paddingVertical="7dp"
             android:singleLine="true"
             android:textColor="@color/text_color_49"
-            android:textCursorDrawable="@drawable/style_cursor_blue"
             android:textSize="18sp" />
 
-        <EditText
+        <auto.base.view.EditText
             android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
-            android:background="@drawable/style_input"
             android:fontFamily="sans-serif-light"
             android:hint="@string/str_password"
             android:imeOptions="actionDone"
@@ -76,7 +71,6 @@
             android:paddingVertical="7dp"
             android:singleLine="true"
             android:textColor="@color/text_color_49"
-            android:textCursorDrawable="@drawable/style_cursor_blue"
             android:textSize="18sp" />
 
         <Button

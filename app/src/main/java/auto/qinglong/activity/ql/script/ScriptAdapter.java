@@ -16,7 +16,7 @@ import java.util.List;
 
 import auto.qinglong.R;
 import auto.qinglong.bean.ql.QLScript;
-import auto.qinglong.utils.TimeUnit;
+import auto.base.util.TimeUnit;
 
 public class ScriptAdapter extends RecyclerView.Adapter<ScriptAdapter.MyViewHolder> {
     public static final String TAG = "ScriptAdapter";

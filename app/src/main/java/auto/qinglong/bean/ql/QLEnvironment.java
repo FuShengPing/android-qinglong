@@ -6,7 +6,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import auto.qinglong.utils.TimeUnit;
+import auto.base.util.TimeUnit;
 
 public class QLEnvironment implements Comparable<QLEnvironment> {
     /* 接口字段 */

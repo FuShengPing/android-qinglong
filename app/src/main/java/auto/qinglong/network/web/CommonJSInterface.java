@@ -2,8 +2,8 @@ package auto.qinglong.network.web;
 
 import android.webkit.JavascriptInterface;
 
-import auto.qinglong.utils.LogUnit;
-import auto.qinglong.utils.ToastUnit;
+import auto.base.util.LogUnit;
+import auto.base.util.ToastUnit;
 
 public class CommonJSInterface {
     public final static String TAG = "CommonJSInterface";

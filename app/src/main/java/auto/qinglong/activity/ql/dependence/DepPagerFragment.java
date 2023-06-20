@@ -19,18 +19,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import auto.base.util.WindowUnit;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.bean.ql.QLDependence;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.utils.TextUnit;
-import auto.qinglong.utils.ToastUnit;
-import auto.base.util.WindowUnit;
-import auto.qinglong.views.popup.PopEditItem;
-import auto.qinglong.views.popup.PopEditWindow;
-import auto.qinglong.views.popup.PopMenuItem;
-import auto.qinglong.views.popup.PopMenuWindow;
-import auto.qinglong.views.popup.PopupWindowBuilder;
+import auto.base.util.TextUnit;
+import auto.base.util.ToastUnit;
+import auto.base.view.popup.PopEditItem;
+import auto.base.view.popup.PopEditWindow;
+import auto.base.view.popup.PopMenuItem;
+import auto.base.view.popup.PopMenuWindow;
+import auto.base.view.popup.PopupWindowBuilder;
 
 
 public class DepPagerFragment extends BaseFragment {

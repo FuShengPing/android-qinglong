@@ -11,8 +11,8 @@ import auto.qinglong.bean.app.Account;
 import auto.qinglong.bean.ql.QLSystem;
 import auto.qinglong.database.sp.AccountSP;
 import auto.qinglong.network.http.QLApiController;
-import auto.qinglong.utils.NetUnit;
-import auto.qinglong.utils.ToastUnit;
+import auto.base.util.NetUnit;
+import auto.base.util.ToastUnit;
 
 
 @SuppressLint("CustomSplashScreen")

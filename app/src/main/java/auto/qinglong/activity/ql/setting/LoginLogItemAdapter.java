@@ -15,7 +15,7 @@ import java.util.List;
 
 import auto.qinglong.R;
 import auto.qinglong.bean.ql.QLLoginLog;
-import auto.qinglong.utils.TimeUnit;
+import auto.base.util.TimeUnit;
 
 public class LoginLogItemAdapter extends RecyclerView.Adapter<LoginLogItemAdapter.MyViewHolder> {
     List<QLLoginLog> data;

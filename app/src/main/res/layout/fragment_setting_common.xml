@@ -54,12 +54,11 @@
                     android:textColor="@color/text_color_49"
                     android:textSize="15sp" />
 
-                <EditText
+                <auto.base.view.EditText
                     android:id="@+id/setting_security_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
-                    android:background="@drawable/style_input"
                     android:hint="@string/str_username"
                     android:inputType="textVisiblePassword"
                     android:maxLength="20"
@@ -67,7 +66,6 @@
                     android:paddingVertical="5dp"
                     android:singleLine="true"
                     android:textColor="@color/text_color_49"
-                    android:textCursorDrawable="@drawable/style_cursor_blue"
                     android:textIsSelectable="true"
                     android:textSize="15sp" />
 
@@ -79,12 +77,11 @@
                     android:textColor="@color/text_color_49"
                     android:textSize="15sp" />
 
-                <EditText
+                <auto.base.view.EditText
                     android:id="@+id/setting_security_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
-                    android:background="@drawable/style_input"
                     android:hint="@string/str_password"
                     android:inputType="textVisiblePassword"
                     android:maxLength="20"
@@ -92,7 +89,6 @@
                     android:paddingVertical="5dp"
                     android:singleLine="true"
                     android:textColor="@color/text_color_49"
-                    android:textCursorDrawable="@drawable/style_cursor_blue"
                     android:textIsSelectable="true"
                     android:textSize="15sp" />
 
@@ -141,19 +137,17 @@
                     android:textColor="@color/text_color_49"
                     android:textSize="15sp" />
 
-                <EditText
+                <auto.base.view.EditText
                     android:id="@+id/setting_log"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
-                    android:background="@drawable/style_input"
                     android:hint="@string/str_day"
                     android:inputType="numberSigned"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="5dp"
                     android:singleLine="true"
                     android:textColor="@color/text_color_49"
-                    android:textCursorDrawable="@drawable/style_cursor_blue"
                     android:textIsSelectable="true"
                     android:textSize="15sp" />
 

@@ -9,13 +9,23 @@ android {
     namespace 'auto.ssh'
     compileSdk 32
 
+    packagingOptions {
+        exclude 'META-INF/INDEX.LIST'
+        exclude 'META-INF/io.netty.versions.properties'
+    }
+
+
     defaultConfig {
-        // 集成化模式不能有applicationId，组件化模式能独立运行才能有applicationId
+        minSdk 26
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
         if (!isRelease) {
             applicationId "auto.ssh"
         }
 
-        // 配置资源路径
         sourceSets {
             main {
                 if (isRelease.toBoolean()) {// 集成化模式
@@ -29,12 +39,6 @@ android {
             }
         }
 
-        minSdk 26
-        targetSdk 32
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -42,11 +46,18 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     buildFeatures {
         viewBinding true
     }
@@ -57,6 +68,8 @@ dependencies {
     configurations {
         all {
             exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel-ktx'
+            exclude group: 'org.bouncycastle',module:'bcprov-jdk15to18'
+            exclude group: 'org.bouncycastle',module:'bcpkix-jdk15to18'
         }
     }
 
@@ -72,6 +85,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     implementation 'com.hierynomus:sshj:0.35.0'
+    implementation 'com.github.monkeywie:proxyee:1.7.5'
+
+    implementation 'org.bouncycastle:bcpkix-jdk15to18:1.68'
+    implementation 'org.bouncycastle:bcprov-jdk15to18:1.68'
 
     implementation project(':base')
 }

@@ -6,7 +6,6 @@ import android.widget.Toast;
 
 import auto.base.BaseApplication;
 
-
 public class ToastUnit {
     public static final String TAG = "ToastUnit";
     private static Toast mToast = null;

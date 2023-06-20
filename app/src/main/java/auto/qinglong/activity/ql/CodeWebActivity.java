@@ -15,14 +15,14 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Objects;
 
+import auto.base.util.WindowUnit;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.ql.QLDependence;
 import auto.qinglong.network.http.QLApiController;
 import auto.qinglong.network.web.QLWebJsManager;
-import auto.qinglong.utils.ToastUnit;
-import auto.base.util.WindowUnit;
-import auto.qinglong.views.WebViewBuilder;
+import auto.base.util.ToastUnit;
+import auto.qinglong.bean.views.WebViewBuilder;
 
 public class CodeWebActivity extends BaseActivity {
     public static final String TAG = "CodeWebActivity";

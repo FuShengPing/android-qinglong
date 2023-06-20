@@ -3,7 +3,7 @@ package auto.qinglong.bean.ql;
 import java.util.Locale;
 
 import auto.qinglong.utils.CronUnit;
-import auto.qinglong.utils.TimeUnit;
+import auto.base.util.TimeUnit;
 
 public class QLTask implements Comparable<QLTask> {
     /* 接口属性 */
