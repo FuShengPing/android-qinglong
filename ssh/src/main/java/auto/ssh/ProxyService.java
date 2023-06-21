@@ -89,7 +89,7 @@ public class ProxyService extends Service {
             startForeground(NOTIFICATION_ID, builder.build());
             // 发送开启广播
             LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(openIntent);
-            Logger.info("开启本地代理", null);
+            Logger.info("本地代理开启", null);
             // 开始监听
             httpProxyServer.start(finalAddress, finalPort);
             Logger.info("本地代理关闭", null);
