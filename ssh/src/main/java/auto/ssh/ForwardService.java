@@ -27,7 +27,6 @@ import java.util.concurrent.TimeUnit;
 
 public class ForwardService extends Service {
     public static final String TAG = "ForwardService";
-    public static final String PROJECT = "proxy";
     public static final String BROADCAST_ACTION_STATE = "auto.ssh.forward.ACTION_FORWARD_STATE_CHANGE";
     private static final String WAKELOCK_TAG = "ssh:forward";
     public static final int STATE_CLOSE = 0;
