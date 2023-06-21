@@ -75,6 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
+            android:visibility="gone"
             app:cardBackgroundColor="@color/gray_80"
             app:cardCornerRadius="6dp"
             app:cardElevation="3dp">

@@ -13,19 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import net.schmizz.sshj.SSHClient;
-import net.schmizz.sshj.common.IOUtils;
-import net.schmizz.sshj.connection.channel.direct.Session;
-import net.schmizz.sshj.connection.channel.forwarded.RemotePortForwarder;
-import net.schmizz.sshj.connection.channel.forwarded.SocketForwardingConnectListener;
-
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
-
 import auto.base.BaseApplication;
-import auto.base.util.LogUnit;
 import auto.base.util.WindowUnit;
 
 public class MainActivity extends AppCompatActivity {
@@ -87,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         this.uiLocal.setCardBackgroundColor(getResources().getColor(R.color.blue_deep, null));
         this.uiLocalImg.setBackgroundResource(auto.base.R.drawable.ic_remove_circle_outline_white);
         this.uiLocalTip.setText(R.string.proxy_local_close);
+        this.uiForward.setVisibility(View.VISIBLE);
     }
 
     private void onProxyClose() {
@@ -94,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
         this.uiLocal.setCardBackgroundColor(getResources().getColor(R.color.gray_80, null));
         this.uiLocalImg.setBackgroundResource(auto.base.R.drawable.ic_check_circle_outline_white);
         this.uiLocalTip.setText(R.string.proxy_local_open);
+        this.uiForward.setVisibility(View.GONE);
+        closeForwardService();
     }
 
     private void onForwardOpen() {
@@ -108,6 +99,11 @@ public class MainActivity extends AppCompatActivity {
         this.uiForward.setCardBackgroundColor(getResources().getColor(R.color.gray_80, null));
         this.uiForwardImg.setBackgroundResource(auto.base.R.drawable.ic_check_circle_outline_white);
         this.uiForwardTip.setText(R.string.proxy_forward_connect);
+    }
+
+    private void closeForwardService() {
+        Intent intent = new Intent(this, ForwardService.class);
+        stopService(intent);
     }
 
     private void init() {
@@ -147,12 +143,12 @@ public class MainActivity extends AppCompatActivity {
         uiForward.setOnClickListener(v -> {
             Intent intent = new Intent(BaseApplication.getContext(), ForwardService.class);
             if (this.forwardState == ForwardService.STATE_CLOSE) {//开启服务
-                intent.putExtra(ForwardService.EXTRA_HOSTNAME,"60.205.228.46");
-                intent.putExtra(ForwardService.EXTRA_USERNAME,"root");
-                intent.putExtra(ForwardService.EXTRA_PASSWORD,"aly@123456Fsp");
-                intent.putExtra(ForwardService.EXTRA_REMOTE_ADDRESS,"0.0.0.0");
+                intent.putExtra(ForwardService.EXTRA_HOSTNAME, "60.205.228.46");
+                intent.putExtra(ForwardService.EXTRA_USERNAME, "root");
+                intent.putExtra(ForwardService.EXTRA_PASSWORD, "aly@123456Fsp");
+                intent.putExtra(ForwardService.EXTRA_REMOTE_ADDRESS, "0.0.0.0");
 //                intent.putExtra(ForwardService.EXTRA_REMOTE_PORT,9100);
-                intent.putExtra(ForwardService.EXTRA_LOCAL_ADDRESS,"0.0.0.0");
+                intent.putExtra(ForwardService.EXTRA_LOCAL_ADDRESS, "0.0.0.0");
 //                intent.putExtra(ForwardService.EXTRA_LOCAL_PORT,9100);
                 startService(intent);
             } else {//结束服务

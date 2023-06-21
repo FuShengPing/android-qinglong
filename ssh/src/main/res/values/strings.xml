@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AutoProxy</string>
+    <string name="app_name">LocProxy</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -10,7 +10,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
-    <string name="app_proxy">AutoProxy</string>
+    <string name="app_proxy">LocProxy</string>
     <string name="proxy_local_close">关闭代理</string>
     <string name="proxy_local_open">启动代理</string>
     <string name="proxy_forward_connect">连接远程</string>
