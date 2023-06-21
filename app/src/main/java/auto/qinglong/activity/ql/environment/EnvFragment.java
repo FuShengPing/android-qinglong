@@ -38,6 +38,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import auto.base.util.WindowUnit;
+import auto.base.view.popup.PopMenuObject;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
 import auto.base.view.popup.LocalFileAdapter;
@@ -51,10 +52,9 @@ import auto.base.util.TextUnit;
 import auto.base.util.TimeUnit;
 import auto.base.util.ToastUnit;
 import auto.qinglong.utils.WebUnit;
-import auto.base.view.popup.PopEditItem;
+import auto.base.view.popup.PopEditObject;
 import auto.base.view.popup.PopEditWindow;
 import auto.base.view.popup.PopListWindow;
-import auto.base.view.popup.PopMenuItem;
 import auto.base.view.popup.PopMenuWindow;
 import auto.base.view.popup.PopProgressWindow;
 import auto.base.view.popup.PopupWindowBuilder;
@@ -284,13 +284,13 @@ public class EnvFragment extends BaseFragment {
 
     private void showPopWindowMenu(View view) {
         PopMenuWindow popMenuWindow = new PopMenuWindow(view, Gravity.END);
-        popMenuWindow.addItem(new PopMenuItem("add", "新建变量", R.drawable.ic_gray_add));
-        popMenuWindow.addItem(new PopMenuItem("quickAdd", "快捷导入", R.drawable.ic_gray_flash_on));
-        popMenuWindow.addItem(new PopMenuItem("localAdd", "本地导入", R.drawable.ic_gray_file));
-        popMenuWindow.addItem(new PopMenuItem("remoteAdd", "远程导入", R.drawable.ic_gray_upload));
-        popMenuWindow.addItem(new PopMenuItem("backup", "变量备份", R.drawable.ic_gray_download));
-        popMenuWindow.addItem(new PopMenuItem("deleteMul", "变量去重", R.drawable.ic_gray_delete));
-        popMenuWindow.addItem(new PopMenuItem("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
+        popMenuWindow.addItem(new PopMenuObject("add", "新建变量", R.drawable.ic_gray_add));
+        popMenuWindow.addItem(new PopMenuObject("quickAdd", "快捷导入", R.drawable.ic_gray_flash_on));
+        popMenuWindow.addItem(new PopMenuObject("localAdd", "本地导入", R.drawable.ic_gray_file));
+        popMenuWindow.addItem(new PopMenuObject("remoteAdd", "远程导入", R.drawable.ic_gray_upload));
+        popMenuWindow.addItem(new PopMenuObject("backup", "变量备份", R.drawable.ic_gray_download));
+        popMenuWindow.addItem(new PopMenuObject("deleteMul", "变量去重", R.drawable.ic_gray_delete));
+        popMenuWindow.addItem(new PopMenuObject("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
         popMenuWindow.setOnActionListener(key -> {
             switch (key) {
                 case "add":
@@ -324,9 +324,9 @@ public class EnvFragment extends BaseFragment {
 
     private void showPopWindowCommonEdit(QLEnvironment environment) {
         ui_pop_edit = new PopEditWindow("新建变量", "取消", "确定");
-        PopEditItem itemName = new PopEditItem("name", null, "名称", "请输入变量名称");
-        PopEditItem itemValue = new PopEditItem("value", null, "值", "请输入变量值");
-        PopEditItem itemRemark = new PopEditItem("remark", null, "备注", "请输入备注(可选)");
+        PopEditObject itemName = new PopEditObject("name", null, "名称", "请输入变量名称");
+        PopEditObject itemValue = new PopEditObject("value", null, "值", "请输入变量值");
+        PopEditObject itemRemark = new PopEditObject("remark", null, "备注", "请输入备注(可选)");
 
         if (environment != null) {
             ui_pop_edit.setTitle("编辑变量");
@@ -384,8 +384,8 @@ public class EnvFragment extends BaseFragment {
 
     private void showPopWindowQuickEdit() {
         ui_pop_edit = new PopEditWindow("快捷导入", "取消", "确定");
-        PopEditItem itemValue = new PopEditItem("values", null, "文本", "请输入文本");
-        PopEditItem itemRemark = new PopEditItem("remark", null, "备注", "请输入备注(可选)");
+        PopEditObject itemValue = new PopEditObject("values", null, "文本", "请输入文本");
+        PopEditObject itemRemark = new PopEditObject("remark", null, "备注", "请输入备注(可选)");
 
         ui_pop_edit.addItem(itemValue);
         ui_pop_edit.addItem(itemRemark);
@@ -422,7 +422,7 @@ public class EnvFragment extends BaseFragment {
 
     private void showPopWindowRemoteEdit() {
         ui_pop_edit = new PopEditWindow("远程导入", "取消", "确定");
-        PopEditItem itemValue = new PopEditItem("url", null, "链接", "请输入远程地址");
+        PopEditObject itemValue = new PopEditObject("url", null, "链接", "请输入远程地址");
         ui_pop_edit.addItem(itemValue);
         ui_pop_edit.setActionListener(new PopEditWindow.OnActionListener() {
             @Override
@@ -450,7 +450,7 @@ public class EnvFragment extends BaseFragment {
 
     private void showPopWindowBackupEdit() {
         ui_pop_edit = new PopEditWindow("变量备份", "取消", "确定");
-        PopEditItem itemName = new PopEditItem("file_name", null, "文件名", "选填");
+        PopEditObject itemName = new PopEditObject("file_name", null, "文件名", "选填");
 
         ui_pop_edit.addItem(itemName);
 

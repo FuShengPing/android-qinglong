@@ -26,9 +26,9 @@ import auto.qinglong.bean.ql.QLDependence;
 import auto.qinglong.network.http.QLApiController;
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
-import auto.base.view.popup.PopEditItem;
+import auto.base.view.popup.PopEditObject;
 import auto.base.view.popup.PopEditWindow;
-import auto.base.view.popup.PopMenuItem;
+import auto.base.view.popup.PopMenuObject;
 import auto.base.view.popup.PopMenuWindow;
 import auto.base.view.popup.PopupWindowBuilder;
 
@@ -158,8 +158,8 @@ public class DepPagerFragment extends BaseFragment {
         ui_pop_edit = new PopEditWindow("新建依赖", "取消", "确定");
         ui_pop_edit.setMaxHeight(WindowUnit.getWindowHeightPix(requireContext()) / 3);
         String type = mPagerAdapter.getCurrentFragment(ui_page.getCurrentItem()).getType();
-        ui_pop_edit.addItem(new PopEditItem("type", type, "类型", null, false, false));
-        ui_pop_edit.addItem(new PopEditItem("name", null, "名称", "请输入依赖名称"));
+        ui_pop_edit.addItem(new PopEditObject("type", type, "类型", null, false, false));
+        ui_pop_edit.addItem(new PopEditObject("name", null, "名称", "请输入依赖名称"));
         ui_pop_edit.setActionListener(new PopEditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
@@ -197,8 +197,8 @@ public class DepPagerFragment extends BaseFragment {
 
     private void showPopWindowMenu(View view) {
         PopMenuWindow popMenuWindow = new PopMenuWindow(view, Gravity.END);
-        popMenuWindow.addItem(new PopMenuItem("add", "新建依赖", R.drawable.ic_gray_add));
-        popMenuWindow.addItem(new PopMenuItem("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
+        popMenuWindow.addItem(new PopMenuObject("add", "新建依赖", R.drawable.ic_gray_add));
+        popMenuWindow.addItem(new PopMenuObject("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
         popMenuWindow.setOnActionListener(key -> {
             if (key.equals("add")) {
                 showPopWindowEdit();

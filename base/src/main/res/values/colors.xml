@@ -19,6 +19,7 @@
     <color name="gray_press">#4ADDDDDD</color>
     <color name="gray_icon">#8B8B8B</color>
     <color name="gray_background">#F5F6F8</color>
+    <color name="background_gray">#F5F6F8</color>
     <color name="ripple">#22000000</color>
 
     <color name="text_color_19">#191919</color>

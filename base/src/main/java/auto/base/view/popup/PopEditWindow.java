@@ -14,7 +14,7 @@ public class PopEditWindow {
     private int maxHeight = 0;
     private PopupWindow popupWindow;
     private View view;
-    private List<PopEditItem> items;
+    private List<PopEditObject> items;
     private OnActionListener actionListener;
 
     public PopEditWindow() {
@@ -28,7 +28,7 @@ public class PopEditWindow {
         this.items = new ArrayList<>();
     }
 
-    public void setItems(List<PopEditItem> items) {
+    public void setItems(List<PopEditObject> items) {
         this.items = items;
     }
 
@@ -40,11 +40,11 @@ public class PopEditWindow {
         this.actionListener = actionListener;
     }
 
-    public void addItem(PopEditItem item) {
+    public void addItem(PopEditObject item) {
         this.items.add(item);
     }
 
-    public List<PopEditItem> getItems() {
+    public List<PopEditObject> getItems() {
         return items;
     }
 

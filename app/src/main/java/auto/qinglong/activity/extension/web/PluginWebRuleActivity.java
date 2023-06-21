@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import auto.base.util.WindowUnit;
+import auto.base.view.popup.PopMenuObject;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.app.WebRule;
@@ -24,9 +25,8 @@ import auto.qinglong.network.http.NetManager;
 import auto.base.util.ToastUnit;
 import auto.qinglong.utils.VibratorUtil;
 import auto.qinglong.utils.WebUnit;
-import auto.base.view.popup.PopEditItem;
+import auto.base.view.popup.PopEditObject;
 import auto.base.view.popup.PopEditWindow;
-import auto.base.view.popup.PopMenuItem;
 import auto.base.view.popup.PopMenuWindow;
 import auto.base.view.popup.PopupWindowBuilder;
 
@@ -82,12 +82,12 @@ public class PluginWebRuleActivity extends BaseActivity {
     private void showPopWindowCommonEdit() {
         PopEditWindow popEditWindow = new PopEditWindow("新建规则", "取消", "确定");
         popEditWindow.setMaxHeight(WindowUnit.getWindowHeightPix(getBaseContext()) / 3);//限制最大高度
-        popEditWindow.addItem(new PopEditItem(WebRuleDBHelper.key_env_name, null, "环境变量", "", true, true));
-        popEditWindow.addItem(new PopEditItem(WebRuleDBHelper.key_name, null, "规则名称", "", true, true));
-        popEditWindow.addItem(new PopEditItem(WebRuleDBHelper.key_url, null, "网址", "", true, true));
-        popEditWindow.addItem(new PopEditItem(WebRuleDBHelper.key_target, null, "目标键", "选填", true, true));
-        popEditWindow.addItem(new PopEditItem(WebRuleDBHelper.key_main, null, "主键", "", true, true));
-        popEditWindow.addItem(new PopEditItem(WebRuleDBHelper.key_join_char, null, "连接符", "选填", true, true));
+        popEditWindow.addItem(new PopEditObject(WebRuleDBHelper.key_env_name, null, "环境变量", "", true, true));
+        popEditWindow.addItem(new PopEditObject(WebRuleDBHelper.key_name, null, "规则名称", "", true, true));
+        popEditWindow.addItem(new PopEditObject(WebRuleDBHelper.key_url, null, "网址", "", true, true));
+        popEditWindow.addItem(new PopEditObject(WebRuleDBHelper.key_target, null, "目标键", "选填", true, true));
+        popEditWindow.addItem(new PopEditObject(WebRuleDBHelper.key_main, null, "主键", "", true, true));
+        popEditWindow.addItem(new PopEditObject(WebRuleDBHelper.key_join_char, null, "连接符", "选填", true, true));
         popEditWindow.setActionListener(new PopEditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
@@ -130,7 +130,7 @@ public class PluginWebRuleActivity extends BaseActivity {
 
     private void showPopWindowRemoteEdit() {
         PopEditWindow popEditWindow = new PopEditWindow("远程导入", "取消", "确定");
-        PopEditItem itemValue = new PopEditItem("url", null, "链接", "请输入远程地址");
+        PopEditObject itemValue = new PopEditObject("url", null, "链接", "请输入远程地址");
         popEditWindow.addItem(itemValue);
         popEditWindow.setActionListener(new PopEditWindow.OnActionListener() {
             @Override
@@ -159,8 +159,8 @@ public class PluginWebRuleActivity extends BaseActivity {
 
     private void showPopMenu(View view) {
         PopMenuWindow popMenuWindow = new PopMenuWindow(view, Gravity.END);
-        popMenuWindow.addItem(new PopMenuItem("add", "新建规则", R.drawable.ic_gray_add));
-        popMenuWindow.addItem(new PopMenuItem("remoteAdd", "远程导入", R.drawable.ic_gray_download));
+        popMenuWindow.addItem(new PopMenuObject("add", "新建规则", R.drawable.ic_gray_add));
+        popMenuWindow.addItem(new PopMenuObject("remoteAdd", "远程导入", R.drawable.ic_gray_download));
         popMenuWindow.setOnActionListener(key -> {
             switch (key) {
                 case "add":

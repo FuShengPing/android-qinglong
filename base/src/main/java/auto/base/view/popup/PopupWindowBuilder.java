@@ -40,7 +40,7 @@ public class PopupWindowBuilder {
 
         LinearLayout ui_ll_container = view.findViewById(R.id.pop_common_ll_container);
 
-        for (PopMenuItem item : popMenuWindow.getItems()) {
+        for (PopMenuObject item : popMenuWindow.getItems()) {
             View itemView = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_menu_item, null, false);
             ImageView ui_icon = itemView.findViewById(R.id.pop_common_mini_more_icon);
             TextView ui_name = itemView.findViewById(R.id.pop_common_mini_more_name);
@@ -84,8 +84,8 @@ public class PopupWindowBuilder {
 
         //添加item
         List<EditText> itemViews = new ArrayList<>();
-        List<PopEditItem> items = popEditWindow.getItems();
-        for (PopEditItem item : items) {
+        List<PopEditObject> items = popEditWindow.getItems();
+        for (PopEditObject item : items) {
             View itemView = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_edit_item, null, false);
             TextView ui_item_label = itemView.findViewById(R.id.pop_common_tv_label);
             EditText ui_item_value = itemView.findViewById(R.id.pop_common_et_value);

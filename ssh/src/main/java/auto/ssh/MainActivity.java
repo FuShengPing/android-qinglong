@@ -1,14 +1,11 @@
 package auto.ssh;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PowerManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.common.IOUtils;
@@ -23,31 +20,52 @@ import java.util.concurrent.TimeUnit;
 
 import auto.base.BaseApplication;
 import auto.base.util.LogUnit;
+import auto.base.util.WindowUnit;
 
 public class MainActivity extends AppCompatActivity {
-    Button ui_button;
-    EditText ui_edit;
-    TextView ui_text;
+    private CardView uiLocal;
+    private CardView uiRemote;
+    private View uiConfig;
+    private View uiSetting;
+    private View uiLog;
+    private View uiHelp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        WindowUnit.setStatusBarTextColor(this, false);
+
         setContentView(R.layout.activity_main);
 
-        ui_button = findViewById(R.id.main_button);
-        ui_edit = findViewById(R.id.main_edit);
-        ui_text = findViewById(R.id.main_text);
+        uiLocal = findViewById(R.id.proxy_local);
+        uiRemote = findViewById(R.id.proxy_remote);
+        uiConfig = findViewById(R.id.proxy_config);
+        uiSetting = findViewById(R.id.proxy_setting);
+        uiLog = findViewById(R.id.proxy_log);
+        uiHelp = findViewById(R.id.proxy_help);
 
-        new Thread(() -> {
-            PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-            PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SSH:ProxyKeepAlive");
-        }).start();
+        init();
+    }
 
+    private void init() {
+        uiLocal.setOnClickListener(v -> {
+            LogUnit.log("startProxyService in");
+            startProxyService();
+        });
+
+        uiRemote.setOnClickListener(v -> {
+            LogUnit.log("startSSHSerVice in");
+            startSSHSerVice();
+        });
+    }
+
+    private void startProxyService() {
         Intent intent = new Intent(BaseApplication.getContext(), ProxyService.class);
-        intent.putExtra(ProxyService.EXTRA_PORT, ProxyService.DEFAULT_PORT);
         startService(intent);
+    }
 
+    private void startSSHSerVice() {
         SSHClient ssh = new SSHClient();
 
         ssh.addHostKeyVerifier(new HostKeyVerifier());
@@ -99,29 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }).start();
-
-        ui_button.setOnClickListener(v -> {
-            String cmd = ui_edit.getText().toString().trim();
-
-            new Thread(() -> {
-                try {
-                    if (!ssh.isConnected()) {
-                        return;
-                    }
-
-                    Session session = ssh.startSession();
-
-                    Session.Command command = session.exec(cmd);
-
-                    command.join(3, TimeUnit.SECONDS);
-
-                    String result = IOUtils.readFully(command.getInputStream()).toString();
-
-                    runOnUiThread(() -> ui_text.setText(result));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }).start();
-        });
     }
+
+
 }

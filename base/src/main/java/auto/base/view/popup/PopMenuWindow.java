@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PopMenuWindow {
-    private List<PopMenuItem> items = new ArrayList<>();
+    private List<PopMenuObject> items = new ArrayList<>();
     private OnActionListener onActionListener;
     private View targetView;
     private int gravity;
@@ -19,15 +19,15 @@ public class PopMenuWindow {
         this.gravity = gravity;
     }
 
-    public List<PopMenuItem> getItems() {
+    public List<PopMenuObject> getItems() {
         return items;
     }
 
-    public void addItems(List<PopMenuItem> items) {
+    public void addItems(List<PopMenuObject> items) {
         this.items = items;
     }
 
-    public void addItem(PopMenuItem item) {
+    public void addItem(PopMenuObject item) {
         this.items.add(item);
     }
 

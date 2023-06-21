@@ -39,6 +39,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import auto.base.util.WindowUnit;
+import auto.base.view.popup.PopMenuObject;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.activity.ql.CodeWebActivity;
@@ -53,10 +54,9 @@ import auto.base.util.TextUnit;
 import auto.base.util.TimeUnit;
 import auto.base.util.ToastUnit;
 import auto.qinglong.utils.VibratorUtil;
-import auto.base.view.popup.PopEditItem;
+import auto.base.view.popup.PopEditObject;
 import auto.base.view.popup.PopEditWindow;
 import auto.base.view.popup.PopListWindow;
-import auto.base.view.popup.PopMenuItem;
 import auto.base.view.popup.PopMenuWindow;
 import auto.base.view.popup.PopProgressWindow;
 import auto.base.view.popup.PopupWindowBuilder;
@@ -388,11 +388,11 @@ public class TaskFragment extends BaseFragment {
 
     private void showPopWindowMenu(View view) {
         PopMenuWindow popMenuWindow = new PopMenuWindow(view, Gravity.END);
-        popMenuWindow.addItem(new PopMenuItem("add", "新建任务", R.drawable.ic_gray_add));
-        popMenuWindow.addItem(new PopMenuItem("localAdd", "本地导入", R.drawable.ic_gray_file));
-        popMenuWindow.addItem(new PopMenuItem("backup", "任务备份", R.drawable.ic_gray_download));
-        popMenuWindow.addItem(new PopMenuItem("deleteMul", "任务去重", R.drawable.ic_gray_delete));
-        popMenuWindow.addItem(new PopMenuItem("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
+        popMenuWindow.addItem(new PopMenuObject("add", "新建任务", R.drawable.ic_gray_add));
+        popMenuWindow.addItem(new PopMenuObject("localAdd", "本地导入", R.drawable.ic_gray_file));
+        popMenuWindow.addItem(new PopMenuObject("backup", "任务备份", R.drawable.ic_gray_download));
+        popMenuWindow.addItem(new PopMenuObject("deleteMul", "任务去重", R.drawable.ic_gray_delete));
+        popMenuWindow.addItem(new PopMenuObject("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
         popMenuWindow.setOnActionListener(key -> {
             switch (key) {
                 case "add":
@@ -417,9 +417,9 @@ public class TaskFragment extends BaseFragment {
 
     private void showPopWindowEdit(QLTask qlTask) {
         ui_pop_edit = new PopEditWindow("新建任务", "取消", "确定");
-        PopEditItem itemName = new PopEditItem("name", null, "名称", "请输入任务名称");
-        PopEditItem itemCommand = new PopEditItem("command", null, "命令", "请输入要执行的命令");
-        PopEditItem itemSchedule = new PopEditItem("schedule", null, "定时规则", "秒(可选) 分 时 天 月 周");
+        PopEditObject itemName = new PopEditObject("name", null, "名称", "请输入任务名称");
+        PopEditObject itemCommand = new PopEditObject("command", null, "命令", "请输入要执行的命令");
+        PopEditObject itemSchedule = new PopEditObject("schedule", null, "定时规则", "秒(可选) 分 时 天 月 周");
 
         if (qlTask != null) {
             ui_pop_edit.setTitle("编辑任务");
@@ -481,7 +481,7 @@ public class TaskFragment extends BaseFragment {
 
     private void showPopWindowBackupEdit() {
         ui_pop_edit = new PopEditWindow("任务备份", "取消", "确定");
-        PopEditItem itemName = new PopEditItem("file_name", null, "文件名", "选填");
+        PopEditObject itemName = new PopEditObject("file_name", null, "文件名", "选填");
 
         ui_pop_edit.addItem(itemName);
 

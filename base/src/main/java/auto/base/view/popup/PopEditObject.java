@@ -1,6 +1,6 @@
 package auto.base.view.popup;
 
-public class PopEditItem {
+public class PopEditObject {
     private String key;
     private String value;
     private String label;
@@ -8,18 +8,18 @@ public class PopEditItem {
     private boolean focusable = true;
     private boolean editable = true;
 
-    public PopEditItem() {
+    public PopEditObject() {
 
     }
 
-    public PopEditItem(String key, String value, String label, String hint) {
+    public PopEditObject(String key, String value, String label, String hint) {
         this.key = key;
         this.value = value;
         this.label = label;
         this.hint = hint;
     }
 
-    public PopEditItem(String key, String value, String label, String hint, boolean focusable, boolean editable) {
+    public PopEditObject(String key, String value, String label, String hint, boolean focusable, boolean editable) {
         this.key = key;
         this.value = value;
         this.label = label;

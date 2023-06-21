@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import auto.base.util.WindowUnit;
+import auto.base.view.popup.PopMenuObject;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseActivity;
 import auto.qinglong.bean.app.WebRule;
@@ -35,7 +36,6 @@ import auto.base.util.ToastUnit;
 import auto.qinglong.utils.WebUnit;
 import auto.qinglong.bean.views.WebViewBuilder;
 import auto.base.view.popup.PopConfirmWindow;
-import auto.base.view.popup.PopMenuItem;
 import auto.base.view.popup.PopMenuWindow;
 import auto.base.view.popup.PopupWindowBuilder;
 
@@ -147,10 +147,10 @@ public class PluginWebActivity extends BaseActivity {
 
     private void showPopMenu(View view) {
         PopMenuWindow popMenuWindow = new PopMenuWindow(view,Gravity.END);
-        popMenuWindow.addItem(new PopMenuItem("rule", "规则配置", R.drawable.ic_gray_mul_setting));
-        popMenuWindow.addItem(new PopMenuItem("read_normal", "常规提取", R.drawable.ic_gray_crop_free));
-        popMenuWindow.addItem(new PopMenuItem("read_rule", "规则提取", R.drawable.ic_gray_rule));
-        popMenuWindow.addItem(new PopMenuItem("import", "导入变量", R.drawable.ic_gray_upload));
+        popMenuWindow.addItem(new PopMenuObject("rule", "规则配置", R.drawable.ic_gray_mul_setting));
+        popMenuWindow.addItem(new PopMenuObject("read_normal", "常规提取", R.drawable.ic_gray_crop_free));
+        popMenuWindow.addItem(new PopMenuObject("read_rule", "规则提取", R.drawable.ic_gray_rule));
+        popMenuWindow.addItem(new PopMenuObject("import", "导入变量", R.drawable.ic_gray_upload));
 
         popMenuWindow.setOnActionListener(key -> {
             switch (key) {

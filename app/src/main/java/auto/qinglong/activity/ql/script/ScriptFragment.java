@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import auto.base.view.popup.PopMenuObject;
 import auto.qinglong.R;
 import auto.qinglong.activity.BaseFragment;
 import auto.qinglong.activity.ql.CodeWebActivity;
@@ -30,7 +31,6 @@ import auto.qinglong.bean.ql.QLScript;
 import auto.qinglong.network.http.NetManager;
 import auto.qinglong.network.http.QLApiController;
 import auto.base.util.ToastUnit;
-import auto.base.view.popup.PopMenuItem;
 import auto.base.view.popup.PopMenuWindow;
 import auto.base.view.popup.PopupWindowBuilder;
 
@@ -147,11 +147,11 @@ public class ScriptFragment extends BaseFragment {
 
     private void showPopMenu(View v, QLScript script, int position) {
         PopMenuWindow popMenuWindow = new PopMenuWindow(v, Gravity.CENTER);
-        popMenuWindow.addItem(new PopMenuItem("copy", "复制路径", R.drawable.ic_gray_crop_free));
-//        popMenuWindow.addItem(new PopMenuItem("backup", "脚本备份", R.drawable.ic_gray_download));
+        popMenuWindow.addItem(new PopMenuObject("copy", "复制路径", R.drawable.ic_gray_crop_free));
+//        popMenuWindow.addItem(new PopMenuObject("backup", "脚本备份", R.drawable.ic_gray_download));
         if (script.isFile()) {
-//            popMenuWindow.addItem(new PopMenuItem("replace", "脚本替换", R.drawable.ic_gray_copy));
-            popMenuWindow.addItem(new PopMenuItem("delete", "删除脚本", R.drawable.ic_gray_delete));
+//            popMenuWindow.addItem(new PopMenuObject("replace", "脚本替换", R.drawable.ic_gray_copy));
+            popMenuWindow.addItem(new PopMenuObject("delete", "删除脚本", R.drawable.ic_gray_delete));
         }
 
         popMenuWindow.setOnActionListener(key -> {
@@ -175,9 +175,9 @@ public class ScriptFragment extends BaseFragment {
 
     private void showPopMenu(View v) {
         PopMenuWindow popMenuWindow = new PopMenuWindow(v, Gravity.END);
-        popMenuWindow.addItem(new PopMenuItem("add", "新建脚本", R.drawable.ic_gray_add));
-        popMenuWindow.addItem(new PopMenuItem("import", "本地导入", R.drawable.ic_gray_upload));
-        popMenuWindow.addItem(new PopMenuItem("backup", "脚本备份", R.drawable.ic_gray_download));
+        popMenuWindow.addItem(new PopMenuObject("add", "新建脚本", R.drawable.ic_gray_add));
+        popMenuWindow.addItem(new PopMenuObject("import", "本地导入", R.drawable.ic_gray_upload));
+        popMenuWindow.addItem(new PopMenuObject("backup", "脚本备份", R.drawable.ic_gray_download));
 
         popMenuWindow.setOnActionListener(key -> true);
         PopupWindowBuilder.buildMenuWindow(requireActivity(), popMenuWindow);

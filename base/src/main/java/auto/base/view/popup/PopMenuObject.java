@@ -1,11 +1,11 @@
 package auto.base.view.popup;
 
-public class PopMenuItem {
+public class PopMenuObject {
     private String key;
     private String name;
     private int icon;
 
-    public PopMenuItem(String key, String name, int icon) {
+    public PopMenuObject(String key, String name, int icon) {
         this.key = key;
         this.name = name;
         this.icon = icon;
