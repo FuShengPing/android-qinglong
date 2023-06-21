@@ -139,7 +139,7 @@ public class ForwardService extends Service {
                 // 端口已被占用
                 if (!result.isEmpty()) {
                     Logger.error("远程端口" + remotePort + "已被占用", null);
-                    Logger.error("尝试释放端口", null);
+                    Logger.info("尝试释放端口", null);
                     NetStat netStat = new NetStat(result);
                     session = sshClient.startSession();
                     session.exec(Commands.killPid(netStat.getPid())).join(3, TimeUnit.SECONDS);
