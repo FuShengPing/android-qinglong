@@ -11,4 +11,8 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="app_proxy">AutoProxy</string>
+    <string name="proxy_local_close">关闭代理</string>
+    <string name="proxy_local_open">启动代理</string>
+    <string name="proxy_forward_connect">连接远程</string>
+    <string name="proxy_forward_disconnect">断开远程</string>
 </resources>

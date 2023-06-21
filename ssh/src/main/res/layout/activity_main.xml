@@ -54,23 +54,24 @@
                 android:padding="16dp">
 
                 <ImageView
+                    android:id="@+id/proxy_local_img"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="16dp"
-                    android:background="@drawable/ic_baseline_check_circle_outline_white" />
+                    android:background="@drawable/ic_check_circle_outline_white" />
 
                 <TextView
                     android:id="@+id/proxy_local_tip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="停止代理"
+                    android:text="@string/proxy_local_open"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/proxy_remote"
+            android:id="@+id/proxy_forward"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
@@ -88,16 +89,17 @@
                 android:padding="16dp">
 
                 <ImageView
+                    android:id="@+id/proxy_forward_img"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="16dp"
-                    android:background="@drawable/ic_baseline_remove_circle_outline_white" />
+                    android:background="@drawable/ic_check_circle_outline_white" />
 
                 <TextView
-                    android:id="@+id/proxy_remote_tip"
+                    android:id="@+id/proxy_forward_tip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="连接远程"
+                    android:text="@string/proxy_forward_connect"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -126,7 +128,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="16dp"
-                    android:background="@drawable/ic_baseline_view_list_black" />
+                    android:background="@drawable/ic_view_list_black" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -152,7 +154,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginEnd="15dp"
-                android:background="@drawable/ic_baseline_settings_black" />
+                android:background="@drawable/ic_settings_black" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -177,7 +179,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginEnd="15dp"
-                android:background="@drawable/ic_baseline_assignment_black" />
+                android:background="@drawable/ic_assignment_black" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -202,7 +204,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginEnd="15dp"
-                android:background="@drawable/ic_baseline_help_center_black" />
+                android:background="@drawable/ic_help_center_black" />
 
             <TextView
                 android:layout_width="wrap_content"

@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -28,16 +30,21 @@ import auto.base.util.WindowUnit;
 
 public class MainActivity extends AppCompatActivity {
     private CardView uiLocal;
-    private CardView uiRemote;
+    private ImageView uiLocalImg;
+    private TextView uiLocalTip;
+    private CardView uiForward;
+    private ImageView uiForwardImg;
+    private TextView uiForwardTip;
     private View uiConfig;
     private View uiSetting;
     private View uiLog;
     private View uiHelp;
 
     private volatile int proxyState = ProxyService.STATE_CLOSE;
+    private volatile int forwardState = ForwardService.STATE_CLOSE;
 
     private BroadcastReceiver proxyBroadcastReceiver;
-    private BroadcastReceiver remoteBroadcastReceiver;
+    private BroadcastReceiver forwardBroadcastReceiver;
 
 
     @Override
@@ -49,7 +56,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         uiLocal = findViewById(R.id.proxy_local);
-        uiRemote = findViewById(R.id.proxy_remote);
+        uiLocalImg = findViewById(R.id.proxy_local_img);
+        uiLocalTip = findViewById(R.id.proxy_local_tip);
+        uiForward = findViewById(R.id.proxy_forward);
+        uiForwardImg = findViewById(R.id.proxy_forward_img);
+        uiForwardTip = findViewById(R.id.proxy_forward_tip);
         uiConfig = findViewById(R.id.proxy_config);
         uiSetting = findViewById(R.id.proxy_setting);
         uiLog = findViewById(R.id.proxy_log);
@@ -57,9 +68,11 @@ public class MainActivity extends AppCompatActivity {
 
         init();
 
-        // 注册代理状态变动广播
-        IntentFilter intentFilter = new IntentFilter(ProxyService.BROADCAST_ACTION_STATE);
-        LocalBroadcastManager.getInstance(this).registerReceiver(proxyBroadcastReceiver, intentFilter);
+        // 注册代理、转发状态变动广播
+        IntentFilter proxyFilter = new IntentFilter(ProxyService.BROADCAST_ACTION_STATE);
+        IntentFilter forwardFilter = new IntentFilter(ForwardService.BROADCAST_ACTION_STATE);
+        LocalBroadcastManager.getInstance(this).registerReceiver(forwardBroadcastReceiver, forwardFilter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(proxyBroadcastReceiver, proxyFilter);
     }
 
     @Override
@@ -72,11 +85,29 @@ public class MainActivity extends AppCompatActivity {
     private void onProxyOpen() {
         this.proxyState = ProxyService.STATE_OPEN;
         this.uiLocal.setCardBackgroundColor(getResources().getColor(R.color.blue_deep, null));
+        this.uiLocalImg.setBackgroundResource(auto.base.R.drawable.ic_remove_circle_outline_white);
+        this.uiLocalTip.setText(R.string.proxy_local_close);
     }
 
     private void onProxyClose() {
         this.proxyState = ProxyService.STATE_CLOSE;
         this.uiLocal.setCardBackgroundColor(getResources().getColor(R.color.gray_80, null));
+        this.uiLocalImg.setBackgroundResource(auto.base.R.drawable.ic_check_circle_outline_white);
+        this.uiLocalTip.setText(R.string.proxy_local_open);
+    }
+
+    private void onForwardOpen() {
+        this.forwardState = ForwardService.STATE_OPEN;
+        this.uiForward.setCardBackgroundColor(getResources().getColor(R.color.blue_deep, null));
+        this.uiForwardImg.setBackgroundResource(auto.base.R.drawable.ic_remove_circle_outline_white);
+        this.uiForwardTip.setText(R.string.proxy_forward_disconnect);
+    }
+
+    private void onForwardClose() {
+        this.forwardState = ForwardService.STATE_CLOSE;
+        this.uiForward.setCardBackgroundColor(getResources().getColor(R.color.gray_80, null));
+        this.uiForwardImg.setBackgroundResource(auto.base.R.drawable.ic_check_circle_outline_white);
+        this.uiForwardTip.setText(R.string.proxy_forward_connect);
     }
 
     private void init() {
@@ -92,10 +123,15 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        remoteBroadcastReceiver = new BroadcastReceiver() {
+        forwardBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-
+                int state = intent.getIntExtra(ForwardService.EXTRA_STATE, ForwardService.STATE_CLOSE);
+                if (state == ForwardService.STATE_OPEN) {
+                    onForwardOpen();
+                } else {
+                    onForwardClose();
+                }
             }
         };
 
@@ -108,63 +144,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        uiRemote.setOnClickListener(v -> {
-            startSSHSerVice();
-        });
-    }
-
-    private void startSSHSerVice() {
-        SSHClient ssh = new SSHClient();
-
-        ssh.addHostKeyVerifier(new HostKeyVerifier());
-
-        new Thread(() -> {
-            try {
-                // 连接远程服务
-                ssh.connect("60.205.228.46", 22);
-                // 设置登录用户名和密码
-                ssh.authPassword("root", "aly@123456Fsp");
-                // 设置保活间隔
-                ssh.getConnection().getKeepAlive().setKeepAliveInterval(5);
-
-                Session session = ssh.startSession();
-
-                Session.Command command = session.exec("netstat -tunlp -t -l | grep 9100");
-
-                command.join(3, TimeUnit.SECONDS);
-
-                String result = IOUtils.readFully(command.getInputStream()).toString();
-
-                LogUnit.log("status：" + command.getExitStatus());
-                LogUnit.log("result：" + result);
-
-                if (!result.isEmpty()) {
-                    NetStat netStat = new NetStat(result);
-                    String[] params = result.split("\\s+");
-                    LogUnit.log(Arrays.toString(params));
-                    LogUnit.log("端口已被占用：" + netStat.getPid());
-
-                    session = ssh.startSession();
-
-                    session.exec("kill -9 " + netStat.getPid()).join(3, TimeUnit.SECONDS);
-                }
-
-                RemotePortForwarder.Forward forward = new RemotePortForwarder.Forward("0.0.0.0", 9100);
-                SocketForwardingConnectListener connectListener = new SocketForwardingConnectListener(new InetSocketAddress("0.0.0.0", 9100));
-
-                // 新建端口转发
-                ssh.getRemotePortForwarder().bind(forward, connectListener);
-                // 线程阻塞
-                ssh.getTransport().join();
-
-                LogUnit.log("RemotePortForward End");
-
-                ssh.disconnect();
-            } catch (IOException e) {
-                LogUnit.log("RemotePortForward IOException");
-                e.printStackTrace();
+        uiForward.setOnClickListener(v -> {
+            Intent intent = new Intent(BaseApplication.getContext(), ForwardService.class);
+            if (this.forwardState == ForwardService.STATE_CLOSE) {//开启服务
+                intent.putExtra(ForwardService.EXTRA_HOSTNAME,"60.205.228.46");
+                intent.putExtra(ForwardService.EXTRA_USERNAME,"root");
+                intent.putExtra(ForwardService.EXTRA_PASSWORD,"aly@123456Fsp");
+                intent.putExtra(ForwardService.EXTRA_REMOTE_ADDRESS,"0.0.0.0");
+//                intent.putExtra(ForwardService.EXTRA_REMOTE_PORT,9100);
+                intent.putExtra(ForwardService.EXTRA_LOCAL_ADDRESS,"0.0.0.0");
+//                intent.putExtra(ForwardService.EXTRA_LOCAL_PORT,9100);
+                startService(intent);
+            } else {//结束服务
+                stopService(intent);
             }
-        }).start();
+        });
     }
 
 }

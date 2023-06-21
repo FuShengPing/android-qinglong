@@ -15,6 +15,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SSH">
         <service
+            android:name=".ForwardService"
+            android:enabled="true"
+            android:exported="true"></service>
+        <service
             android:name=".ProxyService"
             android:enabled="true"
             android:exported="false" />
