@@ -1,11 +1,15 @@
 package auto.ssh;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.common.IOUtils;
@@ -30,6 +34,12 @@ public class MainActivity extends AppCompatActivity {
     private View uiLog;
     private View uiHelp;
 
+    private volatile int proxyState = ProxyService.STATE_CLOSE;
+
+    private BroadcastReceiver proxyBroadcastReceiver;
+    private BroadcastReceiver remoteBroadcastReceiver;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,23 +56,61 @@ public class MainActivity extends AppCompatActivity {
         uiHelp = findViewById(R.id.proxy_help);
 
         init();
+
+        // 注册代理状态变动广播
+        IntentFilter intentFilter = new IntentFilter(ProxyService.BROADCAST_ACTION_STATE);
+        LocalBroadcastManager.getInstance(this).registerReceiver(proxyBroadcastReceiver, intentFilter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // 注销代理状态变动广播
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(proxyBroadcastReceiver);
+    }
+
+    private void onProxyOpen() {
+        this.proxyState = ProxyService.STATE_OPEN;
+        this.uiLocal.setCardBackgroundColor(getResources().getColor(R.color.blue_deep, null));
+    }
+
+    private void onProxyClose() {
+        this.proxyState = ProxyService.STATE_CLOSE;
+        this.uiLocal.setCardBackgroundColor(getResources().getColor(R.color.gray_80, null));
     }
 
     private void init() {
+        proxyBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                int state = intent.getIntExtra(ProxyService.EXTRA_STATE, ProxyService.STATE_CLOSE);
+                if (state == ProxyService.STATE_OPEN) {
+                    onProxyOpen();
+                } else {
+                    onProxyClose();
+                }
+            }
+        };
+
+        remoteBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+            }
+        };
+
         uiLocal.setOnClickListener(v -> {
-            LogUnit.log("startProxyService in");
-            startProxyService();
+            Intent intent = new Intent(BaseApplication.getContext(), ProxyService.class);
+            if (this.proxyState == ProxyService.STATE_CLOSE) {//开启服务
+                startService(intent);
+            } else {//结束服务
+                stopService(intent);
+            }
         });
 
         uiRemote.setOnClickListener(v -> {
-            LogUnit.log("startSSHSerVice in");
             startSSHSerVice();
         });
-    }
-
-    private void startProxyService() {
-        Intent intent = new Intent(BaseApplication.getContext(), ProxyService.class);
-        startService(intent);
     }
 
     private void startSSHSerVice() {
@@ -118,6 +166,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
     }
-
 
 }

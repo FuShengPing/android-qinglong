@@ -9,13 +9,20 @@ import android.os.IBinder;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.github.monkeywie.proxyee.server.HttpProxyServer;
 
-import auto.base.util.LogUnit;
-
 public class ProxyService extends Service {
+    public static final String TAG = "ProxyService";
+    public static final String BROADCAST_ACTION_STATE = "auto.ssh.proxy.ACTION_PROXY_STATE_CHANGE";
+
+    public static final String EXTRA_ADDRESS = "address";
     public static final String EXTRA_PORT = "port";
+    public static final String EXTRA_STATE = "state";
+
+    public static final int STATE_CLOSE = 0;
+    public static final int STATE_OPEN = 1;
 
     public static final int MIN_PORT = 2000;
     public static final int MAX_PORT = 65535;
@@ -44,12 +51,32 @@ public class ProxyService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        //服务正在运行
+        if (proxyThread != null && proxyThread.isAlive()) {
+            return super.onStartCommand(intent, flags, startId);
+        }
+
         int port = intent.getIntExtra(EXTRA_PORT, DEFAULT_PORT);
         if (port < MIN_PORT || port > MAX_PORT) {
             port = DEFAULT_PORT;
         }
 
         int finalPort = port;
+
+        //创建代理线程
+        proxyThread = new Thread(() -> {
+            Intent openIntent = new Intent(BROADCAST_ACTION_STATE);
+            openIntent.putExtra(EXTRA_STATE, STATE_OPEN);
+            LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(openIntent);
+
+            httpProxyServer.start(LOCAL_IP, finalPort);
+
+            Intent closeIntent = new Intent(BROADCAST_ACTION_STATE);
+            closeIntent.putExtra(EXTRA_STATE, STATE_CLOSE);
+            LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(closeIntent);
+        });
+
+        proxyThread.start();
 
         // 创建返回应用的Intent
         Intent returnIntent = new Intent(getBaseContext(), MainActivity.class);
@@ -63,19 +90,8 @@ public class ProxyService extends Service {
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(R.drawable.ic_logo_small);
 
+        //开启前台通知
         startForeground(NOTIFICATION_ID, builder.build());
-
-        if (proxyThread != null && proxyThread.isAlive()) {
-            proxyThread.interrupt();
-        }
-
-        proxyThread = new Thread(() -> {
-            LogUnit.log("ProxyService start");
-            httpProxyServer.start(LOCAL_IP, finalPort);
-            LogUnit.log("ProxyService end");
-        });
-
-        proxyThread.start();
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -95,13 +111,10 @@ public class ProxyService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        LogUnit.log("ProxyService onDestroy");
+        //关闭线程
         try {
-            if (httpProxyServer != null) {
-                httpProxyServer.close();
-            }
-
             if (proxyThread != null && proxyThread.isAlive()) {
+                httpProxyServer.close();
                 proxyThread.interrupt();
             }
         } catch (Exception e) {

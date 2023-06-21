@@ -40,13 +40,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            app:cardBackgroundColor="@color/blue_deep"
+            app:cardBackgroundColor="@color/gray_80"
             app:cardCornerRadius="6dp"
             app:cardElevation="3dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/style_press_gray"
                 android:elevation="3dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -80,6 +81,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/style_press_gray"
                 android:elevation="3dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -114,7 +116,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
+                android:background="@drawable/style_press_gray"
                 android:elevation="3dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -140,6 +142,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="4dp"
+            android:background="@drawable/style_press_gray"
+            android:clickable="true"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="16dp">
@@ -163,6 +167,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="4dp"
+            android:background="@drawable/style_press_gray"
+            android:clickable="true"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="16dp">
@@ -186,6 +192,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="4dp"
+            android:background="@drawable/style_press_gray"
+            android:clickable="true"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="16dp">
