@@ -22,3 +22,4 @@
 
 -keep class com.hierynomus.**{*;}
 -keep class org.littleshoot.**{*;}
+-keep class org.bouncycastle.**{*;}

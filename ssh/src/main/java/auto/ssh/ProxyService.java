@@ -1,5 +1,6 @@
 package auto.ssh;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,6 +14,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.github.monkeywie.proxyee.server.HttpProxyServer;
 
+@SuppressLint("DefaultLocale")
 public class ProxyService extends Service {
     public static final String TAG = "ProxyService";
     public static final String BROADCAST_ACTION_STATE = "auto.ssh.proxy.ACTION_PROXY_STATE_CHANGE";
@@ -73,6 +75,7 @@ public class ProxyService extends Service {
 
         // 创建通知
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentTitle("本地代理")
                 .setContentText(String.format("%1$s:%2$d", finalAddress, finalPort))
                 .setContentIntent(pendingIntent)

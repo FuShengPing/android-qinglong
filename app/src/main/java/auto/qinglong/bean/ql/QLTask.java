@@ -102,7 +102,7 @@ public class QLTask implements Comparable<QLTask> {
     public String getFormatLastExecutionTime() {
         if (mFormatLastExecutionTime == null) {
             if (last_execution_time > 0) {
-                mFormatLastExecutionTime = TimeUnit.formatTimeA(last_execution_time * 1000);
+                mFormatLastExecutionTime = TimeUnit.datetimeFormatTimeA(last_execution_time * 1000);
             } else {
                 mFormatLastExecutionTime = "--";
             }

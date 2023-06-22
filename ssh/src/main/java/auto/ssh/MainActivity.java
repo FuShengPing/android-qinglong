@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         init();
 
-        // 注册代理、转发状态变动广播
+        // 注册广播
         IntentFilter proxyFilter = new IntentFilter(ProxyService.BROADCAST_ACTION_STATE);
         IntentFilter forwardFilter = new IntentFilter(ForwardService.BROADCAST_ACTION_STATE);
         LocalBroadcastManager.getInstance(this).registerReceiver(forwardBroadcastReceiver, forwardFilter);
@@ -66,8 +66,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // 注销代理状态变动广播
+
+        // 关闭服务
+        stopService(new Intent(this, ProxyService.class));
+        stopService(new Intent(this, ForwardService.class));
+
+        // 注销广播
         LocalBroadcastManager.getInstance(this).unregisterReceiver(proxyBroadcastReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(forwardBroadcastReceiver);
     }
 
     private void onProxyOpen() {
@@ -147,9 +153,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(ForwardService.EXTRA_USERNAME, "root");
                 intent.putExtra(ForwardService.EXTRA_PASSWORD, "aly@123456Fsp");
                 intent.putExtra(ForwardService.EXTRA_REMOTE_ADDRESS, "0.0.0.0");
-//                intent.putExtra(ForwardService.EXTRA_REMOTE_PORT,9100);
                 intent.putExtra(ForwardService.EXTRA_LOCAL_ADDRESS, "0.0.0.0");
-//                intent.putExtra(ForwardService.EXTRA_LOCAL_PORT,9100);
                 startService(intent);
             } else {//结束服务
                 stopService(intent);

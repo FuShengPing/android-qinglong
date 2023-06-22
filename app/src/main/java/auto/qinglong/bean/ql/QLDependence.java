@@ -60,7 +60,7 @@ public class QLDependence {
 
     public String getFormatCreated() {
         if (mFormatCreated == null) {
-            mFormatCreated = TimeUnit.formatTimeA(created);
+            mFormatCreated = TimeUnit.datetimeFormatTimeA(created);
         }
         return mFormatCreated;
     }

@@ -23,8 +23,10 @@ import net.schmizz.sshj.userauth.UserAuthException;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+@SuppressLint("WakelockTimeout")
 public class ForwardService extends Service {
     public static final String TAG = "ForwardService";
     public static final String BROADCAST_ACTION_STATE = "auto.ssh.forward.ACTION_FORWARD_STATE_CHANGE";
@@ -47,6 +49,7 @@ public class ForwardService extends Service {
     public static final String EXTRA_WAKEUP = "wakeup";
 
     private static final int DEFAULT_PORT = 9100;
+    private static final int DEFAULT_KEEP_ALIVE_INTERVAL = 5;
 
     private volatile Thread forwardThread;
     private SSHClient sshClient;
@@ -60,6 +63,8 @@ public class ForwardService extends Service {
 
         sshClient = new SSHClient();
         sshClient.addHostKeyVerifier(new HostKeyVerifier());
+        // 设置保活间隔
+        sshClient.getConnection().getKeepAlive().setKeepAliveInterval(DEFAULT_KEEP_ALIVE_INTERVAL);
 
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_TAG);
@@ -70,7 +75,6 @@ public class ForwardService extends Service {
         return null;
     }
 
-    @SuppressLint("WakelockTimeout")
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (forwardThread != null && forwardThread.isAlive()) {
@@ -82,8 +86,8 @@ public class ForwardService extends Service {
         String username = intent.getStringExtra(EXTRA_USERNAME);
         String password = intent.getStringExtra(EXTRA_PASSWORD);
         String remoteAddress = intent.getStringExtra(EXTRA_REMOTE_ADDRESS);
-        int remotePort = intent.getIntExtra(EXTRA_REMOTE_PORT, DEFAULT_PORT);
         String localAddress = intent.getStringExtra(EXTRA_LOCAL_ADDRESS);
+        int remotePort = intent.getIntExtra(EXTRA_REMOTE_PORT, DEFAULT_PORT);
         int localPort = intent.getIntExtra(EXTRA_LOCAL_PORT, DEFAULT_PORT);
         boolean wakeup = intent.getBooleanExtra(EXTRA_WAKEUP, true);
 
@@ -94,16 +98,25 @@ public class ForwardService extends Service {
 
         // 创建通知
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentTitle("远程连接")
                 .setContentText(String.format("%1$s@%2$s", username, hostname))
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(R.drawable.ic_logo_small);
 
+        // 创建线程
         forwardThread = new Thread(() -> {
+            // 广播意图
             Intent openIntent = new Intent(BROADCAST_ACTION_STATE);
             openIntent.putExtra(EXTRA_STATE, STATE_OPEN);
             Intent closeIntent = new Intent(BROADCAST_ACTION_STATE);
             closeIntent.putExtra(EXTRA_STATE, STATE_CLOSE);
+
+            long startTime = System.currentTimeMillis();
+            long divTime = 0L;
+
+            Session session;
+            Session.Command command;
 
             // 连接远程服务
             try {
@@ -117,32 +130,28 @@ public class ForwardService extends Service {
             // 用户鉴权
             try {
                 sshClient.authPassword(username, password);
-            } catch (UserAuthException e) {
-                Logger.error("SSH远程登录失败", e);
-                e.printStackTrace();
-                return;
-            } catch (TransportException e) {
+            } catch (UserAuthException | TransportException e) {
                 Logger.error("SSH远程登录失败", e);
                 e.printStackTrace();
                 return;
             }
 
-            // 设置保活间隔
-            sshClient.getConnection().getKeepAlive().setKeepAliveInterval(3);
-
             try {
-                Session session = sshClient.startSession();
-                Session.Command command = session.exec(Commands.checkPortCommand(remotePort));
-                command.join(3, TimeUnit.SECONDS);
+                session = sshClient.startSession();
+                command = session.exec(Commands.checkPortCommand(remotePort));
+                command.join(5, TimeUnit.SECONDS);
                 String result = IOUtils.readFully(command.getInputStream()).toString();
+                command.close();
 
                 // 端口已被占用
                 if (!result.isEmpty()) {
-                    Logger.error("远程端口" + remotePort + "已被占用", null);
+                    Logger.error(String.format(Locale.CHINA, "远程端口%1$d已被占用", remotePort), null);
                     Logger.info("尝试释放端口", null);
                     NetStat netStat = new NetStat(result);
                     session = sshClient.startSession();
-                    session.exec(Commands.killPid(netStat.getPid())).join(3, TimeUnit.SECONDS);
+                    command = session.exec(Commands.killPid(netStat.getPid()));
+                    command.join(3, TimeUnit.SECONDS);
+                    command.close();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -164,20 +173,22 @@ public class ForwardService extends Service {
             startForeground(NOTIFICATION_ID, builder.build());
             // 发送开启广播
             LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(openIntent);
-            // 保存唤醒
+            // 保存CPU唤醒
             if (wakeup) {
                 wakeLock.acquire();
             }
 
             Logger.info("远程转发已启动", null);
 
-            // 线程阻塞
             try {
                 sshClient.getTransport().join();
             } catch (TransportException e) {
-                Logger.warn("远程转发已断开", e);
                 e.printStackTrace();
             }
+
+            divTime = System.currentTimeMillis() - startTime;
+            Logger.warn("远程转发已断开", null);
+            Logger.info("", null);
 
             // 断开远程连接
             if (sshClient.isConnected()) {

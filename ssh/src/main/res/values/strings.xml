@@ -15,4 +15,8 @@
     <string name="proxy_local_open">启动代理</string>
     <string name="proxy_forward_connect">连接远程</string>
     <string name="proxy_forward_disconnect">断开远程</string>
+
+    <string name="ssh_connect_fail">SSH远程连接失败</string>
+    <string name="ssh_login_fail">SSH远程登录失败</string>
+    <string name="ssh_port_used">远程端口%1$d已被占用</string>
 </resources>

@@ -617,7 +617,7 @@ public class TaskFragment extends BaseFragment {
         if (TextUnit.isFull(fileName)) {
             fileName += ".json";
         } else {
-            fileName = TimeUnit.formatCurrentTime() + ".json";
+            fileName = TimeUnit.datetimeFormatTimeC() + ".json";
         }
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
