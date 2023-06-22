@@ -98,7 +98,7 @@ public class QLEnvironment implements Comparable<QLEnvironment> {
 
     public String getFormatCreated() {
         if (mFormatCreated == null) {
-            mFormatCreated = TimeUnit.datetimeFormatTimeA(created);
+            mFormatCreated = TimeUnit.formatDatetimeA(created);
         }
         return mFormatCreated;
     }

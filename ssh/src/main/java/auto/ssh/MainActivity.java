@@ -140,6 +140,8 @@ public class MainActivity extends AppCompatActivity {
         uiLocal.setOnClickListener(v -> {
             Intent intent = new Intent(BaseApplication.getContext(), ProxyService.class);
             if (this.proxyState == ProxyService.STATE_CLOSE) {//开启服务
+                intent.putExtra(ProxyService.EXTRA_ADDRESS, "127.0.0.1");
+                intent.putExtra(ProxyService.EXTRA_PORT, 9100);
                 startService(intent);
             } else {//结束服务
                 stopService(intent);
@@ -153,7 +155,9 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(ForwardService.EXTRA_USERNAME, "root");
                 intent.putExtra(ForwardService.EXTRA_PASSWORD, "aly@123456Fsp");
                 intent.putExtra(ForwardService.EXTRA_REMOTE_ADDRESS, "0.0.0.0");
-                intent.putExtra(ForwardService.EXTRA_LOCAL_ADDRESS, "0.0.0.0");
+                intent.putExtra(ForwardService.EXTRA_REMOTE_PORT, 9200);
+                intent.putExtra(ForwardService.EXTRA_LOCAL_ADDRESS, "127.0.0.1");
+                intent.putExtra(ForwardService.EXTRA_LOCAL_PORT, 9100);
                 startService(intent);
             } else {//结束服务
                 stopService(intent);

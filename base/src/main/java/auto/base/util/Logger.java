@@ -1,4 +1,4 @@
-package auto.ssh;
+package auto.base.util;
 
 /**
  * @author wsfsp4

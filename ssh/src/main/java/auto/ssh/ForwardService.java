@@ -26,6 +26,8 @@ import java.net.InetSocketAddress;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import auto.base.util.Logger;
+
 @SuppressLint("WakelockTimeout")
 public class ForwardService extends Service {
     public static final String TAG = "ForwardService";

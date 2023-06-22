@@ -567,7 +567,7 @@ public class EnvFragment extends BaseFragment {
         if (TextUnit.isFull(fileName)) {
             fileName += ".json";
         } else {
-            fileName = TimeUnit.datetimeFormatTimeC() + ".json";
+            fileName = TimeUnit.formatDatetimeC() + ".json";
         }
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();

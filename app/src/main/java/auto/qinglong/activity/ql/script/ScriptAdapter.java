@@ -62,7 +62,7 @@ public class ScriptAdapter extends RecyclerView.Adapter<ScriptAdapter.MyViewHold
             holder.ui_image.setImageResource(R.mipmap.ic_file_unknow);
         }
 
-        holder.ui_mtime.setText(TimeUnit.datetimeFormatTimeB((long) qlScript.getMtime()));
+        holder.ui_mtime.setText(TimeUnit.formatDatetimeB((long) qlScript.getMtime()));
 
         holder.itemView.setOnClickListener(v -> itemActionListener.onEdit(qlScript));
 

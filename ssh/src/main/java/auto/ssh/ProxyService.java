@@ -14,6 +14,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.github.monkeywie.proxyee.server.HttpProxyServer;
 
+import auto.base.util.Logger;
+
 @SuppressLint("DefaultLocale")
 public class ProxyService extends Service {
     public static final String TAG = "ProxyService";
@@ -29,10 +31,7 @@ public class ProxyService extends Service {
     public static final String EXTRA_PORT = "port";
     public static final String EXTRA_STATE = "state";
 
-    public static final int MIN_PORT = 2000;
-    public static final int MAX_PORT = 65535;
     public static final int DEFAULT_PORT = 9100;
-    public static final String DEFAULT_ADDRESS = "127.0.0.1";
 
     private volatile Thread proxyThread;
     private HttpProxyServer httpProxyServer;
@@ -58,15 +57,7 @@ public class ProxyService extends Service {
 
         // 获取地址和端口
         String address = intent.getStringExtra(EXTRA_ADDRESS);
-        if (address == null) {
-            address = DEFAULT_ADDRESS;
-        }
         int port = intent.getIntExtra(EXTRA_PORT, DEFAULT_PORT);
-        if (port < MIN_PORT || port > MAX_PORT) {
-            port = DEFAULT_PORT;
-        }
-        String finalAddress = address;
-        int finalPort = port;
 
         // 创建返回应用的Intent
         Intent returnIntent = new Intent(getBaseContext(), MainActivity.class);
@@ -77,7 +68,7 @@ public class ProxyService extends Service {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentTitle("本地代理")
-                .setContentText(String.format("%1$s:%2$d", finalAddress, finalPort))
+                .setContentText(String.format("%1$s:%2$d", address, port))
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(R.drawable.ic_logo_small);
 
@@ -94,7 +85,7 @@ public class ProxyService extends Service {
             LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(openIntent);
             Logger.info("本地代理开启", null);
             // 开始监听
-            httpProxyServer.start(finalAddress, finalPort);
+            httpProxyServer.start(address, port);
             Logger.info("本地代理关闭", null);
             // 发送关闭广播
             LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(closeIntent);

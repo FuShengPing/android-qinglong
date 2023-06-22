@@ -17,45 +17,64 @@ public class TimeUnit {
      * @param timestamp 毫秒级时间戳
      * @return yyyy/M/d HH:mm:ss
      */
-    public static String datetimeFormatTimeA(long timestamp) {
+    public static String formatDatetimeA(long timestamp) {
         return datetimeFormatterA.format(new Date(timestamp));
     }
 
     /**
-     * 格式化当前时间
+     * 格式化当前日期时间
      *
      * @return yyyy/M/d HH:mm:ss
      */
-    public static String datetimeFormatTimeA() {
+    public static String formatDatetimeA() {
         return datetimeFormatterA.format(new Date());
     }
 
     /**
-     * 格式化指定时间
+     * 格式化指定日期时间
      *
      * @param timestamp 毫秒级时间戳
      * @return yyyy/MM/dd HH:mm
      */
-    public static String datetimeFormatTimeB(long timestamp) {
+    public static String formatDatetimeB(long timestamp) {
         return datetimeFormatterB.format(new Date(timestamp));
     }
 
     /**
-     * 格式化当前时间
+     * 格式化当前日期时间
      *
      * @return yyyy/MM/dd HH:mm
      */
-    public static String datetimeFormatTimeB() {
+    public static String formatDatetimeB() {
         return datetimeFormatterB.format(new Date());
+    }
+
+    /**
+     * 格式化当前日期时间
+     *
+     * @return yyyy_MM_dd_HH_mm
+     */
+    public static String formatDatetimeC() {
+        return datetimeFormatterC.format(new Date());
+    }
+
+    /**
+     * 格式化当前日期
+     *
+     * @return yyyy-MM-dd
+     */
+    public static String formatDate() {
+        return dateFormatter.format(new Date());
     }
 
     /**
      * 格式化当前时间
      *
-     * @return yyyy_MM_dd_HH_mm
+     * @return HH:mm
      */
-    public static String datetimeFormatTimeC() {
-        return datetimeFormatterC.format(new Date());
+    public static String formatTime() {
+        return timeFormatter.format(new Date());
     }
+
 
 }

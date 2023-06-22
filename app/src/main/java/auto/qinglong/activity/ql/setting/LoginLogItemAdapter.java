@@ -40,7 +40,7 @@ public class LoginLogItemAdapter extends RecyclerView.Adapter<LoginLogItemAdapte
         QLLoginLog loginLog = data.get(position);
 
         holder.ui_title.setText("[" + (position + 1) + "]");
-        holder.ui_time.setText(TimeUnit.datetimeFormatTimeA(loginLog.getTimestamp()));
+        holder.ui_time.setText(TimeUnit.formatDatetimeA(loginLog.getTimestamp()));
         holder.ui_address.setText(loginLog.getAddress());
         holder.ui_ip.setText(loginLog.getIp());
         holder.ui_platform.setText(loginLog.getPlatform());
