@@ -13,7 +13,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/base" />
-            <option value="$PROJECT_DIR$/ssh" />
+            <option value="$PROJECT_DIR$/proxy" />
             <option value="$PROJECT_DIR$/ui" />
             <option value="$PROJECT_DIR$/web" />
           </set>

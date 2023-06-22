@@ -73,6 +73,4 @@ dependencies {
     implementation 'io.github.scwang90:refresh-footer-classics:2.0.6'    //经典加载
 
     implementation project(":base")
-//    implementation project(":ui")
-//    implementation project(":web")
 }

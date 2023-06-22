@@ -167,6 +167,8 @@ public class MainActivity extends BaseActivity {
         // 代理配置
         uiConfig.setOnClickListener(v -> {
             Intent intent = new Intent(this, ConfigActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
             startActivity(intent);
         });
         // 设置

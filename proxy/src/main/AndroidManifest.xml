@@ -24,42 +24,42 @@
             android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity">
-        </activity>
-        
+            tools:ignore="LockedOrientationActivity" />
+
         <activity
             android:name=".activity.SettingActivity"
             android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity">
-        </activity>
+            tools:ignore="LockedOrientationActivity" />
 
         <activity
             android:name=".activity.ConfigActivity"
             android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity">
-        </activity>
+            tools:ignore="LockedOrientationActivity" />
 
         <activity
             android:name=".activity.MainActivity"
+            android:enabled="true"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+                <data
+                    android:host="ssh"
+                    android:scheme="auto.ssh" />
             </intent-filter>
         </activity>
 
         <service
             android:name=".ForwardService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="false" />
         <service
             android:name=".ProxyService"
             android:enabled="true"
