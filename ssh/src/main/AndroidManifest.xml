@@ -19,28 +19,32 @@
         android:roundIcon="@drawable/ic_logo_big"
         android:supportsRtl="true"
         android:theme="@style/Theme.SSH">
-        <service
-            android:name=".ForwardService"
-            android:enabled="true"
-            android:exported="true" />
-        <service
-            android:name=".ProxyService"
-            android:enabled="true"
-            android:exported="false" />
-
         <activity
-            android:name=".ConfigActivity"
+            android:name=".activity.LogActivity"
             android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
+        </activity>
+        
+        <activity
+            android:name=".activity.SettingActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
         </activity>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.ConfigActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
+        </activity>
+
+        <activity
+            android:name=".activity.MainActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -50,11 +54,16 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
         </activity>
+
+        <service
+            android:name=".ForwardService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".ProxyService"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

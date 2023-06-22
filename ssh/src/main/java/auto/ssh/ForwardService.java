@@ -27,6 +27,7 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import auto.base.util.Logger;
+import auto.ssh.activity.MainActivity;
 
 @SuppressLint("WakelockTimeout")
 public class ForwardService extends Service {

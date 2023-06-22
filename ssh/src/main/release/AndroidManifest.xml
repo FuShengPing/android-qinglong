@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SSH">
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.QingLong.NoActionBar">
             <intent-filter>

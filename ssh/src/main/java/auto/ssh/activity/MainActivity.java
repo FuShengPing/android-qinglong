@@ -1,4 +1,4 @@
-package auto.ssh;
+package auto.ssh.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,14 +9,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import auto.base.BaseApplication;
-import auto.base.util.WindowUnit;
+import auto.ssh.ForwardService;
+import auto.ssh.ProxyService;
+import auto.ssh.R;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     private CardView uiLocal;
     private ImageView uiLocalImg;
     private TextView uiLocalTip;
@@ -38,8 +39,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        WindowUnit.setStatusBarTextColor(this, false);
 
         setContentView(R.layout.activity_main);
 
@@ -138,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        // 本地代理
         uiLocal.setOnClickListener(v -> {
             Intent intent = new Intent(BaseApplication.getContext(), ProxyService.class);
             if (this.proxyState == ProxyService.STATE_CLOSE) {//开启服务
@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                 stopService(intent);
             }
         });
-
+        // 远程连接
         uiForward.setOnClickListener(v -> {
             Intent intent = new Intent(BaseApplication.getContext(), ForwardService.class);
             if (this.forwardState == ForwardService.STATE_CLOSE) {//开启服务
@@ -164,10 +164,24 @@ public class MainActivity extends AppCompatActivity {
                 stopService(intent);
             }
         });
-
+        // 代理配置
         uiConfig.setOnClickListener(v -> {
             Intent intent = new Intent(this, ConfigActivity.class);
             startActivity(intent);
+        });
+        // 设置
+        uiSetting.setOnClickListener(v -> {
+            Intent intent = new Intent(this, SettingActivity.class);
+            startActivity(intent);
+        });
+        // 日志
+        uiLog.setOnClickListener(v -> {
+            Intent intent = new Intent(this, LogActivity.class);
+            startActivity(intent);
+        });
+        // 帮助
+        uiHelp.setOnClickListener(v -> {
+
         });
     }
 

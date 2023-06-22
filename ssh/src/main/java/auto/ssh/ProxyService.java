@@ -15,6 +15,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.github.monkeywie.proxyee.server.HttpProxyServer;
 
 import auto.base.util.Logger;
+import auto.ssh.activity.MainActivity;
 
 @SuppressLint("DefaultLocale")
 public class ProxyService extends Service {
