@@ -14,6 +14,7 @@ import androidx.cardview.widget.CardView;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import auto.base.BaseApplication;
+import auto.base.util.LogUnit;
 import auto.base.util.WindowUnit;
 
 public class MainActivity extends AppCompatActivity {
@@ -100,7 +101,8 @@ public class MainActivity extends AppCompatActivity {
         this.uiForwardTip.setText(R.string.proxy_forward_disconnect);
     }
 
-    private void onForwardClose() {
+    private void onForwardClose(boolean isAccident) {
+        LogUnit.log("onForwardClose " + isAccident);
         this.forwardState = ForwardService.STATE_CLOSE;
         this.uiForward.setCardBackgroundColor(getResources().getColor(R.color.gray_80, null));
         this.uiForwardImg.setBackgroundResource(auto.base.R.drawable.ic_check_circle_outline_white);
@@ -132,7 +134,8 @@ public class MainActivity extends AppCompatActivity {
                 if (state == ForwardService.STATE_OPEN) {
                     onForwardOpen();
                 } else {
-                    onForwardClose();
+                    boolean isAccident = intent.getBooleanExtra(ForwardService.EXTRA_ACCIDENT, false);
+                    onForwardClose(isAccident);
                 }
             }
         };

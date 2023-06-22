@@ -89,7 +89,7 @@ public class ProxyService extends Service {
             Logger.info("本地代理关闭", null);
             // 发送关闭广播
             LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(closeIntent);
-            // 停止服务
+            // 关闭服务
             stopSelf();
         });
         proxyThread.start();

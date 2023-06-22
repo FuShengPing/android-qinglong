@@ -49,11 +49,14 @@ public class ForwardService extends Service {
     public static final String EXTRA_LOCAL_PORT = "localPort";
     public static final String EXTRA_STATE = "state";
     public static final String EXTRA_WAKEUP = "wakeup";
+    public static final String EXTRA_MSG = "msg";
+    public static final String EXTRA_ACCIDENT = "accident";
 
     private static final int DEFAULT_PORT = 9100;
     private static final int DEFAULT_KEEP_ALIVE_INTERVAL = 5;
 
     private volatile Thread forwardThread;
+    private volatile boolean isAccident;
     private SSHClient sshClient;
     private PowerManager.WakeLock wakeLock;
 
@@ -67,7 +70,7 @@ public class ForwardService extends Service {
         sshClient.addHostKeyVerifier(new HostKeyVerifier());
         // 设置保活间隔
         sshClient.getConnection().getKeepAlive().setKeepAliveInterval(DEFAULT_KEEP_ALIVE_INTERVAL);
-
+        // 唤醒锁
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_TAG);
     }
@@ -108,17 +111,8 @@ public class ForwardService extends Service {
 
         // 创建线程
         forwardThread = new Thread(() -> {
-            // 广播意图
-            Intent openIntent = new Intent(BROADCAST_ACTION_STATE);
-            openIntent.putExtra(EXTRA_STATE, STATE_OPEN);
-            Intent closeIntent = new Intent(BROADCAST_ACTION_STATE);
-            closeIntent.putExtra(EXTRA_STATE, STATE_CLOSE);
-
-            long startTime = System.currentTimeMillis();
-            long divTime = 0L;
-
-            Session session;
-            Session.Command command;
+            // 设置异常中断标志
+            isAccident = true;
 
             // 连接远程服务
             try {
@@ -138,13 +132,15 @@ public class ForwardService extends Service {
                 return;
             }
 
+            Session session;
+            Session.Command command;
+
             try {
                 session = sshClient.startSession();
                 command = session.exec(Commands.checkPortCommand(remotePort));
                 command.join(5, TimeUnit.SECONDS);
                 String result = IOUtils.readFully(command.getInputStream()).toString();
                 command.close();
-
                 // 端口已被占用
                 if (!result.isEmpty()) {
                     Logger.error(String.format(Locale.CHINA, "远程端口%1$d已被占用", remotePort), null);
@@ -174,6 +170,8 @@ public class ForwardService extends Service {
             // 开启前台通知
             startForeground(NOTIFICATION_ID, builder.build());
             // 发送开启广播
+            Intent openIntent = new Intent(BROADCAST_ACTION_STATE);
+            openIntent.putExtra(EXTRA_STATE, STATE_OPEN);
             LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(openIntent);
             // 保存CPU唤醒
             if (wakeup) {
@@ -181,16 +179,13 @@ public class ForwardService extends Service {
             }
 
             Logger.info("远程转发已启动", null);
-
+            // 线程阻塞
             try {
                 sshClient.getTransport().join();
             } catch (TransportException e) {
                 e.printStackTrace();
             }
-
-            divTime = System.currentTimeMillis() - startTime;
             Logger.warn("远程转发已断开", null);
-            Logger.info("", null);
 
             // 断开远程连接
             if (sshClient.isConnected()) {
@@ -201,8 +196,11 @@ public class ForwardService extends Service {
                 }
             }
             // 发送关闭广播
+            Intent closeIntent = new Intent(BROADCAST_ACTION_STATE);
+            closeIntent.putExtra(EXTRA_STATE, STATE_CLOSE);
+            closeIntent.putExtra(EXTRA_ACCIDENT, isAccident);
             LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(closeIntent);
-            // 停止服务
+            // 关闭服务
             stopSelf();
         });
         forwardThread.start();
@@ -213,6 +211,8 @@ public class ForwardService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        // 更新异常中断标志
+        isAccident = false;
         // 移除通知
         stopForeground(true);
         // 关闭唤醒
