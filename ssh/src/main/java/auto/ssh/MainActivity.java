@@ -14,7 +14,6 @@ import androidx.cardview.widget.CardView;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import auto.base.BaseApplication;
-import auto.base.util.LogUnit;
 import auto.base.util.WindowUnit;
 
 public class MainActivity extends AppCompatActivity {
@@ -102,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onForwardClose(boolean isAccident) {
-        LogUnit.log("onForwardClose " + isAccident);
         this.forwardState = ForwardService.STATE_CLOSE;
         this.uiForward.setCardBackgroundColor(getResources().getColor(R.color.gray_80, null));
         this.uiForwardImg.setBackgroundResource(auto.base.R.drawable.ic_check_circle_outline_white);
@@ -158,13 +156,18 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(ForwardService.EXTRA_USERNAME, "root");
                 intent.putExtra(ForwardService.EXTRA_PASSWORD, "aly@123456Fsp");
                 intent.putExtra(ForwardService.EXTRA_REMOTE_ADDRESS, "0.0.0.0");
-                intent.putExtra(ForwardService.EXTRA_REMOTE_PORT, 9200);
+                intent.putExtra(ForwardService.EXTRA_REMOTE_PORT, 9100);
                 intent.putExtra(ForwardService.EXTRA_LOCAL_ADDRESS, "127.0.0.1");
                 intent.putExtra(ForwardService.EXTRA_LOCAL_PORT, 9100);
                 startService(intent);
             } else {//结束服务
                 stopService(intent);
             }
+        });
+
+        uiConfig.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ConfigActivity.class);
+            startActivity(intent);
         });
     }
 
