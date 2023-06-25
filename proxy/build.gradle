@@ -1,9 +1,4 @@
-// 集成化环境切换类型
-if (isRelease.toBoolean()) {
-    apply plugin: "com.android.library"
-} else {
-    apply plugin: "com.android.application"
-}
+apply plugin: "com.android.application"
 
 android {
     namespace 'auto.ssh'
@@ -19,22 +14,12 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
+        applicationId "auto.ssh"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        if (!isRelease) {
-            applicationId "auto.ssh"
-        }
 
         sourceSets {
             main {
-                if (isRelease.toBoolean()) {// 集成化模式
-                    manifest.srcFile 'src/main/release/AndroidManifest.xml'
-                } else {// 组件化模式
-                    manifest.srcFile 'src/main/AndroidManifest.xml'
-                    java {
-                        exclude '**/debug/**'
-                    }
-                }
+                manifest.srcFile 'src/main/AndroidManifest.xml'
             }
         }
     }
@@ -46,7 +31,8 @@ android {
         }
 
         debug {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -66,8 +52,8 @@ dependencies {
     configurations {
         all {
             exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel-ktx'
-            exclude group: 'org.bouncycastle',module:'bcprov-jdk15to18'
-            exclude group: 'org.bouncycastle',module:'bcpkix-jdk15to18'
+            exclude group: 'org.bouncycastle', module: 'bcprov-jdk15to18'
+            exclude group: 'org.bouncycastle', module: 'bcpkix-jdk15to18'
         }
     }
 

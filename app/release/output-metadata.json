@@ -4,16 +4,16 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "auto.ssh",
+  "applicationId": "auto.qinglong",
   "variantName": "release",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 1,
-      "versionName": "1.0",
-      "outputFile": "ssh-release.apk"
+      "versionCode": 8,
+      "versionName": "1.7",
+      "outputFile": "app-release.apk"
     }
   ],
   "elementType": "File"

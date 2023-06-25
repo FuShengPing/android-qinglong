@@ -95,7 +95,7 @@
                         android:layout_height="wrap_content"
                         android:lines="1"
                         android:singleLine="true"
-                        android:text="@string/menu_task"
+                        android:text="@string/module_task"
                         android:textColor="@color/text_color_49"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -120,7 +120,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/menu_environment"
+                        android:text="@string/module_environment"
                         android:textColor="@color/text_color_49"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -145,7 +145,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/menu_config"
+                        android:text="@string/module_config"
                         android:textColor="@color/text_color_49"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -170,7 +170,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/menu_script"
+                        android:text="@string/module_script"
                         android:textColor="@color/text_color_49"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -195,7 +195,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/menu_dependence"
+                        android:text="@string/module_dependence"
                         android:textColor="@color/text_color_49"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -220,7 +220,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/menu_log"
+                        android:text="@string/module_log"
                         android:textColor="@color/text_color_49"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -245,18 +245,20 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/menu_setting"
+                        android:text="@string/module_setting"
                         android:textColor="@color/text_color_49"
                         android:textSize="14sp" />
                 </LinearLayout>
 
                 <View
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/divider_thickness"
                     android:layout_marginVertical="10dp"
                     android:background="@color/divider_heavy" />
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/menu_extension_web"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -276,7 +278,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/menu_extension_web"
+                        android:text="@string/module_extension_web"
                         android:textColor="@color/text_color_49"
                         android:textSize="14sp" />
                 </LinearLayout>

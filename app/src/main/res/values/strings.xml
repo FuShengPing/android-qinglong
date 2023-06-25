@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">青龙面板</string>
+    <string name="app_name">定时精灵</string>
     <!-- 链接区 -->
     <string name="url_project">https://gitee.com/wsfsp4/QingLong</string>
     <string name="url_readme">https://gitee.com/wsfsp4/QingLong/blob/master/README.md</string>
@@ -8,34 +8,37 @@
     <string name="url_extension_link">http://service-m1nufffu-1306746806.gz.apigw.tencentcs.com/link</string>
     <string name="url_alipay_scheme">alipays://platformapi/startapp?saId=10000007&amp;qrcode=</string>
     <string name="url_alipay_qrcode">https://qr.alipay.com/fkx11773tmx6hbszzxlp460</string>
-    <!-- 导航 -->
-    <string name="menu_task">定时任务</string>
-    <string name="menu_environment">环境变量</string>
-    <string name="menu_config">配置文件</string>
-    <string name="menu_script">脚本管理</string>
-    <string name="menu_dependence">依赖管理</string>
-    <string name="menu_log">任务日志</string>
-    <string name="menu_setting">系统设置</string>
-    <string name="menu_extension_web">Web助手</string>
-    <string name="menu_extension_ai">AI助手</string>
-    <string name="menu_extension_link">精选导航</string>
+    <!-- 模块 -->
+    <string name="module_task">定时任务</string>
+    <string name="module_environment">环境变量</string>
+    <string name="module_config">配置文件</string>
+    <string name="module_script">脚本管理</string>
+    <string name="module_dependence">依赖管理</string>
+    <string name="module_log">任务日志</string>
+    <string name="module_setting">系统设置</string>
+    <string name="module_extension_web">Web助手</string>
     <string name="menu_account_exit">退出</string>
     <string name="menu_app_setting">设置</string>
 
-    <string name="app_setting_notify">更新推送</string>
-    <string name="app_setting_vibrate">震动反馈</string>
     <string name="action_title_plugin_web">Web助手</string>
     <string name="action_bar_title_app_setting">应用设置</string>
     <string name="action_bar_title_plugin_web_rule">规则配置</string>
+
+    <string name="app_setting_notify">更新推送</string>
+    <string name="app_setting_vibrate">震动反馈</string>
     <string name="app_setting_document">使用手册</string>
     <string name="app_setting_donate">支持应用</string>
     <string name="app_setting_issue">意见反馈</string>
     <string name="app_setting_share">分享应用</string>
+
     <string name="item_login_log_time">登录时间</string>
     <string name="item_login_log_address">登录地址</string>
     <string name="item_login_log_ip">登录IP</string>
     <string name="item_login_log_platform">登录设备</string>
+
     <!-- 操作 -->
+    <string name="action_setting">设置</string>
+    <string name="action_exit">退出</string>
     <string name="action_select_all">全选</string>
     <string name="action_edit">编辑</string>
     <string name="action_run">运行</string>
@@ -86,7 +89,7 @@
     <string name="char_path_split">/</string>
     <!-- 字符串 -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="app_share_description">我正在使用这个APP来管理青龙面板，方便快捷，你也来试试吧！下载地址：https://gitee.com/wsfsp4/QingLong</string>
+    <string name="app_share_description">https://gitee.com/wsfsp4/QingLong</string>
     <string name="str_username">账号</string>
     <string name="str_password">密码</string>
     <string name="setting_common_security">安全设置</string>

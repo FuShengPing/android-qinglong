@@ -29,7 +29,7 @@
         tools:replace="android:theme">
 
         <activity
-            android:name=".activity.app.SplashActivity"
+            android:name=".ui.activity.app.SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.App.Splash">
             <intent-filter>
@@ -39,27 +39,27 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.app.SettingActivity"
+            android:name=".ui.activity.app.SettingActivity"
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activity.ql.CodeWebActivity"
+            android:name=".ui.activity.ql.CodeWebActivity"
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activity.extension.web.PluginWebRuleActivity"
+            android:name=".ui.activity.extension.web.PluginWebRuleActivity"
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activity.extension.web.PluginWebActivity"
+            android:name=".ui.activity.extension.web.PluginWebActivity"
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activity.app.HomeActivity"
+            android:name=".ui.activity.app.HomeActivity"
             android:exported="false"
             android:launchMode="singleTop" />
         <activity
-            android:name=".activity.app.LoginActivity"
+            android:name=".ui.activity.app.LoginActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:theme="@style/Theme.App.Login" />

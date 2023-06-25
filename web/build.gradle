@@ -1,40 +1,23 @@
-// 集成化环境切换类型
-if (isRelease.toBoolean()) {
-    apply plugin:"com.android.library"
-} else {
-    apply plugin:"com.android.application"
-}
+apply plugin: "com.android.application"
 
 android {
     namespace 'auto.web'
     compileSdk 32
 
-    defaultConfig {
-        // 集成化模式不能有applicationId，组件化模式能独立运行才能有applicationId
-        if (!isRelease) {
-            applicationId "auto.web"
-        }
-
-        // 配置资源路径
-        sourceSets {
-            main {
-                if(isRelease.toBoolean()){ //集成模式
-                    manifest.srcFile 'src/main/release/AndroidManifest.xml'
-                    java {
-                        exclude '**/debug/**'
-                    }
-                }else{//组件模式
-                    manifest.srcFile 'src/main/AndroidManifest.xml'
-                }
-            }
-        }
-
+    defaultConfig{
         minSdk 26
         targetSdk 32
         versionCode 1
         versionName "1.0"
-
+        applicationId "auto.web"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // 配置资源路径
+        sourceSets {
+            main {
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+            }
+        }
     }
 
     buildTypes {
