@@ -55,7 +55,7 @@ public interface Api {
      * @return the tasks
      */
     @GET("api/crons")
-    Call<QLTasksRes> getTasks(@Header("Authorization") String authorization, @Query("searchValue") String searchValue);
+    Call<TaskRes> getTasks(@Header("Authorization") String authorization, @Query("searchValue") String searchValue);
 
     /**
      * 执行任务.

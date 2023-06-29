@@ -38,11 +38,11 @@ class TaskObject {
     private String createdAt;
     private String updatedAt;
 
-    public String get_id() {
+    public String getId() {
         return _id;
     }
 
-    public void set_id(String _id) {
+    public void setId(String _id) {
         this._id = _id;
     }
 

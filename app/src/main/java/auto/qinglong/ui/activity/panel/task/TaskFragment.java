@@ -1,6 +1,5 @@
 package auto.qinglong.ui.activity.panel.task;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
@@ -20,9 +19,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
@@ -32,34 +28,31 @@ import java.io.FileReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
-import auto.base.util.WindowUnit;
-import auto.base.view.popup.PopMenuObject;
-import auto.qinglong.R;
-import auto.qinglong.ui.BaseFragment;
-import auto.qinglong.ui.activity.panel.CodeWebActivity;
-import auto.base.view.popup.LocalFileAdapter;
-import auto.qinglong.bean.panel.QLTask;
-import auto.qinglong.net.NetManager;
-import auto.qinglong.net.panel.v10.ApiController;
-import auto.qinglong.utils.CronUnit;
-import auto.qinglong.utils.FileUtil;
 import auto.base.util.LogUnit;
 import auto.base.util.TextUnit;
-import auto.base.util.TimeUnit;
 import auto.base.util.ToastUnit;
-import auto.qinglong.utils.VibratorUtil;
+import auto.base.util.WindowUnit;
+import auto.base.view.popup.LocalFileAdapter;
 import auto.base.view.popup.PopEditObject;
 import auto.base.view.popup.PopEditWindow;
 import auto.base.view.popup.PopListWindow;
+import auto.base.view.popup.PopMenuObject;
 import auto.base.view.popup.PopMenuWindow;
 import auto.base.view.popup.PopProgressWindow;
 import auto.base.view.popup.PopupWindowBuilder;
+import auto.qinglong.R;
+import auto.qinglong.bean.panel.QLTask;
+import auto.qinglong.bean.views.Task;
+import auto.qinglong.database.sp.AccountSP;
+import auto.qinglong.net.NetManager;
+import auto.qinglong.net.panel.v10.ApiController;
+import auto.qinglong.ui.BaseFragment;
+import auto.qinglong.utils.CronUnit;
+import auto.qinglong.utils.FileUtil;
 
 public class TaskFragment extends BaseFragment {
     public static String TAG = "TaskFragment";
@@ -67,6 +60,7 @@ public class TaskFragment extends BaseFragment {
     private String mCurrentSearchValue;
     private MenuClickListener mMenuClickListener;
     private TaskAdapter mAdapter;
+    private boolean init = false;
 
     //主导航栏
     private LinearLayout ui_bar_main;
@@ -167,67 +161,68 @@ public class TaskFragment extends BaseFragment {
         mAdapter = new TaskAdapter(requireContext());
         ui_recycler.setAdapter(mAdapter);
         ui_recycler.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);//取消更新动画，避免刷新闪烁
-
-        //列表操作接口
-        mAdapter.setTaskInterface(new TaskAdapter.ItemActionListener() {
-            @Override
-            public void onLog(QLTask task) {
-                Intent intent = new Intent(getContext(), CodeWebActivity.class);
-                intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_LOG);
-                intent.putExtra(CodeWebActivity.EXTRA_TITLE, task.getName());
-                intent.putExtra(CodeWebActivity.EXTRA_LOG_PATH, task.getLastLogPath());
-                startActivity(intent);
-            }
-
-            @Override
-            public void onStop(QLTask task) {
-                if (NetManager.isRequesting(getNetRequestID())) {
-                    return;
-                }
-                List<String> ids = new ArrayList<>();
-                ids.add(task.getId());
-                netStopTasks(ids, false);
-            }
-
-            @Override
-            public void onRun(QLTask task) {
-                List<String> ids = new ArrayList<>();
-                ids.add(task.getId());
-                netRunTasks(ids, false);
-            }
-
-            @Override
-            public void onEdit(QLTask task) {
-                showPopWindowEdit(task);
-            }
-
-            @Override
-            public void onScript(String parent, String fileName) {
-                VibratorUtil.vibrate(requireContext(), VibratorUtil.VIBRATE_SHORT);
-                Intent intent = new Intent(getContext(), CodeWebActivity.class);
-                intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_NAME, fileName);
-                intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_PARENT, parent);
-                intent.putExtra(CodeWebActivity.EXTRA_TITLE, fileName);
-                intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_SCRIPT);
-                intent.putExtra(CodeWebActivity.EXTRA_CAN_EDIT, true);
-                startActivity(intent);
-            }
-        });
-
-        //刷新
-        ui_refresh.setOnRefreshListener(refreshLayout -> {
-            if (ui_bar_search.getVisibility() != View.VISIBLE) {
-                mCurrentSearchValue = null;
-            }
-            netGetTasks(mCurrentSearchValue, true);
-        });
+        //取消更新动画，避免刷新闪烁
+        Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
 
         //唤起导航栏
         ui_nav_menu.setOnClickListener(v -> {
             if (mMenuClickListener != null) {
                 mMenuClickListener.onMenuClick();
             }
+        });
+
+        //数据项操作监听
+        mAdapter.setActionListener(new TaskAdapter.ActionListener() {
+            @Override
+            public void onLog(Task task) {
+//                Intent intent = new Intent(getContext(), CodeWebActivity.class);
+//                intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_LOG);
+//                intent.putExtra(CodeWebActivity.EXTRA_TITLE, task.getName());
+//                intent.putExtra(CodeWebActivity.EXTRA_LOG_PATH, task.getLastLogPath());
+//                startActivity(intent);
+            }
+
+            @Override
+            public void onStop(Task task) {
+                if (NetManager.isRequesting(getNetRequestID())) {
+                    return;
+                }
+//                List<String> ids = new ArrayList<>();
+//                ids.add(task.getId());
+//                netStopTasks(ids, false);
+            }
+
+            @Override
+            public void onRun(Task task) {
+                List<Object> keys = new ArrayList<>();
+                keys.add(task.getKey());
+                runTasks(keys);
+            }
+
+            @Override
+            public void onEdit(Task task) {
+//                showPopWindowEdit(task);
+            }
+
+            @Override
+            public void onScript(Task task) {
+//                VibratorUtil.vibrate(requireContext(), VibratorUtil.VIBRATE_SHORT);
+//                Intent intent = new Intent(getContext(), CodeWebActivity.class);
+//                intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_NAME, fileName);
+//                intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_PARENT, parent);
+//                intent.putExtra(CodeWebActivity.EXTRA_TITLE, fileName);
+//                intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_SCRIPT);
+//                intent.putExtra(CodeWebActivity.EXTRA_CAN_EDIT, true);
+//                startActivity(intent);
+            }
+        });
+
+        //下拉刷新列表
+        ui_refresh.setOnRefreshListener(refreshLayout -> {
+            if (ui_bar_search.getVisibility() != View.VISIBLE) {
+                mCurrentSearchValue = null;
+            }
+            getTasks(mCurrentSearchValue);
         });
 
         //更多操作
@@ -241,9 +236,9 @@ public class TaskFragment extends BaseFragment {
 
         //搜索栏确定
         ui_search_confirm.setOnClickListener(v -> {
-            mCurrentSearchValue = ui_search_value.getText().toString();
+            mCurrentSearchValue = ui_search_value.getText().toString().trim();
             WindowUnit.hideKeyboard(ui_search_value);
-            netGetTasks(mCurrentSearchValue, true);
+            getTasks(mCurrentSearchValue);
         });
 
         //操作栏返回
@@ -375,13 +370,13 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void initData() {
-        if (initDataFlag || NetManager.isRequesting(this.getNetRequestID())) {
+        if (init) {
             return;
         }
         ui_refresh.autoRefreshAnimationOnly();
         new Handler().postDelayed(() -> {
             if (isVisible()) {
-                netGetTasks(mCurrentSearchValue, true);
+                getTasks(mCurrentSearchValue);
             }
         }, 1000);
     }
@@ -389,9 +384,9 @@ public class TaskFragment extends BaseFragment {
     private void showPopWindowMenu(View view) {
         PopMenuWindow popMenuWindow = new PopMenuWindow(view, Gravity.END);
         popMenuWindow.addItem(new PopMenuObject("add", "新建任务", R.drawable.ic_gray_add));
-        popMenuWindow.addItem(new PopMenuObject("localAdd", "本地导入", R.drawable.ic_gray_file));
-        popMenuWindow.addItem(new PopMenuObject("backup", "任务备份", R.drawable.ic_gray_download));
-        popMenuWindow.addItem(new PopMenuObject("deleteMul", "任务去重", R.drawable.ic_gray_delete));
+//        popMenuWindow.addItem(new PopMenuObject("localAdd", "本地导入", R.drawable.ic_gray_file));
+//        popMenuWindow.addItem(new PopMenuObject("backup", "任务备份", R.drawable.ic_gray_download));
+//        popMenuWindow.addItem(new PopMenuObject("deleteMul", "任务去重", R.drawable.ic_gray_delete));
         popMenuWindow.addItem(new PopMenuObject("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
         popMenuWindow.setOnActionListener(key -> {
             switch (key) {
@@ -528,22 +523,22 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void compareAndDeleteData() {
-        List<String> ids = new ArrayList<>();
-        Set<String> set = new HashSet<>();
-        List<QLTask> tasks = this.mAdapter.getData();
-        for (QLTask task : tasks) {
-            String key = task.getCommand();
-            if (set.contains(key)) {
-                ids.add(task.getId());
-            } else {
-                set.add(key);
-            }
-        }
-        if (ids.size() == 0) {
-            ToastUnit.showShort("无重复任务");
-        } else {
-            netDeleteTasks(ids);
-        }
+//        List<String> ids = new ArrayList<>();
+//        Set<String> set = new HashSet<>();
+//        List<QLTask> tasks = this.mAdapter.getData();
+//        for (QLTask task : tasks) {
+//            String key = task.getCommand();
+//            if (set.contains(key)) {
+//                ids.add(task.getId());
+//            } else {
+//                set.add(key);
+//            }
+//        }
+//        if (ids.size() == 0) {
+//            ToastUnit.showShort("无重复任务");
+//        } else {
+//            netDeleteTasks(ids);
+//        }
     }
 
     private void localAddData() {
@@ -593,73 +588,106 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void backupData(String fileName) {
-        if (FileUtil.isNeedRequestPermission()) {
-            ToastUnit.showShort("请授予应用读写存储权限");
-            FileUtil.requestPermission(requireActivity());
-            return;
-        }
-
-        List<QLTask> tasks = mAdapter.getData();
-        if (tasks == null || tasks.size() == 0) {
-            ToastUnit.showShort("数据为空,无需备份");
-            return;
-        }
-
-        JsonArray jsonArray = new JsonArray();
-        for (QLTask task : tasks) {
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("name", task.getName());
-            jsonObject.addProperty("command", task.getCommand());
-            jsonObject.addProperty("schedule", task.getSchedule());
-            jsonArray.add(jsonObject);
-        }
-
-        if (TextUnit.isFull(fileName)) {
-            fileName += ".json";
-        } else {
-            fileName = TimeUnit.formatDatetimeC() + ".json";
-        }
-
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String content = gson.toJson(jsonArray);
-        try {
-            boolean result = FileUtil.save(FileUtil.getTaskPath(), fileName, content);
-            if (result) {
-                ToastUnit.showShort("备份成功：" + fileName);
-            } else {
-                ToastUnit.showShort("备份失败");
-            }
-        } catch (Exception e) {
-            ToastUnit.showShort("备份失败：" + e.getMessage());
-        }
+//        if (FileUtil.isNeedRequestPermission()) {
+//            ToastUnit.showShort("请授予应用读写存储权限");
+//            FileUtil.requestPermission(requireActivity());
+//            return;
+//        }
+//
+//        List<QLTask> tasks = mAdapter.getData();
+//        if (tasks == null || tasks.size() == 0) {
+//            ToastUnit.showShort("数据为空,无需备份");
+//            return;
+//        }
+//
+//        JsonArray jsonArray = new JsonArray();
+//        for (QLTask task : tasks) {
+//            JsonObject jsonObject = new JsonObject();
+//            jsonObject.addProperty("name", task.getName());
+//            jsonObject.addProperty("command", task.getCommand());
+//            jsonObject.addProperty("schedule", task.getSchedule());
+//            jsonArray.add(jsonObject);
+//        }
+//
+//        if (TextUnit.isFull(fileName)) {
+//            fileName += ".json";
+//        } else {
+//            fileName = TimeUnit.formatDatetimeC() + ".json";
+//        }
+//
+//        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//        String content = gson.toJson(jsonArray);
+//        try {
+//            boolean result = FileUtil.save(FileUtil.getTaskPath(), fileName, content);
+//            if (result) {
+//                ToastUnit.showShort("备份成功：" + fileName);
+//            } else {
+//                ToastUnit.showShort("备份失败");
+//            }
+//        } catch (Exception e) {
+//            ToastUnit.showShort("备份失败：" + e.getMessage());
+//        }
 
     }
 
-    private void netGetTasks(String searchValue, boolean needTip) {
-        if (NetManager.isRequesting(getNetRequestID())) {
-            return;
-        }
-        ApiController.getTasks(getNetRequestID(), searchValue, new ApiController.NetGetTasksCallback() {
+    private void getTasks(String searchValue) {
+        auto.qinglong.net.panel.ApiController.getTasks(AccountSP.getBaseUrl(), AccountSP.getAuthorization(), searchValue, new auto.qinglong.net.panel.ApiController.TaskCallBack() {
             @Override
-            public void onSuccess(List<QLTask> tasks) {
-                initDataFlag = true;
+            public void onSuccess(List<Task> tasks) {
                 Collections.sort(tasks);
-                for (int k = 0; k < tasks.size(); k++) {
-                    tasks.get(k).setIndex(k + 1);
-                }
                 mAdapter.setData(tasks);
-                if (needTip) {
-                    ToastUnit.showShort("加载成功：" + tasks.size());
-                }
                 ui_refresh.finishRefresh(true);
+                init = true;
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort("加载失败：" + msg);
                 ui_refresh.finishRefresh(false);
+                LogUnit.log(msg);
             }
         });
+    }
+
+    private void runTasks(List<Object> keys) {
+        auto.qinglong.net.panel.ApiController.runTasks(AccountSP.getBaseUrl(), AccountSP.getAuthorization(), keys, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
+            @Override
+            public void onSuccess() {
+                ToastUnit.showShort("运行任务成功");
+                getTasks(null);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                LogUnit.log(msg);
+            }
+        });
+    }
+
+    private void netGetTasks(String searchValue, boolean needTip) {
+//        if (NetManager.isRequesting(getNetRequestID())) {
+//            return;
+//        }
+//        ApiController.getTasks(getNetRequestID(), searchValue, new ApiController.NetGetTasksCallback() {
+//            @Override
+//            public void onSuccess(List<QLTask> tasks) {
+//                initDataFlag = true;
+//                Collections.sort(tasks);
+//                for (int k = 0; k < tasks.size(); k++) {
+//                    tasks.get(k).setIndex(k + 1);
+//                }
+//                mAdapter.setData(tasks);
+//                if (needTip) {
+//                    ToastUnit.showShort("加载成功：" + tasks.size());
+//                }
+//                ui_refresh.finishRefresh(true);
+//            }
+//
+//            @Override
+//            public void onFailure(String msg) {
+//                ToastUnit.showShort("加载失败：" + msg);
+//                ui_refresh.finishRefresh(false);
+//            }
+//        });
     }
 
     private void netRunTasks(List<String> ids, boolean isFromBar) {

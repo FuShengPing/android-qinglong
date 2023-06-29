@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import java.util.List;
 import java.util.Objects;
 
+import auto.base.util.LogUnit;
 import auto.qinglong.bean.app.Account;
 import auto.qinglong.bean.panel.QLDependence;
 import auto.qinglong.bean.panel.QLEnvironment;
@@ -17,8 +18,6 @@ import auto.qinglong.bean.panel.QLLoginLog;
 import auto.qinglong.bean.panel.QLScript;
 import auto.qinglong.bean.panel.QLSystem;
 import auto.qinglong.bean.panel.QLTask;
-import auto.qinglong.net.NetManager;
-import auto.qinglong.net.panel.BaseRes;
 import auto.qinglong.bean.panel.network.QLDependenceRes;
 import auto.qinglong.bean.panel.network.QLDependenciesRes;
 import auto.qinglong.bean.panel.network.QLEnvEditRes;
@@ -31,9 +30,9 @@ import auto.qinglong.bean.panel.network.QLScriptsRes;
 import auto.qinglong.bean.panel.network.QLSimpleRes;
 import auto.qinglong.bean.panel.network.QLSystemRes;
 import auto.qinglong.bean.panel.network.QLTaskEditRes;
-import auto.qinglong.bean.panel.network.QLTasksRes;
 import auto.qinglong.database.sp.AccountSP;
-import auto.base.util.LogUnit;
+import auto.qinglong.net.NetManager;
+import auto.qinglong.net.panel.BaseRes;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -47,7 +46,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ApiController {
     private static final String ERROR_NO_BODY = "响应异常";
-    private static final String ERROR_INVALID_AUTH = "登录失效";
+    private static final String ERROR_INVALID_AUTH = "登录信息失效";
 
     public static void getSystemInfo(@NonNull String requestId, @NonNull Account account, @NonNull NetSystemCallback callback) {
         Call<QLSystemRes> call = new Retrofit.Builder()
@@ -179,18 +178,18 @@ public class ApiController {
         NetManager.addCall(call, requestId);
     }
 
-    public static void getTasks(@NonNull String requestId, @Nullable String searchValue, @NonNull NetGetTasksCallback callback) {
-        Call<QLTasksRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+    public static void getTasks(String baseUrl, String authorization, String searchValue, auto.qinglong.net.panel.ApiController.TaskCallBack callback) {
+        Call<TaskRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .getTasks(AccountSP.getAuthorization(), searchValue);
-        call.enqueue(new Callback<QLTasksRes>() {
+                .getTasks(authorization, searchValue);
+
+        call.enqueue(new Callback<TaskRes>() {
             @Override
-            public void onResponse(@NonNull Call<QLTasksRes> call, @NonNull Response<QLTasksRes> response) {
-                NetManager.finishCall(requestId);
-                QLTasksRes res = response.body();
+            public void onResponse(@NonNull Call<TaskRes> call, @NonNull Response<TaskRes> response) {
+                TaskRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -199,7 +198,7 @@ public class ApiController {
                     }
                 } else {
                     if (res.getCode() == 200) {
-                        callback.onSuccess(res.getData());
+                        callback.onSuccess(Factory.buildTasks(res.getData()));
                     } else {
                         callback.onFailure(res.getMessage());
                     }
@@ -207,17 +206,98 @@ public class ApiController {
             }
 
             @Override
-            public void onFailure(@NonNull Call<QLTasksRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
+            public void onFailure(@NonNull Call<TaskRes> call, @NonNull Throwable t) {
                 if (call.isCanceled()) {
                     return;
                 }
                 callback.onFailure(t.getLocalizedMessage());
             }
         });
-
-        NetManager.addCall(call, requestId);
     }
+
+    public static void runTasks(String baseUrl, String authorization, List<Object> keys, auto.qinglong.net.panel.ApiController.BaseCallBack callback) {
+        JsonArray jsonArray = new JsonArray();
+        for (int i = 0; i < keys.size(); i++) {
+            jsonArray.add((String) keys.get(i));
+        }
+
+        String json = jsonArray.toString();
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .runTasks(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callback.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callback.onFailure(ERROR_NO_BODY);
+                    }
+                } else {
+                    if (res.getCode() == 200) {
+                        callback.onSuccess();
+                    } else {
+                        callback.onFailure(res.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                callback.onFailure(t.getLocalizedMessage());
+            }
+        });
+    }
+
+//    public static void getTasks(@NonNull String requestId, @Nullable String searchValue, @NonNull NetGetTasksCallback callback) {
+//        Call<QLTasksRes> call = new Retrofit.Builder()
+//                .baseUrl(AccountSP.getBaseUrl())
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build()
+//                .create(Api.class)
+//                .getTasks(AccountSP.getAuthorization(), searchValue);
+//        call.enqueue(new Callback<QLTasksRes>() {
+//            @Override
+//            public void onResponse(@NonNull Call<QLTasksRes> call, @NonNull Response<QLTasksRes> response) {
+//                NetManager.finishCall(requestId);
+//                QLTasksRes res = response.body();
+//                if (res == null) {
+//                    if (response.code() == 401) {
+//                        callback.onFailure(ERROR_INVALID_AUTH);
+//                    } else {
+//                        callback.onFailure(ERROR_NO_BODY);
+//                    }
+//                } else {
+//                    if (res.getCode() == 200) {
+//                        callback.onSuccess(res.getData());
+//                    } else {
+//                        callback.onFailure(res.getMessage());
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(@NonNull Call<QLTasksRes> call, @NonNull Throwable t) {
+//                NetManager.finishCall(requestId);
+//                if (call.isCanceled()) {
+//                    return;
+//                }
+//                callback.onFailure(t.getLocalizedMessage());
+//            }
+//        });
+//
+//        NetManager.addCall(call, requestId);
+//    }
 
     public static void runTasks(@NonNull String requestId, @NonNull List<String> taskIds, @NonNull NetBaseCallback callback) {
         JsonArray jsonArray = new JsonArray();

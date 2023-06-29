@@ -18,14 +18,14 @@ import java.util.List;
 
 import auto.qinglong.R;
 import auto.qinglong.bean.panel.QLTask;
-import auto.qinglong.bean.panel.QLTaskState;
+import auto.qinglong.bean.views.Task;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> {
     public static final String TAG = "TaskAdapter";
 
     Context context;
-    private ItemActionListener itemActionListener;
-    private List<QLTask> data;
+    private ActionListener actionListener;
+    private List<Task> data;
     private boolean checkState;
     private boolean[] dataCheckState;
 
@@ -51,34 +51,30 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        QLTask task = data.get(position);
-        holder.ui_name.setText(task.getFormatName());
+        Task task = data.get(position);
+        holder.ui_title.setText(task.getTitle());
         holder.ui_command.setText(task.getCommand());
         holder.ui_schedule.setText(task.getSchedule());
-        holder.ui_last_run_time.setText(task.getFormatLastRunningTime());
-        holder.ui_last_execution_time.setText(task.getFormatLastExecutionTime());
-        holder.ui_next_execution_time.setText(task.getFormatNextExecutionTime());
-        //运行状态
-        if (task.getTaskState() == QLTaskState.RUNNING) {
-            holder.ui_state.setText("运行中");
+        holder.ui_last_run_time.setText(task.getLastRunningTime());
+        holder.ui_last_execution_time.setText(task.getLastExecuteTime());
+        holder.ui_next_execution_time.setText(task.getNextExecuteTime());
+        holder.ui_state.setText(task.getState());
+
+        if (task.getStateCode() == Task.STATE_RUNNING) {
             holder.ui_state.setTextColor(colorBlue);
             holder.ui_action.setImageResource(R.drawable.ic_blue_pause);
-        } else if (task.getTaskState() == QLTaskState.WAITING) {
-            holder.ui_state.setText("队列中");
+        } else if (task.getStateCode() == Task.STATE_WAITING) {
             holder.ui_state.setTextColor(colorBlue);
             holder.ui_action.setImageResource(R.drawable.ic_blue_pause);
-        } else if (task.getTaskState() == QLTaskState.LIMIT) {
-            holder.ui_state.setText("禁止中");
+        } else if (task.getStateCode() == Task.STATE_LIMIT) {
             holder.ui_state.setTextColor(colorRed);
             holder.ui_action.setImageResource(R.drawable.ic_blue_start);
         } else {
-            holder.ui_state.setText("空闲中");
             holder.ui_state.setTextColor(colorGray);
             holder.ui_action.setImageResource(R.drawable.ic_blue_start);
         }
 
-        //顶置
-        if (task.isPinned() == 1) {
+        if (task.isPinned()) {
             holder.ui_pinned.setVisibility(View.VISIBLE);
         } else {
             holder.ui_pinned.setVisibility(View.GONE);
@@ -93,33 +89,34 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
             holder.ui_check.setVisibility(View.GONE);
         }
 
-        holder.ui_name.setOnClickListener(v -> {
+        holder.ui_title.setOnClickListener(v -> {
             if (this.checkState) {
                 holder.ui_check.setChecked(!holder.ui_check.isChecked());
             } else {
-                itemActionListener.onLog(task);
+                actionListener.onLog(task);
             }
         });
 
-        holder.ui_name.setOnLongClickListener(v -> {
-            if (!this.checkState && task.getCommand().startsWith("task ")) {
-                String[] path = task.getCommand().replace("task", "").split("/");
-                if (path.length == 1) {
-                    itemActionListener.onScript("", path[0].trim());
-                } else if (path.length == 2) {
-                    itemActionListener.onScript(path[0].trim(), path[1].trim());
-                }
-            }
+        holder.ui_title.setOnLongClickListener(v -> {
+//            if (!this.checkState && task.getCommand().startsWith("task ")) {
+//                String[] path = task.getCommand().replace("task", "").split("/");
+//                if (path.length == 1) {
+//                    actionListener.onScript("", path[0].trim());
+//                } else if (path.length == 2) {
+//                    actionListener.onScript(path[0].trim(), path[1].trim());
+//                }
+//            }
+            actionListener.onScript(task);
             return true;
         });
 
         holder.ui_action.setOnClickListener(v -> {
             if (this.checkState) {
                 holder.ui_check.setChecked(!holder.ui_check.isChecked());
-            } else if (task.getTaskState() == QLTaskState.LIMIT || task.getTaskState() == QLTaskState.FREE) {
-                itemActionListener.onRun(task);
+            } else if (task.getStateCode() == Task.STATE_LIMIT || task.getStateCode() == Task.STATE_FREE) {
+                actionListener.onRun(task);
             } else {
-                itemActionListener.onStop(task);
+                actionListener.onStop(task);
             }
         });
 
@@ -131,7 +128,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
 
         holder.itemView.setOnLongClickListener(v -> {
             if (!this.checkState) {
-                itemActionListener.onEdit(task);
+                actionListener.onEdit(task);
             }
             return true;
         });
@@ -144,19 +141,19 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<QLTask> data) {
+    public void setData(List<Task> data) {
         this.data.clear();
         this.data = data;
         this.dataCheckState = new boolean[data.size()];
         notifyDataSetChanged();
     }
 
-    public List<QLTask> getData() {
+    public List<Task> getData() {
         return this.data;
     }
 
-    public void setTaskInterface(ItemActionListener itemActionListener) {
-        this.itemActionListener = itemActionListener;
+    public void setActionListener(ActionListener itemActionListener) {
+        this.actionListener = itemActionListener;
     }
 
     public boolean getCheckState() {
@@ -177,31 +174,31 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
     }
 
     public List<QLTask> getCheckedItems() {
-        List<QLTask> QLTasks = new ArrayList<>();
-        if (dataCheckState != null) {
-            for (int k = 0; k < dataCheckState.length; k++) {
-                if (dataCheckState[k]) {
-                    QLTasks.add(this.data.get(k));
-                }
-            }
-        }
-        return QLTasks;
+        List<QLTask> tasks = new ArrayList<>();
+//        if (dataCheckState != null) {
+//            for (int k = 0; k < dataCheckState.length; k++) {
+//                if (dataCheckState[k]) {
+//                    tasks.add(this.data.get(k));
+//                }
+//            }
+//        }
+        return tasks;
     }
 
-    public interface ItemActionListener {
-        void onLog(QLTask task);
+    public interface ActionListener {
+        void onStop(Task task);
 
-        void onStop(QLTask task);
+        void onRun(Task task);
 
-        void onRun(QLTask task);
+        void onEdit(Task task);
 
-        void onEdit(QLTask task);
+        void onLog(Task task);
 
-        void onScript(String parent, String fileName);
+        void onScript(Task task);
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView ui_name;
+        public TextView ui_title;
         public TextView ui_command;
         public TextView ui_schedule;
         public TextView ui_state;
@@ -214,7 +211,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            ui_name = itemView.findViewById(R.id.task_name);
+            ui_title = itemView.findViewById(R.id.task_title);
             ui_command = itemView.findViewById(R.id.task_command);
             ui_schedule = itemView.findViewById(R.id.task_schedule);
             ui_state = itemView.findViewById(R.id.task_state);
