@@ -6,11 +6,11 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import auto.qinglong.R;
-import auto.qinglong.ui.activity.BaseActivity;
+import auto.qinglong.ui.BaseActivity;
 import auto.qinglong.bean.app.Account;
-import auto.qinglong.bean.ql.QLSystem;
+import auto.qinglong.bean.panel.QLSystem;
 import auto.qinglong.database.sp.AccountSP;
-import auto.qinglong.network.http.QLApiController;
+import auto.qinglong.net.panel.v10.ApiController;
 import auto.base.util.NetUnit;
 import auto.base.util.ToastUnit;
 
@@ -62,7 +62,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void netCheckAccountValid(Account account) {
-        QLApiController.checkToken(getNetRequestID(), account, new QLApiController.NetBaseCallback() {
+        ApiController.checkToken(getNetRequestID(), account, new ApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
                 enterActivity(true);
@@ -76,7 +76,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     protected void netQuerySystemInfo(Account account) {
-        QLApiController.getSystemInfo(this.getNetRequestID(), account, new QLApiController.NetSystemCallback() {
+        ApiController.getSystemInfo(this.getNetRequestID(), account, new ApiController.NetSystemCallback() {
             @Override
             public void onSuccess(QLSystem system) {
                 QLSystem.setStaticVersion(system.getVersion());

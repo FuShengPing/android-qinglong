@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import auto.base.BaseApplication;
+import auto.base.util.LogUnit;
 import auto.ssh.R;
 import auto.ssh.service.ForwardService;
 import auto.ssh.service.ProxyService;
@@ -37,7 +39,8 @@ public class MainActivity extends BaseActivity {
 
     private BroadcastReceiver proxyBroadcastReceiver;
     private BroadcastReceiver forwardBroadcastReceiver;
-
+    private BroadcastReceiver netBroadcastReceiver;
+    private BroadcastReceiver timeBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +61,20 @@ public class MainActivity extends BaseActivity {
 
         init();
 
+        proxyBroadcastReceiver = new ProxyBroadcastReceiver();
+        forwardBroadcastReceiver = new ForwardBroadcastReceiver();
+        netBroadcastReceiver = new NetBroadcastReceiver();
+        timeBroadcastReceiver = new TimeBroadcastReceiver();
+
         // 注册广播
         IntentFilter proxyFilter = new IntentFilter(ProxyService.BROADCAST_ACTION_STATE);
         IntentFilter forwardFilter = new IntentFilter(ForwardService.BROADCAST_ACTION_STATE);
+        IntentFilter netStateFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        IntentFilter timeFilter = new IntentFilter(Intent.ACTION_TIME_TICK);
         LocalBroadcastManager.getInstance(this).registerReceiver(forwardBroadcastReceiver, forwardFilter);
         LocalBroadcastManager.getInstance(this).registerReceiver(proxyBroadcastReceiver, proxyFilter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(netBroadcastReceiver, netStateFilter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(timeBroadcastReceiver, timeFilter);
     }
 
     @Override
@@ -76,6 +88,8 @@ public class MainActivity extends BaseActivity {
         // 注销广播
         LocalBroadcastManager.getInstance(this).unregisterReceiver(proxyBroadcastReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(forwardBroadcastReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(netBroadcastReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(timeBroadcastReceiver);
     }
 
     @Override
@@ -97,8 +111,8 @@ public class MainActivity extends BaseActivity {
         this.uiLocalImg.setBackgroundResource(auto.base.R.drawable.ic_check_circle_outline_white);
         this.uiLocalTip.setText(R.string.proxy_local_open);
         this.uiForward.setVisibility(View.GONE);
-        //关闭代理服务
-        closeForwardService();
+        //停止代理服务
+        stopForwardService();
     }
 
     private void onForwardServiceOpen() {
@@ -115,14 +129,35 @@ public class MainActivity extends BaseActivity {
         this.uiForwardTip.setText(R.string.proxy_forward_connect);
     }
 
-    private void startForwarService() {
-
+    private void startProxyService() {
+        Intent intent = new Intent(BaseApplication.getContext(), ProxyService.class);
+        intent.putExtra(ProxyService.EXTRA_ADDRESS, "127.0.0.1");
+        intent.putExtra(ProxyService.EXTRA_PORT, 9100);
+        startService(intent);
     }
 
-    private void closeForwardService() {
-        Intent intent = new Intent(this, ForwardService.class);
-        intent.putExtra(ForwardService.EXTRA_ACTION, ForwardService.ACTION_SERVICE_STOP);
+    private void stopProxyService() {
+        Intent intent = new Intent(BaseApplication.getContext(), ProxyService.class);
         stopService(intent);
+    }
+
+    private void startForwardService() {
+        Intent intent = new Intent(BaseApplication.getContext(), ForwardService.class);
+        intent.putExtra(ForwardService.EXTRA_ACTION, ForwardService.ACTION_SERVICE_START);
+        intent.putExtra(ForwardService.EXTRA_HOSTNAME, "60.205.228.46");
+        intent.putExtra(ForwardService.EXTRA_USERNAME, "root");
+        intent.putExtra(ForwardService.EXTRA_PASSWORD, "aly@123456Fsp");
+        intent.putExtra(ForwardService.EXTRA_REMOTE_ADDRESS, "0.0.0.0");
+        intent.putExtra(ForwardService.EXTRA_REMOTE_PORT, 9100);
+        intent.putExtra(ForwardService.EXTRA_LOCAL_ADDRESS, "127.0.0.1");
+        intent.putExtra(ForwardService.EXTRA_LOCAL_PORT, 9100);
+        startService(intent);
+    }
+
+    private void stopForwardService() {
+        Intent intent = new Intent(BaseApplication.getContext(), ForwardService.class);
+        intent.putExtra(ForwardService.EXTRA_ACTION, ForwardService.ACTION_SERVICE_STOP);
+        startService(intent);
     }
 
     private void startForwardRetry() {
@@ -154,64 +189,26 @@ public class MainActivity extends BaseActivity {
     }
 
     private void init() {
-        proxyBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                int state = intent.getIntExtra(ProxyService.EXTRA_STATE, ProxyService.STATE_CLOSE);
-                if (state == ProxyService.STATE_OPEN) {
-                    onProxyServiceOpen();
-                } else {
-                    onProxyServiceClose();
-                }
-            }
-        };
-
-        forwardBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                int state = intent.getIntExtra(ForwardService.EXTRA_STATE, ForwardService.STATE_CLOSE);
-                if (state == ForwardService.STATE_OPEN) {
-                    onForwardServiceOpen();
-                } else {
-                    boolean isAccident = intent.getBooleanExtra(ForwardService.EXTRA_ACCIDENT, false);
-                    onForwardServiceClose(isAccident);
-                }
-            }
-        };
-
         // 本地代理
         uiLocal.setOnClickListener(v -> {
-            Intent intent = new Intent(BaseApplication.getContext(), ProxyService.class);
-            if (this.proxyState == ProxyService.STATE_CLOSE) {//开启服务
-                intent.putExtra(ProxyService.EXTRA_ADDRESS, "127.0.0.1");
-                intent.putExtra(ProxyService.EXTRA_PORT, 9100);
-                startService(intent);
-            } else {//结束服务
-                stopService(intent);
+            if (this.proxyState == ProxyService.STATE_CLOSE) {
+                startProxyService();
+            } else {
+                stopProxyService();
             }
         });
         // 远程连接
         uiForward.setOnClickListener(v -> {
-            Intent intent = new Intent(BaseApplication.getContext(), ForwardService.class);
-            if (this.forwardState == ForwardService.STATE_CLOSE) {//开启服务
-                intent.putExtra(ForwardService.EXTRA_ACTION, ForwardService.ACTION_SERVICE_START);
-                intent.putExtra(ForwardService.EXTRA_HOSTNAME, "60.205.228.46");
-                intent.putExtra(ForwardService.EXTRA_USERNAME, "root");
-                intent.putExtra(ForwardService.EXTRA_PASSWORD, "aly@123456Fsp");
-                intent.putExtra(ForwardService.EXTRA_REMOTE_ADDRESS, "0.0.0.0");
-                intent.putExtra(ForwardService.EXTRA_REMOTE_PORT, 9200);
-                intent.putExtra(ForwardService.EXTRA_LOCAL_ADDRESS, "127.0.0.1");
-                intent.putExtra(ForwardService.EXTRA_LOCAL_PORT, 9100);
-                startService(intent);
-            } else {//结束服务
-                stopService(intent);
+            if (this.forwardState == ForwardService.STATE_CLOSE) {
+                startForwardService();
+            } else {
+                stopForwardService();
             }
         });
         // 代理配置
         uiConfig.setOnClickListener(v -> {
             Intent intent = new Intent(this, ConfigActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
             startActivity(intent);
         });
         // 设置
@@ -228,6 +225,49 @@ public class MainActivity extends BaseActivity {
         uiHelp.setOnClickListener(v -> {
 
         });
+    }
+
+    private class ProxyBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int state = intent.getIntExtra(ProxyService.EXTRA_STATE, ProxyService.STATE_CLOSE);
+            if (state == ProxyService.STATE_OPEN) {
+                onProxyServiceOpen();
+            } else {
+                onProxyServiceClose();
+            }
+        }
+    }
+
+    private class ForwardBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int state = intent.getIntExtra(ForwardService.EXTRA_STATE, ForwardService.STATE_CLOSE);
+            if (state == ForwardService.STATE_OPEN) {
+                onForwardServiceOpen();
+            } else {
+                boolean isAccident = intent.getBooleanExtra(ForwardService.EXTRA_ACCIDENT, false);
+                onForwardServiceClose(isAccident);
+            }
+        }
+    }
+
+    private class NetBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            LogUnit.log("NetBroadcastReceiver");
+        }
+    }
+
+    private class TimeBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            LogUnit.log("TimeBroadcastReceiver");
+        }
     }
 
 }

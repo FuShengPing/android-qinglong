@@ -43,7 +43,7 @@
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".ui.activity.ql.CodeWebActivity"
+            android:name=".ui.activity.panel.CodeWebActivity"
             android:exported="false"
             android:launchMode="singleTask" />
         <activity

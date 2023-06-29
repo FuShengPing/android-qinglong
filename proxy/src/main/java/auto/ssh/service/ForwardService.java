@@ -30,8 +30,8 @@ import auto.base.util.LogUnit;
 import auto.base.util.Logger;
 import auto.ssh.Commands;
 import auto.ssh.HostKeyVerifier;
-import auto.ssh.bean.NetStat;
 import auto.ssh.R;
+import auto.ssh.bean.NetStat;
 import auto.ssh.ui.activity.MainActivity;
 
 @SuppressLint("WakelockTimeout")
@@ -43,7 +43,6 @@ public class ForwardService extends Service {
     private static final int NOTIFICATION_ID = 2;
     private static final String CHANNEL_ID = "ForwardServiceChannel";
     private static final String CHANNEL_NAME = "ForwardServiceChannel";
-
 
     public static final String EXTRA_ACTION = "action";
     public static final String EXTRA_HOSTNAME = "hostname";
@@ -94,18 +93,18 @@ public class ForwardService extends Service {
         // 唤醒锁
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_TAG);
-
+        //返回主界面-out
         Intent returnIntent = new Intent(this, MainActivity.class);
         returnPI = PendingIntent.getActivity(this, 0, returnIntent, 0);
-
+        //停止服务-in
         Intent stopIntent = new Intent(this, ForwardService.class);
         stopIntent.putExtra(EXTRA_ACTION, ACTION_SERVICE_STOP);
         stopPI = PendingIntent.getService(this, 0, stopIntent, 0);
-
+        //获取唤醒锁-in
         Intent acquireWakeupIntent = new Intent(this, ForwardService.class);
         acquireWakeupIntent.putExtra(EXTRA_ACTION, ACTION_WAKEUP_ACQUIRE);
         acquireWakeupPI = PendingIntent.getService(this, 0, acquireWakeupIntent, 0);
-
+        //释放唤醒锁-in
         Intent releaseWakeupIntent = new Intent(this, ForwardService.class);
         releaseWakeupIntent.putExtra(EXTRA_ACTION, ACTION_WAKEUP_RELEASE);
         releaseWakeupPI = PendingIntent.getService(this, 0, releaseWakeupIntent, 0);
@@ -124,6 +123,8 @@ public class ForwardService extends Service {
 
         if (action == ACTION_SERVICE_START) {
             startProxyThread(intent);
+        } else if (action == ACTION_SERVICE_STOP) {
+            stopProxyThread();
         } else if (action == ACTION_WAKEUP_ACQUIRE) {
             acquireWakeupLock();
         } else if (action == ACTION_WAKEUP_RELEASE) {
@@ -151,12 +152,12 @@ public class ForwardService extends Service {
         // 创建通知
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentTitle("远程连接")
+                .setContentTitle("内网穿透")
                 .setContentText(String.format("%1$s@%2$s", username, hostname))
                 .setContentIntent(returnPI)
                 .setSmallIcon(R.drawable.ic_logo_small)
-                .addAction(R.drawable.ic_logo_small, "断开连接", returnPI)
-                .addAction(R.drawable.ic_logo_small, "保持唤醒", acquireWakeupPI);
+                .addAction(R.drawable.ic_logo_small, "保持唤醒", acquireWakeupPI)
+                .addAction(R.drawable.ic_logo_small, "断开连接", stopPI);
 
         // 创建线程
         forwardThread = new Thread(() -> {
@@ -201,6 +202,7 @@ public class ForwardService extends Service {
                     command.close();
                 }
             } catch (IOException e) {
+                Logger.error("端口检查失败", e);
                 e.printStackTrace();
                 return;
             }
@@ -269,11 +271,11 @@ public class ForwardService extends Service {
         // 创建通知
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentTitle("远程连接")
+                .setContentTitle("内网穿透")
                 .setContentText("保持唤醒")
                 .setContentIntent(returnPI)
                 .setSmallIcon(R.drawable.ic_logo_small)
-                .addAction(R.drawable.ic_logo_small, "退出", returnPI)
+                .addAction(R.drawable.ic_logo_small, "断开连接", stopPI)
                 .addAction(R.drawable.ic_logo_small, "保持唤醒", acquireWakeupPI);
 
         startForeground(NOTIFICATION_ID, builder.build());
@@ -288,11 +290,10 @@ public class ForwardService extends Service {
         // 更新通知
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentTitle("远程连接")
-                .setContentText("解除唤醒")
+                .setContentTitle("内网穿透")
                 .setContentIntent(returnPI)
                 .setSmallIcon(R.drawable.ic_logo_small)
-                .addAction(R.drawable.ic_logo_small, "退出", returnPI)
+                .addAction(R.drawable.ic_logo_small, "断开连接", stopPI)
                 .addAction(R.drawable.ic_logo_small, "解除唤醒", releaseWakeupPI);
 
         startForeground(NOTIFICATION_ID, builder.build());

@@ -11,7 +11,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import java.net.URLEncoder;
 
 import auto.qinglong.R;
-import auto.qinglong.ui.activity.BaseActivity;
+import auto.qinglong.ui.BaseActivity;
 import auto.qinglong.database.sp.SettingSP;
 import auto.base.util.DeviceUnit;
 import auto.base.util.ToastUnit;

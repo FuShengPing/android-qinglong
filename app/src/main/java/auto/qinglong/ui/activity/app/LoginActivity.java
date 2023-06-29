@@ -11,12 +11,12 @@ import android.widget.ImageView;
 
 import auto.base.util.WindowUnit;
 import auto.qinglong.R;
-import auto.qinglong.ui.activity.BaseActivity;
+import auto.qinglong.ui.BaseActivity;
 import auto.qinglong.bean.app.Account;
-import auto.qinglong.bean.ql.QLSystem;
+import auto.qinglong.bean.panel.QLSystem;
 import auto.qinglong.database.sp.AccountSP;
-import auto.qinglong.network.http.NetManager;
-import auto.qinglong.network.http.QLApiController;
+import auto.qinglong.net.NetManager;
+import auto.qinglong.net.panel.v10.ApiController;
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
 import auto.qinglong.utils.WebUnit;
@@ -147,7 +147,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     protected void netQuerySystemInfo(Account account) {
-        QLApiController.getSystemInfo(this.getNetRequestID(), account, new QLApiController.NetSystemCallback() {
+        ApiController.getSystemInfo(this.getNetRequestID(), account, new ApiController.NetSystemCallback() {
             @Override
             public void onSuccess(QLSystem system) {
                 QLSystem.setStaticVersion(system.getVersion());
@@ -177,7 +177,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     protected void netCheckToken(Account account) {
-        QLApiController.checkToken(this.getNetRequestID(), account, new QLApiController.NetBaseCallback() {
+        ApiController.checkToken(this.getNetRequestID(), account, new ApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
                 enterHome();
@@ -191,7 +191,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     protected void netLogin(Account account) {
-        QLApiController.login(this.getNetRequestID(), account, new QLApiController.NetLoginCallback() {
+        ApiController.login(this.getNetRequestID(), account, new ApiController.NetLoginCallback() {
             @Override
             public void onSuccess(Account account) {
                 AccountSP.updateCurrentAccount(account);

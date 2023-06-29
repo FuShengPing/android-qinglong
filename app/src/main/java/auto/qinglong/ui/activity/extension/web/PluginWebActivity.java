@@ -26,15 +26,15 @@ import java.util.Map;
 import auto.base.util.WindowUnit;
 import auto.base.view.popup.PopMenuObject;
 import auto.qinglong.R;
-import auto.qinglong.ui.activity.BaseActivity;
+import auto.qinglong.ui.BaseActivity;
 import auto.qinglong.bean.app.WebRule;
-import auto.qinglong.bean.ql.QLEnvironment;
+import auto.qinglong.bean.panel.QLEnvironment;
 import auto.qinglong.database.db.WebRuleDBHelper;
-import auto.qinglong.network.http.QLApiController;
+import auto.qinglong.net.panel.v10.ApiController;
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
 import auto.qinglong.utils.WebUnit;
-import auto.qinglong.bean.views.WebViewBuilder;
+import auto.qinglong.net.web.WebViewBuilder;
 import auto.base.view.popup.PopConfirmWindow;
 import auto.base.view.popup.PopMenuWindow;
 import auto.base.view.popup.PopupWindowBuilder;
@@ -241,7 +241,7 @@ public class PluginWebActivity extends BaseActivity {
     }
 
     private void netGetEnvironments(QLEnvironment environment) {
-        QLApiController.getEnvironments(getNetRequestID(), "", new QLApiController.NetGetEnvironmentsCallback() {
+        ApiController.getEnvironments(getNetRequestID(), "", new ApiController.NetGetEnvironmentsCallback() {
             @Override
             public void onSuccess(List<QLEnvironment> environments) {
                 for (QLEnvironment qlEnvironment : environments) {
@@ -264,7 +264,7 @@ public class PluginWebActivity extends BaseActivity {
     }
 
     public void netUpdateEnvironment(QLEnvironment environment) {
-        QLApiController.updateEnvironment(getNetRequestID(), environment, new QLApiController.NetEditEnvCallback() {
+        ApiController.updateEnvironment(getNetRequestID(), environment, new ApiController.NetEditEnvCallback() {
             @Override
             public void onSuccess(QLEnvironment environment) {
                 ToastUnit.showShort("导入成功");
@@ -278,7 +278,7 @@ public class PluginWebActivity extends BaseActivity {
     }
 
     public void netAddEnvironments(List<QLEnvironment> environments) {
-        QLApiController.addEnvironment(getNetRequestID(), environments, new QLApiController.NetGetEnvironmentsCallback() {
+        ApiController.addEnvironment(getNetRequestID(), environments, new ApiController.NetGetEnvironmentsCallback() {
             @Override
             public void onSuccess(List<QLEnvironment> qlEnvironments) {
                 ToastUnit.showShort("导入成功");
