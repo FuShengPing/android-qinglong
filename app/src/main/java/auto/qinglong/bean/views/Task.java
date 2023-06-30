@@ -111,11 +111,7 @@ public class Task extends Base implements Comparable<Task> {
 
     @Override
     public int compareTo(Task o) {
-        if (this.stateCode == STATE_RUNNING && o.stateCode == STATE_WAITING) {
-            return -1;
-        } else if (this.stateCode == STATE_WAITING && o.stateCode == STATE_RUNNING) {
-            return 1;
-        } else if (this.isPinned && !o.isPinned) {
+        if (this.isPinned && !o.isPinned) {
             return -1;
         } else if (!this.isPinned && o.isPinned) {
             return 1;

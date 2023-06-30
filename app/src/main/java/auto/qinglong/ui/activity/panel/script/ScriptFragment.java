@@ -111,7 +111,7 @@ public class ScriptFragment extends BaseFragment {
                 } else {
                     Intent intent = new Intent(getContext(), CodeWebActivity.class);
                     intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_NAME, script.getTitle());
-                    intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_PARENT, script.getParent());
+                    intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_DIR, script.getParent());
                     intent.putExtra(CodeWebActivity.EXTRA_TITLE, script.getTitle());
                     intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_SCRIPT);
                     intent.putExtra(CodeWebActivity.EXTRA_CAN_EDIT, true);

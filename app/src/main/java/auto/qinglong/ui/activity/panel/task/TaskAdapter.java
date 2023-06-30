@@ -17,7 +17,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import auto.qinglong.R;
-import auto.qinglong.bean.panel.QLTask;
 import auto.qinglong.bean.views.Task;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> {
@@ -26,7 +25,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
     Context context;
     private ActionListener actionListener;
     private List<Task> data;
-    private boolean checkState;
+    private boolean onCheck;
     private boolean[] dataCheckState;
 
     private final int colorBlue;
@@ -36,7 +35,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
     public TaskAdapter(Context context) {
         this.context = context;
         this.data = new ArrayList<>();
-        this.checkState = false;
+        this.onCheck = false;
         this.colorBlue = context.getColor(R.color.theme_blue_color_shadow);
         this.colorRed = context.getColor(R.color.text_color_red);
         this.colorGray = context.getColor(R.color.text_color_49);
@@ -74,6 +73,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
             holder.ui_action.setImageResource(R.drawable.ic_blue_start);
         }
 
+        if (this.onCheck) {
+            holder.ui_action.setVisibility(View.INVISIBLE);
+        } else {
+            holder.ui_action.setVisibility(View.VISIBLE);
+        }
+
         if (task.isPinned()) {
             holder.ui_pinned.setVisibility(View.VISIBLE);
         } else {
@@ -81,7 +86,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
         }
 
         //复选框
-        if (checkState) {
+        if (onCheck) {
             holder.ui_check.setChecked(dataCheckState[position]);
             holder.ui_check.setOnCheckedChangeListener((buttonView, isChecked) -> dataCheckState[holder.getAdapterPosition()] = isChecked);
             holder.ui_check.setVisibility(View.VISIBLE);
@@ -90,7 +95,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
         }
 
         holder.ui_title.setOnClickListener(v -> {
-            if (this.checkState) {
+            if (this.onCheck) {
                 holder.ui_check.setChecked(!holder.ui_check.isChecked());
             } else {
                 actionListener.onLog(task);
@@ -98,20 +103,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
         });
 
         holder.ui_title.setOnLongClickListener(v -> {
-//            if (!this.checkState && task.getCommand().startsWith("task ")) {
-//                String[] path = task.getCommand().replace("task", "").split("/");
-//                if (path.length == 1) {
-//                    actionListener.onScript("", path[0].trim());
-//                } else if (path.length == 2) {
-//                    actionListener.onScript(path[0].trim(), path[1].trim());
-//                }
-//            }
-            actionListener.onScript(task);
+            if(!this.onCheck){
+                actionListener.onScript(task);
+            }
             return true;
         });
 
         holder.ui_action.setOnClickListener(v -> {
-            if (this.checkState) {
+            if (this.onCheck) {
                 holder.ui_check.setChecked(!holder.ui_check.isChecked());
             } else if (task.getStateCode() == Task.STATE_LIMIT || task.getStateCode() == Task.STATE_FREE) {
                 actionListener.onRun(task);
@@ -121,13 +120,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
         });
 
         holder.itemView.setOnClickListener(v -> {
-            if (this.checkState) {
+            if (this.onCheck) {
                 holder.ui_check.setChecked(!holder.ui_check.isChecked());
             }
         });
 
         holder.itemView.setOnLongClickListener(v -> {
-            if (!this.checkState) {
+            if (!this.onCheck) {
                 actionListener.onEdit(task);
             }
             return true;
@@ -156,39 +155,39 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
         this.actionListener = itemActionListener;
     }
 
-    public boolean getCheckState() {
-        return checkState;
+    public boolean getOnCheck() {
+        return onCheck;
     }
 
-    public void setCheckState(boolean checkState) {
-        this.checkState = checkState;
+    public void setOnCheck(boolean onCheck) {
+        this.onCheck = onCheck;
         Arrays.fill(this.dataCheckState, false);
         notifyItemRangeChanged(0, getItemCount());
     }
 
     public void selectAll(boolean isSelected) {
-        if (this.checkState) {
+        if (this.onCheck) {
             Arrays.fill(this.dataCheckState, isSelected);
             notifyItemRangeChanged(0, this.data.size());
         }
     }
 
-    public List<QLTask> getCheckedItems() {
-        List<QLTask> tasks = new ArrayList<>();
-//        if (dataCheckState != null) {
-//            for (int k = 0; k < dataCheckState.length; k++) {
-//                if (dataCheckState[k]) {
-//                    tasks.add(this.data.get(k));
-//                }
-//            }
-//        }
+    public List<Task> getCheckedItems() {
+        List<Task> tasks = new ArrayList<>();
+        if (dataCheckState != null) {
+            for (int k = 0; k < dataCheckState.length; k++) {
+                if (dataCheckState[k]) {
+                    tasks.add(this.data.get(k));
+                }
+            }
+        }
         return tasks;
     }
 
     public interface ActionListener {
-        void onStop(Task task);
-
         void onRun(Task task);
+
+        void onStop(Task task);
 
         void onEdit(Task task);
 

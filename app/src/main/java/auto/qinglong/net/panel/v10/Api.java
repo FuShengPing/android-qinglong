@@ -1,6 +1,5 @@
 package auto.qinglong.net.panel.v10;
 
-import auto.qinglong.net.panel.BaseRes;
 import auto.qinglong.bean.panel.network.QLDependenceRes;
 import auto.qinglong.bean.panel.network.QLDependenciesRes;
 import auto.qinglong.bean.panel.network.QLEnvEditRes;
@@ -13,7 +12,7 @@ import auto.qinglong.bean.panel.network.QLScriptsRes;
 import auto.qinglong.bean.panel.network.QLSimpleRes;
 import auto.qinglong.bean.panel.network.QLSystemRes;
 import auto.qinglong.bean.panel.network.QLTaskEditRes;
-import auto.qinglong.bean.panel.network.QLTasksRes;
+import auto.qinglong.net.panel.BaseRes;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;

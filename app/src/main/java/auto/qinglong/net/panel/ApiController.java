@@ -19,6 +19,35 @@ public class ApiController {
         auto.qinglong.net.panel.v10.ApiController.runTasks(baseUrl, authorization, keys, callBack);
     }
 
+    public static void stopTasks(@Nullable String baseUrl, @Nullable String authorization, List<Object> keys, BaseCallBack callBack) {
+        auto.qinglong.net.panel.v10.ApiController.stopTasks(baseUrl, authorization, keys, callBack);
+    }
+
+    public static void enableTasks(@Nullable String baseUrl, @Nullable String authorization, List<Object> keys, BaseCallBack callBack) {
+        auto.qinglong.net.panel.v10.ApiController.enableTasks(baseUrl, authorization, keys, callBack);
+    }
+
+    public static void disableTasks(@Nullable String baseUrl, @Nullable String authorization, List<Object> keys, BaseCallBack callBack) {
+        auto.qinglong.net.panel.v10.ApiController.disableTasks(baseUrl, authorization, keys, callBack);
+    }
+
+    public static void pinTasks(@Nullable String baseUrl, @Nullable String authorization, List<Object> keys, BaseCallBack callBack) {
+        auto.qinglong.net.panel.v10.ApiController.pinTasks(baseUrl, authorization, keys, callBack);
+    }
+
+    public static void unpinTasks(@Nullable String baseUrl, @Nullable String authorization, List<Object> keys, BaseCallBack callBack) {
+        auto.qinglong.net.panel.v10.ApiController.unpinTasks(baseUrl, authorization, keys, callBack);
+    }
+
+    public static void deleteTasks(@Nullable String baseUrl, @Nullable String authorization, List<Object> keys, BaseCallBack callBack) {
+        auto.qinglong.net.panel.v10.ApiController.deleteTasks(baseUrl, authorization, keys, callBack);
+    }
+
+    public static void createTask(@Nullable String baseUrl, @Nullable String authorization, Task task, BaseCallBack callBack) {
+
+    }
+
+
     public interface TaskCallBack {
         void onSuccess(List<Task> tasks);
 

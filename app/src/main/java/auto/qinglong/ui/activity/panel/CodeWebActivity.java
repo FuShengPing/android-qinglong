@@ -31,7 +31,7 @@ public class CodeWebActivity extends BaseActivity {
     public static final String EXTRA_TYPE = "type";
     public static final String EXTRA_LOG_PATH = "logPath";
     public static final String EXTRA_SCRIPT_NAME = "scriptName";
-    public static final String EXTRA_SCRIPT_PARENT = "scriptParent";
+    public static final String EXTRA_SCRIPT_DIR = "scriptDir";
     public static final String EXTRA_DEPENDENCE_ID = "dependenceId";
     public static final String EXTRA_CAN_REFRESH = "canRefresh";
     public static final String EXTRA_CAN_EDIT = "canEdit";
@@ -40,7 +40,7 @@ public class CodeWebActivity extends BaseActivity {
     public static final String TYPE_DEPENDENCE = "dependence";
     public static final String TYPE_CONFIG = "config";
 
-    private boolean mInitFlag = false;
+    private boolean init = false;
     private String mContent;
     private String mTitle;
     private String mType;
@@ -72,7 +72,7 @@ public class CodeWebActivity extends BaseActivity {
         mCanRefresh = getIntent().getBooleanExtra(EXTRA_CAN_REFRESH, true);
         mCanEdit = getIntent().getBooleanExtra(EXTRA_CAN_EDIT, false);
         mScriptName = getIntent().getStringExtra(EXTRA_SCRIPT_NAME);
-        mScriptParent = getIntent().getStringExtra(EXTRA_SCRIPT_PARENT);
+        mScriptParent = getIntent().getStringExtra(EXTRA_SCRIPT_DIR);
         mLogPath = getIntent().getStringExtra(EXTRA_LOG_PATH);
         mDependenceId = getIntent().getStringExtra(EXTRA_DEPENDENCE_ID);
 
@@ -168,7 +168,7 @@ public class CodeWebActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!mInitFlag) {
+        if (!init) {
             initWebView();
         }
     }
@@ -195,7 +195,7 @@ public class CodeWebActivity extends BaseActivity {
         ui_webView.setFocusable(false);
         ui_webView.loadUrl("file:///android_asset/web/editor.html");
 
-        mInitFlag = true;
+        init = true;
     }
 
     /**
