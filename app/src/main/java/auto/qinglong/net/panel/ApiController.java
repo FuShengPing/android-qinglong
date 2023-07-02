@@ -65,43 +65,6 @@ public class ApiController {
         });
     }
 
-    public static void checkAccountToken(@NonNull String baseUrl, @NonNull String authorization, BaseCallBack callBack) {
-        Call<SystemLogConfigRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .getSystemLogConfig(authorization);
-
-        call.enqueue(new Callback<SystemLogConfigRes>() {
-            @Override
-            public void onResponse(@NonNull Call<SystemLogConfigRes> call, @NonNull Response<SystemLogConfigRes> response) {
-                SystemLogConfigRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY + response.code());
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess();
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<SystemLogConfigRes> call, @NonNull Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
-            }
-        });
-    }
-
     public static void login(@NonNull String baseUrl, @NonNull Account account, LoginCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("username", account.getUsername());
@@ -137,6 +100,43 @@ public class ApiController {
 
             @Override
             public void onFailure(Call<LoginRes> call, Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                callBack.onFailure(t.getLocalizedMessage());
+            }
+        });
+    }
+
+    public static void checkAccountToken(@NonNull String baseUrl, @NonNull String authorization, BaseCallBack callBack) {
+        Call<SystemLogConfigRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .getSystemLogConfig(authorization);
+
+        call.enqueue(new Callback<SystemLogConfigRes>() {
+            @Override
+            public void onResponse(@NonNull Call<SystemLogConfigRes> call, @NonNull Response<SystemLogConfigRes> response) {
+                SystemLogConfigRes res = response.body();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callBack.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callBack.onFailure(ERROR_NO_BODY + response.code());
+                    }
+                } else {
+                    if (res.getCode() == 200) {
+                        callBack.onSuccess();
+                    } else {
+                        callBack.onFailure(res.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<SystemLogConfigRes> call, @NonNull Throwable t) {
                 if (call.isCanceled()) {
                     return;
                 }

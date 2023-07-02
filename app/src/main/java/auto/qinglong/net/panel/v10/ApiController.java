@@ -24,7 +24,6 @@ import auto.qinglong.bean.panel.network.QLEnvEditRes;
 import auto.qinglong.bean.panel.network.QLEnvironmentRes;
 import auto.qinglong.bean.panel.network.QLLogRemoveRes;
 import auto.qinglong.bean.panel.network.QLLoginLogsRes;
-import auto.qinglong.bean.panel.network.QLLoginRes;
 import auto.qinglong.bean.panel.network.QLLogsRes;
 import auto.qinglong.bean.panel.network.QLScriptsRes;
 import auto.qinglong.bean.panel.network.QLSimpleRes;
@@ -46,95 +45,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiController {
     private static final String ERROR_NO_BODY = "响应异常";
     private static final String ERROR_INVALID_AUTH = "登录信息失效";
-
-    public static void checkToken(@NonNull String requestId, @NonNull Account account, @NonNull NetBaseCallback callback) {
-        Call<QLLogRemoveRes> call = new Retrofit.Builder()
-                .baseUrl(account.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .getLogRemove(account.getAuthorization());
-
-        call.enqueue(new Callback<QLLogRemoveRes>() {
-            @Override
-            public void onResponse(@NonNull Call<QLLogRemoveRes> call, @NonNull Response<QLLogRemoveRes> response) {
-                NetManager.finishCall(requestId);
-                QLLogRemoveRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY + response.code());
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callback.onSuccess();
-                    } else {
-                        callback.onFailure(res.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<QLLogRemoveRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
-            }
-        });
-
-        NetManager.addCall(call, requestId);
-    }
-
-    public static void login(@NonNull String requestId, @NonNull Account account, @NonNull NetLoginCallback callback) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("username", account.getUsername());
-        jsonObject.addProperty("password", account.getPassword());
-        String json = jsonObject.toString();
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-
-        Call<QLLoginRes> call = new Retrofit.Builder()
-                .baseUrl(account.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .login(body);
-
-        call.enqueue(new Callback<QLLoginRes>() {
-            @Override
-            public void onResponse(@NonNull Call<QLLoginRes> call, @NonNull Response<QLLoginRes> response) {
-                NetManager.finishCall(requestId);
-                QLLoginRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        //设置会话信息
-                        account.setToken(res.getData().getToken());
-                        callback.onSuccess(account);
-                    } else {
-                        callback.onFailure(res.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<QLLoginRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
-            }
-        });
-        NetManager.addCall(call, requestId);
-    }
 
     public static void getTasks(String baseUrl, String authorization, String searchValue, auto.qinglong.net.panel.ApiController.TaskCallBack callback) {
         Call<TaskRes> call = new Retrofit.Builder()
