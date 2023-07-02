@@ -14,26 +14,28 @@ public class SystemInfoRes extends BaseRes {
     public void setData(SystemInfoObject data) {
         this.data = data;
     }
+
+    public static class SystemInfoObject {
+        private boolean isInitialized;
+        private String version;
+
+        public boolean isInitialized() {
+            return isInitialized;
+        }
+
+        public void setInitialized(boolean initialized) {
+            isInitialized = initialized;
+        }
+
+        public String getVersion() {
+            return version;
+        }
+
+        public void setVersion(String version) {
+            this.version = version;
+        }
+    }
 }
 
 
-class SystemInfoObject {
-    private boolean isInitialized;
-    private String version;
 
-    public boolean isInitialized() {
-        return isInitialized;
-    }
-
-    public void setInitialized(boolean initialized) {
-        isInitialized = initialized;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
-    }
-}

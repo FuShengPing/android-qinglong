@@ -128,11 +128,12 @@ public class CommonFragment extends BaseFragment {
     }
 
     protected void netLogin(Account account) {
-        ApiController.login(this.getNetRequestID(), account, new ApiController.NetLoginCallback() {
+        auto.qinglong.net.panel.ApiController.login(account.getBaseUrl(), account, new auto.qinglong.net.panel.ApiController.LoginCallBack() {
             @Override
-            public void onSuccess(Account account) {
+            public void onSuccess(String token) {
                 ui_security_username.setText(null);
                 ui_security_password.setText(null);
+                account.setToken(token);
                 PanelPreference.updateCurrentAccount(account);
                 ToastUnit.showShort("更新成功");
             }

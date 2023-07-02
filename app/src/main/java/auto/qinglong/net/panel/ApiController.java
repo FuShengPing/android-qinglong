@@ -2,11 +2,15 @@ package auto.qinglong.net.panel;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.JsonObject;
+
 import java.util.List;
 
+import auto.qinglong.bean.panel.Account;
 import auto.qinglong.bean.panel.SystemInfo;
 import auto.qinglong.bean.views.Task;
-import auto.qinglong.net.SystemLogConfigRes;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -21,7 +25,7 @@ public class ApiController {
     private static final String ERROR_NO_BODY = "响应异常";
     private static final String ERROR_INVALID_AUTH = "登录信息失效";
 
-    public static void getSystemInfo(@NonNull String baseUrl,@NonNull SystemCallBack callBack) {
+    public static void getSystemInfo(@NonNull String baseUrl, @NonNull SystemCallBack callBack) {
         Call<SystemInfoRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -98,6 +102,49 @@ public class ApiController {
         });
     }
 
+    public static void login(@NonNull String baseUrl, @NonNull Account account, LoginCallBack callBack) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("username", account.getUsername());
+        jsonObject.addProperty("password", account.getPassword());
+
+        String json = jsonObject.toString();
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
+        Call<LoginRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .login(requestBody);
+
+        call.enqueue(new Callback<LoginRes>() {
+            @Override
+            public void onResponse(Call<LoginRes> call, Response<LoginRes> response) {
+                LoginRes res = response.body();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callBack.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callBack.onFailure(ERROR_NO_BODY + response.code());
+                    }
+                } else {
+                    if (res.getCode() == 200) {
+                        callBack.onSuccess(res.getData().getToken());
+                    } else {
+                        callBack.onFailure(res.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginRes> call, Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                callBack.onFailure(t.getLocalizedMessage());
+            }
+        });
+    }
+
     public static void getTasks(@NonNull String baseUrl, @NonNull String authorization, String searchValue, TaskCallBack callback) {
         auto.qinglong.net.panel.v10.ApiController.getTasks(baseUrl, authorization, searchValue, callback);
     }
@@ -140,6 +187,12 @@ public class ApiController {
 
     public interface SystemCallBack {
         void onSuccess(SystemInfo system);
+
+        void onFailure(String msg);
+    }
+
+    public interface LoginCallBack {
+        void onSuccess(String token);
 
         void onFailure(String msg);
     }

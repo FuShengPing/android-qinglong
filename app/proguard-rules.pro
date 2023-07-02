@@ -32,3 +32,4 @@
 
 # Gson
 -keep class auto.qinglong.bean.**{*;} # 自定义数据模型的bean目录
+-keep class auto.qinglong.net.**{*;} # 自定义数据模型的bean目录

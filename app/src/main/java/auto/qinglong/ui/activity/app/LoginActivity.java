@@ -19,7 +19,6 @@ import auto.qinglong.bean.panel.Account;
 import auto.qinglong.bean.panel.SystemInfo;
 import auto.qinglong.database.sp.PanelPreference;
 import auto.qinglong.net.NetManager;
-import auto.qinglong.net.panel.v10.ApiController;
 import auto.qinglong.ui.BaseActivity;
 
 public class LoginActivity extends BaseActivity {
@@ -180,9 +179,10 @@ public class LoginActivity extends BaseActivity {
     }
 
     protected void login(Account account) {
-        ApiController.login(this.getNetRequestID(), account, new ApiController.NetLoginCallback() {
+        auto.qinglong.net.panel.ApiController.login(account.getBaseUrl(), account, new auto.qinglong.net.panel.ApiController.LoginCallBack() {
             @Override
-            public void onSuccess(Account account) {
+            public void onSuccess(String token) {
+                account.setToken(token);
                 PanelPreference.updateCurrentAccount(account);
                 enterHome();
             }

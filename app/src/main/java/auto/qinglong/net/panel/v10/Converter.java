@@ -13,9 +13,9 @@ import auto.qinglong.utils.CronUnit;
  * @version 2023.06.29
  */
 public class Converter {
-    public static List<Task> convertTasks(List<TaskObject> objects) {
+    public static List<Task> convertTasks(List<TaskRes.TaskObject> objects) {
         List<Task> results = new ArrayList<>();
-        for (TaskObject object : objects) {
+        for (TaskRes.TaskObject object : objects) {
             Task task = new Task(object.getId());
             task.setTitle(object.getName());
             task.setPinned(object.getIsPinned() == 1);
