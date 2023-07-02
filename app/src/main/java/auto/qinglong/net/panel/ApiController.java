@@ -21,7 +21,7 @@ public class ApiController {
     private static final String ERROR_NO_BODY = "响应异常";
     private static final String ERROR_INVALID_AUTH = "登录信息失效";
 
-    public static void getSystemInfo(@NonNull String baseUrl, SystemCallBack callBack) {
+    public static void getSystemInfo(@NonNull String baseUrl,@NonNull SystemCallBack callBack) {
         Call<SystemInfoRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())

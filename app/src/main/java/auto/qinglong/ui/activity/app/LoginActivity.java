@@ -21,7 +21,6 @@ import auto.qinglong.database.sp.PanelPreference;
 import auto.qinglong.net.NetManager;
 import auto.qinglong.net.panel.v10.ApiController;
 import auto.qinglong.ui.BaseActivity;
-import auto.qinglong.utils.WebUnit;
 
 public class LoginActivity extends BaseActivity {
     public static final String TAG = "LoginActivity";
@@ -76,8 +75,6 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void init() {
-        ui_logo.setOnClickListener(v -> WebUnit.open(this, getString(R.string.url_project)));
-
         ui_password.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 ui_password.clearFocus();
@@ -125,7 +122,6 @@ public class LoginActivity extends BaseActivity {
             account.setToken(PanelPreference.getAuthorization(address, username, password));
             //检测系统是否初始化和版本信息(延迟500ms)
             new Handler().postDelayed(() -> querySystemInfo(account), 500);
-
         });
 
         //显示之前账号

@@ -9,7 +9,7 @@ import auto.qinglong.net.panel.BaseRes;
  * @version 2023.06.29
  */
 public class TaskRes extends BaseRes {
-    List<TaskObject> data;
+    private List<TaskObject> data;
 
     public List<TaskObject> getData() {
         return data;
