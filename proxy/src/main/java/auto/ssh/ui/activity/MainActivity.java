@@ -19,6 +19,7 @@ import java.util.List;
 import auto.base.BaseApplication;
 import auto.base.util.LogUnit;
 import auto.ssh.R;
+import auto.ssh.data.ConfigPreference;
 import auto.ssh.service.ForwardService;
 import auto.ssh.service.ProxyService;
 
@@ -131,8 +132,8 @@ public class MainActivity extends BaseActivity {
 
     private void startProxyService() {
         Intent intent = new Intent(BaseApplication.getContext(), ProxyService.class);
-        intent.putExtra(ProxyService.EXTRA_ADDRESS, "127.0.0.1");
-        intent.putExtra(ProxyService.EXTRA_PORT, 9100);
+        intent.putExtra(ProxyService.EXTRA_ADDRESS, ConfigPreference.getLocalAddress());
+        intent.putExtra(ProxyService.EXTRA_PORT, ConfigPreference.getLocalPort());
         startService(intent);
     }
 
@@ -144,9 +145,9 @@ public class MainActivity extends BaseActivity {
     private void startForwardService() {
         Intent intent = new Intent(BaseApplication.getContext(), ForwardService.class);
         intent.putExtra(ForwardService.EXTRA_ACTION, ForwardService.ACTION_SERVICE_START);
-        intent.putExtra(ForwardService.EXTRA_HOSTNAME, "60.205.228.46");
+        intent.putExtra(ForwardService.EXTRA_HOSTNAME, "114.67.238.143");
         intent.putExtra(ForwardService.EXTRA_USERNAME, "root");
-        intent.putExtra(ForwardService.EXTRA_PASSWORD, "aly@123456Fsp");
+        intent.putExtra(ForwardService.EXTRA_PASSWORD, "jdy@123456fsp");
         intent.putExtra(ForwardService.EXTRA_REMOTE_ADDRESS, "0.0.0.0");
         intent.putExtra(ForwardService.EXTRA_REMOTE_PORT, 9100);
         intent.putExtra(ForwardService.EXTRA_LOCAL_ADDRESS, "127.0.0.1");

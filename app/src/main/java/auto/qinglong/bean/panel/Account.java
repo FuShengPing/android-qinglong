@@ -1,4 +1,4 @@
-package auto.qinglong.bean.app;
+package auto.qinglong.bean.panel;
 
 public class Account {
     private String username;
@@ -56,7 +56,7 @@ public class Account {
     }
 
     /**
-     * @return 当前账号的URL
+     * @return 当前账号的URL HOST
      */
     public String getBaseUrl() {
         return (address.startsWith("http") ? "" : "http://") + address + "/";

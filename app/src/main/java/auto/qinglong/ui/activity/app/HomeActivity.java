@@ -24,8 +24,8 @@ import auto.base.view.popup.PopupWindowBuilder;
 import auto.qinglong.R;
 import auto.qinglong.bean.app.Version;
 import auto.qinglong.bean.panel.QLSystem;
-import auto.qinglong.database.sp.AccountSP;
-import auto.qinglong.database.sp.SettingSP;
+import auto.qinglong.database.sp.PanelPreference;
+import auto.qinglong.database.sp.SettingPreference;
 import auto.qinglong.net.app.ApiController;
 import auto.qinglong.ui.BaseActivity;
 import auto.qinglong.ui.BaseFragment;
@@ -115,10 +115,10 @@ public class HomeActivity extends BaseActivity {
         ui_drawer_left.setVisibility(View.INVISIBLE);
         //用户名
         TextView ui_username = ui_drawer_left.findViewById(R.id.menu_top_info_username);
-        ui_username.setText(Objects.requireNonNull(AccountSP.getCurrentAccount()).getUsername());
+        ui_username.setText(Objects.requireNonNull(PanelPreference.getCurrentAccount()).getUsername());
         //面板地址
         TextView ui_address = ui_drawer_left.findViewById(R.id.menu_top_info_address);
-        ui_address.setText(AccountSP.getCurrentAccount().getAddress());
+        ui_address.setText(PanelPreference.getCurrentAccount().getAddress());
         //面板版本
         TextView ui_version = ui_drawer_left.findViewById(R.id.menu_top_info_version);
         ui_version.setText(String.format(getString(R.string.format_tip_version), QLSystem.getStaticVersion()));
@@ -214,7 +214,7 @@ public class HomeActivity extends BaseActivity {
         try {
             int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
             //若版本强制更新 即使停用更新推送仍会要求更新
-            if (version.getVersionCode() > versionCode && (version.isForce() || SettingSP.isNotify())) {
+            if (version.getVersionCode() > versionCode && (version.isForce() || SettingPreference.isNotify())) {
                 showVersionNotice(version);
             }
         } catch (PackageManager.NameNotFoundException e) {
@@ -246,7 +246,7 @@ public class HomeActivity extends BaseActivity {
 
     private void netGetVersion() {
         ApiController.getProject(getNetRequestID());
-        String uid = EncryptUtil.md5(AccountSP.getAddress());
+        String uid = EncryptUtil.md5(PanelPreference.getAddress());
         ApiController.getVersion(getNetRequestID(), uid, new ApiController.VersionCallback() {
             @Override
             public void onSuccess(Version version) {

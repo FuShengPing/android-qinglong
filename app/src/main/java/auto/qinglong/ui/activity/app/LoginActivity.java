@@ -9,19 +9,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import auto.base.util.WindowUnit;
-import auto.qinglong.R;
-import auto.qinglong.ui.BaseActivity;
-import auto.qinglong.bean.app.Account;
-import auto.qinglong.bean.panel.QLSystem;
-import auto.qinglong.database.sp.AccountSP;
-import auto.qinglong.net.NetManager;
-import auto.qinglong.net.panel.v10.ApiController;
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
-import auto.qinglong.utils.WebUnit;
+import auto.base.util.WindowUnit;
 import auto.base.view.popup.PopProgressWindow;
 import auto.base.view.popup.PopupWindowBuilder;
+import auto.qinglong.R;
+import auto.qinglong.bean.panel.Account;
+import auto.qinglong.bean.panel.SystemInfo;
+import auto.qinglong.database.sp.PanelPreference;
+import auto.qinglong.net.NetManager;
+import auto.qinglong.net.panel.v10.ApiController;
+import auto.qinglong.ui.BaseActivity;
+import auto.qinglong.utils.WebUnit;
 
 public class LoginActivity extends BaseActivity {
     public static final String TAG = "LoginActivity";
@@ -122,14 +122,14 @@ public class LoginActivity extends BaseActivity {
 
             Account account = new Account(username, password, address, "");
             //账号存在本地则尝试旧token 避免重复登录
-            account.setToken(AccountSP.getAuthorization(address, username, password));
+            account.setToken(PanelPreference.getAuthorization(address, username, password));
             //检测系统是否初始化和版本信息(延迟500ms)
-            new Handler().postDelayed(() -> netQuerySystemInfo(account), 500);
+            new Handler().postDelayed(() -> querySystemInfo(account), 500);
 
         });
 
         //显示之前账号
-        Account account = AccountSP.getCurrentAccount();
+        Account account = PanelPreference.getCurrentAccount();
         if (account != null) {
             ui_address.setText(account.getAddress());
             ui_username.setText(account.getUsername());
@@ -146,25 +146,18 @@ public class LoginActivity extends BaseActivity {
         finish();
     }
 
-    protected void netQuerySystemInfo(Account account) {
-        ApiController.getSystemInfo(this.getNetRequestID(), account, new ApiController.NetSystemCallback() {
+    protected void querySystemInfo(Account account) {
+        auto.qinglong.net.panel.ApiController.getSystemInfo(account.getBaseUrl(), new auto.qinglong.net.panel.ApiController.SystemCallBack() {
             @Override
-            public void onSuccess(QLSystem system) {
-                QLSystem.setStaticVersion(system.getVersion());
-                if (!system.getVersion().startsWith("2.10")) {
-                    ToastUnit.showShort("仅支持2.10.x面板");
-                    ui_pop_progress.dismiss();
-                    return;
-                }
-                if (system.isInitialized()) {
-                    if (TextUnit.isFull(account.getToken())) {
-                        netCheckToken(account);
-                    } else {
-                        netLogin(account);
-                    }
-                } else {
+            public void onSuccess(SystemInfo system) {
+                PanelPreference.setVersion(system.getVersion());
+                if (!system.isInitialized()) {
                     ui_pop_progress.dismiss();
                     ToastUnit.showShort("系统未初始化，无法登录");
+                } else if (TextUnit.isFull(account.getToken())) {
+                    checkAccountToken(account);
+                } else {
+                    login(account);
                 }
             }
 
@@ -176,8 +169,8 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    protected void netCheckToken(Account account) {
-        ApiController.checkToken(this.getNetRequestID(), account, new ApiController.NetBaseCallback() {
+    protected void checkAccountToken(Account account) {
+        auto.qinglong.net.panel.ApiController.checkAccountToken(account.getBaseUrl(), account.getAuthorization(), new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 enterHome();
@@ -185,16 +178,16 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                netLogin(account);
+                login(account);
             }
         });
     }
 
-    protected void netLogin(Account account) {
+    protected void login(Account account) {
         ApiController.login(this.getNetRequestID(), account, new ApiController.NetLoginCallback() {
             @Override
             public void onSuccess(Account account) {
-                AccountSP.updateCurrentAccount(account);
+                PanelPreference.updateCurrentAccount(account);
                 enterHome();
             }
 

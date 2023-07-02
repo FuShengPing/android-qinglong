@@ -5,14 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import auto.qinglong.R;
-import auto.qinglong.ui.BaseActivity;
-import auto.qinglong.bean.app.Account;
-import auto.qinglong.bean.panel.QLSystem;
-import auto.qinglong.database.sp.AccountSP;
-import auto.qinglong.net.panel.v10.ApiController;
 import auto.base.util.NetUnit;
 import auto.base.util.ToastUnit;
+import auto.qinglong.R;
+import auto.qinglong.bean.panel.Account;
+import auto.qinglong.bean.panel.SystemInfo;
+import auto.qinglong.database.sp.PanelPreference;
+import auto.qinglong.ui.BaseActivity;
 
 
 @SuppressLint("CustomSplashScreen")
@@ -53,16 +52,16 @@ public class SplashActivity extends BaseActivity {
             return;
         }
         //当前账号
-        Account account = AccountSP.getCurrentAccount();
+        Account account = PanelPreference.getCurrentAccount();
         if (account != null) {
-            netQuerySystemInfo(account);
+            querySystemInfo(account);
         } else {
             enterActivity(false);
         }
     }
 
-    private void netCheckAccountValid(Account account) {
-        ApiController.checkToken(getNetRequestID(), account, new ApiController.NetBaseCallback() {
+    private void checkAccountToken(Account account) {
+        auto.qinglong.net.panel.ApiController.checkAccountToken(account.getBaseUrl(), account.getAuthorization(), new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 enterActivity(true);
@@ -75,12 +74,12 @@ public class SplashActivity extends BaseActivity {
         });
     }
 
-    protected void netQuerySystemInfo(Account account) {
-        ApiController.getSystemInfo(this.getNetRequestID(), account, new ApiController.NetSystemCallback() {
+    protected void querySystemInfo(Account account) {
+        auto.qinglong.net.panel.ApiController.getSystemInfo(account.getBaseUrl(), new auto.qinglong.net.panel.ApiController.SystemCallBack() {
             @Override
-            public void onSuccess(QLSystem system) {
-                QLSystem.setStaticVersion(system.getVersion());
-                netCheckAccountValid(account);
+            public void onSuccess(SystemInfo system) {
+                PanelPreference.setVersion(system.getVersion());
+                checkAccountToken(account);
             }
 
             @Override

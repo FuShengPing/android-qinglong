@@ -3,23 +3,25 @@ package auto.qinglong.database.sp;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import auto.qinglong.MyApplication;
-import auto.qinglong.bean.app.Account;
+import auto.base.BaseApplication;
+import auto.qinglong.bean.panel.Account;
 
-public class AccountSP {
-    private static final String TABLE = "ACCOUNT";
-    public static final String FIELD_USERNAME = "username";
-    public static final String FIELD_PASSWORD = "password";
-    public static final String FIELD_ADDRESS = "address";
-    public static final String FIELD_TOKEN = "token";
-    public static final String DEFAULT_VALUE = "";
+public class PanelPreference {
+    private static final String NAME = "PanelPreference";
+    public static final String KEY_USERNAME = "username";
+    public static final String KEY_PASSWORD = "password";
+    public static final String KEY_ADDRESS = "address";
+    public static final String KEY_TOKEN = "token";
+    public static final String KEY_VERSION = "version";
+
+    private static final String DEFAULT_EMPTY = "";
 
     private static String mAuthorization = null;
     private static String mBaseUrl = null;
     private static final SharedPreferences sp;
 
     static {
-        sp = MyApplication.getContext().getSharedPreferences(TABLE, Context.MODE_PRIVATE);
+        sp = BaseApplication.getContext().getSharedPreferences(NAME, Context.MODE_PRIVATE);
     }
 
     /**
@@ -28,13 +30,13 @@ public class AccountSP {
      * @return 当前账号
      */
     public static Account getCurrentAccount() {
-        String address = sp.getString(FIELD_ADDRESS, DEFAULT_VALUE);
+        String address = sp.getString(KEY_ADDRESS, DEFAULT_EMPTY);
         if (address.isEmpty()) {
             return null;
         }
-        String username = sp.getString(FIELD_USERNAME, DEFAULT_VALUE);
-        String password = sp.getString(FIELD_PASSWORD, DEFAULT_VALUE);
-        String token = sp.getString(FIELD_TOKEN, DEFAULT_VALUE);
+        String username = sp.getString(KEY_USERNAME, DEFAULT_EMPTY);
+        String password = sp.getString(KEY_PASSWORD, DEFAULT_EMPTY);
+        String token = sp.getString(KEY_TOKEN, DEFAULT_EMPTY);
         Account account = new Account(username, password, address, token);
         account.setCurrent(true);
         return account;
@@ -47,7 +49,7 @@ public class AccountSP {
      */
     public static String getAuthorization() {
         if (mAuthorization == null) {
-            mAuthorization = "Bearer " + sp.getString(FIELD_TOKEN, DEFAULT_VALUE);
+            mAuthorization = "Bearer " + sp.getString(KEY_TOKEN, DEFAULT_EMPTY);
         }
         return mAuthorization;
     }
@@ -59,12 +61,12 @@ public class AccountSP {
      * @return the authorization 指定地址的会话
      */
     public static String getAuthorization(String address, String username, String password) {
-        String curAddress = sp.getString(FIELD_ADDRESS, DEFAULT_VALUE);
-        String curUsername = sp.getString(FIELD_USERNAME, DEFAULT_VALUE);
-        String curPassword = sp.getString(FIELD_PASSWORD, DEFAULT_VALUE);
+        String curAddress = sp.getString(KEY_ADDRESS, DEFAULT_EMPTY);
+        String curUsername = sp.getString(KEY_USERNAME, DEFAULT_EMPTY);
+        String curPassword = sp.getString(KEY_PASSWORD, DEFAULT_EMPTY);
         boolean flag = curAddress.equals(address) && curPassword.equals(password) && curUsername.equals(username);
         if (flag) {
-            return sp.getString(FIELD_TOKEN, DEFAULT_VALUE);
+            return sp.getString(KEY_TOKEN, DEFAULT_EMPTY);
         } else {
             return null;
         }
@@ -77,13 +79,13 @@ public class AccountSP {
      */
     public static String getBaseUrl() {
         if (mBaseUrl == null) {
-            mBaseUrl = "http://" + sp.getString(FIELD_ADDRESS, DEFAULT_VALUE) + "/";
+            mBaseUrl = "http://" + sp.getString(KEY_ADDRESS, DEFAULT_EMPTY) + "/";
         }
         return mBaseUrl;
     }
 
     public static String getAddress() {
-        return sp.getString(FIELD_ADDRESS, DEFAULT_VALUE);
+        return sp.getString(KEY_ADDRESS, DEFAULT_EMPTY);
     }
 
     /**
@@ -93,17 +95,27 @@ public class AccountSP {
      */
     public static void updateCurrentAccount(Account account) {
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString(FIELD_USERNAME, account.getUsername());
-        editor.putString(FIELD_PASSWORD, account.getPassword());
-        editor.putString(FIELD_TOKEN, account.getToken());
+        editor.putString(KEY_USERNAME, account.getUsername());
+        editor.putString(KEY_PASSWORD, account.getPassword());
+        editor.putString(KEY_TOKEN, account.getToken());
 
         if (account.getAddress() != null) {
-            editor.putString(FIELD_ADDRESS, account.getAddress());
+            editor.putString(KEY_ADDRESS, account.getAddress());
         }
 
         mBaseUrl = null;
         mAuthorization = null;
 
+        editor.apply();
+    }
+
+    public static String getVersion() {
+        return sp.getString(KEY_VERSION, DEFAULT_EMPTY);
+    }
+
+    public static void setVersion(String version) {
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(KEY_VERSION, version);
         editor.apply();
     }
 }

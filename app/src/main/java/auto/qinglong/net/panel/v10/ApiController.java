@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 import auto.base.util.LogUnit;
-import auto.qinglong.bean.app.Account;
+import auto.qinglong.bean.panel.Account;
 import auto.qinglong.bean.panel.QLDependence;
 import auto.qinglong.bean.panel.QLEnvironment;
 import auto.qinglong.bean.panel.QLLog;
@@ -29,8 +29,8 @@ import auto.qinglong.bean.panel.network.QLLogsRes;
 import auto.qinglong.bean.panel.network.QLScriptsRes;
 import auto.qinglong.bean.panel.network.QLSimpleRes;
 import auto.qinglong.bean.panel.network.QLSystemRes;
-import auto.qinglong.bean.panel.network.QLTaskEditRes;
-import auto.qinglong.database.sp.AccountSP;
+import auto.qinglong.bean.views.Task;
+import auto.qinglong.database.sp.PanelPreference;
 import auto.qinglong.net.NetManager;
 import auto.qinglong.net.panel.BaseRes;
 import okhttp3.MediaType;
@@ -47,47 +47,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiController {
     private static final String ERROR_NO_BODY = "响应异常";
     private static final String ERROR_INVALID_AUTH = "登录信息失效";
-
-    public static void getSystemInfo(@NonNull String requestId, @NonNull Account account, @NonNull NetSystemCallback callback) {
-        Call<QLSystemRes> call = new Retrofit.Builder()
-                .baseUrl(account.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .getSystemInfo();
-
-        call.enqueue(new Callback<QLSystemRes>() {
-            @Override
-            public void onResponse(@NonNull Call<QLSystemRes> call, @NonNull Response<QLSystemRes> response) {
-                NetManager.finishCall(requestId);
-                QLSystemRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY + response.code());
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callback.onSuccess(res.getData());
-                    } else {
-                        callback.onFailure(res.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<QLSystemRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
-            }
-        });
-
-        NetManager.addCall(call, requestId);
-    }
 
     public static void checkToken(@NonNull String requestId, @NonNull Account account, @NonNull NetBaseCallback callback) {
         Call<QLLogRemoveRes> call = new Retrofit.Builder()
@@ -523,356 +482,104 @@ public class ApiController {
         });
     }
 
-    public static void enableTasks(@NonNull String requestId, @NonNull List<String> taskIds, @NonNull NetBaseCallback callback) {
-        JsonArray jsonArray = new JsonArray();
-        for (int i = 0; i < taskIds.size(); i++) {
-            jsonArray.add(taskIds.get(i));
-        }
-
-        String json = jsonArray.toString();
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .enableTasks(AccountSP.getAuthorization(), body);
-
-        call.enqueue(new Callback<BaseRes>() {
-            @Override
-            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
-                NetManager.finishCall(requestId);
-                BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY + response.code());
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callback.onSuccess();
-                    } else {
-                        callback.onFailure(res.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
-            }
-        });
-
-        NetManager.addCall(call, requestId);
-
-    }
-
-    public static void disableTasks(@NonNull String requestId, @NonNull List<String> taskIds, @NonNull NetBaseCallback callback) {
-        JsonArray jsonArray = new JsonArray();
-        for (int i = 0; i < taskIds.size(); i++) {
-            jsonArray.add(taskIds.get(i));
-        }
-
-        String json = jsonArray.toString();
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .disableTasks(AccountSP.getAuthorization(), body);
-
-        call.enqueue(new Callback<BaseRes>() {
-            @Override
-            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
-                NetManager.finishCall(requestId);
-                BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY + response.code());
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callback.onSuccess();
-                    } else {
-                        callback.onFailure(res.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
-            }
-        });
-
-        NetManager.addCall(call, requestId);
-
-    }
-
-    public static void pinTasks(@NonNull String requestId, @NonNull List<String> taskIds, @NonNull NetBaseCallback callback) {
-        JsonArray jsonArray = new JsonArray();
-        for (int i = 0; i < taskIds.size(); i++) {
-            jsonArray.add(taskIds.get(i));
-        }
-
-        String json = jsonArray.toString();
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .pinTasks(AccountSP.getAuthorization(), body);
-
-        call.enqueue(new Callback<BaseRes>() {
-            @Override
-            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
-                NetManager.finishCall(requestId);
-                BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY + response.code());
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callback.onSuccess();
-                    } else {
-                        callback.onFailure(res.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
-            }
-        });
-
-        NetManager.addCall(call, requestId);
-
-    }
-
-    public static void unpinTasks(@NonNull String requestId, @NonNull List<String> taskIds, @NonNull NetBaseCallback callback) {
-        JsonArray jsonArray = new JsonArray();
-        for (int i = 0; i < taskIds.size(); i++) {
-            jsonArray.add(taskIds.get(i));
-        }
-
-        String json = jsonArray.toString();
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .unpinTasks(AccountSP.getAuthorization(), body);
-
-        call.enqueue(new Callback<BaseRes>() {
-            @Override
-            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
-                NetManager.finishCall(requestId);
-                BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY + response.code());
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callback.onSuccess();
-                    } else {
-                        callback.onFailure(res.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
-            }
-        });
-
-        NetManager.addCall(call, requestId);
-
-    }
-
-    public static void deleteTasks(@NonNull String requestId, @NonNull List<String> taskIds, @NonNull NetBaseCallback callback) {
-        JsonArray jsonArray = new JsonArray();
-        for (int i = 0; i < taskIds.size(); i++) {
-            jsonArray.add(taskIds.get(i));
-        }
-
-        String json = jsonArray.toString();
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .deleteTasks(AccountSP.getAuthorization(), body);
-
-        call.enqueue(new Callback<BaseRes>() {
-            @Override
-            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
-                NetManager.finishCall(requestId);
-                BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY + response.code());
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callback.onSuccess();
-                    } else {
-                        callback.onFailure(res.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
-            }
-        });
-
-        NetManager.addCall(call, requestId);
-
-    }
-
-    public static void editTask(@NonNull String requestId, @NonNull QLTask QLTask, @NonNull NetEditTaskCallback callback) {
+    public static void updateTask(String baseUrl, String authorization, Task task, auto.qinglong.net.panel.ApiController.BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("name", QLTask.getName());
-        jsonObject.addProperty("_id", QLTask.getId());
-        jsonObject.addProperty("command", QLTask.getCommand());
-        jsonObject.addProperty("schedule", QLTask.getSchedule());
+        jsonObject.addProperty("name", task.getTitle());
+        jsonObject.addProperty("_id", (String) task.getKey());
+        jsonObject.addProperty("command", task.getCommand());
+        jsonObject.addProperty("schedule", task.getSchedule());
 
         String json = jsonObject.toString();
 
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<QLTaskEditRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .updateTask(AccountSP.getAuthorization(), body);
+                .updateTask(authorization, body);
 
-        call.enqueue(new Callback<QLTaskEditRes>() {
+        call.enqueue(new Callback<BaseRes>() {
             @Override
-            public void onResponse(@NonNull Call<QLTaskEditRes> call, @NonNull Response<QLTaskEditRes> response) {
-                NetManager.finishCall(requestId);
-                QLTaskEditRes res = response.body();
+            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
+                BaseRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
+                        callBack.onFailure(ERROR_INVALID_AUTH);
                     } else {
-                        callback.onFailure(ERROR_NO_BODY + response.code());
+                        callBack.onFailure(ERROR_NO_BODY + response.code());
                     }
                 } else {
                     if (res.getCode() == 200) {
-                        callback.onSuccess(res.getData());
+                        callBack.onSuccess();
                     } else {
-                        callback.onFailure(res.getMessage());
+                        callBack.onFailure(res.getMessage());
                     }
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<QLTaskEditRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
+            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
                 if (call.isCanceled()) {
                     return;
                 }
-                callback.onFailure(t.getLocalizedMessage());
+                callBack.onFailure(t.getLocalizedMessage());
             }
         });
-
-        NetManager.addCall(call, requestId);
     }
 
-    public static void addTask(@NonNull String requestId, @NonNull QLTask QLTask, @NonNull NetEditTaskCallback callback) {
+    public static void createTask(String baseUrl, String authorization, Task task, auto.qinglong.net.panel.ApiController.BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("name", QLTask.getName());
-        jsonObject.addProperty("command", QLTask.getCommand());
-        jsonObject.addProperty("schedule", QLTask.getSchedule());
+        jsonObject.addProperty("name", task.getTitle());
+        jsonObject.addProperty("command", task.getCommand());
+        jsonObject.addProperty("schedule", task.getSchedule());
 
         String json = jsonObject.toString();
+
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<QLTaskEditRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .addTask(AccountSP.getAuthorization(), body);
+                .createTask(authorization, body);
 
-        call.enqueue(new Callback<QLTaskEditRes>() {
+        call.enqueue(new Callback<BaseRes>() {
             @Override
-            public void onResponse(@NonNull Call<QLTaskEditRes> call, @NonNull Response<QLTaskEditRes> response) {
-                NetManager.finishCall(requestId);
-                QLTaskEditRes res = response.body();
+            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
+                BaseRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
+                        callBack.onFailure(ERROR_INVALID_AUTH);
                     } else {
-                        callback.onFailure(ERROR_NO_BODY + response.code());
+                        callBack.onFailure(ERROR_NO_BODY + response.code());
                     }
                 } else {
                     if (res.getCode() == 200) {
-                        callback.onSuccess(res.getData());
+                        callBack.onSuccess();
                     } else {
-                        callback.onFailure(res.getMessage());
+                        callBack.onFailure(res.getMessage());
                     }
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<QLTaskEditRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
+            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
                 if (call.isCanceled()) {
                     return;
                 }
-                callback.onFailure(t.getLocalizedMessage());
+                callBack.onFailure(t.getLocalizedMessage());
             }
         });
-
-        NetManager.addCall(call, requestId);
     }
 
     public static void getEnvironments(@NonNull String requestId, @NonNull String searchValue, @NonNull NetGetEnvironmentsCallback callback) {
         Call<QLEnvironmentRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+                .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .getEnvironments(AccountSP.getAuthorization(), searchValue);
+                .getEnvironments(PanelPreference.getAuthorization(), searchValue);
         call.enqueue(new Callback<QLEnvironmentRes>() {
             @Override
             public void onResponse(@NonNull Call<QLEnvironmentRes> call, @NonNull Response<QLEnvironmentRes> response) {
@@ -920,11 +627,11 @@ public class ApiController {
 
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
         Call<QLEnvironmentRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+                .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .addEnvironments(AccountSP.getAuthorization(), requestBody);
+                .addEnvironments(PanelPreference.getAuthorization(), requestBody);
 
         call.enqueue(new Callback<QLEnvironmentRes>() {
             @Override
@@ -970,11 +677,11 @@ public class ApiController {
         String json = jsonObject.toString();
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
         Call<QLEnvEditRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+                .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .updateEnvironment(AccountSP.getAuthorization(), requestBody);
+                .updateEnvironment(PanelPreference.getAuthorization(), requestBody);
 
         call.enqueue(new Callback<QLEnvEditRes>() {
             @Override
@@ -1018,11 +725,11 @@ public class ApiController {
         String json = jsonArray.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+                .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .deleteEnvironments(AccountSP.getAuthorization(), body);
+                .deleteEnvironments(PanelPreference.getAuthorization(), body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -1067,11 +774,11 @@ public class ApiController {
         String json = jsonArray.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+                .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .enableEnv(AccountSP.getAuthorization(), body);
+                .enableEnv(PanelPreference.getAuthorization(), body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -1116,11 +823,11 @@ public class ApiController {
         String json = jsonArray.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+                .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .disableEnv(AccountSP.getAuthorization(), body);
+                .disableEnv(PanelPreference.getAuthorization(), body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -1164,11 +871,11 @@ public class ApiController {
         String json = jsonObject.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+                .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .moveEnv(AccountSP.getAuthorization(), id, body);
+                .moveEnv(PanelPreference.getAuthorization(), id, body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -1207,11 +914,11 @@ public class ApiController {
 
     public static void getLogs(@NonNull String requestId, @NonNull NetGetLogsCallback callback) {
         Call<QLLogsRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+                .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .getLogs(AccountSP.getAuthorization());
+                .getLogs(PanelPreference.getAuthorization());
         call.enqueue(new Callback<QLLogsRes>() {
             @Override
             public void onResponse(@NonNull Call<QLLogsRes> call, @NonNull Response<QLLogsRes> response) {
@@ -1247,11 +954,11 @@ public class ApiController {
 
     public static void getLogDetail(@NonNull String requestId, @NonNull String logPath, @NonNull NetSimpleCallBack callback) {
         Call<QLSimpleRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+                .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .getLogDetail(logPath, AccountSP.getAuthorization());
+                .getLogDetail(logPath, PanelPreference.getAuthorization());
 
         call.enqueue(new Callback<QLSimpleRes>() {
             @Override
@@ -1287,11 +994,11 @@ public class ApiController {
 
     public static void getConfigDetail(@NonNull String requestId, @NonNull NetConfigCallback callback) {
         Call<QLSimpleRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+                .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .getConfig(AccountSP.getAuthorization());
+                .getConfig(PanelPreference.getAuthorization());
 
         call.enqueue(new Callback<QLSimpleRes>() {
             @Override
@@ -1334,11 +1041,11 @@ public class ApiController {
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
 
         Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+                .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .updateConfig(AccountSP.getAuthorization(), body);
+                .updateConfig(PanelPreference.getAuthorization(), body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -1375,11 +1082,11 @@ public class ApiController {
 
     public static void getScripts(@NonNull String requestId, @NonNull NetGetScriptsCallback callback) {
         Call<QLScriptsRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+                .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .getScripts(AccountSP.getAuthorization());
+                .getScripts(PanelPreference.getAuthorization());
         call.enqueue(new Callback<QLScriptsRes>() {
             @Override
             public void onResponse(@NonNull Call<QLScriptsRes> call, @NonNull Response<QLScriptsRes> response) {
@@ -1415,11 +1122,11 @@ public class ApiController {
 
     public static void getScriptDetail(@NonNull String requestId, @NonNull String scriptPath, @NonNull NetSimpleCallBack callback) {
         Call<QLSimpleRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+                .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .getScriptDetail(scriptPath, AccountSP.getAuthorization());
+                .getScriptDetail(scriptPath, PanelPreference.getAuthorization());
 
         call.enqueue(new Callback<QLSimpleRes>() {
             @Override
@@ -1463,11 +1170,11 @@ public class ApiController {
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
 
         Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+                .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .updateScript(AccountSP.getAuthorization(), body);
+                .updateScript(PanelPreference.getAuthorization(), body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -1512,11 +1219,11 @@ public class ApiController {
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
 
         Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+                .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .createScript(AccountSP.getAuthorization(), body);
+                .createScript(PanelPreference.getAuthorization(), body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -1560,11 +1267,11 @@ public class ApiController {
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
 
         Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+                .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .deleteScript(AccountSP.getAuthorization(), body);
+                .deleteScript(PanelPreference.getAuthorization(), body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -1601,11 +1308,11 @@ public class ApiController {
 
     public static void getDependencies(@NonNull String requestId, @Nullable String searchValue, String type, @NonNull NetGetDependenciesCallback callback) {
         Call<QLDependenciesRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+                .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .getDependencies(AccountSP.getAuthorization(), searchValue, type);
+                .getDependencies(PanelPreference.getAuthorization(), searchValue, type);
 
         call.enqueue(new Callback<QLDependenciesRes>() {
             @Override
@@ -1652,11 +1359,11 @@ public class ApiController {
 
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
         Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+                .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .addDependencies(AccountSP.getAuthorization(), requestBody);
+                .addDependencies(PanelPreference.getAuthorization(), requestBody);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -1700,11 +1407,11 @@ public class ApiController {
 
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
         Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+                .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .deleteDependencies(AccountSP.getAuthorization(), requestBody);
+                .deleteDependencies(PanelPreference.getAuthorization(), requestBody);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -1741,11 +1448,11 @@ public class ApiController {
 
     public static void getDependence(@NonNull String requestId, @NonNull String path, @NonNull NetGetDependenceCallback callback) {
         Call<QLDependenceRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+                .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .getDependence(path, AccountSP.getAuthorization());
+                .getDependence(path, PanelPreference.getAuthorization());
 
         call.enqueue(new Callback<QLDependenceRes>() {
             @Override
@@ -1787,11 +1494,11 @@ public class ApiController {
 
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
         Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+                .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .reinstallDependencies(AccountSP.getAuthorization(), requestBody);
+                .reinstallDependencies(PanelPreference.getAuthorization(), requestBody);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -1828,11 +1535,11 @@ public class ApiController {
 
     public static void getLoginLogs(@NonNull String requestId, @NonNull NetGetLoginLogsCallback callback) {
         Call<QLLoginLogsRes> call = new Retrofit.Builder()
-                .baseUrl(Objects.requireNonNull(AccountSP.getCurrentAccount()).getBaseUrl())
+                .baseUrl(Objects.requireNonNull(PanelPreference.getCurrentAccount()).getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .getLoginLogs(AccountSP.getAuthorization());
+                .getLoginLogs(PanelPreference.getAuthorization());
 
         call.enqueue(new Callback<QLLoginLogsRes>() {
             @Override
@@ -1869,11 +1576,11 @@ public class ApiController {
 
     public static void getLogRemove(@NonNull String requestId, @NonNull NetGetLogRemoveCallback callback) {
         Call<QLLogRemoveRes> call = new Retrofit.Builder()
-                .baseUrl(Objects.requireNonNull(AccountSP.getCurrentAccount()).getBaseUrl())
+                .baseUrl(Objects.requireNonNull(PanelPreference.getCurrentAccount()).getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .getLogRemove(AccountSP.getAuthorization());
+                .getLogRemove(PanelPreference.getAuthorization());
 
         call.enqueue(new Callback<QLLogRemoveRes>() {
             @Override
@@ -1914,11 +1621,11 @@ public class ApiController {
 
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
         Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+                .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .updateLogRemove(AccountSP.getAuthorization(), requestBody);
+                .updateLogRemove(PanelPreference.getAuthorization(), requestBody);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -1961,11 +1668,11 @@ public class ApiController {
 
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
         Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(AccountSP.getBaseUrl())
+                .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .updateUser(AccountSP.getAuthorization(), requestBody);
+                .updateUser(PanelPreference.getAuthorization(), requestBody);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -2033,20 +1740,8 @@ public class ApiController {
         void onFailure(String msg);
     }
 
-    public interface NetRunTaskCallback {
-        void onSuccess(String msg);
-
-        void onFailure(String msg);
-    }
-
     public interface NetEditTaskCallback {
         void onSuccess(QLTask QLTask);
-
-        void onFailure(String msg);
-    }
-
-    public interface NetGetTasksCallback {
-        void onSuccess(List<QLTask> tasks);
 
         void onFailure(String msg);
     }

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 
-import auto.qinglong.database.sp.SettingSP;
+import auto.qinglong.database.sp.SettingPreference;
 
 /**
  * @author wsfsp4
@@ -22,7 +22,7 @@ public class VibratorUtil {
      * @param milliseconds 持续时间
      */
     public static void vibrate(Context context, long milliseconds) {
-        if (SettingSP.isVibrate()) {
+        if (SettingPreference.isVibrate()) {
             if (vibrator == null) {
                 vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
             }

@@ -1,4 +1,4 @@
-package auto.ssh;
+package auto.ssh.service;
 
 import java.security.PublicKey;
 import java.util.List;

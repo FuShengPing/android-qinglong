@@ -3,16 +3,16 @@ package auto.qinglong.database.sp;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import auto.qinglong.MyApplication;
+import auto.base.BaseApplication;
 
-public class SettingSP {
-    private static final String TABLE = "SETTING";
+public class SettingPreference {
+    private static final String NAME = "SettingPreference";
     public static final String FIELD_NOTIFY = "notify";
     public static final String FIELD_VIBRATE = "vibrate";
     private static final SharedPreferences sp;
 
     static {
-        sp = MyApplication.getContext().getSharedPreferences(TABLE, Context.MODE_PRIVATE);
+        sp = BaseApplication.getContext().getSharedPreferences(NAME, Context.MODE_PRIVATE);
     }
 
     public static boolean isNotify() {

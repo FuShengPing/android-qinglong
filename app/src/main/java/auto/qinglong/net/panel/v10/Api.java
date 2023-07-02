@@ -11,7 +11,6 @@ import auto.qinglong.bean.panel.network.QLLogsRes;
 import auto.qinglong.bean.panel.network.QLScriptsRes;
 import auto.qinglong.bean.panel.network.QLSimpleRes;
 import auto.qinglong.bean.panel.network.QLSystemRes;
-import auto.qinglong.bean.panel.network.QLTaskEditRes;
 import auto.qinglong.net.panel.BaseRes;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -134,7 +133,7 @@ public interface Api {
      * @return the call
      */
     @PUT("api/crons")
-    Call<QLTaskEditRes> updateTask(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<BaseRes> updateTask(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
      * 新建任务.
@@ -144,7 +143,7 @@ public interface Api {
      * @return the call
      */
     @POST("api/crons")
-    Call<QLTaskEditRes> addTask(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<BaseRes> createTask(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
      * 获取环境变量.

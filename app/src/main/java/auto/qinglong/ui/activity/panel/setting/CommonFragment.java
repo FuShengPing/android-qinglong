@@ -12,8 +12,8 @@ import auto.base.util.WindowUnit;
 import auto.qinglong.R;
 import auto.qinglong.ui.BaseFragment;
 import auto.qinglong.ui.activity.app.LoginActivity;
-import auto.qinglong.bean.app.Account;
-import auto.qinglong.database.sp.AccountSP;
+import auto.qinglong.bean.panel.Account;
+import auto.qinglong.database.sp.PanelPreference;
 import auto.qinglong.net.panel.v10.ApiController;
 import auto.base.util.LogUnit;
 import auto.base.util.TextUnit;
@@ -68,7 +68,7 @@ public class CommonFragment extends BaseFragment {
             }
 
             WindowUnit.hideKeyboard(ui_security_username);
-            Account account = new Account(username, password, AccountSP.getAddress(), null);
+            Account account = new Account(username, password, PanelPreference.getAddress(), null);
             netUpdateUser(account);
         });
 
@@ -116,7 +116,7 @@ public class CommonFragment extends BaseFragment {
         ApiController.updateUser(getNetRequestID(), account, new ApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
-                AccountSP.updateCurrentAccount(account);
+                PanelPreference.updateCurrentAccount(account);
                 netLogin(account);
             }
 
@@ -133,7 +133,7 @@ public class CommonFragment extends BaseFragment {
             public void onSuccess(Account account) {
                 ui_security_username.setText(null);
                 ui_security_password.setText(null);
-                AccountSP.updateCurrentAccount(account);
+                PanelPreference.updateCurrentAccount(account);
                 ToastUnit.showShort("更新成功");
             }
 

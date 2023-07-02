@@ -12,7 +12,7 @@ import java.net.URLEncoder;
 
 import auto.qinglong.R;
 import auto.qinglong.ui.BaseActivity;
-import auto.qinglong.database.sp.SettingSP;
+import auto.qinglong.database.sp.SettingPreference;
 import auto.base.util.DeviceUnit;
 import auto.base.util.ToastUnit;
 import auto.qinglong.utils.WebUnit;
@@ -48,10 +48,10 @@ public class SettingActivity extends BaseActivity {
     protected void init() {
         ui_back.setOnClickListener(v -> finish());
 
-        ui_notify_switch.setChecked(SettingSP.isNotify());
-        ui_notify_switch.setOnCheckedChangeListener((buttonView, isChecked) -> SettingSP.setBoolean(SettingSP.FIELD_NOTIFY, isChecked));
-        ui_vibrate_switch.setChecked(SettingSP.isVibrate());
-        ui_vibrate_switch.setOnCheckedChangeListener((buttonView, isChecked) -> SettingSP.setBoolean(SettingSP.FIELD_VIBRATE, isChecked));
+        ui_notify_switch.setChecked(SettingPreference.isNotify());
+        ui_notify_switch.setOnCheckedChangeListener((buttonView, isChecked) -> SettingPreference.setBoolean(SettingPreference.FIELD_NOTIFY, isChecked));
+        ui_vibrate_switch.setChecked(SettingPreference.isVibrate());
+        ui_vibrate_switch.setOnCheckedChangeListener((buttonView, isChecked) -> SettingPreference.setBoolean(SettingPreference.FIELD_VIBRATE, isChecked));
 
         ui_help.setOnClickListener(v -> WebUnit.open(this, getString(R.string.url_readme)));
 

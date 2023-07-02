@@ -28,8 +28,6 @@ import java.util.concurrent.TimeUnit;
 
 import auto.base.util.LogUnit;
 import auto.base.util.Logger;
-import auto.ssh.Commands;
-import auto.ssh.HostKeyVerifier;
 import auto.ssh.R;
 import auto.ssh.bean.NetStat;
 import auto.ssh.ui.activity.MainActivity;

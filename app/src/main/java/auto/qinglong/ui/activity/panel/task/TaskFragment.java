@@ -12,21 +12,14 @@ import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,24 +29,21 @@ import java.util.Objects;
 import auto.base.util.LogUnit;
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
+import auto.base.util.VibratorUtil;
 import auto.base.util.WindowUnit;
-import auto.base.view.popup.LocalFileAdapter;
 import auto.base.view.popup.PopEditObject;
 import auto.base.view.popup.PopEditWindow;
-import auto.base.view.popup.PopListWindow;
 import auto.base.view.popup.PopMenuObject;
 import auto.base.view.popup.PopMenuWindow;
 import auto.base.view.popup.PopProgressWindow;
 import auto.base.view.popup.PopupWindowBuilder;
 import auto.qinglong.R;
-import auto.qinglong.bean.panel.QLTask;
 import auto.qinglong.bean.views.Task;
-import auto.qinglong.database.sp.AccountSP;
-import auto.qinglong.net.panel.v10.ApiController;
+import auto.qinglong.database.sp.PanelPreference;
+import auto.qinglong.net.panel.ApiController;
 import auto.qinglong.ui.BaseFragment;
 import auto.qinglong.ui.activity.panel.CodeWebActivity;
 import auto.qinglong.utils.CronUnit;
-import auto.qinglong.utils.FileUtil;
 
 public class TaskFragment extends BaseFragment {
     public static String TAG = "TaskFragment";
@@ -227,7 +217,7 @@ public class TaskFragment extends BaseFragment {
                 } else {
                     return;
                 }
-                //  VibratorUtil.vibrate(requireContext(), VibratorUtil.VIBRATE_SHORT);
+                VibratorUtil.vibrate(requireContext(), VibratorUtil.VIBRATE_SHORT);
                 Intent intent = new Intent(getContext(), CodeWebActivity.class);
                 intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_NAME, fileName);
                 intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_DIR, dir);
@@ -456,7 +446,7 @@ public class TaskFragment extends BaseFragment {
                     newTask.setTitle(name);
                     newTask.setCommand(command);
                     newTask.setSchedule(schedule);
-                    editTask(newTask);
+                    updateTask(newTask);
                 }
                 return false;
             }
@@ -538,49 +528,49 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void localAddData() {
-        if (FileUtil.isNeedRequestPermission()) {
-            ToastUnit.showShort("请授予应用读写存储权限");
-            FileUtil.requestPermission(requireActivity());
-            return;
-        }
-
-        List<File> files = FileUtil.getFiles(FileUtil.getTaskPath(), (dir, name) -> name.endsWith(".json"));
-        if (files.size() == 0) {
-            ToastUnit.showShort("无本地备份数据");
-            return;
-        }
-
-        PopListWindow<LocalFileAdapter> listWindow = new PopListWindow<>("选择文件");
-        LocalFileAdapter fileAdapter = new LocalFileAdapter(getContext());
-        fileAdapter.setData(files);
-        listWindow.setAdapter(fileAdapter);
-
-        PopupWindow popupWindow = PopupWindowBuilder.buildListWindow(requireActivity(), listWindow);
-
-        fileAdapter.setListener(file -> {
-            try {
-                popupWindow.dismiss();
-                if (ui_pop_progress == null) {
-                    ui_pop_progress = PopupWindowBuilder.buildProgressWindow(requireActivity(), null);
-                }
-                ui_pop_progress.setTextAndShow("加载文件中...");
-                BufferedReader bufferedInputStream = new BufferedReader(new FileReader(file));
-                StringBuilder stringBuilder = new StringBuilder();
-                String line;
-                while ((line = bufferedInputStream.readLine()) != null) {
-                    stringBuilder.append(line);
-                }
-
-                ui_pop_progress.setTextAndShow("解析文件中...");
-                Type type = new TypeToken<List<QLTask>>() {
-                }.getType();
-                List<QLTask> tasks = new Gson().fromJson(stringBuilder.toString(), type);
-
-                netMulAddTask(tasks);
-            } catch (Exception e) {
-                ToastUnit.showShort("导入失败：" + e.getLocalizedMessage());
-            }
-        });
+//        if (FileUtil.isNeedRequestPermission()) {
+//            ToastUnit.showShort("请授予应用读写存储权限");
+//            FileUtil.requestPermission(requireActivity());
+//            return;
+//        }
+//
+//        List<File> files = FileUtil.getFiles(FileUtil.getTaskPath(), (dir, name) -> name.endsWith(".json"));
+//        if (files.size() == 0) {
+//            ToastUnit.showShort("无本地备份数据");
+//            return;
+//        }
+//
+//        PopListWindow<LocalFileAdapter> listWindow = new PopListWindow<>("选择文件");
+//        LocalFileAdapter fileAdapter = new LocalFileAdapter(getContext());
+//        fileAdapter.setData(files);
+//        listWindow.setAdapter(fileAdapter);
+//
+//        PopupWindow popupWindow = PopupWindowBuilder.buildListWindow(requireActivity(), listWindow);
+//
+//        fileAdapter.setListener(file -> {
+//            try {
+//                popupWindow.dismiss();
+//                if (ui_pop_progress == null) {
+//                    ui_pop_progress = PopupWindowBuilder.buildProgressWindow(requireActivity(), null);
+//                }
+//                ui_pop_progress.setTextAndShow("加载文件中...");
+//                BufferedReader bufferedInputStream = new BufferedReader(new FileReader(file));
+//                StringBuilder stringBuilder = new StringBuilder();
+//                String line;
+//                while ((line = bufferedInputStream.readLine()) != null) {
+//                    stringBuilder.append(line);
+//                }
+//
+//                ui_pop_progress.setTextAndShow("解析文件中...");
+//                Type type = new TypeToken<List<QLTask>>() {
+//                }.getType();
+//                List<QLTask> tasks = new Gson().fromJson(stringBuilder.toString(), type);
+//
+//                netMulAddTask(tasks);
+//            } catch (Exception e) {
+//                ToastUnit.showShort("导入失败：" + e.getLocalizedMessage());
+//            }
+//        });
     }
 
     private void backupData(String fileName) {
@@ -627,7 +617,7 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void getTasks(String searchValue) {
-        auto.qinglong.net.panel.ApiController.getTasks(AccountSP.getBaseUrl(), AccountSP.getAuthorization(), searchValue, new auto.qinglong.net.panel.ApiController.TaskCallBack() {
+        auto.qinglong.net.panel.ApiController.getTasks(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), searchValue, new auto.qinglong.net.panel.ApiController.TaskCallBack() {
             @Override
             public void onSuccess(List<Task> tasks) {
                 Collections.sort(tasks);
@@ -645,7 +635,7 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void runTasks(List<Object> keys) {
-        auto.qinglong.net.panel.ApiController.runTasks(AccountSP.getBaseUrl(), AccountSP.getAuthorization(), keys, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
+        auto.qinglong.net.panel.ApiController.runTasks(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), keys, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("执行成功");
@@ -661,7 +651,7 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void stopTasks(List<Object> keys) {
-        auto.qinglong.net.panel.ApiController.stopTasks(AccountSP.getBaseUrl(), AccountSP.getAuthorization(), keys, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
+        auto.qinglong.net.panel.ApiController.stopTasks(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), keys, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("终止成功");
@@ -677,7 +667,7 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void enableTasks(List<Object> keys) {
-        auto.qinglong.net.panel.ApiController.enableTasks(AccountSP.getBaseUrl(), AccountSP.getAuthorization(), keys, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
+        auto.qinglong.net.panel.ApiController.enableTasks(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), keys, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("启用成功");
@@ -692,7 +682,7 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void disableTasks(List<Object> keys) {
-        auto.qinglong.net.panel.ApiController.disableTasks(AccountSP.getBaseUrl(), AccountSP.getAuthorization(), keys, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
+        auto.qinglong.net.panel.ApiController.disableTasks(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), keys, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("禁用成功");
@@ -707,7 +697,7 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void pinTasks(List<Object> keys) {
-        auto.qinglong.net.panel.ApiController.pinTasks(AccountSP.getBaseUrl(), AccountSP.getAuthorization(), keys, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
+        auto.qinglong.net.panel.ApiController.pinTasks(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), keys, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("顶置成功");
@@ -722,7 +712,7 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void unpinTasks(List<Object> keys) {
-        ApiController.unpinTasks(AccountSP.getBaseUrl(), AccountSP.getAuthorization(), keys, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
+        ApiController.unpinTasks(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), keys, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("取消顶置成功");
@@ -737,7 +727,7 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void deleteTasks(List<Object> keys) {
-        auto.qinglong.net.panel.ApiController.deleteTasks(AccountSP.getBaseUrl(), AccountSP.getAuthorization(), keys, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
+        auto.qinglong.net.panel.ApiController.deleteTasks(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), keys, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("删除成功");
@@ -752,21 +742,13 @@ public class TaskFragment extends BaseFragment {
 
     }
 
-    private void editTask(Task task) {
-
-    }
-
-    private void createTask(Task task) {
-
-    }
-
-    private void netEditTask(QLTask task) {
-        ApiController.editTask(getNetRequestID(), task, new ApiController.NetEditTaskCallback() {
+    private void updateTask(Task task) {
+        auto.qinglong.net.panel.ApiController.updateTask(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), task, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
-            public void onSuccess(QLTask QLTask) {
+            public void onSuccess() {
                 ui_pop_edit.dismiss();
                 ToastUnit.showShort("编辑成功");
-//                netGetTasks(mCurrentSearchValue, false);
+                getTasks(null);
             }
 
             @Override
@@ -776,13 +758,13 @@ public class TaskFragment extends BaseFragment {
         });
     }
 
-    private void netAddTask(QLTask task) {
-        ApiController.addTask(getNetRequestID(), task, new ApiController.NetEditTaskCallback() {
+    private void createTask(Task task) {
+        auto.qinglong.net.panel.ApiController.createTask(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), task, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
-            public void onSuccess(QLTask QLTask) {
+            public void onSuccess() {
                 ui_pop_edit.dismiss();
                 ToastUnit.showShort("新建任务成功");
-//                netGetTasks(mCurrentSearchValue, false);
+                getTasks(null);
             }
 
             @Override
@@ -792,35 +774,35 @@ public class TaskFragment extends BaseFragment {
         });
     }
 
-    private void netMulAddTask(List<QLTask> tasks) {
-        new Thread(() -> {
-            final boolean[] isEnd = {false};
-
-            for (int k = 0; k < tasks.size(); k++) {
-                ui_pop_progress.setText("导入任务中 " + k + "/" + tasks.size());
-                ApiController.addTask(getNetRequestID(), tasks.get(k), new ApiController.NetEditTaskCallback() {
-                    @Override
-                    public void onSuccess(QLTask QLTask) {
-                        isEnd[0] = true;
-                    }
-
-                    @Override
-                    public void onFailure(String msg) {
-                        isEnd[0] = true;
-                        LogUnit.log(TAG, msg);
-                    }
-                });
-                while (!isEnd[0]) {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            ui_pop_progress.dismiss();
-//            netGetTasks(mCurrentSearchValue, true);
-        }).start();
+    private void netMulAddTask(List<Task> tasks) {
+//        new Thread(() -> {
+//            final boolean[] isEnd = {false};
+//
+//            for (int k = 0; k < tasks.size(); k++) {
+//                ui_pop_progress.setText("导入任务中 " + k + "/" + tasks.size());
+//                ApiController.addTask(getNetRequestID(), tasks.get(k), new ApiController.NetEditTaskCallback() {
+//                    @Override
+//                    public void onSuccess(QLTask QLTask) {
+//                        isEnd[0] = true;
+//                    }
+//
+//                    @Override
+//                    public void onFailure(String msg) {
+//                        isEnd[0] = true;
+//                        LogUnit.log(TAG, msg);
+//                    }
+//                });
+//                while (!isEnd[0]) {
+//                    try {
+//                        Thread.sleep(100);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//            ui_pop_progress.dismiss();
+////            netGetTasks(mCurrentSearchValue, true);
+//        }).start();
     }
 
 
