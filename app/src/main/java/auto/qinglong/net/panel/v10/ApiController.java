@@ -28,7 +28,6 @@ import auto.qinglong.bean.panel.network.QLLoginRes;
 import auto.qinglong.bean.panel.network.QLLogsRes;
 import auto.qinglong.bean.panel.network.QLScriptsRes;
 import auto.qinglong.bean.panel.network.QLSimpleRes;
-import auto.qinglong.bean.panel.network.QLSystemRes;
 import auto.qinglong.bean.views.Task;
 import auto.qinglong.database.sp.PanelPreference;
 import auto.qinglong.net.NetManager;
@@ -157,7 +156,7 @@ public class ApiController {
                     }
                 } else {
                     if (res.getCode() == 200) {
-                        callback.onSuccess(Factory.buildTasks(res.getData()));
+                        callback.onSuccess(Converter.convertTasks(res.getData()));
                     } else {
                         callback.onFailure(res.getMessage());
                     }

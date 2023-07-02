@@ -12,8 +12,8 @@ import auto.qinglong.utils.CronUnit;
  * @author wsfsp4
  * @version 2023.06.29
  */
-public class Factory {
-    public static List<Task> buildTasks(List<TaskObject> objects) {
+public class Converter {
+    public static List<Task> convertTasks(List<TaskObject> objects) {
         List<Task> results = new ArrayList<>();
         for (TaskObject object : objects) {
             Task task = new Task(object.getId());
