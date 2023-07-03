@@ -186,7 +186,148 @@ public class ApiController {
         auto.qinglong.net.panel.v10.ApiController.createTask(baseUrl, authorization, task, callBack);
     }
 
-    public static void getLogFiles(@NonNull String baseUrl, @NonNull String authorization,LogFileCallBack callBack){
+    public static void getLogFileContent(@NonNull String baseUrl, @NonNull String authorization, String scriptKey, String fileName, String fileParent, ContentCallBack callBack) {
+        String path = auto.qinglong.net.panel.v10.ApiController.getLogFilePath(scriptKey, fileName, fileParent);
+
+        getFileContent(baseUrl, authorization, path, callBack);
+    }
+
+    public static void getConfigFileContent(@NonNull String baseUrl, @NonNull String authorization, ContentCallBack callBack) {
+        String path = "api/configs/config.sh";
+        getFileContent(baseUrl, authorization, path, callBack);
+    }
+
+    public static void saveConfigFileContent(@NonNull String baseUrl, @NonNull String authorization, String content, BaseCallBack callBack) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("content", content);
+        jsonObject.addProperty("name", "config.sh");
+
+        String json = jsonObject.toString();
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .updateConfig(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callBack.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callBack.onFailure(ERROR_NO_BODY);
+                    }
+                } else {
+                    if (res.getCode() == 200) {
+                        callBack.onSuccess();
+                    } else {
+                        callBack.onFailure(res.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                callBack.onFailure(t.getLocalizedMessage());
+            }
+        });
+    }
+
+    public static void getScriptFileContent(@NonNull String baseUrl, @NonNull String authorization, String fileName, String fileParent, ContentCallBack callBack) {
+        String path = "api/scripts/" + fileName + "?path=" + fileParent;
+        getFileContent(baseUrl, authorization, path, callBack);
+    }
+
+    public static void saveScriptFileContent(@NonNull String baseUrl, @NonNull String authorization, String fileName, String fileParent, String content, BaseCallBack callBack) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("content", content);
+        jsonObject.addProperty("filename", fileName);
+        jsonObject.addProperty("path", fileParent == null ? "" : fileParent);
+
+        String json = jsonObject.toString();
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .updateScript(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callBack.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callBack.onFailure(ERROR_NO_BODY);
+                    }
+                } else {
+                    if (res.getCode() == 200) {
+                        callBack.onSuccess();
+                    } else {
+                        callBack.onFailure(res.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                callBack.onFailure(t.getLocalizedMessage());
+            }
+        });
+    }
+
+    private static void getFileContent(@NonNull String baseUrl, @NonNull String authorization, String path, ContentCallBack callBack) {
+        Call<FileContentRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .getFileContent(path, authorization);
+        call.enqueue(new Callback<FileContentRes>() {
+            @Override
+            public void onResponse(Call<FileContentRes> call, Response<FileContentRes> response) {
+                FileContentRes res = response.body();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callBack.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callBack.onFailure(ERROR_NO_BODY + response.code());
+                    }
+                } else {
+                    if (res.getCode() == 200) {
+                        callBack.onSuccess(res.getData());
+                    } else {
+                        callBack.onFailure(res.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FileContentRes> call, Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                callBack.onFailure(t.getLocalizedMessage());
+            }
+        });
+    }
+
+    public static void getLogFiles(@NonNull String baseUrl, @NonNull String authorization, LogFileCallBack callBack) {
         auto.qinglong.net.panel.v10.ApiController.getLogFiles(baseUrl, authorization, callBack);
     }
 
@@ -210,6 +351,12 @@ public class ApiController {
 
     public interface LogFileCallBack {
         void onSuccess(List<LogFile> files);
+
+        void onFailure(String msg);
+    }
+
+    public interface ContentCallBack {
+        void onSuccess(String content);
 
         void onFailure(String msg);
     }

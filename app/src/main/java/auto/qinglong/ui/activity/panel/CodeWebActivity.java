@@ -15,11 +15,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Objects;
 
-import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
 import auto.qinglong.R;
 import auto.qinglong.bean.panel.QLDependence;
+import auto.qinglong.database.sp.PanelPreference;
 import auto.qinglong.net.panel.v10.ApiController;
 import auto.qinglong.net.web.PanelWebJsManager;
 import auto.qinglong.net.web.WebViewBuilder;
@@ -119,9 +119,18 @@ public class CodeWebActivity extends BaseActivity {
      */
     private void onSave(String content) {
         if (Objects.equals(mType, TYPE_CONFIG)) {
-            netSaveConfig(content);
+            saveConfigContent(content);
         } else if (Objects.equals(mType, TYPE_SCRIPT)) {
-            netSaveScript(content);
+            saveScriptContent(content);
+        }
+    }
+
+    /**
+     * 网络加载结束 关闭刷新动画
+     */
+    private void onLoadFinish() {
+        if (ui_refresh.getAnimation() != null) {
+            ui_refresh.getAnimation().cancel();
         }
     }
 
@@ -227,51 +236,22 @@ public class CodeWebActivity extends BaseActivity {
     private void load(String type) {
         switch (type) {
             case TYPE_SCRIPT:
-                netGetScriptDetail(mScriptName, mScriptParent);
+                getScriptContent(mScriptName, mScriptParent);
                 break;
             case TYPE_LOG:
                 getLogFileContent(mLogId, mLogFileName, mLogFileDir);
                 break;
             case TYPE_DEPENDENCE:
-                netGetDependenceLog(mDependenceId);
+                getDependenceLogContent(mDependenceId);
                 break;
             case TYPE_CONFIG:
-                netGetConfig();
+                getConfigContent();
                 break;
         }
     }
 
-    /**
-     * 网络加载结束 关闭刷新动画
-     */
-    private void loadFinish() {
-        if (ui_refresh.getAnimation() != null) {
-            ui_refresh.getAnimation().cancel();
-        }
-    }
-
-    private void netGetConfig() {
-        ApiController.getConfigDetail(getNetRequestID(), new ApiController.NetConfigCallback() {
-            @Override
-            public void onSuccess(String content) {
-                mContent = content;
-                ui_edit.setVisibility(View.VISIBLE);
-                PanelWebJsManager.setContent(ui_webView, content);
-                loadFinish();
-                ToastUnit.showShort(getString(R.string.tip_load_success));
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                ui_edit.setVisibility(View.INVISIBLE);
-                loadFinish();
-                ToastUnit.showShort(msg);
-            }
-        });
-    }
-
-    private void netSaveConfig(String content) {
-        ApiController.saveConfig(getNetRequestID(), content, new ApiController.NetBaseCallback() {
+    private void saveConfigContent(String content) {
+        auto.qinglong.net.panel.ApiController.saveConfigFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), content, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 mContent = content;
@@ -285,9 +265,43 @@ public class CodeWebActivity extends BaseActivity {
         });
     }
 
-    private void netGetScriptDetail(String name, String parent) {
-        String path = "api/scripts/" + name + "?path=" + parent;
-        ApiController.getScriptDetail(getNetRequestID(), path, new ApiController.NetSimpleCallBack() {
+    private void saveScriptContent(String content) {
+        auto.qinglong.net.panel.ApiController.saveScriptFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), mScriptName, mScriptParent, content, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
+            @Override
+            public void onSuccess() {
+                mContent = content;
+                ToastUnit.showShort("保存成功");
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort(msg);
+            }
+        });
+    }
+
+    private void getConfigContent() {
+        auto.qinglong.net.panel.ApiController.getConfigFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.qinglong.net.panel.ApiController.ContentCallBack() {
+            @Override
+            public void onSuccess(String content) {
+                mContent = content;
+                ui_edit.setVisibility(View.VISIBLE);
+                PanelWebJsManager.setContent(ui_webView, content);
+                onLoadFinish();
+                ToastUnit.showShort(getString(R.string.tip_load_success));
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ui_edit.setVisibility(View.INVISIBLE);
+                onLoadFinish();
+                ToastUnit.showShort(msg);
+            }
+        });
+    }
+
+    private void getScriptContent(String fileName, String fileParent) {
+        auto.qinglong.net.panel.ApiController.getScriptFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), fileName, fileParent, new auto.qinglong.net.panel.ApiController.ContentCallBack() {
             @Override
             public void onSuccess(String content) {
                 //防止内容过大导致崩溃
@@ -299,72 +313,48 @@ public class CodeWebActivity extends BaseActivity {
                 mContent = content;
                 ui_edit.setVisibility(View.VISIBLE);
                 PanelWebJsManager.setContent(ui_webView, content);
-                loadFinish();
+                onLoadFinish();
                 ToastUnit.showShort(getString(R.string.tip_load_success));
             }
 
             @Override
             public void onFailure(String msg) {
                 ui_edit.setVisibility(View.INVISIBLE);
-                loadFinish();
+                onLoadFinish();
                 ToastUnit.showShort(msg);
             }
         });
     }
 
-    private void netSaveScript(String content) {
-        ApiController.saveScript(getNetRequestID(), content, mScriptName, mScriptParent, new ApiController.NetBaseCallback() {
-            @Override
-            public void onSuccess() {
-                mContent = content;
-                ToastUnit.showShort("保存成功");
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                ToastUnit.showShort(msg);
-            }
-        });
-    }
-
-    private void getLogFileContent(String scripId, String name, String parent) {
-        String path;
-        if (TextUnit.isFull(scripId)) {
-            path = "api/crons/" + scripId + "/log";
-        } else if (TextUnit.isFull(parent)) {
-            path = "api/logs/" + parent + "/" + name;
-        } else {
-            path = "api/logs/" + name;
-        }
-        ApiController.getLogDetail(getNetRequestID(), path, new ApiController.NetSimpleCallBack() {
+    private void getLogFileContent(String scriptKey, String fileName, String fileParent) {
+        auto.qinglong.net.panel.ApiController.getLogFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), scriptKey, fileName, fileParent, new auto.qinglong.net.panel.ApiController.ContentCallBack() {
             @Override
             public void onSuccess(String content) {
                 PanelWebJsManager.setContent(ui_webView, content);
-                loadFinish();
+                onLoadFinish();
                 ToastUnit.showShort(getString(R.string.tip_load_success));
             }
 
             @Override
             public void onFailure(String msg) {
-                loadFinish();
+                onLoadFinish();
                 ToastUnit.showShort(msg);
             }
         });
     }
 
-    private void netGetDependenceLog(String id) {
-        String path = "api/dependencies/" + id;
-        ApiController.getDependence(getNetRequestID(), path, new ApiController.NetGetDependenceCallback() {
+    private void getDependenceLogContent(String key) {
+        ApiController.getDependenceLog(getNetRequestID(), key, new ApiController.NetGetDependenceCallback() {
             @Override
             public void onSuccess(QLDependence dependence) {
                 PanelWebJsManager.setContent(ui_webView, dependence.getLogStr());
-                loadFinish();
+                onLoadFinish();
                 ToastUnit.showShort(getString(R.string.tip_load_success));
             }
 
             @Override
             public void onFailure(String msg) {
-                loadFinish();
+                onLoadFinish();
                 ToastUnit.showShort(msg);
             }
         });
