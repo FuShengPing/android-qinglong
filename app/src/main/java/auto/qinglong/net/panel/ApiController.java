@@ -146,7 +146,7 @@ public class ApiController {
         });
     }
 
-    public static void getTasks(@NonNull String baseUrl, @NonNull String authorization, String searchValue, TaskCallBack callback) {
+    public static void getTasks(@NonNull String baseUrl, @NonNull String authorization, String searchValue, TaskListCallBack callback) {
         auto.qinglong.net.panel.v10.ApiController.getTasks(baseUrl, authorization, searchValue, callback);
     }
 
@@ -186,7 +186,7 @@ public class ApiController {
         auto.qinglong.net.panel.v10.ApiController.createTask(baseUrl, authorization, task, callBack);
     }
 
-    public static void getLogFiles(@NonNull String baseUrl, @NonNull String authorization, LogFileCallBack callBack) {
+    public static void getLogFiles(@NonNull String baseUrl, @NonNull String authorization, FileListCallBack callBack) {
         auto.qinglong.net.panel.v10.ApiController.getLogFiles(baseUrl, authorization, callBack);
     }
 
@@ -386,13 +386,13 @@ public class ApiController {
         void onFailure(String msg);
     }
 
-    public interface TaskCallBack {
+    public interface TaskListCallBack {
         void onSuccess(List<Task> tasks);
 
         void onFailure(String msg);
     }
 
-    public interface LogFileCallBack {
+    public interface FileListCallBack {
         void onSuccess(List<File> files);
 
         void onFailure(String msg);

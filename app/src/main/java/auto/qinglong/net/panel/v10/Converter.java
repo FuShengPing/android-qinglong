@@ -14,12 +14,12 @@ import auto.qinglong.utils.CronUnit;
  * @version 2023.06.29
  */
 public class Converter {
-    public static List<Task> toTasks(List<TaskRes.TaskObject> objects) {
+    public static List<Task> toTasks(List<TaskListRes.TaskObject> objects) {
         List<Task> result = new ArrayList<>();
         if (objects == null || objects.isEmpty()) {
             return result;
         }
-        for (TaskRes.TaskObject object : objects) {
+        for (TaskListRes.TaskObject object : objects) {
             Task task = new Task(object.getId());
             task.setTitle(object.getName());
             task.setPinned(object.getIsPinned() == 1);
@@ -58,12 +58,12 @@ public class Converter {
         return result;
     }
 
-    public static List<File> toLogFiles(List<LogFileRes.LogFileObject> objects) {
+    public static List<File> toFiles(List<FileListRes.FileObject> objects) {
         List<File> result = new ArrayList<>();
         if (objects == null || objects.isEmpty()) {
             return result;
         }
-        for (LogFileRes.LogFileObject object : objects) {
+        for (FileListRes.FileObject object : objects) {
             File logFile = new File();
             logFile.setTitle(object.getName());
             logFile.setDir(object.isDir());

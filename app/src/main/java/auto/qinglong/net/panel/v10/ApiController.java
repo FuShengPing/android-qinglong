@@ -42,18 +42,18 @@ public class ApiController {
     private static final String ERROR_NO_BODY = "响应异常";
     private static final String ERROR_INVALID_AUTH = "登录信息失效";
 
-    public static void getTasks(String baseUrl, String authorization, String searchValue, auto.qinglong.net.panel.ApiController.TaskCallBack callback) {
-        Call<TaskRes> call = new Retrofit.Builder()
+    public static void getTasks(String baseUrl, String authorization, String searchValue, auto.qinglong.net.panel.ApiController.TaskListCallBack callback) {
+        Call<TaskListRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
                 .getTasks(authorization, searchValue);
 
-        call.enqueue(new Callback<TaskRes>() {
+        call.enqueue(new Callback<TaskListRes>() {
             @Override
-            public void onResponse(@NonNull Call<TaskRes> call, @NonNull Response<TaskRes> response) {
-                TaskRes res = response.body();
+            public void onResponse(@NonNull Call<TaskListRes> call, @NonNull Response<TaskListRes> response) {
+                TaskListRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -70,7 +70,7 @@ public class ApiController {
             }
 
             @Override
-            public void onFailure(@NonNull Call<TaskRes> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<TaskListRes> call, @NonNull Throwable t) {
                 if (call.isCanceled()) {
                     return;
                 }
@@ -817,18 +817,18 @@ public class ApiController {
 
     }
 
-    public static void getLogFiles(@NonNull String baseUrl, @NonNull String authorization, auto.qinglong.net.panel.ApiController.LogFileCallBack callBack) {
-        Call<LogFileRes> call = new Retrofit.Builder()
+    public static void getLogFiles(@NonNull String baseUrl, @NonNull String authorization, auto.qinglong.net.panel.ApiController.FileListCallBack callBack) {
+        Call<FileListRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
                 .getLogFiles(authorization);
 
-        call.enqueue(new Callback<LogFileRes>() {
+        call.enqueue(new Callback<FileListRes>() {
             @Override
-            public void onResponse(Call<LogFileRes> call, Response<LogFileRes> response) {
-                LogFileRes res = response.body();
+            public void onResponse(Call<FileListRes> call, Response<FileListRes> response) {
+                FileListRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
                         callBack.onFailure(ERROR_INVALID_AUTH);
@@ -837,7 +837,7 @@ public class ApiController {
                     }
                 } else {
                     if (res.getCode() == 200) {
-                        callBack.onSuccess(Converter.toLogFiles(res.getDirs()));
+                        callBack.onSuccess(Converter.toFiles(res.getDirs()));
                     } else {
                         callBack.onFailure(res.getMessage());
                     }
@@ -845,7 +845,7 @@ public class ApiController {
             }
 
             @Override
-            public void onFailure(Call<LogFileRes> call, Throwable t) {
+            public void onFailure(Call<FileListRes> call, Throwable t) {
                 if (call.isCanceled()) {
                     return;
                 }
@@ -866,7 +866,7 @@ public class ApiController {
         return path;
     }
 
-    public static void getScripts(@NonNull String requestId, @NonNull NetGetScriptsCallback callback) {
+    public static void getScriptFiles(@NonNull String requestId, @NonNull NetGetScriptsCallback callback) {
         Call<QLScriptsRes> call = new Retrofit.Builder()
                 .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())

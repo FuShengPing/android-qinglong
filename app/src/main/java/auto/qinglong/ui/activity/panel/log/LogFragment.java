@@ -26,6 +26,7 @@ import auto.qinglong.R;
 import auto.qinglong.bean.panel.File;
 import auto.qinglong.database.sp.PanelPreference;
 import auto.qinglong.net.NetManager;
+import auto.qinglong.net.panel.ApiController;
 import auto.qinglong.ui.BaseFragment;
 import auto.qinglong.ui.activity.panel.CodeWebActivity;
 
@@ -139,7 +140,7 @@ public class LogFragment extends BaseFragment {
     }
 
     private void getLogFiles() {
-        auto.qinglong.net.panel.ApiController.getLogFiles(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.qinglong.net.panel.ApiController.LogFileCallBack() {
+        auto.qinglong.net.panel.ApiController.getLogFiles(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new ApiController.FileListCallBack() {
             @Override
             public void onSuccess(List<File> files) {
                 sortAndSetData(files, "");

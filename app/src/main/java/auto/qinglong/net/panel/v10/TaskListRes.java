@@ -8,7 +8,7 @@ import auto.qinglong.net.panel.BaseRes;
  * @author wsfsp4
  * @version 2023.06.29
  */
-public class TaskRes extends BaseRes {
+public class TaskListRes extends BaseRes {
     private List<TaskObject> data;
 
     public List<TaskObject> getData() {

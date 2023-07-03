@@ -34,7 +34,7 @@ public interface Api {
      * @return the tasks
      */
     @GET("api/crons")
-    Call<TaskRes> getTasks(@Header("Authorization") String authorization, @Query("searchValue") String searchValue);
+    Call<TaskListRes> getTasks(@Header("Authorization") String authorization, @Query("searchValue") String searchValue);
 
     /**
      * 执行任务.
@@ -315,7 +315,7 @@ public interface Api {
      * @return the logs
      */
     @GET("api/logs")
-    Call<LogFileRes> getLogFiles(@Header("Authorization") String authorization);
+    Call<FileListRes> getLogFiles(@Header("Authorization") String authorization);
 
     /**
      * 获取日志信息.

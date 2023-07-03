@@ -615,7 +615,7 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void getTasks(String searchValue) {
-        auto.qinglong.net.panel.ApiController.getTasks(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), searchValue, new auto.qinglong.net.panel.ApiController.TaskCallBack() {
+        auto.qinglong.net.panel.ApiController.getTasks(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), searchValue, new ApiController.TaskListCallBack() {
             @Override
             public void onSuccess(List<Task> tasks) {
                 Collections.sort(tasks);

@@ -192,7 +192,7 @@ public class ScriptFragment extends BaseFragment {
     }
 
     private void netGetScripts() {
-        ApiController.getScripts(getNetRequestID(), new ApiController.NetGetScriptsCallback() {
+        ApiController.getScriptFiles(getNetRequestID(), new ApiController.NetGetScriptsCallback() {
             @Override
             public void onSuccess(List<QLScript> scripts) {
                 sortAndSetData(scripts, "");
