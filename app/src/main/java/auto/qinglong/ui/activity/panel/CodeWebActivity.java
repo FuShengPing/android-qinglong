@@ -15,26 +15,30 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Objects;
 
+import auto.base.util.TextUnit;
+import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
 import auto.qinglong.R;
-import auto.qinglong.ui.BaseActivity;
 import auto.qinglong.bean.panel.QLDependence;
 import auto.qinglong.net.panel.v10.ApiController;
-import auto.qinglong.net.web.QLWebJsManager;
-import auto.base.util.ToastUnit;
+import auto.qinglong.net.web.PanelWebJsManager;
 import auto.qinglong.net.web.WebViewBuilder;
+import auto.qinglong.ui.BaseActivity;
 
 public class CodeWebActivity extends BaseActivity {
     public static final String TAG = "CodeWebActivity";
 
     public static final String EXTRA_TITLE = "title";
     public static final String EXTRA_TYPE = "type";
-    public static final String EXTRA_LOG_PATH = "logPath";
+    public static final String EXTRA_LOG_ID = "logId";
+    public static final String EXTRA_LOG_NAME = "logFileName";
+    public static final String EXTRA_LOG_DIR = "logFileDir";
     public static final String EXTRA_SCRIPT_NAME = "scriptName";
     public static final String EXTRA_SCRIPT_DIR = "scriptDir";
     public static final String EXTRA_DEPENDENCE_ID = "dependenceId";
     public static final String EXTRA_CAN_REFRESH = "canRefresh";
     public static final String EXTRA_CAN_EDIT = "canEdit";
+
     public static final String TYPE_LOG = "log";
     public static final String TYPE_SCRIPT = "script";
     public static final String TYPE_DEPENDENCE = "dependence";
@@ -48,7 +52,9 @@ public class CodeWebActivity extends BaseActivity {
     private boolean mCanEdit;
     private String mScriptName;
     private String mScriptParent;
-    private String mLogPath;
+    private String mLogId;
+    private String mLogFileName;
+    private String mLogFileDir;
     private String mDependenceId;
 
     private LinearLayout ui_nav_bar;
@@ -73,7 +79,9 @@ public class CodeWebActivity extends BaseActivity {
         mCanEdit = getIntent().getBooleanExtra(EXTRA_CAN_EDIT, false);
         mScriptName = getIntent().getStringExtra(EXTRA_SCRIPT_NAME);
         mScriptParent = getIntent().getStringExtra(EXTRA_SCRIPT_DIR);
-        mLogPath = getIntent().getStringExtra(EXTRA_LOG_PATH);
+        mLogId = getIntent().getStringExtra(EXTRA_LOG_ID);
+        mLogFileName = getIntent().getStringExtra(EXTRA_LOG_NAME);
+        mLogFileDir = getIntent().getStringExtra(EXTRA_LOG_DIR);
         mDependenceId = getIntent().getStringExtra(EXTRA_DEPENDENCE_ID);
 
         ui_nav_bar = findViewById(R.id.script_bar);
@@ -87,6 +95,34 @@ public class CodeWebActivity extends BaseActivity {
         ui_web_container = findViewById(R.id.web_container);
 
         init();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!init) {
+            initWebView();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        WebViewBuilder.destroy(ui_webView);
+        ui_webView = null;
+        super.onDestroy();
+    }
+
+    /**
+     * 保存内容，当前仅支持配置文件和脚本文件
+     *
+     * @param content 内容
+     */
+    private void onSave(String content) {
+        if (Objects.equals(mType, TYPE_CONFIG)) {
+            netSaveConfig(content);
+        } else if (Objects.equals(mType, TYPE_SCRIPT)) {
+            netSaveScript(content);
+        }
     }
 
     @Override
@@ -134,7 +170,7 @@ public class CodeWebActivity extends BaseActivity {
                 ui_edit_bar.setVisibility(View.VISIBLE);
                 ui_webView.setFocusable(true);
                 ui_webView.setFocusableInTouchMode(true);
-                QLWebJsManager.setEditable(ui_webView, true);
+                PanelWebJsManager.setEditable(ui_webView, true);
             });
 
             ui_edit_back.setOnClickListener(v -> {
@@ -144,11 +180,11 @@ public class CodeWebActivity extends BaseActivity {
                 ui_webView.clearFocus();
                 ui_webView.setFocusable(false);
                 ui_webView.setFocusableInTouchMode(false);
-                QLWebJsManager.setEditable(ui_webView, false);
-                QLWebJsManager.setContent(ui_webView, mContent);
+                PanelWebJsManager.setEditable(ui_webView, false);
+                PanelWebJsManager.setContent(ui_webView, mContent);
             });
 
-            ui_edit_save.setOnClickListener(v -> QLWebJsManager.getContent(ui_webView, value -> {
+            ui_edit_save.setOnClickListener(v -> PanelWebJsManager.getContent(ui_webView, value -> {
                 try {
                     ui_webView.clearFocus();
                     WindowUnit.hideKeyboard(ui_webView);
@@ -157,27 +193,12 @@ public class CodeWebActivity extends BaseActivity {
                         stringBuilder.deleteCharAt(0);
                         stringBuilder.deleteCharAt(stringBuilder.length() - 1);
                     }
-                    save(stringBuilder.toString());
+                    onSave(stringBuilder.toString());
                 } catch (UnsupportedEncodingException e) {
                     ToastUnit.showShort(e.getMessage());
                 }
             }));
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (!init) {
-            initWebView();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        WebViewBuilder.destroy(ui_webView);
-        ui_webView = null;
-        super.onDestroy();
     }
 
     private void initWebView() {
@@ -206,13 +227,13 @@ public class CodeWebActivity extends BaseActivity {
     private void load(String type) {
         switch (type) {
             case TYPE_SCRIPT:
-                netGetScriptDetail("api/scripts/" + mScriptName + "?path=" + mScriptParent);
+                netGetScriptDetail(mScriptName, mScriptParent);
                 break;
             case TYPE_LOG:
-                netGetLogDetail(mLogPath);
+                getLogFileContent(mLogId, mLogFileName, mLogFileDir);
                 break;
             case TYPE_DEPENDENCE:
-                netGetDependenceLog("api/dependencies/" + mDependenceId);
+                netGetDependenceLog(mDependenceId);
                 break;
             case TYPE_CONFIG:
                 netGetConfig();
@@ -229,26 +250,13 @@ public class CodeWebActivity extends BaseActivity {
         }
     }
 
-    /**
-     * 保存内容，当前仅支持配置文件和脚本文件
-     *
-     * @param content 内容
-     */
-    private void save(String content) {
-        if (Objects.equals(mType, TYPE_CONFIG)) {
-            netSaveConfig(content);
-        } else if (Objects.equals(mType, TYPE_SCRIPT)) {
-            netSaveScript(content);
-        }
-    }
-
     private void netGetConfig() {
         ApiController.getConfigDetail(getNetRequestID(), new ApiController.NetConfigCallback() {
             @Override
             public void onSuccess(String content) {
                 mContent = content;
                 ui_edit.setVisibility(View.VISIBLE);
-                QLWebJsManager.setContent(ui_webView, content);
+                PanelWebJsManager.setContent(ui_webView, content);
                 loadFinish();
                 ToastUnit.showShort(getString(R.string.tip_load_success));
             }
@@ -277,19 +285,20 @@ public class CodeWebActivity extends BaseActivity {
         });
     }
 
-    private void netGetScriptDetail(String path) {
+    private void netGetScriptDetail(String name, String parent) {
+        String path = "api/scripts/" + name + "?path=" + parent;
         ApiController.getScriptDetail(getNetRequestID(), path, new ApiController.NetSimpleCallBack() {
             @Override
             public void onSuccess(String content) {
                 //防止内容过大导致崩溃
-                if (content.length() > 1500000) {
+                if (content.length() > 1024 * 1024) {
                     ToastUnit.showShort(getString(R.string.tip_text_too_long));
                     ui_refresh.setVisibility(View.GONE);
                     return;
                 }
                 mContent = content;
                 ui_edit.setVisibility(View.VISIBLE);
-                QLWebJsManager.setContent(ui_webView, content);
+                PanelWebJsManager.setContent(ui_webView, content);
                 loadFinish();
                 ToastUnit.showShort(getString(R.string.tip_load_success));
             }
@@ -318,11 +327,19 @@ public class CodeWebActivity extends BaseActivity {
         });
     }
 
-    private void netGetLogDetail(String path) {
+    private void getLogFileContent(String scripId, String name, String parent) {
+        String path;
+        if (TextUnit.isFull(scripId)) {
+            path = "api/crons/" + scripId + "/log";
+        } else if (TextUnit.isFull(parent)) {
+            path = "api/logs/" + parent + "/" + name;
+        } else {
+            path = "api/logs/" + name;
+        }
         ApiController.getLogDetail(getNetRequestID(), path, new ApiController.NetSimpleCallBack() {
             @Override
             public void onSuccess(String content) {
-                QLWebJsManager.setContent(ui_webView, content);
+                PanelWebJsManager.setContent(ui_webView, content);
                 loadFinish();
                 ToastUnit.showShort(getString(R.string.tip_load_success));
             }
@@ -335,11 +352,12 @@ public class CodeWebActivity extends BaseActivity {
         });
     }
 
-    private void netGetDependenceLog(String path) {
+    private void netGetDependenceLog(String id) {
+        String path = "api/dependencies/" + id;
         ApiController.getDependence(getNetRequestID(), path, new ApiController.NetGetDependenceCallback() {
             @Override
             public void onSuccess(QLDependence dependence) {
-                QLWebJsManager.setContent(ui_webView, dependence.getLogStr());
+                PanelWebJsManager.setContent(ui_webView, dependence.getLogStr());
                 loadFinish();
                 ToastUnit.showShort(getString(R.string.tip_load_success));
             }

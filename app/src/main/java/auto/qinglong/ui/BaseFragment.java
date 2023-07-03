@@ -10,7 +10,7 @@ import auto.qinglong.net.NetManager;
 public abstract class BaseFragment extends Fragment {
     public static final String TAG = "BaseFragment";
     //数据加载标志
-    protected boolean initDataFlag = false;
+    protected boolean init = false;
 
     @Override
     public void onAttach(@NonNull Context context) {

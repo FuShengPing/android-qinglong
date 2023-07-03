@@ -270,7 +270,7 @@ public class EnvFragment extends BaseFragment {
     }
 
     private void initData() {
-        if (initDataFlag || NetManager.isRequesting(getNetRequestID())) {
+        if (init || NetManager.isRequesting(getNetRequestID())) {
             return;
         }
         ui_refresh.autoRefreshAnimationOnly();
@@ -637,7 +637,7 @@ public class EnvFragment extends BaseFragment {
         ApiController.getEnvironments(getNetRequestID(), searchValue, new ApiController.NetGetEnvironmentsCallback() {
             @Override
             public void onSuccess(List<QLEnvironment> environments) {
-                initDataFlag = true;
+                init = true;
                 if (needTip) {
                     ToastUnit.showShort("加载成功：" + environments.size());
                 }

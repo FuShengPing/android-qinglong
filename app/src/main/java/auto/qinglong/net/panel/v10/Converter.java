@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import auto.base.util.LogUnit;
 import auto.base.util.TimeUnit;
 import auto.qinglong.bean.panel.LogFile;
 import auto.qinglong.bean.views.Task;
@@ -14,7 +15,7 @@ import auto.qinglong.utils.CronUnit;
  * @version 2023.06.29
  */
 public class Converter {
-    public static List<Task> convertTasks(List<TaskRes.TaskObject> objects) {
+    public static List<Task> toTasks(List<TaskRes.TaskObject> objects) {
         List<Task> result = new ArrayList<>();
         if (objects == null || objects.isEmpty()) {
             return result;
@@ -58,7 +59,7 @@ public class Converter {
         return result;
     }
 
-    public static List<LogFile> covertLogFiles(List<LogFileRes.LogFileObject> objects) {
+    public static List<LogFile> toLogFiles(List<LogFileRes.LogFileObject> objects) {
         List<LogFile> result = new ArrayList<>();
         if (objects == null || objects.isEmpty()) {
             return result;
@@ -67,6 +68,7 @@ public class Converter {
             LogFile logFile = new LogFile();
             logFile.setTitle(object.getName());
             logFile.setDir(object.isDir());
+            logFile.setPath(object.getName());
             if (object.isDir()) {
                 List<LogFile> children = new ArrayList<>();
                 for (String name : object.getFiles()) {
@@ -75,6 +77,7 @@ public class Converter {
                     child.setTitle(name);
                     child.setParent(object.getName());
                     child.setPath(object.getName() + "/" + name);
+                    children.add(child);
                 }
                 logFile.setChildren(children);
             }

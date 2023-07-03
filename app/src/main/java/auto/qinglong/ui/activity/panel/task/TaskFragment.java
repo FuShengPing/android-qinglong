@@ -51,7 +51,6 @@ public class TaskFragment extends BaseFragment {
     private String mCurrentSearchValue;
     private MenuClickListener mMenuClickListener;
     private TaskAdapter mAdapter;
-    private boolean init = false;
 
     //主导航栏
     private LinearLayout ui_bar_main;
@@ -193,11 +192,10 @@ public class TaskFragment extends BaseFragment {
 
             @Override
             public void onLog(Task task) {
-                String path = "api/crons/" + task.getKey() + "/log";
                 Intent intent = new Intent(getContext(), CodeWebActivity.class);
                 intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_LOG);
                 intent.putExtra(CodeWebActivity.EXTRA_TITLE, task.getTitle());
-                intent.putExtra(CodeWebActivity.EXTRA_LOG_PATH, path);
+                intent.putExtra(CodeWebActivity.EXTRA_LOG_ID, String.valueOf(task.getKey()));
                 startActivity(intent);
             }
 

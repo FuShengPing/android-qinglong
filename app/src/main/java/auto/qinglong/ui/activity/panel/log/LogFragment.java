@@ -76,7 +76,7 @@ public class LogFragment extends BaseFragment {
     @Override
     public boolean onDispatchBackKey() {
         if (canBack && logFiles != null) {
-            uiDir.setText(File.pathSeparator);
+            uiDir.setText(File.separator);
             logAdapter.setData(logFiles);
             canBack = false;
             return true;
@@ -105,7 +105,8 @@ public class LogFragment extends BaseFragment {
                 Intent intent = new Intent(getContext(), CodeWebActivity.class);
                 intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_LOG);
                 intent.putExtra(CodeWebActivity.EXTRA_TITLE, file.getTitle());
-                intent.putExtra(CodeWebActivity.EXTRA_LOG_PATH, file.getParent());
+                intent.putExtra(CodeWebActivity.EXTRA_LOG_NAME, file.getTitle());
+                intent.putExtra(CodeWebActivity.EXTRA_LOG_DIR, file.getParent());
                 startActivity(intent);
             }
         });
@@ -120,7 +121,7 @@ public class LogFragment extends BaseFragment {
     }
 
     private void initData() {
-        if (initDataFlag || NetManager.isRequesting(getNetRequestID())) {
+        if (init || NetManager.isRequesting(getNetRequestID())) {
             return;
         }
         uiRefresh.autoRefreshAnimationOnly();
@@ -135,7 +136,7 @@ public class LogFragment extends BaseFragment {
     private void sortAndSetData(List<LogFile> data, String dir) {
         Collections.sort(data);
         logAdapter.setData(data);
-        uiDir.setText(File.pathSeparator + dir);
+        uiDir.setText(File.separator + dir);
     }
 
     private void getLogFiles() {
@@ -145,7 +146,7 @@ public class LogFragment extends BaseFragment {
                 sortAndSetData(files, "");
                 logFiles = files;
                 canBack = false;
-                initDataFlag = true;
+                init = true;
                 this.onEnd(true);
             }
 

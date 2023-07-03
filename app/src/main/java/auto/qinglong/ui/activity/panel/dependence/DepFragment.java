@@ -81,7 +81,7 @@ public class DepFragment extends BaseFragment {
     }
 
     private void initData() {
-        if (initDataFlag || NetManager.isRequesting(getNetRequestID())) {
+        if (init || NetManager.isRequesting(getNetRequestID())) {
             return;
         }
         ui_refresh.autoRefreshAnimationOnly();
@@ -131,7 +131,7 @@ public class DepFragment extends BaseFragment {
             @Override
             public void onSuccess(List<QLDependence> dependencies) {
                 depItemAdapter.setData(dependencies);
-                initDataFlag = true;
+                init = true;
                 ToastUnit.showShort(getString(R.string.tip_load_success_header) + dependencies.size());
                 this.onEnd(true);
             }

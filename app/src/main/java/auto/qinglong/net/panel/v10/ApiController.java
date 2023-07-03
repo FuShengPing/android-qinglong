@@ -65,7 +65,7 @@ public class ApiController {
                     }
                 } else {
                     if (res.getCode() == 200) {
-                        callback.onSuccess(Converter.convertTasks(res.getData()));
+                        callback.onSuccess(Converter.toTasks(res.getData()));
                     } else {
                         callback.onFailure(res.getMessage());
                     }
@@ -820,46 +820,6 @@ public class ApiController {
 
     }
 
-    public static void getLogs(@NonNull String requestId, @NonNull NetGetLogsCallback callback) {
-//        Call<QLLogsRes> call = new Retrofit.Builder()
-//                .baseUrl(PanelPreference.getBaseUrl())
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build()
-//                .create(Api.class)
-//                .getLogFiles(PanelPreference.getAuthorization());
-//        call.enqueue(new Callback<QLLogsRes>() {
-//            @Override
-//            public void onResponse(@NonNull Call<QLLogsRes> call, @NonNull Response<QLLogsRes> response) {
-//                NetManager.finishCall(requestId);
-//                QLLogsRes res = response.body();
-//                if (res == null) {
-//                    if (response.code() == 401) {
-//                        callback.onFailure(ERROR_INVALID_AUTH);
-//                    } else {
-//                        callback.onFailure(ERROR_NO_BODY);
-//                    }
-//                } else {
-//                    if (res.getCode() == 200) {
-//                        callback.onSuccess(res.getDirs());
-//                    } else {
-//                        callback.onFailure(res.getMessage());
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<QLLogsRes> call, @NonNull Throwable t) {
-//                NetManager.finishCall(requestId);
-//                if (call.isCanceled()) {
-//                    return;
-//                }
-//                callback.onFailure(t.getLocalizedMessage());
-//            }
-//        });
-//
-//        NetManager.addCall(call, requestId);
-    }
-
     public static void getLogFiles(@NonNull String baseUrl, @NonNull String authorization, auto.qinglong.net.panel.ApiController.LogFileCallBack callBack) {
         Call<LogFileRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -880,7 +840,7 @@ public class ApiController {
                     }
                 } else {
                     if (res.getCode() == 200) {
-                        callBack.onSuccess(Converter.covertLogFiles(res.getDirs()));
+                        callBack.onSuccess(Converter.toLogFiles(res.getDirs()));
                     } else {
                         callBack.onFailure(res.getMessage());
                     }

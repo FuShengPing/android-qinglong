@@ -23,7 +23,6 @@ import auto.base.view.popup.PopConfirmWindow;
 import auto.base.view.popup.PopupWindowBuilder;
 import auto.qinglong.R;
 import auto.qinglong.bean.app.Version;
-import auto.qinglong.bean.panel.QLSystem;
 import auto.qinglong.database.sp.PanelPreference;
 import auto.qinglong.database.sp.SettingPreference;
 import auto.qinglong.net.app.ApiController;
@@ -113,7 +112,7 @@ public class HomeActivity extends BaseActivity {
         ui_address.setText(PanelPreference.getCurrentAccount().getAddress());
         //面板版本
         TextView ui_version = uiDrawerLeft.findViewById(R.id.menu_top_info_version);
-        ui_version.setText(String.format(getString(R.string.format_tip_version), QLSystem.getStaticVersion()));
+        ui_version.setText(String.format(getString(R.string.format_tip_version), PanelPreference.getVersion()));
 
         //导航监听
         LinearLayout menu_task = uiDrawerLeft.findViewById(R.id.menu_task);

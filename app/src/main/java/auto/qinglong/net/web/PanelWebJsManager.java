@@ -11,7 +11,7 @@ import auto.base.util.ToastUnit;
 /**
  * WebView与JS交互辅助类 实现代码显示和编辑功能.
  */
-public class QLWebJsManager {
+public class PanelWebJsManager {
 
     /**
      * 设置编辑器是否可用编辑
@@ -50,35 +50,4 @@ public class QLWebJsManager {
         webView.evaluateJavascript(script, callback);
     }
 
-    public static void initConfig(WebView webView, String host, String authorization) {
-        if (webView == null) {
-            return;
-        }
-        String script = String.format("javascript:initConfig('%1$s','%2$s')", host, authorization);
-        webView.evaluateJavascript(script, null);
-    }
-
-    public static void refreshConfig(WebView webView) {
-        if (webView == null) {
-            return;
-        }
-        String script = "javascript:refreshConfig()";
-        webView.evaluateJavascript(script, null);
-    }
-
-    public static void backConfig(WebView webView) {
-        if (webView == null) {
-            return;
-        }
-        String script = "javascript:backConfig()";
-        webView.evaluateJavascript(script, null);
-    }
-
-    public static void saveConfig(WebView webView) {
-        if (webView == null) {
-            return;
-        }
-        String script = "javascript:saveConfig()";
-        webView.evaluateJavascript(script, null);
-    }
 }

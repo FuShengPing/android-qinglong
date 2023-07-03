@@ -6,7 +6,6 @@ import auto.qinglong.bean.panel.network.QLEnvEditRes;
 import auto.qinglong.bean.panel.network.QLEnvironmentRes;
 import auto.qinglong.bean.panel.network.QLLogRemoveRes;
 import auto.qinglong.bean.panel.network.QLLoginLogsRes;
-import auto.qinglong.bean.panel.network.QLLogsRes;
 import auto.qinglong.bean.panel.network.QLScriptsRes;
 import auto.qinglong.bean.panel.network.QLSimpleRes;
 import auto.qinglong.net.panel.BaseRes;

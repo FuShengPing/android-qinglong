@@ -133,7 +133,7 @@ public class ScriptFragment extends BaseFragment {
     }
 
     private void initData() {
-        if (initDataFlag || NetManager.isRequesting(getNetRequestID())) {
+        if (init || NetManager.isRequesting(getNetRequestID())) {
             return;
         }
         ui_refresh.autoRefreshAnimationOnly();
@@ -198,7 +198,7 @@ public class ScriptFragment extends BaseFragment {
                 sortAndSetData(scripts, "");
                 rootData = scripts;
                 canBack = false;
-                initDataFlag = true;
+                init = true;
                 this.onEnd(true);
             }
 

@@ -58,7 +58,7 @@ public class LoginLogFragment extends BaseFragment {
     }
 
     private void initData() {
-        if (initDataFlag || NetManager.isRequesting(this.getNetRequestID())) {
+        if (init || NetManager.isRequesting(this.getNetRequestID())) {
             return;
         }
         ui_refresh.autoRefreshAnimationOnly();
@@ -74,7 +74,7 @@ public class LoginLogFragment extends BaseFragment {
             @Override
             public void onSuccess(List<QLLoginLog> logs) {
                 itemAdapter.setData(logs);
-                initDataFlag = true;
+                init = true;
                 this.onEnd(true);
             }
 
