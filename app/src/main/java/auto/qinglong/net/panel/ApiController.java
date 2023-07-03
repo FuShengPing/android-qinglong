@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import java.util.List;
 
 import auto.qinglong.bean.panel.Account;
+import auto.qinglong.bean.panel.LogFile;
 import auto.qinglong.bean.panel.SystemInfo;
 import auto.qinglong.bean.views.Task;
 import okhttp3.MediaType;
@@ -185,6 +186,10 @@ public class ApiController {
         auto.qinglong.net.panel.v10.ApiController.createTask(baseUrl, authorization, task, callBack);
     }
 
+    public static void getLogFiles(@NonNull String baseUrl, @NonNull String authorization,LogFileCallBack callBack){
+        auto.qinglong.net.panel.v10.ApiController.getLogFiles(baseUrl, authorization, callBack);
+    }
+
     public interface SystemCallBack {
         void onSuccess(SystemInfo system);
 
@@ -199,6 +204,12 @@ public class ApiController {
 
     public interface TaskCallBack {
         void onSuccess(List<Task> tasks);
+
+        void onFailure(String msg);
+    }
+
+    public interface LogFileCallBack {
+        void onSuccess(List<LogFile> files);
 
         void onFailure(String msg);
     }

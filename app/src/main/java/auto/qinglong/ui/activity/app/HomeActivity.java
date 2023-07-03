@@ -45,28 +45,20 @@ public class HomeActivity extends BaseActivity {
 
     private long mLastBackPressedTime = 0;//上次按下返回键时间
     private BaseFragment mCurrentFragment;//当前帧
-    private String mCurrentMenu;
     private BaseFragment.MenuClickListener mMenuClickListener;
     private Map<String, BaseFragment> fragmentMap;
-    // 碎片界面列表
-    private TaskFragment fg_task;
-    private LogFragment fg_log;
-    private ScriptFragment fg_script;
-    private EnvFragment fg_environment;
-    private DepPagerFragment fg_dependence;
-    private SettingFragment fg_setting;
-    //布局变量
-    private DrawerLayout ui_drawer;
-    private LinearLayout ui_drawer_left;
-    private PopupWindow ui_pop_notice;
+
+    private DrawerLayout uiDrawer;
+    private LinearLayout uiDrawerLeft;
+    private PopupWindow uiPopNotice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        ui_drawer = findViewById(R.id.drawer_layout);
-        ui_drawer_left = findViewById(R.id.drawer_left);
+        uiDrawer = findViewById(R.id.drawer_layout);
+        uiDrawerLeft = findViewById(R.id.drawer_left);
 
         fragmentMap = new HashMap<>();
 
@@ -76,7 +68,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void init() {
         //变量初始化
-        mMenuClickListener = () -> ui_drawer.openDrawer(ui_drawer_left);
+        mMenuClickListener = () -> uiDrawer.openDrawer(uiDrawerLeft);
         //导航栏初始化
         initDrawerBar();
         //初始化第一帧页面
@@ -101,7 +93,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         //进度pop存在阻止点击
-        if (ui_pop_notice != null && ui_pop_notice.isShowing()) {
+        if (uiPopNotice != null && uiPopNotice.isShowing()) {
             return false;
         }
         //询问当前帧是否阻止点击
@@ -112,28 +104,28 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void initDrawerBar() {
-        ui_drawer_left.setVisibility(View.INVISIBLE);
+        uiDrawerLeft.setVisibility(View.INVISIBLE);
         //用户名
-        TextView ui_username = ui_drawer_left.findViewById(R.id.menu_top_info_username);
+        TextView ui_username = uiDrawerLeft.findViewById(R.id.menu_top_info_username);
         ui_username.setText(Objects.requireNonNull(PanelPreference.getCurrentAccount()).getUsername());
         //面板地址
-        TextView ui_address = ui_drawer_left.findViewById(R.id.menu_top_info_address);
+        TextView ui_address = uiDrawerLeft.findViewById(R.id.menu_top_info_address);
         ui_address.setText(PanelPreference.getCurrentAccount().getAddress());
         //面板版本
-        TextView ui_version = ui_drawer_left.findViewById(R.id.menu_top_info_version);
+        TextView ui_version = uiDrawerLeft.findViewById(R.id.menu_top_info_version);
         ui_version.setText(String.format(getString(R.string.format_tip_version), QLSystem.getStaticVersion()));
 
         //导航监听
-        LinearLayout menu_task = ui_drawer_left.findViewById(R.id.menu_task);
-        LinearLayout menu_log = ui_drawer_left.findViewById(R.id.menu_log);
-        LinearLayout menu_config = ui_drawer_left.findViewById(R.id.menu_config);
-        LinearLayout menu_script = ui_drawer_left.findViewById(R.id.menu_script);
-        LinearLayout menu_env = ui_drawer_left.findViewById(R.id.menu_env);
-        LinearLayout menu_setting = ui_drawer_left.findViewById(R.id.menu_setting);
-        LinearLayout menu_dep = ui_drawer_left.findViewById(R.id.menu_dep);
-        LinearLayout menu_extension_web = ui_drawer_left.findViewById(R.id.menu_extension_web);
-        LinearLayout menu_app_exit = ui_drawer_left.findViewById(R.id.menu_exit);
-        LinearLayout menu_app_setting = ui_drawer_left.findViewById(R.id.menu_app_setting);
+        LinearLayout menu_task = uiDrawerLeft.findViewById(R.id.menu_task);
+        LinearLayout menu_log = uiDrawerLeft.findViewById(R.id.menu_log);
+        LinearLayout menu_config = uiDrawerLeft.findViewById(R.id.menu_config);
+        LinearLayout menu_script = uiDrawerLeft.findViewById(R.id.menu_script);
+        LinearLayout menu_env = uiDrawerLeft.findViewById(R.id.menu_env);
+        LinearLayout menu_setting = uiDrawerLeft.findViewById(R.id.menu_setting);
+        LinearLayout menu_dep = uiDrawerLeft.findViewById(R.id.menu_dep);
+        LinearLayout menu_extension_web = uiDrawerLeft.findViewById(R.id.menu_extension_web);
+        LinearLayout menu_app_exit = uiDrawerLeft.findViewById(R.id.menu_exit);
+        LinearLayout menu_app_setting = uiDrawerLeft.findViewById(R.id.menu_app_setting);
 
         //定时任务
         menu_task.setOnClickListener(v -> showFragment(TaskFragment.class));
@@ -205,8 +197,8 @@ public class HomeActivity extends BaseActivity {
         //显示新页面
         getSupportFragmentManager().beginTransaction().show(mCurrentFragment).commit();
         //关闭导航栏
-        if (ui_drawer.isDrawerOpen(ui_drawer_left)) {
-            ui_drawer.closeDrawer(ui_drawer_left);
+        if (uiDrawer.isDrawerOpen(uiDrawerLeft)) {
+            uiDrawer.closeDrawer(uiDrawerLeft);
         }
     }
 
@@ -241,7 +233,7 @@ public class HomeActivity extends BaseActivity {
                 return true;
             }
         });
-        ui_pop_notice = PopupWindowBuilder.buildConfirmWindow(this, popConfirmWindow);
+        uiPopNotice = PopupWindowBuilder.buildConfirmWindow(this, popConfirmWindow);
     }
 
     private void netGetVersion() {

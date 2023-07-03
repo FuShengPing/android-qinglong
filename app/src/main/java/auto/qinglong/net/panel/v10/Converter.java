@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import auto.base.util.TimeUnit;
+import auto.qinglong.bean.panel.LogFile;
 import auto.qinglong.bean.views.Task;
 import auto.qinglong.utils.CronUnit;
 
@@ -14,7 +15,10 @@ import auto.qinglong.utils.CronUnit;
  */
 public class Converter {
     public static List<Task> convertTasks(List<TaskRes.TaskObject> objects) {
-        List<Task> results = new ArrayList<>();
+        List<Task> result = new ArrayList<>();
+        if (objects == null || objects.isEmpty()) {
+            return result;
+        }
         for (TaskRes.TaskObject object : objects) {
             Task task = new Task(object.getId());
             task.setTitle(object.getName());
@@ -49,8 +53,33 @@ public class Converter {
                 task.setState("空闲中");
                 task.setStateCode(Task.STATE_FREE);
             }
-            results.add(task);
+            result.add(task);
         }
-        return results;
+        return result;
+    }
+
+    public static List<LogFile> covertLogFiles(List<LogFileRes.LogFileObject> objects) {
+        List<LogFile> result = new ArrayList<>();
+        if (objects == null || objects.isEmpty()) {
+            return result;
+        }
+        for (LogFileRes.LogFileObject object : objects) {
+            LogFile logFile = new LogFile();
+            logFile.setTitle(object.getName());
+            logFile.setDir(object.isDir());
+            if (object.isDir()) {
+                List<LogFile> children = new ArrayList<>();
+                for (String name : object.getFiles()) {
+                    LogFile child = new LogFile();
+                    child.setDir(false);
+                    child.setTitle(name);
+                    child.setParent(object.getName());
+                    child.setPath(object.getName() + "/" + name);
+                }
+                logFile.setChildren(children);
+            }
+            result.add(logFile);
+        }
+        return result;
     }
 }

@@ -6,11 +6,9 @@ import auto.qinglong.bean.panel.network.QLEnvEditRes;
 import auto.qinglong.bean.panel.network.QLEnvironmentRes;
 import auto.qinglong.bean.panel.network.QLLogRemoveRes;
 import auto.qinglong.bean.panel.network.QLLoginLogsRes;
-import auto.qinglong.bean.panel.network.QLLoginRes;
 import auto.qinglong.bean.panel.network.QLLogsRes;
 import auto.qinglong.bean.panel.network.QLScriptsRes;
 import auto.qinglong.bean.panel.network.QLSimpleRes;
-import auto.qinglong.bean.panel.network.QLSystemRes;
 import auto.qinglong.net.panel.BaseRes;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -28,22 +26,6 @@ import retrofit2.http.Url;
  * 青龙面板接口.
  */
 public interface Api {
-    /**
-     * 登录.
-     *
-     * @param body the body
-     * @return the call
-     */
-    @POST("api/user/login")
-    Call<QLLoginRes> login(@Body RequestBody body);
-
-    /**
-     * 查询系统信息.
-     *
-     * @return the system info
-     */
-    @GET("api/system")
-    Call<QLSystemRes> getSystemInfo();
 
     /**
      * 查询任务列表.
@@ -334,7 +316,7 @@ public interface Api {
      * @return the logs
      */
     @GET("api/logs")
-    Call<QLLogsRes> getLogs(@Header("Authorization") String authorization);
+    Call<LogFileRes> getLogFiles(@Header("Authorization") String authorization);
 
     /**
      * 获取日志信息.

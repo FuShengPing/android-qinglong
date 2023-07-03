@@ -17,30 +17,32 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import auto.base.util.ToastUnit;
 import auto.qinglong.R;
+import auto.qinglong.bean.panel.LogFile;
+import auto.qinglong.database.sp.PanelPreference;
+import auto.qinglong.net.NetManager;
 import auto.qinglong.ui.BaseFragment;
 import auto.qinglong.ui.activity.panel.CodeWebActivity;
-import auto.qinglong.bean.panel.QLLog;
-import auto.qinglong.net.NetManager;
-import auto.qinglong.net.panel.v10.ApiController;
-import auto.base.util.ToastUnit;
 
 
 public class LogFragment extends BaseFragment {
     public static String TAG = "LogFragment";
-    private boolean canBack = false;
-    private List<QLLog> oData;
+
+    private List<LogFile> logFiles;
     private MenuClickListener menuClickListener;
     private LogAdapter logAdapter;
+    private boolean canBack = false;
 
-    private ImageView ui_nav;
-    private SmartRefreshLayout ui_refresh;
-    private TextView ui_dir;
-    private RecyclerView ui_recycler;
+    private ImageView uiNav;
+    private SmartRefreshLayout uiRefresh;
+    private TextView uiDir;
+    private RecyclerView uiRecycler;
 
     @SuppressLint("InflateParams")
     @Nullable
@@ -48,10 +50,10 @@ public class LogFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_log, null);
 
-        ui_nav = view.findViewById(R.id.log_nav);
-        ui_refresh = view.findViewById(R.id.refresh_layout);
-        ui_dir = view.findViewById(R.id.log_dir_tip);
-        ui_recycler = view.findViewById(R.id.recycler_view);
+        uiNav = view.findViewById(R.id.log_nav);
+        uiRefresh = view.findViewById(R.id.refresh_layout);
+        uiDir = view.findViewById(R.id.log_dir_tip);
+        uiRecycler = view.findViewById(R.id.recycler_view);
 
         init();
         return view;
@@ -71,54 +73,77 @@ public class LogFragment extends BaseFragment {
         }
     }
 
-    private void initData() {
-        if (initDataFlag || NetManager.isRequesting(getNetRequestID())) {
-            return;
+    @Override
+    public boolean onDispatchBackKey() {
+        if (canBack && logFiles != null) {
+            uiDir.setText(File.pathSeparator);
+            logAdapter.setData(logFiles);
+            canBack = false;
+            return true;
+        } else {
+            return false;
         }
-        ui_refresh.autoRefreshAnimationOnly();
-        new Handler().postDelayed(() -> {
-            if (isVisible()) {
-                getLogs();
-            }
-        }, 1000);
+
+    }
+
+    public void setMenuClickListener(MenuClickListener mMenuClickListener) {
+        this.menuClickListener = mMenuClickListener;
     }
 
     @Override
     public void init() {
         logAdapter = new LogAdapter(requireContext());
-        ui_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
-        Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
-        ui_recycler.setAdapter(logAdapter);
+        uiRecycler.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
+        Objects.requireNonNull(uiRecycler.getItemAnimator()).setChangeDuration(0);
+        uiRecycler.setAdapter(logAdapter);
 
-        ui_nav.setOnClickListener(v -> {
+        logAdapter.setItemActionListener(file -> {
+            if (file.isDir()) {
+                canBack = true;
+                sortAndSetData(file.getChildren(), file.getTitle());
+            } else {
+                Intent intent = new Intent(getContext(), CodeWebActivity.class);
+                intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_LOG);
+                intent.putExtra(CodeWebActivity.EXTRA_TITLE, file.getTitle());
+                intent.putExtra(CodeWebActivity.EXTRA_LOG_PATH, file.getParent());
+                startActivity(intent);
+            }
+        });
+
+        uiNav.setOnClickListener(v -> {
             if (menuClickListener != null) {
                 menuClickListener.onMenuClick();
             }
         });
 
-        logAdapter.setItemActionListener(qlLog -> {
-            if (qlLog.isDir()) {
-                canBack = true;
-                sortAndSetData(qlLog.getChildren(), qlLog.getName());
-            } else {
-                Intent intent = new Intent(getContext(), CodeWebActivity.class);
-                intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_LOG);
-                intent.putExtra(CodeWebActivity.EXTRA_TITLE, qlLog.getName());
-                intent.putExtra(CodeWebActivity.EXTRA_LOG_PATH, qlLog.getLogPath());
-                startActivity(intent);
-            }
-        });
-
-        ui_refresh.setOnRefreshListener(refreshLayout -> getLogs());
+        uiRefresh.setOnRefreshListener(refreshLayout -> getLogFiles());
     }
 
+    private void initData() {
+        if (initDataFlag || NetManager.isRequesting(getNetRequestID())) {
+            return;
+        }
+        uiRefresh.autoRefreshAnimationOnly();
+        new Handler().postDelayed(() -> {
+            if (isVisible()) {
+                getLogFiles();
+            }
+        }, 1000);
+    }
 
-    private void getLogs() {
-        ApiController.getLogs(getNetRequestID(), new ApiController.NetGetLogsCallback() {
+    @SuppressLint("SetTextI18n")
+    private void sortAndSetData(List<LogFile> data, String dir) {
+        Collections.sort(data);
+        logAdapter.setData(data);
+        uiDir.setText(File.pathSeparator + dir);
+    }
+
+    private void getLogFiles() {
+        auto.qinglong.net.panel.ApiController.getLogFiles(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.qinglong.net.panel.ApiController.LogFileCallBack() {
             @Override
-            public void onSuccess(List<QLLog> logs) {
-                sortAndSetData(logs, "");
-                oData = logs;
+            public void onSuccess(List<LogFile> files) {
+                sortAndSetData(files, "");
+                logFiles = files;
                 canBack = false;
                 initDataFlag = true;
                 this.onEnd(true);
@@ -130,35 +155,13 @@ public class LogFragment extends BaseFragment {
                 this.onEnd(false);
             }
 
-            protected void onEnd(boolean isSuccess) {
-                if (ui_refresh.isRefreshing()) {
-                    ui_refresh.finishRefresh(isSuccess);
+            private void onEnd(boolean isSuccess) {
+                if (uiRefresh.isRefreshing()) {
+                    uiRefresh.finishRefresh(isSuccess);
                 }
             }
         });
     }
 
-    @SuppressLint("SetTextI18n")
-    private void sortAndSetData(List<QLLog> data, String dir) {
-        Collections.sort(data);
-        logAdapter.setData(data);
-        ui_dir.setText(getString(R.string.char_path_split) + dir);
-    }
 
-    public void setMenuClickListener(MenuClickListener mMenuClickListener) {
-        this.menuClickListener = mMenuClickListener;
-    }
-
-    @Override
-    public boolean onDispatchBackKey() {
-        if (canBack) {
-            logAdapter.setData(oData);
-            ui_dir.setText(getString(R.string.char_path_split));
-            canBack = false;
-            return true;
-        } else {
-            return false;
-        }
-
-    }
 }

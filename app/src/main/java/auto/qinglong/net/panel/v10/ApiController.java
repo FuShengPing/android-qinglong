@@ -24,7 +24,6 @@ import auto.qinglong.bean.panel.network.QLEnvEditRes;
 import auto.qinglong.bean.panel.network.QLEnvironmentRes;
 import auto.qinglong.bean.panel.network.QLLogRemoveRes;
 import auto.qinglong.bean.panel.network.QLLoginLogsRes;
-import auto.qinglong.bean.panel.network.QLLogsRes;
 import auto.qinglong.bean.panel.network.QLScriptsRes;
 import auto.qinglong.bean.panel.network.QLSimpleRes;
 import auto.qinglong.bean.views.Task;
@@ -822,43 +821,80 @@ public class ApiController {
     }
 
     public static void getLogs(@NonNull String requestId, @NonNull NetGetLogsCallback callback) {
-        Call<QLLogsRes> call = new Retrofit.Builder()
-                .baseUrl(PanelPreference.getBaseUrl())
+//        Call<QLLogsRes> call = new Retrofit.Builder()
+//                .baseUrl(PanelPreference.getBaseUrl())
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build()
+//                .create(Api.class)
+//                .getLogFiles(PanelPreference.getAuthorization());
+//        call.enqueue(new Callback<QLLogsRes>() {
+//            @Override
+//            public void onResponse(@NonNull Call<QLLogsRes> call, @NonNull Response<QLLogsRes> response) {
+//                NetManager.finishCall(requestId);
+//                QLLogsRes res = response.body();
+//                if (res == null) {
+//                    if (response.code() == 401) {
+//                        callback.onFailure(ERROR_INVALID_AUTH);
+//                    } else {
+//                        callback.onFailure(ERROR_NO_BODY);
+//                    }
+//                } else {
+//                    if (res.getCode() == 200) {
+//                        callback.onSuccess(res.getDirs());
+//                    } else {
+//                        callback.onFailure(res.getMessage());
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(@NonNull Call<QLLogsRes> call, @NonNull Throwable t) {
+//                NetManager.finishCall(requestId);
+//                if (call.isCanceled()) {
+//                    return;
+//                }
+//                callback.onFailure(t.getLocalizedMessage());
+//            }
+//        });
+//
+//        NetManager.addCall(call, requestId);
+    }
+
+    public static void getLogFiles(@NonNull String baseUrl, @NonNull String authorization, auto.qinglong.net.panel.ApiController.LogFileCallBack callBack) {
+        Call<LogFileRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .getLogs(PanelPreference.getAuthorization());
-        call.enqueue(new Callback<QLLogsRes>() {
+                .getLogFiles(authorization);
+
+        call.enqueue(new Callback<LogFileRes>() {
             @Override
-            public void onResponse(@NonNull Call<QLLogsRes> call, @NonNull Response<QLLogsRes> response) {
-                NetManager.finishCall(requestId);
-                QLLogsRes res = response.body();
+            public void onResponse(Call<LogFileRes> call, Response<LogFileRes> response) {
+                LogFileRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
+                        callBack.onFailure(ERROR_INVALID_AUTH);
                     } else {
-                        callback.onFailure(ERROR_NO_BODY);
+                        callBack.onFailure(ERROR_NO_BODY);
                     }
                 } else {
                     if (res.getCode() == 200) {
-                        callback.onSuccess(res.getDirs());
+                        callBack.onSuccess(Converter.covertLogFiles(res.getDirs()));
                     } else {
-                        callback.onFailure(res.getMessage());
+                        callBack.onFailure(res.getMessage());
                     }
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<QLLogsRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
+            public void onFailure(Call<LogFileRes> call, Throwable t) {
                 if (call.isCanceled()) {
                     return;
                 }
-                callback.onFailure(t.getLocalizedMessage());
+                callBack.onFailure(t.getLocalizedMessage());
             }
         });
-
-        NetManager.addCall(call, requestId);
     }
 
     public static void getLogDetail(@NonNull String requestId, @NonNull String logPath, @NonNull NetSimpleCallBack callback) {

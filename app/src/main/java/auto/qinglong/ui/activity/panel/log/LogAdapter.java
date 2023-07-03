@@ -15,11 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import auto.qinglong.R;
+import auto.qinglong.bean.panel.LogFile;
 import auto.qinglong.bean.panel.QLLog;
 
 public class LogAdapter extends RecyclerView.Adapter<LogAdapter.MyViewHolder> {
     private final Context context;
-    private final List<QLLog> data;
+    private final List<LogFile> data;
     private ItemActionListener itemActionListener;
 
     public LogAdapter(@NonNull Context context) {
@@ -37,23 +38,23 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.MyViewHolder> {
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        QLLog QLLog = data.get(position);
+        LogFile file = data.get(position);
 
-        holder.ui_title.setText(QLLog.getName());
+        holder.ui_title.setText(file.getTitle());
 
-        if (QLLog.isDir()) {
-            holder.ui_num.setText(QLLog.getFiles().size() + " 项");
+        if (file.isDir()) {
+            holder.ui_num.setText(file.getChildren().size() + " 项");
         } else {
             holder.ui_num.setText(null);
         }
 
-        if (QLLog.isDir()) {
+        if (file.isDir()) {
             holder.ui_image.setImageResource(R.drawable.ic_blue_folder);
         } else {
             holder.ui_image.setImageResource(R.mipmap.ic_file_txt);
         }
 
-        holder.itemView.setOnClickListener(v -> itemActionListener.onClick(QLLog));
+        holder.itemView.setOnClickListener(v -> itemActionListener.onClick(file));
     }
 
     @Override
@@ -62,7 +63,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.MyViewHolder> {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<QLLog> data) {
+    public void setData(List<LogFile> data) {
         this.data.clear();
         this.data.addAll(data);
         notifyDataSetChanged();
@@ -74,10 +75,10 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.MyViewHolder> {
     }
 
     public interface ItemActionListener {
-        void onClick(QLLog qlLog);
+        void onClick(LogFile file);
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView ui_image;
         public TextView ui_title;
         public TextView ui_num;
