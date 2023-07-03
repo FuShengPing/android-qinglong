@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 
 import java.util.List;
 
+import auto.base.util.TextUnit;
 import auto.qinglong.bean.panel.Account;
 import auto.qinglong.bean.panel.File;
 import auto.qinglong.bean.panel.SystemInfo;
@@ -245,12 +246,12 @@ public class ApiController {
         });
     }
 
-    public static void getScriptFiles(@NonNull String baseUrl, @NonNull String authorization,FileListCallBack callBack){
+    public static void getScriptFiles(@NonNull String baseUrl, @NonNull String authorization, FileListCallBack callBack) {
         auto.qinglong.net.panel.v10.ApiController.getScriptFiles(baseUrl, authorization, callBack);
     }
 
     public static void getScriptFileContent(@NonNull String baseUrl, @NonNull String authorization, String fileName, String fileParent, ContentCallBack callBack) {
-        String path = "api/scripts/" + fileName + "?path=" + fileParent;
+        String path = "api/scripts/" + fileName + "?path=" + (TextUnit.isFull(fileParent) ? fileParent : "");
         getFileContent(baseUrl, authorization, path, callBack);
     }
 
