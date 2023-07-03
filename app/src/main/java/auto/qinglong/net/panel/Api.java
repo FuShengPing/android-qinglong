@@ -29,6 +29,9 @@ public interface Api {
     @POST("api/configs/save")
     Call<BaseRes> updateConfig(@Header("Authorization") String authorization, @Body RequestBody body);
 
+    @GET
+    Call<DependenceLogRes> getDependenceLog(@Url String url, @Header("Authorization") String authorization);
+
     @GET("api/system/log/remove")
     Call<SystemLogConfigRes> getSystemLogConfig(@Header("Authorization") String authorization);
 }

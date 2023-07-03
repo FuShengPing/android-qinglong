@@ -186,6 +186,10 @@ public class ApiController {
         auto.qinglong.net.panel.v10.ApiController.createTask(baseUrl, authorization, task, callBack);
     }
 
+    public static void getLogFiles(@NonNull String baseUrl, @NonNull String authorization, LogFileCallBack callBack) {
+        auto.qinglong.net.panel.v10.ApiController.getLogFiles(baseUrl, authorization, callBack);
+    }
+
     public static void getLogFileContent(@NonNull String baseUrl, @NonNull String authorization, String scriptKey, String fileName, String fileParent, ContentCallBack callBack) {
         String path = auto.qinglong.net.panel.v10.ApiController.getLogFilePath(scriptKey, fileName, fileParent);
 
@@ -291,6 +295,49 @@ public class ApiController {
         });
     }
 
+    public static void getDependenceLogContent(@NonNull String baseUrl, @NonNull String authorization, Object key, ContentCallBack callBack) {
+        String path = "api/dependencies/" + key;
+
+        Call<DependenceLogRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .getDependenceLog(path, authorization);
+
+        call.enqueue(new Callback<DependenceLogRes>() {
+            @Override
+            public void onResponse(@NonNull Call<DependenceLogRes> call, @NonNull Response<DependenceLogRes> response) {
+                DependenceLogRes res = response.body();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callBack.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callBack.onFailure(ERROR_NO_BODY);
+                    }
+                } else {
+                    if (res.getCode() == 200) {
+                        StringBuilder content = new StringBuilder();
+                        for (String line : res.getData().getLog()) {
+                            content.append(line).append("\n");
+                        }
+                        callBack.onSuccess(content.toString());
+                    } else {
+                        callBack.onFailure(res.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<DependenceLogRes> call, @NonNull Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                callBack.onFailure(t.getLocalizedMessage());
+            }
+        });
+    }
+
     private static void getFileContent(@NonNull String baseUrl, @NonNull String authorization, String path, ContentCallBack callBack) {
         Call<FileContentRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -325,10 +372,6 @@ public class ApiController {
                 callBack.onFailure(t.getLocalizedMessage());
             }
         });
-    }
-
-    public static void getLogFiles(@NonNull String baseUrl, @NonNull String authorization, LogFileCallBack callBack) {
-        auto.qinglong.net.panel.v10.ApiController.getLogFiles(baseUrl, authorization, callBack);
     }
 
     public interface SystemCallBack {

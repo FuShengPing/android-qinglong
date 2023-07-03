@@ -18,9 +18,8 @@ import java.util.Objects;
 import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
 import auto.qinglong.R;
-import auto.qinglong.bean.panel.QLDependence;
 import auto.qinglong.database.sp.PanelPreference;
-import auto.qinglong.net.panel.v10.ApiController;
+import auto.qinglong.net.panel.ApiController;
 import auto.qinglong.net.web.PanelWebJsManager;
 import auto.qinglong.net.web.WebViewBuilder;
 import auto.qinglong.ui.BaseActivity;
@@ -251,7 +250,7 @@ public class CodeWebActivity extends BaseActivity {
     }
 
     private void saveConfigContent(String content) {
-        auto.qinglong.net.panel.ApiController.saveConfigFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), content, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
+        ApiController.saveConfigFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), content, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 mContent = content;
@@ -266,7 +265,7 @@ public class CodeWebActivity extends BaseActivity {
     }
 
     private void saveScriptContent(String content) {
-        auto.qinglong.net.panel.ApiController.saveScriptFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), mScriptName, mScriptParent, content, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
+       ApiController.saveScriptFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), mScriptName, mScriptParent, content, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 mContent = content;
@@ -281,7 +280,7 @@ public class CodeWebActivity extends BaseActivity {
     }
 
     private void getConfigContent() {
-        auto.qinglong.net.panel.ApiController.getConfigFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.qinglong.net.panel.ApiController.ContentCallBack() {
+       ApiController.getConfigFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.qinglong.net.panel.ApiController.ContentCallBack() {
             @Override
             public void onSuccess(String content) {
                 mContent = content;
@@ -301,7 +300,7 @@ public class CodeWebActivity extends BaseActivity {
     }
 
     private void getScriptContent(String fileName, String fileParent) {
-        auto.qinglong.net.panel.ApiController.getScriptFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), fileName, fileParent, new auto.qinglong.net.panel.ApiController.ContentCallBack() {
+        ApiController.getScriptFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), fileName, fileParent, new auto.qinglong.net.panel.ApiController.ContentCallBack() {
             @Override
             public void onSuccess(String content) {
                 //防止内容过大导致崩溃
@@ -327,7 +326,7 @@ public class CodeWebActivity extends BaseActivity {
     }
 
     private void getLogFileContent(String scriptKey, String fileName, String fileParent) {
-        auto.qinglong.net.panel.ApiController.getLogFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), scriptKey, fileName, fileParent, new auto.qinglong.net.panel.ApiController.ContentCallBack() {
+        ApiController.getLogFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), scriptKey, fileName, fileParent, new auto.qinglong.net.panel.ApiController.ContentCallBack() {
             @Override
             public void onSuccess(String content) {
                 PanelWebJsManager.setContent(ui_webView, content);
@@ -344,10 +343,10 @@ public class CodeWebActivity extends BaseActivity {
     }
 
     private void getDependenceLogContent(String key) {
-        ApiController.getDependenceLog(getNetRequestID(), key, new ApiController.NetGetDependenceCallback() {
+        ApiController.getDependenceLogContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), key, new auto.qinglong.net.panel.ApiController.ContentCallBack() {
             @Override
-            public void onSuccess(QLDependence dependence) {
-                PanelWebJsManager.setContent(ui_webView, dependence.getLogStr());
+            public void onSuccess(String content) {
+                PanelWebJsManager.setContent(ui_webView, content);
                 onLoadFinish();
                 ToastUnit.showShort(getString(R.string.tip_load_success));
             }
