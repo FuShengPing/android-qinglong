@@ -245,6 +245,10 @@ public class ApiController {
         });
     }
 
+    public static void getScriptFiles(@NonNull String baseUrl, @NonNull String authorization,FileListCallBack callBack){
+        auto.qinglong.net.panel.v10.ApiController.getScriptFiles(baseUrl, authorization, callBack);
+    }
+
     public static void getScriptFileContent(@NonNull String baseUrl, @NonNull String authorization, String fileName, String fileParent, ContentCallBack callBack) {
         String path = "api/scripts/" + fileName + "?path=" + fileParent;
         getFileContent(baseUrl, authorization, path, callBack);

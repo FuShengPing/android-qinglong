@@ -14,7 +14,7 @@ import auto.qinglong.utils.CronUnit;
  * @version 2023.06.29
  */
 public class Converter {
-    public static List<Task> toTasks(List<TaskListRes.TaskObject> objects) {
+    public static List<Task> convertTasks(List<TaskListRes.TaskObject> objects) {
         List<Task> result = new ArrayList<>();
         if (objects == null || objects.isEmpty()) {
             return result;
@@ -58,12 +58,12 @@ public class Converter {
         return result;
     }
 
-    public static List<File> toFiles(List<FileListRes.FileObject> objects) {
+    public static List<File> convertLogFiles(List<LogFileListRes.FileObject> objects) {
         List<File> result = new ArrayList<>();
         if (objects == null || objects.isEmpty()) {
             return result;
         }
-        for (FileListRes.FileObject object : objects) {
+        for (LogFileListRes.FileObject object : objects) {
             File logFile = new File();
             logFile.setTitle(object.getName());
             logFile.setDir(object.isDir());
@@ -81,6 +81,35 @@ public class Converter {
                 logFile.setChildren(children);
             }
             result.add(logFile);
+        }
+        return result;
+    }
+
+    public static List<File> convertScriptFiles(List<ScriptFileListRes.FileObject> objects) {
+        List<File> result = new ArrayList<>();
+        if (objects == null || objects.isEmpty()) {
+            return result;
+        }
+        for (ScriptFileListRes.FileObject object : objects) {
+            File file = new File();
+            file.setTitle(object.getTitle());
+            file.setDir(object.isDir());
+            file.setCreateTime(TimeUnit.formatDatetimeA((long) object.getMtime()));
+            file.setPath(object.getTitle());
+            if (object.isDir()) {
+                List<File> children = new ArrayList<>();
+                for (ScriptFileListRes.FileObject childObject : object.getChildren()) {
+                    File childFile = new File();
+                    childFile.setDir(false);
+                    childFile.setTitle(childObject.getTitle());
+                    childFile.setParent(object.getTitle());
+                    childFile.setCreateTime(TimeUnit.formatDatetimeA((long) childObject.getMtime()));
+                    childFile.setPath(object.getTitle() + "/" + childObject.getTitle());
+                    children.add(childFile);
+                }
+                file.setChildren(children);
+            }
+            result.add(file);
         }
         return result;
     }

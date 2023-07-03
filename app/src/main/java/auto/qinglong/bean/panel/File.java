@@ -11,6 +11,7 @@ public class File implements Comparable<File> {
     private String title;
     private String path;
     private String parent;
+    private String createTime;
     private List<File> children;
 
     public boolean isDir() {
@@ -51,6 +52,14 @@ public class File implements Comparable<File> {
 
     public void setChildren(List<File> children) {
         this.children = children;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 
     @Override

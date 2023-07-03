@@ -23,26 +23,26 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import auto.base.view.popup.PopMenuObject;
-import auto.qinglong.R;
-import auto.qinglong.ui.BaseFragment;
-import auto.qinglong.ui.activity.panel.CodeWebActivity;
-import auto.qinglong.bean.panel.QLScript;
-import auto.qinglong.net.NetManager;
-import auto.qinglong.net.panel.v10.ApiController;
 import auto.base.util.ToastUnit;
+import auto.base.view.popup.PopMenuObject;
 import auto.base.view.popup.PopMenuWindow;
 import auto.base.view.popup.PopupWindowBuilder;
+import auto.qinglong.R;
+import auto.qinglong.bean.panel.File;
+import auto.qinglong.database.sp.PanelPreference;
+import auto.qinglong.net.NetManager;
+import auto.qinglong.ui.BaseFragment;
+import auto.qinglong.ui.activity.panel.CodeWebActivity;
 
 
 public class ScriptFragment extends BaseFragment {
     public static String TAG = "ScriptFragment";
 
-    private List<QLScript> rootData;//根数据
+    private List<File> rootData;//根数据
     private String curDir;//当前目录
     private boolean canBack = false;//可返回操作
     private MenuClickListener menuClickListener;
-    private ScriptAdapter scriptAdapter;
+    private ScriptAdapter adapter;
 
     private ImageView ui_menu;
     private ImageView ui_more;
@@ -79,15 +79,10 @@ public class ScriptFragment extends BaseFragment {
     }
 
     @Override
-    public void setMenuClickListener(MenuClickListener mMenuClickListener) {
-        this.menuClickListener = mMenuClickListener;
-    }
-
-    @Override
     public boolean onDispatchBackKey() {
         if (canBack) {
-            scriptAdapter.setData(rootData);
-            ui_dir_tip.setText(getString(R.string.char_path_split));
+            adapter.setData(rootData);
+            ui_dir_tip.setText(java.io.File.separator);
             canBack = false;
             return true;
         } else {
@@ -97,35 +92,35 @@ public class ScriptFragment extends BaseFragment {
 
     @Override
     public void init() {
-        scriptAdapter = new ScriptAdapter(requireContext());
+        adapter = new ScriptAdapter(requireContext());
         ui_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
         Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
-        ui_recycler.setAdapter(scriptAdapter);
+        ui_recycler.setAdapter(adapter);
 
-        scriptAdapter.setScriptInterface(new ScriptAdapter.ItemActionListener() {
+        adapter.setScriptInterface(new ScriptAdapter.ItemActionListener() {
             @Override
-            public void onEdit(QLScript script) {
-                if (script.isDirectory()) {
+            public void onEdit(File file) {
+                if (file.isDir()) {
                     canBack = true;
-                    sortAndSetData(script.getChildren(), script.getTitle());
+                    sortAndSetData(file.getChildren(), file.getTitle());
                 } else {
                     Intent intent = new Intent(getContext(), CodeWebActivity.class);
-                    intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_NAME, script.getTitle());
-                    intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_DIR, script.getParent());
-                    intent.putExtra(CodeWebActivity.EXTRA_TITLE, script.getTitle());
                     intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_SCRIPT);
+                    intent.putExtra(CodeWebActivity.EXTRA_TITLE, file.getTitle());
+                    intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_NAME, file.getTitle());
+                    intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_DIR, file.getParent());
                     intent.putExtra(CodeWebActivity.EXTRA_CAN_EDIT, true);
                     startActivity(intent);
                 }
             }
 
             @Override
-            public void onMenu(View view, QLScript script, int position) {
-                showPopMenu(view, script, position);
+            public void onMenu(View view, File file, int position) {
+                showPopMenu(view, file, position);
             }
         });
 
-        ui_refresh.setOnRefreshListener(refreshLayout -> netGetScripts());
+        ui_refresh.setOnRefreshListener(refreshLayout -> getScriptFiles());
 
         ui_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
 
@@ -139,18 +134,23 @@ public class ScriptFragment extends BaseFragment {
         ui_refresh.autoRefreshAnimationOnly();
         new Handler().postDelayed(() -> {
             if (isVisible()) {
-                netGetScripts();
+                getScriptFiles();
             }
         }, 1000);
 
     }
 
-    private void showPopMenu(View v, QLScript script, int position) {
+    @Override
+    public void setMenuClickListener(MenuClickListener mMenuClickListener) {
+        this.menuClickListener = mMenuClickListener;
+    }
+
+    private void showPopMenu(View v, File file, int position) {
         PopMenuWindow popMenuWindow = new PopMenuWindow(v, Gravity.CENTER);
         popMenuWindow.addItem(new PopMenuObject("copy", "复制路径", R.drawable.ic_gray_crop_free));
-//        popMenuWindow.addItem(new PopMenuObject("backup", "脚本备份", R.drawable.ic_gray_download));
-        if (script.isFile()) {
-//            popMenuWindow.addItem(new PopMenuObject("replace", "脚本替换", R.drawable.ic_gray_copy));
+        //popMenuWindow.addItem(new PopMenuObject("backup", "脚本备份", R.drawable.ic_gray_download));
+        //popMenuWindow.addItem(new PopMenuObject("replace", "脚本替换", R.drawable.ic_gray_copy));
+        if (!file.isDir()) {
             popMenuWindow.addItem(new PopMenuObject("delete", "删除脚本", R.drawable.ic_gray_delete));
         }
 
@@ -158,13 +158,13 @@ public class ScriptFragment extends BaseFragment {
             switch (key) {
                 case "copy":
                     ClipboardManager clipboardManager = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                    clipboardManager.setPrimaryClip(ClipData.newPlainText(null, script.getKey()));
+                    clipboardManager.setPrimaryClip(ClipData.newPlainText(null, file.getPath()));
                     ToastUnit.showShort(getString(R.string.tip_copy_path_ready));
                     break;
                 case "backup":
                     break;
                 case "delete":
-                    netDeleteScript(script, position);
+                    deleteScript(file.getTitle(), file.getParent(), position);
                     break;
             }
             return true;
@@ -184,19 +184,19 @@ public class ScriptFragment extends BaseFragment {
     }
 
     @SuppressLint("SetTextI18n")
-    private void sortAndSetData(List<QLScript> scripts, String director) {
-        Collections.sort(scripts);
-        scriptAdapter.setData(scripts);
-        curDir = director;
-        ui_dir_tip.setText(getString(R.string.char_path_split) + director);
+    private void sortAndSetData(List<File> files, String dir) {
+        Collections.sort(files);
+        adapter.setData(files);
+        curDir = dir;
+        ui_dir_tip.setText(java.io.File.separator + dir);
     }
 
-    private void netGetScripts() {
-        ApiController.getScriptFiles(getNetRequestID(), new ApiController.NetGetScriptsCallback() {
+    private void getScriptFiles() {
+        auto.qinglong.net.panel.ApiController.getScriptFiles(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.qinglong.net.panel.ApiController.FileListCallBack() {
             @Override
-            public void onSuccess(List<QLScript> scripts) {
-                sortAndSetData(scripts, "");
-                rootData = scripts;
+            public void onSuccess(List<File> files) {
+                sortAndSetData(files, "");
+                rootData = files;
                 canBack = false;
                 init = true;
                 this.onEnd(true);
@@ -214,21 +214,43 @@ public class ScriptFragment extends BaseFragment {
                 }
             }
         });
+//        ApiController.getScriptFiles(getNetRequestID(), new ApiController.NetGetScriptsCallback() {
+//            @Override
+//            public void onSuccess(List<QLScript> scripts) {
+//                sortAndSetData(scripts, "");
+//                rootData = scripts;
+//                canBack = false;
+//                init = true;
+//                this.onEnd(true);
+//            }
+//
+//            @Override
+//            public void onFailure(String msg) {
+//                ToastUnit.showShort(getString(R.string.tip_load_failure_header) + msg);
+//                this.onEnd(false);
+//            }
+//
+//            private void onEnd(boolean isSuccess) {
+//                if (ui_refresh.isRefreshing()) {
+//                    ui_refresh.finishRefresh(isSuccess);
+//                }
+//            }
+//        });
     }
 
-    private void netDeleteScript(QLScript script, int position) {
-        ApiController.deleteScript(getNetRequestID(), script.getTitle(), script.getParent(), new ApiController.NetBaseCallback() {
-            @Override
-            public void onSuccess() {
-                ToastUnit.showShort(getString(R.string.tip_delete_success));
-                scriptAdapter.removeItem(position);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                ToastUnit.showShort(getString(R.string.tip_delete_failure_header) + msg);
-            }
-        });
+    private void deleteScript(String fileName, String fileParent, int position) {
+//        ApiController.deleteScript(getNetRequestID(), script.getTitle(), script.getParent(), new ApiController.NetBaseCallback() {
+//            @Override
+//            public void onSuccess() {
+//                ToastUnit.showShort(getString(R.string.tip_delete_success));
+//                adapter.removeItem(position);
+//            }
+//
+//            @Override
+//            public void onFailure(String msg) {
+//                ToastUnit.showShort(getString(R.string.tip_delete_failure_header) + msg);
+//            }
+//        });
     }
 
 }

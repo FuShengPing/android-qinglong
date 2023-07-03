@@ -22,7 +22,6 @@ import auto.qinglong.bean.panel.network.QLEnvEditRes;
 import auto.qinglong.bean.panel.network.QLEnvironmentRes;
 import auto.qinglong.bean.panel.network.QLLogRemoveRes;
 import auto.qinglong.bean.panel.network.QLLoginLogsRes;
-import auto.qinglong.bean.panel.network.QLScriptsRes;
 import auto.qinglong.bean.views.Task;
 import auto.qinglong.database.sp.PanelPreference;
 import auto.qinglong.net.NetManager;
@@ -62,7 +61,7 @@ public class ApiController {
                     }
                 } else {
                     if (res.getCode() == 200) {
-                        callback.onSuccess(Converter.toTasks(res.getData()));
+                        callback.onSuccess(Converter.convertTasks(res.getData()));
                     } else {
                         callback.onFailure(res.getMessage());
                     }
@@ -818,17 +817,17 @@ public class ApiController {
     }
 
     public static void getLogFiles(@NonNull String baseUrl, @NonNull String authorization, auto.qinglong.net.panel.ApiController.FileListCallBack callBack) {
-        Call<FileListRes> call = new Retrofit.Builder()
+        Call<LogFileListRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
                 .getLogFiles(authorization);
 
-        call.enqueue(new Callback<FileListRes>() {
+        call.enqueue(new Callback<LogFileListRes>() {
             @Override
-            public void onResponse(Call<FileListRes> call, Response<FileListRes> response) {
-                FileListRes res = response.body();
+            public void onResponse(Call<LogFileListRes> call, Response<LogFileListRes> response) {
+                LogFileListRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
                         callBack.onFailure(ERROR_INVALID_AUTH);
@@ -837,7 +836,7 @@ public class ApiController {
                     }
                 } else {
                     if (res.getCode() == 200) {
-                        callBack.onSuccess(Converter.toFiles(res.getDirs()));
+                        callBack.onSuccess(Converter.convertLogFiles(res.getDirs()));
                     } else {
                         callBack.onFailure(res.getMessage());
                     }
@@ -845,7 +844,7 @@ public class ApiController {
             }
 
             @Override
-            public void onFailure(Call<FileListRes> call, Throwable t) {
+            public void onFailure(Call<LogFileListRes> call, Throwable t) {
                 if (call.isCanceled()) {
                     return;
                 }
@@ -866,44 +865,41 @@ public class ApiController {
         return path;
     }
 
-    public static void getScriptFiles(@NonNull String requestId, @NonNull NetGetScriptsCallback callback) {
-        Call<QLScriptsRes> call = new Retrofit.Builder()
-                .baseUrl(PanelPreference.getBaseUrl())
+    public static void getScriptFiles(@NonNull String baseUrl, @NonNull String authorization, auto.qinglong.net.panel.ApiController.FileListCallBack callBack) {
+        Call<ScriptFileListRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .getScripts(PanelPreference.getAuthorization());
-        call.enqueue(new Callback<QLScriptsRes>() {
+                .getScriptFiles(authorization);
+
+        call.enqueue(new Callback<ScriptFileListRes>() {
             @Override
-            public void onResponse(@NonNull Call<QLScriptsRes> call, @NonNull Response<QLScriptsRes> response) {
-                NetManager.finishCall(requestId);
-                QLScriptsRes res = response.body();
+            public void onResponse(Call<ScriptFileListRes> call, Response<ScriptFileListRes> response) {
+                ScriptFileListRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
+                        callBack.onFailure(ERROR_INVALID_AUTH);
                     } else {
-                        callback.onFailure(ERROR_NO_BODY);
+                        callBack.onFailure(ERROR_NO_BODY);
                     }
                 } else {
                     if (res.getCode() == 200) {
-                        callback.onSuccess(res.getData());
+                        callBack.onSuccess(Converter.convertScriptFiles(res.getData()));
                     } else {
-                        callback.onFailure(res.getMessage());
+                        callBack.onFailure(res.getMessage());
                     }
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<QLScriptsRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
+            public void onFailure(Call<ScriptFileListRes> call, Throwable t) {
                 if (call.isCanceled()) {
                     return;
                 }
-                callback.onFailure(t.getLocalizedMessage());
+                callBack.onFailure(t.getLocalizedMessage());
             }
         });
-
-        NetManager.addCall(call, requestId);
     }
 
     public static void createScript(@NonNull String requestId, @NonNull String fileName, @Nullable String path, @NonNull NetBaseCallback callback) {

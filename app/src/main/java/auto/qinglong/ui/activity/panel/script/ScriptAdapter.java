@@ -15,14 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import auto.qinglong.R;
-import auto.qinglong.bean.panel.QLScript;
-import auto.base.util.TimeUnit;
+import auto.qinglong.bean.panel.File;
 
 public class ScriptAdapter extends RecyclerView.Adapter<ScriptAdapter.MyViewHolder> {
     public static final String TAG = "ScriptAdapter";
 
     private final Context context;
-    private List<QLScript> data;
+    private List<File> data;
     private ItemActionListener itemActionListener;
 
     public ScriptAdapter(@NonNull Context context) {
@@ -40,34 +39,34 @@ public class ScriptAdapter extends RecyclerView.Adapter<ScriptAdapter.MyViewHold
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        QLScript qlScript = data.get(position);
+        File file = data.get(position);
 
-        holder.ui_title.setText(qlScript.getTitle());
+        holder.ui_title.setText(file.getTitle());
 
-        if (qlScript.isDirectory()) {
-            holder.ui_num.setText(qlScript.getChildren().size() + " 项");
+        if (file.isDir()) {
+            holder.ui_num.setText(file.getChildren().size() + " 项");
         } else {
             holder.ui_num.setText(null);
         }
 
-        if (qlScript.isDirectory()) {
+        if (file.isDir()) {
             holder.ui_image.setImageResource(R.drawable.ic_blue_folder);
-        } else if (qlScript.getType() == QLScript.Type.JavaScript) {
+        } else if (file.getTitle().endsWith(".js")) {
             holder.ui_image.setImageResource(R.mipmap.ic_file_js);
-        } else if (qlScript.getType() == QLScript.Type.Python) {
+        } else if (file.getTitle().endsWith(".py")) {
             holder.ui_image.setImageResource(R.mipmap.ic_file_py);
-        } else if (qlScript.getType() == QLScript.Type.Json) {
+        } else if (file.getTitle().endsWith(".json")) {
             holder.ui_image.setImageResource(R.mipmap.ic_file_json);
         } else {
             holder.ui_image.setImageResource(R.mipmap.ic_file_unknow);
         }
 
-        holder.ui_mtime.setText(TimeUnit.formatDatetimeB((long) qlScript.getMtime()));
+        holder.ui_mtime.setText(file.getCreateTime());
 
-        holder.itemView.setOnClickListener(v -> itemActionListener.onEdit(qlScript));
+        holder.itemView.setOnClickListener(v -> itemActionListener.onEdit(file));
 
         holder.itemView.setOnLongClickListener(v -> {
-            itemActionListener.onMenu(v, qlScript, holder.getAbsoluteAdapterPosition());
+            itemActionListener.onMenu(v, file, holder.getAbsoluteAdapterPosition());
             return true;
         });
     }
@@ -78,7 +77,7 @@ public class ScriptAdapter extends RecyclerView.Adapter<ScriptAdapter.MyViewHold
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<QLScript> data) {
+    public void setData(List<File> data) {
         this.data = data;
         notifyDataSetChanged();
     }
@@ -93,9 +92,9 @@ public class ScriptAdapter extends RecyclerView.Adapter<ScriptAdapter.MyViewHold
     }
 
     public interface ItemActionListener {
-        void onEdit(QLScript QLScript);
+        void onEdit(File file);
 
-        void onMenu(View view, QLScript QLScript, int position);
+        void onMenu(View view, File file, int position);
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {

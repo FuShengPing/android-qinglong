@@ -1,13 +1,10 @@
 package auto.qinglong.net.panel.v10;
 
-import auto.qinglong.bean.panel.network.QLDependenceRes;
 import auto.qinglong.bean.panel.network.QLDependenciesRes;
 import auto.qinglong.bean.panel.network.QLEnvEditRes;
 import auto.qinglong.bean.panel.network.QLEnvironmentRes;
 import auto.qinglong.bean.panel.network.QLLogRemoveRes;
 import auto.qinglong.bean.panel.network.QLLoginLogsRes;
-import auto.qinglong.bean.panel.network.QLScriptsRes;
-import auto.qinglong.bean.panel.network.QLSimpleRes;
 import auto.qinglong.net.panel.BaseRes;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -19,7 +16,6 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import retrofit2.http.Url;
 
 /**
  * 青龙面板接口.
@@ -190,52 +186,13 @@ public interface Api {
     Call<BaseRes> moveEnv(@Header("Authorization") String authorization, @Path("id") String id, @Body RequestBody body);
 
     /**
-     * 读取配置文件.
-     *
-     * @param authorization the authorization
-     * @return the config
-     */
-    @GET("api/configs/config.sh")
-    Call<QLSimpleRes> getConfig(@Header("Authorization") String authorization);
-
-    /**
-     * 保存配置文件.
-     *
-     * @param authorization the authorization
-     * @param body          the body
-     * @return the call
-     */
-    @POST("api/configs/save")
-    Call<BaseRes> updateConfig(@Header("Authorization") String authorization, @Body RequestBody body);
-
-    /**
      * 读取脚本列表.
      *
      * @param authorization the authorization
      * @return the scripts
      */
     @GET("api/scripts/files")
-    Call<QLScriptsRes> getScripts(@Header("Authorization") String authorization);
-
-    /**
-     * 获取脚本详细.
-     *
-     * @param url           the url
-     * @param authorization the authorization
-     * @return the script detail
-     */
-    @GET
-    Call<QLSimpleRes> getScriptDetail(@Url String url, @Header("Authorization") String authorization);
-
-    /**
-     * 保存脚本.
-     *
-     * @param authorization the authorization
-     * @param body          the body
-     * @return the call
-     */
-    @PUT("api/scripts")
-    Call<BaseRes> updateScript(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<ScriptFileListRes> getScriptFiles(@Header("Authorization") String authorization);
 
     /**
      * 新建脚本.
@@ -267,16 +224,6 @@ public interface Api {
      */
     @GET("api/dependencies")
     Call<QLDependenciesRes> getDependencies(@Header("Authorization") String authorization, @Query("searchValue") String searchValue, @Query("type") String type);
-
-    /**
-     * 读取依赖安装日志信息.
-     *
-     * @param url           the url
-     * @param authorization the authorization
-     * @return the log detail
-     */
-    @GET
-    Call<QLDependenceRes> getDependence(@Url String url, @Header("Authorization") String authorization);
 
     /**
      * 新建依赖.
@@ -315,17 +262,7 @@ public interface Api {
      * @return the logs
      */
     @GET("api/logs")
-    Call<FileListRes> getLogFiles(@Header("Authorization") String authorization);
-
-    /**
-     * 获取日志信息.
-     *
-     * @param url           the url
-     * @param authorization the authorization
-     * @return the log detail
-     */
-    @GET
-    Call<QLSimpleRes> getLogDetail(@Url String url, @Header("Authorization") String authorization);
+    Call<LogFileListRes> getLogFiles(@Header("Authorization") String authorization);
 
     /**
      * 获取登录日志.
