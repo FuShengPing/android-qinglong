@@ -17,14 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
-import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 import auto.base.util.ToastUnit;
 import auto.qinglong.R;
-import auto.qinglong.bean.panel.LogFile;
+import auto.qinglong.bean.panel.File;
 import auto.qinglong.database.sp.PanelPreference;
 import auto.qinglong.net.NetManager;
 import auto.qinglong.ui.BaseFragment;
@@ -34,7 +33,7 @@ import auto.qinglong.ui.activity.panel.CodeWebActivity;
 public class LogFragment extends BaseFragment {
     public static String TAG = "LogFragment";
 
-    private List<LogFile> logFiles;
+    private List<File> logFiles;
     private MenuClickListener menuClickListener;
     private LogAdapter logAdapter;
     private boolean canBack = false;
@@ -76,7 +75,7 @@ public class LogFragment extends BaseFragment {
     @Override
     public boolean onDispatchBackKey() {
         if (canBack && logFiles != null) {
-            uiDir.setText(File.separator);
+            uiDir.setText(java.io.File.separator);
             logAdapter.setData(logFiles);
             canBack = false;
             return true;
@@ -133,16 +132,16 @@ public class LogFragment extends BaseFragment {
     }
 
     @SuppressLint("SetTextI18n")
-    private void sortAndSetData(List<LogFile> data, String dir) {
+    private void sortAndSetData(List<File> data, String dir) {
         Collections.sort(data);
         logAdapter.setData(data);
-        uiDir.setText(File.separator + dir);
+        uiDir.setText(java.io.File.separator + dir);
     }
 
     private void getLogFiles() {
         auto.qinglong.net.panel.ApiController.getLogFiles(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.qinglong.net.panel.ApiController.LogFileCallBack() {
             @Override
-            public void onSuccess(List<LogFile> files) {
+            public void onSuccess(List<File> files) {
                 sortAndSetData(files, "");
                 logFiles = files;
                 canBack = false;

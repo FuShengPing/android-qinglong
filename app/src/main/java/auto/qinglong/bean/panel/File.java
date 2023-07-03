@@ -6,12 +6,12 @@ import java.util.List;
  * @author wsfsp4
  * @version 2023.07.03
  */
-public class LogFile implements Comparable<LogFile> {
+public class File implements Comparable<File> {
     private boolean isDir;
     private String title;
     private String path;
     private String parent;
-    private List<LogFile> children;
+    private List<File> children;
 
     public boolean isDir() {
         return isDir;
@@ -45,16 +45,16 @@ public class LogFile implements Comparable<LogFile> {
         this.parent = parent;
     }
 
-    public List<LogFile> getChildren() {
+    public List<File> getChildren() {
         return children;
     }
 
-    public void setChildren(List<LogFile> children) {
+    public void setChildren(List<File> children) {
         this.children = children;
     }
 
     @Override
-    public int compareTo(LogFile o) {
+    public int compareTo(File o) {
         if (this.isDir && o.isDir()) {
             return this.title.toLowerCase().compareTo(o.title.toLowerCase());
         } else if (this.isDir && !o.isDir()) {

@@ -15,12 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import auto.qinglong.R;
-import auto.qinglong.bean.panel.LogFile;
-import auto.qinglong.bean.panel.QLLog;
+import auto.qinglong.bean.panel.File;
 
 public class LogAdapter extends RecyclerView.Adapter<LogAdapter.MyViewHolder> {
     private final Context context;
-    private final List<LogFile> data;
+    private final List<File> data;
     private ItemActionListener itemActionListener;
 
     public LogAdapter(@NonNull Context context) {
@@ -38,7 +37,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.MyViewHolder> {
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        LogFile file = data.get(position);
+        File file = data.get(position);
 
         holder.ui_title.setText(file.getTitle());
 
@@ -63,7 +62,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.MyViewHolder> {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<LogFile> data) {
+    public void setData(List<File> data) {
         this.data.clear();
         this.data.addAll(data);
         notifyDataSetChanged();
@@ -75,7 +74,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.MyViewHolder> {
     }
 
     public interface ItemActionListener {
-        void onClick(LogFile file);
+        void onClick(File file);
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {

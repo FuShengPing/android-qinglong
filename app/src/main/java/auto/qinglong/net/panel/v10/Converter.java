@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import auto.base.util.LogUnit;
 import auto.base.util.TimeUnit;
-import auto.qinglong.bean.panel.LogFile;
+import auto.qinglong.bean.panel.File;
 import auto.qinglong.bean.views.Task;
 import auto.qinglong.utils.CronUnit;
 
@@ -59,20 +58,20 @@ public class Converter {
         return result;
     }
 
-    public static List<LogFile> toLogFiles(List<LogFileRes.LogFileObject> objects) {
-        List<LogFile> result = new ArrayList<>();
+    public static List<File> toLogFiles(List<LogFileRes.LogFileObject> objects) {
+        List<File> result = new ArrayList<>();
         if (objects == null || objects.isEmpty()) {
             return result;
         }
         for (LogFileRes.LogFileObject object : objects) {
-            LogFile logFile = new LogFile();
+            File logFile = new File();
             logFile.setTitle(object.getName());
             logFile.setDir(object.isDir());
             logFile.setPath(object.getName());
             if (object.isDir()) {
-                List<LogFile> children = new ArrayList<>();
+                List<File> children = new ArrayList<>();
                 for (String name : object.getFiles()) {
-                    LogFile child = new LogFile();
+                    File child = new File();
                     child.setDir(false);
                     child.setTitle(name);
                     child.setParent(object.getName());

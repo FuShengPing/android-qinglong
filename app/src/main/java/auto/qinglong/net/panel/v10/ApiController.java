@@ -17,7 +17,6 @@ import auto.qinglong.bean.panel.QLEnvironment;
 import auto.qinglong.bean.panel.QLLoginLog;
 import auto.qinglong.bean.panel.QLScript;
 import auto.qinglong.bean.panel.QLTask;
-import auto.qinglong.bean.panel.network.QLDependenceRes;
 import auto.qinglong.bean.panel.network.QLDependenciesRes;
 import auto.qinglong.bean.panel.network.QLEnvEditRes;
 import auto.qinglong.bean.panel.network.QLEnvironmentRes;
@@ -1141,47 +1140,6 @@ public class ApiController {
             }
         });
 
-        NetManager.addCall(call, requestId);
-    }
-
-    public static void getDependenceLog(@NonNull String requestId, @NonNull String key, @NonNull NetGetDependenceCallback callback) {
-        String path = "api/dependencies/" + key;
-        Call<QLDependenceRes> call = new Retrofit.Builder()
-                .baseUrl(PanelPreference.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .getDependence(path, PanelPreference.getAuthorization());
-
-        call.enqueue(new Callback<QLDependenceRes>() {
-            @Override
-            public void onResponse(@NonNull Call<QLDependenceRes> call, @NonNull Response<QLDependenceRes> response) {
-                NetManager.finishCall(requestId);
-                QLDependenceRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callback.onSuccess(res.getData());
-                    } else {
-                        callback.onFailure(res.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<QLDependenceRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
-            }
-        });
         NetManager.addCall(call, requestId);
     }
 

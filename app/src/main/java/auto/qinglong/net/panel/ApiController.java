@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 import java.util.List;
 
 import auto.qinglong.bean.panel.Account;
-import auto.qinglong.bean.panel.LogFile;
+import auto.qinglong.bean.panel.File;
 import auto.qinglong.bean.panel.SystemInfo;
 import auto.qinglong.bean.views.Task;
 import okhttp3.MediaType;
@@ -393,7 +393,7 @@ public class ApiController {
     }
 
     public interface LogFileCallBack {
-        void onSuccess(List<LogFile> files);
+        void onSuccess(List<File> files);
 
         void onFailure(String msg);
     }
