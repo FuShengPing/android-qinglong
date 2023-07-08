@@ -2,6 +2,7 @@ package auto.qinglong.net.panel;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import auto.qinglong.bean.panel.Account;
 import auto.qinglong.bean.panel.File;
 import auto.qinglong.bean.panel.SystemInfo;
 import auto.qinglong.bean.views.Task;
+import auto.qinglong.database.sp.PanelPreference;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -148,47 +150,448 @@ public class ApiController {
     }
 
     public static void getTasks(@NonNull String baseUrl, @NonNull String authorization, String searchValue, TaskListCallBack callback) {
-        auto.qinglong.net.panel.v10.ApiController.getTasks(baseUrl, authorization, searchValue, callback);
+        if (PanelPreference.isLowVersion()) {
+            auto.qinglong.net.panel.v10.ApiController.getTasks(baseUrl, authorization, searchValue, callback);
+        } else {
+            auto.qinglong.net.panel.v15.ApiController.getTasks(baseUrl, authorization, searchValue, callback);
+        }
+
     }
 
     public static void runTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
-        auto.qinglong.net.panel.v10.ApiController.runTasks(baseUrl, authorization, keys, callBack);
+        JsonArray jsonArray = new JsonArray();
+        for (int i = 0; i < keys.size(); i++) {
+            if (keys.get(i) instanceof String) {
+                jsonArray.add((String) keys.get(i));
+            } else {
+                jsonArray.add((Integer) keys.get(i));
+            }
+        }
+
+        String json = jsonArray.toString();
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .runTasks(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callBack.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callBack.onFailure(ERROR_NO_BODY);
+                    }
+                } else {
+                    if (res.getCode() == 200) {
+                        callBack.onSuccess();
+                    } else {
+                        callBack.onFailure(res.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                callBack.onFailure(t.getLocalizedMessage());
+            }
+        });
     }
 
     public static void stopTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
-        auto.qinglong.net.panel.v10.ApiController.stopTasks(baseUrl, authorization, keys, callBack);
+        JsonArray jsonArray = new JsonArray();
+        for (int i = 0; i < keys.size(); i++) {
+            if (keys.get(i) instanceof String) {
+                jsonArray.add((String) keys.get(i));
+            } else {
+                jsonArray.add((Integer) keys.get(i));
+            }
+        }
+
+        String json = jsonArray.toString();
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .stopTasks(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callBack.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callBack.onFailure(ERROR_NO_BODY);
+                    }
+                } else {
+                    if (res.getCode() == 200) {
+                        callBack.onSuccess();
+                    } else {
+                        callBack.onFailure(res.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                callBack.onFailure(t.getLocalizedMessage());
+            }
+        });
     }
 
     public static void enableTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
-        auto.qinglong.net.panel.v10.ApiController.enableTasks(baseUrl, authorization, keys, callBack);
+        JsonArray jsonArray = new JsonArray();
+        for (int i = 0; i < keys.size(); i++) {
+            if (keys.get(i) instanceof String) {
+                jsonArray.add((String) keys.get(i));
+            } else {
+                jsonArray.add((Integer) keys.get(i));
+            }
+        }
+
+        String json = jsonArray.toString();
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .enableTasks(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callBack.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callBack.onFailure(ERROR_NO_BODY);
+                    }
+                } else {
+                    if (res.getCode() == 200) {
+                        callBack.onSuccess();
+                    } else {
+                        callBack.onFailure(res.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                callBack.onFailure(t.getLocalizedMessage());
+            }
+        });
     }
 
     public static void disableTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
-        auto.qinglong.net.panel.v10.ApiController.disableTasks(baseUrl, authorization, keys, callBack);
+        JsonArray jsonArray = new JsonArray();
+        for (int i = 0; i < keys.size(); i++) {
+            if (keys.get(i) instanceof String) {
+                jsonArray.add((String) keys.get(i));
+            } else {
+                jsonArray.add((Integer) keys.get(i));
+            }
+        }
+
+        String json = jsonArray.toString();
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .disableTasks(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callBack.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callBack.onFailure(ERROR_NO_BODY);
+                    }
+                } else {
+                    if (res.getCode() == 200) {
+                        callBack.onSuccess();
+                    } else {
+                        callBack.onFailure(res.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                callBack.onFailure(t.getLocalizedMessage());
+            }
+        });
     }
 
     public static void pinTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
-        auto.qinglong.net.panel.v10.ApiController.pinTasks(baseUrl, authorization, keys, callBack);
+        JsonArray jsonArray = new JsonArray();
+        for (int i = 0; i < keys.size(); i++) {
+            if (keys.get(i) instanceof String) {
+                jsonArray.add((String) keys.get(i));
+            } else {
+                jsonArray.add((Integer) keys.get(i));
+            }
+        }
+
+        String json = jsonArray.toString();
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .pinTasks(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callBack.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callBack.onFailure(ERROR_NO_BODY);
+                    }
+                } else {
+                    if (res.getCode() == 200) {
+                        callBack.onSuccess();
+                    } else {
+                        callBack.onFailure(res.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                callBack.onFailure(t.getLocalizedMessage());
+            }
+        });
     }
 
     public static void unpinTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
-        auto.qinglong.net.panel.v10.ApiController.unpinTasks(baseUrl, authorization, keys, callBack);
+        JsonArray jsonArray = new JsonArray();
+        for (int i = 0; i < keys.size(); i++) {
+            if (keys.get(i) instanceof String) {
+                jsonArray.add((String) keys.get(i));
+            } else {
+                jsonArray.add((Integer) keys.get(i));
+            }
+        }
+
+        String json = jsonArray.toString();
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .unpinTasks(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callBack.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callBack.onFailure(ERROR_NO_BODY);
+                    }
+                } else {
+                    if (res.getCode() == 200) {
+                        callBack.onSuccess();
+                    } else {
+                        callBack.onFailure(res.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                callBack.onFailure(t.getLocalizedMessage());
+            }
+        });
     }
 
     public static void deleteTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
-        auto.qinglong.net.panel.v10.ApiController.deleteTasks(baseUrl, authorization, keys, callBack);
+        JsonArray jsonArray = new JsonArray();
+        for (int i = 0; i < keys.size(); i++) {
+            if (keys.get(i) instanceof String) {
+                jsonArray.add((String) keys.get(i));
+            } else {
+                jsonArray.add((Integer) keys.get(i));
+            }
+        }
+
+        String json = jsonArray.toString();
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .deleteTasks(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callBack.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callBack.onFailure(ERROR_NO_BODY);
+                    }
+                } else {
+                    if (res.getCode() == 200) {
+                        callBack.onSuccess();
+                    } else {
+                        callBack.onFailure(res.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                callBack.onFailure(t.getLocalizedMessage());
+            }
+        });
     }
 
     public static void updateTask(@NonNull String baseUrl, @NonNull String authorization, Task task, BaseCallBack callBack) {
-        auto.qinglong.net.panel.v10.ApiController.updateTask(baseUrl, authorization, task, callBack);
+        JsonObject jsonObject = new JsonObject();
+        if (task.getKey() instanceof String) {
+            jsonObject.addProperty("_id", (String) task.getKey());
+        } else {
+            jsonObject.addProperty("id", (Integer) task.getKey());
+            jsonObject.add("labels", new JsonArray());
+        }
+        jsonObject.addProperty("name", task.getTitle());
+        jsonObject.addProperty("command", task.getCommand());
+        jsonObject.addProperty("schedule", task.getSchedule());
+
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .updateTask(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callBack.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callBack.onFailure(ERROR_NO_BODY + response.code());
+                    }
+                } else {
+                    if (res.getCode() == 200) {
+                        callBack.onSuccess();
+                    } else {
+                        callBack.onFailure(res.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                callBack.onFailure(t.getLocalizedMessage());
+            }
+        });
     }
 
     public static void createTask(@NonNull String baseUrl, @NonNull String authorization, Task task, BaseCallBack callBack) {
-        auto.qinglong.net.panel.v10.ApiController.createTask(baseUrl, authorization, task, callBack);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("name", task.getTitle());
+        jsonObject.addProperty("command", task.getCommand());
+        jsonObject.addProperty("schedule", task.getSchedule());
+
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .createTask(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callBack.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callBack.onFailure(ERROR_NO_BODY + response.code());
+                    }
+                } else {
+                    if (res.getCode() == 200) {
+                        callBack.onSuccess();
+                    } else {
+                        callBack.onFailure(res.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                callBack.onFailure(t.getLocalizedMessage());
+            }
+        });
     }
 
     public static void getLogFiles(@NonNull String baseUrl, @NonNull String authorization, FileListCallBack callBack) {
-        auto.qinglong.net.panel.v10.ApiController.getLogFiles(baseUrl, authorization, callBack);
+        if (PanelPreference.isLowVersion()) {
+            auto.qinglong.net.panel.v10.ApiController.getLogFiles(baseUrl, authorization, callBack);
+        } else {
+            auto.qinglong.net.panel.v15.ApiController.getLogFiles(baseUrl, authorization, callBack);
+        }
     }
 
     public static void getLogFileContent(@NonNull String baseUrl, @NonNull String authorization, String scriptKey, String fileName, String fileParent, ContentCallBack callBack) {
@@ -247,7 +650,61 @@ public class ApiController {
     }
 
     public static void getScriptFiles(@NonNull String baseUrl, @NonNull String authorization, FileListCallBack callBack) {
-        auto.qinglong.net.panel.v10.ApiController.getScriptFiles(baseUrl, authorization, callBack);
+        if (PanelPreference.isLowVersion()) {
+            auto.qinglong.net.panel.v10.ApiController.getScriptFiles(baseUrl, authorization, callBack);
+        } else {
+            auto.qinglong.net.panel.v15.ApiController.getScriptFiles(baseUrl, authorization, callBack);
+        }
+
+    }
+
+    public static void deleteScriptFile(@NonNull String baseUrl, @NonNull String authorization, File file, BaseCallBack callBack) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("filename", file.getTitle());
+        jsonObject.addProperty("path", file.getPath());
+        if (file.isDir()) {
+            jsonObject.addProperty("type", "directory");
+        } else {
+            jsonObject.addProperty("type", "file");
+        }
+
+        String json = jsonObject.toString();
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .deleteScript(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callBack.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callBack.onFailure(ERROR_NO_BODY);
+                    }
+                } else {
+                    if (res.getCode() == 200) {
+                        callBack.onSuccess();
+                    } else {
+                        callBack.onFailure(res.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseRes> call, Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                callBack.onFailure(t.getLocalizedMessage());
+            }
+        });
     }
 
     public static void getScriptFileContent(@NonNull String baseUrl, @NonNull String authorization, String fileName, String fileParent, ContentCallBack callBack) {

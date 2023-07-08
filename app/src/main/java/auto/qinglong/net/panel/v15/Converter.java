@@ -1,4 +1,4 @@
-package auto.qinglong.net.panel.v10;
+package auto.qinglong.net.panel.v15;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import auto.qinglong.utils.CronUnit;
 
 /**
  * @author wsfsp4
- * @version 2023.06.29
+ * @version 2023.07.06
  */
 public class Converter {
     public static List<Task> convertTasks(List<TaskListRes.TaskObject> objects) {
@@ -19,7 +19,6 @@ public class Converter {
         if (objects == null || objects.isEmpty()) {
             return result;
         }
-
         for (TaskListRes.TaskObject object : objects) {
             Task task = new Task(object.getId());
             task.setTitle(object.getName());
@@ -29,15 +28,15 @@ public class Converter {
             //任务下次执行时间
             task.setNextExecuteTime(CronUnit.nextExecutionTime(object.getSchedule(), "--"));
             //任务上次执行时间
+            if (object.getLast_execution_time() > 0) {
+                task.setLastExecuteTime(TimeUnit.formatDatetimeA(object.getLast_execution_time() * 1000));
+            } else {
+                task.setLastExecuteTime("--");
+            }
+            //任务执行时长
             if (object.getLast_running_time() >= 60) {
                 task.setLastRunningTime(String.format(Locale.CHINA, "%d分%d秒", object.getLast_running_time() / 60, object.getLast_running_time() % 60));
             } else if (object.getLast_running_time() > 0) {
-                task.setLastRunningTime(String.format(Locale.CHINA, "%d秒", object.getLast_running_time()));
-            } else {
-                task.setLastRunningTime("--");
-            }
-            //任务执行时长
-            if (object.getLast_running_time() > 0) {
                 task.setLastRunningTime(String.format(Locale.CHINA, "%d秒", object.getLast_running_time()));
             } else {
                 task.setLastRunningTime("--");
@@ -62,46 +61,49 @@ public class Converter {
     }
 
     public static List<File> convertLogFiles(List<LogFileListRes.FileObject> objects) {
-        List<File> result = new ArrayList<>();
+        List<File> files = new ArrayList<>();
         if (objects == null || objects.isEmpty()) {
-            return result;
+            return files;
         }
 
         for (LogFileListRes.FileObject object : objects) {
             File logFile = new File();
-            logFile.setTitle(object.getName());
+            logFile.setTitle(object.getTitle());
             logFile.setDir(object.isDir());
             logFile.setParent("");
-            logFile.setPath(object.getName());
+            logFile.setPath(object.getTitle());
+            logFile.setCreateTime(TimeUnit.formatDatetimeA(object.getMtime()));
 
             if (object.isDir()) {
                 List<File> children = new ArrayList<>();
-                for (String name : object.getFiles()) {
-                    File child = new File();
-                    child.setDir(false);
-                    child.setTitle(name);
-                    child.setParent(object.getName());
-                    child.setPath(object.getName() + "/" + name);
-                    children.add(child);
+                for (LogFileListRes.FileObject childObject : object.getChildren()) {
+                    File childFile = new File();
+                    childFile.setDir(false);
+                    childFile.setTitle(childObject.getTitle());
+                    childFile.setParent(object.getTitle());
+                    childFile.setPath(object.getTitle() + "/" + childObject.getTitle());
+                    childFile.setCreateTime(TimeUnit.formatDatetimeA(childObject.getMtime()));
+                    children.add(childFile);
                 }
                 logFile.setChildren(children);
             }
-            result.add(logFile);
+            files.add(logFile);
         }
 
-        return result;
+        return files;
     }
 
     public static List<File> convertScriptFiles(List<ScriptFileListRes.FileObject> objects) {
-        List<File> result = new ArrayList<>();
+        List<File> files = new ArrayList<>();
         if (objects == null || objects.isEmpty()) {
-            return result;
+            return files;
         }
+
         for (ScriptFileListRes.FileObject object : objects) {
             File file = new File();
             file.setTitle(object.getTitle());
-            file.setDir(object.isDir());
             file.setParent("");
+            file.setDir(object.isDir());
             file.setCreateTime(TimeUnit.formatDatetimeA((long) object.getMtime()));
             file.setPath(object.getTitle());
 
@@ -109,9 +111,9 @@ public class Converter {
                 file.setChildren(buildChildren(file.getPath(), object.getChildren()));
             }
 
-            result.add(file);
+            files.add(file);
         }
-        return result;
+        return files;
     }
 
     private static List<File> buildChildren(String parent, List<ScriptFileListRes.FileObject> objects) {
@@ -121,18 +123,18 @@ public class Converter {
         }
 
         for (ScriptFileListRes.FileObject object : objects) {
-            File file = new File();
-            file.setTitle(object.getTitle());
-            file.setParent(parent);
-            file.setDir(object.isDir());
-            file.setCreateTime(TimeUnit.formatDatetimeA((long) object.getMtime()));
-            file.setPath(parent + "/" + object.getTitle());
+            File childFile = new File();
+            childFile.setTitle(object.getTitle());
+            childFile.setParent(parent);
+            childFile.setDir(object.isDir());
+            childFile.setCreateTime(TimeUnit.formatDatetimeA((long) object.getMtime()));
+            childFile.setPath(parent + "/" + object.getTitle());
 
             if (object.isDir()) {
-                file.setChildren(buildChildren(file.getPath(), object.getChildren()));
+                childFile.setChildren(buildChildren(childFile.getPath(), object.getChildren()));
             }
 
-            children.add(file);
+            children.add(childFile);
         }
         return children;
     }

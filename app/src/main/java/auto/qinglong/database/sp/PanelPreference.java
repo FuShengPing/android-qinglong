@@ -118,4 +118,8 @@ public class PanelPreference {
         editor.putString(KEY_VERSION, version);
         editor.apply();
     }
+
+    public static boolean isLowVersion() {
+        return sp.getString(KEY_VERSION, DEFAULT_EMPTY).startsWith("2.10");
+    }
 }
