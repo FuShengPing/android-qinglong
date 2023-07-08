@@ -18,10 +18,10 @@ public interface Api {
      * @return the tasks
      */
     @GET("api/crons")
-    Call<TaskListRes> getTasks(@Header("Authorization") String authorization, @Query("searchValue") String searchValue, @Query("page") int page, @Query("pageSize") int size);
+    Call<TasksRes> getTasks(@Header("Authorization") String authorization, @Query("searchValue") String searchValue, @Query("page") int page, @Query("pageSize") int size);
 
     @GET("api/scripts")
-    Call<ScriptFileListRes> getScriptFiles(@Header("Authorization") String authorization);
+    Call<ScriptFilesRes> getScriptFiles(@Header("Authorization") String authorization);
 
     /**
      * 获取日志列表.
@@ -30,5 +30,5 @@ public interface Api {
      * @return the logs
      */
     @GET("api/logs")
-    Call<LogFileListRes> getLogFiles(@Header("Authorization") String authorization);
+    Call<LogFilesRes> getLogFiles(@Header("Authorization") String authorization);
 }

@@ -30,7 +30,7 @@ public interface Api {
      * @return the tasks
      */
     @GET("api/crons")
-    Call<TaskListRes> getTasks(@Header("Authorization") String authorization, @Query("searchValue") String searchValue);
+    Call<TasksRes> getTasks(@Header("Authorization") String authorization, @Query("searchValue") String searchValue);
 
     /**
      * 获取环境变量.
@@ -102,7 +102,7 @@ public interface Api {
      * @return the scripts
      */
     @GET("api/scripts/files")
-    Call<ScriptFileListRes> getScriptFiles(@Header("Authorization") String authorization);
+    Call<ScriptFilesRes> getScriptFiles(@Header("Authorization") String authorization);
 
     /**
      * 新建脚本.
@@ -172,7 +172,7 @@ public interface Api {
      * @return the logs
      */
     @GET("api/logs")
-    Call<LogFileListRes> getLogFiles(@Header("Authorization") String authorization);
+    Call<LogFilesRes> getLogFiles(@Header("Authorization") String authorization);
 
     /**
      * 获取登录日志.

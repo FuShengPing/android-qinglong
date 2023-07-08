@@ -1,4 +1,4 @@
-package auto.qinglong.net.panel.v10;
+package auto.qinglong.net.panel.v15;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import auto.qinglong.net.panel.BaseRes;
  * @author wsfsp4
  * @version 2023.07.03
  */
-public class ScriptFileListRes extends BaseRes {
+public class ScriptFilesRes extends BaseRes {
     private List<FileObject> data;
 
     public List<FileObject> getData() {
@@ -22,10 +22,11 @@ public class ScriptFileListRes extends BaseRes {
     public static class FileObject {
         private double mtime;
         private String title;
+        private boolean isLeaf;
         private List<FileObject> children;
 
         public boolean isDir() {
-            return children != null;
+            return !isLeaf;
         }
 
         public String getTitle() {

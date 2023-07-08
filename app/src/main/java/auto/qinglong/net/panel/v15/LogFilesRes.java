@@ -8,7 +8,7 @@ import auto.qinglong.net.panel.BaseRes;
  * @author wsfsp4
  * @version 2023.07.03
  */
-public class ScriptFileListRes extends BaseRes {
+public class LogFilesRes extends BaseRes {
     private List<FileObject> data;
 
     public List<FileObject> getData() {
@@ -20,10 +20,19 @@ public class ScriptFileListRes extends BaseRes {
     }
 
     public static class FileObject {
-        private double mtime;
-        private String title;
         private boolean isLeaf;
+        private String title;
+        private long mtime;
         private List<FileObject> children;
+
+        public long getMtime() {
+            return mtime;
+        }
+
+        public void setMtime(long mtime) {
+            this.mtime = mtime;
+        }
+
 
         public boolean isDir() {
             return !isLeaf;
@@ -43,14 +52,6 @@ public class ScriptFileListRes extends BaseRes {
 
         public void setChildren(List<FileObject> children) {
             this.children = children;
-        }
-
-        public double getMtime() {
-            return mtime;
-        }
-
-        public void setMtime(double mtime) {
-            this.mtime = mtime;
         }
     }
 }

@@ -17,17 +17,17 @@ public class ApiController {
     private static final String ERROR_INVALID_AUTH = "登录信息失效";
 
     public static void getTasks(String baseUrl, String authorization, String searchValue, auto.qinglong.net.panel.ApiController.TaskListCallBack callback) {
-        Call<TaskListRes> call = new Retrofit.Builder()
+        Call<TasksRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
                 .getTasks(authorization, searchValue, 1, 300);
 
-        call.enqueue(new Callback<TaskListRes>() {
+        call.enqueue(new Callback<TasksRes>() {
             @Override
-            public void onResponse(@NonNull Call<TaskListRes> call, @NonNull Response<TaskListRes> response) {
-                TaskListRes res = response.body();
+            public void onResponse(@NonNull Call<TasksRes> call, @NonNull Response<TasksRes> response) {
+                TasksRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
                         callback.onFailure(ERROR_INVALID_AUTH);
@@ -44,7 +44,7 @@ public class ApiController {
             }
 
             @Override
-            public void onFailure(@NonNull Call<TaskListRes> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<TasksRes> call, @NonNull Throwable t) {
                 if (call.isCanceled()) {
                     return;
                 }
@@ -54,17 +54,17 @@ public class ApiController {
     }
 
     public static void getScriptFiles(@NonNull String baseUrl, @NonNull String authorization, auto.qinglong.net.panel.ApiController.FileListCallBack callBack) {
-        Call<ScriptFileListRes> call = new Retrofit.Builder()
+        Call<ScriptFilesRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
                 .getScriptFiles(authorization);
 
-        call.enqueue(new Callback<ScriptFileListRes>() {
+        call.enqueue(new Callback<ScriptFilesRes>() {
             @Override
-            public void onResponse(Call<ScriptFileListRes> call, Response<ScriptFileListRes> response) {
-                ScriptFileListRes res = response.body();
+            public void onResponse(Call<ScriptFilesRes> call, Response<ScriptFilesRes> response) {
+                ScriptFilesRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
                         callBack.onFailure(ERROR_INVALID_AUTH);
@@ -81,7 +81,7 @@ public class ApiController {
             }
 
             @Override
-            public void onFailure(Call<ScriptFileListRes> call, Throwable t) {
+            public void onFailure(Call<ScriptFilesRes> call, Throwable t) {
                 if (call.isCanceled()) {
                     return;
                 }
@@ -91,17 +91,17 @@ public class ApiController {
     }
 
     public static void getLogFiles(@NonNull String baseUrl, @NonNull String authorization, auto.qinglong.net.panel.ApiController.FileListCallBack callBack) {
-        Call<LogFileListRes> call = new Retrofit.Builder()
+        Call<LogFilesRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
                 .getLogFiles(authorization);
 
-        call.enqueue(new Callback<LogFileListRes>() {
+        call.enqueue(new Callback<LogFilesRes>() {
             @Override
-            public void onResponse(Call<LogFileListRes> call, Response<LogFileListRes> response) {
-                LogFileListRes res = response.body();
+            public void onResponse(Call<LogFilesRes> call, Response<LogFilesRes> response) {
+                LogFilesRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
                         callBack.onFailure(ERROR_INVALID_AUTH);
@@ -118,7 +118,7 @@ public class ApiController {
             }
 
             @Override
-            public void onFailure(Call<LogFileListRes> call, Throwable t) {
+            public void onFailure(Call<LogFilesRes> call, Throwable t) {
                 if (call.isCanceled()) {
                     return;
                 }

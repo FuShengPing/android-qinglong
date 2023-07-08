@@ -14,13 +14,13 @@ import auto.qinglong.utils.CronUnit;
  * @version 2023.06.29
  */
 public class Converter {
-    public static List<Task> convertTasks(List<TaskListRes.TaskObject> objects) {
+    public static List<Task> convertTasks(List<TasksRes.TaskObject> objects) {
         List<Task> result = new ArrayList<>();
         if (objects == null || objects.isEmpty()) {
             return result;
         }
 
-        for (TaskListRes.TaskObject object : objects) {
+        for (TasksRes.TaskObject object : objects) {
             Task task = new Task(object.getId());
             task.setTitle(object.getName());
             task.setPinned(object.getIsPinned() == 1);
@@ -61,13 +61,13 @@ public class Converter {
         return result;
     }
 
-    public static List<File> convertLogFiles(List<LogFileListRes.FileObject> objects) {
+    public static List<File> convertLogFiles(List<LogFilesRes.FileObject> objects) {
         List<File> result = new ArrayList<>();
         if (objects == null || objects.isEmpty()) {
             return result;
         }
 
-        for (LogFileListRes.FileObject object : objects) {
+        for (LogFilesRes.FileObject object : objects) {
             File logFile = new File();
             logFile.setTitle(object.getName());
             logFile.setDir(object.isDir());
@@ -92,12 +92,12 @@ public class Converter {
         return result;
     }
 
-    public static List<File> convertScriptFiles(List<ScriptFileListRes.FileObject> objects) {
+    public static List<File> convertScriptFiles(List<ScriptFilesRes.FileObject> objects) {
         List<File> result = new ArrayList<>();
         if (objects == null || objects.isEmpty()) {
             return result;
         }
-        for (ScriptFileListRes.FileObject object : objects) {
+        for (ScriptFilesRes.FileObject object : objects) {
             File file = new File();
             file.setTitle(object.getTitle());
             file.setDir(object.isDir());
@@ -114,13 +114,13 @@ public class Converter {
         return result;
     }
 
-    private static List<File> buildChildren(String parent, List<ScriptFileListRes.FileObject> objects) {
+    private static List<File> buildChildren(String parent, List<ScriptFilesRes.FileObject> objects) {
         List<File> children = new ArrayList<>();
         if (objects == null || objects.isEmpty()) {
             return children;
         }
 
-        for (ScriptFileListRes.FileObject object : objects) {
+        for (ScriptFilesRes.FileObject object : objects) {
             File file = new File();
             file.setTitle(object.getTitle());
             file.setParent(parent);

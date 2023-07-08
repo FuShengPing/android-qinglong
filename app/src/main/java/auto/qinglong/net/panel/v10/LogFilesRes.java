@@ -8,7 +8,7 @@ import auto.qinglong.net.panel.BaseRes;
  * @author wsfsp4
  * @version 2023.07.03
  */
-public class LogFileListRes extends BaseRes {
+public class LogFilesRes extends BaseRes {
     private List<FileObject> dirs;
 
     public List<FileObject> getDirs() {
