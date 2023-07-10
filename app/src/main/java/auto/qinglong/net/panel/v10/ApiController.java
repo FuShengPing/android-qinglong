@@ -15,10 +15,8 @@ import auto.qinglong.bean.panel.Account;
 import auto.qinglong.bean.panel.QLDependence;
 import auto.qinglong.bean.panel.QLEnvironment;
 import auto.qinglong.bean.panel.QLLoginLog;
-import auto.qinglong.bean.panel.network.QLDependenciesRes;
 import auto.qinglong.bean.panel.network.QLEnvEditRes;
 import auto.qinglong.bean.panel.network.QLEnvironmentRes;
-import auto.qinglong.bean.panel.network.QLLogRemoveRes;
 import auto.qinglong.bean.panel.network.QLLoginLogsRes;
 import auto.qinglong.database.sp.PanelPreference;
 import auto.qinglong.net.NetManager;
@@ -37,6 +35,43 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiController {
     private static final String ERROR_NO_BODY = "响应异常";
     private static final String ERROR_INVALID_AUTH = "登录信息失效";
+
+    public static void checkAccountToken(String baseUrl, String authorization, auto.qinglong.net.panel.ApiController.BaseCallBack callBack) {
+        Call<SystemConfigRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .getSystemConfig(authorization);
+
+        call.enqueue(new Callback<SystemConfigRes>() {
+            @Override
+            public void onResponse(@NonNull Call<SystemConfigRes> call, @NonNull Response<SystemConfigRes> response) {
+                SystemConfigRes res = response.body();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callBack.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callBack.onFailure(ERROR_NO_BODY);
+                    }
+                } else {
+                    if (res.getCode() == 200) {
+                        callBack.onSuccess();
+                    } else {
+                        callBack.onFailure(res.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<SystemConfigRes> call, @NonNull Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                callBack.onFailure(t.getLocalizedMessage());
+            }
+        });
+    }
 
     public static void getTasks(String baseUrl, String authorization, String searchValue, auto.qinglong.net.panel.ApiController.TaskListCallBack callback) {
         Call<TasksRes> call = new Retrofit.Builder()
@@ -597,44 +632,41 @@ public class ApiController {
         NetManager.addCall(call, requestId);
     }
 
-    public static void getDependencies(@NonNull String requestId, @Nullable String searchValue, String type, @NonNull NetGetDependenciesCallback callback) {
-        Call<QLDependenciesRes> call = new Retrofit.Builder()
-                .baseUrl(PanelPreference.getBaseUrl())
+    public static void getDependencies(@NonNull String baseUrl, @NonNull String authorization, String searchValue, String type, auto.qinglong.net.panel.ApiController.DependenceListCallBack callBack) {
+        Call<DependenciesRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .getDependencies(PanelPreference.getAuthorization(), searchValue, type);
+                .getDependencies(authorization, searchValue, type);
 
-        call.enqueue(new Callback<QLDependenciesRes>() {
+        call.enqueue(new Callback<DependenciesRes>() {
             @Override
-            public void onResponse(@NonNull Call<QLDependenciesRes> call, @NonNull Response<QLDependenciesRes> response) {
-                NetManager.finishCall(requestId);
-                QLDependenciesRes res = response.body();
+            public void onResponse(@NonNull Call<DependenciesRes> call, @NonNull Response<DependenciesRes> response) {
+                DependenciesRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
+                        callBack.onFailure(ERROR_INVALID_AUTH);
                     } else {
-                        callback.onFailure(ERROR_NO_BODY);
+                        callBack.onFailure(ERROR_NO_BODY);
                     }
                 } else {
                     if (res.getCode() == 200) {
-                        callback.onSuccess(res.getData());
+                        callBack.onSuccess(Converter.convertDependencies(res.getData()));
                     } else {
-                        callback.onFailure(res.getMessage());
+                        callBack.onFailure(res.getMessage());
                     }
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<QLDependenciesRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
+            public void onFailure(@NonNull Call<DependenciesRes> call, @NonNull Throwable t) {
                 if (call.isCanceled()) {
                     return;
                 }
-                callback.onFailure(t.getLocalizedMessage());
+                callBack.onFailure(t.getLocalizedMessage());
             }
         });
-        NetManager.addCall(call, requestId);
 
     }
 
@@ -825,45 +857,41 @@ public class ApiController {
         NetManager.addCall(call, requestId);
     }
 
-    public static void getLogRemove(@NonNull String requestId, @NonNull NetGetLogRemoveCallback callback) {
-        Call<QLLogRemoveRes> call = new Retrofit.Builder()
-                .baseUrl(Objects.requireNonNull(PanelPreference.getCurrentAccount()).getBaseUrl())
+    public static void getSystemConfig(@NonNull String baseUrl, @NonNull String authorization, auto.qinglong.net.panel.ApiController.SystemConfigCallBack callBack) {
+        Call<SystemConfigRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .getLogRemove(PanelPreference.getAuthorization());
+                .getSystemConfig(authorization);
 
-        call.enqueue(new Callback<QLLogRemoveRes>() {
+        call.enqueue(new Callback<SystemConfigRes>() {
             @Override
-            public void onResponse(@NonNull Call<QLLogRemoveRes> call, @NonNull Response<QLLogRemoveRes> response) {
-                NetManager.finishCall(requestId);
-                QLLogRemoveRes res = response.body();
+            public void onResponse(@NonNull Call<SystemConfigRes> call, @NonNull Response<SystemConfigRes> response) {
+                SystemConfigRes res = response.body();
                 if (res == null) {
                     if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
+                        callBack.onFailure(ERROR_INVALID_AUTH);
                     } else {
-                        callback.onFailure(ERROR_NO_BODY);
+                        callBack.onFailure(ERROR_NO_BODY);
                     }
                 } else {
                     if (res.getCode() == 200) {
-                        callback.onSuccess(res.getData().getFrequency());
+                        callBack.onSuccess(Converter.convertSystemConfig(res.getData()));
                     } else {
-                        callback.onFailure(res.getMessage());
+                        callBack.onFailure(res.getMessage());
                     }
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<QLLogRemoveRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
+            public void onFailure(@NonNull Call<SystemConfigRes> call, @NonNull Throwable t) {
                 if (call.isCanceled()) {
                     return;
                 }
-                callback.onFailure(t.getLocalizedMessage());
+                callBack.onFailure(t.getLocalizedMessage());
             }
         });
-
-        NetManager.addCall(call, requestId);
     }
 
     public static void updateLogRemove(@NonNull String requestId, int frequency, @NonNull NetBaseCallback callback) {
@@ -876,7 +904,7 @@ public class ApiController {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .updateLogRemove(PanelPreference.getAuthorization(), requestBody);
+                .updateSystemConfig(PanelPreference.getAuthorization(), requestBody);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -923,7 +951,7 @@ public class ApiController {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .updateUser(PanelPreference.getAuthorization(), requestBody);
+                .updateUserInfo(PanelPreference.getAuthorization(), requestBody);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override

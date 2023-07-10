@@ -8,34 +8,35 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import auto.base.util.WindowUnit;
-import auto.qinglong.R;
-import auto.qinglong.ui.BaseFragment;
-import auto.qinglong.ui.activity.app.LoginActivity;
-import auto.qinglong.bean.panel.Account;
-import auto.qinglong.database.sp.PanelPreference;
-import auto.qinglong.net.panel.v10.ApiController;
 import auto.base.util.LogUnit;
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
+import auto.base.util.WindowUnit;
+import auto.qinglong.R;
+import auto.qinglong.bean.panel.Account;
+import auto.qinglong.bean.panel.SystemConfig;
+import auto.qinglong.database.sp.PanelPreference;
+import auto.qinglong.net.panel.v10.ApiController;
+import auto.qinglong.ui.BaseFragment;
+import auto.qinglong.ui.activity.app.LoginActivity;
 
 public class CommonFragment extends BaseFragment {
-    private EditText ui_log;
-    private Button ui_log_save;
-    private EditText ui_security_username;
-    private EditText ui_security_password;
-    private Button ui_security_save;
+    private EditText uiSecurityUsername;
+    private EditText uiSecurityPassword;
+    private Button uiSecuritySave;
+    private EditText uiLogRemoveFrequency;
+    private Button uiLogSave;
 
     private int mOldFrequency = -1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting_common, container, false);
-        ui_log = view.findViewById(R.id.setting_log);
-        ui_log_save = view.findViewById(R.id.setting_log_save);
-        ui_security_username = view.findViewById(R.id.setting_security_username);
-        ui_security_password = view.findViewById(R.id.setting_security_password);
-        ui_security_save = view.findViewById(R.id.setting_security_save);
+        uiLogRemoveFrequency = view.findViewById(R.id.setting_log);
+        uiLogSave = view.findViewById(R.id.setting_log_save);
+        uiSecurityUsername = view.findViewById(R.id.setting_security_username);
+        uiSecurityPassword = view.findViewById(R.id.setting_security_password);
+        uiSecuritySave = view.findViewById(R.id.setting_security_save);
 
         init();
         return view;
@@ -44,19 +45,19 @@ public class CommonFragment extends BaseFragment {
     @Override
     protected void init() {
 
-        ui_log_save.setOnClickListener(v -> {
-            String value = ui_log.getText().toString();
+        uiLogSave.setOnClickListener(v -> {
+            String value = uiLogRemoveFrequency.getText().toString();
             if (TextUnit.isEmpty(value)) {
                 ToastUnit.showShort("请输入正确数值");
                 return;
             }
-            WindowUnit.hideKeyboard(ui_log);
+            WindowUnit.hideKeyboard(uiLogRemoveFrequency);
             netUpdateLogRemove(Integer.parseInt(value), mOldFrequency);
         });
 
-        ui_security_save.setOnClickListener(v -> {
-            String username = ui_security_username.getText().toString();
-            String password = ui_security_password.getText().toString();
+        uiSecuritySave.setOnClickListener(v -> {
+            String username = uiSecurityUsername.getText().toString();
+            String password = uiSecurityPassword.getText().toString();
 
             if (username.isEmpty()) {
                 ToastUnit.showShort("请输入用户名");
@@ -67,19 +68,19 @@ public class CommonFragment extends BaseFragment {
                 return;
             }
 
-            WindowUnit.hideKeyboard(ui_security_username);
+            WindowUnit.hideKeyboard(uiSecurityUsername);
             Account account = new Account(username, password, PanelPreference.getAddress(), null);
             netUpdateUser(account);
         });
 
-        netGetLogRemove();
+        getSystemConfig();
     }
 
-    private void netGetLogRemove() {
-        ApiController.getLogRemove(getNetRequestID(), new ApiController.NetGetLogRemoveCallback() {
+    private void getSystemConfig() {
+        auto.qinglong.net.panel.ApiController.getSystemConfig(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.qinglong.net.panel.ApiController.SystemConfigCallBack() {
             @Override
-            public void onSuccess(int frequency) {
-                ui_log.setText(String.valueOf(frequency));
+            public void onSuccess(SystemConfig config) {
+                uiLogRemoveFrequency.setText(String.valueOf(config.getLogRemoveFrequency()));
             }
 
             @Override
@@ -93,19 +94,19 @@ public class CommonFragment extends BaseFragment {
         ApiController.updateLogRemove(getNetRequestID(), newFrequency, new ApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
-                ui_log.clearFocus();
+                uiLogRemoveFrequency.clearFocus();
                 mOldFrequency = newFrequency;
                 ToastUnit.showShort("保存成功");
             }
 
             @Override
             public void onFailure(String msg) {
-                ui_log.clearFocus();
-                ui_log.clearComposingText();
+                uiLogRemoveFrequency.clearFocus();
+                uiLogRemoveFrequency.clearComposingText();
                 if (oldFrequency > -1) {
-                    ui_log.setText(String.valueOf(oldFrequency));
+                    uiLogRemoveFrequency.setText(String.valueOf(oldFrequency));
                 } else {
-                    ui_log.setText("");
+                    uiLogRemoveFrequency.setText("");
                 }
                 ToastUnit.showShort(msg);
             }
@@ -131,8 +132,8 @@ public class CommonFragment extends BaseFragment {
         auto.qinglong.net.panel.ApiController.login(account.getBaseUrl(), account, new auto.qinglong.net.panel.ApiController.LoginCallBack() {
             @Override
             public void onSuccess(String token) {
-                ui_security_username.setText(null);
-                ui_security_password.setText(null);
+                uiSecurityUsername.setText(null);
+                uiSecurityPassword.setText(null);
                 account.setToken(token);
                 PanelPreference.updateCurrentAccount(account);
                 ToastUnit.showShort("更新成功");

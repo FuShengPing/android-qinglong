@@ -75,6 +75,4 @@ public class TimeUnit {
     public static String formatTime() {
         return timeFormatter.format(new Date());
     }
-
-
 }

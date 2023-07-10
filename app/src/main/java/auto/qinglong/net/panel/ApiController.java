@@ -9,7 +9,9 @@ import java.util.List;
 
 import auto.base.util.TextUnit;
 import auto.qinglong.bean.panel.Account;
+import auto.qinglong.bean.panel.Dependence;
 import auto.qinglong.bean.panel.File;
+import auto.qinglong.bean.panel.SystemConfig;
 import auto.qinglong.bean.panel.SystemInfo;
 import auto.qinglong.bean.views.Task;
 import auto.qinglong.database.sp.PanelPreference;
@@ -113,40 +115,11 @@ public class ApiController {
     }
 
     public static void checkAccountToken(@NonNull String baseUrl, @NonNull String authorization, BaseCallBack callBack) {
-        Call<SystemLogConfigRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .getSystemLogConfig(authorization);
-
-        call.enqueue(new Callback<SystemLogConfigRes>() {
-            @Override
-            public void onResponse(@NonNull Call<SystemLogConfigRes> call, @NonNull Response<SystemLogConfigRes> response) {
-                SystemLogConfigRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY + response.code());
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess();
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<SystemLogConfigRes> call, @NonNull Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
-            }
-        });
+        if (PanelPreference.isLowVersion()) {
+            auto.qinglong.net.panel.v10.ApiController.checkAccountToken(baseUrl, authorization, callBack);
+        } else {
+            auto.qinglong.net.panel.v15.ApiController.checkAccountToken(baseUrl, authorization, callBack);
+        }
     }
 
     public static void getTasks(@NonNull String baseUrl, @NonNull String authorization, String searchValue, TaskListCallBack callback) {
@@ -586,21 +559,21 @@ public class ApiController {
         });
     }
 
-    public static void getLogFiles(@NonNull String baseUrl, @NonNull String authorization, FileListCallBack callBack) {
+    public static void getLogs(@NonNull String baseUrl, @NonNull String authorization, FileListCallBack callBack) {
         if (PanelPreference.isLowVersion()) {
             auto.qinglong.net.panel.v10.ApiController.getLogFiles(baseUrl, authorization, callBack);
         } else {
-            auto.qinglong.net.panel.v15.ApiController.getLogFiles(baseUrl, authorization, callBack);
+            auto.qinglong.net.panel.v15.ApiController.getLogs(baseUrl, authorization, callBack);
         }
     }
 
-    public static void getLogFileContent(@NonNull String baseUrl, @NonNull String authorization, String scriptKey, String fileName, String fileParent, ContentCallBack callBack) {
+    public static void getLogContent(@NonNull String baseUrl, @NonNull String authorization, String scriptKey, String fileName, String fileParent, ContentCallBack callBack) {
         String path = auto.qinglong.net.panel.v10.ApiController.getLogFilePath(scriptKey, fileName, fileParent);
 
         getFileContent(baseUrl, authorization, path, callBack);
     }
 
-    public static void getConfigFileContent(@NonNull String baseUrl, @NonNull String authorization, ContentCallBack callBack) {
+    public static void getConfigContent(@NonNull String baseUrl, @NonNull String authorization, ContentCallBack callBack) {
         String path = "api/configs/config.sh";
         getFileContent(baseUrl, authorization, path, callBack);
     }
@@ -618,7 +591,7 @@ public class ApiController {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .updateConfig(authorization, body);
+                .updateConfigContent(authorization, body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -649,16 +622,16 @@ public class ApiController {
         });
     }
 
-    public static void getScriptFiles(@NonNull String baseUrl, @NonNull String authorization, FileListCallBack callBack) {
+    public static void getScripts(@NonNull String baseUrl, @NonNull String authorization, FileListCallBack callBack) {
         if (PanelPreference.isLowVersion()) {
             auto.qinglong.net.panel.v10.ApiController.getScriptFiles(baseUrl, authorization, callBack);
         } else {
-            auto.qinglong.net.panel.v15.ApiController.getScriptFiles(baseUrl, authorization, callBack);
+            auto.qinglong.net.panel.v15.ApiController.getScripts(baseUrl, authorization, callBack);
         }
 
     }
 
-    public static void deleteScriptFile(@NonNull String baseUrl, @NonNull String authorization, File file, BaseCallBack callBack) {
+    public static void deleteScript(@NonNull String baseUrl, @NonNull String authorization, File file, BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("filename", file.getTitle());
         jsonObject.addProperty("path", file.getPath());
@@ -707,12 +680,12 @@ public class ApiController {
         });
     }
 
-    public static void getScriptFileContent(@NonNull String baseUrl, @NonNull String authorization, String fileName, String fileParent, ContentCallBack callBack) {
+    public static void getScriptContent(@NonNull String baseUrl, @NonNull String authorization, String fileName, String fileParent, ContentCallBack callBack) {
         String path = "api/scripts/" + fileName + "?path=" + (TextUnit.isFull(fileParent) ? fileParent : "");
         getFileContent(baseUrl, authorization, path, callBack);
     }
 
-    public static void saveScriptFileContent(@NonNull String baseUrl, @NonNull String authorization, String fileName, String fileParent, String content, BaseCallBack callBack) {
+    public static void saveScriptContent(@NonNull String baseUrl, @NonNull String authorization, String fileName, String fileParent, String content, BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("content", content);
         jsonObject.addProperty("filename", fileName);
@@ -757,6 +730,22 @@ public class ApiController {
         });
     }
 
+    public static void getDependencies(@NonNull String baseUrl, @NonNull String authorization, String searchValue, String type, DependenceListCallBack callBack) {
+        if (PanelPreference.isLowVersion()) {
+            auto.qinglong.net.panel.v10.ApiController.getDependencies(baseUrl, authorization, searchValue, type, callBack);
+        } else {
+            auto.qinglong.net.panel.v15.ApiController.getDependencies(baseUrl, authorization, searchValue, type, callBack);
+        }
+    }
+
+    public static void reinstallDependencies(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
+
+    }
+
+    public static void deleteDependencies(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
+
+    }
+
     public static void getDependenceLogContent(@NonNull String baseUrl, @NonNull String authorization, Object key, ContentCallBack callBack) {
         String path = "api/dependencies/" + key;
 
@@ -798,6 +787,10 @@ public class ApiController {
                 callBack.onFailure(t.getLocalizedMessage());
             }
         });
+    }
+
+    public static void getSystemConfig(@NonNull String baseUrl, @NonNull String authorization, SystemConfigCallBack callBack) {
+        auto.qinglong.net.panel.v10.ApiController.getSystemConfig(baseUrl, authorization, callBack);
     }
 
     private static void getFileContent(@NonNull String baseUrl, @NonNull String authorization, String path, ContentCallBack callBack) {
@@ -854,6 +847,12 @@ public class ApiController {
         void onFailure(String msg);
     }
 
+    public interface DependenceListCallBack {
+        void onSuccess(List<Dependence> dependencies);
+
+        void onFailure(String msg);
+    }
+
     public interface FileListCallBack {
         void onSuccess(List<File> files);
 
@@ -862,6 +861,12 @@ public class ApiController {
 
     public interface ContentCallBack {
         void onSuccess(String content);
+
+        void onFailure(String msg);
+    }
+
+    public interface SystemConfigCallBack {
+        void onSuccess(SystemConfig config);
 
         void onFailure(String msg);
     }

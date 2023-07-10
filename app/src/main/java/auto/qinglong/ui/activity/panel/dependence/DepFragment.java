@@ -16,29 +16,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import auto.base.util.ToastUnit;
 import auto.qinglong.R;
+import auto.qinglong.bean.panel.Dependence;
+import auto.qinglong.database.sp.PanelPreference;
+import auto.qinglong.net.NetManager;
+import auto.qinglong.net.panel.ApiController;
 import auto.qinglong.ui.BaseFragment;
 import auto.qinglong.ui.activity.panel.CodeWebActivity;
-import auto.qinglong.bean.panel.QLDependence;
-import auto.qinglong.net.NetManager;
-import auto.qinglong.net.panel.v10.ApiController;
-import auto.base.util.ToastUnit;
 
 public class DepFragment extends BaseFragment {
     private String type;
 
-    private DepItemAdapter depItemAdapter;
+    private DepItemAdapter itemAdapter;
     private PagerAdapter.PagerActionListener pagerActionListener;
 
-    private SmartRefreshLayout ui_refresh;
-    private RecyclerView ui_recycler;
+    private SmartRefreshLayout uiRefresh;
+    private RecyclerView uiRecycler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dep_pager, container, false);
 
-        ui_refresh = view.findViewById(R.id.refresh_layout);
-        ui_recycler = view.findViewById(R.id.recycler_view);
+        uiRefresh = view.findViewById(R.id.refresh_layout);
+        uiRecycler = view.findViewById(R.id.recycler_view);
+
+        itemAdapter = new DepItemAdapter(requireContext());
+        uiRecycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
+        uiRecycler.setAdapter(itemAdapter);
+        Objects.requireNonNull(uiRecycler.getItemAnimator()).setChangeDuration(0);
 
         init();
 
@@ -51,70 +57,18 @@ public class DepFragment extends BaseFragment {
         initData();
     }
 
-    @Override
-    protected void init() {
-        depItemAdapter = new DepItemAdapter(requireContext());
-        ui_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
-        Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
-        ui_recycler.setAdapter(depItemAdapter);
-
-        depItemAdapter.setItemInterface(new DepItemAdapter.ItemActionListener() {
-            @Override
-            public void onDetail(QLDependence dependence, int position) {
-                Intent intent = new Intent(getContext(), CodeWebActivity.class);
-                intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_DEPENDENCE);
-                intent.putExtra(CodeWebActivity.EXTRA_TITLE, dependence.getName());
-                intent.putExtra(CodeWebActivity.EXTRA_DEPENDENCE_ID, dependence.getId());
-
-                startActivity(intent);
-            }
-
-            @Override
-            public void onReinstall(QLDependence dependence, int position) {
-                List<String> ids = new ArrayList<>();
-                ids.add(dependence.getId());
-                netReinstallDependencies(ids);
-            }
-        });
-
-        ui_refresh.setOnRefreshListener(refreshLayout -> netGetDependencies());
-    }
-
-    private void initData() {
-        if (init || NetManager.isRequesting(getNetRequestID())) {
-            return;
+    public void onDeleteClick() {
+        List<Object> ids = getCheckedItemIds();
+        if (ids.size() > 0) {
+            netDeleteDependence(ids);
+        } else {
+            ToastUnit.showShort(getString(R.string.tip_empty_select));
         }
-        ui_refresh.autoRefreshAnimationOnly();
-        new Handler().postDelayed(() -> {
-            if (isVisible()) {
-                netGetDependencies();
-            }
-        }, 1000);
     }
 
-    public void refreshData() {
-        this.netGetDependencies();
-    }
-
-    public List<String> getCheckedItemIds() {
-        List<String> ids = new ArrayList<>();
-        for (QLDependence dependence : depItemAdapter.getCheckedItems()) {
-            ids.add(dependence.getId());
-        }
-        return ids;
-    }
-
-    public void setPagerActionListener(PagerAdapter.PagerActionListener pagerActionListener) {
-        this.pagerActionListener = pagerActionListener;
-    }
-
-    public void setCheckState(boolean checkState) {
-        depItemAdapter.setCheckState(checkState);
-    }
-
-    public void setAllItemCheck(boolean isChecked) {
-        if (depItemAdapter.getCheckState()) {
-            depItemAdapter.setAllChecked(isChecked);
+    public void onSelectAllChange(boolean isChecked) {
+        if (itemAdapter.getCheckState()) {
+            itemAdapter.setAllChecked(isChecked);
         }
     }
 
@@ -126,41 +80,112 @@ public class DepFragment extends BaseFragment {
         return this.type;
     }
 
-    private void netGetDependencies() {
-        ApiController.getDependencies(getNetRequestID(), null, this.type, new ApiController.NetGetDependenciesCallback() {
+    @Override
+    protected void init() {
+        itemAdapter.setItemInterface(new DepItemAdapter.ItemActionListener() {
             @Override
-            public void onSuccess(List<QLDependence> dependencies) {
-                depItemAdapter.setData(dependencies);
+            public void onDetail(Dependence dependence, int position) {
+                Intent intent = new Intent(getContext(), CodeWebActivity.class);
+                intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_DEPENDENCE);
+                intent.putExtra(CodeWebActivity.EXTRA_TITLE, dependence.getTitle());
+                intent.putExtra(CodeWebActivity.EXTRA_DEPENDENCE_ID, String.valueOf(dependence.getKey()));
+
+                startActivity(intent);
+            }
+
+            @Override
+            public void onReinstall(Dependence dependence, int position) {
+                List<Object> ids = new ArrayList<>();
+                ids.add(dependence.getKey());
+                reinstallDependencies(ids);
+            }
+        });
+
+        uiRefresh.setOnRefreshListener(refreshLayout -> getDependencies());
+    }
+
+    private void initData() {
+        if (init || NetManager.isRequesting(getNetRequestID())) {
+            return;
+        }
+        uiRefresh.autoRefreshAnimationOnly();
+        new Handler().postDelayed(() -> {
+            if (isVisible()) {
+                getDependencies();
+            }
+        }, 1000);
+    }
+
+    public void refreshData() {
+        this.getDependencies();
+    }
+
+    private List<Object> getCheckedItemIds() {
+        List<Object> ids = new ArrayList<>();
+        for (Dependence dependence : itemAdapter.getCheckedItems()) {
+            ids.add(dependence.getKey());
+        }
+        return ids;
+    }
+
+    public void setPagerActionListener(PagerAdapter.PagerActionListener pagerActionListener) {
+        this.pagerActionListener = pagerActionListener;
+    }
+
+    public void setCheckState(boolean checkState) {
+        itemAdapter.setCheckState(checkState);
+    }
+
+    private void getDependencies() {
+        auto.qinglong.net.panel.ApiController.getDependencies(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), "", this.type, new auto.qinglong.net.panel.ApiController.DependenceListCallBack() {
+            @Override
+            public void onSuccess(List<Dependence> dependencies) {
+                itemAdapter.setData(dependencies);
                 init = true;
-                ToastUnit.showShort(getString(R.string.tip_load_success_header) + dependencies.size());
+                ToastUnit.showShort("加载成功：" + dependencies.size());
                 this.onEnd(true);
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort(getString(R.string.tip_load_failure_header) + msg);
+                ToastUnit.showShort("加载失败：" + msg);
                 this.onEnd(false);
             }
 
             private void onEnd(boolean isSuccess) {
-                if (ui_refresh.isRefreshing()) {
-                    ui_refresh.finishRefresh(isSuccess);
+                if (uiRefresh.isRefreshing()) {
+                    uiRefresh.finishRefresh(isSuccess);
                 }
             }
         });
     }
 
-    private void netReinstallDependencies(List<String> ids) {
-        ApiController.reinstallDependencies(getNetRequestID(), ids, new ApiController.NetBaseCallback() {
+    private void reinstallDependencies(List<Object> keys) {
+        ApiController.reinstallDependencies(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), keys, new ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
-                netGetDependencies();
+                getDependencies();
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort(getString(R.string.tip_reinstall_failure_header) + msg);
-                netGetDependencies();
+                ToastUnit.showShort("重装失败：" + msg);
+                getDependencies();
+            }
+        });
+    }
+
+    private void netDeleteDependence(List<Object> keys) {
+        auto.qinglong.net.panel.ApiController.deleteDependencies(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), keys, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
+            @Override
+            public void onSuccess() {
+                getDependencies();
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort("重装失败：" + msg);
+                getDependencies();
             }
         });
     }

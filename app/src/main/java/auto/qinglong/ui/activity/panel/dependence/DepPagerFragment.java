@@ -19,18 +19,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import auto.base.util.WindowUnit;
-import auto.qinglong.R;
-import auto.qinglong.ui.BaseFragment;
-import auto.qinglong.bean.panel.QLDependence;
-import auto.qinglong.net.panel.v10.ApiController;
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
+import auto.base.util.WindowUnit;
 import auto.base.view.popup.PopEditObject;
 import auto.base.view.popup.PopEditWindow;
 import auto.base.view.popup.PopMenuObject;
 import auto.base.view.popup.PopMenuWindow;
 import auto.base.view.popup.PopupWindowBuilder;
+import auto.qinglong.R;
+import auto.qinglong.bean.panel.QLDependence;
+import auto.qinglong.net.panel.v10.ApiController;
+import auto.qinglong.ui.BaseFragment;
 
 
 public class DepPagerFragment extends BaseFragment {
@@ -43,18 +43,18 @@ public class DepPagerFragment extends BaseFragment {
     private PagerAdapter mPagerAdapter;
     private MenuClickListener mMenuClickListener;
 
-    private LinearLayout ui_nav_bar;
-    private LinearLayout ui_action_bar;
-    private CheckBox ui_action_bar_check;
-    private LinearLayout ui_action_bar_delete;
-    private ImageView ui_action_bar_back;
-    private ImageView ui_menu;
-    private ImageView ui_more;
+    private LinearLayout uiNavBar;
+    private LinearLayout uiActionBar;
+    private CheckBox uiActionBarCheck;
+    private LinearLayout uiActionBarDelete;
+    private ImageView uiActionBarBack;
+    private ImageView uiMenu;
+    private ImageView uiMore;
 
-    private ViewPager2 ui_page;
-    private TabLayout ui_page_tab;
+    private ViewPager2 uiPage;
+    private TabLayout uiPageTab;
 
-    private PopEditWindow ui_pop_edit;
+    private PopEditWindow uiPopEdit;
 
     enum BarType {NAV, ACTION}
 
@@ -63,17 +63,17 @@ public class DepPagerFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dep, null);
 
-        ui_nav_bar = view.findViewById(R.id.dep_nav_bar);
+        uiNavBar = view.findViewById(R.id.dep_nav_bar);
 
-        ui_action_bar = view.findViewById(R.id.dep_action_bar);
-        ui_action_bar_back = view.findViewById(R.id.dep_action_bar_back);
-        ui_action_bar_delete = view.findViewById(R.id.dep_action_bar_delete);
-        ui_action_bar_check = view.findViewById(R.id.dep_action_bar_select_all);
+        uiActionBar = view.findViewById(R.id.dep_action_bar);
+        uiActionBarBack = view.findViewById(R.id.dep_action_bar_back);
+        uiActionBarDelete = view.findViewById(R.id.dep_action_bar_delete);
+        uiActionBarCheck = view.findViewById(R.id.dep_action_bar_select_all);
 
-        ui_page = view.findViewById(R.id.view_page);
-        ui_page_tab = view.findViewById(R.id.page_tab);
-        ui_menu = view.findViewById(R.id.dep_nav_bar_menu);
-        ui_more = view.findViewById(R.id.dep_nav_bar_more);
+        uiPage = view.findViewById(R.id.view_page);
+        uiPageTab = view.findViewById(R.id.page_tab);
+        uiMenu = view.findViewById(R.id.dep_nav_bar_menu);
+        uiMore = view.findViewById(R.id.dep_nav_bar_more);
 
         init();
 
@@ -81,41 +81,45 @@ public class DepPagerFragment extends BaseFragment {
     }
 
     @Override
+    public boolean onDispatchBackKey() {
+        if (uiActionBar.getVisibility() == View.VISIBLE) {
+            uiActionBarBack.performClick();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public void init() {
         //导航栏回调
-        ui_menu.setOnClickListener(v -> mMenuClickListener.onMenuClick());
+        uiMenu.setOnClickListener(v -> mMenuClickListener.onMenuClick());
 
         //弹窗-更多
-        ui_more.setOnClickListener(this::showPopWindowMenu);
+        uiMore.setOnClickListener(this::showPopWindowMenu);
 
         //操作栏-返回
-        ui_action_bar_back.setOnClickListener(v -> showBar(BarType.NAV));
+        uiActionBarBack.setOnClickListener(v -> showBar(BarType.NAV));
 
         //操作栏-全选
-        ui_action_bar_check.setOnCheckedChangeListener((buttonView, isChecked) -> mCurrentFragment.setAllItemCheck(isChecked));
+        uiActionBarCheck.setOnCheckedChangeListener((buttonView, isChecked) -> mCurrentFragment.onSelectAllChange(isChecked));
 
         //操作栏-删除
-        ui_action_bar_delete.setOnClickListener(v -> {
-            List<String> ids = mCurrentFragment.getCheckedItemIds();
-            if (ids != null && ids.size() > 0) {
-                netDeleteDependence(ids);
-            } else {
-                ToastUnit.showShort(getString(R.string.tip_empty_select));
-            }
-        });
+        uiActionBarDelete.setOnClickListener(v -> mCurrentFragment.onDeleteClick());
 
         mPagerAdapter = new PagerAdapter(requireActivity());//界面适配器
         mPagerAdapter.setPagerActionListener(() -> {
             showBar(BarType.ACTION);//进入操作栏
         });
 
-        ui_page.setAdapter(mPagerAdapter);
-        ui_page.setUserInputEnabled(false);//禁用用户左右滑动页面
-        ui_page.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        uiPage.setAdapter(mPagerAdapter);
+        //禁用用户左右滑动页面
+        uiPage.setUserInputEnabled(false);
+        uiPage.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 //如果处于操作栏则切换至导航栏
-                if (ui_action_bar.getVisibility() == View.VISIBLE) {
+                if (uiActionBar.getVisibility() == View.VISIBLE) {
                     showBar(BarType.NAV);
                     mCurrentFragment.setCheckState(false);
                 }
@@ -124,7 +128,7 @@ public class DepPagerFragment extends BaseFragment {
         });
 
         //设置界面联动
-        new TabLayoutMediator(ui_page_tab, ui_page, (tab, position) -> {
+        new TabLayoutMediator(uiPageTab, uiPage, (tab, position) -> {
             switch (position) {
                 case 0:
                     tab.setText("NodeJs");
@@ -144,23 +148,13 @@ public class DepPagerFragment extends BaseFragment {
         this.mMenuClickListener = mMenuClickListener;
     }
 
-    @Override
-    public boolean onDispatchBackKey() {
-        if (ui_action_bar.getVisibility() == View.VISIBLE) {
-            ui_action_bar_back.performClick();
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     private void showPopWindowEdit() {
-        ui_pop_edit = new PopEditWindow("新建依赖", "取消", "确定");
-        ui_pop_edit.setMaxHeight(WindowUnit.getWindowHeightPix(requireContext()) / 3);
-        String type = mPagerAdapter.getCurrentFragment(ui_page.getCurrentItem()).getType();
-        ui_pop_edit.addItem(new PopEditObject("type", type, "类型", null, false, false));
-        ui_pop_edit.addItem(new PopEditObject("name", null, "名称", "请输入依赖名称"));
-        ui_pop_edit.setActionListener(new PopEditWindow.OnActionListener() {
+        uiPopEdit = new PopEditWindow("新建依赖", "取消", "确定");
+        uiPopEdit.setMaxHeight(WindowUnit.getWindowHeightPix(requireContext()) / 3);
+        String type = mPagerAdapter.getCurrentFragment(uiPage.getCurrentItem()).getType();
+        uiPopEdit.addItem(new PopEditObject("type", type, "类型", null, false, false));
+        uiPopEdit.addItem(new PopEditObject("name", null, "名称", "请输入依赖名称"));
+        uiPopEdit.setActionListener(new PopEditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 String type = map.get("type");
@@ -192,7 +186,7 @@ public class DepPagerFragment extends BaseFragment {
                 return true;
             }
         });
-        PopupWindowBuilder.buildEditWindow(requireActivity(), ui_pop_edit);
+        PopupWindowBuilder.buildEditWindow(requireActivity(), uiPopEdit);
     }
 
     private void showPopWindowMenu(View view) {
@@ -213,15 +207,15 @@ public class DepPagerFragment extends BaseFragment {
 
     private void showBar(BarType barType) {
         if (barType == BarType.NAV) {
-            ui_action_bar.setVisibility(View.INVISIBLE);
+            uiActionBar.setVisibility(View.INVISIBLE);
             mCurrentFragment.setCheckState(false);
-            ui_action_bar_check.setChecked(false);
-            ui_nav_bar.setVisibility(View.VISIBLE);
+            uiActionBarCheck.setChecked(false);
+            uiNavBar.setVisibility(View.VISIBLE);
         } else {
-            ui_nav_bar.setVisibility(View.INVISIBLE);
-            ui_action_bar_check.setChecked(false);
+            uiNavBar.setVisibility(View.INVISIBLE);
+            uiActionBarCheck.setChecked(false);
             mCurrentFragment.setCheckState(true);
-            ui_action_bar.setVisibility(View.VISIBLE);
+            uiActionBar.setVisibility(View.VISIBLE);
         }
     }
 
@@ -229,8 +223,8 @@ public class DepPagerFragment extends BaseFragment {
         ApiController.addDependencies(getNetRequestID(), dependencies, new ApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
-                ui_pop_edit.dismiss();
-                mPagerAdapter.getCurrentFragment(ui_page.getCurrentItem()).refreshData();
+                uiPopEdit.dismiss();
+                mPagerAdapter.getCurrentFragment(uiPage.getCurrentItem()).refreshData();
             }
 
             @Override
@@ -240,21 +234,4 @@ public class DepPagerFragment extends BaseFragment {
         });
 
     }
-
-    private void netDeleteDependence(List<String> ids) {
-        ApiController.deleteDependencies(getNetRequestID(), ids, new ApiController.NetBaseCallback() {
-            @Override
-            public void onSuccess() {
-                showBar(BarType.NAV);
-                mPagerAdapter.getCurrentFragment(ui_page.getCurrentItem()).refreshData();
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                ToastUnit.showShort(msg);
-            }
-        });
-    }
-
-
 }

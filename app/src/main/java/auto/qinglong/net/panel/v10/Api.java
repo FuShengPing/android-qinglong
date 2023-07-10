@@ -1,6 +1,5 @@
 package auto.qinglong.net.panel.v10;
 
-import auto.qinglong.bean.panel.network.QLDependenciesRes;
 import auto.qinglong.bean.panel.network.QLEnvEditRes;
 import auto.qinglong.bean.panel.network.QLEnvironmentRes;
 import auto.qinglong.bean.panel.network.QLLogRemoveRes;
@@ -133,7 +132,7 @@ public interface Api {
      * @return the dependencies
      */
     @GET("api/dependencies")
-    Call<QLDependenciesRes> getDependencies(@Header("Authorization") String authorization, @Query("searchValue") String searchValue, @Query("type") String type);
+    Call<DependenciesRes> getDependencies(@Header("Authorization") String authorization, @Query("searchValue") String searchValue, @Query("type") String type);
 
     /**
      * 新建依赖.
@@ -184,13 +183,13 @@ public interface Api {
     Call<QLLoginLogsRes> getLoginLogs(@Header("Authorization") String authorization);
 
     /**
-     * 获取日志删除频率.
+     * 获取系统配置.
      *
      * @param authorization the authorization
      * @return the log remove
      */
     @GET("api/system/log/remove")
-    Call<QLLogRemoveRes> getLogRemove(@Header("Authorization") String authorization);
+    Call<SystemConfigRes> getSystemConfig(@Header("Authorization") String authorization);
 
     /**
      * 更新日志删除频率.
@@ -200,7 +199,7 @@ public interface Api {
      * @return the call
      */
     @PUT("api/system/log/remove")
-    Call<BaseRes> updateLogRemove(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<BaseRes> updateSystemConfig(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
      * 更新账号密码.
@@ -210,5 +209,5 @@ public interface Api {
      * @return the call
      */
     @PUT("api/user")
-    Call<BaseRes> updateUser(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<BaseRes> updateUserInfo(@Header("Authorization") String authorization, @Body RequestBody body);
 }

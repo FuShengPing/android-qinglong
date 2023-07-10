@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import auto.base.util.LogUnit;
 import auto.base.util.NetUnit;
 import auto.base.util.ToastUnit;
 import auto.qinglong.R;
@@ -64,11 +65,13 @@ public class SplashActivity extends BaseActivity {
         auto.qinglong.net.panel.ApiController.checkAccountToken(account.getBaseUrl(), account.getAuthorization(), new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
+                LogUnit.log("querySystemInfo");
                 enterActivity(true);
             }
 
             @Override
             public void onFailure(String msg) {
+                LogUnit.log(msg);
                 enterActivity(false);
             }
         });
@@ -78,6 +81,7 @@ public class SplashActivity extends BaseActivity {
         auto.qinglong.net.panel.ApiController.getSystemInfo(account.getBaseUrl(), new auto.qinglong.net.panel.ApiController.SystemCallBack() {
             @Override
             public void onSuccess(SystemInfo system) {
+                LogUnit.log("querySystemInfo");
                 PanelPreference.setVersion(system.getVersion());
                 checkAccountToken(account);
             }

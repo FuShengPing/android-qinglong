@@ -125,27 +125,27 @@ public class TasksRes extends BaseRes {
             this.isPinned = isPinned;
         }
 
-        public String getLog_path() {
+        public String getLogPath() {
             return log_path;
         }
 
-        public void setLog_path(String log_path) {
+        public void setLogPath(String log_path) {
             this.log_path = log_path;
         }
 
-        public int getLast_running_time() {
+        public int getLastRunningTime() {
             return last_running_time;
         }
 
-        public void setLast_running_time(int last_running_time) {
+        public void setLastRunningTime(int last_running_time) {
             this.last_running_time = last_running_time;
         }
 
-        public long getLast_execution_time() {
+        public long getLastExecutionTime() {
             return last_execution_time;
         }
 
-        public void setLast_execution_time(long last_execution_time) {
+        public void setLastExecutionTime(long last_execution_time) {
             this.last_execution_time = last_execution_time;
         }
 

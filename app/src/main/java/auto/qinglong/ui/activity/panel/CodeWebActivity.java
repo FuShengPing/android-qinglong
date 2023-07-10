@@ -265,7 +265,7 @@ public class CodeWebActivity extends BaseActivity {
     }
 
     private void saveScriptContent(String content) {
-       ApiController.saveScriptFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), mScriptName, mScriptParent, content, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
+       ApiController.saveScriptContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), mScriptName, mScriptParent, content, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 mContent = content;
@@ -280,7 +280,7 @@ public class CodeWebActivity extends BaseActivity {
     }
 
     private void getConfigContent() {
-       ApiController.getConfigFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.qinglong.net.panel.ApiController.ContentCallBack() {
+       ApiController.getConfigContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.qinglong.net.panel.ApiController.ContentCallBack() {
             @Override
             public void onSuccess(String content) {
                 mContent = content;
@@ -300,7 +300,7 @@ public class CodeWebActivity extends BaseActivity {
     }
 
     private void getScriptContent(String fileName, String fileParent) {
-        ApiController.getScriptFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), fileName, fileParent, new auto.qinglong.net.panel.ApiController.ContentCallBack() {
+        ApiController.getScriptContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), fileName, fileParent, new auto.qinglong.net.panel.ApiController.ContentCallBack() {
             @Override
             public void onSuccess(String content) {
                 //防止内容过大导致崩溃
@@ -326,7 +326,7 @@ public class CodeWebActivity extends BaseActivity {
     }
 
     private void getLogFileContent(String scriptKey, String fileName, String fileParent) {
-        ApiController.getLogFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), scriptKey, fileName, fileParent, new auto.qinglong.net.panel.ApiController.ContentCallBack() {
+        ApiController.getLogContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), scriptKey, fileName, fileParent, new auto.qinglong.net.panel.ApiController.ContentCallBack() {
             @Override
             public void onSuccess(String content) {
                 PanelWebJsManager.setContent(ui_webView, content);

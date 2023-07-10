@@ -1,5 +1,6 @@
 package auto.qinglong.net.panel;
 
+import auto.qinglong.net.panel.v10.SystemConfigRes;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -104,21 +105,21 @@ public interface Api {
     @HTTP(method = "DELETE", path = "api/crons", hasBody = true)
     Call<BaseRes> deleteTasks(@Header("Authorization") String authorization, @Body RequestBody body);
 
-    @GET
-    Call<FileContentRes> getFileContent(@Url String url, @Header("Authorization") String authorization);
-
     @PUT("api/scripts")
     Call<BaseRes> updateScript(@Header("Authorization") String authorization, @Body RequestBody body);
 
     @HTTP(method = "DELETE", path = "api/scripts", hasBody = true)
     Call<BaseRes> deleteScript(@Header("Authorization") String authorization, @Body RequestBody body);
 
-    @POST("api/configs/save")
-    Call<BaseRes> updateConfig(@Header("Authorization") String authorization, @Body RequestBody body);
-
     @GET
     Call<DependenceLogRes> getDependenceLog(@Url String url, @Header("Authorization") String authorization);
 
+    @GET
+    Call<FileContentRes> getFileContent(@Url String url, @Header("Authorization") String authorization);
+
+    @POST("api/configs/save")
+    Call<BaseRes> updateConfigContent(@Header("Authorization") String authorization, @Body RequestBody body);
+
     @GET("api/system/log/remove")
-    Call<SystemLogConfigRes> getSystemLogConfig(@Header("Authorization") String authorization);
+    Call<SystemConfigRes> getSystemConfig(@Header("Authorization") String authorization);
 }

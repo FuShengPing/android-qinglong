@@ -199,7 +199,7 @@ public class ScriptFragment extends BaseFragment {
     }
 
     private void getScriptFiles() {
-        auto.qinglong.net.panel.ApiController.getScriptFiles(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.qinglong.net.panel.ApiController.FileListCallBack() {
+        auto.qinglong.net.panel.ApiController.getScripts(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.qinglong.net.panel.ApiController.FileListCallBack() {
             @Override
             public void onSuccess(List<File> files) {
                 fileStack.clear();
@@ -223,7 +223,7 @@ public class ScriptFragment extends BaseFragment {
     }
 
     private void deleteScript(File file, int position) {
-        ApiController.deleteScriptFile(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), file, new ApiController.BaseCallBack() {
+        ApiController.deleteScript(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), file, new ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort(getString(R.string.tip_delete_success));

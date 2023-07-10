@@ -140,7 +140,7 @@ public class LogFragment extends BaseFragment {
     }
 
     private void getLogFiles() {
-        auto.qinglong.net.panel.ApiController.getLogFiles(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new ApiController.FileListCallBack() {
+        auto.qinglong.net.panel.ApiController.getLogs(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new ApiController.FileListCallBack() {
             @Override
             public void onSuccess(List<File> files) {
                 sortAndSetData(files, "");

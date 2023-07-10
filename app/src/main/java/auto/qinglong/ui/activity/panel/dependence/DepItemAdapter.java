@@ -17,14 +17,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import auto.qinglong.R;
-import auto.qinglong.bean.panel.QLDependence;
+import auto.qinglong.bean.panel.Dependence;
 
 public class DepItemAdapter extends RecyclerView.Adapter<DepItemAdapter.MyViewHolder> {
     public static String TAG = "DepItemAdapter";
 
     private final Context context;
     private ItemActionListener itemActionListener;
-    private List<QLDependence> data;
+    private List<Dependence> data;
     private boolean checkState;
     private Boolean[] dataCheckState;
 
@@ -51,59 +51,54 @@ public class DepItemAdapter extends RecyclerView.Adapter<DepItemAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        QLDependence dependence = data.get(position);
+        Dependence dependence = data.get(position);
 
-        holder.ui_title.setText(dependence.getName());
-        holder.ui_time.setText(dependence.getFormatCreated());
+        holder.uiTitle.setText(dependence.getTitle());
+        holder.uiTime.setText(dependence.getCreateTime());
+        holder.uiStatus.setText(dependence.getStatus());
 
-        if (dependence.getStatus() == 0) {
-            holder.ui_status.setText("安装中");
-            holder.ui_status.setTextColor(colorBlue);
-        } else if (dependence.getStatus() == 1) {
-            holder.ui_status.setText("已安装");
-            holder.ui_status.setTextColor(colorBlue);
-        } else if (dependence.getStatus() == 2) {
-            holder.ui_status.setText("安装失败");
-            holder.ui_status.setTextColor(colorRed);
-        } else if (dependence.getStatus() == 3) {
-            holder.ui_status.setText("删除中");
-            holder.ui_status.setTextColor(colorRed);
-        } else if (dependence.getStatus() == 5) {
-            holder.ui_status.setText("卸载失败");
-            holder.ui_status.setTextColor(colorRed);
+        if (dependence.getStatusCode() == Dependence.STATUS_INSTALLING) {
+            holder.uiStatus.setTextColor(colorBlue);
+        } else if (dependence.getStatusCode() == Dependence.STATUS_INSTALLED) {
+            holder.uiStatus.setTextColor(colorBlue);
+        } else if (dependence.getStatusCode() == Dependence.STATUS_INSTALL_FAILURE) {
+            holder.uiStatus.setTextColor(colorRed);
+        } else if (dependence.getStatusCode() == Dependence.STATUS_UNINSTALLING) {
+            holder.uiStatus.setTextColor(colorRed);
+        } else if (dependence.getStatusCode() == Dependence.STATUS_UNINSTALL_FAILURE) {
+            holder.uiStatus.setTextColor(colorRed);
         } else {
-            holder.ui_status.setText("未知");
-            holder.ui_status.setTextColor(colorGray);
+            holder.uiStatus.setTextColor(colorGray);
         }
 
         //处于选择状态
         if (this.checkState) {
-            holder.ui_check.setChecked(this.dataCheckState != null && this.dataCheckState[position]);
-            holder.ui_check.setOnCheckedChangeListener((buttonView, isChecked) -> dataCheckState[holder.getAdapterPosition()] = isChecked);
-            holder.ui_check.setVisibility(View.VISIBLE);
+            holder.uiCheck.setChecked(this.dataCheckState != null && this.dataCheckState[position]);
+            holder.uiCheck.setOnCheckedChangeListener((buttonView, isChecked) -> dataCheckState[holder.getAdapterPosition()] = isChecked);
+            holder.uiCheck.setVisibility(View.VISIBLE);
         } else {
-            holder.ui_check.setVisibility(View.GONE);
+            holder.uiCheck.setVisibility(View.GONE);
         }
 
-        holder.ui_title.setOnClickListener(v -> {
+        holder.uiTitle.setOnClickListener(v -> {
             if (this.checkState) {
-                holder.ui_check.setChecked(!holder.ui_check.isChecked());
+                holder.uiCheck.setChecked(!holder.uiCheck.isChecked());
             } else {
                 itemActionListener.onDetail(dependence, holder.getAdapterPosition());
             }
         });
 
-        holder.ui_bug.setOnClickListener(v -> {
+        holder.uiBug.setOnClickListener(v -> {
             if (!this.checkState) {
                 itemActionListener.onReinstall(dependence, holder.getAdapterPosition());
             } else {
-                holder.ui_check.setChecked(!holder.ui_check.isChecked());
+                holder.uiCheck.setChecked(!holder.uiCheck.isChecked());
             }
         });
 
         holder.itemView.setOnClickListener(v -> {
             if (this.checkState) {
-                holder.ui_check.setChecked(!holder.ui_check.isChecked());
+                holder.uiCheck.setChecked(!holder.uiCheck.isChecked());
             }
         });
 
@@ -115,7 +110,7 @@ public class DepItemAdapter extends RecyclerView.Adapter<DepItemAdapter.MyViewHo
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<QLDependence> data) {
+    public void setData(List<Dependence> data) {
         this.data.clear();
         this.data.addAll(data);
         this.dataCheckState = new Boolean[this.data.size()];
@@ -153,8 +148,8 @@ public class DepItemAdapter extends RecyclerView.Adapter<DepItemAdapter.MyViewHo
     /**
      * 获取被选中的item
      */
-    public List<QLDependence> getCheckedItems() {
-        List<QLDependence> dependencies = new ArrayList<>();
+    public List<Dependence> getCheckedItems() {
+        List<Dependence> dependencies = new ArrayList<>();
         if (this.dataCheckState != null) {
             for (int k = 0; k < this.dataCheckState.length; k++) {
                 if (this.dataCheckState[k]) {
@@ -166,25 +161,25 @@ public class DepItemAdapter extends RecyclerView.Adapter<DepItemAdapter.MyViewHo
     }
 
     public interface ItemActionListener {
-        void onDetail(QLDependence dependence, int position);
+        void onDetail(Dependence dependence, int position);
 
-        void onReinstall(QLDependence dependence, int position);
+        void onReinstall(Dependence dependence, int position);
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView ui_title;
-        public TextView ui_time;
-        public TextView ui_status;
-        public CheckBox ui_check;
-        public ImageView ui_bug;
+        public TextView uiTitle;
+        public TextView uiTime;
+        public TextView uiStatus;
+        public CheckBox uiCheck;
+        public ImageView uiBug;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            ui_title = itemView.findViewById(R.id.item_title);
-            ui_time = itemView.findViewById(R.id.dep_item_time);
-            ui_status = itemView.findViewById(R.id.dep_item_status);
-            ui_check = itemView.findViewById(R.id.item_check);
-            ui_bug = itemView.findViewById(R.id.dep_action_bug);
+            uiTitle = itemView.findViewById(R.id.item_title);
+            uiTime = itemView.findViewById(R.id.dep_item_time);
+            uiStatus = itemView.findViewById(R.id.dep_item_status);
+            uiCheck = itemView.findViewById(R.id.item_check);
+            uiBug = itemView.findViewById(R.id.dep_action_bug);
         }
     }
 }

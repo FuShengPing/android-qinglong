@@ -16,6 +16,44 @@ public class ApiController {
     private static final String ERROR_NO_BODY = "响应异常";
     private static final String ERROR_INVALID_AUTH = "登录信息失效";
 
+    public static void checkAccountToken(@NonNull String baseUrl, @NonNull String authorization, auto.qinglong.net.panel.ApiController.BaseCallBack callBack) {
+        Call<SystemConfigRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .getSystemConfig(authorization);
+
+        call.enqueue(new Callback<SystemConfigRes>() {
+            @Override
+            public void onResponse(Call<SystemConfigRes> call, Response<SystemConfigRes> response) {
+                SystemConfigRes res = response.body();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callBack.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callBack.onFailure(ERROR_NO_BODY);
+                    }
+                } else {
+                    if (res.getCode() == 200) {
+                        callBack.onSuccess();
+                    } else {
+                        callBack.onFailure(res.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SystemConfigRes> call, Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                callBack.onFailure(t.getLocalizedMessage());
+            }
+        });
+
+    }
+
     public static void getTasks(String baseUrl, String authorization, String searchValue, auto.qinglong.net.panel.ApiController.TaskListCallBack callback) {
         Call<TasksRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -53,7 +91,7 @@ public class ApiController {
         });
     }
 
-    public static void getScriptFiles(@NonNull String baseUrl, @NonNull String authorization, auto.qinglong.net.panel.ApiController.FileListCallBack callBack) {
+    public static void getScripts(@NonNull String baseUrl, @NonNull String authorization, auto.qinglong.net.panel.ApiController.FileListCallBack callBack) {
         Call<ScriptFilesRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -90,7 +128,7 @@ public class ApiController {
         });
     }
 
-    public static void getLogFiles(@NonNull String baseUrl, @NonNull String authorization, auto.qinglong.net.panel.ApiController.FileListCallBack callBack) {
+    public static void getLogs(@NonNull String baseUrl, @NonNull String authorization, auto.qinglong.net.panel.ApiController.FileListCallBack callBack) {
         Call<LogFilesRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -127,4 +165,40 @@ public class ApiController {
         });
     }
 
+    public static void getDependencies(@NonNull String baseUrl, @NonNull String authorization, String searchValue, String type, auto.qinglong.net.panel.ApiController.DependenceListCallBack callBack) {
+        Call<DependenciesRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .getDependencies(authorization, searchValue, type);
+
+        call.enqueue(new Callback<DependenciesRes>() {
+            @Override
+            public void onResponse(Call<DependenciesRes> call, Response<DependenciesRes> response) {
+                DependenciesRes res = response.body();
+                if (res == null) {
+                    if (response.code() == 401) {
+                        callBack.onFailure(ERROR_INVALID_AUTH);
+                    } else {
+                        callBack.onFailure(ERROR_NO_BODY);
+                    }
+                } else {
+                    if (res.getCode() == 200) {
+                        callBack.onSuccess(Converter.convertDependencies(res.getData()));
+                    } else {
+                        callBack.onFailure(res.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DependenciesRes> call, Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                callBack.onFailure(t.getLocalizedMessage());
+            }
+        });
+    }
 }

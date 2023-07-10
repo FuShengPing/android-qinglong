@@ -16,8 +16,8 @@ public class Task extends Base implements Comparable<Task> {
     private int stateCode;
     private String schedule;
     private String lastExecuteTime;
-    private String nextExecuteTime;
     private String lastRunningTime;
+    private String nextExecuteTime;
     private boolean isPinned;
 
     public Task(Object key) {
