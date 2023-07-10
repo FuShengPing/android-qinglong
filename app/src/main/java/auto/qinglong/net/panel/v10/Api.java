@@ -2,7 +2,6 @@ package auto.qinglong.net.panel.v10;
 
 import auto.qinglong.bean.panel.network.QLEnvEditRes;
 import auto.qinglong.bean.panel.network.QLEnvironmentRes;
-import auto.qinglong.bean.panel.network.QLLogRemoveRes;
 import auto.qinglong.bean.panel.network.QLLoginLogsRes;
 import auto.qinglong.net.panel.BaseRes;
 import okhttp3.RequestBody;

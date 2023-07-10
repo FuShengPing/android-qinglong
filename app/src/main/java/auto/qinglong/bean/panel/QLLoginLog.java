@@ -1,7 +1,6 @@
 package auto.qinglong.bean.panel;
 
 public class QLLoginLog {
-    /* 接口属性 */
     private String address;
     private String ip;
     private String platform;

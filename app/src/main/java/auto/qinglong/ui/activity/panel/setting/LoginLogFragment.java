@@ -14,27 +14,25 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import java.util.List;
 import java.util.Objects;
 
-import auto.qinglong.R;
-import auto.qinglong.ui.BaseFragment;
-import auto.qinglong.bean.panel.QLLoginLog;
-import auto.qinglong.net.NetManager;
-import auto.qinglong.net.panel.v10.ApiController;
 import auto.base.util.ToastUnit;
+import auto.qinglong.R;
+import auto.qinglong.bean.panel.LoginLog;
+import auto.qinglong.database.sp.PanelPreference;
+import auto.qinglong.ui.BaseFragment;
 
 
 public class LoginLogFragment extends BaseFragment {
-
     private LoginLogItemAdapter itemAdapter;
 
-    private RecyclerView ui_recycler;
-    private SmartRefreshLayout ui_refresh;
+    private RecyclerView uiRecycler;
+    private SmartRefreshLayout uiRefresh;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting_login_log, container, false);
 
-        ui_refresh = view.findViewById(R.id.refresh_layout);
-        ui_recycler = view.findViewById(R.id.recycler_view);
+        uiRefresh = view.findViewById(R.id.refresh_layout);
+        uiRecycler = view.findViewById(R.id.recycler_view);
 
         init();
         return view;
@@ -49,31 +47,30 @@ public class LoginLogFragment extends BaseFragment {
     @Override
     protected void init() {
         itemAdapter = new LoginLogItemAdapter(getContext());
+        uiRecycler.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        uiRecycler.setAdapter(itemAdapter);
+        Objects.requireNonNull(uiRecycler.getItemAnimator()).setChangeDuration(0);
 
-        Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
-        ui_recycler.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        ui_recycler.setAdapter(itemAdapter);
-
-        ui_refresh.setOnRefreshListener(refreshLayout -> netGetLoginLogs());
+        uiRefresh.setOnRefreshListener(refreshLayout -> getLoginLogs());
     }
 
     private void initData() {
-        if (init || NetManager.isRequesting(this.getNetRequestID())) {
+        if (init) {
             return;
         }
-        ui_refresh.autoRefreshAnimationOnly();
+        uiRefresh.autoRefreshAnimationOnly();
         new Handler().postDelayed(() -> {
             if (isVisible()) {
-                netGetLoginLogs();
+                getLoginLogs();
             }
         }, 1000);
     }
 
-    private void netGetLoginLogs() {
-        ApiController.getLoginLogs(getNetRequestID(), new ApiController.NetGetLoginLogsCallback() {
+    private void getLoginLogs() {
+        auto.qinglong.net.panel.ApiController.getLoginLogs(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.qinglong.net.panel.ApiController.LoginLogListCallBack() {
             @Override
-            public void onSuccess(List<QLLoginLog> logs) {
-                itemAdapter.setData(logs);
+            public void onSuccess(List<LoginLog> loginLogs) {
+                itemAdapter.setData(loginLogs);
                 init = true;
                 this.onEnd(true);
             }
@@ -85,8 +82,8 @@ public class LoginLogFragment extends BaseFragment {
             }
 
             private void onEnd(boolean isSuccess) {
-                if (ui_refresh.isRefreshing()) {
-                    ui_refresh.finishRefresh(isSuccess);
+                if (uiRefresh.isRefreshing()) {
+                    uiRefresh.finishRefresh(isSuccess);
                 }
             }
         });

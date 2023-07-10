@@ -7,6 +7,7 @@ import java.util.Locale;
 import auto.base.util.TimeUnit;
 import auto.qinglong.bean.panel.Dependence;
 import auto.qinglong.bean.panel.File;
+import auto.qinglong.bean.panel.SystemConfig;
 import auto.qinglong.bean.views.Task;
 import auto.qinglong.utils.CronUnit;
 
@@ -147,6 +148,13 @@ public class Converter {
             files.add(file);
         }
         return files;
+    }
+
+    public static SystemConfig convertSystemConfig(SystemConfigRes.SystemConfigObject object) {
+        SystemConfig config = new SystemConfig();
+        config.setLogRemoveFrequency(object.getLogRemoveFrequency());
+        config.setCronConcurrency(object.getCronConcurrency());
+        return config;
     }
 
     private static List<File> buildChildren(String parent, List<ScriptFilesRes.FileObject> objects) {

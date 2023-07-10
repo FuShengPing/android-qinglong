@@ -114,6 +114,15 @@ public interface Api {
     @GET
     Call<DependenceLogRes> getDependenceLog(@Url String url, @Header("Authorization") String authorization);
 
+    /**
+     * 获取登录日志.
+     *
+     * @param authorization the authorization
+     * @return the login logs
+     */
+    @GET("api/user/login-log")
+    Call<LoginLogsRes> getLoginLogs(@Header("Authorization") String authorization);
+
     @GET
     Call<FileContentRes> getFileContent(@Url String url, @Header("Authorization") String authorization);
 

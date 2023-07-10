@@ -11,6 +11,7 @@ import auto.base.util.TextUnit;
 import auto.qinglong.bean.panel.Account;
 import auto.qinglong.bean.panel.Dependence;
 import auto.qinglong.bean.panel.File;
+import auto.qinglong.bean.panel.LoginLog;
 import auto.qinglong.bean.panel.SystemConfig;
 import auto.qinglong.bean.panel.SystemInfo;
 import auto.qinglong.bean.views.Task;
@@ -31,7 +32,7 @@ public class ApiController {
     private static final String ERROR_NO_BODY = "响应异常";
     private static final String ERROR_INVALID_AUTH = "登录信息失效";
 
-    public static void getSystemInfo(@NonNull String baseUrl, @NonNull SystemCallBack callBack) {
+    public static void getSystemInfo(@NonNull String baseUrl, @NonNull SystemInfoCallBack callBack) {
         Call<SystemInfoRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -43,30 +44,17 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<SystemInfoRes> call, @NonNull Response<SystemInfoRes> response) {
                 SystemInfoRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY + response.code());
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        SystemInfo system = new SystemInfo();
-                        system.setInitialized(res.getData().isInitialized());
-                        system.setVersion(res.getData().getVersion());
-                        callBack.onSuccess(system);
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                if (checkResponse(response.code(), res, callBack)) {
+                    SystemInfo system = new SystemInfo();
+                    system.setInitialized(res.getData().isInitialized());
+                    system.setVersion(res.getData().getVersion());
+                    callBack.onSuccess(system);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<SystemInfoRes> call, @NonNull Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
+                handleRequestError(call, t, callBack);
             }
         });
     }
@@ -89,27 +77,14 @@ public class ApiController {
             @Override
             public void onResponse(Call<LoginRes> call, Response<LoginRes> response) {
                 LoginRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY + response.code());
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess(res.getData().getToken());
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                if (checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess(res.getData().getToken());
                 }
             }
 
             @Override
             public void onFailure(Call<LoginRes> call, Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
+                handleRequestError(call, t, callBack);
             }
         });
     }
@@ -132,17 +107,7 @@ public class ApiController {
     }
 
     public static void runTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
-        JsonArray jsonArray = new JsonArray();
-        for (int i = 0; i < keys.size(); i++) {
-            if (keys.get(i) instanceof String) {
-                jsonArray.add((String) keys.get(i));
-            } else {
-                jsonArray.add((Integer) keys.get(i));
-            }
-        }
-
-        String json = jsonArray.toString();
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        RequestBody body = buildArrayJson(keys);
         Call<BaseRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -154,43 +119,20 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess();
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                if (checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
+                handleRequestError(call, t, callBack);
             }
         });
     }
 
     public static void stopTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
-        JsonArray jsonArray = new JsonArray();
-        for (int i = 0; i < keys.size(); i++) {
-            if (keys.get(i) instanceof String) {
-                jsonArray.add((String) keys.get(i));
-            } else {
-                jsonArray.add((Integer) keys.get(i));
-            }
-        }
-
-        String json = jsonArray.toString();
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        RequestBody body = buildArrayJson(keys);
         Call<BaseRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -202,43 +144,20 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess();
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                if (checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
+                handleRequestError(call, t, callBack);
             }
         });
     }
 
     public static void enableTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
-        JsonArray jsonArray = new JsonArray();
-        for (int i = 0; i < keys.size(); i++) {
-            if (keys.get(i) instanceof String) {
-                jsonArray.add((String) keys.get(i));
-            } else {
-                jsonArray.add((Integer) keys.get(i));
-            }
-        }
-
-        String json = jsonArray.toString();
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        RequestBody body = buildArrayJson(keys);
         Call<BaseRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -250,43 +169,20 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess();
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                if (checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
+                handleRequestError(call, t, callBack);
             }
         });
     }
 
     public static void disableTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
-        JsonArray jsonArray = new JsonArray();
-        for (int i = 0; i < keys.size(); i++) {
-            if (keys.get(i) instanceof String) {
-                jsonArray.add((String) keys.get(i));
-            } else {
-                jsonArray.add((Integer) keys.get(i));
-            }
-        }
-
-        String json = jsonArray.toString();
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        RequestBody body = buildArrayJson(keys);
         Call<BaseRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -298,43 +194,20 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess();
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                if (checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
+                handleRequestError(call, t, callBack);
             }
         });
     }
 
     public static void pinTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
-        JsonArray jsonArray = new JsonArray();
-        for (int i = 0; i < keys.size(); i++) {
-            if (keys.get(i) instanceof String) {
-                jsonArray.add((String) keys.get(i));
-            } else {
-                jsonArray.add((Integer) keys.get(i));
-            }
-        }
-
-        String json = jsonArray.toString();
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        RequestBody body = buildArrayJson(keys);
         Call<BaseRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -346,43 +219,20 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess();
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                if (checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
+                handleRequestError(call, t, callBack);
             }
         });
     }
 
     public static void unpinTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
-        JsonArray jsonArray = new JsonArray();
-        for (int i = 0; i < keys.size(); i++) {
-            if (keys.get(i) instanceof String) {
-                jsonArray.add((String) keys.get(i));
-            } else {
-                jsonArray.add((Integer) keys.get(i));
-            }
-        }
-
-        String json = jsonArray.toString();
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        RequestBody body = buildArrayJson(keys);
         Call<BaseRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -394,43 +244,20 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess();
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                if (checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
+                handleRequestError(call, t, callBack);
             }
         });
     }
 
     public static void deleteTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
-        JsonArray jsonArray = new JsonArray();
-        for (int i = 0; i < keys.size(); i++) {
-            if (keys.get(i) instanceof String) {
-                jsonArray.add((String) keys.get(i));
-            } else {
-                jsonArray.add((Integer) keys.get(i));
-            }
-        }
-
-        String json = jsonArray.toString();
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        RequestBody body = buildArrayJson(keys);
         Call<BaseRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -442,27 +269,14 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess();
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                if (checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
+                handleRequestError(call, t, callBack);
             }
         });
     }
@@ -491,27 +305,14 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY + response.code());
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess();
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                if (checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
+                handleRequestError(call, t, callBack);
             }
         });
     }
@@ -534,27 +335,14 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY + response.code());
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess();
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                if (checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
+                handleRequestError(call, t, callBack);
             }
         });
     }
@@ -597,27 +385,14 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess();
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                if (checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
+                handleRequestError(call, t, callBack);
             }
         });
     }
@@ -628,7 +403,6 @@ public class ApiController {
         } else {
             auto.qinglong.net.panel.v15.ApiController.getScripts(baseUrl, authorization, callBack);
         }
-
     }
 
     public static void deleteScript(@NonNull String baseUrl, @NonNull String authorization, File file, BaseCallBack callBack) {
@@ -655,27 +429,14 @@ public class ApiController {
             @Override
             public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess();
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                if (checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess();
                 }
             }
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
+                handleRequestError(call, t, callBack);
             }
         });
     }
@@ -705,27 +466,14 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess();
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                if (checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
+                handleRequestError(call, t, callBack);
             }
         });
     }
@@ -760,37 +508,52 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<DependenceLogRes> call, @NonNull Response<DependenceLogRes> response) {
                 DependenceLogRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY);
+                if (checkResponse(response.code(), res, callBack)) {
+                    StringBuilder content = new StringBuilder();
+                    for (String line : res.getData().getLog()) {
+                        content.append(line).append("\n");
                     }
-                } else {
-                    if (res.getCode() == 200) {
-                        StringBuilder content = new StringBuilder();
-                        for (String line : res.getData().getLog()) {
-                            content.append(line).append("\n");
-                        }
-                        callBack.onSuccess(content.toString());
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                    callBack.onSuccess(content.toString());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<DependenceLogRes> call, @NonNull Throwable t) {
-                if (call.isCanceled()) {
-                    return;
+                handleRequestError(call, t, callBack);
+            }
+        });
+    }
+
+    public static void getLoginLogs(@NonNull String baseUrl, @NonNull String authorization, LoginLogListCallBack callBack) {
+        Call<LoginLogsRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .getLoginLogs(authorization);
+
+        call.enqueue(new Callback<LoginLogsRes>() {
+            @Override
+            public void onResponse(Call<LoginLogsRes> call, Response<LoginLogsRes> response) {
+                LoginLogsRes res = response.body();
+                if (checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess(Converter.convertLoginLogs(res.getData()));
                 }
-                callBack.onFailure(t.getLocalizedMessage());
+            }
+
+            @Override
+            public void onFailure(Call<LoginLogsRes> call, Throwable t) {
+                handleRequestError(call, t, callBack);
             }
         });
     }
 
     public static void getSystemConfig(@NonNull String baseUrl, @NonNull String authorization, SystemConfigCallBack callBack) {
-        auto.qinglong.net.panel.v10.ApiController.getSystemConfig(baseUrl, authorization, callBack);
+        if (PanelPreference.isLowVersion()) {
+            auto.qinglong.net.panel.v10.ApiController.getSystemConfig(baseUrl, authorization, callBack);
+        } else {
+            auto.qinglong.net.panel.v15.ApiController.getSystemConfig(baseUrl, authorization, callBack);
+        }
     }
 
     private static void getFileContent(@NonNull String baseUrl, @NonNull String authorization, String path, ContentCallBack callBack) {
@@ -800,79 +563,90 @@ public class ApiController {
                 .build()
                 .create(Api.class)
                 .getFileContent(path, authorization);
+
         call.enqueue(new Callback<FileContentRes>() {
             @Override
             public void onResponse(Call<FileContentRes> call, Response<FileContentRes> response) {
                 FileContentRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY + response.code());
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess(res.getData());
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                if (checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess(res.getData());
                 }
             }
 
             @Override
             public void onFailure(Call<FileContentRes> call, Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
+                handleRequestError(call, t, callBack);
             }
         });
     }
 
-    public interface SystemCallBack {
+    protected static RequestBody buildArrayJson(List<Object> objects) {
+        JsonArray jsonArray = new JsonArray();
+        for (Object object : objects) {
+            if (object instanceof String) {
+                jsonArray.add((String) object);
+            } else {
+                jsonArray.add((Integer) object);
+            }
+        }
+        return RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
+    }
+
+    public static boolean checkResponse(int statusCode, BaseRes res, BaseCallBack callBack) {
+        if (res == null) {
+            callBack.onFailure(ERROR_NO_BODY + statusCode);
+            return false;
+        } else if (statusCode == 401) {
+            callBack.onFailure(ERROR_INVALID_AUTH);
+            return false;
+        } else if (res.getCode() != 200) {
+            callBack.onFailure(res.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    public static void handleRequestError(Call<?> call, Throwable t, BaseCallBack callBack) {
+        if (!call.isCanceled()) {
+            callBack.onFailure(t.getLocalizedMessage());
+        }
+    }
+
+    public interface SystemInfoCallBack extends BaseCallBack {
         void onSuccess(SystemInfo system);
-
-        void onFailure(String msg);
     }
 
-    public interface LoginCallBack {
+    public interface LoginCallBack extends BaseCallBack {
         void onSuccess(String token);
-
-        void onFailure(String msg);
     }
 
-    public interface TaskListCallBack {
+    public interface TaskListCallBack extends BaseCallBack {
         void onSuccess(List<Task> tasks);
-
-        void onFailure(String msg);
     }
 
-    public interface DependenceListCallBack {
+    public interface DependenceListCallBack extends BaseCallBack {
         void onSuccess(List<Dependence> dependencies);
-
-        void onFailure(String msg);
     }
 
-    public interface FileListCallBack {
+    public interface FileListCallBack extends BaseCallBack {
         void onSuccess(List<File> files);
-
-        void onFailure(String msg);
     }
 
-    public interface ContentCallBack {
+    public interface LoginLogListCallBack extends BaseCallBack {
+        void onSuccess(List<LoginLog> loginLogs);
+    }
+
+    public interface ContentCallBack extends BaseCallBack {
         void onSuccess(String content);
-
-        void onFailure(String msg);
     }
 
-    public interface SystemConfigCallBack {
+    public interface SystemConfigCallBack extends BaseCallBack {
         void onSuccess(SystemConfig config);
-
-        void onFailure(String msg);
     }
 
     public interface BaseCallBack {
-        void onSuccess();
+        default void onSuccess() {
+        }
 
         void onFailure(String msg);
     }

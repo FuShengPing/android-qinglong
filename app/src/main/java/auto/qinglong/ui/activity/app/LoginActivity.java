@@ -19,6 +19,7 @@ import auto.qinglong.bean.panel.Account;
 import auto.qinglong.bean.panel.SystemInfo;
 import auto.qinglong.database.sp.PanelPreference;
 import auto.qinglong.net.NetManager;
+import auto.qinglong.net.panel.ApiController;
 import auto.qinglong.ui.BaseActivity;
 
 public class LoginActivity extends BaseActivity {
@@ -142,7 +143,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     protected void querySystemInfo(Account account) {
-        auto.qinglong.net.panel.ApiController.getSystemInfo(account.getBaseUrl(), new auto.qinglong.net.panel.ApiController.SystemCallBack() {
+        auto.qinglong.net.panel.ApiController.getSystemInfo(account.getBaseUrl(), new ApiController.SystemInfoCallBack() {
             @Override
             public void onSuccess(SystemInfo system) {
                 PanelPreference.setVersion(system.getVersion());

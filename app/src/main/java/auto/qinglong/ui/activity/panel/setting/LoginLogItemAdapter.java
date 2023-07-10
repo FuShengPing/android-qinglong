@@ -14,11 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import auto.qinglong.R;
-import auto.qinglong.bean.panel.QLLoginLog;
-import auto.base.util.TimeUnit;
+import auto.qinglong.bean.panel.LoginLog;
 
 public class LoginLogItemAdapter extends RecyclerView.Adapter<LoginLogItemAdapter.MyViewHolder> {
-    List<QLLoginLog> data;
+    List<LoginLog> data;
 
     private final Context context;
 
@@ -37,19 +36,18 @@ public class LoginLogItemAdapter extends RecyclerView.Adapter<LoginLogItemAdapte
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        QLLoginLog loginLog = data.get(position);
+        LoginLog loginLog = data.get(position);
 
-        holder.ui_title.setText("[" + (position + 1) + "]");
-        holder.ui_time.setText(TimeUnit.formatDatetimeA(loginLog.getTimestamp()));
-        holder.ui_address.setText(loginLog.getAddress());
-        holder.ui_ip.setText(loginLog.getIp());
-        holder.ui_platform.setText(loginLog.getPlatform());
-        if (loginLog.getStatus() == 0) {
-            holder.ui_status.setText("成功");
-            holder.ui_status.setTextColor(context.getColor(R.color.theme_blue_color_shadow));
+        holder.uiTitle.setText("[" + (position + 1) + "]");
+        holder.uiTime.setText(loginLog.getTime());
+        holder.uiAddress.setText(loginLog.getAddress());
+        holder.uiIp.setText(loginLog.getIp());
+        holder.uiPlatform.setText(loginLog.getPlatform());
+        holder.uiStatus.setText(loginLog.getStatus());
+        if (loginLog.getStatusCode() == LoginLog.STATUS_SUCCESS) {
+            holder.uiStatus.setTextColor(context.getColor(R.color.theme_blue_color_shadow));
         } else {
-            holder.ui_status.setText("失败");
-            holder.ui_status.setTextColor(context.getColor(R.color.text_color_red));
+            holder.uiStatus.setTextColor(context.getColor(R.color.text_color_red));
         }
     }
 
@@ -59,28 +57,28 @@ public class LoginLogItemAdapter extends RecyclerView.Adapter<LoginLogItemAdapte
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<QLLoginLog> data) {
+    public void setData(List<LoginLog> data) {
         this.data.clear();
         this.data.addAll(data);
         notifyDataSetChanged();
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView ui_title;
-        public TextView ui_time;
-        public TextView ui_address;
-        public TextView ui_ip;
-        public TextView ui_platform;
-        public TextView ui_status;
+        public TextView uiTitle;
+        public TextView uiTime;
+        public TextView uiAddress;
+        public TextView uiIp;
+        public TextView uiPlatform;
+        public TextView uiStatus;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            ui_title = itemView.findViewById(R.id.login_log_title);
-            ui_time = itemView.findViewById(R.id.login_log_time);
-            ui_address = itemView.findViewById(R.id.login_log_address);
-            ui_ip = itemView.findViewById(R.id.login_log_ip);
-            ui_platform = itemView.findViewById(R.id.login_log_platform);
-            ui_status = itemView.findViewById(R.id.login_log_status);
+            uiTitle = itemView.findViewById(R.id.login_log_title);
+            uiTime = itemView.findViewById(R.id.login_log_time);
+            uiAddress = itemView.findViewById(R.id.login_log_address);
+            uiIp = itemView.findViewById(R.id.login_log_ip);
+            uiPlatform = itemView.findViewById(R.id.login_log_platform);
+            uiStatus = itemView.findViewById(R.id.login_log_status);
 
         }
     }
