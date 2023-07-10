@@ -13,8 +13,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * @version 2023.07.06
  */
 public class ApiController {
-    private static final String ERROR_NO_BODY = "响应异常";
-    private static final String ERROR_INVALID_AUTH = "登录信息失效";
 
     public static void checkAccountToken(@NonNull String baseUrl, @NonNull String authorization, auto.qinglong.net.panel.ApiController.BaseCallBack callBack) {
         Call<SystemConfigRes> call = new Retrofit.Builder()
@@ -28,33 +26,20 @@ public class ApiController {
             @Override
             public void onResponse(Call<SystemConfigRes> call, Response<SystemConfigRes> response) {
                 SystemConfigRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess();
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                if (auto.qinglong.net.panel.ApiController.checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess();
                 }
             }
 
             @Override
             public void onFailure(Call<SystemConfigRes> call, Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
+                auto.qinglong.net.panel.ApiController.handleRequestError(call, t, callBack);
             }
         });
 
     }
 
-    public static void getTasks(String baseUrl, String authorization, String searchValue, auto.qinglong.net.panel.ApiController.TaskListCallBack callback) {
+    public static void getTasks(String baseUrl, String authorization, String searchValue, auto.qinglong.net.panel.ApiController.TaskListCallBack callBack) {
         Call<TasksRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -66,27 +51,14 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<TasksRes> call, @NonNull Response<TasksRes> response) {
                 TasksRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callback.onSuccess(Converter.convertTasks(res.getData().getData()));
-                    } else {
-                        callback.onFailure(res.getMessage());
-                    }
+                if (auto.qinglong.net.panel.ApiController.checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess(Converter.convertTasks(res.getData().getData()));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<TasksRes> call, @NonNull Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
+                auto.qinglong.net.panel.ApiController.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -103,27 +75,14 @@ public class ApiController {
             @Override
             public void onResponse(Call<ScriptFilesRes> call, Response<ScriptFilesRes> response) {
                 ScriptFilesRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess(Converter.convertScriptFiles(res.getData()));
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                if (auto.qinglong.net.panel.ApiController.checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess(Converter.convertScriptFiles(res.getData()));
                 }
             }
 
             @Override
             public void onFailure(Call<ScriptFilesRes> call, Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
+                auto.qinglong.net.panel.ApiController.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -140,27 +99,14 @@ public class ApiController {
             @Override
             public void onResponse(Call<LogFilesRes> call, Response<LogFilesRes> response) {
                 LogFilesRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess(Converter.convertLogFiles(res.getData()));
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                if (auto.qinglong.net.panel.ApiController.checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess(Converter.convertLogFiles(res.getData()));
                 }
             }
 
             @Override
             public void onFailure(Call<LogFilesRes> call, Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
+                auto.qinglong.net.panel.ApiController.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -177,27 +123,38 @@ public class ApiController {
             @Override
             public void onResponse(Call<DependenciesRes> call, Response<DependenciesRes> response) {
                 DependenciesRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess(Converter.convertDependencies(res.getData()));
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                if (auto.qinglong.net.panel.ApiController.checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess(Converter.convertDependencies(res.getData()));
                 }
             }
 
             @Override
             public void onFailure(Call<DependenciesRes> call, Throwable t) {
-                if (call.isCanceled()) {
-                    return;
+                auto.qinglong.net.panel.ApiController.handleRequestError(call, t, callBack);
+            }
+        });
+    }
+
+    public static void getSystemConfig(@NonNull String baseUrl, @NonNull String authorization, auto.qinglong.net.panel.ApiController.SystemConfigCallBack callBack) {
+        Call<SystemConfigRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .getSystemConfig(authorization);
+
+        call.enqueue(new Callback<SystemConfigRes>() {
+            @Override
+            public void onResponse(Call<SystemConfigRes> call, Response<SystemConfigRes> response) {
+                SystemConfigRes res = response.body();
+                if (auto.qinglong.net.panel.ApiController.checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess(Converter.convertSystemConfig(res.getData()));
                 }
-                callBack.onFailure(t.getLocalizedMessage());
+            }
+
+            @Override
+            public void onFailure(Call<SystemConfigRes> call, Throwable t) {
+                auto.qinglong.net.panel.ApiController.handleRequestError(call, t, callBack);
             }
         });
     }
