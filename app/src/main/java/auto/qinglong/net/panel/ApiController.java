@@ -63,9 +63,8 @@ public class ApiController {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("username", account.getUsername());
         jsonObject.addProperty("password", account.getPassword());
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
 
-        String json = jsonObject.toString();
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
         Call<LoginRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -103,11 +102,11 @@ public class ApiController {
         } else {
             auto.qinglong.net.panel.v15.ApiController.getTasks(baseUrl, authorization, searchValue, callback);
         }
-
     }
 
     public static void runTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
+
         Call<BaseRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -133,6 +132,7 @@ public class ApiController {
 
     public static void stopTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
+
         Call<BaseRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -158,6 +158,7 @@ public class ApiController {
 
     public static void enableTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
+
         Call<BaseRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -183,6 +184,7 @@ public class ApiController {
 
     public static void disableTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
+
         Call<BaseRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -208,6 +210,7 @@ public class ApiController {
 
     public static void pinTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
+
         Call<BaseRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -233,6 +236,7 @@ public class ApiController {
 
     public static void unpinTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
+
         Call<BaseRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -258,6 +262,7 @@ public class ApiController {
 
     public static void deleteTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
+
         Call<BaseRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -556,6 +561,14 @@ public class ApiController {
         }
     }
 
+    public static void updateSystemConfig(@NonNull String baseUrl, @NonNull String authorization, SystemConfig config, BaseCallBack callBack) {
+        if (PanelPreference.isLowVersion()) {
+            auto.qinglong.net.panel.v10.ApiController.updateSystemConfig(baseUrl, authorization, config, callBack);
+        } else {
+            auto.qinglong.net.panel.v15.ApiController.updateSystemConfig(baseUrl, authorization, config, callBack);
+        }
+    }
+
     private static void getFileContent(@NonNull String baseUrl, @NonNull String authorization, String path, ContentCallBack callBack) {
         Call<FileContentRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -580,18 +593,6 @@ public class ApiController {
         });
     }
 
-    protected static RequestBody buildArrayJson(List<Object> objects) {
-        JsonArray jsonArray = new JsonArray();
-        for (Object object : objects) {
-            if (object instanceof String) {
-                jsonArray.add((String) object);
-            } else {
-                jsonArray.add((Integer) object);
-            }
-        }
-        return RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
-    }
-
     public static boolean checkResponse(int statusCode, BaseRes res, BaseCallBack callBack) {
         if (res == null) {
             callBack.onFailure(ERROR_NO_BODY + statusCode);
@@ -610,6 +611,18 @@ public class ApiController {
         if (!call.isCanceled()) {
             callBack.onFailure(t.getLocalizedMessage());
         }
+    }
+
+    public static RequestBody buildArrayJson(List<Object> objects) {
+        JsonArray jsonArray = new JsonArray();
+        for (Object object : objects) {
+            if (object instanceof String) {
+                jsonArray.add((String) object);
+            } else {
+                jsonArray.add((Integer) object);
+            }
+        }
+        return RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
     }
 
     public interface SystemInfoCallBack extends BaseCallBack {

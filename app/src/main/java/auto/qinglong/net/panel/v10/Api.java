@@ -191,7 +191,7 @@ public interface Api {
     Call<SystemConfigRes> getSystemConfig(@Header("Authorization") String authorization);
 
     /**
-     * 更新日志删除频率.
+     * 更新系统配置.
      *
      * @param authorization the authorization
      * @param body          the body

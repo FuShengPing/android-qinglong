@@ -15,6 +15,7 @@ import auto.qinglong.bean.panel.Account;
 import auto.qinglong.bean.panel.QLDependence;
 import auto.qinglong.bean.panel.QLEnvironment;
 import auto.qinglong.bean.panel.QLLoginLog;
+import auto.qinglong.bean.panel.SystemConfig;
 import auto.qinglong.bean.panel.network.QLEnvEditRes;
 import auto.qinglong.bean.panel.network.QLEnvironmentRes;
 import auto.qinglong.bean.panel.network.QLLoginLogsRes;
@@ -894,11 +895,11 @@ public class ApiController {
         });
     }
 
-    public static void updateLogRemove(@NonNull String requestId, int frequency, @NonNull NetBaseCallback callback) {
+    public static void updateSystemConfig(@NonNull String baseUrl, @NonNull String authorization, SystemConfig config, @NonNull auto.qinglong.net.panel.ApiController.BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("frequency", frequency);
-
+        jsonObject.addProperty("frequency", config.getLogRemoveFrequency());
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
+
         Call<BaseRes> call = new Retrofit.Builder()
                 .baseUrl(PanelPreference.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -909,34 +910,17 @@ public class ApiController {
         call.enqueue(new Callback<BaseRes>() {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
-                NetManager.finishCall(requestId);
                 BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callback.onSuccess();
-                    } else {
-                        callback.onFailure(res.getMessage());
-                    }
+                if (auto.qinglong.net.panel.ApiController.checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
+                auto.qinglong.net.panel.ApiController.handleRequestError(call, t, callBack);
             }
         });
-
-        NetManager.addCall(call, requestId);
 
     }
 

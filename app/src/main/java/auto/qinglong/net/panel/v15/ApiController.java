@@ -2,6 +2,12 @@ package auto.qinglong.net.panel.v15;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.JsonObject;
+
+import auto.qinglong.bean.panel.SystemConfig;
+import auto.qinglong.net.panel.BaseRes;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -148,12 +154,41 @@ public class ApiController {
             public void onResponse(Call<SystemConfigRes> call, Response<SystemConfigRes> response) {
                 SystemConfigRes res = response.body();
                 if (auto.qinglong.net.panel.ApiController.checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess(Converter.convertSystemConfig(res.getData()));
+                    callBack.onSuccess(Converter.convertSystemConfig(res.getData().getInfo()));
                 }
             }
 
             @Override
             public void onFailure(Call<SystemConfigRes> call, Throwable t) {
+                auto.qinglong.net.panel.ApiController.handleRequestError(call, t, callBack);
+            }
+        });
+    }
+
+    public static void updateSystemConfig(@NonNull String baseUrl, @NonNull String authorization, SystemConfig config, @NonNull auto.qinglong.net.panel.ApiController.BaseCallBack callBack) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("cronConcurrency", config.getCronConcurrency());
+        jsonObject.addProperty("logRemoveFrequency", config.getLogRemoveFrequency());
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
+
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .updateSystemConfig(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (auto.qinglong.net.panel.ApiController.checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseRes> call, Throwable t) {
                 auto.qinglong.net.panel.ApiController.handleRequestError(call, t, callBack);
             }
         });

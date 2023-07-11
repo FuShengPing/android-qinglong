@@ -7,14 +7,26 @@ import auto.qinglong.net.panel.BaseRes;
  * @version 2023.07.10
  */
 public class SystemConfigRes extends BaseRes {
-    private SystemConfigObject data;
+    private DataObject data;
 
-    public SystemConfigObject getData() {
+    public DataObject getData() {
         return data;
     }
 
-    public void setData(SystemConfigObject data) {
+    public void setData(DataObject data) {
         this.data = data;
+    }
+
+    public static class DataObject{
+        private SystemConfigObject info;
+
+        public SystemConfigObject getInfo() {
+            return info;
+        }
+
+        public void setInfo(SystemConfigObject info) {
+            this.info = info;
+        }
     }
 
     public static class SystemConfigObject{

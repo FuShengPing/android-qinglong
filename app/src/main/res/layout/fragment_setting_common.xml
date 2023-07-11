@@ -138,7 +138,7 @@
                     android:textSize="15sp" />
 
                 <auto.base.view.EditText
-                    android:id="@+id/setting_log"
+                    android:id="@+id/setting_other_log"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
@@ -151,8 +151,29 @@
                     android:textIsSelectable="true"
                     android:textSize="15sp" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="定时任务并发数"
+                    android:textColor="@color/text_color_49"
+                    android:textSize="15sp" />
+
+                <auto.base.view.EditText
+                    android:id="@+id/setting_other_cron"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:inputType="numberSigned"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="5dp"
+                    android:singleLine="true"
+                    android:textColor="@color/text_color_49"
+                    android:textIsSelectable="true"
+                    android:textSize="15sp" />
+
                 <Button
-                    android:id="@+id/setting_log_save"
+                    android:id="@+id/setting_other_save"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/style_button_blue"

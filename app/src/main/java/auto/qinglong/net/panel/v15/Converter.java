@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import auto.base.util.LogUnit;
 import auto.base.util.TimeUnit;
 import auto.qinglong.bean.panel.Dependence;
 import auto.qinglong.bean.panel.File;
@@ -152,6 +153,8 @@ public class Converter {
 
     public static SystemConfig convertSystemConfig(SystemConfigRes.SystemConfigObject object) {
         SystemConfig config = new SystemConfig();
+        LogUnit.log(object.getLogRemoveFrequency());
+        LogUnit.log(object.getCronConcurrency());
         config.setLogRemoveFrequency(object.getLogRemoveFrequency());
         config.setCronConcurrency(object.getCronConcurrency());
         return config;

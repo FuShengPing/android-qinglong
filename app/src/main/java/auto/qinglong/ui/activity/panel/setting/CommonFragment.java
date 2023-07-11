@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import auto.base.util.LogUnit;
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
@@ -25,18 +24,18 @@ public class CommonFragment extends BaseFragment {
     private EditText uiSecurityPassword;
     private Button uiSecuritySave;
     private EditText uiLogRemoveFrequency;
-    private Button uiLogSave;
-
-    private int mOldFrequency = -1;
+    private EditText uiCronConcurrency;
+    private Button uiConfigSave;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting_common, container, false);
-        uiLogRemoveFrequency = view.findViewById(R.id.setting_log);
-        uiLogSave = view.findViewById(R.id.setting_log_save);
         uiSecurityUsername = view.findViewById(R.id.setting_security_username);
         uiSecurityPassword = view.findViewById(R.id.setting_security_password);
         uiSecuritySave = view.findViewById(R.id.setting_security_save);
+        uiLogRemoveFrequency = view.findViewById(R.id.setting_other_log);
+        uiCronConcurrency = view.findViewById(R.id.setting_other_cron);
+        uiConfigSave = view.findViewById(R.id.setting_other_save);
 
         init();
         return view;
@@ -44,15 +43,18 @@ public class CommonFragment extends BaseFragment {
 
     @Override
     protected void init() {
-
-        uiLogSave.setOnClickListener(v -> {
-            String value = uiLogRemoveFrequency.getText().toString();
-            if (TextUnit.isEmpty(value)) {
+        uiConfigSave.setOnClickListener(v -> {
+            String logValue = uiLogRemoveFrequency.getText().toString();
+            String cronValue = uiCronConcurrency.getText().toString();
+            if (TextUnit.isEmpty(logValue) || TextUnit.isEmpty(cronValue)) {
                 ToastUnit.showShort("请输入正确数值");
                 return;
             }
             WindowUnit.hideKeyboard(uiLogRemoveFrequency);
-            netUpdateLogRemove(Integer.parseInt(value), mOldFrequency);
+            SystemConfig config = new SystemConfig();
+            config.setLogRemoveFrequency(Integer.parseInt(logValue));
+            config.setCronConcurrency(Integer.parseInt(cronValue));
+            updateSystemConfig(config);
         });
 
         uiSecuritySave.setOnClickListener(v -> {
@@ -70,7 +72,7 @@ public class CommonFragment extends BaseFragment {
 
             WindowUnit.hideKeyboard(uiSecurityUsername);
             Account account = new Account(username, password, PanelPreference.getAddress(), null);
-            netUpdateUser(account);
+            updateAccount(account);
         });
 
         getSystemConfig();
@@ -81,6 +83,7 @@ public class CommonFragment extends BaseFragment {
             @Override
             public void onSuccess(SystemConfig config) {
                 uiLogRemoveFrequency.setText(String.valueOf(config.getLogRemoveFrequency()));
+                uiCronConcurrency.setText(String.valueOf(config.getCronConcurrency()));
             }
 
             @Override
@@ -90,35 +93,27 @@ public class CommonFragment extends BaseFragment {
         });
     }
 
-    private void netUpdateLogRemove(int newFrequency, int oldFrequency) {
-        ApiController.updateLogRemove(getNetRequestID(), newFrequency, new ApiController.NetBaseCallback() {
+    private void updateSystemConfig(SystemConfig config) {
+        auto.qinglong.net.panel.ApiController.updateSystemConfig(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), config, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 uiLogRemoveFrequency.clearFocus();
-                mOldFrequency = newFrequency;
-                ToastUnit.showShort("保存成功");
+                ToastUnit.showShort("更新成功");
             }
 
             @Override
             public void onFailure(String msg) {
-                uiLogRemoveFrequency.clearFocus();
-                uiLogRemoveFrequency.clearComposingText();
-                if (oldFrequency > -1) {
-                    uiLogRemoveFrequency.setText(String.valueOf(oldFrequency));
-                } else {
-                    uiLogRemoveFrequency.setText("");
-                }
                 ToastUnit.showShort(msg);
             }
         });
     }
 
-    private void netUpdateUser(Account account) {
+    private void updateAccount(Account account) {
         ApiController.updateUser(getNetRequestID(), account, new ApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
                 PanelPreference.updateCurrentAccount(account);
-                netLogin(account);
+                login(account);
             }
 
             @Override
@@ -128,7 +123,7 @@ public class CommonFragment extends BaseFragment {
         });
     }
 
-    protected void netLogin(Account account) {
+    protected void login(Account account) {
         auto.qinglong.net.panel.ApiController.login(account.getBaseUrl(), account, new auto.qinglong.net.panel.ApiController.LoginCallBack() {
             @Override
             public void onSuccess(String token) {
@@ -144,7 +139,7 @@ public class CommonFragment extends BaseFragment {
                 Intent intent = new Intent(requireActivity(), LoginActivity.class);
                 requireActivity().startActivity(intent);
                 requireActivity().finish();
-                LogUnit.log(msg);
+                ToastUnit.showShort(msg);
             }
         });
     }
