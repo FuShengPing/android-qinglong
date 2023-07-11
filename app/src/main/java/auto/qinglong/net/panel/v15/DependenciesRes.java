@@ -22,7 +22,7 @@ public class DependenciesRes extends BaseRes {
     public static class DependenceObject {
         private int id;
         private String name;
-        private String createAt;
+        private String createdAt;
         private int status;
 
         public int getId() {
@@ -41,20 +41,20 @@ public class DependenciesRes extends BaseRes {
             this.name = name;
         }
 
-        public String getCreateAt() {
-            return createAt;
-        }
-
-        public void setCreateAt(String createAt) {
-            this.createAt = createAt;
-        }
-
         public int getStatus() {
             return status;
         }
 
         public void setStatus(int status) {
             this.status = status;
+        }
+
+        public String getCreatedAt() {
+            return createdAt;
+        }
+
+        public void setCreatedAt(String createdAt) {
+            this.createdAt = createdAt;
         }
     }
 }

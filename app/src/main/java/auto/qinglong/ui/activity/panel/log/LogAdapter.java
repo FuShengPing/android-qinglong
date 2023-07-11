@@ -17,6 +17,7 @@ import java.util.List;
 import auto.qinglong.R;
 import auto.qinglong.bean.panel.File;
 
+@SuppressLint("SetTextI18n")
 public class LogAdapter extends RecyclerView.Adapter<LogAdapter.MyViewHolder> {
     private final Context context;
     private final List<File> data;
@@ -34,7 +35,6 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.MyViewHolder> {
         return new MyViewHolder(view);
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         File file = data.get(position);

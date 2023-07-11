@@ -51,67 +51,67 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Task task = data.get(position);
-        holder.ui_title.setText(task.getTitle());
-        holder.ui_command.setText(task.getCommand());
-        holder.ui_schedule.setText(task.getSchedule());
-        holder.ui_last_run_time.setText(task.getLastRunningTime());
-        holder.ui_last_execution_time.setText(task.getLastExecuteTime());
-        holder.ui_next_execution_time.setText(task.getNextExecuteTime());
-        holder.ui_state.setText(task.getState());
+        holder.uiTitle.setText(task.getTitle());
+        holder.uiCommand.setText(task.getCommand());
+        holder.uiSchedule.setText(task.getSchedule());
+        holder.uiLastRunTime.setText(task.getLastRunningTime());
+        holder.uiLastExecutionTime.setText(task.getLastExecuteTime());
+        holder.uiNextExecutionTime.setText(task.getNextExecuteTime());
+        holder.uiState.setText(task.getState());
 
         if (task.getStateCode() == Task.STATE_RUNNING) {
-            holder.ui_state.setTextColor(colorBlue);
-            holder.ui_action.setImageResource(R.drawable.ic_blue_pause);
+            holder.uiState.setTextColor(colorBlue);
+            holder.uiAction.setImageResource(R.drawable.ic_blue_pause);
         } else if (task.getStateCode() == Task.STATE_WAITING) {
-            holder.ui_state.setTextColor(colorBlue);
-            holder.ui_action.setImageResource(R.drawable.ic_blue_pause);
+            holder.uiState.setTextColor(colorBlue);
+            holder.uiAction.setImageResource(R.drawable.ic_blue_pause);
         } else if (task.getStateCode() == Task.STATE_LIMIT) {
-            holder.ui_state.setTextColor(colorRed);
-            holder.ui_action.setImageResource(R.drawable.ic_blue_start);
+            holder.uiState.setTextColor(colorRed);
+            holder.uiAction.setImageResource(R.drawable.ic_blue_start);
         } else {
-            holder.ui_state.setTextColor(colorGray);
-            holder.ui_action.setImageResource(R.drawable.ic_blue_start);
+            holder.uiState.setTextColor(colorGray);
+            holder.uiAction.setImageResource(R.drawable.ic_blue_start);
         }
 
         if (this.onCheck) {
-            holder.ui_action.setVisibility(View.INVISIBLE);
+            holder.uiAction.setVisibility(View.INVISIBLE);
         } else {
-            holder.ui_action.setVisibility(View.VISIBLE);
+            holder.uiAction.setVisibility(View.VISIBLE);
         }
 
         if (task.isPinned()) {
-            holder.ui_pinned.setVisibility(View.VISIBLE);
+            holder.uiPinned.setVisibility(View.VISIBLE);
         } else {
-            holder.ui_pinned.setVisibility(View.GONE);
+            holder.uiPinned.setVisibility(View.GONE);
         }
 
         //复选框
         if (onCheck) {
-            holder.ui_check.setChecked(dataCheckState[position]);
-            holder.ui_check.setOnCheckedChangeListener((buttonView, isChecked) -> dataCheckState[holder.getAdapterPosition()] = isChecked);
-            holder.ui_check.setVisibility(View.VISIBLE);
+            holder.uiCheck.setChecked(dataCheckState[position]);
+            holder.uiCheck.setOnCheckedChangeListener((buttonView, isChecked) -> dataCheckState[holder.getAdapterPosition()] = isChecked);
+            holder.uiCheck.setVisibility(View.VISIBLE);
         } else {
-            holder.ui_check.setVisibility(View.GONE);
+            holder.uiCheck.setVisibility(View.GONE);
         }
 
-        holder.ui_title.setOnClickListener(v -> {
+        holder.uiTitle.setOnClickListener(v -> {
             if (this.onCheck) {
-                holder.ui_check.setChecked(!holder.ui_check.isChecked());
+                holder.uiCheck.setChecked(!holder.uiCheck.isChecked());
             } else {
                 actionListener.onLog(task);
             }
         });
 
-        holder.ui_title.setOnLongClickListener(v -> {
-            if(!this.onCheck){
+        holder.uiTitle.setOnLongClickListener(v -> {
+            if (!this.onCheck) {
                 actionListener.onScript(task);
             }
             return true;
         });
 
-        holder.ui_action.setOnClickListener(v -> {
+        holder.uiAction.setOnClickListener(v -> {
             if (this.onCheck) {
-                holder.ui_check.setChecked(!holder.ui_check.isChecked());
+                holder.uiCheck.setChecked(!holder.uiCheck.isChecked());
             } else if (task.getStateCode() == Task.STATE_LIMIT || task.getStateCode() == Task.STATE_FREE) {
                 actionListener.onRun(task);
             } else {
@@ -121,7 +121,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
 
         holder.itemView.setOnClickListener(v -> {
             if (this.onCheck) {
-                holder.ui_check.setChecked(!holder.ui_check.isChecked());
+                holder.uiCheck.setChecked(!holder.uiCheck.isChecked());
             }
         });
 
@@ -155,11 +155,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
         this.actionListener = itemActionListener;
     }
 
-    public boolean getOnCheck() {
-        return onCheck;
-    }
-
-    public void setOnCheck(boolean onCheck) {
+    public void setCheckState(boolean onCheck) {
         this.onCheck = onCheck;
         Arrays.fill(this.dataCheckState, false);
         notifyItemRangeChanged(0, getItemCount());
@@ -197,29 +193,29 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView ui_title;
-        public TextView ui_command;
-        public TextView ui_schedule;
-        public TextView ui_state;
-        public CheckBox ui_check;
-        public ImageView ui_action;
-        public ImageView ui_pinned;
-        public TextView ui_last_run_time;
-        public TextView ui_last_execution_time;
-        public TextView ui_next_execution_time;
+        public TextView uiTitle;
+        public TextView uiCommand;
+        public TextView uiSchedule;
+        public TextView uiState;
+        public CheckBox uiCheck;
+        public ImageView uiAction;
+        public ImageView uiPinned;
+        public TextView uiLastRunTime;
+        public TextView uiLastExecutionTime;
+        public TextView uiNextExecutionTime;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            ui_title = itemView.findViewById(R.id.task_title);
-            ui_command = itemView.findViewById(R.id.task_command);
-            ui_schedule = itemView.findViewById(R.id.task_schedule);
-            ui_state = itemView.findViewById(R.id.task_state);
-            ui_action = itemView.findViewById(R.id.task_action_run);
-            ui_check = itemView.findViewById(R.id.task_check);
-            ui_pinned = itemView.findViewById(R.id.task_pinned);
-            ui_last_run_time = itemView.findViewById(R.id.task_last_running_time);
-            ui_last_execution_time = itemView.findViewById(R.id.task_last_execution_time);
-            ui_next_execution_time = itemView.findViewById(R.id.task_next_execution_time);
+            uiTitle = itemView.findViewById(R.id.task_title);
+            uiCommand = itemView.findViewById(R.id.task_command);
+            uiSchedule = itemView.findViewById(R.id.task_schedule);
+            uiState = itemView.findViewById(R.id.task_state);
+            uiAction = itemView.findViewById(R.id.task_action_run);
+            uiCheck = itemView.findViewById(R.id.task_check);
+            uiPinned = itemView.findViewById(R.id.task_pinned);
+            uiLastRunTime = itemView.findViewById(R.id.task_last_running_time);
+            uiLastExecutionTime = itemView.findViewById(R.id.task_last_execution_time);
+            uiNextExecutionTime = itemView.findViewById(R.id.task_next_execution_time);
         }
     }
 }

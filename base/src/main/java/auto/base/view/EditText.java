@@ -14,7 +14,7 @@ import auto.base.R;
  */
 @SuppressLint("AppCompatCustomView")
 public class EditText extends android.widget.EditText {
-    private Context context;
+    private final Context context;
 
 
     public EditText(Context context) {

@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import auto.qinglong.bean.panel.QLEnvironment;
 import auto.base.util.TextUnit;
+import auto.qinglong.bean.panel.QLEnvironment;
 import auto.qinglong.utils.WebUnit;
 
 public class WebRule {

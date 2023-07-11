@@ -18,7 +18,7 @@ import auto.base.util.WindowUnit;
  * @version 2023.06.20
  */
 public class MyEditText extends LinearLayout {
-    private Context context;
+    private final Context context;
     private TextView mTextView;
     private EditText mEditText;
 

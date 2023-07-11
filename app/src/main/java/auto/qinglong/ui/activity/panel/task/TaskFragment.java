@@ -84,8 +84,6 @@ public class TaskFragment extends BaseFragment {
     private PopEditWindow uiPopEdit;
     private PopProgressWindow uiPopProgress;
 
-    private enum BarType {NAV, SEARCH, MUL_ACTION}
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -144,14 +142,40 @@ public class TaskFragment extends BaseFragment {
     @Override
     public boolean onDispatchBackKey() {
         if (uiBarActions.getVisibility() == View.VISIBLE) {
-            changeBar(BarType.NAV);
+            onActionBarClose();
             return true;
         } else if (uiBarSearch.getVisibility() == View.VISIBLE) {
-            changeBar(BarType.NAV);
+            onSearchBarClose();
             return true;
         } else {
             return false;
         }
+    }
+
+    private void onSearchBarOpen() {
+        uiBarNav.setVisibility(View.INVISIBLE);
+        uiBarSearch.setVisibility(View.VISIBLE);
+    }
+
+    private void onSearchBarClose() {
+        uiBarSearch.setVisibility(View.INVISIBLE);
+        mCurrentSearchValue = "";
+        uiSearchValue.setText("");
+        uiBarNav.setVisibility(View.VISIBLE);
+    }
+
+    private void onActionBarOpen() {
+        uiBarNav.setVisibility(View.INVISIBLE);
+        mAdapter.setCheckState(true);
+        uiBarActions.setVisibility(View.VISIBLE);
+    }
+
+    private void onActionBarClose() {
+        uiBarActions.setVisibility(View.INVISIBLE);
+        mAdapter.setCheckState(false);
+        uiActionsSelect.setChecked(false);
+        uiActionsScroll.scrollTo(0, 0);
+        uiBarNav.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -232,7 +256,7 @@ public class TaskFragment extends BaseFragment {
         uiNavMore.setOnClickListener(this::showPopWindowMenu);
 
         //搜索栏进入
-        uiNavSearch.setOnClickListener(v -> changeBar(BarType.SEARCH));
+        uiNavSearch.setOnClickListener(v -> onSearchBarOpen());
 
         //搜索栏确定
         uiSearchConfirm.setOnClickListener(v -> {
@@ -242,10 +266,10 @@ public class TaskFragment extends BaseFragment {
         });
 
         //搜索栏返回
-        uiSearchBack.setOnClickListener(v -> changeBar(BarType.NAV));
+        uiSearchBack.setOnClickListener(v -> onSearchBarClose());
 
         //操作栏返回
-        uiActionsBack.setOnClickListener(v -> changeBar(BarType.NAV));
+        uiActionsBack.setOnClickListener(v -> onActionBarClose());
 
         //操作-全选
         uiActionsSelect.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -390,7 +414,7 @@ public class TaskFragment extends BaseFragment {
                     deduplicationData();
                     break;
                 default:
-                    changeBar(BarType.MUL_ACTION);
+                    onActionBarOpen();
             }
             return true;
         });
@@ -482,30 +506,6 @@ public class TaskFragment extends BaseFragment {
         });
 
         PopupWindowBuilder.buildEditWindow(requireActivity(), uiPopEdit);
-    }
-
-    private void changeBar(BarType barType) {
-        if (uiBarSearch.getVisibility() == View.VISIBLE) {
-            WindowUnit.hideKeyboard(uiRoot);
-            uiBarSearch.setVisibility(View.INVISIBLE);
-        } else if (uiBarActions.getVisibility() == View.VISIBLE) {
-            uiBarActions.setVisibility(View.INVISIBLE);
-            mAdapter.setOnCheck(false);
-            uiActionsSelect.setChecked(false);
-        }
-
-        uiBarNav.setVisibility(View.INVISIBLE);
-
-        if (barType == BarType.NAV) {
-            uiBarNav.setVisibility(View.VISIBLE);
-        } else if (barType == BarType.SEARCH) {
-            uiSearchValue.setText(mCurrentSearchValue);
-            uiBarSearch.setVisibility(View.VISIBLE);
-        } else {
-            uiActionsScroll.scrollTo(0, 0);
-            mAdapter.setOnCheck(true);
-            uiBarActions.setVisibility(View.VISIBLE);
-        }
     }
 
     private void backupData(String fileName) {

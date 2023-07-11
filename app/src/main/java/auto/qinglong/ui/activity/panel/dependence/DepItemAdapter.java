@@ -24,7 +24,7 @@ public class DepItemAdapter extends RecyclerView.Adapter<DepItemAdapter.MyViewHo
 
     private final Context context;
     private ItemActionListener itemActionListener;
-    private List<Dependence> data;
+    private final List<Dependence> data;
     private boolean checkState;
     private Boolean[] dataCheckState;
 

@@ -20,6 +20,7 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Stack;
 
 import auto.base.util.ToastUnit;
 import auto.qinglong.R;
@@ -30,21 +31,20 @@ import auto.qinglong.net.panel.ApiController;
 import auto.qinglong.ui.BaseFragment;
 import auto.qinglong.ui.activity.panel.CodeWebActivity;
 
-
+@SuppressLint({"SetTextI18n", "InflateParams"})
 public class LogFragment extends BaseFragment {
     public static String TAG = "LogFragment";
 
-    private List<File> logFiles;
+    private Stack<List<File>> fileStack;
     private MenuClickListener menuClickListener;
-    private LogAdapter logAdapter;
-    private boolean canBack = false;
+    private LogAdapter adapter;
 
     private ImageView uiNav;
     private SmartRefreshLayout uiRefresh;
     private TextView uiDir;
     private RecyclerView uiRecycler;
 
-    @SuppressLint("InflateParams")
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,6 +54,8 @@ public class LogFragment extends BaseFragment {
         uiRefresh = view.findViewById(R.id.refresh_layout);
         uiDir = view.findViewById(R.id.log_dir_tip);
         uiRecycler = view.findViewById(R.id.recycler_view);
+
+        fileStack = new Stack<>();
 
         init();
         return view;
@@ -75,15 +77,19 @@ public class LogFragment extends BaseFragment {
 
     @Override
     public boolean onDispatchBackKey() {
-        if (canBack && logFiles != null) {
-            uiDir.setText(java.io.File.separator);
-            logAdapter.setData(logFiles);
-            canBack = false;
-            return true;
-        } else {
+        if (fileStack.size() == 1) {
+            fileStack.clear();
             return false;
+        } else {
+            fileStack.pop();
+            adapter.setData(fileStack.peek());
+            if (fileStack.peek().isEmpty() || fileStack.peek().get(0).getParent().isEmpty()) {
+                uiDir.setText("/");
+            } else {
+                uiDir.setText("/" + fileStack.peek().get(0).getParent());
+            }
+            return true;
         }
-
     }
 
     public void setMenuClickListener(MenuClickListener mMenuClickListener) {
@@ -92,14 +98,13 @@ public class LogFragment extends BaseFragment {
 
     @Override
     public void init() {
-        logAdapter = new LogAdapter(requireContext());
+        adapter = new LogAdapter(requireContext());
         uiRecycler.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
         Objects.requireNonNull(uiRecycler.getItemAnimator()).setChangeDuration(0);
-        uiRecycler.setAdapter(logAdapter);
+        uiRecycler.setAdapter(adapter);
 
-        logAdapter.setItemActionListener(file -> {
+        adapter.setItemActionListener(file -> {
             if (file.isDir()) {
-                canBack = true;
                 sortAndSetData(file.getChildren(), file.getTitle());
             } else {
                 Intent intent = new Intent(getContext(), CodeWebActivity.class);
@@ -132,11 +137,11 @@ public class LogFragment extends BaseFragment {
         }, 1000);
     }
 
-    @SuppressLint("SetTextI18n")
-    private void sortAndSetData(List<File> data, String dir) {
-        Collections.sort(data);
-        logAdapter.setData(data);
-        uiDir.setText(java.io.File.separator + dir);
+    private void sortAndSetData(List<File> files, String dir) {
+        Collections.sort(files);
+        fileStack.add(files);
+        adapter.setData(files);
+        uiDir.setText("/" + dir);
     }
 
     private void getLogFiles() {
@@ -144,8 +149,6 @@ public class LogFragment extends BaseFragment {
             @Override
             public void onSuccess(List<File> files) {
                 sortAndSetData(files, "");
-                logFiles = files;
-                canBack = false;
                 init = true;
                 this.onEnd(true);
             }
@@ -163,6 +166,4 @@ public class LogFragment extends BaseFragment {
             }
         });
     }
-
-
 }

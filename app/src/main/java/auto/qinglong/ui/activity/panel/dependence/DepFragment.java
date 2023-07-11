@@ -14,9 +14,15 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
+import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
+import auto.base.util.WindowUnit;
+import auto.base.view.popup.PopEditObject;
+import auto.base.view.popup.PopEditWindow;
+import auto.base.view.popup.PopupWindowBuilder;
 import auto.qinglong.R;
 import auto.qinglong.bean.panel.Dependence;
 import auto.qinglong.database.sp.PanelPreference;
@@ -29,19 +35,18 @@ public class DepFragment extends BaseFragment {
     private String type;
 
     private DepItemAdapter itemAdapter;
-    private PagerAdapter.PagerActionListener pagerActionListener;
 
     private SmartRefreshLayout uiRefresh;
-    private RecyclerView uiRecycler;
+    private PopEditWindow uiPopEdit;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dep_pager, container, false);
 
         uiRefresh = view.findViewById(R.id.refresh_layout);
-        uiRecycler = view.findViewById(R.id.recycler_view);
 
         itemAdapter = new DepItemAdapter(requireContext());
+        RecyclerView uiRecycler = view.findViewById(R.id.recycler_view);
         uiRecycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
         uiRecycler.setAdapter(itemAdapter);
         Objects.requireNonNull(uiRecycler.getItemAnimator()).setChangeDuration(0);
@@ -57,27 +62,57 @@ public class DepFragment extends BaseFragment {
         initData();
     }
 
-    public void onDeleteClick() {
-        List<Object> ids = getCheckedItemIds();
-        if (ids.size() > 0) {
-            netDeleteDependence(ids);
-        } else {
-            ToastUnit.showShort(getString(R.string.tip_empty_select));
-        }
+    protected void onCheckStateChange(boolean checkState) {
+        itemAdapter.setCheckState(checkState);
     }
 
-    public void onSelectAllChange(boolean isChecked) {
+    protected void onSelectAllChange(boolean isChecked) {
         if (itemAdapter.getCheckState()) {
             itemAdapter.setAllChecked(isChecked);
         }
     }
 
-    public void setType(String type) {
-        this.type = type;
+    protected void onDeleteClick() {
+        List<Object> ids = getSelectedItemIds();
+        if (ids.size() > 0) {
+            deleteDependence(ids);
+        } else {
+            ToastUnit.showShort(getString(R.string.tip_empty_select));
+        }
     }
 
-    public String getType() {
-        return this.type;
+    protected void onAddClick() {
+        uiPopEdit = new PopEditWindow("新建依赖", "取消", "确定");
+        uiPopEdit.setMaxHeight(WindowUnit.getWindowHeightPix(requireContext()) / 3);
+        uiPopEdit.addItem(new PopEditObject("type", this.type, "类型", null, false, false));
+        uiPopEdit.addItem(new PopEditObject("name", null, "名称", "请输入依赖名称"));
+
+        uiPopEdit.setActionListener(new PopEditWindow.OnActionListener() {
+            @Override
+            public boolean onConfirm(Map<String, String> map) {
+                String type = map.get("type");
+                String name = map.get("name");
+
+                if (TextUnit.isEmpty(name)) {
+                    ToastUnit.showShort(getString(R.string.tip_empty_dependence_name));
+                    return false;
+                }
+
+                List<Dependence> dependencies = new ArrayList<>();
+                Dependence dependence = new Dependence();
+                dependence.setTitle(name);
+                dependence.setType(type);
+                dependencies.add(dependence);
+                addDependencies(dependencies);
+                return false;
+            }
+
+            @Override
+            public boolean onCancel() {
+                return true;
+            }
+        });
+        PopupWindowBuilder.buildEditWindow(requireActivity(), uiPopEdit);
     }
 
     @Override
@@ -116,24 +151,16 @@ public class DepFragment extends BaseFragment {
         }, 1000);
     }
 
-    public void refreshData() {
-        this.getDependencies();
+    public void setType(String type) {
+        this.type = type;
     }
 
-    private List<Object> getCheckedItemIds() {
+    private List<Object> getSelectedItemIds() {
         List<Object> ids = new ArrayList<>();
         for (Dependence dependence : itemAdapter.getCheckedItems()) {
             ids.add(dependence.getKey());
         }
         return ids;
-    }
-
-    public void setPagerActionListener(PagerAdapter.PagerActionListener pagerActionListener) {
-        this.pagerActionListener = pagerActionListener;
-    }
-
-    public void setCheckState(boolean checkState) {
-        itemAdapter.setCheckState(checkState);
     }
 
     private void getDependencies() {
@@ -160,6 +187,21 @@ public class DepFragment extends BaseFragment {
         });
     }
 
+    private void addDependencies(List<Dependence> dependencies) {
+        ApiController.addDependencies(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), dependencies, new ApiController.BaseCallBack() {
+            @Override
+            public void onSuccess() {
+                uiPopEdit.dismiss();
+                getDependencies();
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort(msg);
+            }
+        });
+    }
+
     private void reinstallDependencies(List<Object> keys) {
         ApiController.reinstallDependencies(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), keys, new ApiController.BaseCallBack() {
             @Override
@@ -175,7 +217,7 @@ public class DepFragment extends BaseFragment {
         });
     }
 
-    private void netDeleteDependence(List<Object> keys) {
+    private void deleteDependence(List<Object> keys) {
         auto.qinglong.net.panel.ApiController.deleteDependencies(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), keys, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {

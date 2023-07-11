@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import auto.base.util.LogUnit;
 import auto.base.util.TimeUnit;
 import auto.qinglong.bean.panel.Dependence;
 import auto.qinglong.bean.panel.File;
@@ -106,22 +105,8 @@ public class Converter {
             Dependence dependence = new Dependence();
             dependence.setKey(object.getId());
             dependence.setTitle(object.getName());
-            dependence.setCreateTime(object.getCreateAt());
+            dependence.setCreateTime(object.getCreatedAt());
             dependence.setStatusCode(object.getStatus());
-            if (object.getStatus() == Dependence.STATUS_INSTALLING) {
-                dependence.setStatus("安装中");
-            } else if (object.getStatus() == Dependence.STATUS_INSTALLED) {
-                dependence.setStatus("已安装");
-            } else if (object.getStatus() == Dependence.STATUS_INSTALL_FAILURE) {
-                dependence.setStatus("安装失败");
-            } else if (object.getStatus() == Dependence.STATUS_UNINSTALLING) {
-                dependence.setStatus("卸载中");
-            } else if (object.getStatus() == Dependence.STATUS_UNINSTALL_FAILURE) {
-                dependence.setStatus("卸载失败");
-            } else {
-                dependence.setStatus("未知");
-            }
-
             result.add(dependence);
         }
 
@@ -153,8 +138,6 @@ public class Converter {
 
     public static SystemConfig convertSystemConfig(SystemConfigRes.SystemConfigObject object) {
         SystemConfig config = new SystemConfig();
-        LogUnit.log(object.getLogRemoveFrequency());
-        LogUnit.log(object.getCronConcurrency());
         config.setLogRemoveFrequency(object.getLogRemoveFrequency());
         config.setCronConcurrency(object.getCronConcurrency());
         return config;

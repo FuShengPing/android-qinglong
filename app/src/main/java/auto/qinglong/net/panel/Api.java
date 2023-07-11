@@ -1,6 +1,5 @@
 package auto.qinglong.net.panel;
 
-import auto.qinglong.net.panel.v10.SystemConfigRes;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -111,15 +110,12 @@ public interface Api {
     @HTTP(method = "DELETE", path = "api/scripts", hasBody = true)
     Call<BaseRes> deleteScript(@Header("Authorization") String authorization, @Body RequestBody body);
 
+    @POST("api/dependencies")
+    Call<BaseRes> addDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
+
     @GET
     Call<DependenceLogRes> getDependenceLog(@Url String url, @Header("Authorization") String authorization);
 
-    /**
-     * 获取登录日志.
-     *
-     * @param authorization the authorization
-     * @return the login logs
-     */
     @GET("api/user/login-log")
     Call<LoginLogsRes> getLoginLogs(@Header("Authorization") String authorization);
 
@@ -128,7 +124,4 @@ public interface Api {
 
     @POST("api/configs/save")
     Call<BaseRes> updateConfigContent(@Header("Authorization") String authorization, @Body RequestBody body);
-
-    @GET("api/system/log/remove")
-    Call<SystemConfigRes> getSystemConfig(@Header("Authorization") String authorization);
 }

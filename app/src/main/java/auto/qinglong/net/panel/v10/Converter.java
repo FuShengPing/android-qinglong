@@ -106,20 +106,6 @@ public class Converter {
             dependence.setTitle(object.getName());
             dependence.setCreateTime(TimeUnit.formatDatetimeA(object.getCreated()));
             dependence.setStatusCode(object.getStatus());
-            if (object.getStatus() == Dependence.STATUS_INSTALLING) {
-                dependence.setStatus("安装中");
-            } else if (object.getStatus() == Dependence.STATUS_INSTALLED) {
-                dependence.setStatus("已安装");
-            } else if (object.getStatus() == Dependence.STATUS_INSTALL_FAILURE) {
-                dependence.setStatus("安装失败");
-            } else if (object.getStatus() == Dependence.STATUS_UNINSTALLING) {
-                dependence.setStatus("卸载中");
-            } else if (object.getStatus() == Dependence.STATUS_UNINSTALL_FAILURE) {
-                dependence.setStatus("卸载失败");
-            } else {
-                dependence.setStatus("未知");
-            }
-
             result.add(dependence);
         }
 

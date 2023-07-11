@@ -491,6 +491,39 @@ public class ApiController {
         }
     }
 
+    public static void addDependencies(@NonNull String baseUrl, @NonNull String authorization, List<Dependence> dependencies, BaseCallBack callBack) {
+        JsonArray jsonArray = new JsonArray();
+        for (auto.qinglong.bean.panel.Dependence dependence : dependencies) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("name", dependence.getTitle());
+            jsonObject.addProperty("type", dependence.getTypeCode());
+            jsonArray.add(jsonObject);
+        }
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
+
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .addDependencies(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (checkResponse(response.code(), res, callBack)) {
+                    callBack.onSuccess();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseRes> call, Throwable t) {
+                handleRequestError(call, t, callBack);
+            }
+        });
+    }
+
     public static void reinstallDependencies(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
 
     }

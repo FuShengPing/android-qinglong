@@ -7,18 +7,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.List;
-import java.util.Objects;
 
 import auto.base.util.LogUnit;
 import auto.base.util.TextUnit;
 import auto.qinglong.bean.panel.Account;
-import auto.qinglong.bean.panel.QLDependence;
 import auto.qinglong.bean.panel.QLEnvironment;
-import auto.qinglong.bean.panel.QLLoginLog;
 import auto.qinglong.bean.panel.SystemConfig;
 import auto.qinglong.bean.panel.network.QLEnvEditRes;
 import auto.qinglong.bean.panel.network.QLEnvironmentRes;
-import auto.qinglong.bean.panel.network.QLLoginLogsRes;
 import auto.qinglong.database.sp.PanelPreference;
 import auto.qinglong.net.NetManager;
 import auto.qinglong.net.panel.BaseRes;
@@ -585,54 +581,6 @@ public class ApiController {
         NetManager.addCall(call, requestId);
     }
 
-    public static void deleteScript(@NonNull String requestId, @NonNull String fileName, @Nullable String path, @NonNull NetBaseCallback callback) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("filename", fileName);
-        jsonObject.addProperty("path", path == null ? "" : path);
-
-        String json = jsonObject.toString();
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(PanelPreference.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .deleteScript(PanelPreference.getAuthorization(), body);
-
-        call.enqueue(new Callback<BaseRes>() {
-            @Override
-            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
-                NetManager.finishCall(requestId);
-                BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callback.onSuccess();
-                    } else {
-                        callback.onFailure(res.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
-            }
-        });
-
-        NetManager.addCall(call, requestId);
-    }
-
     public static void getDependencies(@NonNull String baseUrl, @NonNull String authorization, String searchValue, String type, auto.qinglong.net.panel.ApiController.DependenceListCallBack callBack) {
         Call<DependenciesRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -669,193 +617,6 @@ public class ApiController {
             }
         });
 
-    }
-
-    public static void addDependencies(@NonNull String requestId, @NonNull List<QLDependence> dependencies, @NonNull NetBaseCallback callback) {
-        JsonArray jsonArray = new JsonArray();
-        JsonObject jsonObject;
-        for (QLDependence QLDependence : dependencies) {
-            jsonObject = new JsonObject();
-            jsonObject.addProperty("name", QLDependence.getName());
-            jsonObject.addProperty("type", QLDependence.getType());
-            jsonArray.add(jsonObject);
-        }
-
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(PanelPreference.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .addDependencies(PanelPreference.getAuthorization(), requestBody);
-
-        call.enqueue(new Callback<BaseRes>() {
-            @Override
-            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
-                NetManager.finishCall(requestId);
-                BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callback.onSuccess();
-                    } else {
-                        callback.onFailure(res.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
-            }
-        });
-
-        NetManager.addCall(call, requestId);
-    }
-
-    public static void deleteDependencies(@NonNull String requestId, @NonNull List<String> ids, @NonNull NetBaseCallback callback) {
-        JsonArray jsonArray = new JsonArray();
-        for (String id : ids) {
-            jsonArray.add(id);
-        }
-        String json = jsonArray.toString();
-
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(PanelPreference.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .deleteDependencies(PanelPreference.getAuthorization(), requestBody);
-
-        call.enqueue(new Callback<BaseRes>() {
-            @Override
-            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
-                NetManager.finishCall(requestId);
-                BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callback.onSuccess();
-                    } else {
-                        callback.onFailure(res.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
-            }
-        });
-
-        NetManager.addCall(call, requestId);
-    }
-
-    public static void reinstallDependencies(@NonNull String requestId, @NonNull List<String> ids, @NonNull NetBaseCallback callback) {
-        JsonArray jsonArray = new JsonArray();
-        for (String id : ids) {
-            jsonArray.add(id);
-        }
-
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(PanelPreference.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .reinstallDependencies(PanelPreference.getAuthorization(), requestBody);
-
-        call.enqueue(new Callback<BaseRes>() {
-            @Override
-            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
-                NetManager.finishCall(requestId);
-                BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callback.onSuccess();
-                    } else {
-                        callback.onFailure(res.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
-            }
-        });
-
-        NetManager.addCall(call, requestId);
-    }
-
-    public static void getLoginLogs(@NonNull String requestId, @NonNull NetGetLoginLogsCallback callback) {
-        Call<QLLoginLogsRes> call = new Retrofit.Builder()
-                .baseUrl(Objects.requireNonNull(PanelPreference.getCurrentAccount()).getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .getLoginLogs(PanelPreference.getAuthorization());
-
-        call.enqueue(new Callback<QLLoginLogsRes>() {
-            @Override
-            public void onResponse(@NonNull Call<QLLoginLogsRes> call, @NonNull Response<QLLoginLogsRes> response) {
-                NetManager.finishCall(requestId);
-                QLLoginLogsRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callback.onSuccess(res.getData());
-                    } else {
-                        callback.onFailure(res.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<QLLoginLogsRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
-            }
-        });
-
-        NetManager.addCall(call, requestId);
     }
 
     public static void getSystemConfig(@NonNull String baseUrl, @NonNull String authorization, auto.qinglong.net.panel.ApiController.SystemConfigCallBack callBack) {
@@ -901,11 +662,11 @@ public class ApiController {
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
 
         Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(PanelPreference.getBaseUrl())
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .updateSystemConfig(PanelPreference.getAuthorization(), requestBody);
+                .updateSystemConfig(authorization, requestBody);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -971,7 +732,6 @@ public class ApiController {
 
     }
 
-
     public interface NetBaseCallback {
         void onSuccess();
 
@@ -984,27 +744,10 @@ public class ApiController {
         void onFailure(String msg);
     }
 
-    public interface NetGetDependenciesCallback {
-        void onSuccess(List<QLDependence> dependencies);
-
-        void onFailure(String msg);
-    }
-
     public interface NetEditEnvCallback {
         void onSuccess(QLEnvironment environment);
 
         void onFailure(String msg);
     }
 
-    public interface NetGetLoginLogsCallback {
-        void onSuccess(List<QLLoginLog> logs);
-
-        void onFailure(String msg);
-    }
-
-    public interface NetGetLogRemoveCallback {
-        void onSuccess(int frequency);
-
-        void onFailure(String msg);
-    }
 }

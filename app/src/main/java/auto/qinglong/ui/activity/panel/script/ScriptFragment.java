@@ -44,28 +44,29 @@ public class ScriptFragment extends BaseFragment {
     private MenuClickListener menuClickListener;
     private ScriptAdapter adapter;
 
-    private ImageView ui_menu;
-    private ImageView ui_more;
-    private SmartRefreshLayout ui_refresh;
-    private TextView ui_dir_tip;
-    private RecyclerView ui_recycler;
+    private ImageView uiMenu;
+    private ImageView uiMore;
+    private TextView uiDirTip;
+
+    private SmartRefreshLayout uiRefresh;
+    private RecyclerView uiRecycler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_script, null, false);
 
-        ui_menu = view.findViewById(R.id.scrip_menu);
-        ui_more = view.findViewById(R.id.script_more);
-        ui_dir_tip = view.findViewById(R.id.script_dir_tip);
-        ui_refresh = view.findViewById(R.id.refresh_layout);
-        ui_recycler = view.findViewById(R.id.recycler_view);
+        uiMenu = view.findViewById(R.id.scrip_menu);
+        uiMore = view.findViewById(R.id.script_more);
+        uiDirTip = view.findViewById(R.id.script_dir_tip);
+        uiRefresh = view.findViewById(R.id.refresh_layout);
+        uiRecycler = view.findViewById(R.id.recycler_view);
 
         fileStack = new Stack<>();
 
         adapter = new ScriptAdapter(requireContext());
-        ui_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
-        ui_recycler.setAdapter(adapter);
-        Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
+        uiRecycler.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
+        uiRecycler.setAdapter(adapter);
+        Objects.requireNonNull(uiRecycler.getItemAnimator()).setChangeDuration(0);
 
         init();
         return view;
@@ -95,9 +96,9 @@ public class ScriptFragment extends BaseFragment {
             fileStack.pop();
             adapter.setData(fileStack.peek());
             if (fileStack.peek().isEmpty() || fileStack.peek().get(0).getParent().isEmpty()) {
-                ui_dir_tip.setText("/");
+                uiDirTip.setText("/");
             } else {
-                ui_dir_tip.setText("/" + fileStack.peek().get(0).getParent());
+                uiDirTip.setText("/" + fileStack.peek().get(0).getParent());
             }
             return true;
         }
@@ -127,18 +128,18 @@ public class ScriptFragment extends BaseFragment {
             }
         });
 
-        ui_refresh.setOnRefreshListener(refreshLayout -> getScriptFiles());
+        uiRefresh.setOnRefreshListener(refreshLayout -> getScriptFiles());
 
-        ui_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
+        uiMenu.setOnClickListener(v -> menuClickListener.onMenuClick());
 
-        ui_more.setOnClickListener(this::showPopMenu);
+        uiMore.setOnClickListener(this::showPopMenu);
     }
 
     private void initData() {
         if (init || NetManager.isRequesting(getNetRequestID())) {
             return;
         }
-        ui_refresh.autoRefreshAnimationOnly();
+        uiRefresh.autoRefreshAnimationOnly();
         new Handler().postDelayed(() -> {
             if (isVisible()) {
                 getScriptFiles();
@@ -195,7 +196,7 @@ public class ScriptFragment extends BaseFragment {
         Collections.sort(files);
         fileStack.add(files);
         adapter.setData(files);
-        ui_dir_tip.setText("/" + dir);
+        uiDirTip.setText("/" + dir);
     }
 
     private void getScriptFiles() {
@@ -215,8 +216,8 @@ public class ScriptFragment extends BaseFragment {
             }
 
             private void onEnd(boolean isSuccess) {
-                if (ui_refresh.isRefreshing()) {
-                    ui_refresh.finishRefresh(isSuccess);
+                if (uiRefresh.isRefreshing()) {
+                    uiRefresh.finishRefresh(isSuccess);
                 }
             }
         });

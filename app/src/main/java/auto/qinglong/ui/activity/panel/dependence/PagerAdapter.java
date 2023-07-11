@@ -7,11 +7,12 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import java.util.HashMap;
 
+import auto.qinglong.bean.panel.Dependence;
+
 public class PagerAdapter extends FragmentStateAdapter {
     public static final String TAG = "PagerAdapter";
 
     private HashMap<Integer, DepFragment> fragmentList;
-    private PagerActionListener pagerActionListener;
 
     public PagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
@@ -23,11 +24,11 @@ public class PagerAdapter extends FragmentStateAdapter {
         DepFragment depFragment = new DepFragment();
 
         if (position == 0) {
-            depFragment.setType("nodejs");
+            depFragment.setType(Dependence.TYPE_NODEJS);
         } else if (position == 1) {
-            depFragment.setType("python3");
+            depFragment.setType(Dependence.TYPE_PYTHON);
         } else if (position == 2) {
-            depFragment.setType("linux");
+            depFragment.setType(Dependence.TYPE_LINUX);
         }
 
         if (fragmentList == null) {
@@ -35,7 +36,6 @@ public class PagerAdapter extends FragmentStateAdapter {
         }
 
         fragmentList.put(position, depFragment);
-        depFragment.setPagerActionListener(pagerActionListener);
         return depFragment;
     }
 
@@ -47,14 +47,4 @@ public class PagerAdapter extends FragmentStateAdapter {
     public DepFragment getCurrentFragment(int position) {
         return fragmentList.get(position);
     }
-
-    public void setPagerActionListener(PagerActionListener pagerActionListener) {
-        this.pagerActionListener = pagerActionListener;
-    }
-
-    public interface PagerActionListener {
-        void onMulAction();
-    }
-
-
 }

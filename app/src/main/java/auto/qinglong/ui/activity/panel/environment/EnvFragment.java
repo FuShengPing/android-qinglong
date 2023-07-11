@@ -37,26 +37,26 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import auto.base.util.TextUnit;
+import auto.base.util.TimeUnit;
+import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
-import auto.base.view.popup.PopMenuObject;
-import auto.qinglong.R;
-import auto.qinglong.ui.BaseFragment;
 import auto.base.view.popup.LocalFileAdapter;
+import auto.base.view.popup.PopEditObject;
+import auto.base.view.popup.PopEditWindow;
+import auto.base.view.popup.PopListWindow;
+import auto.base.view.popup.PopMenuObject;
+import auto.base.view.popup.PopMenuWindow;
+import auto.base.view.popup.PopProgressWindow;
+import auto.base.view.popup.PopupWindowBuilder;
+import auto.qinglong.R;
 import auto.qinglong.bean.panel.MoveInfo;
 import auto.qinglong.bean.panel.QLEnvironment;
 import auto.qinglong.net.NetManager;
 import auto.qinglong.net.panel.v10.ApiController;
+import auto.qinglong.ui.BaseFragment;
 import auto.qinglong.utils.FileUtil;
-import auto.base.util.TextUnit;
-import auto.base.util.TimeUnit;
-import auto.base.util.ToastUnit;
 import auto.qinglong.utils.WebUnit;
-import auto.base.view.popup.PopEditObject;
-import auto.base.view.popup.PopEditWindow;
-import auto.base.view.popup.PopListWindow;
-import auto.base.view.popup.PopMenuWindow;
-import auto.base.view.popup.PopProgressWindow;
-import auto.base.view.popup.PopupWindowBuilder;
 
 public class EnvFragment extends BaseFragment {
     public static String TAG = "EnvFragment";
@@ -64,51 +64,54 @@ public class EnvFragment extends BaseFragment {
     private MenuClickListener mMenuClickListener;
     private EnvItemAdapter mAdapter;
 
-    private LinearLayout ui_bar_nav;
-    private ImageView ui_nav_menu;
-    private ImageView ui_nav_search;
-    private ImageView ui_nav_more;
-    private LinearLayout ui_bar_search;
-    private ImageView ui_search_back;
-    private EditText ui_search_value;
-    private ImageView ui_search_confirm;
-    private LinearLayout ui_bar_actions;
-    private ImageView ui_actions_back;
-    private CheckBox ui_actions_select;
-    private LinearLayout ui_actions_enable;
-    private LinearLayout ui_actions_disable;
-    private LinearLayout ui_actions_delete;
+    private LinearLayout uiBarNav;
+    private ImageView uiNavMenu;
+    private ImageView uiNavSearch;
+    private ImageView uiNavMore;
+    private LinearLayout uiBarSearch;
+    private ImageView uiSearchBack;
+    private EditText uiSearchValue;
+    private ImageView uiSearchConfirm;
+    private LinearLayout uiBarActions;
+    private ImageView uiActionsBack;
+    private CheckBox uiActionsSelect;
+    private LinearLayout uiActionsEnable;
+    private LinearLayout uiActionsDisable;
+    private LinearLayout uiActionsDelete;
 
-    private RecyclerView ui_recycler;
-    private SmartRefreshLayout ui_refresh;
+    private RecyclerView uiRecycler;
+    private SmartRefreshLayout uiRefresh;
 
-    private PopEditWindow ui_pop_edit;
-    private PopProgressWindow ui_pop_progress;
-
-    enum BarType {NAV, SEARCH, MUL_ACTION}
+    private PopEditWindow uiPopEdit;
+    private PopProgressWindow uiPopProgress;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_env, null);
 
-        ui_bar_nav = view.findViewById(R.id.env_bar_nav);
-        ui_nav_menu = view.findViewById(R.id.env_menu);
-        ui_nav_search = view.findViewById(R.id.env_search);
-        ui_nav_more = view.findViewById(R.id.env_more);
-        ui_bar_search = view.findViewById(R.id.env_bar_search);
-        ui_search_back = view.findViewById(R.id.env_bar_search_back);
-        ui_search_value = view.findViewById(R.id.env_bar_search_input);
-        ui_search_confirm = view.findViewById(R.id.env_bar_search_confirm);
-        ui_bar_actions = view.findViewById(R.id.env_bar_actions);
-        ui_actions_back = view.findViewById(R.id.env_bar_actions_back);
-        ui_actions_select = view.findViewById(R.id.env_bar_actions_select_all);
-        ui_actions_enable = view.findViewById(R.id.env_bar_actions_enable);
-        ui_actions_disable = view.findViewById(R.id.env_bar_actions_disable);
-        ui_actions_delete = view.findViewById(R.id.env_bar_actions_delete);
+        uiBarNav = view.findViewById(R.id.env_bar_nav);
+        uiNavMenu = view.findViewById(R.id.env_menu);
+        uiNavSearch = view.findViewById(R.id.env_search);
+        uiNavMore = view.findViewById(R.id.env_more);
+        uiBarSearch = view.findViewById(R.id.env_bar_search);
+        uiSearchBack = view.findViewById(R.id.env_bar_search_back);
+        uiSearchValue = view.findViewById(R.id.env_bar_search_input);
+        uiSearchConfirm = view.findViewById(R.id.env_bar_search_confirm);
+        uiBarActions = view.findViewById(R.id.env_bar_actions);
+        uiActionsBack = view.findViewById(R.id.env_bar_actions_back);
+        uiActionsSelect = view.findViewById(R.id.env_bar_actions_select_all);
+        uiActionsEnable = view.findViewById(R.id.env_bar_actions_enable);
+        uiActionsDisable = view.findViewById(R.id.env_bar_actions_disable);
+        uiActionsDelete = view.findViewById(R.id.env_bar_actions_delete);
 
-        ui_refresh = view.findViewById(R.id.refresh_layout);
-        ui_recycler = view.findViewById(R.id.recycler_view);
+        uiRefresh = view.findViewById(R.id.refresh_layout);
+        uiRecycler = view.findViewById(R.id.recycler_view);
+
+        mAdapter = new EnvItemAdapter(requireContext());
+        uiRecycler.setAdapter(mAdapter);
+        uiRecycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
+        Objects.requireNonNull(uiRecycler.getItemAnimator()).setChangeDuration(0);
 
         init();
 
@@ -131,26 +134,49 @@ public class EnvFragment extends BaseFragment {
 
     @Override
     public boolean onDispatchBackKey() {
-        if (ui_bar_search.getVisibility() == View.VISIBLE) {
-            changeBar(BarType.NAV);
+        if (uiBarSearch.getVisibility() == View.VISIBLE) {
+            onSearchBarClose();
             return true;
-        } else if (ui_bar_actions.getVisibility() == View.VISIBLE) {
-            changeBar(BarType.NAV);
+        } else if (uiBarActions.getVisibility() == View.VISIBLE) {
+            onActionBarClose();
             return true;
         } else {
             return false;
         }
     }
 
+    private void onSearchBarOpen() {
+        uiBarNav.setVisibility(View.INVISIBLE);
+        uiBarSearch.setVisibility(View.VISIBLE);
+    }
+
+    private void onSearchBarClose() {
+        uiBarSearch.setVisibility(View.INVISIBLE);
+        mCurrentSearchValue = "";
+        uiSearchValue.setText("");
+        uiBarNav.setVisibility(View.VISIBLE);
+    }
+
+    private void onActionBarOpen() {
+        uiBarNav.setVisibility(View.INVISIBLE);
+        mAdapter.setCheckState(true);
+        uiBarActions.setVisibility(View.VISIBLE);
+    }
+
+    private void onActionBarClose() {
+        uiBarActions.setVisibility(View.INVISIBLE);
+        uiActionsSelect.setChecked(false);
+        mAdapter.setCheckState(false);
+        uiBarNav.setVisibility(View.VISIBLE);
+    }
+
     @Override
     public void init() {
-        mAdapter = new EnvItemAdapter(requireContext());
-        ui_recycler.setAdapter(mAdapter);
-        ui_recycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
-        Objects.requireNonNull(ui_recycler.getItemAnimator()).setChangeDuration(0);
-
         ItemMoveHelper itemMoveHelper = new ItemMoveHelper(mAdapter);
-        new ItemTouchHelper(itemMoveHelper).attachToRecyclerView(ui_recycler);
+        new ItemTouchHelper(itemMoveHelper).attachToRecyclerView(uiRecycler);
+
+        //导航栏
+        uiNavMenu.setOnClickListener(v -> mMenuClickListener.onMenuClick());
 
         //列表操作接口
         mAdapter.setItemInterface(new EnvItemAdapter.ItemActionListener() {
@@ -166,42 +192,37 @@ public class EnvFragment extends BaseFragment {
         });
 
         //刷新
-        ui_refresh.setOnRefreshListener(refreshLayout -> {
-            if (ui_bar_search.getVisibility() != View.VISIBLE) {
+        uiRefresh.setOnRefreshListener(refreshLayout -> {
+            if (uiBarSearch.getVisibility() != View.VISIBLE) {
                 mCurrentSearchValue = null;
             }
             netGetEnvironments(mCurrentSearchValue, true);
         });
 
-        //导航栏
-        ui_nav_menu.setOnClickListener(v -> mMenuClickListener.onMenuClick());
-
         //更多操作
-        ui_nav_more.setOnClickListener(this::showPopWindowMenu);
+        uiNavMore.setOnClickListener(this::showPopWindowMenu);
 
         //搜索栏进入
-        ui_nav_search.setOnClickListener(v -> {
-            changeBar(BarType.SEARCH);
-        });
+        uiNavSearch.setOnClickListener(v -> onSearchBarOpen());
 
         //搜索栏返回
-        ui_search_back.setOnClickListener(v -> changeBar(BarType.NAV));
+        uiSearchBack.setOnClickListener(v -> onSearchBarClose());
 
         //搜索栏确定
-        ui_search_confirm.setOnClickListener(v -> {
-            mCurrentSearchValue = ui_search_value.getText().toString().trim();
-            WindowUnit.hideKeyboard(ui_search_value);
+        uiSearchConfirm.setOnClickListener(v -> {
+            mCurrentSearchValue = uiSearchValue.getText().toString().trim();
+            WindowUnit.hideKeyboard(uiSearchValue);
             netGetEnvironments(mCurrentSearchValue, true);
         });
 
         //操作栏返回
-        ui_actions_back.setOnClickListener(v -> changeBar(BarType.NAV));
+        uiActionsBack.setOnClickListener(v -> onActionBarClose());
 
         //全选
-        ui_actions_select.setOnCheckedChangeListener((buttonView, isChecked) -> mAdapter.setAllChecked(isChecked));
+        uiActionsSelect.setOnCheckedChangeListener((buttonView, isChecked) -> mAdapter.setAllChecked(isChecked));
 
         //删除
-        ui_actions_delete.setOnClickListener(v -> {
+        uiActionsDelete.setOnClickListener(v -> {
             if (NetManager.isRequesting(getNetRequestID())) {
                 return;
             }
@@ -219,7 +240,7 @@ public class EnvFragment extends BaseFragment {
         });
 
         //禁用
-        ui_actions_disable.setOnClickListener(v -> {
+        uiActionsDisable.setOnClickListener(v -> {
             if (NetManager.isRequesting(getNetRequestID())) {
                 return;
             }
@@ -237,7 +258,7 @@ public class EnvFragment extends BaseFragment {
         });
 
         //启用
-        ui_actions_enable.setOnClickListener(v -> {
+        uiActionsEnable.setOnClickListener(v -> {
             if (NetManager.isRequesting(getNetRequestID())) {
                 return;
             }
@@ -263,7 +284,7 @@ public class EnvFragment extends BaseFragment {
 
     @Override
     public boolean onDispatchTouchEvent() {
-        if (ui_pop_progress != null && ui_pop_progress.isShowing()) {
+        if (uiPopProgress != null && uiPopProgress.isShowing()) {
             return true;
         }
         return super.onDispatchTouchEvent();
@@ -273,7 +294,7 @@ public class EnvFragment extends BaseFragment {
         if (init || NetManager.isRequesting(getNetRequestID())) {
             return;
         }
-        ui_refresh.autoRefreshAnimationOnly();
+        uiRefresh.autoRefreshAnimationOnly();
         new Handler().postDelayed(() -> {
             if (isVisible()) {
                 netGetEnvironments(mCurrentSearchValue, true);
@@ -299,16 +320,16 @@ public class EnvFragment extends BaseFragment {
                     showPopWindowQuickEdit();
                     break;
                 case "localAdd":
-                    localAddData();
+                    importData();
                     break;
                 case "remoteAdd":
                     showPopWindowRemoteEdit();
                     break;
                 case "deleteMul":
-                    compareAndDeleteData();
+                    deduplicationData();
                     break;
                 case "mulAction":
-                    changeBar(BarType.MUL_ACTION);
+                    onActionBarOpen();
                     break;
                 case "backup":
                     showPopWindowBackupEdit();
@@ -322,22 +343,22 @@ public class EnvFragment extends BaseFragment {
     }
 
     private void showPopWindowCommonEdit(QLEnvironment environment) {
-        ui_pop_edit = new PopEditWindow("新建变量", "取消", "确定");
+        uiPopEdit = new PopEditWindow("新建变量", "取消", "确定");
         PopEditObject itemName = new PopEditObject("name", null, "名称", "请输入变量名称");
         PopEditObject itemValue = new PopEditObject("value", null, "值", "请输入变量值");
         PopEditObject itemRemark = new PopEditObject("remark", null, "备注", "请输入备注(可选)");
 
         if (environment != null) {
-            ui_pop_edit.setTitle("编辑变量");
+            uiPopEdit.setTitle("编辑变量");
             itemName.setValue(environment.getName());
             itemValue.setValue(environment.getValue());
             itemRemark.setValue(environment.getRemarks());
         }
 
-        ui_pop_edit.addItem(itemName);
-        ui_pop_edit.addItem(itemValue);
-        ui_pop_edit.addItem(itemRemark);
-        ui_pop_edit.setActionListener(new PopEditWindow.OnActionListener() {
+        uiPopEdit.addItem(itemName);
+        uiPopEdit.addItem(itemValue);
+        uiPopEdit.addItem(itemRemark);
+        uiPopEdit.setActionListener(new PopEditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 String name = map.get("name");
@@ -353,7 +374,7 @@ public class EnvFragment extends BaseFragment {
                     return false;
                 }
 
-                WindowUnit.hideKeyboard(ui_pop_edit.getView());
+                WindowUnit.hideKeyboard(uiPopEdit.getView());
 
                 List<QLEnvironment> environments = new ArrayList<>();
                 QLEnvironment newEnv;
@@ -378,17 +399,17 @@ public class EnvFragment extends BaseFragment {
             }
         });
 
-        PopupWindowBuilder.buildEditWindow(requireActivity(), ui_pop_edit);
+        PopupWindowBuilder.buildEditWindow(requireActivity(), uiPopEdit);
     }
 
     private void showPopWindowQuickEdit() {
-        ui_pop_edit = new PopEditWindow("快捷导入", "取消", "确定");
+        uiPopEdit = new PopEditWindow("快捷导入", "取消", "确定");
         PopEditObject itemValue = new PopEditObject("values", null, "文本", "请输入文本");
         PopEditObject itemRemark = new PopEditObject("remark", null, "备注", "请输入备注(可选)");
 
-        ui_pop_edit.addItem(itemValue);
-        ui_pop_edit.addItem(itemRemark);
-        ui_pop_edit.setActionListener(new PopEditWindow.OnActionListener() {
+        uiPopEdit.addItem(itemValue);
+        uiPopEdit.addItem(itemRemark);
+        uiPopEdit.setActionListener(new PopEditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 String values = map.get("values");
@@ -399,7 +420,7 @@ public class EnvFragment extends BaseFragment {
                     return false;
                 }
 
-                WindowUnit.hideKeyboard(ui_pop_edit.getView());
+                WindowUnit.hideKeyboard(uiPopEdit.getView());
 
                 List<QLEnvironment> environments = QLEnvironment.parse(values, remarks);
                 if (environments.size() == 0) {
@@ -416,14 +437,14 @@ public class EnvFragment extends BaseFragment {
             }
         });
 
-        PopupWindowBuilder.buildEditWindow(requireActivity(), ui_pop_edit);
+        PopupWindowBuilder.buildEditWindow(requireActivity(), uiPopEdit);
     }
 
     private void showPopWindowRemoteEdit() {
-        ui_pop_edit = new PopEditWindow("远程导入", "取消", "确定");
+        uiPopEdit = new PopEditWindow("远程导入", "取消", "确定");
         PopEditObject itemValue = new PopEditObject("url", null, "链接", "请输入远程地址");
-        ui_pop_edit.addItem(itemValue);
-        ui_pop_edit.setActionListener(new PopEditWindow.OnActionListener() {
+        uiPopEdit.addItem(itemValue);
+        uiPopEdit.setActionListener(new PopEditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 String url = map.get("url");
@@ -432,7 +453,7 @@ public class EnvFragment extends BaseFragment {
                     ToastUnit.showShort(getString(R.string.tip_invalid_url));
                     return false;
                 }
-                WindowUnit.hideKeyboard(ui_pop_edit.getView());
+                WindowUnit.hideKeyboard(uiPopEdit.getView());
                 netGetRemoteEnvironments(url);
 
                 return true;
@@ -444,20 +465,20 @@ public class EnvFragment extends BaseFragment {
             }
         });
 
-        PopupWindowBuilder.buildEditWindow(requireActivity(), ui_pop_edit);
+        PopupWindowBuilder.buildEditWindow(requireActivity(), uiPopEdit);
     }
 
     private void showPopWindowBackupEdit() {
-        ui_pop_edit = new PopEditWindow("变量备份", "取消", "确定");
+        uiPopEdit = new PopEditWindow("变量备份", "取消", "确定");
         PopEditObject itemName = new PopEditObject("file_name", null, "文件名", "选填");
 
-        ui_pop_edit.addItem(itemName);
+        uiPopEdit.addItem(itemName);
 
-        ui_pop_edit.setActionListener(new PopEditWindow.OnActionListener() {
+        uiPopEdit.setActionListener(new PopEditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 String fileName = map.get("file_name");
-                WindowUnit.hideKeyboard(ui_pop_edit.getView());
+                WindowUnit.hideKeyboard(uiPopEdit.getView());
                 backupData(fileName);
                 return true;
             }
@@ -468,31 +489,7 @@ public class EnvFragment extends BaseFragment {
             }
         });
 
-        PopupWindowBuilder.buildEditWindow(requireActivity(), ui_pop_edit);
-    }
-
-    private void changeBar(BarType barType) {
-        if (ui_bar_search.getVisibility() == View.VISIBLE) {
-            WindowUnit.hideKeyboard(ui_search_value);
-            ui_bar_search.setVisibility(View.INVISIBLE);
-        } else if (ui_bar_actions.getVisibility() == View.VISIBLE) {
-            ui_bar_actions.setVisibility(View.INVISIBLE);
-            mAdapter.setCheckState(false);
-            ui_actions_select.setChecked(false);
-        }
-
-        ui_bar_nav.setVisibility(View.INVISIBLE);
-
-        if (barType == BarType.NAV) {
-            ui_bar_nav.setVisibility(View.VISIBLE);
-        } else if (barType == BarType.SEARCH) {
-            ui_search_value.setText(mCurrentSearchValue);
-            ui_bar_search.setVisibility(View.VISIBLE);
-        } else {
-            ui_actions_select.setChecked(false);
-            mAdapter.setCheckState(true);
-            ui_bar_actions.setVisibility(View.VISIBLE);
-        }
+        PopupWindowBuilder.buildEditWindow(requireActivity(), uiPopEdit);
     }
 
     private void sortAndSetData(List<QLEnvironment> data) {
@@ -522,7 +519,7 @@ public class EnvFragment extends BaseFragment {
         mAdapter.setData(data);
     }
 
-    private void compareAndDeleteData() {
+    private void deduplicationData() {
         List<String> ids = new ArrayList<>();
         Set<String> set = new HashSet<>();
         List<QLEnvironment> qlEnvironments = this.mAdapter.getData();
@@ -585,7 +582,7 @@ public class EnvFragment extends BaseFragment {
 
     }
 
-    private void localAddData() {
+    private void importData() {
         if (FileUtil.isNeedRequestPermission()) {
             ToastUnit.showShort("请授予应用读写存储权限");
             FileUtil.requestPermission(requireActivity());
@@ -608,21 +605,21 @@ public class EnvFragment extends BaseFragment {
         fileAdapter.setListener(file -> {
             try {
                 popupWindow.dismiss();
-                if (ui_pop_progress == null) {
-                    ui_pop_progress = PopupWindowBuilder.buildProgressWindow(requireActivity(), null);
+                if (uiPopProgress == null) {
+                    uiPopProgress = PopupWindowBuilder.buildProgressWindow(requireActivity(), null);
                 }
-                ui_pop_progress.setTextAndShow("加载文件中...");
+                uiPopProgress.setTextAndShow("加载文件中...");
                 BufferedReader bufferedInputStream = new BufferedReader(new FileReader(file));
                 StringBuilder stringBuilder = new StringBuilder();
                 String line;
                 while ((line = bufferedInputStream.readLine()) != null) {
                     stringBuilder.append(line);
                 }
-                ui_pop_progress.setTextAndShow("解析文件中...");
+                uiPopProgress.setTextAndShow("解析文件中...");
                 Type type = new TypeToken<List<QLEnvironment>>() {
                 }.getType();
                 List<QLEnvironment> environments = new Gson().fromJson(stringBuilder.toString(), type);
-                ui_pop_progress.setTextAndShow("导入变量中...");
+                uiPopProgress.setTextAndShow("导入变量中...");
                 netAddEnvironments(environments);
             } catch (Exception e) {
                 ToastUnit.showShort("导入失败：" + e.getLocalizedMessage());
@@ -642,13 +639,13 @@ public class EnvFragment extends BaseFragment {
                     ToastUnit.showShort("加载成功：" + environments.size());
                 }
                 sortAndSetData(environments);
-                ui_refresh.finishRefresh(true);
+                uiRefresh.finishRefresh(true);
             }
 
             @Override
             public void onFailure(String msg) {
                 ToastUnit.showShort("加载失败：" + msg);
-                ui_refresh.finishRefresh(false);
+                uiRefresh.finishRefresh(false);
             }
         });
     }
@@ -660,7 +657,7 @@ public class EnvFragment extends BaseFragment {
         ApiController.updateEnvironment(getNetRequestID(), environment, new ApiController.NetEditEnvCallback() {
             @Override
             public void onSuccess(QLEnvironment environment) {
-                ui_pop_edit.dismiss();
+                uiPopEdit.dismiss();
                 ToastUnit.showShort("更新成功");
                 netGetEnvironments(mCurrentSearchValue, false);
             }
@@ -679,11 +676,11 @@ public class EnvFragment extends BaseFragment {
         ApiController.addEnvironment(getNetRequestID(), environments, new ApiController.NetGetEnvironmentsCallback() {
             @Override
             public void onSuccess(List<QLEnvironment> qlEnvironments) {
-                if (ui_pop_edit != null) {
-                    ui_pop_edit.dismiss();
+                if (uiPopEdit != null) {
+                    uiPopEdit.dismiss();
                 }
-                if (ui_pop_progress != null) {
-                    ui_pop_progress.dismiss();
+                if (uiPopProgress != null) {
+                    uiPopProgress.dismiss();
                 }
                 ToastUnit.showShort("新建成功：" + environments.size());
                 netGetEnvironments(mCurrentSearchValue, false);
@@ -703,7 +700,7 @@ public class EnvFragment extends BaseFragment {
         ApiController.deleteEnvironments(getNetRequestID(), ids, new ApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
-                ui_actions_back.performClick();
+                uiActionsBack.performClick();
                 ToastUnit.showShort("删除成功：" + ids.size());
                 netGetEnvironments(mCurrentSearchValue, false);
             }
@@ -722,7 +719,7 @@ public class EnvFragment extends BaseFragment {
         ApiController.enableEnvironments(getNetRequestID(), ids, new ApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
-                ui_actions_back.performClick();
+                uiActionsBack.performClick();
                 ToastUnit.showShort("启用成功");
                 netGetEnvironments(mCurrentSearchValue, false);
             }
@@ -742,7 +739,7 @@ public class EnvFragment extends BaseFragment {
         ApiController.disableEnvironments(getNetRequestID(), ids, new ApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
-                ui_actions_back.performClick();
+                uiActionsBack.performClick();
                 ToastUnit.showShort("禁用成功");
                 netGetEnvironments(mCurrentSearchValue, false);
             }

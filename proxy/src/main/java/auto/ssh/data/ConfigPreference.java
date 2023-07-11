@@ -22,7 +22,7 @@ public class ConfigPreference {
     private static final int DEFAULT_REMOTE_PORT = 9100;
     private static final String DEFAULT_LOCAL_ADDRESS = "127.0.0.1";
     private static final int DEFAULT_LOCAL_PORT = 9100;
-    private static SharedPreferences sp;
+    private static final SharedPreferences sp;
 
     static {
         sp = MyApplication.getContext().getSharedPreferences(NAME, Context.MODE_PRIVATE);

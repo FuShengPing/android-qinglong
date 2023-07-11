@@ -14,21 +14,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import auto.base.util.WindowUnit;
-import auto.base.view.popup.PopMenuObject;
-import auto.qinglong.R;
-import auto.qinglong.ui.BaseActivity;
-import auto.qinglong.bean.app.WebRule;
-import auto.qinglong.database.db.WebRuleDBHelper;
-import auto.qinglong.net.app.ApiController;
-import auto.qinglong.net.NetManager;
 import auto.base.util.ToastUnit;
-import auto.qinglong.utils.VibratorUtil;
-import auto.qinglong.utils.WebUnit;
+import auto.base.util.WindowUnit;
 import auto.base.view.popup.PopEditObject;
 import auto.base.view.popup.PopEditWindow;
+import auto.base.view.popup.PopMenuObject;
 import auto.base.view.popup.PopMenuWindow;
 import auto.base.view.popup.PopupWindowBuilder;
+import auto.qinglong.R;
+import auto.qinglong.bean.app.WebRule;
+import auto.qinglong.database.db.WebRuleDBHelper;
+import auto.qinglong.net.NetManager;
+import auto.qinglong.net.app.ApiController;
+import auto.qinglong.ui.BaseActivity;
+import auto.qinglong.utils.VibratorUtil;
+import auto.qinglong.utils.WebUnit;
 
 public class PluginWebRuleActivity extends BaseActivity {
     public static final String TAG = "PluginWebRuleActivity";

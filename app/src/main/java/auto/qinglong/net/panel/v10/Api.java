@@ -2,7 +2,6 @@ package auto.qinglong.net.panel.v10;
 
 import auto.qinglong.bean.panel.network.QLEnvEditRes;
 import auto.qinglong.bean.panel.network.QLEnvironmentRes;
-import auto.qinglong.bean.panel.network.QLLoginLogsRes;
 import auto.qinglong.net.panel.BaseRes;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -113,16 +112,6 @@ public interface Api {
     Call<BaseRes> createScript(@Header("Authorization") String authorization, @Body RequestBody body);
 
     /**
-     * 删除脚本.
-     *
-     * @param authorization the authorization
-     * @param body          the body
-     * @return the call
-     */
-    @HTTP(method = "DELETE", path = "api/scripts", hasBody = true)
-    Call<BaseRes> deleteScript(@Header("Authorization") String authorization, @Body RequestBody body);
-
-    /**
      * 获取依赖列表.
      *
      * @param authorization the authorization
@@ -134,36 +123,6 @@ public interface Api {
     Call<DependenciesRes> getDependencies(@Header("Authorization") String authorization, @Query("searchValue") String searchValue, @Query("type") String type);
 
     /**
-     * 新建依赖.
-     *
-     * @param authorization the authorization
-     * @param body          the body
-     * @return the call
-     */
-    @POST("api/dependencies")
-    Call<BaseRes> addDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
-
-    /**
-     * 删除依赖.
-     *
-     * @param authorization the authorization
-     * @param body          the body
-     * @return the call
-     */
-    @HTTP(method = "DELETE", path = "api/dependencies", hasBody = true)
-    Call<BaseRes> deleteDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
-
-    /**
-     * 重装依赖.
-     *
-     * @param authorization the authorization
-     * @param body          the body
-     * @return the call
-     */
-    @PUT("api/dependencies/reinstall")
-    Call<BaseRes> reinstallDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
-
-    /**
      * 获取日志列表.
      *
      * @param authorization the authorization
@@ -171,15 +130,6 @@ public interface Api {
      */
     @GET("api/logs")
     Call<LogFilesRes> getLogFiles(@Header("Authorization") String authorization);
-
-    /**
-     * 获取登录日志.
-     *
-     * @param authorization the authorization
-     * @return the login logs
-     */
-    @GET("api/user/login-log")
-    Call<QLLoginLogsRes> getLoginLogs(@Header("Authorization") String authorization);
 
     /**
      * 获取系统配置.
