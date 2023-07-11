@@ -18,15 +18,14 @@ import java.util.Collections;
 import java.util.List;
 
 import auto.qinglong.R;
+import auto.qinglong.bean.panel.Environment;
 import auto.qinglong.bean.panel.MoveInfo;
-import auto.qinglong.bean.panel.QLEnvironment;
-import auto.qinglong.utils.VibratorUtil;
 
 public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHolder> implements ItemMoveCallback {
     public static final String TAG = "EnvItemAdapter";
 
     private final Context context;
-    private List<QLEnvironment> data;
+    private List<Environment> data;
     private ItemActionListener itemActionListener;
     private boolean checkState;
     private Boolean[] dataCheckState;
@@ -53,40 +52,40 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        QLEnvironment environment = this.data.get(position);
-        holder.ui_name.setText(environment.getFormatName());
-        holder.ui_value.setText(environment.getValue());
-        holder.ui_createAt.setText(environment.getFormatCreated());
+        Environment environment = this.data.get(position);
+        holder.uiName.setText(environment.getName());
+        holder.uiValue.setText(environment.getValue());
+        holder.uiTime.setText(environment.getTime());
 
-        if (environment.getRemarks() == null || environment.getRemarks().isEmpty()) {
-            holder.ui_remark.setText("--");
+        if (environment.getRemark() == null || environment.getRemark().isEmpty()) {
+            holder.uiRemark.setText("--");
         } else {
-            holder.ui_remark.setText(environment.getRemarks());
+            holder.uiRemark.setText(environment.getRemark());
         }
 
-        if (environment.getStatus() == 0) {
-            holder.ui_status.setTextColor(colorBlue);
-            holder.ui_status.setText("已启用");
+        holder.uiStatus.setText(environment.getStatus());
+
+        if (environment.getStatusCode() == Environment.STATUS_ENABLE) {
+            holder.uiStatus.setTextColor(colorBlue);
         } else {
-            holder.ui_status.setTextColor(colorRed);
-            holder.ui_status.setText("已禁用");
+            holder.uiStatus.setTextColor(colorRed);
         }
 
         if (this.checkState) {
-            holder.ui_check.setChecked(this.dataCheckState[position]);
-            holder.ui_check.setOnCheckedChangeListener((buttonView, isChecked) -> dataCheckState[holder.getBindingAdapterPosition()] = isChecked);
-            holder.ui_check.setVisibility(View.VISIBLE);
+            holder.uiCheck.setChecked(this.dataCheckState[position]);
+            holder.uiCheck.setOnCheckedChangeListener((buttonView, isChecked) -> dataCheckState[holder.getBindingAdapterPosition()] = isChecked);
+            holder.uiCheck.setVisibility(View.VISIBLE);
         } else {
-            holder.ui_check.setVisibility(View.GONE);
+            holder.uiCheck.setVisibility(View.GONE);
         }
 
-        holder.ui_body.setOnClickListener(v -> {
+        holder.uiBody.setOnClickListener(v -> {
             if (this.checkState) {
-                holder.ui_check.setChecked(!holder.ui_check.isChecked());
+                holder.uiCheck.setChecked(!holder.uiCheck.isChecked());
             }
         });
 
-        holder.ui_body.setOnLongClickListener(v -> {
+        holder.uiBody.setOnLongClickListener(v -> {
             if (!this.checkState) {
                 itemActionListener.onEdit(environment);
             }
@@ -95,7 +94,7 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
 
         holder.itemView.setOnClickListener(v -> {
             if (this.checkState) {
-                holder.ui_check.setChecked(!holder.ui_check.isChecked());
+                holder.uiCheck.setChecked(!holder.uiCheck.isChecked());
             }
         });
     }
@@ -113,19 +112,19 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
 
     @Override
     public void onItemMoveStart() {
-        VibratorUtil.vibrate(context, VibratorUtil.VIBRATE_SHORT);
+//        VibratorUtil.vibrate(context, VibratorUtil.VIBRATE_SHORT);
     }
 
     @Override
     public void onItemMoveEnd(int start, int from, int to) {
-        if (start != to) {
-            MoveInfo moveInfo = new MoveInfo(data.get(to), from, data.get(from), to);
-            itemActionListener.onMove(moveInfo);
-        }
+//        if (start != to) {
+//            MoveInfo moveInfo = new MoveInfo(data.get(to), from, data.get(from), to);
+//            itemActionListener.onMove(moveInfo);
+//        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<QLEnvironment> data) {
+    public void setData(List<Environment> data) {
         this.data = data;
         if (data != null && data.size() > 0) {
             this.dataCheckState = new Boolean[this.data.size()];
@@ -134,7 +133,7 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
         notifyDataSetChanged();
     }
 
-    public List<QLEnvironment> getData() {
+    public List<Environment> getData() {
         return this.data;
     }
 
@@ -151,8 +150,8 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
         }
     }
 
-    public List<QLEnvironment> getSelectedItems() {
-        List<QLEnvironment> environments = new ArrayList<>();
+    public List<Environment> getSelectedItems() {
+        List<Environment> environments = new ArrayList<>();
         for (int k = 0; k < this.dataCheckState.length; k++) {
             if (this.dataCheckState[k]) {
                 environments.add(this.data.get(k));
@@ -166,29 +165,29 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
     }
 
     public interface ItemActionListener {
-        void onEdit(QLEnvironment environment);
+        void onEdit(Environment environment);
 
         void onMove(MoveInfo info);
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
-        CheckBox ui_check;
-        TextView ui_name;
-        LinearLayout ui_body;
-        TextView ui_value;
-        TextView ui_remark;
-        TextView ui_status;
-        TextView ui_createAt;
+        CheckBox uiCheck;
+        LinearLayout uiBody;
+        TextView uiName;
+        TextView uiValue;
+        TextView uiRemark;
+        TextView uiStatus;
+        TextView uiTime;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            ui_check = itemView.findViewById(R.id.env_check);
-            ui_name = itemView.findViewById(R.id.env_name);
-            ui_body = itemView.findViewById(R.id.item_env_body);
-            ui_value = itemView.findViewById(R.id.env_value);
-            ui_status = itemView.findViewById(R.id.env_status);
-            ui_remark = itemView.findViewById(R.id.env_remark);
-            ui_createAt = itemView.findViewById(R.id.env_create_time);
+            uiCheck = itemView.findViewById(R.id.env_check);
+            uiName = itemView.findViewById(R.id.env_name);
+            uiBody = itemView.findViewById(R.id.item_env_body);
+            uiValue = itemView.findViewById(R.id.env_value);
+            uiStatus = itemView.findViewById(R.id.env_status);
+            uiRemark = itemView.findViewById(R.id.env_remark);
+            uiTime = itemView.findViewById(R.id.env_create_time);
         }
     }
 

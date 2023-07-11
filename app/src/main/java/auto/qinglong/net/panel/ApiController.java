@@ -10,11 +10,12 @@ import java.util.List;
 import auto.base.util.TextUnit;
 import auto.qinglong.bean.panel.Account;
 import auto.qinglong.bean.panel.Dependence;
+import auto.qinglong.bean.panel.Environment;
 import auto.qinglong.bean.panel.File;
 import auto.qinglong.bean.panel.LoginLog;
 import auto.qinglong.bean.panel.SystemConfig;
 import auto.qinglong.bean.panel.SystemInfo;
-import auto.qinglong.bean.views.Task;
+import auto.qinglong.bean.panel.Task;
 import auto.qinglong.database.sp.PanelPreference;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -294,7 +295,7 @@ public class ApiController {
             jsonObject.addProperty("id", (Integer) task.getKey());
             jsonObject.add("labels", new JsonArray());
         }
-        jsonObject.addProperty("name", task.getTitle());
+        jsonObject.addProperty("name", task.getName());
         jsonObject.addProperty("command", task.getCommand());
         jsonObject.addProperty("schedule", task.getSchedule());
 
@@ -324,7 +325,7 @@ public class ApiController {
 
     public static void createTask(@NonNull String baseUrl, @NonNull String authorization, Task task, BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("name", task.getTitle());
+        jsonObject.addProperty("name", task.getName());
         jsonObject.addProperty("command", task.getCommand());
         jsonObject.addProperty("schedule", task.getSchedule());
 
@@ -350,6 +351,14 @@ public class ApiController {
                 handleRequestError(call, t, callBack);
             }
         });
+    }
+
+    public static void getEnvironments(@NonNull String baseUrl, @NonNull String authorization, @NonNull String searchValue, EnvironmentListCallBack callBack) {
+        if (PanelPreference.isLowVersion()) {
+            auto.qinglong.net.panel.v10.ApiController.getEnvironments(baseUrl, authorization, searchValue, callBack);
+        } else {
+            auto.qinglong.net.panel.v15.ApiController.getEnvironments(baseUrl, authorization, searchValue, callBack);
+        }
     }
 
     public static void getLogs(@NonNull String baseUrl, @NonNull String authorization, FileListCallBack callBack) {
@@ -668,6 +677,10 @@ public class ApiController {
 
     public interface TaskListCallBack extends BaseCallBack {
         void onSuccess(List<Task> tasks);
+    }
+
+    public interface EnvironmentListCallBack extends BaseCallBack {
+        void onSuccess(List<Environment> environments);
     }
 
     public interface DependenceListCallBack extends BaseCallBack {

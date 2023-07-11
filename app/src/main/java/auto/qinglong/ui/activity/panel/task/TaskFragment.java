@@ -40,7 +40,7 @@ import auto.base.view.popup.PopMenuWindow;
 import auto.base.view.popup.PopProgressWindow;
 import auto.base.view.popup.PopupWindowBuilder;
 import auto.qinglong.R;
-import auto.qinglong.bean.views.Task;
+import auto.qinglong.bean.panel.Task;
 import auto.qinglong.database.sp.PanelPreference;
 import auto.qinglong.net.panel.ApiController;
 import auto.qinglong.ui.BaseFragment;
@@ -220,7 +220,7 @@ public class TaskFragment extends BaseFragment {
             public void onLog(Task task) {
                 Intent intent = new Intent(getContext(), CodeWebActivity.class);
                 intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_LOG);
-                intent.putExtra(CodeWebActivity.EXTRA_TITLE, task.getTitle());
+                intent.putExtra(CodeWebActivity.EXTRA_TITLE, task.getName());
                 intent.putExtra(CodeWebActivity.EXTRA_LOG_ID, String.valueOf(task.getKey()));
                 startActivity(intent);
             }
@@ -429,7 +429,7 @@ public class TaskFragment extends BaseFragment {
 
         if (task != null) {
             uiPopEdit.setTitle("编辑任务");
-            itemName.setValue(task.getTitle());
+            itemName.setValue(task.getName());
             itemCommand.setValue(task.getCommand());
             itemSchedule.setValue(task.getSchedule());
         }
@@ -459,15 +459,15 @@ public class TaskFragment extends BaseFragment {
 
                 WindowUnit.hideKeyboard(uiPopEdit.getView());
 
-                Task newTask = new Task(null);
+                Task newTask = new Task();
                 if (task == null) {
-                    newTask.setTitle(name);
+                    newTask.setName(name);
                     newTask.setCommand(command);
                     newTask.setSchedule(schedule);
                     createTask(newTask);
                 } else {
                     newTask.setKey(task.getKey());
-                    newTask.setTitle(name);
+                    newTask.setName(name);
                     newTask.setCommand(command);
                     newTask.setSchedule(schedule);
                     updateTask(newTask);

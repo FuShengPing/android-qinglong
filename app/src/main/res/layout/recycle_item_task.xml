@@ -69,7 +69,7 @@
         <TextView
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="任务"
+            android:text="命令"
             android:textColor="@color/text_color_49" />
 
         <TextView
@@ -111,7 +111,7 @@
         <TextView
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="任务定时"
+            android:text="定时"
             android:textColor="@color/text_color_49" />
 
         <TextView
@@ -130,7 +130,7 @@
         <TextView
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="最后运行时间"
+            android:text="上次运行时间"
             android:textColor="@color/text_color_49" />
 
         <TextView
@@ -149,7 +149,7 @@
         <TextView
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="最后运行时长"
+            android:text="上次运行时长"
             android:textColor="@color/text_color_49" />
 
         <TextView

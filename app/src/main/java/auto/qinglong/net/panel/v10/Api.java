@@ -29,13 +29,6 @@ public interface Api {
     @GET("api/crons")
     Call<TasksRes> getTasks(@Header("Authorization") String authorization, @Query("searchValue") String searchValue);
 
-    /**
-     * 获取环境变量.
-     *
-     * @param authorization the authorization
-     * @param searchValue   the search value
-     * @return the environments
-     */
     @GET("api/envs")
     Call<QLEnvironmentRes> getEnvironments(@Header("Authorization") String authorization, @Query("searchValue") String searchValue);
 

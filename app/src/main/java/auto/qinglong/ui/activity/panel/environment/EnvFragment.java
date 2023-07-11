@@ -19,9 +19,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
@@ -38,7 +35,6 @@ import java.util.Objects;
 import java.util.Set;
 
 import auto.base.util.TextUnit;
-import auto.base.util.TimeUnit;
 import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
 import auto.base.view.popup.LocalFileAdapter;
@@ -50,8 +46,10 @@ import auto.base.view.popup.PopMenuWindow;
 import auto.base.view.popup.PopProgressWindow;
 import auto.base.view.popup.PopupWindowBuilder;
 import auto.qinglong.R;
+import auto.qinglong.bean.panel.Environment;
 import auto.qinglong.bean.panel.MoveInfo;
 import auto.qinglong.bean.panel.QLEnvironment;
+import auto.qinglong.database.sp.PanelPreference;
 import auto.qinglong.net.NetManager;
 import auto.qinglong.net.panel.v10.ApiController;
 import auto.qinglong.ui.BaseFragment;
@@ -181,8 +179,8 @@ public class EnvFragment extends BaseFragment {
         //列表操作接口
         mAdapter.setItemInterface(new EnvItemAdapter.ItemActionListener() {
             @Override
-            public void onEdit(QLEnvironment environment) {
-                showPopWindowCommonEdit(environment);
+            public void onEdit(Environment environment) {
+//                showPopWindowCommonEdit(environment);
             }
 
             @Override
@@ -196,7 +194,7 @@ public class EnvFragment extends BaseFragment {
             if (uiBarSearch.getVisibility() != View.VISIBLE) {
                 mCurrentSearchValue = null;
             }
-            netGetEnvironments(mCurrentSearchValue, true);
+            getEnvironments(mCurrentSearchValue, true);
         });
 
         //更多操作
@@ -212,7 +210,7 @@ public class EnvFragment extends BaseFragment {
         uiSearchConfirm.setOnClickListener(v -> {
             mCurrentSearchValue = uiSearchValue.getText().toString().trim();
             WindowUnit.hideKeyboard(uiSearchValue);
-            netGetEnvironments(mCurrentSearchValue, true);
+            getEnvironments(mCurrentSearchValue, true);
         });
 
         //操作栏返回
@@ -226,17 +224,17 @@ public class EnvFragment extends BaseFragment {
             if (NetManager.isRequesting(getNetRequestID())) {
                 return;
             }
-            List<QLEnvironment> environments = mAdapter.getSelectedItems();
+            List<Environment> environments = mAdapter.getSelectedItems();
             if (environments.size() == 0) {
                 ToastUnit.showShort(getString(R.string.tip_empty_select));
                 return;
             }
 
-            List<String> ids = new ArrayList<>();
-            for (QLEnvironment environment : environments) {
-                ids.add(environment.getId());
+            List<Object> ids = new ArrayList<>();
+            for (Environment environment : environments) {
+                ids.add(environment.getKey());
             }
-            netDeleteEnvironments(ids);
+//            netDeleteEnvironments(ids);
         });
 
         //禁用
@@ -244,17 +242,17 @@ public class EnvFragment extends BaseFragment {
             if (NetManager.isRequesting(getNetRequestID())) {
                 return;
             }
-            List<QLEnvironment> environments = mAdapter.getSelectedItems();
+            List<Environment> environments = mAdapter.getSelectedItems();
             if (environments.size() == 0) {
                 ToastUnit.showShort(getString(R.string.tip_empty_select));
                 return;
             }
 
-            List<String> ids = new ArrayList<>();
-            for (QLEnvironment environment : environments) {
-                ids.add(environment.getId());
+            List<Object> ids = new ArrayList<>();
+            for (Environment environment : environments) {
+                ids.add(environment.getKey());
             }
-            netDisableEnvironments(ids);
+//            netDisableEnvironments(ids);
         });
 
         //启用
@@ -262,17 +260,17 @@ public class EnvFragment extends BaseFragment {
             if (NetManager.isRequesting(getNetRequestID())) {
                 return;
             }
-            List<QLEnvironment> environments = mAdapter.getSelectedItems();
+            List<Environment> environments = mAdapter.getSelectedItems();
             if (environments.size() == 0) {
                 ToastUnit.showShort(getString(R.string.tip_empty_select));
                 return;
             }
 
-            List<String> ids = new ArrayList<>();
-            for (QLEnvironment environment : environments) {
-                ids.add(environment.getId());
+            List<Object> ids = new ArrayList<>();
+            for (Environment environment : environments) {
+                ids.add(environment.getKey());
             }
-            netEnableEnvironments(ids);
+//            netEnableEnvironments(ids);
         });
 
     }
@@ -297,7 +295,7 @@ public class EnvFragment extends BaseFragment {
         uiRefresh.autoRefreshAnimationOnly();
         new Handler().postDelayed(() -> {
             if (isVisible()) {
-                netGetEnvironments(mCurrentSearchValue, true);
+                getEnvironments(mCurrentSearchValue, true);
             }
         }, 1000);
     }
@@ -455,7 +453,6 @@ public class EnvFragment extends BaseFragment {
                 }
                 WindowUnit.hideKeyboard(uiPopEdit.getView());
                 netGetRemoteEnvironments(url);
-
                 return true;
             }
 
@@ -470,14 +467,14 @@ public class EnvFragment extends BaseFragment {
 
     private void showPopWindowBackupEdit() {
         uiPopEdit = new PopEditWindow("变量备份", "取消", "确定");
-        PopEditObject itemName = new PopEditObject("file_name", null, "文件名", "选填");
+        PopEditObject itemName = new PopEditObject("fileName", null, "文件名", "选填");
 
         uiPopEdit.addItem(itemName);
 
         uiPopEdit.setActionListener(new PopEditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
-                String fileName = map.get("file_name");
+                String fileName = map.get("fileName");
                 WindowUnit.hideKeyboard(uiPopEdit.getView());
                 backupData(fileName);
                 return true;
@@ -516,17 +513,17 @@ public class EnvFragment extends BaseFragment {
                 current += 1;
             }
         }
-        mAdapter.setData(data);
+//        mAdapter.setData(data);
     }
 
     private void deduplicationData() {
-        List<String> ids = new ArrayList<>();
-        Set<String> set = new HashSet<>();
-        List<QLEnvironment> qlEnvironments = this.mAdapter.getData();
-        for (QLEnvironment qlEnvironment : qlEnvironments) {
-            String key = qlEnvironment.getName() + qlEnvironment.getValue();
+        List<Object> ids = new ArrayList<>();
+        Set<Object> set = new HashSet<>();
+        List<Environment> environments = this.mAdapter.getData();
+        for (Environment environment : environments) {
+            String key = environment.getName() + environment.getValue();
             if (set.contains(key)) {
-                ids.add(qlEnvironment.getId());
+                ids.add(environment.getKey());
             } else {
                 set.add(key);
             }
@@ -534,51 +531,51 @@ public class EnvFragment extends BaseFragment {
         if (ids.size() == 0) {
             ToastUnit.showShort("无重复变量");
         } else {
-            netDeleteEnvironments(ids);
+//            netDeleteEnvironments(ids);
         }
     }
 
     private void backupData(String fileName) {
-        if (FileUtil.isNeedRequestPermission()) {
-            ToastUnit.showShort("请授予应用获取存储权限");
-            FileUtil.requestPermission(requireActivity());
-            return;
-        }
-
-        List<QLEnvironment> environments = mAdapter.getData();
-        if (environments == null || environments.size() == 0) {
-            ToastUnit.showShort("数据为空,无需备份");
-            return;
-        }
-
-        JsonArray jsonArray = new JsonArray();
-        for (QLEnvironment environment : environments) {
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("name", environment.getName());
-            jsonObject.addProperty("value", environment.getValue());
-            jsonObject.addProperty("remarks", environment.getRemarks());
-            jsonArray.add(jsonObject);
-        }
-
-        if (TextUnit.isFull(fileName)) {
-            fileName += ".json";
-        } else {
-            fileName = TimeUnit.formatDatetimeC() + ".json";
-        }
-
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String content = gson.toJson(jsonArray);
-
-        try {
-            boolean result = FileUtil.save(FileUtil.getEnvPath(), fileName, content);
-            if (result) {
-                ToastUnit.showShort("备份成功：" + fileName);
-            } else {
-                ToastUnit.showShort("备份失败");
-            }
-        } catch (Exception e) {
-            ToastUnit.showShort("备份失败：" + e.getMessage());
-        }
+//        if (FileUtil.isNeedRequestPermission()) {
+//            ToastUnit.showShort("请授予应用获取存储权限");
+//            FileUtil.requestPermission(requireActivity());
+//            return;
+//        }
+//
+//        List<QLEnvironment> environments = mAdapter.getData();
+//        if (environments == null || environments.size() == 0) {
+//            ToastUnit.showShort("数据为空,无需备份");
+//            return;
+//        }
+//
+//        JsonArray jsonArray = new JsonArray();
+//        for (QLEnvironment environment : environments) {
+//            JsonObject jsonObject = new JsonObject();
+//            jsonObject.addProperty("name", environment.getName());
+//            jsonObject.addProperty("value", environment.getValue());
+//            jsonObject.addProperty("remarks", environment.getRemarks());
+//            jsonArray.add(jsonObject);
+//        }
+//
+//        if (TextUnit.isFull(fileName)) {
+//            fileName += ".json";
+//        } else {
+//            fileName = TimeUnit.formatDatetimeC() + ".json";
+//        }
+//
+//        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//        String content = gson.toJson(jsonArray);
+//
+//        try {
+//            boolean result = FileUtil.save(FileUtil.getEnvPath(), fileName, content);
+//            if (result) {
+//                ToastUnit.showShort("备份成功：" + fileName);
+//            } else {
+//                ToastUnit.showShort("备份失败");
+//            }
+//        } catch (Exception e) {
+//            ToastUnit.showShort("备份失败：" + e.getMessage());
+//        }
 
     }
 
@@ -627,18 +624,12 @@ public class EnvFragment extends BaseFragment {
         });
     }
 
-    private void netGetEnvironments(String searchValue, boolean needTip) {
-        if (NetManager.isRequesting(getNetRequestID())) {
-            return;
-        }
-        ApiController.getEnvironments(getNetRequestID(), searchValue, new ApiController.NetGetEnvironmentsCallback() {
+    private void getEnvironments(String searchValue, boolean needTip) {
+        auto.qinglong.net.panel.ApiController.getEnvironments(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), searchValue, new auto.qinglong.net.panel.ApiController.EnvironmentListCallBack() {
             @Override
-            public void onSuccess(List<QLEnvironment> environments) {
+            public void onSuccess(List<Environment> environments) {
                 init = true;
-                if (needTip) {
-                    ToastUnit.showShort("加载成功：" + environments.size());
-                }
-                sortAndSetData(environments);
+                mAdapter.setData(environments);
                 uiRefresh.finishRefresh(true);
             }
 
@@ -659,7 +650,7 @@ public class EnvFragment extends BaseFragment {
             public void onSuccess(QLEnvironment environment) {
                 uiPopEdit.dismiss();
                 ToastUnit.showShort("更新成功");
-                netGetEnvironments(mCurrentSearchValue, false);
+                getEnvironments(mCurrentSearchValue, false);
             }
 
             @Override
@@ -683,7 +674,7 @@ public class EnvFragment extends BaseFragment {
                     uiPopProgress.dismiss();
                 }
                 ToastUnit.showShort("新建成功：" + environments.size());
-                netGetEnvironments(mCurrentSearchValue, false);
+                getEnvironments(mCurrentSearchValue, false);
             }
 
             @Override
@@ -702,7 +693,7 @@ public class EnvFragment extends BaseFragment {
             public void onSuccess() {
                 uiActionsBack.performClick();
                 ToastUnit.showShort("删除成功：" + ids.size());
-                netGetEnvironments(mCurrentSearchValue, false);
+                getEnvironments(mCurrentSearchValue, false);
             }
 
             @Override
@@ -721,7 +712,7 @@ public class EnvFragment extends BaseFragment {
             public void onSuccess() {
                 uiActionsBack.performClick();
                 ToastUnit.showShort("启用成功");
-                netGetEnvironments(mCurrentSearchValue, false);
+                getEnvironments(mCurrentSearchValue, false);
             }
 
             @Override
@@ -741,7 +732,7 @@ public class EnvFragment extends BaseFragment {
             public void onSuccess() {
                 uiActionsBack.performClick();
                 ToastUnit.showShort("禁用成功");
-                netGetEnvironments(mCurrentSearchValue, false);
+                getEnvironments(mCurrentSearchValue, false);
             }
 
             @Override
@@ -752,9 +743,6 @@ public class EnvFragment extends BaseFragment {
     }
 
     private void netGetRemoteEnvironments(String url) {
-        if (NetManager.isRequesting(getNetRequestID())) {
-            return;
-        }
         auto.qinglong.net.app.ApiController.getRemoteEnvironments(getNetRequestID(), url, new auto.qinglong.net.app.ApiController.NetRemoteEnvCallback() {
 
             @Override

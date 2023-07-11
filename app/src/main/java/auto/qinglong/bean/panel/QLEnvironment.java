@@ -28,7 +28,6 @@ public class QLEnvironment implements Comparable<QLEnvironment> {
         return status;
     }
 
-
     public float getPosition() {
         return position;
     }

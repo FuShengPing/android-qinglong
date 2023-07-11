@@ -8,7 +8,7 @@ import auto.base.util.TimeUnit;
 import auto.qinglong.bean.panel.Dependence;
 import auto.qinglong.bean.panel.File;
 import auto.qinglong.bean.panel.SystemConfig;
-import auto.qinglong.bean.views.Task;
+import auto.qinglong.bean.panel.Task;
 import auto.qinglong.utils.CronUnit;
 
 /**
@@ -23,8 +23,9 @@ public class Converter {
         }
 
         for (TasksRes.TaskObject object : objects) {
-            Task task = new Task(object.getId());
-            task.setTitle(object.getName());
+            Task task = new Task();
+            task.setKey(object.getId());
+            task.setName(object.getName());
             task.setPinned(object.getIsPinned() == 1);
             task.setCommand(object.getCommand());
             task.setSchedule(object.getSchedule());

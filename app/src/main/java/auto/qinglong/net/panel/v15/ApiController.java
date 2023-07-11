@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 
 import auto.qinglong.bean.panel.SystemConfig;
 import auto.qinglong.net.panel.BaseRes;
+import auto.qinglong.net.panel.Handler;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -45,7 +46,7 @@ public class ApiController {
 
     }
 
-    public static void getTasks(String baseUrl, String authorization, String searchValue, auto.qinglong.net.panel.ApiController.TaskListCallBack callBack) {
+    public static void getTasks(@NonNull String baseUrl, @NonNull String authorization, String searchValue, auto.qinglong.net.panel.ApiController.TaskListCallBack callBack) {
         Call<TasksRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -57,14 +58,40 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<TasksRes> call, @NonNull Response<TasksRes> response) {
                 TasksRes res = response.body();
-                if (auto.qinglong.net.panel.ApiController.checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess(Converter.convertTasks(res.getData().getData()));
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess(Converter.convertTasks(res.getData().getData()));
             }
 
             @Override
             public void onFailure(@NonNull Call<TasksRes> call, @NonNull Throwable t) {
-                auto.qinglong.net.panel.ApiController.handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
+            }
+        });
+    }
+
+    public static void getEnvironments(@NonNull String baseUrl, @NonNull String authorization, @NonNull String searchValue, auto.qinglong.net.panel.ApiController.EnvironmentListCallBack callBack) {
+        Call<EnvironmentsRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .getEnvironments(authorization, searchValue);
+
+        call.enqueue(new Callback<EnvironmentsRes>() {
+            @Override
+            public void onResponse(Call<EnvironmentsRes> call, Response<EnvironmentsRes> response) {
+                EnvironmentsRes res = response.body();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
+                }
+                callBack.onSuccess(Converter.convertEnvironments(res.getData()));
+            }
+
+            @Override
+            public void onFailure(Call<EnvironmentsRes> call, Throwable t) {
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }

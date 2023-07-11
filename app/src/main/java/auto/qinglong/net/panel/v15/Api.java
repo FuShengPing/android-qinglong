@@ -17,6 +17,9 @@ public interface Api {
     @GET("api/crons")
     Call<TasksRes> getTasks(@Header("Authorization") String authorization, @Query("searchValue") String searchValue, @Query("page") int page, @Query("pageSize") int size);
 
+    @GET("api/envs")
+    Call<EnvironmentsRes> getEnvironments(@Header("Authorization") String authorization, @Query("searchValue") String searchValue);
+
     @GET("api/scripts")
     Call<ScriptFilesRes> getScriptFiles(@Header("Authorization") String authorization);
 

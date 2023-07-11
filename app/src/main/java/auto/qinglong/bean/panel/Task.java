@@ -1,16 +1,17 @@
-package auto.qinglong.bean.views;
+package auto.qinglong.bean.panel;
 
 /**
  * @author wsfsp4
  * @version 2023.06.29
  */
-public class Task extends Base implements Comparable<Task> {
+public class Task implements Comparable<Task> {
     public static final int STATE_FREE = 0;
     public static final int STATE_WAITING = 1;
     public static final int STATE_RUNNING = 2;
     public static final int STATE_LIMIT = 3;
 
-    private String title;
+    private Object key;
+    private String name;
     private String command;
     private String state;
     private int stateCode;
@@ -20,29 +21,20 @@ public class Task extends Base implements Comparable<Task> {
     private String nextExecuteTime;
     private boolean isPinned;
 
-    public Task(Object key) {
+    public Object getKey() {
+        return key;
+    }
+
+    public void setKey(Object key) {
         this.key = key;
     }
 
-    public Task(Object key, String title, String command, String state, int stateCode, String schedule, String lastExecuteTime, String nextExecuteTime, String lastRunningTime, boolean isPinned) {
-        this.key = key;
-        this.title = title;
-        this.command = command;
-        this.state = state;
-        this.stateCode = stateCode;
-        this.schedule = schedule;
-        this.lastExecuteTime = lastExecuteTime;
-        this.nextExecuteTime = nextExecuteTime;
-        this.lastRunningTime = lastRunningTime;
-        this.isPinned = isPinned;
+    public String getName() {
+        return name;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getCommand() {

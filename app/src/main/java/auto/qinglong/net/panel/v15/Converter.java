@@ -6,9 +6,10 @@ import java.util.Locale;
 
 import auto.base.util.TimeUnit;
 import auto.qinglong.bean.panel.Dependence;
+import auto.qinglong.bean.panel.Environment;
 import auto.qinglong.bean.panel.File;
 import auto.qinglong.bean.panel.SystemConfig;
-import auto.qinglong.bean.views.Task;
+import auto.qinglong.bean.panel.Task;
 import auto.qinglong.utils.CronUnit;
 
 /**
@@ -22,8 +23,9 @@ public class Converter {
             return result;
         }
         for (TasksRes.TaskObject object : objects) {
-            Task task = new Task(object.getId());
-            task.setTitle(object.getName());
+            Task task = new Task();
+            task.setKey(object.getId());
+            task.setName(object.getName());
             task.setPinned(object.getIsPinned() == 1);
             task.setCommand(object.getCommand());
             task.setSchedule(object.getSchedule());
@@ -59,6 +61,27 @@ public class Converter {
             }
             result.add(task);
         }
+        return result;
+    }
+
+    public static List<Environment> convertEnvironments(List<EnvironmentsRes.EnvironmentObject> objects) {
+        List<Environment> result = new ArrayList<>();
+        if (objects == null || objects.isEmpty()) {
+            return result;
+        }
+
+        for (EnvironmentsRes.EnvironmentObject object : objects) {
+            Environment environment = new Environment();
+            environment.setKey(object.getId());
+            environment.setName(object.getName());
+            environment.setValue(object.getValue());
+            environment.setRemark(object.getRemarks());
+            environment.setPosition(object.getPosition());
+            environment.setStatusCode(object.getStatus());
+            environment.setTime(object.getUpdatedAt());
+            result.add(environment);
+        }
+
         return result;
     }
 

@@ -107,6 +107,10 @@ public class ApiController {
         });
     }
 
+    public static void getEnvironments(@NonNull String baseUrl, @NonNull String authorization,@NonNull String searchValue, auto.qinglong.net.panel.ApiController.EnvironmentListCallBack callBack) {
+
+    }
+
     public static void getEnvironments(@NonNull String requestId, @NonNull String searchValue, @NonNull NetGetEnvironmentsCallback callback) {
         Call<QLEnvironmentRes> call = new Retrofit.Builder()
                 .baseUrl(PanelPreference.getBaseUrl())

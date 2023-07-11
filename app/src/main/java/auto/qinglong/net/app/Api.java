@@ -3,7 +3,6 @@ package auto.qinglong.net.app;
 import java.util.List;
 
 import auto.qinglong.bean.app.Version;
-import auto.qinglong.bean.app.WebRule;
 import auto.qinglong.bean.panel.QLEnvironment;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -36,15 +35,6 @@ public interface Api {
      */
     @GET("version")
     Call<Version> getVersion(@Query("uid") String uid);
-
-    /**
-     * 远程导入Web规则.
-     *
-     * @param url the url
-     * @return the remote web rules
-     */
-    @GET
-    Call<List<WebRule>> getRemoteWebRules(@Url String url);
 
     /**
      * 远程导入环境变量.

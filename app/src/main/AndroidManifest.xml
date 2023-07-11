@@ -47,10 +47,6 @@
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".ui.activity.extension.web.PluginWebRuleActivity"
-            android:exported="false"
-            android:launchMode="singleTask" />
-        <activity
             android:name=".ui.activity.extension.web.PluginWebActivity"
             android:exported="false"
             android:launchMode="singleTask" />

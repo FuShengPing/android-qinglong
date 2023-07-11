@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -19,10 +18,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
@@ -31,13 +26,8 @@ import auto.base.view.popup.PopMenuObject;
 import auto.base.view.popup.PopMenuWindow;
 import auto.base.view.popup.PopupWindowBuilder;
 import auto.qinglong.R;
-import auto.qinglong.bean.app.WebRule;
-import auto.qinglong.bean.panel.QLEnvironment;
-import auto.qinglong.database.db.WebRuleDBHelper;
-import auto.qinglong.net.panel.v10.ApiController;
 import auto.qinglong.net.web.WebViewBuilder;
 import auto.qinglong.ui.BaseActivity;
-import auto.qinglong.utils.WebUnit;
 
 public class PluginWebActivity extends BaseActivity {
     public static final String TAG = "PluginWebActivity";
@@ -146,26 +136,15 @@ public class PluginWebActivity extends BaseActivity {
     }
 
     private void showPopMenu(View view) {
-        PopMenuWindow popMenuWindow = new PopMenuWindow(view,Gravity.END);
-        popMenuWindow.addItem(new PopMenuObject("rule", "规则配置", R.drawable.ic_gray_mul_setting));
-        popMenuWindow.addItem(new PopMenuObject("read_normal", "常规提取", R.drawable.ic_gray_crop_free));
-        popMenuWindow.addItem(new PopMenuObject("read_rule", "规则提取", R.drawable.ic_gray_rule));
-        popMenuWindow.addItem(new PopMenuObject("import", "导入变量", R.drawable.ic_gray_upload));
+        PopMenuWindow popMenuWindow = new PopMenuWindow(view, Gravity.END);
+        popMenuWindow.addItem(new PopMenuObject("read_normal", "ck提取", R.drawable.ic_gray_crop_free));
+//        popMenuWindow.addItem(new PopMenuObject("rule", "规则配置", R.drawable.ic_gray_mul_setting));
+//        popMenuWindow.addItem(new PopMenuObject("read_rule", "规则提取", R.drawable.ic_gray_rule));
+//        popMenuWindow.addItem(new PopMenuObject("import", "导入变量", R.drawable.ic_gray_upload));
 
         popMenuWindow.setOnActionListener(key -> {
-            switch (key) {
-                case "rule":
-                    Intent intent = new Intent(getBaseContext(), PluginWebRuleActivity.class);
-                    startActivity(intent);
-                    break;
-                case "read_normal":
-                    readNormal();
-                    break;
-                case "read_rule":
-                    readRule();
-                    break;
-                default:
-                    startImport();
+            if ("read_normal".equals(key)) {
+                readNormal();
             }
             return true;
         });
@@ -186,110 +165,4 @@ public class PluginWebActivity extends BaseActivity {
         }
 
     }
-
-    private void readRule() {
-        WindowUnit.hideKeyboard(ui_et_url);
-        String url = ui_webView.getOriginalUrl();
-        if (TextUnit.isEmpty(url)) {
-            ToastUnit.showShort("请先加载网页");
-            return;
-        }
-
-        //删除URL参数
-        url = url.split("\\?", 2)[0];
-        //读取cookies
-        String cookies = cookieManager.getCookie(url);
-
-        //获取键值对
-        Map<String, String> cks = WebUnit.parseCookies(cookies);
-        //获取规则列表
-        List<WebRule> rules = WebRuleDBHelper.getAll();
-        //规则匹配 取第一个匹配成功规则
-        for (WebRule rule : rules) {
-            if (rule.match(url, cks)) {
-                ToastUnit.showShort("匹配成功：" + rule.getName());
-                showPopWindowConfirm(rule.getEnvValue());
-                return;
-            }
-        }
-        ToastUnit.showShort("无匹配规则");
-    }
-
-    private void startImport() {
-        WindowUnit.hideKeyboard(ui_et_url);
-        String url = ui_webView.getOriginalUrl();
-        if (TextUnit.isEmpty(url)) {
-            ToastUnit.showShort("请先加载网页");
-            return;
-        }
-
-        //删除URL参数
-        url = url.split("\\?", 2)[0];
-        //读取cookies
-        String cookies = cookieManager.getCookie(url);
-
-        Map<String, String> cks = WebUnit.parseCookies(cookies);
-        List<WebRule> rules = WebRuleDBHelper.getAll();
-        for (WebRule rule : rules) {
-            if (rule.match(url, cks)) {
-                ToastUnit.showShort("匹配规则成功：" + rule.getName());
-                netGetEnvironments(rule.buildObject());
-                return;
-            }
-        }
-        ToastUnit.showShort("匹配规则失败");
-    }
-
-    private void netGetEnvironments(QLEnvironment environment) {
-        ApiController.getEnvironments(getNetRequestID(), "", new ApiController.NetGetEnvironmentsCallback() {
-            @Override
-            public void onSuccess(List<QLEnvironment> environments) {
-                for (QLEnvironment qlEnvironment : environments) {
-                    if (environment.getName().equals(qlEnvironment.getName()) && environment.getRemarks().equals(qlEnvironment.getRemarks())) {
-                        qlEnvironment.setValue(environment.getValue());
-                        netUpdateEnvironment(qlEnvironment);
-                        return;
-                    }
-                }
-                List<QLEnvironment> envList = new ArrayList<>();
-                envList.add(environment);
-                netAddEnvironments(envList);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                ToastUnit.showShort("获取变量列表失败：" + msg);
-            }
-        });
-    }
-
-    public void netUpdateEnvironment(QLEnvironment environment) {
-        ApiController.updateEnvironment(getNetRequestID(), environment, new ApiController.NetEditEnvCallback() {
-            @Override
-            public void onSuccess(QLEnvironment environment) {
-                ToastUnit.showShort("导入成功");
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                ToastUnit.showShort("导入失败：" + msg);
-            }
-        });
-    }
-
-    public void netAddEnvironments(List<QLEnvironment> environments) {
-        ApiController.addEnvironment(getNetRequestID(), environments, new ApiController.NetGetEnvironmentsCallback() {
-            @Override
-            public void onSuccess(List<QLEnvironment> qlEnvironments) {
-                ToastUnit.showShort("导入成功");
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                ToastUnit.showShort("导入失败：" + msg);
-            }
-        });
-    }
-
-
 }

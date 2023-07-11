@@ -15,6 +15,4 @@ public class QLEnvironmentRes extends BaseRes {
     public void setData(List<QLEnvironment> data) {
         this.data = data;
     }
-
-
 }

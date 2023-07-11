@@ -28,7 +28,6 @@ import auto.qinglong.database.sp.SettingPreference;
 import auto.qinglong.net.app.ApiController;
 import auto.qinglong.ui.BaseActivity;
 import auto.qinglong.ui.BaseFragment;
-import auto.qinglong.ui.activity.extension.web.PluginWebActivity;
 import auto.qinglong.ui.activity.panel.CodeWebActivity;
 import auto.qinglong.ui.activity.panel.dependence.DepPagerFragment;
 import auto.qinglong.ui.activity.panel.environment.EnvFragment;
@@ -148,10 +147,10 @@ public class HomeActivity extends BaseActivity {
         menu_setting.setOnClickListener(v -> showFragment(SettingFragment.class));
 
         //Web助手
-        menu_extension_web.setOnClickListener(v -> {
-            Intent intent = new Intent(getBaseContext(), PluginWebActivity.class);
-            startActivity(intent);
-        });
+//        menu_extension_web.setOnClickListener(v -> {
+//            Intent intent = new Intent(getBaseContext(), PluginWebActivity.class);
+//            startActivity(intent);
+//        });
 
         //退出登录
         menu_app_exit.setOnClickListener(v -> {

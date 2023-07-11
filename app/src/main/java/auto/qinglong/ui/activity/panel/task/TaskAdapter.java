@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import auto.qinglong.R;
-import auto.qinglong.bean.views.Task;
+import auto.qinglong.bean.panel.Task;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> {
     public static final String TAG = "TaskAdapter";
@@ -51,7 +51,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Task task = data.get(position);
-        holder.uiTitle.setText(task.getTitle());
+        holder.uiTitle.setText(task.getName());
         holder.uiCommand.setText(task.getCommand());
         holder.uiSchedule.setText(task.getSchedule());
         holder.uiLastRunTime.setText(task.getLastRunningTime());
