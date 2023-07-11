@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import auto.base.BaseApplication;
 import auto.base.util.LogUnit;
 import auto.qinglong.MyApplication;
 
@@ -22,26 +23,17 @@ import auto.qinglong.MyApplication;
  * 文件操作工具类，注意权限问题
  */
 public class FileUtil {
-    /**
-     * The constant TAG.
-     */
     public static final String TAG = "FileUtil";
     private static final String SCRIPT_PATH = "scripts";
     private static final String ENV_PATH = "environments";
     private static final String TASK_PATH = "tasks";
 
-    /**
-     * The constant internalStorage.
-     */
     public static final String internalStorage;
-    /**
-     * The constant externalStorage.
-     */
     public static final String externalStorage;
 
     static {
-        externalStorage = MyApplication.getContext().getExternalFilesDir(null).getAbsolutePath();
-        internalStorage = MyApplication.getContext().getFilesDir().getAbsolutePath();
+        externalStorage = BaseApplication.getContext().getExternalFilesDir(null).getAbsolutePath();
+        internalStorage = BaseApplication.getContext().getFilesDir().getAbsolutePath();
     }
 
     /**
