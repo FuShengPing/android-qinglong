@@ -5,20 +5,20 @@ package auto.qinglong.bean.panel;
  * @version 2023.03.02
  */
 public class MoveInfo {
-    private final QLEnvironment fromObejct;
+    private final QLEnvironment fromObject;
     private final QLEnvironment toObject;
     private final int fromIndex;
     private final int toIndex;
 
     public MoveInfo(QLEnvironment fromObejct, int fromIndex, QLEnvironment toObject, int toIndex) {
-        this.fromObejct = fromObejct;
+        this.fromObject = fromObejct;
         this.fromIndex = fromIndex;
         this.toObject = toObject;
         this.toIndex = toIndex;
     }
 
-    public QLEnvironment getFromObejct() {
-        return fromObejct;
+    public QLEnvironment getFromObject() {
+        return fromObject;
     }
 
     public QLEnvironment getToObject() {

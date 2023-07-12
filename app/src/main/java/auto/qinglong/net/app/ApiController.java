@@ -3,12 +3,8 @@ package auto.qinglong.net.app;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.List;
-
 import auto.qinglong.bean.app.Version;
-import auto.qinglong.bean.panel.QLEnvironment;
 import auto.qinglong.net.NetManager;
-import auto.qinglong.utils.WebUnit;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -75,47 +71,10 @@ public class ApiController {
         NetManager.addCall(call, requestId);
     }
 
-    public static void getRemoteEnvironments(@NonNull String requestId, @NonNull String url, @NonNull NetRemoteEnvCallback callback) {
-        String baseUrl = WebUnit.getHost(url) + "/";
-        String path = WebUnit.getPath(url, "");
-
-        Call<List<QLEnvironment>> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .getRemoteEnvironments(path);
-
-        call.enqueue(new Callback<List<QLEnvironment>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<QLEnvironment>> call, @NonNull Response<List<QLEnvironment>> response) {
-                NetManager.finishCall(requestId);
-                List<QLEnvironment> res = response.body();
-                callback.onSuccess(res);
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<QLEnvironment>> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
-            }
-        });
-
-        NetManager.addCall(call, requestId);
-    }
-
     public interface VersionCallback {
         void onSuccess(Version version);
 
         void onFailure(String msg);
     }
 
-    public interface NetRemoteEnvCallback {
-        void onSuccess(List<QLEnvironment> environments);
-
-        void onFailure(String msg);
-    }
 }

@@ -261,15 +261,19 @@ public class ApiController {
         });
     }
 
-    public static void deleteTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
-        RequestBody body = buildArrayJson(keys);
+    public static void addTask(@NonNull String baseUrl, @NonNull String authorization, Task task, BaseCallBack callBack) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("name", task.getName());
+        jsonObject.addProperty("command", task.getCommand());
+        jsonObject.addProperty("schedule", task.getSchedule());
 
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
         Call<BaseRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .deleteTasks(authorization, body);
+                .addTask(authorization, body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -323,19 +327,15 @@ public class ApiController {
         });
     }
 
-    public static void createTask(@NonNull String baseUrl, @NonNull String authorization, Task task, BaseCallBack callBack) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("name", task.getName());
-        jsonObject.addProperty("command", task.getCommand());
-        jsonObject.addProperty("schedule", task.getSchedule());
+    public static void deleteTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
+        RequestBody body = buildArrayJson(keys);
 
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
         Call<BaseRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .createTask(authorization, body);
+                .deleteTasks(authorization, body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -359,6 +359,159 @@ public class ApiController {
         } else {
             auto.qinglong.net.panel.v15.ApiController.getEnvironments(baseUrl, authorization, searchValue, callBack);
         }
+    }
+
+    public static void enableEnvironments(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
+        RequestBody body = buildArrayJson(keys);
+
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .enableEnvironments(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
+                }
+                callBack.onSuccess();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
+                Handler.handleRequestError(call, t, callBack);
+            }
+        });
+    }
+
+    public static void disableEnvironments(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
+        RequestBody body = buildArrayJson(keys);
+
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .disableEnvironments(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
+                }
+                callBack.onSuccess();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
+                Handler.handleRequestError(call, t, callBack);
+            }
+        });
+    }
+
+    public static void addEnvironments(@NonNull String baseUrl, @NonNull String authorization, List<Environment> environments, BaseCallBack callBack) {
+        JsonArray jsonArray = new JsonArray();
+        JsonObject jsonObject;
+        for (Environment environment : environments) {
+            jsonObject = new JsonObject();
+            jsonObject.addProperty("name", environment.getName());
+            jsonObject.addProperty("remarks", environment.getRemark());
+            jsonObject.addProperty("value", environment.getValue());
+            jsonArray.add(jsonObject);
+        }
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
+
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .addEnvironments(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
+                }
+                callBack.onSuccess();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
+                Handler.handleRequestError(call, t, callBack);
+            }
+        });
+    }
+
+    public static void updateEnvironment(@NonNull String baseUrl, @NonNull String authorization, Environment environment, BaseCallBack callBack) {
+        JsonObject jsonObject = new JsonObject();
+        if (environment.getKey() instanceof Integer) {
+            jsonObject.addProperty("id", (Integer) environment.getKey());
+        } else {
+            jsonObject.addProperty("_id", (String) environment.getKey());
+        }
+        jsonObject.addProperty("name", environment.getName());
+        jsonObject.addProperty("remarks", environment.getRemark());
+        jsonObject.addProperty("value", environment.getValue());
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
+
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .updateEnvironment(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
+                }
+                callBack.onSuccess();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
+                Handler.handleRequestError(call, t, callBack);
+            }
+        });
+    }
+
+    public static void deleteEnvironments(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
+        RequestBody body = buildArrayJson(keys);
+
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .deleteEnvironments(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
+                }
+                callBack.onSuccess();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
+                Handler.handleRequestError(call, t, callBack);
+            }
+        });
     }
 
     public static void getLogs(@NonNull String baseUrl, @NonNull String authorization, FileListCallBack callBack) {

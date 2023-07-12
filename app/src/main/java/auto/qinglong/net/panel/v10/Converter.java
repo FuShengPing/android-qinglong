@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import auto.base.util.TimeUnit;
 import auto.qinglong.bean.panel.Dependence;
+import auto.qinglong.bean.panel.Environment;
 import auto.qinglong.bean.panel.File;
 import auto.qinglong.bean.panel.SystemConfig;
 import auto.qinglong.bean.panel.Task;
@@ -61,6 +62,27 @@ public class Converter {
             }
             result.add(task);
         }
+        return result;
+    }
+
+    public static List<Environment> convertEnvironments(List<EnvironmentsRes.EnvironmentObject> objects) {
+        List<Environment> result = new ArrayList<>();
+        if (objects == null || objects.isEmpty()) {
+            return result;
+        }
+
+        for (EnvironmentsRes.EnvironmentObject object : objects) {
+            Environment environment = new Environment();
+            environment.setKey(object.getId());
+            environment.setName(object.getName());
+            environment.setValue(object.getValue());
+            environment.setRemark(object.getRemarks());
+            environment.setPosition(object.getPosition());
+            environment.setStatusCode(object.getStatus());
+            environment.setTime(TimeUnit.formatDatetimeA(object.getCreated()));
+            result.add(environment);
+        }
+
         return result;
     }
 

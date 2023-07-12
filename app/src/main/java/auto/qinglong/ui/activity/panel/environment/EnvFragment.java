@@ -27,7 +27,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +53,6 @@ import auto.qinglong.net.NetManager;
 import auto.qinglong.net.panel.v10.ApiController;
 import auto.qinglong.ui.BaseFragment;
 import auto.qinglong.utils.FileUtil;
-import auto.qinglong.utils.WebUnit;
 
 public class EnvFragment extends BaseFragment {
     public static String TAG = "EnvFragment";
@@ -180,12 +178,12 @@ public class EnvFragment extends BaseFragment {
         mAdapter.setItemInterface(new EnvItemAdapter.ItemActionListener() {
             @Override
             public void onEdit(Environment environment) {
-//                showPopWindowCommonEdit(environment);
+                showPopWindowEdit(environment);
             }
 
             @Override
             public void onMove(MoveInfo info) {
-                netMoveEnvironment(info);
+                moveEnvironment(info);
             }
         });
 
@@ -194,7 +192,7 @@ public class EnvFragment extends BaseFragment {
             if (uiBarSearch.getVisibility() != View.VISIBLE) {
                 mCurrentSearchValue = null;
             }
-            getEnvironments(mCurrentSearchValue, true);
+            getEnvironments(mCurrentSearchValue);
         });
 
         //更多操作
@@ -210,7 +208,7 @@ public class EnvFragment extends BaseFragment {
         uiSearchConfirm.setOnClickListener(v -> {
             mCurrentSearchValue = uiSearchValue.getText().toString().trim();
             WindowUnit.hideKeyboard(uiSearchValue);
-            getEnvironments(mCurrentSearchValue, true);
+            getEnvironments(mCurrentSearchValue);
         });
 
         //操作栏返回
@@ -221,9 +219,6 @@ public class EnvFragment extends BaseFragment {
 
         //删除
         uiActionsDelete.setOnClickListener(v -> {
-            if (NetManager.isRequesting(getNetRequestID())) {
-                return;
-            }
             List<Environment> environments = mAdapter.getSelectedItems();
             if (environments.size() == 0) {
                 ToastUnit.showShort(getString(R.string.tip_empty_select));
@@ -234,25 +229,7 @@ public class EnvFragment extends BaseFragment {
             for (Environment environment : environments) {
                 ids.add(environment.getKey());
             }
-//            netDeleteEnvironments(ids);
-        });
-
-        //禁用
-        uiActionsDisable.setOnClickListener(v -> {
-            if (NetManager.isRequesting(getNetRequestID())) {
-                return;
-            }
-            List<Environment> environments = mAdapter.getSelectedItems();
-            if (environments.size() == 0) {
-                ToastUnit.showShort(getString(R.string.tip_empty_select));
-                return;
-            }
-
-            List<Object> ids = new ArrayList<>();
-            for (Environment environment : environments) {
-                ids.add(environment.getKey());
-            }
-//            netDisableEnvironments(ids);
+            deleteEnvironments(ids);
         });
 
         //启用
@@ -270,9 +247,23 @@ public class EnvFragment extends BaseFragment {
             for (Environment environment : environments) {
                 ids.add(environment.getKey());
             }
-//            netEnableEnvironments(ids);
+            enableEnvironments(ids);
         });
 
+        //禁用
+        uiActionsDisable.setOnClickListener(v -> {
+            List<Environment> environments = mAdapter.getSelectedItems();
+            if (environments.size() == 0) {
+                ToastUnit.showShort(getString(R.string.tip_empty_select));
+                return;
+            }
+
+            List<Object> ids = new ArrayList<>();
+            for (Environment environment : environments) {
+                ids.add(environment.getKey());
+            }
+            disableEnvironments(ids);
+        });
     }
 
     @Override
@@ -295,7 +286,7 @@ public class EnvFragment extends BaseFragment {
         uiRefresh.autoRefreshAnimationOnly();
         new Handler().postDelayed(() -> {
             if (isVisible()) {
-                getEnvironments(mCurrentSearchValue, true);
+                getEnvironments(mCurrentSearchValue);
             }
         }, 1000);
     }
@@ -305,23 +296,19 @@ public class EnvFragment extends BaseFragment {
         popMenuWindow.addItem(new PopMenuObject("add", "新建变量", R.drawable.ic_gray_add));
         popMenuWindow.addItem(new PopMenuObject("quickAdd", "快捷导入", R.drawable.ic_gray_flash_on));
         popMenuWindow.addItem(new PopMenuObject("localAdd", "本地导入", R.drawable.ic_gray_file));
-        popMenuWindow.addItem(new PopMenuObject("remoteAdd", "远程导入", R.drawable.ic_gray_upload));
         popMenuWindow.addItem(new PopMenuObject("backup", "变量备份", R.drawable.ic_gray_download));
         popMenuWindow.addItem(new PopMenuObject("deleteMul", "变量去重", R.drawable.ic_gray_delete));
         popMenuWindow.addItem(new PopMenuObject("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
         popMenuWindow.setOnActionListener(key -> {
             switch (key) {
                 case "add":
-                    showPopWindowCommonEdit(null);
+                    showPopWindowEdit(null);
                     break;
                 case "quickAdd":
-                    showPopWindowQuickEdit();
+                    showPopWindowQuickImport();
                     break;
                 case "localAdd":
                     importData();
-                    break;
-                case "remoteAdd":
-                    showPopWindowRemoteEdit();
                     break;
                 case "deleteMul":
                     deduplicationData();
@@ -330,7 +317,7 @@ public class EnvFragment extends BaseFragment {
                     onActionBarOpen();
                     break;
                 case "backup":
-                    showPopWindowBackupEdit();
+                    showPopWindowBackup();
                     break;
                 default:
                     break;
@@ -340,22 +327,23 @@ public class EnvFragment extends BaseFragment {
         PopupWindowBuilder.buildMenuWindow(requireActivity(), popMenuWindow);
     }
 
-    private void showPopWindowCommonEdit(QLEnvironment environment) {
+    private void showPopWindowEdit(Environment environment) {
         uiPopEdit = new PopEditWindow("新建变量", "取消", "确定");
         PopEditObject itemName = new PopEditObject("name", null, "名称", "请输入变量名称");
         PopEditObject itemValue = new PopEditObject("value", null, "值", "请输入变量值");
         PopEditObject itemRemark = new PopEditObject("remark", null, "备注", "请输入备注(可选)");
 
+        uiPopEdit.addItem(itemName);
+        uiPopEdit.addItem(itemValue);
+        uiPopEdit.addItem(itemRemark);
+
         if (environment != null) {
             uiPopEdit.setTitle("编辑变量");
             itemName.setValue(environment.getName());
             itemValue.setValue(environment.getValue());
-            itemRemark.setValue(environment.getRemarks());
+            itemRemark.setValue(environment.getRemark());
         }
 
-        uiPopEdit.addItem(itemName);
-        uiPopEdit.addItem(itemValue);
-        uiPopEdit.addItem(itemRemark);
         uiPopEdit.setActionListener(new PopEditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
@@ -374,18 +362,18 @@ public class EnvFragment extends BaseFragment {
 
                 WindowUnit.hideKeyboard(uiPopEdit.getView());
 
-                List<QLEnvironment> environments = new ArrayList<>();
-                QLEnvironment newEnv;
-                newEnv = new QLEnvironment();
+                List<Environment> environments = new ArrayList<>();
+                Environment newEnv = new Environment();
                 newEnv.setName(name);
                 newEnv.setValue(value);
-                newEnv.setRemarks(remarks);
-                environments.add(newEnv);
+                newEnv.setRemark(remarks);
+
                 if (environment == null) {
-                    netAddEnvironments(environments);
+                    environments.add(newEnv);
+                    addEnvironments(environments);
                 } else {
-                    newEnv.setId(environment.getId());
-                    netUpdateEnvironment(newEnv);
+                    newEnv.setKey(environment.getKey());
+                    updateEnvironment(newEnv);
                 }
 
                 return false;
@@ -400,7 +388,7 @@ public class EnvFragment extends BaseFragment {
         PopupWindowBuilder.buildEditWindow(requireActivity(), uiPopEdit);
     }
 
-    private void showPopWindowQuickEdit() {
+    private void showPopWindowQuickImport() {
         uiPopEdit = new PopEditWindow("快捷导入", "取消", "确定");
         PopEditObject itemValue = new PopEditObject("values", null, "文本", "请输入文本");
         PopEditObject itemRemark = new PopEditObject("remark", null, "备注", "请输入备注(可选)");
@@ -420,11 +408,11 @@ public class EnvFragment extends BaseFragment {
 
                 WindowUnit.hideKeyboard(uiPopEdit.getView());
 
-                List<QLEnvironment> environments = QLEnvironment.parse(values, remarks);
+                List<Environment> environments = Environment.parse(values, remarks);
                 if (environments.size() == 0) {
                     ToastUnit.showShort("提取变量失败");
                 } else {
-                    netAddEnvironments(environments);
+                    addEnvironments(environments);
                 }
                 return false;
             }
@@ -438,34 +426,7 @@ public class EnvFragment extends BaseFragment {
         PopupWindowBuilder.buildEditWindow(requireActivity(), uiPopEdit);
     }
 
-    private void showPopWindowRemoteEdit() {
-        uiPopEdit = new PopEditWindow("远程导入", "取消", "确定");
-        PopEditObject itemValue = new PopEditObject("url", null, "链接", "请输入远程地址");
-        uiPopEdit.addItem(itemValue);
-        uiPopEdit.setActionListener(new PopEditWindow.OnActionListener() {
-            @Override
-            public boolean onConfirm(Map<String, String> map) {
-                String url = map.get("url");
-
-                if (WebUnit.isInvalid(url)) {
-                    ToastUnit.showShort(getString(R.string.tip_invalid_url));
-                    return false;
-                }
-                WindowUnit.hideKeyboard(uiPopEdit.getView());
-                netGetRemoteEnvironments(url);
-                return true;
-            }
-
-            @Override
-            public boolean onCancel() {
-                return true;
-            }
-        });
-
-        PopupWindowBuilder.buildEditWindow(requireActivity(), uiPopEdit);
-    }
-
-    private void showPopWindowBackupEdit() {
+    private void showPopWindowBackup() {
         uiPopEdit = new PopEditWindow("变量备份", "取消", "确定");
         PopEditObject itemName = new PopEditObject("fileName", null, "文件名", "选填");
 
@@ -487,33 +448,6 @@ public class EnvFragment extends BaseFragment {
         });
 
         PopupWindowBuilder.buildEditWindow(requireActivity(), uiPopEdit);
-    }
-
-    private void sortAndSetData(List<QLEnvironment> data) {
-        for (int k = 0; k < data.size(); k++) {
-            data.get(k).setRealIndex(k);
-        }
-        if (data.size() != 0) {
-            Collections.sort(data);
-            //设置同名序号
-            int size = data.size();
-            int current = 0;
-            int index = 1;
-            while (true) {
-                data.get(current).setIndex(index);
-                if (current < size - 1) {
-                    if (data.get(current).getName().equals(data.get(current + 1).getName())) {
-                        index += 1;
-                    } else {
-                        index = 1;
-                    }
-                } else {
-                    break;
-                }
-                current += 1;
-            }
-        }
-//        mAdapter.setData(data);
     }
 
     private void deduplicationData() {
@@ -613,18 +547,18 @@ public class EnvFragment extends BaseFragment {
                     stringBuilder.append(line);
                 }
                 uiPopProgress.setTextAndShow("解析文件中...");
-                Type type = new TypeToken<List<QLEnvironment>>() {
+                Type type = new TypeToken<List<Environment>>() {
                 }.getType();
-                List<QLEnvironment> environments = new Gson().fromJson(stringBuilder.toString(), type);
+                List<Environment> environments = new Gson().fromJson(stringBuilder.toString(), type);
                 uiPopProgress.setTextAndShow("导入变量中...");
-                netAddEnvironments(environments);
+                addEnvironments(environments);
             } catch (Exception e) {
                 ToastUnit.showShort("导入失败：" + e.getLocalizedMessage());
             }
         });
     }
 
-    private void getEnvironments(String searchValue, boolean needTip) {
+    private void getEnvironments(String searchValue) {
         auto.qinglong.net.panel.ApiController.getEnvironments(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), searchValue, new auto.qinglong.net.panel.ApiController.EnvironmentListCallBack() {
             @Override
             public void onSuccess(List<Environment> environments) {
@@ -641,78 +575,13 @@ public class EnvFragment extends BaseFragment {
         });
     }
 
-    private void netUpdateEnvironment(QLEnvironment environment) {
-        if (NetManager.isRequesting(getNetRequestID())) {
-            return;
-        }
-        ApiController.updateEnvironment(getNetRequestID(), environment, new ApiController.NetEditEnvCallback() {
-            @Override
-            public void onSuccess(QLEnvironment environment) {
-                uiPopEdit.dismiss();
-                ToastUnit.showShort("更新成功");
-                getEnvironments(mCurrentSearchValue, false);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                ToastUnit.showShort("更新失败：" + msg);
-            }
-        });
-    }
-
-    private void netAddEnvironments(List<QLEnvironment> environments) {
-        if (NetManager.isRequesting(getNetRequestID())) {
-            return;
-        }
-        ApiController.addEnvironment(getNetRequestID(), environments, new ApiController.NetGetEnvironmentsCallback() {
-            @Override
-            public void onSuccess(List<QLEnvironment> qlEnvironments) {
-                if (uiPopEdit != null) {
-                    uiPopEdit.dismiss();
-                }
-                if (uiPopProgress != null) {
-                    uiPopProgress.dismiss();
-                }
-                ToastUnit.showShort("新建成功：" + environments.size());
-                getEnvironments(mCurrentSearchValue, false);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                ToastUnit.showShort("新建失败：" + msg);
-            }
-        });
-    }
-
-    private void netDeleteEnvironments(List<String> ids) {
-        if (NetManager.isRequesting(getNetRequestID())) {
-            return;
-        }
-        ApiController.deleteEnvironments(getNetRequestID(), ids, new ApiController.NetBaseCallback() {
-            @Override
-            public void onSuccess() {
-                uiActionsBack.performClick();
-                ToastUnit.showShort("删除成功：" + ids.size());
-                getEnvironments(mCurrentSearchValue, false);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                ToastUnit.showShort("删除失败：" + msg);
-            }
-        });
-    }
-
-    private void netEnableEnvironments(List<String> ids) {
-        if (NetManager.isRequesting(getNetRequestID())) {
-            return;
-        }
-        ApiController.enableEnvironments(getNetRequestID(), ids, new ApiController.NetBaseCallback() {
+    private void enableEnvironments(List<Object> ids) {
+        auto.qinglong.net.panel.ApiController.enableEnvironments(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), ids, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 uiActionsBack.performClick();
                 ToastUnit.showShort("启用成功");
-                getEnvironments(mCurrentSearchValue, false);
+                getEnvironments(mCurrentSearchValue);
             }
 
             @Override
@@ -720,53 +589,78 @@ public class EnvFragment extends BaseFragment {
                 ToastUnit.showShort("启用失败：" + msg);
             }
         });
-
     }
 
-    private void netDisableEnvironments(List<String> ids) {
-        if (NetManager.isRequesting(getNetRequestID())) {
-            return;
-        }
-        ApiController.disableEnvironments(getNetRequestID(), ids, new ApiController.NetBaseCallback() {
+    private void disableEnvironments(List<Object> ids) {
+        auto.qinglong.net.panel.ApiController.disableEnvironments(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), ids, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 uiActionsBack.performClick();
-                ToastUnit.showShort("禁用成功");
-                getEnvironments(mCurrentSearchValue, false);
+                ToastUnit.showShort("启用成功");
+                getEnvironments(mCurrentSearchValue);
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort("禁用失败：" + msg);
+                ToastUnit.showShort("启用失败：" + msg);
             }
         });
     }
 
-    private void netGetRemoteEnvironments(String url) {
-        auto.qinglong.net.app.ApiController.getRemoteEnvironments(getNetRequestID(), url, new auto.qinglong.net.app.ApiController.NetRemoteEnvCallback() {
-
+    private void addEnvironments(List<Environment> environments) {
+        auto.qinglong.net.panel.ApiController.addEnvironments(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), environments, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
-            public void onSuccess(List<QLEnvironment> environments) {
-                if (environments.size() == 0) {
-                    ToastUnit.showShort("变量为空");
-                } else {
-                    netAddEnvironments(environments);
-                }
+            public void onSuccess() {
+                uiActionsBack.performClick();
+                ToastUnit.showShort("启用成功");
+                getEnvironments(mCurrentSearchValue);
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort("加载失败：" + msg);
+                ToastUnit.showShort("启用失败：" + msg);
             }
         });
     }
 
-    private void netMoveEnvironment(MoveInfo info) {
-        QLEnvironment fromObject = info.getFromObejct();
+    private void updateEnvironment(Environment environment) {
+        auto.qinglong.net.panel.ApiController.updateEnvironment(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), environment, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
+            @Override
+            public void onSuccess() {
+                uiActionsBack.performClick();
+                ToastUnit.showShort("启用成功");
+                getEnvironments(mCurrentSearchValue);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort("启用失败：" + msg);
+            }
+        });
+    }
+
+    private void deleteEnvironments(List<Object> ids) {
+        auto.qinglong.net.panel.ApiController.deleteEnvironments(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), ids, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
+            @Override
+            public void onSuccess() {
+                uiActionsBack.performClick();
+                ToastUnit.showShort("启用成功");
+                getEnvironments(mCurrentSearchValue);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort("启用失败：" + msg);
+            }
+        });
+    }
+
+    private void moveEnvironment(MoveInfo info) {
+        QLEnvironment fromObject = info.getFromObject();
         QLEnvironment toObject = info.getToObject();
-        int realFrom = info.getFromObejct().getRealIndex();
+        int realFrom = info.getFromObject().getRealIndex();
         int realTo = info.getToObject().getRealIndex();
-        ApiController.moveEnvironment(getNetRequestID(), info.getFromObejct().getId(), realFrom, realTo, new ApiController.NetBaseCallback() {
+        ApiController.moveEnvironment(getNetRequestID(), info.getFromObject().getId(), realFrom, realTo, new ApiController.NetBaseCallback() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort(getString(R.string.tip_move_success));

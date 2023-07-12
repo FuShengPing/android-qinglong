@@ -1,14 +1,10 @@
 package auto.qinglong.net.app;
 
-import java.util.List;
-
 import auto.qinglong.bean.app.Version;
-import auto.qinglong.bean.panel.QLEnvironment;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import retrofit2.http.Url;
 
 /**
  * 应用接口.
@@ -36,12 +32,4 @@ public interface Api {
     @GET("version")
     Call<Version> getVersion(@Query("uid") String uid);
 
-    /**
-     * 远程导入环境变量.
-     *
-     * @param url the url
-     * @return the remote environments
-     */
-    @GET
-    Call<List<QLEnvironment>> getRemoteEnvironments(@Url String url);
 }

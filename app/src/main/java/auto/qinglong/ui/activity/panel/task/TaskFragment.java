@@ -426,6 +426,9 @@ public class TaskFragment extends BaseFragment {
         PopEditObject itemName = new PopEditObject("name", null, "名称", "请输入任务名称");
         PopEditObject itemCommand = new PopEditObject("command", null, "命令", "请输入要执行的命令");
         PopEditObject itemSchedule = new PopEditObject("schedule", null, "定时规则", "秒(可选) 分 时 天 月 周");
+        uiPopEdit.addItem(itemName);
+        uiPopEdit.addItem(itemCommand);
+        uiPopEdit.addItem(itemSchedule);
 
         if (task != null) {
             uiPopEdit.setTitle("编辑任务");
@@ -434,9 +437,6 @@ public class TaskFragment extends BaseFragment {
             itemSchedule.setValue(task.getSchedule());
         }
 
-        uiPopEdit.addItem(itemName);
-        uiPopEdit.addItem(itemCommand);
-        uiPopEdit.addItem(itemSchedule);
         uiPopEdit.setActionListener(new PopEditWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
@@ -460,16 +460,14 @@ public class TaskFragment extends BaseFragment {
                 WindowUnit.hideKeyboard(uiPopEdit.getView());
 
                 Task newTask = new Task();
+                newTask.setName(name);
+                newTask.setCommand(command);
+                newTask.setSchedule(schedule);
+
                 if (task == null) {
-                    newTask.setName(name);
-                    newTask.setCommand(command);
-                    newTask.setSchedule(schedule);
                     createTask(newTask);
                 } else {
                     newTask.setKey(task.getKey());
-                    newTask.setName(name);
-                    newTask.setCommand(command);
-                    newTask.setSchedule(schedule);
                     updateTask(newTask);
                 }
                 return false;
@@ -758,7 +756,7 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void createTask(Task task) {
-        auto.qinglong.net.panel.ApiController.createTask(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), task, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
+        auto.qinglong.net.panel.ApiController.addTask(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), task, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 uiPopEdit.dismiss();

@@ -3,21 +3,16 @@ package auto.qinglong.net.panel.v10;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
-import java.util.List;
 
 import auto.base.util.LogUnit;
 import auto.base.util.TextUnit;
 import auto.qinglong.bean.panel.Account;
-import auto.qinglong.bean.panel.QLEnvironment;
 import auto.qinglong.bean.panel.SystemConfig;
-import auto.qinglong.bean.panel.network.QLEnvEditRes;
-import auto.qinglong.bean.panel.network.QLEnvironmentRes;
 import auto.qinglong.database.sp.PanelPreference;
 import auto.qinglong.net.NetManager;
 import auto.qinglong.net.panel.BaseRes;
+import auto.qinglong.net.panel.Handler;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -107,298 +102,29 @@ public class ApiController {
         });
     }
 
-    public static void getEnvironments(@NonNull String baseUrl, @NonNull String authorization,@NonNull String searchValue, auto.qinglong.net.panel.ApiController.EnvironmentListCallBack callBack) {
-
-    }
-
-    public static void getEnvironments(@NonNull String requestId, @NonNull String searchValue, @NonNull NetGetEnvironmentsCallback callback) {
-        Call<QLEnvironmentRes> call = new Retrofit.Builder()
-                .baseUrl(PanelPreference.getBaseUrl())
+    public static void getEnvironments(@NonNull String baseUrl, @NonNull String authorization, @NonNull String searchValue, auto.qinglong.net.panel.ApiController.EnvironmentListCallBack callBack) {
+        Call<EnvironmentsRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .getEnvironments(PanelPreference.getAuthorization(), searchValue);
-        call.enqueue(new Callback<QLEnvironmentRes>() {
-            @Override
-            public void onResponse(@NonNull Call<QLEnvironmentRes> call, @NonNull Response<QLEnvironmentRes> response) {
-                NetManager.finishCall(requestId);
-                QLEnvironmentRes environmentRes = response.body();
-                if (environmentRes == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (environmentRes.getCode() == 200) {
-                        callback.onSuccess(environmentRes.getData());
-                    } else {
-                        callback.onFailure(environmentRes.getMessage());
-                    }
-                }
-            }
+                .getEnvironments(authorization, searchValue);
 
+        call.enqueue(new Callback<EnvironmentsRes>() {
             @Override
-            public void onFailure(@NonNull Call<QLEnvironmentRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
+            public void onResponse(Call<EnvironmentsRes> call, Response<EnvironmentsRes> response) {
+                EnvironmentsRes res = response.body();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
                     return;
                 }
-                callback.onFailure(t.getLocalizedMessage());
+                callBack.onSuccess(Converter.convertEnvironments(res.getData()));
+            }
+
+            @Override
+            public void onFailure(Call<EnvironmentsRes> call, Throwable t) {
+                Handler.handleRequestError(call, t, callBack);
             }
         });
-
-        NetManager.addCall(call, requestId);
-    }
-
-    public static void addEnvironment(@NonNull String requestId, @NonNull List<QLEnvironment> environments, @NonNull NetGetEnvironmentsCallback callback) {
-        JsonArray jsonArray = new JsonArray();
-        JsonObject jsonObject;
-        for (QLEnvironment environment : environments) {
-            jsonObject = new JsonObject();
-            jsonObject.addProperty("name", environment.getName());
-            jsonObject.addProperty("remarks", environment.getRemarks());
-            jsonObject.addProperty("value", environment.getValue());
-            jsonArray.add(jsonObject);
-        }
-        String json = jsonArray.toString();
-
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<QLEnvironmentRes> call = new Retrofit.Builder()
-                .baseUrl(PanelPreference.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .addEnvironments(PanelPreference.getAuthorization(), requestBody);
-
-        call.enqueue(new Callback<QLEnvironmentRes>() {
-            @Override
-            public void onResponse(@NonNull Call<QLEnvironmentRes> call, @NonNull Response<QLEnvironmentRes> response) {
-                NetManager.finishCall(requestId);
-                QLEnvironmentRes environmentRes = response.body();
-                if (environmentRes == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (environmentRes.getCode() == 200) {
-                        callback.onSuccess(environmentRes.getData());
-                    } else {
-                        callback.onFailure(environmentRes.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<QLEnvironmentRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
-            }
-        });
-
-        NetManager.addCall(call, requestId);
-    }
-
-    public static void updateEnvironment(@NonNull String requestId, @NonNull QLEnvironment environment, @NonNull NetEditEnvCallback callback) {
-        JsonObject jsonObject;
-        jsonObject = new JsonObject();
-        jsonObject.addProperty("name", environment.getName());
-        jsonObject.addProperty("remarks", environment.getRemarks());
-        jsonObject.addProperty("value", environment.getValue());
-        jsonObject.addProperty("_id", environment.getId());
-
-        String json = jsonObject.toString();
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<QLEnvEditRes> call = new Retrofit.Builder()
-                .baseUrl(PanelPreference.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .updateEnvironment(PanelPreference.getAuthorization(), requestBody);
-
-        call.enqueue(new Callback<QLEnvEditRes>() {
-            @Override
-            public void onResponse(@NonNull Call<QLEnvEditRes> call, @NonNull Response<QLEnvEditRes> response) {
-                NetManager.finishCall(requestId);
-                QLEnvEditRes editEnvRes = response.body();
-                if (editEnvRes == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (editEnvRes.getCode() == 200) {
-                        callback.onSuccess(editEnvRes.getData());
-                    } else {
-                        callback.onFailure(editEnvRes.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<QLEnvEditRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
-            }
-        });
-
-        NetManager.addCall(call, requestId);
-    }
-
-    public static void deleteEnvironments(@NonNull String requestId, @NonNull List<String> envIds, @NonNull NetBaseCallback callback) {
-        JsonArray jsonArray = new JsonArray();
-        for (int i = 0; i < envIds.size(); i++) {
-            jsonArray.add(envIds.get(i));
-        }
-
-        String json = jsonArray.toString();
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(PanelPreference.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .deleteEnvironments(PanelPreference.getAuthorization(), body);
-
-        call.enqueue(new Callback<BaseRes>() {
-            @Override
-            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
-                NetManager.finishCall(requestId);
-                BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY + response.code());
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callback.onSuccess();
-                    } else {
-                        callback.onFailure(res.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
-            }
-        });
-
-        NetManager.addCall(call, requestId);
-
-    }
-
-    public static void enableEnvironments(@NonNull String requestId, @NonNull List<String> envIds, @NonNull NetBaseCallback callback) {
-        JsonArray jsonArray = new JsonArray();
-        for (int i = 0; i < envIds.size(); i++) {
-            jsonArray.add(envIds.get(i));
-        }
-
-        String json = jsonArray.toString();
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(PanelPreference.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .enableEnv(PanelPreference.getAuthorization(), body);
-
-        call.enqueue(new Callback<BaseRes>() {
-            @Override
-            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
-                NetManager.finishCall(requestId);
-                BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY + response.code());
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callback.onSuccess();
-                    } else {
-                        callback.onFailure(res.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
-            }
-        });
-
-        NetManager.addCall(call, requestId);
-
-    }
-
-    public static void disableEnvironments(@NonNull String requestId, @NonNull List<String> envIds, @NonNull NetBaseCallback callback) {
-        JsonArray jsonArray = new JsonArray();
-        for (int i = 0; i < envIds.size(); i++) {
-            jsonArray.add(envIds.get(i));
-        }
-
-        String json = jsonArray.toString();
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(PanelPreference.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .disableEnv(PanelPreference.getAuthorization(), body);
-
-        call.enqueue(new Callback<BaseRes>() {
-            @Override
-            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
-                NetManager.finishCall(requestId);
-                BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY + response.code());
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callback.onSuccess();
-                    } else {
-                        callback.onFailure(res.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
-            }
-        });
-
-        NetManager.addCall(call, requestId);
-
     }
 
     public static void moveEnvironment(@NonNull String requestId, @NonNull String id, int from, int to, @NonNull NetBaseCallback callback) {
@@ -738,18 +464,6 @@ public class ApiController {
 
     public interface NetBaseCallback {
         void onSuccess();
-
-        void onFailure(String msg);
-    }
-
-    public interface NetGetEnvironmentsCallback {
-        void onSuccess(List<QLEnvironment> environments);
-
-        void onFailure(String msg);
-    }
-
-    public interface NetEditEnvCallback {
-        void onSuccess(QLEnvironment environment);
 
         void onFailure(String msg);
     }

@@ -1,5 +1,10 @@
 package auto.qinglong.bean.panel;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * @author wsfsp4
  * @version 2023.07.11
@@ -53,10 +58,6 @@ public class Environment implements Comparable<Environment> {
         return status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public int getStatusCode() {
         return statusCode;
     }
@@ -90,5 +91,23 @@ public class Environment implements Comparable<Environment> {
     @Override
     public int compareTo(Environment o) {
         return 0;
+    }
+
+    public static List<Environment> parse(String str, String remarks) {
+        List<Environment> environments = new ArrayList<>();
+        Pattern pattern = Pattern.compile("export \\w+=\"[^\"]+\"");
+        Matcher matcher = pattern.matcher(str);
+        while (matcher.find()) {
+            Environment environment = new Environment();
+            String[] ss = matcher.group().split("=", 2);
+            String name = ss[0].split(" ", 2)[1];
+            String value = ss[1].replace("\"", "");
+
+            environment.setName(name);
+            environment.setValue(value);
+            environment.setRemark(remarks);
+            environments.add(environment);
+        }
+        return environments;
     }
 }
