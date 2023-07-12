@@ -6,7 +6,6 @@ import androidx.annotation.Nullable;
 import com.google.gson.JsonObject;
 
 import auto.base.util.TextUnit;
-import auto.qinglong.bean.panel.Account;
 import auto.qinglong.bean.panel.SystemConfig;
 import auto.qinglong.database.sp.PanelPreference;
 import auto.qinglong.net.NetManager;
@@ -126,7 +125,7 @@ public class ApiController {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .moveEnv(PanelPreference.getAuthorization(), id, body);
+                .moveEnvironment(PanelPreference.getAuthorization(), id, body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -325,53 +324,6 @@ public class ApiController {
                 Handler.handleRequestError(call, t, callBack);
             }
         });
-
-    }
-
-    public static void updateUser(@NonNull String requestId, Account account, @NonNull NetBaseCallback callback) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("username", account.getUsername());
-        jsonObject.addProperty("password", account.getPassword());
-
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(PanelPreference.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .updateUserInfo(PanelPreference.getAuthorization(), requestBody);
-
-        call.enqueue(new Callback<BaseRes>() {
-            @Override
-            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
-                NetManager.finishCall(requestId);
-                BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callback.onSuccess();
-                    } else {
-                        callback.onFailure(res.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
-            }
-        });
-
-        NetManager.addCall(call, requestId);
 
     }
 

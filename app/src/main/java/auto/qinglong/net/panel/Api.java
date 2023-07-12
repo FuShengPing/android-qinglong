@@ -63,17 +63,20 @@ public interface Api {
     @HTTP(method = "DELETE", path = "api/envs", hasBody = true)
     Call<BaseRes> deleteEnvironments(@Header("Authorization") String authorization, @Body RequestBody body);
 
-    @PUT("api/scripts")
-    Call<BaseRes> updateScript(@Header("Authorization") String authorization, @Body RequestBody body);
-
-    @HTTP(method = "DELETE", path = "api/scripts", hasBody = true)
-    Call<BaseRes> deleteScript(@Header("Authorization") String authorization, @Body RequestBody body);
-
     @POST("api/dependencies")
     Call<BaseRes> addDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
 
     @GET
     Call<DependenceLogRes> getDependenceLog(@Url String url, @Header("Authorization") String authorization);
+
+    @POST("api/configs/save")
+    Call<BaseRes> updateConfigContent(@Header("Authorization") String authorization, @Body RequestBody body);
+
+    @PUT("api/scripts")
+    Call<BaseRes> updateScript(@Header("Authorization") String authorization, @Body RequestBody body);
+
+    @HTTP(method = "DELETE", path = "api/scripts", hasBody = true)
+    Call<BaseRes> deleteScript(@Header("Authorization") String authorization, @Body RequestBody body);
 
     @GET("api/user/login-log")
     Call<LoginLogsRes> getLoginLogs(@Header("Authorization") String authorization);
@@ -81,6 +84,6 @@ public interface Api {
     @GET
     Call<FileContentRes> getFileContent(@Url String url, @Header("Authorization") String authorization);
 
-    @POST("api/configs/save")
-    Call<BaseRes> updateConfigContent(@Header("Authorization") String authorization, @Body RequestBody body);
+    @PUT("api/user")
+    Call<BaseRes> updateAccount(@Header("Authorization") String authorization, @Body RequestBody body);
 }

@@ -782,6 +782,36 @@ public class ApiController {
         }
     }
 
+    public static void updateAccount(@NonNull String baseUrl, @NonNull String authorization, Account account, BaseCallBack callBack) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("username", account.getUsername());
+        jsonObject.addProperty("password", account.getPassword());
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
+
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .updateAccount(authorization, requestBody);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
+                }
+                callBack.onSuccess();
+            }
+
+            @Override
+            public void onFailure(Call<BaseRes> call, Throwable t) {
+                Handler.handleRequestError(call, t, callBack);
+            }
+        });
+    }
+
     private static void getFileContent(@NonNull String baseUrl, @NonNull String authorization, String path, ContentCallBack callBack) {
         Call<FileContentRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)

@@ -15,7 +15,6 @@ import auto.qinglong.R;
 import auto.qinglong.bean.panel.Account;
 import auto.qinglong.bean.panel.SystemConfig;
 import auto.qinglong.database.sp.PanelPreference;
-import auto.qinglong.net.panel.v10.ApiController;
 import auto.qinglong.ui.BaseFragment;
 import auto.qinglong.ui.activity.app.LoginActivity;
 
@@ -98,6 +97,7 @@ public class CommonFragment extends BaseFragment {
             @Override
             public void onSuccess() {
                 uiLogRemoveFrequency.clearFocus();
+                uiCronConcurrency.clearFocus();
                 ToastUnit.showShort("更新成功");
             }
 
@@ -109,7 +109,7 @@ public class CommonFragment extends BaseFragment {
     }
 
     private void updateAccount(Account account) {
-        ApiController.updateUser(getNetRequestID(), account, new ApiController.NetBaseCallback() {
+        auto.qinglong.net.panel.ApiController.updateAccount(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), account, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 PanelPreference.updateCurrentAccount(account);
