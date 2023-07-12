@@ -251,37 +251,11 @@
                 </LinearLayout>
 
                 <View
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/divider_thickness"
                     android:layout_marginVertical="10dp"
-                    android:background="@color/divider_heavy" />
-
-                <LinearLayout
-                    android:visibility="gone"
-                    android:id="@+id/menu_extension_web"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/style_press_gray"
-                    android:clickable="true"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingVertical="15dp"
-                    android:paddingLeft="15dp">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_gray_menu_extension_web" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/module_extension_web"
-                        android:textColor="@color/text_color_49"
-                        android:textSize="14sp" />
-                </LinearLayout>
+                    android:background="@color/divider_heavy"
+                    android:visibility="gone" />
             </LinearLayout>
         </ScrollView>
 

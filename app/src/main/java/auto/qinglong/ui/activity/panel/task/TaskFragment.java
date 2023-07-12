@@ -77,7 +77,6 @@ public class TaskFragment extends BaseFragment {
     private LinearLayout uiActionsDisable;
     private LinearLayout uiActionsDelete;
     //布局控件
-    private LinearLayout uiRoot;
     private RecyclerView uiRecycler;
     private SmartRefreshLayout uiRefresh;
 
@@ -89,7 +88,6 @@ public class TaskFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_task, null);
 
-        uiRoot = view.findViewById(R.id.root);
         uiBarNav = view.findViewById(R.id.task_bar_nav);
         uiNavMenu = view.findViewById(R.id.task_bar_nav_menu);
         uiNavSearch = view.findViewById(R.id.task_bar_nav_search);
@@ -465,7 +463,7 @@ public class TaskFragment extends BaseFragment {
                 newTask.setSchedule(schedule);
 
                 if (task == null) {
-                    createTask(newTask);
+                    addTask(newTask);
                 } else {
                     newTask.setKey(task.getKey());
                     updateTask(newTask);
@@ -755,7 +753,7 @@ public class TaskFragment extends BaseFragment {
         });
     }
 
-    private void createTask(Task task) {
+    private void addTask(Task task) {
         auto.qinglong.net.panel.ApiController.addTask(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), task, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {

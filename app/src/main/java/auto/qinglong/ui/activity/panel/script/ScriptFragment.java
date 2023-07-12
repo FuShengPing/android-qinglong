@@ -36,7 +36,7 @@ import auto.qinglong.net.panel.ApiController;
 import auto.qinglong.ui.BaseFragment;
 import auto.qinglong.ui.activity.panel.CodeWebActivity;
 
-
+@SuppressLint("SetTextI18n")
 public class ScriptFragment extends BaseFragment {
     public static String TAG = "ScriptFragment";
 
@@ -156,8 +156,6 @@ public class ScriptFragment extends BaseFragment {
     private void showPopMenu(View v, File file, int position) {
         PopMenuWindow popMenuWindow = new PopMenuWindow(v, Gravity.CENTER);
         popMenuWindow.addItem(new PopMenuObject("copy", "复制路径", R.drawable.ic_gray_crop_free));
-        //popMenuWindow.addItem(new PopMenuObject("backup", "脚本备份", R.drawable.ic_gray_download));
-        //popMenuWindow.addItem(new PopMenuObject("replace", "脚本替换", R.drawable.ic_gray_copy));
         if (!file.isDir()) {
             popMenuWindow.addItem(new PopMenuObject("delete", "删除脚本", R.drawable.ic_gray_delete));
         }
@@ -167,7 +165,7 @@ public class ScriptFragment extends BaseFragment {
                 case "copy":
                     ClipboardManager clipboardManager = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
                     clipboardManager.setPrimaryClip(ClipData.newPlainText(null, file.getPath()));
-                    ToastUnit.showShort(getString(R.string.tip_copy_path_ready));
+                    ToastUnit.showShort("已复制");
                     break;
                 case "backup":
                     break;
@@ -191,7 +189,6 @@ public class ScriptFragment extends BaseFragment {
         PopupWindowBuilder.buildMenuWindow(requireActivity(), popMenuWindow);
     }
 
-    @SuppressLint("SetTextI18n")
     private void sortAndSetData(List<File> files, String dir) {
         Collections.sort(files);
         fileStack.add(files);

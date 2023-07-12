@@ -69,7 +69,7 @@ public class EnvFragment extends BaseFragment {
     private EditText uiSearchValue;
     private ImageView uiSearchConfirm;
     private LinearLayout uiBarActions;
-    private ImageView uiActionsBack;
+    private ImageView uiActionBack;
     private CheckBox uiActionsSelect;
     private LinearLayout uiActionsEnable;
     private LinearLayout uiActionsDisable;
@@ -95,7 +95,7 @@ public class EnvFragment extends BaseFragment {
         uiSearchValue = view.findViewById(R.id.env_bar_search_input);
         uiSearchConfirm = view.findViewById(R.id.env_bar_search_confirm);
         uiBarActions = view.findViewById(R.id.env_bar_actions);
-        uiActionsBack = view.findViewById(R.id.env_bar_actions_back);
+        uiActionBack = view.findViewById(R.id.env_bar_actions_back);
         uiActionsSelect = view.findViewById(R.id.env_bar_actions_select_all);
         uiActionsEnable = view.findViewById(R.id.env_bar_actions_enable);
         uiActionsDisable = view.findViewById(R.id.env_bar_actions_disable);
@@ -212,7 +212,7 @@ public class EnvFragment extends BaseFragment {
         });
 
         //操作栏返回
-        uiActionsBack.setOnClickListener(v -> onActionBarClose());
+        uiActionBack.setOnClickListener(v -> onActionBarClose());
 
         //全选
         uiActionsSelect.setOnCheckedChangeListener((buttonView, isChecked) -> mAdapter.setAllChecked(isChecked));
@@ -450,25 +450,6 @@ public class EnvFragment extends BaseFragment {
         PopupWindowBuilder.buildEditWindow(requireActivity(), uiPopEdit);
     }
 
-    private void deduplicationData() {
-        List<Object> ids = new ArrayList<>();
-        Set<Object> set = new HashSet<>();
-        List<Environment> environments = this.mAdapter.getData();
-        for (Environment environment : environments) {
-            String key = environment.getName() + environment.getValue();
-            if (set.contains(key)) {
-                ids.add(environment.getKey());
-            } else {
-                set.add(key);
-            }
-        }
-        if (ids.size() == 0) {
-            ToastUnit.showShort("无重复变量");
-        } else {
-//            netDeleteEnvironments(ids);
-        }
-    }
-
     private void backupData(String fileName) {
 //        if (FileUtil.isNeedRequestPermission()) {
 //            ToastUnit.showShort("请授予应用获取存储权限");
@@ -558,6 +539,25 @@ public class EnvFragment extends BaseFragment {
         });
     }
 
+    private void deduplicationData() {
+        List<Object> ids = new ArrayList<>();
+        Set<Object> set = new HashSet<>();
+        List<Environment> environments = this.mAdapter.getData();
+        for (Environment environment : environments) {
+            String key = environment.getName() + environment.getValue();
+            if (set.contains(key)) {
+                ids.add(environment.getKey());
+            } else {
+                set.add(key);
+            }
+        }
+        if (ids.size() == 0) {
+            ToastUnit.showShort("无重复变量");
+        } else {
+//            netDeleteEnvironments(ids);
+        }
+    }
+
     private void getEnvironments(String searchValue) {
         auto.qinglong.net.panel.ApiController.getEnvironments(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), searchValue, new auto.qinglong.net.panel.ApiController.EnvironmentListCallBack() {
             @Override
@@ -579,7 +579,7 @@ public class EnvFragment extends BaseFragment {
         auto.qinglong.net.panel.ApiController.enableEnvironments(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), ids, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
-                uiActionsBack.performClick();
+                uiActionBack.performClick();
                 ToastUnit.showShort("启用成功");
                 getEnvironments(mCurrentSearchValue);
             }
@@ -595,14 +595,14 @@ public class EnvFragment extends BaseFragment {
         auto.qinglong.net.panel.ApiController.disableEnvironments(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), ids, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
-                uiActionsBack.performClick();
-                ToastUnit.showShort("启用成功");
+                uiActionBack.performClick();
+                ToastUnit.showShort("禁用成功");
                 getEnvironments(mCurrentSearchValue);
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort("启用失败：" + msg);
+                ToastUnit.showShort("禁用失败：" + msg);
             }
         });
     }
@@ -611,14 +611,14 @@ public class EnvFragment extends BaseFragment {
         auto.qinglong.net.panel.ApiController.addEnvironments(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), environments, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
-                uiActionsBack.performClick();
-                ToastUnit.showShort("启用成功");
+                uiPopEdit.dismiss();
+                ToastUnit.showShort("新建成功");
                 getEnvironments(mCurrentSearchValue);
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort("启用失败：" + msg);
+                ToastUnit.showShort("新建失败：" + msg);
             }
         });
     }
@@ -627,14 +627,14 @@ public class EnvFragment extends BaseFragment {
         auto.qinglong.net.panel.ApiController.updateEnvironment(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), environment, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
-                uiActionsBack.performClick();
-                ToastUnit.showShort("启用成功");
+                uiPopEdit.dismiss();
+                ToastUnit.showShort("更新成功");
                 getEnvironments(mCurrentSearchValue);
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort("启用失败：" + msg);
+                ToastUnit.showShort("更新失败：" + msg);
             }
         });
     }
@@ -643,14 +643,14 @@ public class EnvFragment extends BaseFragment {
         auto.qinglong.net.panel.ApiController.deleteEnvironments(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), ids, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
-                uiActionsBack.performClick();
-                ToastUnit.showShort("启用成功");
+                uiActionBack.performClick();
+                ToastUnit.showShort("删除成功");
                 getEnvironments(mCurrentSearchValue);
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort("启用失败：" + msg);
+                ToastUnit.showShort("删除失败：" + msg);
             }
         });
     }

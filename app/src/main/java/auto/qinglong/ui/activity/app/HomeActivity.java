@@ -10,6 +10,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,9 +43,9 @@ public class HomeActivity extends BaseActivity {
     public static final String TAG = "HomeActivity";
 
     private long mLastBackPressedTime = 0;//上次按下返回键时间
-    private BaseFragment mCurrentFragment;//当前帧
     private BaseFragment.MenuClickListener mMenuClickListener;
     private Map<String, BaseFragment> fragmentMap;
+    private BaseFragment mCurrentFragment;//当前Fragment
 
     private DrawerLayout uiDrawer;
     private LinearLayout uiDrawerLeft;
@@ -59,6 +60,9 @@ public class HomeActivity extends BaseActivity {
         uiDrawerLeft = findViewById(R.id.drawer_left);
 
         fragmentMap = new HashMap<>();
+
+        //清空Fragment
+        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         init();
     }
@@ -121,7 +125,6 @@ public class HomeActivity extends BaseActivity {
         LinearLayout menu_env = uiDrawerLeft.findViewById(R.id.menu_env);
         LinearLayout menu_setting = uiDrawerLeft.findViewById(R.id.menu_setting);
         LinearLayout menu_dep = uiDrawerLeft.findViewById(R.id.menu_dep);
-        LinearLayout menu_extension_web = uiDrawerLeft.findViewById(R.id.menu_extension_web);
         LinearLayout menu_app_exit = uiDrawerLeft.findViewById(R.id.menu_exit);
         LinearLayout menu_app_setting = uiDrawerLeft.findViewById(R.id.menu_app_setting);
 
@@ -145,12 +148,6 @@ public class HomeActivity extends BaseActivity {
         menu_dep.setOnClickListener(v -> showFragment(DepPagerFragment.class));
         //系统设置
         menu_setting.setOnClickListener(v -> showFragment(SettingFragment.class));
-
-        //Web助手
-//        menu_extension_web.setOnClickListener(v -> {
-//            Intent intent = new Intent(getBaseContext(), PluginWebActivity.class);
-//            startActivity(intent);
-//        });
 
         //退出登录
         menu_app_exit.setOnClickListener(v -> {
