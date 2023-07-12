@@ -15,7 +15,7 @@ public class Handler {
             return false;
         }
 
-        if (res == null && statusCode == 401) {
+        if (statusCode == 401) {
             callBack.onFailure(ERROR_INVALID_AUTH);
         } else if (res == null) {
             callBack.onFailure(ERROR_NO_BODY + statusCode);

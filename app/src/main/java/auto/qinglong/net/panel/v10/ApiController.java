@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 
 import com.google.gson.JsonObject;
 
-import auto.base.util.LogUnit;
 import auto.base.util.TextUnit;
 import auto.qinglong.bean.panel.Account;
 import auto.qinglong.bean.panel.SystemConfig;
@@ -65,7 +64,7 @@ public class ApiController {
         });
     }
 
-    public static void getTasks(String baseUrl, String authorization, String searchValue, auto.qinglong.net.panel.ApiController.TaskListCallBack callback) {
+    public static void getTasks(String baseUrl, String authorization, String searchValue, auto.qinglong.net.panel.ApiController.TaskListCallBack callBack) {
         Call<TasksRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -77,27 +76,15 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<TasksRes> call, @NonNull Response<TasksRes> response) {
                 TasksRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callback.onSuccess(Converter.convertTasks(res.getData()));
-                    } else {
-                        callback.onFailure(res.getMessage());
-                    }
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess(Converter.convertTasks(res.getData()));
             }
 
             @Override
             public void onFailure(@NonNull Call<TasksRes> call, @NonNull Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -127,7 +114,7 @@ public class ApiController {
         });
     }
 
-    public static void moveEnvironment(@NonNull String requestId, @NonNull String id, int from, int to, @NonNull NetBaseCallback callback) {
+    public static void moveEnvironment(@NonNull String requestId, @NonNull String id, int from, int to, @NonNull NetBaseCallback callBack) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("fromIndex", from);
         jsonObject.addProperty("toIndex", to);
@@ -144,31 +131,16 @@ public class ApiController {
         call.enqueue(new Callback<BaseRes>() {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
-                NetManager.finishCall(requestId);
-                LogUnit.log(call.request().url().toString());
                 BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY + response.code());
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callback.onSuccess();
-                    } else {
-                        callback.onFailure(res.getMessage());
-                    }
-                }
+//                if (Handler.handleResponse(response.code(), res, callBack)) {
+//                    return;
+//                }
+                callBack.onSuccess();
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
+//                Handler.handleRequestError(call,t,callBack);
             }
         });
 
@@ -188,27 +160,15 @@ public class ApiController {
             @Override
             public void onResponse(Call<LogFilesRes> call, Response<LogFilesRes> response) {
                 LogFilesRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess(Converter.convertLogFiles(res.getDirs()));
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess(Converter.convertLogFiles(res.getDirs()));
             }
 
             @Override
             public void onFailure(Call<LogFilesRes> call, Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -237,27 +197,15 @@ public class ApiController {
             @Override
             public void onResponse(Call<ScriptFilesRes> call, Response<ScriptFilesRes> response) {
                 ScriptFilesRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess(Converter.convertScriptFiles(res.getData()));
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess(Converter.convertScriptFiles(res.getData()));
             }
 
             @Override
             public void onFailure(Call<ScriptFilesRes> call, Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -323,27 +271,15 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<DependenciesRes> call, @NonNull Response<DependenciesRes> response) {
                 DependenciesRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess(Converter.convertDependencies(res.getData()));
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess(Converter.convertDependencies(res.getData()));
             }
 
             @Override
             public void onFailure(@NonNull Call<DependenciesRes> call, @NonNull Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
+                Handler.handleRequestError(call, t, callBack);
             }
         });
 
@@ -361,27 +297,15 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<SystemConfigRes> call, @NonNull Response<SystemConfigRes> response) {
                 SystemConfigRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callBack.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callBack.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callBack.onSuccess(Converter.convertSystemConfig(res.getData()));
-                    } else {
-                        callBack.onFailure(res.getMessage());
-                    }
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess(Converter.convertSystemConfig(res.getData()));
             }
 
             @Override
             public void onFailure(@NonNull Call<SystemConfigRes> call, @NonNull Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
+                Handler.handleRequestError(call,t,callBack);
             }
         });
     }
@@ -402,14 +326,15 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (auto.qinglong.net.panel.ApiController.checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess();
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                auto.qinglong.net.panel.ApiController.handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
             }
         });
 

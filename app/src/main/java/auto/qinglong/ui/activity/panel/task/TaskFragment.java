@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import auto.base.util.LogUnit;
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
 import auto.base.util.VibratorUtil;
@@ -624,7 +623,7 @@ public class TaskFragment extends BaseFragment {
             @Override
             public void onFailure(String msg) {
                 uiRefresh.finishRefresh(false);
-                LogUnit.log(msg);
+                ToastUnit.showShort(msg);
             }
         });
     }
@@ -640,7 +639,6 @@ public class TaskFragment extends BaseFragment {
             @Override
             public void onFailure(String msg) {
                 ToastUnit.showShort("执行失败：" + msg);
-                LogUnit.log(msg);
             }
         });
     }
@@ -656,7 +654,6 @@ public class TaskFragment extends BaseFragment {
             @Override
             public void onFailure(String msg) {
                 ToastUnit.showShort("终止失败：" + msg);
-                LogUnit.log(msg);
             }
         });
     }
@@ -734,7 +731,6 @@ public class TaskFragment extends BaseFragment {
                 ToastUnit.showShort("删除失败：" + msg);
             }
         });
-
     }
 
     private void updateTask(Task task) {
@@ -767,36 +763,5 @@ public class TaskFragment extends BaseFragment {
                 ToastUnit.showShort("新建任务失败：" + msg);
             }
         });
-    }
-
-    private void netMulAddTask(List<Task> tasks) {
-//        new Thread(() -> {
-//            final boolean[] isEnd = {false};
-//
-//            for (int k = 0; k < tasks.size(); k++) {
-//                ui_pop_progress.setText("导入任务中 " + k + "/" + tasks.size());
-//                ApiController.addTask(getNetRequestID(), tasks.get(k), new ApiController.NetEditTaskCallback() {
-//                    @Override
-//                    public void onSuccess(QLTask QLTask) {
-//                        isEnd[0] = true;
-//                    }
-//
-//                    @Override
-//                    public void onFailure(String msg) {
-//                        isEnd[0] = true;
-//                        LogUnit.log(TAG, msg);
-//                    }
-//                });
-//                while (!isEnd[0]) {
-//                    try {
-//                        Thread.sleep(100);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//            ui_pop_progress.dismiss();
-////            netGetTasks(mCurrentSearchValue, true);
-//        }).start();
     }
 }

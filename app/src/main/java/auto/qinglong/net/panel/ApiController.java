@@ -30,9 +30,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * @version 2023.06.29
  */
 public class ApiController {
-    private static final String ERROR_NO_BODY = "响应异常";
-    private static final String ERROR_INVALID_AUTH = "登录信息失效";
-
     public static void getSystemInfo(@NonNull String baseUrl, @NonNull SystemInfoCallBack callBack) {
         Call<SystemInfoRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -45,17 +42,18 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<SystemInfoRes> call, @NonNull Response<SystemInfoRes> response) {
                 SystemInfoRes res = response.body();
-                if (checkResponse(response.code(), res, callBack)) {
-                    SystemInfo system = new SystemInfo();
-                    system.setInitialized(res.getData().isInitialized());
-                    system.setVersion(res.getData().getVersion());
-                    callBack.onSuccess(system);
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                SystemInfo system = new SystemInfo();
+                system.setInitialized(res.getData().isInitialized());
+                system.setVersion(res.getData().getVersion());
+                callBack.onSuccess(system);
             }
 
             @Override
             public void onFailure(@NonNull Call<SystemInfoRes> call, @NonNull Throwable t) {
-                handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -77,14 +75,15 @@ public class ApiController {
             @Override
             public void onResponse(Call<LoginRes> call, Response<LoginRes> response) {
                 LoginRes res = response.body();
-                if (checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess(res.getData().getToken());
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess(res.getData().getToken());
             }
 
             @Override
             public void onFailure(Call<LoginRes> call, Throwable t) {
-                handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -119,14 +118,15 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess();
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -145,14 +145,15 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess();
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -171,14 +172,15 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess();
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -197,14 +199,15 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess();
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -223,14 +226,15 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess();
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -249,14 +253,15 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess();
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -279,14 +284,15 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess();
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -315,14 +321,15 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess();
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -341,14 +348,15 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess();
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -514,20 +522,6 @@ public class ApiController {
         });
     }
 
-    public static void getLogs(@NonNull String baseUrl, @NonNull String authorization, FileListCallBack callBack) {
-        if (PanelPreference.isLowVersion()) {
-            auto.qinglong.net.panel.v10.ApiController.getLogFiles(baseUrl, authorization, callBack);
-        } else {
-            auto.qinglong.net.panel.v15.ApiController.getLogs(baseUrl, authorization, callBack);
-        }
-    }
-
-    public static void getLogContent(@NonNull String baseUrl, @NonNull String authorization, String scriptKey, String fileName, String fileParent, ContentCallBack callBack) {
-        String path = auto.qinglong.net.panel.v10.ApiController.getLogFilePath(scriptKey, fileName, fileParent);
-
-        getFileContent(baseUrl, authorization, path, callBack);
-    }
-
     public static void getConfigContent(@NonNull String baseUrl, @NonNull String authorization, ContentCallBack callBack) {
         String path = "api/configs/config.sh";
         getFileContent(baseUrl, authorization, path, callBack);
@@ -552,14 +546,96 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess();
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
+            }
+        });
+    }
+
+    public static void getDependencies(@NonNull String baseUrl, @NonNull String authorization, String searchValue, String type, DependenceListCallBack callBack) {
+        if (PanelPreference.isLowVersion()) {
+            auto.qinglong.net.panel.v10.ApiController.getDependencies(baseUrl, authorization, searchValue, type, callBack);
+        } else {
+            auto.qinglong.net.panel.v15.ApiController.getDependencies(baseUrl, authorization, searchValue, type, callBack);
+        }
+    }
+
+    public static void addDependencies(@NonNull String baseUrl, @NonNull String authorization, List<Dependence> dependencies, BaseCallBack callBack) {
+        JsonArray jsonArray = new JsonArray();
+        for (auto.qinglong.bean.panel.Dependence dependence : dependencies) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("name", dependence.getTitle());
+            jsonObject.addProperty("type", dependence.getTypeCode());
+            jsonArray.add(jsonObject);
+        }
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
+
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .addDependencies(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
+                }
+                callBack.onSuccess();
+            }
+
+            @Override
+            public void onFailure(Call<BaseRes> call, Throwable t) {
+                Handler.handleRequestError(call, t, callBack);
+            }
+        });
+    }
+
+    public static void reinstallDependencies(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
+
+    }
+
+    public static void deleteDependencies(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
+
+    }
+
+    public static void getDependenceLogContent(@NonNull String baseUrl, @NonNull String authorization, Object key, ContentCallBack callBack) {
+        String path = "api/dependencies/" + key;
+
+        Call<DependenceLogRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .getDependenceLog(path, authorization);
+
+        call.enqueue(new Callback<DependenceLogRes>() {
+            @Override
+            public void onResponse(@NonNull Call<DependenceLogRes> call, @NonNull Response<DependenceLogRes> response) {
+                DependenceLogRes res = response.body();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
+                }
+                StringBuilder content = new StringBuilder();
+                for (String line : res.getData().getLog()) {
+                    content.append(line).append("\n");
+                }
+                callBack.onSuccess(content.toString());
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<DependenceLogRes> call, @NonNull Throwable t) {
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -596,14 +672,15 @@ public class ApiController {
             @Override
             public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess();
             }
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
-                handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -633,95 +710,31 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess();
             }
 
             @Override
             public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
 
-    public static void getDependencies(@NonNull String baseUrl, @NonNull String authorization, String searchValue, String type, DependenceListCallBack callBack) {
+    public static void getLogs(@NonNull String baseUrl, @NonNull String authorization, FileListCallBack callBack) {
         if (PanelPreference.isLowVersion()) {
-            auto.qinglong.net.panel.v10.ApiController.getDependencies(baseUrl, authorization, searchValue, type, callBack);
+            auto.qinglong.net.panel.v10.ApiController.getLogFiles(baseUrl, authorization, callBack);
         } else {
-            auto.qinglong.net.panel.v15.ApiController.getDependencies(baseUrl, authorization, searchValue, type, callBack);
+            auto.qinglong.net.panel.v15.ApiController.getLogs(baseUrl, authorization, callBack);
         }
     }
 
-    public static void addDependencies(@NonNull String baseUrl, @NonNull String authorization, List<Dependence> dependencies, BaseCallBack callBack) {
-        JsonArray jsonArray = new JsonArray();
-        for (auto.qinglong.bean.panel.Dependence dependence : dependencies) {
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("name", dependence.getTitle());
-            jsonObject.addProperty("type", dependence.getTypeCode());
-            jsonArray.add(jsonObject);
-        }
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
+    public static void getLogContent(@NonNull String baseUrl, @NonNull String authorization, String scriptKey, String fileName, String fileParent, ContentCallBack callBack) {
+        String path = auto.qinglong.net.panel.v10.ApiController.getLogFilePath(scriptKey, fileName, fileParent);
 
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .addDependencies(authorization, body);
-
-        call.enqueue(new Callback<BaseRes>() {
-            @Override
-            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
-                BaseRes res = response.body();
-                if (checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<BaseRes> call, Throwable t) {
-                handleRequestError(call, t, callBack);
-            }
-        });
-    }
-
-    public static void reinstallDependencies(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
-
-    }
-
-    public static void deleteDependencies(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
-
-    }
-
-    public static void getDependenceLogContent(@NonNull String baseUrl, @NonNull String authorization, Object key, ContentCallBack callBack) {
-        String path = "api/dependencies/" + key;
-
-        Call<DependenceLogRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .getDependenceLog(path, authorization);
-
-        call.enqueue(new Callback<DependenceLogRes>() {
-            @Override
-            public void onResponse(@NonNull Call<DependenceLogRes> call, @NonNull Response<DependenceLogRes> response) {
-                DependenceLogRes res = response.body();
-                if (checkResponse(response.code(), res, callBack)) {
-                    StringBuilder content = new StringBuilder();
-                    for (String line : res.getData().getLog()) {
-                        content.append(line).append("\n");
-                    }
-                    callBack.onSuccess(content.toString());
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<DependenceLogRes> call, @NonNull Throwable t) {
-                handleRequestError(call, t, callBack);
-            }
-        });
+        getFileContent(baseUrl, authorization, path, callBack);
     }
 
     public static void getLoginLogs(@NonNull String baseUrl, @NonNull String authorization, LoginLogListCallBack callBack) {
@@ -736,14 +749,15 @@ public class ApiController {
             @Override
             public void onResponse(Call<LoginLogsRes> call, Response<LoginLogsRes> response) {
                 LoginLogsRes res = response.body();
-                if (checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess(Converter.convertLoginLogs(res.getData()));
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess(Converter.convertLoginLogs(res.getData()));
             }
 
             @Override
             public void onFailure(Call<LoginLogsRes> call, Throwable t) {
-                handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -776,36 +790,17 @@ public class ApiController {
             @Override
             public void onResponse(Call<FileContentRes> call, Response<FileContentRes> response) {
                 FileContentRes res = response.body();
-                if (checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess(res.getData());
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess(res.getData());
             }
 
             @Override
             public void onFailure(Call<FileContentRes> call, Throwable t) {
-                handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
             }
         });
-    }
-
-    public static boolean checkResponse(int statusCode, BaseRes res, BaseCallBack callBack) {
-        if (res == null) {
-            callBack.onFailure(ERROR_NO_BODY + statusCode);
-            return false;
-        } else if (statusCode == 401) {
-            callBack.onFailure(ERROR_INVALID_AUTH);
-            return false;
-        } else if (res.getCode() != 200) {
-            callBack.onFailure(res.getMessage());
-            return false;
-        }
-        return true;
-    }
-
-    public static void handleRequestError(Call<?> call, Throwable t, BaseCallBack callBack) {
-        if (!call.isCanceled()) {
-            callBack.onFailure(t.getLocalizedMessage());
-        }
     }
 
     public static RequestBody buildArrayJson(List<Object> objects) {

@@ -33,14 +33,15 @@ public class ApiController {
             @Override
             public void onResponse(Call<SystemConfigRes> call, Response<SystemConfigRes> response) {
                 SystemConfigRes res = response.body();
-                if (auto.qinglong.net.panel.ApiController.checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess();
             }
 
             @Override
             public void onFailure(Call<SystemConfigRes> call, Throwable t) {
-                auto.qinglong.net.panel.ApiController.handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
             }
         });
 
@@ -108,14 +109,15 @@ public class ApiController {
             @Override
             public void onResponse(Call<ScriptFilesRes> call, Response<ScriptFilesRes> response) {
                 ScriptFilesRes res = response.body();
-                if (auto.qinglong.net.panel.ApiController.checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess(Converter.convertScriptFiles(res.getData()));
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess(Converter.convertScriptFiles(res.getData()));
             }
 
             @Override
             public void onFailure(Call<ScriptFilesRes> call, Throwable t) {
-                auto.qinglong.net.panel.ApiController.handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -132,14 +134,15 @@ public class ApiController {
             @Override
             public void onResponse(Call<LogFilesRes> call, Response<LogFilesRes> response) {
                 LogFilesRes res = response.body();
-                if (auto.qinglong.net.panel.ApiController.checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess(Converter.convertLogFiles(res.getData()));
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess(Converter.convertLogFiles(res.getData()));
             }
 
             @Override
             public void onFailure(Call<LogFilesRes> call, Throwable t) {
-                auto.qinglong.net.panel.ApiController.handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -156,14 +159,15 @@ public class ApiController {
             @Override
             public void onResponse(Call<DependenciesRes> call, Response<DependenciesRes> response) {
                 DependenciesRes res = response.body();
-                if (auto.qinglong.net.panel.ApiController.checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess(Converter.convertDependencies(res.getData()));
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess(Converter.convertDependencies(res.getData()));
             }
 
             @Override
             public void onFailure(Call<DependenciesRes> call, Throwable t) {
-                auto.qinglong.net.panel.ApiController.handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -180,14 +184,15 @@ public class ApiController {
             @Override
             public void onResponse(Call<SystemConfigRes> call, Response<SystemConfigRes> response) {
                 SystemConfigRes res = response.body();
-                if (auto.qinglong.net.panel.ApiController.checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess(Converter.convertSystemConfig(res.getData().getInfo()));
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess(Converter.convertSystemConfig(res.getData().getInfo()));
             }
 
             @Override
             public void onFailure(Call<SystemConfigRes> call, Throwable t) {
-                auto.qinglong.net.panel.ApiController.handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -209,14 +214,15 @@ public class ApiController {
             @Override
             public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (auto.qinglong.net.panel.ApiController.checkResponse(response.code(), res, callBack)) {
-                    callBack.onSuccess();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
                 }
+                callBack.onSuccess();
             }
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
-                auto.qinglong.net.panel.ApiController.handleRequestError(call, t, callBack);
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
