@@ -732,8 +732,12 @@ public class ApiController {
     }
 
     public static void getLogContent(@NonNull String baseUrl, @NonNull String authorization, String scriptKey, String fileName, String fileParent, ContentCallBack callBack) {
-        String path = auto.qinglong.net.panel.v10.ApiController.getLogFilePath(scriptKey, fileName, fileParent);
-
+        String path;
+        if (PanelPreference.isLowVersion()) {
+            path = auto.qinglong.net.panel.v10.ApiController.getLogFilePath(scriptKey, fileName, fileParent);
+        } else {
+            path = auto.qinglong.net.panel.v15.ApiController.getLogFilePath(scriptKey, fileName, fileParent);
+        }
         getFileContent(baseUrl, authorization, path, callBack);
     }
 

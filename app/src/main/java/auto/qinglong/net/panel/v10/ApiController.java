@@ -173,18 +173,6 @@ public class ApiController {
         });
     }
 
-    public static String getLogFilePath(String scriptKey, String fileName, String fileParent) {
-        String path;
-        if (TextUnit.isFull(scriptKey)) {
-            path = "api/crons/" + scriptKey + "/log";
-        } else if (TextUnit.isFull(fileParent)) {
-            path = "api/logs/" + fileParent + "/" + fileName;
-        } else {
-            path = "api/logs/" + scriptKey;
-        }
-        return path;
-    }
-
     public static void getScriptFiles(@NonNull String baseUrl, @NonNull String authorization, auto.qinglong.net.panel.ApiController.FileListCallBack callBack) {
         Call<ScriptFilesRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -305,7 +293,7 @@ public class ApiController {
 
             @Override
             public void onFailure(@NonNull Call<SystemConfigRes> call, @NonNull Throwable t) {
-                Handler.handleRequestError(call,t,callBack);
+                Handler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -385,6 +373,18 @@ public class ApiController {
 
         NetManager.addCall(call, requestId);
 
+    }
+
+    public static String getLogFilePath(String scriptKey, String fileName, String fileParent) {
+        String path;
+        if (TextUnit.isFull(scriptKey)) {//任务日志
+            path = "api/crons/" + scriptKey + "/log";
+        } else if (TextUnit.isFull(fileParent)) {//脚本日志
+            path = "api/logs/" + fileParent + "/" + fileName;
+        } else {
+            path = "api/logs/" + fileName;
+        }
+        return path;
     }
 
     public interface NetBaseCallback {

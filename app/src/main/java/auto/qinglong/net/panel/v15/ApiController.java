@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.JsonObject;
 
+import auto.base.util.TextUnit;
 import auto.qinglong.bean.panel.SystemConfig;
 import auto.qinglong.net.panel.BaseRes;
 import auto.qinglong.net.panel.Handler;
@@ -225,5 +226,15 @@ public class ApiController {
                 Handler.handleRequestError(call, t, callBack);
             }
         });
+    }
+
+    public static String getLogFilePath(String scriptKey, String fileName, String fileParent) {
+        String path;
+        if (TextUnit.isFull(scriptKey)) {//任务日志
+            path = "api/crons/" + scriptKey + "/log";
+        } else {//脚本日志
+            path = "api/logs/" + fileName + "?path=" + (TextUnit.isFull(fileParent) ? fileParent : "");
+        }
+        return path;
     }
 }
