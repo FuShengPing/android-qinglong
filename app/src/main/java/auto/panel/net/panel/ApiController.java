@@ -728,10 +728,12 @@ public class ApiController {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("filename", file.getTitle());
         jsonObject.addProperty("path", file.getParent());
-        if (file.isDir()) {
-            jsonObject.addProperty("type", "directory");
-        } else {
-            jsonObject.addProperty("type", "file");
+        if (!PanelPreference.isLowVersion()) {
+            if (file.isDir()) {
+                jsonObject.addProperty("type", "directory");
+            } else {
+                jsonObject.addProperty("type", "file");
+            }
         }
 
         String json = jsonObject.toString();
