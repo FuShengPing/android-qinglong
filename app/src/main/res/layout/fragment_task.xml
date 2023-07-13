@@ -24,7 +24,7 @@
                 android:id="@+id/task_bar_nav_menu"
                 android:layout_width="@dimen/action_bar_icon_size"
                 android:layout_height="@dimen/action_bar_icon_size"
-                android:background="@drawable/style_button_ripple"
+                android:background="@drawable/style_press_ripple"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_white_menu" />
 
@@ -38,7 +38,7 @@
                 android:id="@+id/task_bar_nav_search"
                 android:layout_width="@dimen/action_bar_icon_size"
                 android:layout_height="@dimen/action_bar_icon_size"
-                android:background="@drawable/style_button_ripple"
+                android:background="@drawable/style_press_ripple"
                 android:clickable="true"
                 android:src="@drawable/ic_white_search" />
 
@@ -47,7 +47,7 @@
                 android:layout_width="@dimen/action_bar_icon_size"
                 android:layout_height="@dimen/action_bar_icon_size"
                 android:layout_marginStart="10dp"
-                android:background="@drawable/style_button_ripple"
+                android:background="@drawable/style_press_ripple"
                 android:clickable="true"
                 android:src="@drawable/ic_white_more_options" />
         </LinearLayout>
@@ -65,7 +65,7 @@
                 android:id="@+id/task_bar_search_back"
                 android:layout_width="@dimen/action_bar_icon_size"
                 android:layout_height="@dimen/action_bar_icon_size"
-                android:background="@drawable/style_button_ripple"
+                android:background="@drawable/style_press_ripple"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_white_arrow_back" />
 
@@ -89,7 +89,7 @@
                 android:id="@+id/task_bar_search_confirm"
                 android:layout_width="@dimen/action_bar_icon_size"
                 android:layout_height="@dimen/action_bar_icon_size"
-                android:background="@drawable/style_button_ripple"
+                android:background="@drawable/style_press_ripple"
                 android:clickable="true"
                 android:src="@drawable/ic_white_search" />
         </LinearLayout>
@@ -108,7 +108,7 @@
                 android:layout_width="@dimen/action_bar_icon_size"
                 android:layout_height="@dimen/action_bar_icon_size"
                 android:layout_marginEnd="40dp"
-                android:background="@drawable/style_button_ripple"
+                android:background="@drawable/style_press_ripple"
                 android:src="@drawable/ic_white_arrow_back" />
 
             <LinearLayout
@@ -153,7 +153,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
-                        android:background="@drawable/style_button_ripple"
+                        android:background="@drawable/style_press_ripple"
                         android:clickable="true"
                         android:gravity="center_horizontal"
                         android:orientation="vertical"
@@ -177,7 +177,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
-                        android:background="@drawable/style_button_ripple"
+                        android:background="@drawable/style_press_ripple"
                         android:clickable="true"
                         android:gravity="center_horizontal"
                         android:orientation="vertical"
@@ -201,7 +201,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
-                        android:background="@drawable/style_button_ripple"
+                        android:background="@drawable/style_press_ripple"
                         android:clickable="true"
                         android:gravity="center_horizontal"
                         android:orientation="vertical"
@@ -225,7 +225,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
-                        android:background="@drawable/style_button_ripple"
+                        android:background="@drawable/style_press_ripple"
                         android:clickable="true"
                         android:gravity="center_horizontal"
                         android:orientation="vertical"
@@ -249,7 +249,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
-                        android:background="@drawable/style_button_ripple"
+                        android:background="@drawable/style_press_ripple"
                         android:clickable="true"
                         android:gravity="center_horizontal"
                         android:orientation="vertical"
@@ -273,7 +273,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
-                        android:background="@drawable/style_button_ripple"
+                        android:background="@drawable/style_press_ripple"
                         android:clickable="true"
                         android:gravity="center_horizontal"
                         android:orientation="vertical"
@@ -297,7 +297,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
-                        android:background="@drawable/style_button_ripple"
+                        android:background="@drawable/style_press_ripple"
                         android:clickable="true"
                         android:gravity="center_horizontal"
                         android:orientation="vertical"

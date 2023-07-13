@@ -22,7 +22,7 @@
                 android:id="@+id/bar_action_back"
                 android:layout_width="@dimen/action_bar_icon_size"
                 android:layout_height="@dimen/action_bar_icon_size"
-                android:background="@drawable/style_button_ripple"
+                android:background="@drawable/style_press_ripple"
                 android:contentDescription="@string/action_back"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_white_arrow_back" />
@@ -45,7 +45,7 @@
                 android:id="@+id/back_action_refresh"
                 android:layout_width="@dimen/action_bar_icon_size"
                 android:layout_height="@dimen/action_bar_icon_size"
-                android:background="@drawable/style_button_ripple"
+                android:background="@drawable/style_press_ripple"
                 android:contentDescription="@string/action_back"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_white_refresh" />

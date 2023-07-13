@@ -57,18 +57,11 @@ public class SettingActivity extends BaseActivity {
             joinQQGroup(SettingPreference.getGroupKey());
         });
 
-        uiShare.setOnClickListener(v -> DeviceUnit.shareText(this, getString(R.string.app_share_description)));
+        uiShare.setOnClickListener(v -> DeviceUnit.shareText(this, SettingPreference.getShareText()));
 
         uiAbout.setOnClickListener(v -> {
-//            try {
-//                String scheme = getString(R.string.url_alipay_scheme) + URLEncoder.encode(getString(R.string.url_alipay_qrcode), "UTF-8");
-//                Uri uri = Uri.parse(scheme);
-//                Intent intent = new Intent(Intent.ACTION_VIEW);
-//                intent.setData(uri);
-//                startActivity(intent);
-//            } catch (Exception e) {
-//                ToastUnit.showShort(e.getLocalizedMessage());
-//            }
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
         });
     }
 

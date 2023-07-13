@@ -19,7 +19,7 @@
             android:id="@+id/action_nav_bar_menu"
             android:layout_width="@dimen/action_bar_icon_size"
             android:layout_height="@dimen/action_bar_icon_size"
-            android:background="@drawable/style_button_ripple"
+            android:background="@drawable/style_press_ripple"
             android:clickable="true"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_white_menu" />

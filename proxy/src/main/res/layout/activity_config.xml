@@ -15,10 +15,10 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/style_button_ripple"
+            android:background="@drawable/style_press_ripple"
             android:clickable="true"
             android:padding="3dp"
-            android:src="@drawable/ic__arrow_back_black" />
+            android:src="@drawable/ic_arrow_back_black" />
 
         <TextView
             android:layout_width="wrap_content"

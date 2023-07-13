@@ -24,7 +24,7 @@
                 android:layout_width="@dimen/action_bar_icon_size"
                 android:layout_height="@dimen/action_bar_icon_size"
                 android:layout_centerVertical="true"
-                android:background="@drawable/style_button_ripple"
+                android:background="@drawable/style_press_ripple"
                 android:clickable="true"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_white_menu" />
@@ -35,7 +35,7 @@
                 android:layout_height="@dimen/action_bar_icon_size"
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@id/config_refresh"
-                android:background="@drawable/style_button_ripple"
+                android:background="@drawable/style_press_ripple"
                 android:clickable="true"
                 android:src="@drawable/ic_white_write"
                 android:visibility="visible" />
@@ -47,7 +47,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="10dp"
-                android:background="@drawable/style_button_ripple"
+                android:background="@drawable/style_press_ripple"
                 android:clickable="true"
                 android:src="@drawable/ic_white_refresh"
                 android:visibility="visible" />
@@ -65,7 +65,7 @@
                 android:layout_width="@dimen/action_bar_icon_size"
                 android:layout_height="@dimen/action_bar_icon_size"
                 android:layout_centerVertical="true"
-                android:background="@drawable/style_button_ripple"
+                android:background="@drawable/style_press_ripple"
                 android:clickable="true"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_white_arrow_back" />
@@ -76,7 +76,7 @@
                 android:layout_height="@dimen/action_bar_icon_size"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/style_button_ripple"
+                android:background="@drawable/style_press_ripple"
                 android:clickable="true"
                 android:src="@drawable/ic_white_save" />
         </RelativeLayout>

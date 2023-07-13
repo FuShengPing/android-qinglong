@@ -27,16 +27,11 @@
         android:theme="@style/Theme.App"
         tools:ignore="DataExtractionRules"
         tools:replace="android:theme">
-
         <activity
-            android:name=".ui.activity.app.SplashActivity"
-            android:exported="true"
-            android:theme="@style/Theme.App.WhiteShadow">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:name=".ui.activity.app.AboutActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.App.WhiteShadow" />
         <activity
             android:name=".ui.activity.app.SettingActivity"
             android:exported="false"
@@ -58,6 +53,16 @@
             android:exported="false"
             android:launchMode="singleTop"
             android:theme="@style/Theme.App.WhiteShadow" />
+        <activity
+            android:name=".ui.activity.app.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.App.WhiteShadow">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

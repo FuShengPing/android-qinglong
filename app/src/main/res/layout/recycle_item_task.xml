@@ -50,7 +50,7 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginStart="10dp"
-            android:background="@drawable/style_button_ripple"
+            android:background="@drawable/style_press_ripple"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_blue_start" />
     </LinearLayout>
