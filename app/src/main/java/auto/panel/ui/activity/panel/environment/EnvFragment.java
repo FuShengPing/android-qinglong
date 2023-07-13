@@ -557,6 +557,7 @@ public class EnvFragment extends BaseFragment {
             uiPopProgress.setTextAndShow("导入变量中...");
             addEnvironments(Arrays.asList(environments));
         } catch (Exception e) {
+            dismissPopWindowProgress();
             ToastUnit.showShort("导入失败：" + e.getLocalizedMessage());
         }
     }

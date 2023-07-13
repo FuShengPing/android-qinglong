@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.io.IOException;
 import java.util.List;
 
 import auto.base.util.TextUnit;
@@ -297,6 +298,29 @@ public class ApiController {
             }
         });
     }
+
+    public static boolean addTaskSync(@NonNull String baseUrl, @NonNull String authorization, Task task) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("name", task.getName());
+        jsonObject.addProperty("command", task.getCommand());
+        jsonObject.addProperty("schedule", task.getSchedule());
+
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .addTask(authorization, body);
+
+        try {
+            Response<BaseRes> res = call.execute();
+            return res.body() != null && res.body().getCode() == 200;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
 
     public static void updateTask(@NonNull String baseUrl, @NonNull String authorization, Task task, BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();

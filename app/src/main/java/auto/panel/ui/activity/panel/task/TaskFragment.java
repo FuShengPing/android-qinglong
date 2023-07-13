@@ -23,13 +23,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -602,6 +600,7 @@ public class TaskFragment extends BaseFragment {
             if (uiPopProgress == null) {
                 uiPopProgress = PopupWindowBuilder.buildProgressWindow(requireActivity(), null);
             }
+
             uiPopProgress.setTextAndShow("加载文件中...");
             BufferedReader bufferedInputStream = new BufferedReader(new FileReader(file));
             StringBuilder stringBuilder = new StringBuilder();
@@ -611,12 +610,28 @@ public class TaskFragment extends BaseFragment {
             }
 
             uiPopProgress.setTextAndShow("解析文件中...");
-            Type type = new TypeToken<List<Task>>() {
-            }.getType();
-            List<Task> tasks = new Gson().fromJson(stringBuilder.toString(), type);
+            Task[] tasks = new Gson().fromJson(stringBuilder.toString(), Task[].class);
 
-//                netMulAddTask(tasks);
+            new Thread(() -> {
+                uiPopProgress.setTextAndShow("导入中...");
+                int index = 0;
+                int success = 0;
+                int total = tasks.length;
+
+                for (Task task : tasks) {
+                    boolean result = ApiController.addTaskSync(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), task);
+                    uiPopProgress.setTextAndShow("导入中... " + index + "/" + total);
+                    index++;
+                    if (result) {
+                        success++;
+                    }
+                }
+
+                dismissPopWindowProgress();
+                ToastUnit.showShort("导入完成 " + success + "/" + total);
+            }).start();
         } catch (Exception e) {
+            dismissPopWindowProgress();
             ToastUnit.showShort("导入失败：" + e.getLocalizedMessage());
         }
     }
