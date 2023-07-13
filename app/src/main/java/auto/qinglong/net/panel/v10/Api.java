@@ -5,6 +5,7 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.Header;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -32,6 +33,9 @@ public interface Api {
 
     @GET("api/dependencies")
     Call<DependenciesRes> getDependencies(@Header("Authorization") String authorization, @Query("searchValue") String searchValue, @Query("type") String type);
+
+    @HTTP(method = "DELETE", path = "api/dependencies", hasBody = true)
+    Call<BaseRes> deleteDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
 
     @GET("api/logs")
     Call<LogFilesRes> getLogFiles(@Header("Authorization") String authorization);

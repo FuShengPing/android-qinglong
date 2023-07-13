@@ -602,11 +602,38 @@ public class ApiController {
     }
 
     public static void reinstallDependencies(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
+        RequestBody body = buildArrayJson(keys);
 
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .reinstallDependencies(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
+                }
+                callBack.onSuccess();
+            }
+
+            @Override
+            public void onFailure(Call<BaseRes> call, Throwable t) {
+                Handler.handleRequestError(call, t, callBack);
+            }
+        });
     }
 
     public static void deleteDependencies(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
-
+        if (PanelPreference.isLowVersion()) {
+            auto.qinglong.net.panel.v10.ApiController.deleteDependencies(baseUrl, authorization, keys, callBack);
+        } else {
+            auto.qinglong.net.panel.v15.ApiController.deleteDependencies(baseUrl, authorization, keys, callBack);
+        }
     }
 
     public static void getDependenceLogContent(@NonNull String baseUrl, @NonNull String authorization, Object key, ContentCallBack callBack) {

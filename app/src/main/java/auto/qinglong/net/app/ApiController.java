@@ -76,5 +76,4 @@ public class ApiController {
 
         void onFailure(String msg);
     }
-
 }

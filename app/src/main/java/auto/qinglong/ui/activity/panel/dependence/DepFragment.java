@@ -124,7 +124,6 @@ public class DepFragment extends BaseFragment {
                 intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_DEPENDENCE);
                 intent.putExtra(CodeWebActivity.EXTRA_TITLE, dependence.getTitle());
                 intent.putExtra(CodeWebActivity.EXTRA_DEPENDENCE_ID, String.valueOf(dependence.getKey()));
-
                 startActivity(intent);
             }
 
@@ -169,7 +168,6 @@ public class DepFragment extends BaseFragment {
             public void onSuccess(List<Dependence> dependencies) {
                 itemAdapter.setData(dependencies);
                 init = true;
-                ToastUnit.showShort("加载成功：" + dependencies.size());
                 this.onEnd(true);
             }
 
@@ -192,12 +190,13 @@ public class DepFragment extends BaseFragment {
             @Override
             public void onSuccess() {
                 uiPopEdit.dismiss();
+                ToastUnit.showShort("新建成功");
                 getDependencies();
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort(msg);
+                ToastUnit.showShort("新建失败：" + msg);
             }
         });
     }
@@ -206,6 +205,7 @@ public class DepFragment extends BaseFragment {
         ApiController.reinstallDependencies(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), keys, new ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
+                ToastUnit.showShort("执行成功");
                 getDependencies();
             }
 
@@ -221,12 +221,13 @@ public class DepFragment extends BaseFragment {
         auto.qinglong.net.panel.ApiController.deleteDependencies(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), keys, new auto.qinglong.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
+                ToastUnit.showShort("执行成功");
                 getDependencies();
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort("重装失败：" + msg);
+                ToastUnit.showShort("删除失败：" + msg);
                 getDependencies();
             }
         });

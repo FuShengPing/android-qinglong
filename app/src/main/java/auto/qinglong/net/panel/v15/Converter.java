@@ -78,7 +78,8 @@ public class Converter {
             environment.setRemark(object.getRemarks());
             environment.setPosition(object.getPosition());
             environment.setStatusCode(object.getStatus());
-            environment.setTime(object.getUpdatedAt());
+            long timestamp = TimeUnit.utcToTimestamp(object.getUpdatedAt()) + 8 * 60 * 60 * 1000;
+            environment.setTime(TimeUnit.formatDatetimeA(timestamp));
             result.add(environment);
         }
 
@@ -128,7 +129,8 @@ public class Converter {
             Dependence dependence = new Dependence();
             dependence.setKey(object.getId());
             dependence.setTitle(object.getName());
-            dependence.setCreateTime(object.getCreatedAt());
+            long timestamp = TimeUnit.utcToTimestamp(object.getCreatedAt()) + 8 * 60 * 60 * 1000;
+            dependence.setCreateTime(TimeUnit.formatDatetimeA(timestamp));
             dependence.setStatusCode(object.getStatus());
             result.add(dependence);
         }

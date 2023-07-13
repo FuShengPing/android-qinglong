@@ -66,6 +66,9 @@ public interface Api {
     @POST("api/dependencies")
     Call<BaseRes> addDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
 
+    @PUT("api/dependencies/reinstall")
+    Call<BaseRes> reinstallDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
+
     @GET
     Call<DependenceLogRes> getDependenceLog(@Url String url, @Header("Authorization") String authorization);
 

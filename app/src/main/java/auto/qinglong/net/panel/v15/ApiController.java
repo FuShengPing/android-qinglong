@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.JsonObject;
 
+import java.util.List;
+
 import auto.base.util.TextUnit;
 import auto.qinglong.bean.panel.SystemConfig;
 import auto.qinglong.net.panel.BaseRes;
@@ -98,6 +100,58 @@ public class ApiController {
         });
     }
 
+    public static void getDependencies(@NonNull String baseUrl, @NonNull String authorization, String searchValue, String type, auto.qinglong.net.panel.ApiController.DependenceListCallBack callBack) {
+        Call<DependenciesRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .getDependencies(authorization, searchValue, type);
+
+        call.enqueue(new Callback<DependenciesRes>() {
+            @Override
+            public void onResponse(Call<DependenciesRes> call, Response<DependenciesRes> response) {
+                DependenciesRes res = response.body();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
+                }
+                callBack.onSuccess(Converter.convertDependencies(res.getData()));
+            }
+
+            @Override
+            public void onFailure(Call<DependenciesRes> call, Throwable t) {
+                Handler.handleRequestError(call, t, callBack);
+            }
+        });
+    }
+
+    public static void deleteDependencies(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, auto.qinglong.net.panel.ApiController.BaseCallBack callBack) {
+        RequestBody body = auto.qinglong.net.panel.ApiController.buildArrayJson(keys);
+
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .deleteDependencies(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
+                }
+                callBack.onSuccess();
+            }
+
+            @Override
+            public void onFailure(Call<BaseRes> call, Throwable t) {
+                Handler.handleRequestError(call, t, callBack);
+            }
+        });
+    }
+
     public static void getScripts(@NonNull String baseUrl, @NonNull String authorization, auto.qinglong.net.panel.ApiController.FileListCallBack callBack) {
         Call<ScriptFilesRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -143,31 +197,6 @@ public class ApiController {
 
             @Override
             public void onFailure(Call<LogFilesRes> call, Throwable t) {
-                Handler.handleRequestError(call, t, callBack);
-            }
-        });
-    }
-
-    public static void getDependencies(@NonNull String baseUrl, @NonNull String authorization, String searchValue, String type, auto.qinglong.net.panel.ApiController.DependenceListCallBack callBack) {
-        Call<DependenciesRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .getDependencies(authorization, searchValue, type);
-
-        call.enqueue(new Callback<DependenciesRes>() {
-            @Override
-            public void onResponse(Call<DependenciesRes> call, Response<DependenciesRes> response) {
-                DependenciesRes res = response.body();
-                if (Handler.handleResponse(response.code(), res, callBack)) {
-                    return;
-                }
-                callBack.onSuccess(Converter.convertDependencies(res.getData()));
-            }
-
-            @Override
-            public void onFailure(Call<DependenciesRes> call, Throwable t) {
                 Handler.handleRequestError(call, t, callBack);
             }
         });
