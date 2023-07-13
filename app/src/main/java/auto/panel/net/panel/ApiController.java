@@ -30,6 +30,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * @version 2023.06.29
  */
 public class ApiController {
+
     public static void getSystemInfo(@NonNull String baseUrl, @NonNull SystemInfoCallBack callBack) {
         Call<SystemInfoRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)

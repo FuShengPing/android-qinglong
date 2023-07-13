@@ -22,20 +22,20 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import auto.base.util.LogUnit;
 import auto.base.util.TextUnit;
 import auto.base.util.TimeUnit;
 import auto.base.util.ToastUnit;
@@ -486,6 +486,18 @@ public class EnvFragment extends BaseFragment {
         });
     }
 
+    private void dismissPopWindowEdit() {
+        if (uiPopEdit != null) {
+            uiPopEdit.dismiss();
+        }
+    }
+
+    private void dismissPopWindowProgress() {
+        if (uiPopProgress != null) {
+            uiPopProgress.dismiss();
+        }
+    }
+
     private void backupData(String fileName) {
         List<Environment> environments = mAdapter.getData();
         if (environments == null || environments.size() == 0) {
@@ -529,6 +541,7 @@ public class EnvFragment extends BaseFragment {
             if (uiPopProgress == null) {
                 uiPopProgress = PopupWindowBuilder.buildProgressWindow(requireActivity(), null);
             }
+
             uiPopProgress.setTextAndShow("加载文件中...");
             BufferedReader bufferedInputStream = new BufferedReader(new FileReader(file));
             StringBuilder stringBuilder = new StringBuilder();
@@ -536,12 +549,13 @@ public class EnvFragment extends BaseFragment {
             while ((line = bufferedInputStream.readLine()) != null) {
                 stringBuilder.append(line);
             }
+            LogUnit.log(stringBuilder);
+
             uiPopProgress.setTextAndShow("解析文件中...");
-            Type type = new TypeToken<List<Environment>>() {
-            }.getType();
-            List<Environment> environments = new Gson().fromJson(stringBuilder.toString(), type);
+            Environment[] environments = new Gson().fromJson(stringBuilder.toString(), Environment[].class);
+
             uiPopProgress.setTextAndShow("导入变量中...");
-            addEnvironments(environments);
+            addEnvironments(Arrays.asList(environments));
         } catch (Exception e) {
             ToastUnit.showShort("导入失败：" + e.getLocalizedMessage());
         }
@@ -562,7 +576,7 @@ public class EnvFragment extends BaseFragment {
         if (ids.size() == 0) {
             ToastUnit.showShort("无重复变量");
         } else {
-//            netDeleteEnvironments(ids);
+            deleteEnvironments(ids);
         }
     }
 
@@ -619,13 +633,15 @@ public class EnvFragment extends BaseFragment {
         auto.panel.net.panel.ApiController.addEnvironments(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), environments, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
-                uiPopEdit.dismiss();
+                dismissPopWindowEdit();
+                dismissPopWindowProgress();
                 ToastUnit.showShort("新建成功");
                 getEnvironments(mCurrentSearchValue);
             }
 
             @Override
             public void onFailure(String msg) {
+                dismissPopWindowProgress();
                 ToastUnit.showShort("新建失败：" + msg);
             }
         });

@@ -549,6 +549,18 @@ public class TaskFragment extends BaseFragment {
         });
     }
 
+    private void dismissPopWindowEdit() {
+        if (uiPopEdit != null) {
+            uiPopEdit.dismiss();
+        }
+    }
+
+    private void dismissPopWindowProgress() {
+        if (uiPopProgress != null) {
+            uiPopProgress.dismiss();
+        }
+    }
+
     private void backupData(String fileName) {
         List<Task> tasks = mAdapter.getData();
         if (tasks == null || tasks.size() == 0) {
@@ -755,7 +767,7 @@ public class TaskFragment extends BaseFragment {
         auto.panel.net.panel.ApiController.updateTask(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), task, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
-                uiPopEdit.dismiss();
+                dismissPopWindowEdit();
                 ToastUnit.showShort("编辑成功");
                 getTasks(null);
             }
@@ -771,7 +783,7 @@ public class TaskFragment extends BaseFragment {
         auto.panel.net.panel.ApiController.addTask(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), task, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
-                uiPopEdit.dismiss();
+                dismissPopWindowEdit();
                 ToastUnit.showShort("新建任务成功");
                 getTasks(null);
             }
