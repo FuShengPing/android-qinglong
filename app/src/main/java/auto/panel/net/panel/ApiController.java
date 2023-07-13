@@ -321,7 +321,6 @@ public class ApiController {
         }
     }
 
-
     public static void updateTask(@NonNull String baseUrl, @NonNull String authorization, Task task, BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         if (task.getKey() instanceof String) {
@@ -482,6 +481,31 @@ public class ApiController {
                 Handler.handleRequestError(call, t, callBack);
             }
         });
+    }
+
+    public static boolean addEnvironmentSync(@NonNull String baseUrl, @NonNull String authorization, Environment environment) {
+        JsonArray jsonArray = new JsonArray();
+        JsonObject jsonObject;
+        jsonObject = new JsonObject();
+        jsonObject.addProperty("name", environment.getName());
+        jsonObject.addProperty("remarks", environment.getRemark());
+        jsonObject.addProperty("value", environment.getValue());
+        jsonArray.add(jsonObject);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
+
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .addEnvironments(authorization, body);
+
+        try {
+            Response<BaseRes> res = call.execute();
+            return res.body() != null && res.body().getCode() == 200;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     public static void updateEnvironment(@NonNull String baseUrl, @NonNull String authorization, Environment environment, BaseCallBack callBack) {

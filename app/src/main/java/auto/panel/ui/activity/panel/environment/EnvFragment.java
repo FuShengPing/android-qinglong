@@ -28,14 +28,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import auto.base.util.LogUnit;
 import auto.base.util.TextUnit;
 import auto.base.util.TimeUnit;
 import auto.base.util.ToastUnit;
@@ -549,13 +547,29 @@ public class EnvFragment extends BaseFragment {
             while ((line = bufferedInputStream.readLine()) != null) {
                 stringBuilder.append(line);
             }
-            LogUnit.log(stringBuilder);
 
             uiPopProgress.setTextAndShow("解析文件中...");
             Environment[] environments = new Gson().fromJson(stringBuilder.toString(), Environment[].class);
 
-            uiPopProgress.setTextAndShow("导入变量中...");
-            addEnvironments(Arrays.asList(environments));
+            new Thread(() -> {
+                uiPopProgress.setTextAndShow("导入中...");
+                int index = 0;
+                int success = 0;
+                int total = environments.length;
+
+                for (Environment environment : environments) {
+                    boolean result = auto.panel.net.panel.ApiController.addEnvironmentSync(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), environment);
+                    uiPopProgress.setTextAndShow("导入中... " + index + "/" + total);
+                    index++;
+                    if (result) {
+                        success++;
+                    }
+                }
+
+                dismissPopWindowProgress();
+                ToastUnit.showShort("导入完成 " + success + "/" + total);
+                getEnvironments(mCurrentSearchValue);
+            }).start();
         } catch (Exception e) {
             dismissPopWindowProgress();
             ToastUnit.showShort("导入失败：" + e.getLocalizedMessage());
@@ -635,14 +649,12 @@ public class EnvFragment extends BaseFragment {
             @Override
             public void onSuccess() {
                 dismissPopWindowEdit();
-                dismissPopWindowProgress();
                 ToastUnit.showShort("新建成功");
                 getEnvironments(mCurrentSearchValue);
             }
 
             @Override
             public void onFailure(String msg) {
-                dismissPopWindowProgress();
                 ToastUnit.showShort("新建失败：" + msg);
             }
         });

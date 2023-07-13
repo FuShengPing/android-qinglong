@@ -103,10 +103,14 @@ public class Task implements Comparable<Task> {
 
     @Override
     public int compareTo(Task o) {
-        if (this.isPinned && !o.isPinned) {
+        if (this.stateCode == STATE_RUNNING && o.stateCode != STATE_RUNNING) {
+            return -1;
+        } else if (this.isPinned && !o.isPinned) {
             return -1;
         } else if (!this.isPinned && o.isPinned) {
             return 1;
+        } else if (this.stateCode != STATE_LIMIT && o.stateCode == STATE_LIMIT) {
+            return -1;
         }
 
         return o.stateCode - this.stateCode;

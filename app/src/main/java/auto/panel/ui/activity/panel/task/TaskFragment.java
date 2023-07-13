@@ -629,6 +629,7 @@ public class TaskFragment extends BaseFragment {
 
                 dismissPopWindowProgress();
                 ToastUnit.showShort("导入完成 " + success + "/" + total);
+                getTasks(mCurrentSearchValue);
             }).start();
         } catch (Exception e) {
             dismissPopWindowProgress();
