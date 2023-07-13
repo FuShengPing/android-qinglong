@@ -45,7 +45,7 @@ public class LoginLogItemAdapter extends RecyclerView.Adapter<LoginLogItemAdapte
         holder.uiPlatform.setText(loginLog.getPlatform());
         holder.uiStatus.setText(loginLog.getStatus());
         if (loginLog.getStatusCode() == LoginLog.STATUS_SUCCESS) {
-            holder.uiStatus.setTextColor(context.getColor(R.color.theme_blue_color_shadow));
+            holder.uiStatus.setTextColor(context.getColor(R.color.theme_blue_shadow));
         } else {
             holder.uiStatus.setTextColor(context.getColor(R.color.text_color_red));
         }

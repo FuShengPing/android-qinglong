@@ -11,8 +11,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00000000</color>
 
-    <color name="theme_blue_color">#2273E6</color>
-    <color name="theme_blue_color_shadow">#40a9ff</color>
+    <color name="theme_blue">#2273E6</color>
+    <color name="theme_blue_shadow">#40a9ff</color>
 
     <color name="divider">#EEEEEE</color>
     <color name="divider_heavy">#E0E0E0</color>

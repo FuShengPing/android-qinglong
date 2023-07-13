@@ -35,7 +35,7 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@color/theme_blue_color_shadow"
+            android:textColor="@color/theme_blue_shadow"
             android:textSize="17sp" />
 
     </LinearLayout>

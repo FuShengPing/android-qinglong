@@ -11,15 +11,15 @@
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00000000</color>
 
-    <color name="theme_blue_color">#2273E6</color>
-    <color name="theme_blue_color_shadow">#40a9ff</color>
+    <color name="theme_blue">#2273E6</color>
+    <color name="theme_blue_shadow">#40a9ff</color>
+    <color name="theme_white_shadow">#F5F6F8</color>
 
     <color name="divider">#EEEEEE</color>
     <color name="divider_heavy">#E0E0E0</color>
     <color name="gray_press">#4ADDDDDD</color>
     <color name="gray_icon">#8B8B8B</color>
     <color name="gray_background">#F5F6F8</color>
-    <color name="background_gray">#F5F6F8</color>
     <color name="ripple">#22000000</color>
 
     <color name="text_color_19">#191919</color>

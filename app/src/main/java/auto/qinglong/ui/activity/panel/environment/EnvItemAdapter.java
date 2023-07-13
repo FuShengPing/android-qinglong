@@ -38,7 +38,7 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
         this.data = new ArrayList<>();
         this.checkState = false;
 
-        this.colorBlue = context.getColor(R.color.theme_blue_color_shadow);
+        this.colorBlue = context.getColor(R.color.theme_blue_shadow);
         this.colorRed = context.getColor(R.color.text_color_red);
     }
 

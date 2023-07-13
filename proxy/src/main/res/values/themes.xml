@@ -1,5 +1,4 @@
 <resources>
-    <!-- Base application theme. -->
     <style name="Theme.SSH" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
@@ -10,9 +9,9 @@
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">@color/background_gray</item>
+        <item name="android:statusBarColor">@color/theme_white_shadow</item>
         <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@color/background_gray</item>
+        <item name="android:windowBackground">@color/theme_white_shadow</item>
     </style>
 
     <style name="Theme.SSH.NoActionBar">
