@@ -41,6 +41,7 @@ public class ScriptFragment extends BaseFragment {
     public static String TAG = "ScriptFragment";
 
     private Stack<List<File>> fileStack;
+    private String fileDir;
     private MenuClickListener menuClickListener;
     private ScriptAdapter adapter;
 
@@ -95,11 +96,7 @@ public class ScriptFragment extends BaseFragment {
         } else {
             fileStack.pop();
             adapter.setData(fileStack.peek());
-            if (fileStack.peek().isEmpty() || fileStack.peek().get(0).getParent().isEmpty()) {
-                uiDirTip.setText("/");
-            } else {
-                uiDirTip.setText("/" + fileStack.peek().get(0).getParent());
-            }
+            updateDir(fileStack.peek().get(0).getParent());
             return true;
         }
     }
@@ -124,7 +121,7 @@ public class ScriptFragment extends BaseFragment {
 
             @Override
             public void onMenu(View view, File file, int position) {
-                showPopMenu(view, file, position);
+                showPopItemMenu(view, file, position);
             }
         });
 
@@ -132,7 +129,7 @@ public class ScriptFragment extends BaseFragment {
 
         uiMenu.setOnClickListener(v -> menuClickListener.onMenuClick());
 
-        uiMore.setOnClickListener(this::showPopMenu);
+        uiMore.setOnClickListener(this::showPopWindowMenu);
     }
 
     private void initData() {
@@ -145,7 +142,11 @@ public class ScriptFragment extends BaseFragment {
                 getScriptFiles();
             }
         }, 1000);
+    }
 
+    private void updateDir(String dir) {
+        fileDir = dir;
+        uiDirTip.setText("/" + dir);
     }
 
     @Override
@@ -153,7 +154,7 @@ public class ScriptFragment extends BaseFragment {
         this.menuClickListener = mMenuClickListener;
     }
 
-    private void showPopMenu(View v, File file, int position) {
+    private void showPopItemMenu(View v, File file, int position) {
         PopMenuWindow popMenuWindow = new PopMenuWindow(v, Gravity.CENTER);
         popMenuWindow.addItem(new PopMenuObject("copy", "复制路径", R.drawable.ic_gray_crop_free));
         if (!file.isDir()) {
@@ -179,7 +180,7 @@ public class ScriptFragment extends BaseFragment {
         PopupWindowBuilder.buildMenuWindow(requireActivity(), popMenuWindow);
     }
 
-    private void showPopMenu(View v) {
+    private void showPopWindowMenu(View v) {
         PopMenuWindow popMenuWindow = new PopMenuWindow(v, Gravity.END);
         popMenuWindow.addItem(new PopMenuObject("add", "新建脚本", R.drawable.ic_gray_add));
         popMenuWindow.addItem(new PopMenuObject("import", "本地导入", R.drawable.ic_gray_upload));
@@ -193,7 +194,7 @@ public class ScriptFragment extends BaseFragment {
         Collections.sort(files);
         fileStack.add(files);
         adapter.setData(files);
-        uiDirTip.setText("/" + dir);
+        updateDir(dir);
     }
 
     private void getScriptFiles() {

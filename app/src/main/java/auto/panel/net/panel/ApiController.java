@@ -727,7 +727,7 @@ public class ApiController {
     public static void deleteScript(@NonNull String baseUrl, @NonNull String authorization, File file, BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("filename", file.getTitle());
-        jsonObject.addProperty("path", file.getPath());
+        jsonObject.addProperty("path", file.getParent());
         if (file.isDir()) {
             jsonObject.addProperty("type", "directory");
         } else {
