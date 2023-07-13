@@ -8,8 +8,6 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.widget.SwitchCompat;
 
-import java.net.URLEncoder;
-
 import auto.base.util.DeviceUnit;
 import auto.base.util.ToastUnit;
 import auto.qinglong.R;
@@ -25,8 +23,8 @@ public class SettingActivity extends BaseActivity {
     private SwitchCompat uiVibrateSwitch;
     private LinearLayout uiHelp;
     private LinearLayout uiIssue;
-    private LinearLayout uiDonate;
     private LinearLayout uiShare;
+    private LinearLayout uiAbout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +37,7 @@ public class SettingActivity extends BaseActivity {
         uiHelp = findViewById(R.id.app_setting_document);
         uiIssue = findViewById(R.id.app_setting_issue);
         uiShare = findViewById(R.id.app_setting_share);
-        uiDonate = findViewById(R.id.app_setting_donate);
+        uiAbout = findViewById(R.id.app_setting_about);
 
         init();
     }
@@ -55,21 +53,34 @@ public class SettingActivity extends BaseActivity {
 
         uiHelp.setOnClickListener(v -> WebUnit.open(this, getString(R.string.url_readme)));
 
-        uiIssue.setOnClickListener(v -> WebUnit.open(this, getString(R.string.url_issue)));
+        uiIssue.setOnClickListener(v -> {
+            joinQQGroup(SettingPreference.getGroupKey());
+        });
 
         uiShare.setOnClickListener(v -> DeviceUnit.shareText(this, getString(R.string.app_share_description)));
 
-        uiDonate.setOnClickListener(v -> {
-            try {
-                String scheme = getString(R.string.url_alipay_scheme) + URLEncoder.encode(getString(R.string.url_alipay_qrcode), "UTF-8");
-                Uri uri = Uri.parse(scheme);
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(uri);
-                startActivity(intent);
-            } catch (Exception e) {
-                ToastUnit.showShort(e.getLocalizedMessage());
-            }
-
+        uiAbout.setOnClickListener(v -> {
+//            try {
+//                String scheme = getString(R.string.url_alipay_scheme) + URLEncoder.encode(getString(R.string.url_alipay_qrcode), "UTF-8");
+//                Uri uri = Uri.parse(scheme);
+//                Intent intent = new Intent(Intent.ACTION_VIEW);
+//                intent.setData(uri);
+//                startActivity(intent);
+//            } catch (Exception e) {
+//                ToastUnit.showShort(e.getLocalizedMessage());
+//            }
         });
+    }
+
+    public void joinQQGroup(String key) {
+        Intent intent = new Intent();
+        intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26jump_from%3Dwebapi%26k%3D" + key));
+        // 此Flag可根据具体产品需要自定义，如设置，则在加群界面按返回，返回手Q主界面，不设置，按返回会返回到呼起产品界面
+        // intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        try {
+            startActivity(intent);
+        } catch (Exception e) {
+            ToastUnit.showShort("未安装手Q或安装的版本不支持");
+        }
     }
 }

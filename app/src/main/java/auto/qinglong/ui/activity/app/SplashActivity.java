@@ -43,7 +43,7 @@ public class SplashActivity extends BaseActivity {
             startActivity(intent);
             overridePendingTransition(R.anim.activity_alpha_enter, R.anim.activity_alpha_out);
             finish();
-        }, 750);
+        }, 500);
     }
 
     private void start() {

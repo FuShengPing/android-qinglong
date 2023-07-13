@@ -26,10 +26,11 @@
 
     <string name="app_setting_notify">更新推送</string>
     <string name="app_setting_vibrate">震动反馈</string>
-    <string name="app_setting_document">使用手册</string>
+    <string name="app_setting_document">功能介绍</string>
+    <string name="app_setting_issue">加入Q群</string>
     <string name="app_setting_donate">支持应用</string>
-    <string name="app_setting_issue">意见反馈</string>
     <string name="app_setting_share">分享应用</string>
+    <string name="app_setting_about">关于应用</string>
 
     <string name="item_login_log_time">登录时间</string>
     <string name="item_login_log_address">登录地址</string>

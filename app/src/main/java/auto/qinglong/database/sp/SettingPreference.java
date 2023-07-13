@@ -9,6 +9,7 @@ public class SettingPreference {
     private static final String NAME = "SettingPreference";
     public static final String FIELD_NOTIFY = "notify";
     public static final String FIELD_VIBRATE = "vibrate";
+    public static final String FIELD_GROUP_KEY = "groupKey";
     private static final SharedPreferences sp;
 
     static {
@@ -27,5 +28,9 @@ public class SettingPreference {
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean(field, value);
         editor.apply();
+    }
+
+    public static String getGroupKey(){
+        return sp.getString(FIELD_GROUP_KEY,"4e4W5fel2H5x7XKwYTB7PkBY46ZGXpaE");
     }
 }
