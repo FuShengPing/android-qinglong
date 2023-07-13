@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'auto.qinglong'
+    namespace 'auto.panel'
     compileSdk 32
 
     defaultConfig {
-        applicationId "auto.qinglong"
+        applicationId "auto.panel"
         minSdk 26
         targetSdk 32
         versionCode 8
