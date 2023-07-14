@@ -7,7 +7,6 @@ import android.view.MotionEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
@@ -24,12 +23,15 @@ import auto.panel.ui.BaseActivity;
 
 public class LoginActivity extends BaseActivity {
     public static final String TAG = "LoginActivity";
+    private static final int ACTION_LOGIN = 0;
+    private static final int ACTION_REGISTER = 1;
 
-    private ImageView uiLogo;
-    private Button uiConfirm;
     private EditText uiAddress;
     private EditText uiUsername;
     private EditText uiPassword;
+    private Button uiLogin;
+    private Button uiRegister;
+
     private PopProgressWindow uiPopProgress;
 
     @Override
@@ -38,11 +40,11 @@ public class LoginActivity extends BaseActivity {
 
         setContentView(R.layout.activity_login);
 
-        uiLogo = findViewById(R.id.img_logo);
-        uiConfirm = findViewById(R.id.bt_login);
         uiAddress = findViewById(R.id.et_address);
         uiUsername = findViewById(R.id.et_username);
         uiPassword = findViewById(R.id.et_password);
+        uiLogin = findViewById(R.id.bt_login);
+        uiRegister = findViewById(R.id.bt_register);
 
         init();
     }
@@ -78,50 +80,46 @@ public class LoginActivity extends BaseActivity {
         uiPassword.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 uiPassword.clearFocus();
-                uiConfirm.performClick();
+                uiLogin.performClick();
                 return true;
             }
             return false;
         });
 
-        uiConfirm.setOnClickListener(v -> {
-            if (uiPopProgress != null && uiPopProgress.isShowing()) {
+        uiLogin.setOnClickListener(v -> {
+            Account account = checkInput();
+
+            if (account == null) {
                 return;
             }
 
-            String address = uiAddress.getText().toString();
+            uiLogin.setEnabled(false);
+            uiLogin.postDelayed(() -> uiLogin.setEnabled(true), 300);
 
-            if (!address.matches("[0-9a-zA-Z.:/_-]+")) {
-                ToastUnit.showShort("地址格式错误");
-                return;
-            }
-
-            String username = uiUsername.getText().toString().trim();
-            if (username.isEmpty()) {
-                ToastUnit.showShort("账号不能为空");
-                return;
-            }
-
-            String password = uiPassword.getText().toString().trim();
-            if (password.isEmpty()) {
-                ToastUnit.showShort("密码不能为空");
-                return;
-            }
-            WindowUnit.hideKeyboard(uiPassword);
-
-            uiConfirm.setEnabled(false);
-            uiConfirm.postDelayed(() -> uiConfirm.setEnabled(true), 300);
-
-            if (uiPopProgress == null) {
-                uiPopProgress = PopupWindowBuilder.buildProgressWindow(this, () -> NetManager.cancelAllCall(getNetRequestID()));
-            }
+            buildPopWindowProgress();
             uiPopProgress.setTextAndShow("登录中...");
 
-            Account account = new Account(username, password, address, "");
             //账号存在本地则尝试旧token 避免重复登录
-            account.setToken(PanelPreference.getAuthorization(address, username, password));
+            account.setToken(PanelPreference.getAuthorization(account.getAddress(), account.getUsername(), account.getPassword()));
             //检测系统是否初始化和版本信息(延迟500ms)
-            new Handler().postDelayed(() -> querySystemInfo(account), 500);
+            new Handler().postDelayed(() -> querySystemInfo(account, ACTION_LOGIN), 500);
+        });
+
+        uiRegister.setOnClickListener(v -> {
+            Account account = checkInput();
+
+            if (account == null) {
+                return;
+            }
+
+            uiRegister.setEnabled(false);
+            uiRegister.postDelayed(() -> uiRegister.setEnabled(true), 300);
+
+            buildPopWindowProgress();
+            uiPopProgress.setTextAndShow("初始化中...");
+
+            //检测系统是否初始化和版本信息(延迟500ms)
+            new Handler().postDelayed(() -> querySystemInfo(account, ACTION_REGISTER), 500);
         });
 
         //显示之前账号
@@ -133,6 +131,43 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
+    private void buildPopWindowProgress() {
+        if (uiPopProgress == null) {
+            uiPopProgress = PopupWindowBuilder.buildProgressWindow(this, () -> NetManager.cancelAllCall(getNetRequestID()));
+        }
+    }
+
+    private void dismissProgress() {
+        if (uiPopProgress != null && uiPopProgress.isShowing()) {
+            uiPopProgress.dismiss();
+        }
+    }
+
+    private Account checkInput() {
+        if (uiPopProgress != null && uiPopProgress.isShowing()) {
+            return null;
+        }
+
+        String address = uiAddress.getText().toString();
+        String username = uiUsername.getText().toString().trim();
+        String password = uiPassword.getText().toString().trim();
+
+        if (!address.matches("[0-9a-zA-Z.:/_-]+")) {
+            ToastUnit.showShort("地址格式错误");
+            return null;
+        } else if (username.isEmpty()) {
+            ToastUnit.showShort("账号不能为空");
+            return null;
+        } else if (password.isEmpty()) {
+            ToastUnit.showShort("密码不能为空");
+            return null;
+        }
+
+        WindowUnit.hideKeyboard(uiPassword);
+
+        return new Account(username, password, address, null);
+    }
+
     /**
      * 进入主界面
      */
@@ -142,24 +177,35 @@ public class LoginActivity extends BaseActivity {
         finish();
     }
 
-    protected void querySystemInfo(Account account) {
+    protected void querySystemInfo(Account account, int action) {
         auto.panel.net.panel.ApiController.getSystemInfo(account.getBaseUrl(), new ApiController.SystemInfoCallBack() {
             @Override
             public void onSuccess(SystemInfo system) {
                 PanelPreference.setVersion(system.getVersion());
-                if (!system.isInitialized()) {
-                    uiPopProgress.dismiss();
-                    ToastUnit.showShort("系统未初始化，无法登录");
-                } else if (TextUnit.isFull(account.getToken())) {
-                    checkAccountToken(account);
+
+                if (action == ACTION_LOGIN) {
+                    if (!system.isInitialized()) {
+                        dismissProgress();
+                        ToastUnit.showShort("系统未初始化，无法登录");
+                    } else if (TextUnit.isFull(account.getToken())) {
+                        checkAccountToken(account);
+                    } else {
+                        login(account);
+                    }
                 } else {
-                    login(account);
+                    if (system.isInitialized()) {
+                        dismissProgress();
+                        ToastUnit.showShort("系统已初始化，无法注册");
+                    } else {
+                        register(account);
+                    }
                 }
+
             }
 
             @Override
             public void onFailure(String msg) {
-                uiPopProgress.dismiss();
+                dismissProgress();
                 ToastUnit.showShort(msg);
             }
         });
@@ -179,6 +225,10 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
+    protected void register(Account account) {
+
+    }
+
     protected void login(Account account) {
         auto.panel.net.panel.ApiController.login(account.getBaseUrl(), account, new auto.panel.net.panel.ApiController.LoginCallBack() {
             @Override
@@ -190,7 +240,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                uiPopProgress.dismiss();
+                dismissProgress();
                 ToastUnit.showShort(msg);
             }
         });
