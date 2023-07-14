@@ -43,7 +43,7 @@ public class SettingPreference {
     }
 
     public static String getVersionName() {
-        return sp.getString(FIELD_VERSION_NAME, "2.0");
+        return sp.getString(FIELD_VERSION_NAME, "2.0.0");
     }
 
     public static String getGroupKey() {
