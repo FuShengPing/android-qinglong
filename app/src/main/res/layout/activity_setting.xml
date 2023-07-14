@@ -103,7 +103,8 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1px"
-                            android:background="@color/divider" />
+                            android:background="@color/divider"
+                            android:visibility="gone" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -112,7 +113,8 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="vertical"
-                        android:paddingHorizontal="@dimen/action_bar_padding_horizontal">
+                        android:paddingHorizontal="@dimen/action_bar_padding_horizontal"
+                        android:visibility="gone">
 
                         <LinearLayout
                             android:layout_width="wrap_content"

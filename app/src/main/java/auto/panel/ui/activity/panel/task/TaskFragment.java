@@ -250,7 +250,6 @@ public class TaskFragment extends BaseFragment {
                 } else {
                     return;
                 }
-                VibratorUtil.vibrate(requireContext(), VibratorUtil.VIBRATE_SHORT);
                 Intent intent = new Intent(getContext(), CodeWebActivity.class);
                 intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_NAME, fileName);
                 intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_DIR, dir);
