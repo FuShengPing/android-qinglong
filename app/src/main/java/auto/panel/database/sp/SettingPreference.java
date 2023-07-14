@@ -39,7 +39,7 @@ public class SettingPreference {
     }
 
     public static int getVersionCode() {
-        return sp.getInt(FIELD_VERSION_CODE, 0);
+        return sp.getInt(FIELD_VERSION_CODE, 20);
     }
 
     public static String getVersionName() {
