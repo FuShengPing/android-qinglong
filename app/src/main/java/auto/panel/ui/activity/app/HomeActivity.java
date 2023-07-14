@@ -197,14 +197,6 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-    private void checkVersion(Version version) {
-        Version versionNow = PackageUtil.getVersion(this);
-        //若版本强制更新 即使停用更新推送仍会要求更新
-        if (version.getVersionCode() > versionNow.getVersionCode() && (version.isForce() || SettingPreference.isNotify())) {
-            showVersionNotice(version);
-        }
-    }
-
     private void showVersionNotice(Version version) {
         String content = "最新版本：" + version.getVersionName() + "\n\n";
         content += "更新时间：" + version.getUpdateTime() + "\n\n";
@@ -227,10 +219,18 @@ public class HomeActivity extends BaseActivity {
         uiPopNotice = PopupWindowBuilder.buildConfirmWindow(this, popConfirmWindow);
     }
 
+    private void checkVersion(Version version) {
+        Version versionNow = PackageUtil.getVersion(this);
+        //若版本强制更新 即使停用更新推送仍会要求更新
+        if (version.getVersionCode() > versionNow.getVersionCode() && (version.isForce() || SettingPreference.isNotify())) {
+            showVersionNotice(version);
+        }
+    }
+
     private void getVersion() {
-        ApiController.getProject(getNetRequestID());
         String uid = EncryptUtil.md5(PanelPreference.getAddress());
-        ApiController.getVersion(getNetRequestID(), uid, new ApiController.VersionCallback() {
+
+        ApiController.getVersion(uid, new ApiController.VersionCallBack() {
             @Override
             public void onSuccess(Version version) {
                 checkVersion(version);

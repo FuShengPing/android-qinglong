@@ -10,9 +10,12 @@ public class SettingPreference {
 
     public static final String FIELD_NOTIFY = "notify";
     public static final String FIELD_VIBRATE = "vibrate";
+
     public static final String FIELD_VERSION_CODE = "versionCode";
     public static final String FIELD_VERSION_NAME = "versionName";
     public static final String FIELD_DOWNLOAD_URL = "downloadUrl";
+
+    public static final String FIELD_DOCUMENT_URL = "documentUrl";
     public static final String FIELD_GITEE_URL = "giteeUrl";
     public static final String FIELD_GITHUB_URL = "githubUrl";
     public static final String FIELD_GROUP_KEY = "groupKey";
@@ -52,6 +55,10 @@ public class SettingPreference {
 
     public static String getShareText() {
         return sp.getString(FIELD_SHARE_TEXT, "青龙面板APP下载地址：https://gitee.com/wsfsp4/QingLong，QQ交流群：309836858");
+    }
+
+    public static String getDocumentUrl(){
+        return sp.getString(FIELD_GITEE_URL, "https://gitee.com/wsfsp4/QingLong/blob/master/README.md");
     }
 
     public static String getGiteeUrl() {

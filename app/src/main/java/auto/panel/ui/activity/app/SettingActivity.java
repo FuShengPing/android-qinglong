@@ -21,7 +21,7 @@ public class SettingActivity extends BaseActivity {
     private ImageView uiBack;
     private SwitchCompat uiNotifySwitch;
     private SwitchCompat uiVibrateSwitch;
-    private LinearLayout uiHelp;
+    private LinearLayout uiDocument;
     private LinearLayout uiIssue;
     private LinearLayout uiShare;
     private LinearLayout uiAbout;
@@ -34,7 +34,7 @@ public class SettingActivity extends BaseActivity {
         uiBack = findViewById(R.id.bar_back);
         uiNotifySwitch = findViewById(R.id.app_setting_notify_switch);
         uiVibrateSwitch = findViewById(R.id.app_setting_vibrate_switch);
-        uiHelp = findViewById(R.id.app_setting_document);
+        uiDocument = findViewById(R.id.app_setting_document);
         uiIssue = findViewById(R.id.app_setting_issue);
         uiShare = findViewById(R.id.app_setting_share);
         uiAbout = findViewById(R.id.app_setting_about);
@@ -51,11 +51,9 @@ public class SettingActivity extends BaseActivity {
         uiVibrateSwitch.setChecked(SettingPreference.isVibrate());
         uiVibrateSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> SettingPreference.setBoolean(SettingPreference.FIELD_VIBRATE, isChecked));
 
-        uiHelp.setOnClickListener(v -> WebUnit.open(this, getString(R.string.url_readme)));
+        uiDocument.setOnClickListener(v -> WebUnit.open(this, SettingPreference.getDocumentUrl()));
 
-        uiIssue.setOnClickListener(v -> {
-            joinQQGroup(SettingPreference.getGroupKey());
-        });
+        uiIssue.setOnClickListener(v -> joinQQGroup(SettingPreference.getGroupKey()));
 
         uiShare.setOnClickListener(v -> DeviceUnit.shareText(this, SettingPreference.getShareText()));
 
