@@ -5,8 +5,8 @@
   "isForce": true,
   "downloadUrl": "https://gitee.com/wsfsp4/QingLong/releases/download/V1.7/app-release.apk",
   "updateDetail": [
-    "(1)修复域名登录异常问题",
-    "(2)新增AI助手模块",
+    "(1)兼容高版本面板",
+    "(2)支持初始化面板",
     "(3)优化代码和其他细节"
   ]
 }

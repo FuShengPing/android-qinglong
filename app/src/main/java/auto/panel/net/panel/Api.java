@@ -89,4 +89,7 @@ public interface Api {
 
     @PUT("api/user")
     Call<BaseRes> updateAccount(@Header("Authorization") String authorization, @Body RequestBody body);
+
+    @PUT("api/user/init")
+    Call<BaseRes> initAccount(@Body RequestBody body);
 }

@@ -200,7 +200,6 @@ public class LoginActivity extends BaseActivity {
                         register(account);
                     }
                 }
-
             }
 
             @Override
@@ -226,7 +225,18 @@ public class LoginActivity extends BaseActivity {
     }
 
     protected void register(Account account) {
+        ApiController.initAccount(account.getBaseUrl(), account, new ApiController.BaseCallBack() {
+            @Override
+            public void onSuccess() {
+                login(account);
+            }
 
+            @Override
+            public void onFailure(String msg) {
+                dismissProgress();
+                ToastUnit.showShort("初始化失败：" + msg);
+            }
+        });
     }
 
     protected void login(Account account) {
