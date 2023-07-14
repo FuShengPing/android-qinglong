@@ -73,16 +73,38 @@
             android:textColor="@color/text_color_49"
             android:textSize="18sp" />
 
-        <Button
-            android:id="@+id/bt_confirm"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/style_button_blue"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:paddingVertical="8dp"
-            android:text="@string/action_login"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/bt_login"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/style_button_blue"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingVertical="8dp"
+                android:text="@string/action_login"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/bt_register"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/style_button_white"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingVertical="8dp"
+                android:text="@string/action_register"
+                android:textColor="@color/text_color_49"
+                android:textSize="18sp" />
+        </LinearLayout>
+
     </LinearLayout>
 </RelativeLayout>

@@ -38,7 +38,7 @@ public class EditText extends android.widget.EditText {
     private void init() {
         setBackgroundResource(R.drawable.style_edit_text_border_gray_blue);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            setTextCursorDrawable(R.drawable.style_edit__cursor_blue);
+            setTextCursorDrawable(R.drawable.style_edit_cursor_blue);
         }
     }
 }

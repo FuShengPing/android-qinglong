@@ -53,13 +53,14 @@
     <string name="action_refresh">刷新</string>
     <string name="action_save">保存</string>
     <string name="action_save_space">保 存</string>
-    <string name="action_login">登录</string>
     <string name="action_load">加载</string>
     <string name="action_read">读取</string>
     <string name="action_import">导入</string>
     <string name="action_new_task">新建任务</string>
     <string name="action_edit_task">编辑任务</string>
     <string name="action_bulk_operation">批量操作</string>
+    <string name="action_login">登录</string>
+    <string name="action_register">注册</string>
     <!-- 提示 -->
     <string name="tip_loading">加载中…</string>
     <string name="tip_load_success">加载成功</string>

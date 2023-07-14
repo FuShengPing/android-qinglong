@@ -77,7 +77,7 @@ public class MyEditText extends LinearLayout {
         mEditText.setPadding(10, 15, 10, 15);
         mEditText.setBackgroundResource(R.drawable.style_edit_text_border_gray_blue);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            mEditText.setTextCursorDrawable(R.drawable.style_edit__cursor_blue);
+            mEditText.setTextCursorDrawable(R.drawable.style_edit_cursor_blue);
         }
 
         mEditText.setSelected(true);

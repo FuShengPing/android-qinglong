@@ -39,7 +39,7 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
 
         uiLogo = findViewById(R.id.img_logo);
-        uiConfirm = findViewById(R.id.bt_confirm);
+        uiConfirm = findViewById(R.id.bt_login);
         uiAddress = findViewById(R.id.et_address);
         uiUsername = findViewById(R.id.et_username);
         uiPassword = findViewById(R.id.et_password);

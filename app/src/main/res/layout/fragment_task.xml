@@ -82,7 +82,7 @@
                 android:paddingHorizontal="5dp"
                 android:singleLine="true"
                 android:textColor="@color/text_color_49"
-                android:textCursorDrawable="@drawable/style_edit__cursor_blue"
+                android:textCursorDrawable="@drawable/style_edit_cursor_blue"
                 android:textSize="17sp" />
 
             <ImageView
