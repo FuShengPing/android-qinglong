@@ -1,7 +1,6 @@
 package auto.panel.ui.activity.app;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,6 +36,7 @@ import auto.panel.ui.activity.panel.script.ScriptFragment;
 import auto.panel.ui.activity.panel.setting.SettingFragment;
 import auto.panel.ui.activity.panel.task.TaskFragment;
 import auto.panel.utils.EncryptUtil;
+import auto.panel.utils.PackageUtil;
 import auto.panel.utils.WebUnit;
 
 public class HomeActivity extends BaseActivity {
@@ -68,18 +68,6 @@ public class HomeActivity extends BaseActivity {
     }
 
     @Override
-    protected void init() {
-        //变量初始化
-        mMenuClickListener = () -> uiDrawer.openDrawer(uiDrawerLeft);
-        //导航栏初始化
-        initDrawerBar();
-        //初始化第一帧页面
-        showFragment(TaskFragment.class);
-        //版本检查
-        netGetVersion();
-    }
-
-    @Override
     public void onBackPressed() {
         if (!mCurrentFragment.onDispatchBackKey()) {
             long current = System.currentTimeMillis();
@@ -103,6 +91,18 @@ public class HomeActivity extends BaseActivity {
             return false;
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    protected void init() {
+        //变量初始化
+        mMenuClickListener = () -> uiDrawer.openDrawer(uiDrawerLeft);
+        //导航栏初始化
+        initDrawerBar();
+        //初始化第一帧页面
+        showFragment(TaskFragment.class);
+        //版本检查
+        getVersion();
     }
 
     private void initDrawerBar() {
@@ -198,14 +198,10 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void checkVersion(Version version) {
-        try {
-            int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-            //若版本强制更新 即使停用更新推送仍会要求更新
-            if (version.getVersionCode() > versionCode && (version.isForce() || SettingPreference.isNotify())) {
-                showVersionNotice(version);
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+        Version versionNow = PackageUtil.getVersion(this);
+        //若版本强制更新 即使停用更新推送仍会要求更新
+        if (version.getVersionCode() > versionNow.getVersionCode() && (version.isForce() || SettingPreference.isNotify())) {
+            showVersionNotice(version);
         }
     }
 
@@ -231,7 +227,7 @@ public class HomeActivity extends BaseActivity {
         uiPopNotice = PopupWindowBuilder.buildConfirmWindow(this, popConfirmWindow);
     }
 
-    private void netGetVersion() {
+    private void getVersion() {
         ApiController.getProject(getNetRequestID());
         String uid = EncryptUtil.md5(PanelPreference.getAddress());
         ApiController.getVersion(getNetRequestID(), uid, new ApiController.VersionCallback() {

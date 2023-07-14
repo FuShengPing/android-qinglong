@@ -39,7 +39,6 @@ import java.util.Set;
 import auto.base.util.TextUnit;
 import auto.base.util.TimeUnit;
 import auto.base.util.ToastUnit;
-import auto.base.util.VibratorUtil;
 import auto.base.util.WindowUnit;
 import auto.base.view.popup.LocalFileAdapter;
 import auto.base.view.popup.PopEditObject;
