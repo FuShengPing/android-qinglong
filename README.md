@@ -67,14 +67,14 @@ docker容器可视化操作，提供容器操作、运行查看等功能。
 网络开发工具，提供内网穿透、流量转发功能。
 
 ## 界面预览
-
-<img src="https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/preview_1.jpg" alt="模块导航" width="25%">  
-<img src="https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/preview_2.jpg" alt="代码编辑" width="25%">  
-<img src="https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/preview_3.jpg" alt="系统设置" width="25%">  
+<img src="https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/p1.jpg" alt="登录页面" width="22%"> 
+<img src="https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/p2.jpg" alt="模块导航" width="22%">  
+<img src="https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/p3.jpg" alt="代码编辑" width="22%">  
+<img src="https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/p4.jpg" alt="系统设置" width="22%">  
 
 ## 下载地址
 
-[最新版本](https://gitee.com/wsfsp4/QingLong/releases/tag/V1.6)
+[最新版本](https://gitee.com/wsfsp4/QingLong/releases/tag/V2.0)
 
 [历史版本](https://gitee.com/wsfsp4/QingLong/releases)
 
@@ -82,7 +82,8 @@ docker容器可视化操作，提供容器操作、运行查看等功能。
 ## 交流反馈
 
 如果你在使用过程中发现Bug或者有功能需求请创建Issue。  
-欢迎加入QQ交流群：**309836858**，可以获取到最新的软件资讯和最快的问题反馈！
+欢迎加入QQ交流群：**309836858**，可以获取到最新的软件资讯和最快的问题反馈！  
+<img src="https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/group.jpg" alt="QQ群" width="25%">
 
 ## 支持项目
 
