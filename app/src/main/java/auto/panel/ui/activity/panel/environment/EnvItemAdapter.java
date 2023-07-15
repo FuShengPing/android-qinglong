@@ -190,7 +190,6 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
             uiTime = itemView.findViewById(R.id.env_create_time);
         }
     }
-
 }
 
 

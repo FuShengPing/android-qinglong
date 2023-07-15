@@ -14,7 +14,6 @@ import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -178,11 +177,12 @@ public class EnvFragment extends BaseFragment {
 
     @Override
     public void init() {
-        ItemMoveHelper itemMoveHelper = new ItemMoveHelper(mAdapter);
-        new ItemTouchHelper(itemMoveHelper).attachToRecyclerView(uiRecycler);
-
         //导航栏
         uiNavMenu.setOnClickListener(v -> mMenuClickListener.onMenuClick());
+
+        //列表项目移动
+//        ItemMoveHelper itemMoveHelper = new ItemMoveHelper(mAdapter);
+//        new ItemTouchHelper(itemMoveHelper).attachToRecyclerView(uiRecycler);
 
         //列表操作接口
         mAdapter.setItemInterface(new EnvItemAdapter.ItemActionListener() {
