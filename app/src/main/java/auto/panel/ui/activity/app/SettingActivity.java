@@ -11,8 +11,12 @@ import androidx.appcompat.widget.SwitchCompat;
 import auto.base.util.DeviceUnit;
 import auto.base.util.ToastUnit;
 import auto.panel.R;
+import auto.panel.bean.app.Config;
+import auto.panel.database.sp.PanelPreference;
 import auto.panel.database.sp.SettingPreference;
+import auto.panel.net.app.ApiController;
 import auto.panel.ui.BaseActivity;
+import auto.panel.utils.EncryptUtil;
 import auto.panel.utils.WebUnit;
 
 public class SettingActivity extends BaseActivity {
@@ -42,12 +46,21 @@ public class SettingActivity extends BaseActivity {
         init();
     }
 
+    private void onUpdateConfig(Config config) {
+        uiDocument.setOnClickListener(v -> WebUnit.open(this, config.getDocumentUrl()));
+
+        uiIssue.setOnClickListener(v -> joinQQGroup(config.getGroupKey()));
+
+        uiShare.setOnClickListener(v -> DeviceUnit.shareText(this, config.getShareText()));
+    }
+
     @Override
     protected void init() {
         uiBack.setOnClickListener(v -> finish());
 
         uiNotifySwitch.setChecked(SettingPreference.isNotify());
         uiNotifySwitch.setOnCheckedChangeListener((buttonView, isChecked) -> SettingPreference.setBoolean(SettingPreference.FIELD_NOTIFY, isChecked));
+
         uiVibrateSwitch.setChecked(SettingPreference.isVibrate());
         uiVibrateSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> SettingPreference.setBoolean(SettingPreference.FIELD_VIBRATE, isChecked));
 
@@ -61,9 +74,11 @@ public class SettingActivity extends BaseActivity {
             Intent intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
         });
+
+        getConfig();
     }
 
-    public void joinQQGroup(String key) {
+    private void joinQQGroup(String key) {
         Intent intent = new Intent();
         intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26jump_from%3Dwebapi%26k%3D" + key));
         // 此Flag可根据具体产品需要自定义，如设置，则在加群界面按返回，返回手Q主界面，不设置，按返回会返回到呼起产品界面
@@ -73,5 +88,14 @@ public class SettingActivity extends BaseActivity {
         } catch (Exception e) {
             ToastUnit.showShort("未安装手Q或安装的版本不支持");
         }
+    }
+
+    private void getConfig() {
+        String uid = EncryptUtil.md5(PanelPreference.getAddress());
+
+        ApiController.getConfig(uid, config -> {
+            onUpdateConfig(config);
+            SettingPreference.updateConfig(config);
+        });
     }
 }

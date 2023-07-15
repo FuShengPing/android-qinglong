@@ -72,15 +72,19 @@ public class ApiController {
         });
     }
 
-    public interface VersionCallBack {
-        void onSuccess(Version version);
+    public interface BaseCallBack {
+        default void onSuccess() {
+        }
 
-        void onFailure(String msg);
+        default void onFailure(String msg) {
+        }
     }
 
-    public interface ConfigCallBack {
-        void onSuccess(Config config);
+    public interface VersionCallBack extends BaseCallBack {
+        void onSuccess(Version version);
+    }
 
-        void onFailure(String msg);
+    public interface ConfigCallBack extends BaseCallBack {
+        void onSuccess(Config config);
     }
 }

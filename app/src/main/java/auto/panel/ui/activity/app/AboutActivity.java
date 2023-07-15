@@ -42,8 +42,8 @@ public class AboutActivity extends BaseActivity {
 
         uiVersionNow.setText("Version " + version.getVersionName());
 
-        if (SettingPreference.getVersionCode() > version.getVersionCode()) {
-            uiVersionNew.setText("New " + SettingPreference.getVersionName());
+        if (SettingPreference.getNewVersionCode() > version.getVersionCode()) {
+            uiVersionNew.setText("New " + SettingPreference.getNewVersionName());
             uiVersionNew.setOnClickListener(v -> WebUnit.open(this, SettingPreference.getDownloadUrl()));
         } else {
             uiVersionNew.setVisibility(View.INVISIBLE);

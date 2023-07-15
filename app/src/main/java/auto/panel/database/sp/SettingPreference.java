@@ -9,14 +9,14 @@ import auto.panel.bean.app.Version;
 
 public class SettingPreference {
     private static final String NAME = "SettingPreference";
-
+    //
     public static final String FIELD_NOTIFY = "notify";
     public static final String FIELD_VIBRATE = "vibrate";
-
+    //
     public static final String FIELD_VERSION_CODE = "versionCode";
     public static final String FIELD_VERSION_NAME = "versionName";
     public static final String FIELD_DOWNLOAD_URL = "downloadUrl";
-
+    //
     public static final String FIELD_DOCUMENT_URL = "documentUrl";
     public static final String FIELD_GITEE_URL = "giteeUrl";
     public static final String FIELD_GITHUB_URL = "githubUrl";
@@ -30,11 +30,27 @@ public class SettingPreference {
     }
 
     public static void updateVersion(Version version) {
-
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(FIELD_VERSION_NAME, version.getVersionName());
+        editor.putString(FIELD_DOWNLOAD_URL, version.getDownloadUrl());
+        editor.putInt(FIELD_VERSION_CODE, version.getVersionCode());
+        editor.apply();
     }
 
     public static void updateConfig(Config config) {
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(FIELD_DOCUMENT_URL, config.getDocumentUrl());
+        editor.putString(FIELD_GROUP_KEY, config.getGroupKey());
+        editor.putString(FIELD_GITEE_URL, config.getGiteeUrl());
+        editor.putString(FIELD_GITHUB_URL, config.getGithubUrl());
+        editor.putString(FIELD_SHARE_TEXT, config.getShareText());
+        editor.apply();
+    }
 
+    public static void setBoolean(String field, boolean value) {
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean(field, value);
+        editor.apply();
     }
 
     public static boolean isNotify() {
@@ -45,17 +61,11 @@ public class SettingPreference {
         return sp.getBoolean(FIELD_VIBRATE, false);
     }
 
-    public static void setBoolean(String field, boolean value) {
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putBoolean(field, value);
-        editor.apply();
+    public static int getNewVersionCode() {
+        return sp.getInt(FIELD_VERSION_CODE, 9);
     }
 
-    public static int getVersionCode() {
-        return sp.getInt(FIELD_VERSION_CODE, 20);
-    }
-
-    public static String getVersionName() {
+    public static String getNewVersionName() {
         return sp.getString(FIELD_VERSION_NAME, "2.0.0");
     }
 

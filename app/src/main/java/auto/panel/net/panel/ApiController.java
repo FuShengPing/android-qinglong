@@ -920,7 +920,6 @@ public class ApiController {
         });
     }
 
-
     private static void getFileContent(@NonNull String baseUrl, @NonNull String authorization, String path, ContentCallBack callBack) {
         Call<FileContentRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -958,6 +957,14 @@ public class ApiController {
         return RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
     }
 
+    public interface BaseCallBack {
+        default void onSuccess() {
+        }
+
+        default void onFailure(String msg) {
+        }
+    }
+
     public interface SystemInfoCallBack extends BaseCallBack {
         void onSuccess(SystemInfo system);
     }
@@ -992,13 +999,6 @@ public class ApiController {
 
     public interface SystemConfigCallBack extends BaseCallBack {
         void onSuccess(SystemConfig config);
-    }
-
-    public interface BaseCallBack {
-        default void onSuccess() {
-        }
-
-        void onFailure(String msg);
     }
 }
 
