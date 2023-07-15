@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import auto.base.BaseApplication;
+import auto.panel.bean.app.Config;
+import auto.panel.bean.app.Version;
 
 public class SettingPreference {
     private static final String NAME = "SettingPreference";
@@ -25,6 +27,14 @@ public class SettingPreference {
 
     static {
         sp = BaseApplication.getContext().getSharedPreferences(NAME, Context.MODE_PRIVATE);
+    }
+
+    public static void updateVersion(Version version) {
+
+    }
+
+    public static void updateConfig(Config config) {
+
     }
 
     public static boolean isNotify() {
@@ -57,7 +67,7 @@ public class SettingPreference {
         return sp.getString(FIELD_SHARE_TEXT, "青龙面板APP下载地址：https://gitee.com/wsfsp4/QingLong，QQ交流群：309836858");
     }
 
-    public static String getDocumentUrl(){
+    public static String getDocumentUrl() {
         return sp.getString(FIELD_GITEE_URL, "https://gitee.com/wsfsp4/QingLong/blob/master/README.md");
     }
 

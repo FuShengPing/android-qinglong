@@ -4,12 +4,11 @@ import java.util.List;
 
 public class Version {
     private int versionCode;
+    private int minVersionCode;
     private String versionName;
     private String updateTime;
     private String downloadUrl;
     private List<String> updateDetail;
-    private boolean isForce;
-
 
     public int getVersionCode() {
         return versionCode;
@@ -51,11 +50,11 @@ public class Version {
         this.updateDetail = updateDetail;
     }
 
-    public boolean isForce() {
-        return isForce;
+    public int getMinVersionCode() {
+        return minVersionCode;
     }
 
-    public void setForce(boolean force) {
-        isForce = force;
+    public void setMinVersionCode(int minVersionCode) {
+        this.minVersionCode = minVersionCode;
     }
 }

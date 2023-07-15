@@ -197,7 +197,7 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-    private void showVersionNotice(Version version) {
+    private void showUpdateNotice(Version version, boolean force) {
         String content = "最新版本：" + version.getVersionName() + "\n\n";
         content += "更新时间：" + version.getUpdateTime() + "\n\n";
         content += TextUnit.join(version.getUpdateDetail(), "\n\n");
@@ -208,9 +208,9 @@ public class HomeActivity extends BaseActivity {
         popConfirmWindow.setOnActionListener(isConfirm -> {
             if (isConfirm) {
                 WebUnit.open(this, version.getDownloadUrl());
-                return !version.isForce();
+                return !force;
             } else {
-                if (version.isForce()) {
+                if (force) {
                     finish();
                 }
                 return true;
@@ -222,8 +222,10 @@ public class HomeActivity extends BaseActivity {
     private void checkVersion(Version version) {
         Version versionNow = PackageUtil.getVersion(this);
         //若版本强制更新 即使停用更新推送仍会要求更新
-        if (version.getVersionCode() > versionNow.getVersionCode() && (version.isForce() || SettingPreference.isNotify())) {
-            showVersionNotice(version);
+        if (version.getMinVersionCode() > versionNow.getVersionCode()) {
+            showUpdateNotice(version, true);
+        } else if (version.getVersionCode() > versionNow.getVersionCode() && SettingPreference.isNotify()) {
+            showUpdateNotice(version, false);
         }
     }
 
@@ -233,12 +235,13 @@ public class HomeActivity extends BaseActivity {
         ApiController.getVersion(uid, new ApiController.VersionCallBack() {
             @Override
             public void onSuccess(Version version) {
+                SettingPreference.updateVersion(version);
                 checkVersion(version);
             }
 
             @Override
             public void onFailure(String msg) {
-                LogUnit.log(TAG, msg);
+                LogUnit.log(msg);
             }
         });
     }
