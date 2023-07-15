@@ -4,15 +4,15 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "auto.qinglong",
+  "applicationId": "auto.panel",
   "variantName": "release",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 8,
-      "versionName": "1.7",
+      "versionCode": 9,
+      "versionName": "2.0.0",
       "outputFile": "app-release.apk"
     }
   ],
