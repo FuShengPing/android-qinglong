@@ -17,14 +17,18 @@ public class Converter {
             return result;
         }
 
-        for (LoginLogsRes.LoginLogObject object : objects) {
-            LoginLog loginLog = new LoginLog();
-            loginLog.setAddress(object.getAddress());
-            loginLog.setIp(object.getIp());
-            loginLog.setPlatform(object.getPlatform());
-            loginLog.setTime(TimeUnit.formatDatetimeA(object.getTimestamp()));
-            loginLog.setStatusCode(object.getStatus());
-            result.add(loginLog);
+        try {
+            for (LoginLogsRes.LoginLogObject object : objects) {
+                LoginLog loginLog = new LoginLog();
+                loginLog.setAddress(object.getAddress());
+                loginLog.setIp(object.getIp());
+                loginLog.setPlatform(object.getPlatform());
+                loginLog.setTime(TimeUnit.formatDatetimeA(object.getTimestamp()));
+                loginLog.setStatusCode(object.getStatus());
+                result.add(loginLog);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return result;

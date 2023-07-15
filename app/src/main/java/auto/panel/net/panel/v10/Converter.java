@@ -23,45 +23,50 @@ public class Converter {
             return result;
         }
 
-        for (TasksRes.TaskObject object : objects) {
-            Task task = new Task();
-            task.setKey(object.getId());
-            task.setName(object.getName());
-            task.setPinned(object.getIsPinned() == 1);
-            task.setCommand(object.getCommand());
-            task.setSchedule(object.getSchedule());
-            //任务上次执行时间
-            if (object.getLastExecutionTime() > 0) {
-                task.setLastExecuteTime(TimeUnit.formatDatetimeA(object.getLastExecutionTime() * 1000));
-            } else {
-                task.setLastExecuteTime("--");
+        try {
+            for (TasksRes.TaskObject object : objects) {
+                Task task = new Task();
+                task.setKey(object.getId());
+                task.setName(object.getName());
+                task.setPinned(object.getIsPinned() == 1);
+                task.setCommand(object.getCommand());
+                task.setSchedule(object.getSchedule());
+                //任务上次执行时间
+                if (object.getLastExecutionTime() > 0) {
+                    task.setLastExecuteTime(TimeUnit.formatDatetimeA(object.getLastExecutionTime() * 1000));
+                } else {
+                    task.setLastExecuteTime("--");
+                }
+                //任务上次执行时长
+                if (object.getLastRunningTime() >= 60) {
+                    task.setLastRunningTime(String.format(Locale.CHINA, "%d分%d秒", object.getLastRunningTime() / 60, object.getLastRunningTime() % 60));
+                } else if (object.getLastRunningTime() > 0) {
+                    task.setLastRunningTime(String.format(Locale.CHINA, "%d秒", object.getLastRunningTime()));
+                } else {
+                    task.setLastRunningTime("--");
+                }
+                //任务下次执行时间
+                task.setNextExecuteTime(CronUnit.nextExecutionTime(object.getSchedule(), "--"));
+                // 任务状态
+                if (object.getStatus() == 0) {
+                    task.setState("运行中");
+                    task.setStateCode(Task.STATE_RUNNING);
+                } else if (object.getStatus() == 3) {
+                    task.setState("等待中");
+                    task.setStateCode(Task.STATE_WAITING);
+                } else if (object.getIsDisabled() == 1) {
+                    task.setState("已禁止");
+                    task.setStateCode(Task.STATE_LIMIT);
+                } else {
+                    task.setState("空闲中");
+                    task.setStateCode(Task.STATE_FREE);
+                }
+                result.add(task);
             }
-            //任务上次执行时长
-            if (object.getLastRunningTime() >= 60) {
-                task.setLastRunningTime(String.format(Locale.CHINA, "%d分%d秒", object.getLastRunningTime() / 60, object.getLastRunningTime() % 60));
-            } else if (object.getLastRunningTime() > 0) {
-                task.setLastRunningTime(String.format(Locale.CHINA, "%d秒", object.getLastRunningTime()));
-            } else {
-                task.setLastRunningTime("--");
-            }
-            //任务下次执行时间
-            task.setNextExecuteTime(CronUnit.nextExecutionTime(object.getSchedule(), "--"));
-            // 任务状态
-            if (object.getStatus() == 0) {
-                task.setState("运行中");
-                task.setStateCode(Task.STATE_RUNNING);
-            } else if (object.getStatus() == 3) {
-                task.setState("等待中");
-                task.setStateCode(Task.STATE_WAITING);
-            } else if (object.getIsDisabled() == 1) {
-                task.setState("已禁止");
-                task.setStateCode(Task.STATE_LIMIT);
-            } else {
-                task.setState("空闲中");
-                task.setStateCode(Task.STATE_FREE);
-            }
-            result.add(task);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
         return result;
     }
 
@@ -71,16 +76,20 @@ public class Converter {
             return result;
         }
 
-        for (EnvironmentsRes.EnvironmentObject object : objects) {
-            Environment environment = new Environment();
-            environment.setKey(object.getId());
-            environment.setName(object.getName());
-            environment.setValue(object.getValue());
-            environment.setRemark(object.getRemarks());
-            environment.setPosition(object.getPosition());
-            environment.setStatusCode(object.getStatus());
-            environment.setTime(TimeUnit.formatDatetimeA(object.getCreated()));
-            result.add(environment);
+        try {
+            for (EnvironmentsRes.EnvironmentObject object : objects) {
+                Environment environment = new Environment();
+                environment.setKey(object.getId());
+                environment.setName(object.getName());
+                environment.setValue(object.getValue());
+                environment.setRemark(object.getRemarks());
+                environment.setPosition(object.getPosition());
+                environment.setStatusCode(object.getStatus());
+                environment.setTime(TimeUnit.formatDatetimeA(object.getCreated()));
+                result.add(environment);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return result;
@@ -92,26 +101,30 @@ public class Converter {
             return result;
         }
 
-        for (LogFilesRes.FileObject object : objects) {
-            File logFile = new File();
-            logFile.setTitle(object.getName());
-            logFile.setDir(object.isDir());
-            logFile.setParent("");
-            logFile.setPath(object.getName());
+        try {
+            for (LogFilesRes.FileObject object : objects) {
+                File logFile = new File();
+                logFile.setTitle(object.getName());
+                logFile.setDir(object.isDir());
+                logFile.setParent("");
+                logFile.setPath(object.getName());
 
-            if (object.isDir()) {
-                List<File> children = new ArrayList<>();
-                for (String name : object.getFiles()) {
-                    File child = new File();
-                    child.setDir(false);
-                    child.setTitle(name);
-                    child.setParent(object.getName());
-                    child.setPath(object.getName() + "/" + name);
-                    children.add(child);
+                if (object.isDir()) {
+                    List<File> children = new ArrayList<>();
+                    for (String name : object.getFiles()) {
+                        File child = new File();
+                        child.setDir(false);
+                        child.setTitle(name);
+                        child.setParent(object.getName());
+                        child.setPath(object.getName() + "/" + name);
+                        children.add(child);
+                    }
+                    logFile.setChildren(children);
                 }
-                logFile.setChildren(children);
+                result.add(logFile);
             }
-            result.add(logFile);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return result;
@@ -123,13 +136,17 @@ public class Converter {
             return result;
         }
 
-        for (DependenciesRes.DependenceObject object : objects) {
-            Dependence dependence = new Dependence();
-            dependence.setKey(object.getId());
-            dependence.setTitle(object.getName());
-            dependence.setCreateTime(TimeUnit.formatDatetimeA(object.getCreated()));
-            dependence.setStatusCode(object.getStatus());
-            result.add(dependence);
+        try {
+            for (DependenciesRes.DependenceObject object : objects) {
+                Dependence dependence = new Dependence();
+                dependence.setKey(object.getId());
+                dependence.setTitle(object.getName());
+                dependence.setCreateTime(TimeUnit.formatDatetimeA(object.getCreated()));
+                dependence.setStatusCode(object.getStatus());
+                result.add(dependence);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return result;
@@ -140,26 +157,38 @@ public class Converter {
         if (objects == null || objects.isEmpty()) {
             return result;
         }
-        for (ScriptFilesRes.FileObject object : objects) {
-            File file = new File();
-            file.setTitle(object.getTitle());
-            file.setDir(object.isDir());
-            file.setParent("");
-            file.setCreateTime(TimeUnit.formatDatetimeA((long) object.getMtime()));
-            file.setPath(object.getTitle());
 
-            if (object.isDir()) {
-                file.setChildren(buildChildren(file.getPath(), object.getChildren()));
+        try {
+            for (ScriptFilesRes.FileObject object : objects) {
+                File file = new File();
+                file.setTitle(object.getTitle());
+                file.setDir(object.isDir());
+                file.setParent("");
+                file.setCreateTime(TimeUnit.formatDatetimeA((long) object.getMtime()));
+                file.setPath(object.getTitle());
+
+                if (object.isDir()) {
+                    file.setChildren(buildChildren(file.getPath(), object.getChildren()));
+                }
+
+                result.add(file);
             }
-
-            result.add(file);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
         return result;
     }
 
     public static SystemConfig convertSystemConfig(SystemConfigRes.SystemConfigObject object) {
         SystemConfig config = new SystemConfig();
-        config.setLogRemoveFrequency(object.getFrequency());
+
+        try {
+            config.setLogRemoveFrequency(object.getFrequency());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return config;
     }
 
@@ -169,20 +198,25 @@ public class Converter {
             return children;
         }
 
-        for (ScriptFilesRes.FileObject object : objects) {
-            File file = new File();
-            file.setTitle(object.getTitle());
-            file.setParent(parent);
-            file.setDir(object.isDir());
-            file.setCreateTime(TimeUnit.formatDatetimeA((long) object.getMtime()));
-            file.setPath(parent + "/" + object.getTitle());
+        try {
+            for (ScriptFilesRes.FileObject object : objects) {
+                File file = new File();
+                file.setTitle(object.getTitle());
+                file.setParent(parent);
+                file.setDir(object.isDir());
+                file.setCreateTime(TimeUnit.formatDatetimeA((long) object.getMtime()));
+                file.setPath(parent + "/" + object.getTitle());
 
-            if (object.isDir()) {
-                file.setChildren(buildChildren(file.getPath(), object.getChildren()));
+                if (object.isDir()) {
+                    file.setChildren(buildChildren(file.getPath(), object.getChildren()));
+                }
+
+                children.add(file);
             }
-
-            children.add(file);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
         return children;
     }
 }
