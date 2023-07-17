@@ -57,25 +57,20 @@ public class ForwardService extends Service {
 
     public static final int ACTION_SERVICE_START = 0;
     public static final int ACTION_SERVICE_STOP = 1;
-    public static final int ACTION_SERVICE_EXIT = 2;
-    public static final int ACTION_WAKEUP_ACQUIRE = 3;
-    public static final int ACTION_WAKEUP_RELEASE = 4;
     public static final int STATE_CLOSE = 0;
     public static final int STATE_OPEN = 1;
 
     private static final int DEFAULT_PORT = 9100;
-    private static final int DEFAULT_KEEP_ALIVE_INTERVAL = 5;
+    private static final int DEFAULT_KEEP_ALIVE_INTERVAL = 30;
 
     private volatile Thread forwardThread;
+    private volatile Thread keepAliveThread;
     private volatile boolean isAccident;
     private SSHClient sshClient;
     private PowerManager.WakeLock wakeLock;
 
-    private PendingIntent returnPI;
-    private PendingIntent stopPI;
-    private PendingIntent exitPI;
-    private PendingIntent acquireWakeupPI;
-    private PendingIntent releaseWakeupPI;
+    private PendingIntent returnIntent;
+    private PendingIntent stopIntent;
 
     @SuppressLint("UnspecifiedImmutableFlag")
     @Override
@@ -88,24 +83,19 @@ public class ForwardService extends Service {
         sshClient = new SSHClient();
         sshClient.addHostKeyVerifier(new HostKeyVerifier());
         sshClient.getConnection().getKeepAlive().setKeepAliveInterval(DEFAULT_KEEP_ALIVE_INTERVAL);
+
         // 唤醒锁
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_TAG);
+
         //返回主界面-out
         Intent returnIntent = new Intent(this, MainActivity.class);
-        returnPI = PendingIntent.getActivity(this, 0, returnIntent, 0);
+        this.returnIntent = PendingIntent.getActivity(this, 0, returnIntent, 0);
+
         //停止服务-in
         Intent stopIntent = new Intent(this, ForwardService.class);
         stopIntent.putExtra(EXTRA_ACTION, ACTION_SERVICE_STOP);
-        stopPI = PendingIntent.getService(this, 0, stopIntent, 0);
-        //获取唤醒锁-in
-        Intent acquireWakeupIntent = new Intent(this, ForwardService.class);
-        acquireWakeupIntent.putExtra(EXTRA_ACTION, ACTION_WAKEUP_ACQUIRE);
-        acquireWakeupPI = PendingIntent.getService(this, 0, acquireWakeupIntent, 0);
-        //释放唤醒锁-in
-        Intent releaseWakeupIntent = new Intent(this, ForwardService.class);
-        releaseWakeupIntent.putExtra(EXTRA_ACTION, ACTION_WAKEUP_RELEASE);
-        releaseWakeupPI = PendingIntent.getService(this, 0, releaseWakeupIntent, 0);
+        this.stopIntent = PendingIntent.getService(this, 0, stopIntent, 0);
     }
 
     @Override
@@ -120,19 +110,15 @@ public class ForwardService extends Service {
         LogUnit.log(action);
 
         if (action == ACTION_SERVICE_START) {
-            startProxyThread(intent);
+            startForwardThread(intent);
         } else if (action == ACTION_SERVICE_STOP) {
-            stopProxyThread();
-        } else if (action == ACTION_WAKEUP_ACQUIRE) {
-            acquireWakeupLock();
-        } else if (action == ACTION_WAKEUP_RELEASE) {
-            releaseWakeupLock();
+            stopThread();
         }
 
         return START_STICKY;
     }
 
-    private void startProxyThread(Intent intent) {
+    private void startForwardThread(Intent intent) {
         if (forwardThread != null && forwardThread.isAlive()) {
             return;
         }
@@ -151,11 +137,9 @@ public class ForwardService extends Service {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentTitle("内网穿透")
-                .setContentText(String.format("%1$s@%2$s", username, hostname))
-                .setContentIntent(returnPI)
-                .setSmallIcon(R.drawable.ic_logo_small)
-                .addAction(R.drawable.ic_logo_small, "保持唤醒", acquireWakeupPI)
-                .addAction(R.drawable.ic_logo_small, "断开连接", stopPI);
+                .setContentText(String.format("%1$s@%2$s %3$s", username, hostname, wakeup ? "lock" : "unlock"))
+                .setContentIntent(returnIntent)
+                .setSmallIcon(R.drawable.ic_logo_small);
 
         // 创建线程
         forwardThread = new Thread(() -> {
@@ -218,22 +202,29 @@ public class ForwardService extends Service {
 
             // 开启前台通知
             startForeground(NOTIFICATION_ID, builder.build());
+
             // 发送开启广播
             Intent openIntent = new Intent(BROADCAST_ACTION_STATE);
             openIntent.putExtra(EXTRA_STATE, STATE_OPEN);
             LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(openIntent);
+
             // 保存CPU唤醒
             if (wakeup) {
                 wakeLock.acquire();
             }
 
             Logger.info("远程转发已启动", null);
+
+            //启动保活线程
+            startKeepAliveThread();
+
             // 线程阻塞
             try {
                 sshClient.getTransport().join();
             } catch (TransportException e) {
                 e.printStackTrace();
             }
+
             Logger.warn("远程转发已断开", null);
 
             // 断开远程连接
@@ -244,74 +235,69 @@ public class ForwardService extends Service {
                     e.printStackTrace();
                 }
             }
+
             // 发送关闭广播
             Intent closeIntent = new Intent(BROADCAST_ACTION_STATE);
             closeIntent.putExtra(EXTRA_STATE, STATE_CLOSE);
             closeIntent.putExtra(EXTRA_ACCIDENT, isAccident);
             LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(closeIntent);
+
             // 关闭服务
             stopSelf();
         });
+
         forwardThread.start();
     }
 
-    private void stopProxyThread() {
-
+    private void startKeepAliveThread() {
+        keepAliveThread = new Thread(() -> {
+            while (true) {
+                try {
+                    if (sshClient.isConnected()) {
+                        Session session = sshClient.startSession();
+                        Session.Command command = session.exec("ps");
+                        command.join(1, TimeUnit.SECONDS);
+                        command.close();
+                        Logger.info("保活线程心跳...", null);
+                        Thread.sleep(60 * 10 * 1000);
+                    } else {
+                        Logger.info("连接断开，保活线程退出", null);
+                        return;
+                    }
+                } catch (Exception e) {
+                    Logger.warn("保活线程中断", e);
+                    return;
+                }
+            }
+        });
+        keepAliveThread.start();
     }
 
-    private void releaseWakeupLock() {
-        if (wakeLock == null || !wakeLock.isHeld()) {
-            return;
-        }
+    private void stopThread() {
+        // 更新异常中断标志
+        isAccident = false;
 
-        wakeLock.release();
+        // 移除通知
+        stopForeground(true);
 
-        // 创建通知
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentTitle("内网穿透")
-                .setContentText("保持唤醒")
-                .setContentIntent(returnPI)
-                .setSmallIcon(R.drawable.ic_logo_small)
-                .addAction(R.drawable.ic_logo_small, "断开连接", stopPI)
-                .addAction(R.drawable.ic_logo_small, "保持唤醒", acquireWakeupPI);
-
-        startForeground(NOTIFICATION_ID, builder.build());
-    }
-
-    private void acquireWakeupLock() {
+        // 关闭唤醒
         if (wakeLock.isHeld()) {
-            return;
+            wakeLock.release();
         }
-        wakeLock.acquire();
 
-        // 更新通知
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentTitle("内网穿透")
-                .setContentIntent(returnPI)
-                .setSmallIcon(R.drawable.ic_logo_small)
-                .addAction(R.drawable.ic_logo_small, "断开连接", stopPI)
-                .addAction(R.drawable.ic_logo_small, "解除唤醒", releaseWakeupPI);
-
-        startForeground(NOTIFICATION_ID, builder.build());
+        // 关闭线程
+        if (keepAliveThread != null && keepAliveThread.isAlive()) {
+            keepAliveThread.interrupt();
+        }
+        if (forwardThread != null && forwardThread.isAlive()) {
+            forwardThread.interrupt();
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // 更新异常中断标志
-        isAccident = false;
-        // 移除通知
-        stopForeground(true);
-        // 关闭唤醒
-        if (wakeLock.isHeld()) {
-            wakeLock.release();
-        }
-        // 关闭线程
-        if (forwardThread != null && forwardThread.isAlive()) {
-            forwardThread.interrupt();
-        }
+        stopThread();
     }
 
     private void createNotificationChannel() {
