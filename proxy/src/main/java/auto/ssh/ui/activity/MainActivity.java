@@ -67,15 +67,16 @@ public class MainActivity extends BaseActivity {
         netBroadcastReceiver = new NetBroadcastReceiver();
         timeBroadcastReceiver = new TimeBroadcastReceiver();
 
-        // 注册广播
+        // 广播过滤
         IntentFilter proxyFilter = new IntentFilter(ProxyService.BROADCAST_ACTION_STATE);
         IntentFilter forwardFilter = new IntentFilter(ForwardService.BROADCAST_ACTION_STATE);
         IntentFilter netStateFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         IntentFilter timeFilter = new IntentFilter(Intent.ACTION_TIME_TICK);
+        // 注册广播
         LocalBroadcastManager.getInstance(this).registerReceiver(forwardBroadcastReceiver, forwardFilter);
         LocalBroadcastManager.getInstance(this).registerReceiver(proxyBroadcastReceiver, proxyFilter);
-        LocalBroadcastManager.getInstance(this).registerReceiver(netBroadcastReceiver, netStateFilter);
-        LocalBroadcastManager.getInstance(this).registerReceiver(timeBroadcastReceiver, timeFilter);
+        registerReceiver(netBroadcastReceiver, netStateFilter);
+        registerReceiver(timeBroadcastReceiver, timeFilter);
     }
 
     @Override
@@ -89,8 +90,8 @@ public class MainActivity extends BaseActivity {
         // 注销广播
         LocalBroadcastManager.getInstance(this).unregisterReceiver(proxyBroadcastReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(forwardBroadcastReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(netBroadcastReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(timeBroadcastReceiver);
+        unregisterReceiver(netBroadcastReceiver);
+        unregisterReceiver(timeBroadcastReceiver);
     }
 
     @Override
@@ -123,7 +124,7 @@ public class MainActivity extends BaseActivity {
         this.uiForwardTip.setText(R.string.proxy_forward_disconnect);
     }
 
-    private void onForwardServiceClose(boolean isAccident) {
+    private void onForwardServiceClose(boolean accident) {
         this.forwardState = ForwardService.STATE_CLOSE;
         this.uiForward.setCardBackgroundColor(getResources().getColor(R.color.gray_80, null));
         this.uiForwardImg.setBackgroundResource(auto.base.R.drawable.ic_check_circle_outline_white);
@@ -163,19 +164,11 @@ public class MainActivity extends BaseActivity {
 
     private void startForwardRetry() {
         new Thread(() -> {
-            List<Integer> times = Arrays.asList(1, 2, 3, 5, 5, 10, 10, 20, 20, 30, 30, 50, 50, 60, 60);
-            Intent service = new Intent(BaseApplication.getContext(), ForwardService.class);
-            service.putExtra(ForwardService.EXTRA_ACTION, ForwardService.ACTION_SERVICE_START);
-            service.putExtra(ForwardService.EXTRA_HOSTNAME, "60.205.228.46");
-            service.putExtra(ForwardService.EXTRA_USERNAME, "root");
-            service.putExtra(ForwardService.EXTRA_PASSWORD, "aly@123456Fsp");
-            service.putExtra(ForwardService.EXTRA_REMOTE_ADDRESS, "0.0.0.0");
-            service.putExtra(ForwardService.EXTRA_REMOTE_PORT, 9200);
-            service.putExtra(ForwardService.EXTRA_LOCAL_ADDRESS, "127.0.0.1");
-            service.putExtra(ForwardService.EXTRA_LOCAL_PORT, 9100);
+            List<Integer> times = Arrays.asList(3, 3, 6, 6, 30, 30, 60, 60, 120, 120);
+
+            startForwardService();
 
             for (int time : times) {
-                startService(service);
                 if (this.forwardState == ForwardService.STATE_OPEN) {
                     break;
                 }
@@ -249,8 +242,8 @@ public class MainActivity extends BaseActivity {
             if (state == ForwardService.STATE_OPEN) {
                 onForwardServiceOpen();
             } else {
-                boolean isAccident = intent.getBooleanExtra(ForwardService.EXTRA_ACCIDENT, false);
-                onForwardServiceClose(isAccident);
+                boolean accident = intent.getBooleanExtra(ForwardService.EXTRA_ACCIDENT, false);
+                onForwardServiceClose(accident);
             }
         }
     }

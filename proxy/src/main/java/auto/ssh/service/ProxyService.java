@@ -1,6 +1,7 @@
 package auto.ssh.service;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -37,6 +38,7 @@ public class ProxyService extends Service {
 
     private volatile Thread proxyThread;
     private HttpProxyServer httpProxyServer;
+    private Notification notification;
 
     public ProxyService() {
     }
@@ -67,12 +69,13 @@ public class ProxyService extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(getBaseContext(), 0, returnIntent, 0);
 
         // 创建通知
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+        notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentTitle("本地代理")
                 .setContentText(String.format("%1$s:%2$d", address, port))
                 .setContentIntent(pendingIntent)
-                .setSmallIcon(R.drawable.ic_logo_small);
+                .setSmallIcon(R.drawable.ic_logo_small)
+                .build();
 
         // 创建代理线程
         proxyThread = new Thread(() -> {
@@ -82,7 +85,7 @@ public class ProxyService extends Service {
             closeIntent.putExtra(EXTRA_STATE, STATE_CLOSE);
 
             // 开启前台通知
-            startForeground(NOTIFICATION_ID, builder.build());
+            startForeground(NOTIFICATION_ID, notification);
             // 发送开启广播
             LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(openIntent);
             Logger.info("本地代理开启", null);
