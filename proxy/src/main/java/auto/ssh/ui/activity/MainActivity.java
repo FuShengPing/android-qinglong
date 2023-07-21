@@ -18,6 +18,8 @@ import java.util.List;
 
 import auto.base.BaseApplication;
 import auto.base.util.LogUnit;
+import auto.base.util.Logger;
+import auto.base.util.NetUnit;
 import auto.ssh.R;
 import auto.ssh.data.ConfigPreference;
 import auto.ssh.service.ForwardService;
@@ -41,7 +43,6 @@ public class MainActivity extends BaseActivity {
     private BroadcastReceiver proxyBroadcastReceiver;
     private BroadcastReceiver forwardBroadcastReceiver;
     private BroadcastReceiver netBroadcastReceiver;
-    private BroadcastReceiver timeBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,18 +66,15 @@ public class MainActivity extends BaseActivity {
         proxyBroadcastReceiver = new ProxyBroadcastReceiver();
         forwardBroadcastReceiver = new ForwardBroadcastReceiver();
         netBroadcastReceiver = new NetBroadcastReceiver();
-        timeBroadcastReceiver = new TimeBroadcastReceiver();
 
         // 广播过滤
         IntentFilter proxyFilter = new IntentFilter(ProxyService.BROADCAST_ACTION_STATE);
         IntentFilter forwardFilter = new IntentFilter(ForwardService.BROADCAST_ACTION_STATE);
         IntentFilter netStateFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        IntentFilter timeFilter = new IntentFilter(Intent.ACTION_TIME_TICK);
         // 注册广播
         LocalBroadcastManager.getInstance(this).registerReceiver(forwardBroadcastReceiver, forwardFilter);
         LocalBroadcastManager.getInstance(this).registerReceiver(proxyBroadcastReceiver, proxyFilter);
         registerReceiver(netBroadcastReceiver, netStateFilter);
-        registerReceiver(timeBroadcastReceiver, timeFilter);
     }
 
     @Override
@@ -91,7 +89,6 @@ public class MainActivity extends BaseActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(proxyBroadcastReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(forwardBroadcastReceiver);
         unregisterReceiver(netBroadcastReceiver);
-        unregisterReceiver(timeBroadcastReceiver);
     }
 
     @Override
@@ -153,6 +150,7 @@ public class MainActivity extends BaseActivity {
         intent.putExtra(ForwardService.EXTRA_REMOTE_PORT, 9100);
         intent.putExtra(ForwardService.EXTRA_LOCAL_ADDRESS, "127.0.0.1");
         intent.putExtra(ForwardService.EXTRA_LOCAL_PORT, 9100);
+        intent.putExtra(ForwardService.EXTRA_WAKEUP, true);
         startService(intent);
     }
 
@@ -253,14 +251,7 @@ public class MainActivity extends BaseActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             LogUnit.log("NetBroadcastReceiver");
-        }
-    }
-
-    private class TimeBroadcastReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            LogUnit.log("TimeBroadcastReceiver");
+            Logger.debug("网络状态变化 " + NetUnit.isConnected(getApplicationContext()), null);
         }
     }
 

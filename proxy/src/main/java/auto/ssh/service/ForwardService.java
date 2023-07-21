@@ -6,8 +6,10 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.IBinder;
 import android.os.PowerManager;
 
@@ -61,7 +63,7 @@ public class ForwardService extends Service {
     public static final int STATE_OPEN = 1;
 
     private static final int DEFAULT_PORT = 9100;
-    private static final int DEFAULT_KEEP_ALIVE_INTERVAL = 30;
+    private static final int DEFAULT_KEEP_ALIVE_INTERVAL = 10;
 
     private volatile Thread forwardThread;
     private volatile Thread keepAliveThread;
@@ -70,11 +72,15 @@ public class ForwardService extends Service {
     private PowerManager.WakeLock wakeLock;
     private PendingIntent returnIntent;
     private Notification notification;
+    private TimeBroadcastReceiver timeReceiver;
 
     @SuppressLint("UnspecifiedImmutableFlag")
     @Override
     public void onCreate() {
         super.onCreate();
+
+        //广播接收器
+        timeReceiver = new TimeBroadcastReceiver();
 
         //创建通知管道
         createNotificationChannel();
@@ -112,8 +118,12 @@ public class ForwardService extends Service {
         stopThread();
     }
 
+    private boolean isAlive() {
+        return forwardThread != null && forwardThread.isAlive() && sshClient != null && sshClient.isConnected();
+    }
+
     private void startForwardThread(Intent intent) {
-        if (forwardThread != null && forwardThread.isAlive() && sshClient != null && sshClient.isConnected()) {
+        if (isAlive()) {
             sendOpenBroadcast();
             return;
         }
@@ -148,7 +158,7 @@ public class ForwardService extends Service {
                 sshClient.addHostKeyVerifier(new HostKeyVerifier());
                 sshClient.getConnection().getKeepAlive().setKeepAliveInterval(DEFAULT_KEEP_ALIVE_INTERVAL);
                 sshClient.connect(hostname, 22);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 Logger.error("SSH远程连接失败", e);
                 return;
             }
@@ -184,9 +194,9 @@ public class ForwardService extends Service {
             }
 
             // 新建端口转发
-            RemotePortForwarder.Forward forward = new RemotePortForwarder.Forward(remoteAddress, remotePort);
-            SocketForwardingConnectListener connectListener = new SocketForwardingConnectListener(new InetSocketAddress(localAddress, localPort));
             try {
+                RemotePortForwarder.Forward forward = new RemotePortForwarder.Forward(remoteAddress, remotePort);
+                SocketForwardingConnectListener connectListener = new SocketForwardingConnectListener(new InetSocketAddress(localAddress, localPort));
                 sshClient.getRemotePortForwarder().bind(forward, connectListener);
                 Logger.info("远程转发已启动", null);
             } catch (Exception e) {
@@ -194,13 +204,8 @@ public class ForwardService extends Service {
                 return;
             }
 
-            // 保存CPU唤醒
-            if (wakeup) {
-                wakeLock.acquire();
-            }
-
-            // 启动保活线程
-            startKeepAliveThread();
+            // 开启定时广播接收
+            registerReceiver(timeReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
 
             // 开启前台通知
             startForeground(NOTIFICATION_ID, notification);
@@ -208,22 +213,29 @@ public class ForwardService extends Service {
             // 发送开启广播
             sendOpenBroadcast();
 
+            // 保存CPU唤醒
+            if (wakeup) {
+                wakeLock.acquire();
+            }
+
             // 线程阻塞
             try {
                 sshClient.getTransport().join();
-            } catch (TransportException e) {
-                Logger.warn("远程转发已断开", e);
+            } catch (Exception e) {
+                Logger.warn("远程转发断开", e);
             }
 
             // 断开远程连接
             if (sshClient.isConnected()) {
                 try {
                     sshClient.disconnect();
-                    sshClient = null;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
+
+            //移除定时广播
+            unregisterReceiver(timeReceiver);
 
             // 发送关闭广播
             sendCloseBroadcast();
@@ -233,31 +245,6 @@ public class ForwardService extends Service {
         });
 
         forwardThread.start();
-    }
-
-    private void startKeepAliveThread() {
-        keepAliveThread = new Thread(() -> {
-            while (true) {
-                try {
-                    if (sshClient != null && sshClient.isConnected()) {
-                        Session session = sshClient.startSession();
-                        Session.Command command = session.exec("ps");
-                        command.join(1, TimeUnit.SECONDS);
-                        command.close();
-                        startForeground(NOTIFICATION_ID, notification);
-                        Logger.debug("保活线程心跳...", null);
-                        Thread.sleep(60 * 10 * 1000);
-                    } else {
-                        Logger.info("连接断开，保活线程退出", null);
-                        return;
-                    }
-                } catch (Exception e) {
-                    Logger.warn("保活线程中断", e);
-                    return;
-                }
-            }
-        });
-        keepAliveThread.start();
     }
 
     private void stopThread() {
@@ -298,5 +285,23 @@ public class ForwardService extends Service {
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
         NotificationManager manager = getSystemService(NotificationManager.class);
         manager.createNotificationChannel(channel);
+    }
+
+    private class TimeBroadcastReceiver extends BroadcastReceiver {
+        private int count = 1;
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (isAlive()) {
+                if (count % 6 == 0) {
+                    startForeground(NOTIFICATION_ID, notification);
+                    Logger.debug("TIME_TICK", null);
+                    count = 1;
+                } else {
+                    count++;
+                }
+
+            }
+        }
     }
 }

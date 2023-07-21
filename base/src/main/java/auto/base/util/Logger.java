@@ -11,6 +11,7 @@ public class Logger {
     private static final int LEVEL_INFO = 1;
     private static final int LEVEL_WARN = 2;
     private static final int LEVEL_ERROR = 3;
+    private static final int LEVEL_NONE = 4;
 
 
     public static void debug(String str, Exception e) {
@@ -18,9 +19,9 @@ public class Logger {
             return;
         }
         if (e == null) {
-            LogFileUtil.writeLogToFile(PROJECT, "[DEBUG]" + str);
+            LogFileUtil.writeLogToFile(PROJECT, "[DEBUG]\t" + str);
         } else {
-            LogFileUtil.writeLogToFile(PROJECT, "[DEBUG]" + str + " " + e.getMessage());
+            LogFileUtil.writeLogToFile(PROJECT, "[DEBUG]\t" + str + " " + e.getMessage());
         }
     }
 
@@ -29,9 +30,9 @@ public class Logger {
             return;
         }
         if (e == null) {
-            LogFileUtil.writeLogToFile(PROJECT, "[INFO]" + str);
+            LogFileUtil.writeLogToFile(PROJECT, "[INFO]\t" + str);
         } else {
-            LogFileUtil.writeLogToFile(PROJECT, "[INFO]" + str + " " + e.getMessage());
+            LogFileUtil.writeLogToFile(PROJECT, "[INFO]\t" + str + " " + e.getMessage());
         }
     }
 
@@ -40,9 +41,9 @@ public class Logger {
             return;
         }
         if (e == null) {
-            LogFileUtil.writeLogToFile(PROJECT, "[WARN]" + str);
+            LogFileUtil.writeLogToFile(PROJECT, "[WARN]\t" + str);
         } else {
-            LogFileUtil.writeLogToFile(PROJECT, "[WARN]" + str + " " + e.getMessage());
+            LogFileUtil.writeLogToFile(PROJECT, "[WARN]\t" + str + " " + e.getMessage());
         }
     }
 
@@ -51,9 +52,9 @@ public class Logger {
             return;
         }
         if (e == null) {
-            LogFileUtil.writeLogToFile(PROJECT, "[ERROR]" + str);
+            LogFileUtil.writeLogToFile(PROJECT, "[ERROR]\t" + str);
         } else {
-            LogFileUtil.writeLogToFile(PROJECT, "[ERROR]" + str + " " + e.getMessage());
+            LogFileUtil.writeLogToFile(PROJECT, "[ERROR]\t" + str + " " + e.getMessage());
         }
 
     }
