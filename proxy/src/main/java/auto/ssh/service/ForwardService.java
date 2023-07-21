@@ -66,8 +66,7 @@ public class ForwardService extends Service {
     private static final int DEFAULT_KEEP_ALIVE_INTERVAL = 10;
 
     private volatile Thread forwardThread;
-    private volatile Thread keepAliveThread;
-    private volatile boolean isAccident;
+    private volatile boolean interrupted;
     private SSHClient sshClient;
     private PowerManager.WakeLock wakeLock;
     private PendingIntent returnIntent;
@@ -150,7 +149,7 @@ public class ForwardService extends Service {
         // 创建线程
         forwardThread = new Thread(() -> {
             // 设置异常中断标志
-            isAccident = true;
+            interrupted = true;
 
             // 连接远程服务
             try {
@@ -249,7 +248,7 @@ public class ForwardService extends Service {
 
     private void stopThread() {
         // 更新异常中断标志
-        isAccident = false;
+        interrupted = false;
 
         // 移除通知
         stopForeground(true);
@@ -260,9 +259,6 @@ public class ForwardService extends Service {
         }
 
         // 关闭线程
-        if (keepAliveThread != null && keepAliveThread.isAlive()) {
-            keepAliveThread.interrupt();
-        }
         if (forwardThread != null && forwardThread.isAlive()) {
             forwardThread.interrupt();
         }
@@ -277,7 +273,7 @@ public class ForwardService extends Service {
     private void sendCloseBroadcast() {
         Intent closeIntent = new Intent(BROADCAST_ACTION_STATE);
         closeIntent.putExtra(EXTRA_STATE, STATE_CLOSE);
-        closeIntent.putExtra(EXTRA_ACCIDENT, isAccident);
+        closeIntent.putExtra(EXTRA_ACCIDENT, interrupted);
         LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(closeIntent);
     }
 
@@ -300,7 +296,6 @@ public class ForwardService extends Service {
                 } else {
                     count++;
                 }
-
             }
         }
     }
