@@ -130,6 +130,7 @@ public class MainActivity extends BaseActivity {
 
     private void startProxyService() {
         Intent intent = new Intent(BaseApplication.getContext(), ProxyService.class);
+        intent.putExtra(ProxyService.EXTRA_ACTION, ProxyService.ACTION_SERVICE_START);
         intent.putExtra(ProxyService.EXTRA_ADDRESS, ConfigPreference.getLocalAddress());
         intent.putExtra(ProxyService.EXTRA_PORT, ConfigPreference.getLocalPort());
         startService(intent);
@@ -137,7 +138,8 @@ public class MainActivity extends BaseActivity {
 
     private void stopProxyService() {
         Intent intent = new Intent(BaseApplication.getContext(), ProxyService.class);
-        stopService(intent);
+        intent.putExtra(ProxyService.EXTRA_ACTION, ProxyService.ACTION_SERVICE_STOP);
+        startService(intent);
     }
 
     private void startForwardService() {

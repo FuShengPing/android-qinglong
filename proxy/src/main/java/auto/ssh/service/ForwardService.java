@@ -94,21 +94,21 @@ public class ForwardService extends Service {
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         int action = intent.getIntExtra(EXTRA_ACTION, ACTION_SERVICE_START);
 
         if (action == ACTION_SERVICE_START) {
-            startForwardThread(intent);
+            startThread(intent);
         } else if (action == ACTION_SERVICE_STOP) {
             stopThread();
         }
 
         return START_STICKY;
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     @Override
@@ -121,7 +121,7 @@ public class ForwardService extends Service {
         return forwardThread != null && forwardThread.isAlive() && sshClient != null && sshClient.isConnected();
     }
 
-    private void startForwardThread(Intent intent) {
+    private void startThread(Intent intent) {
         if (isAlive()) {
             sendOpenBroadcast();
             return;
@@ -239,6 +239,9 @@ public class ForwardService extends Service {
             // 发送关闭广播
             sendCloseBroadcast();
 
+            // 移除通知
+            stopForeground(true);
+
             // 关闭所有线程
             stopThread();
         });
@@ -249,9 +252,6 @@ public class ForwardService extends Service {
     private void stopThread() {
         // 更新异常中断标志
         interrupted = false;
-
-        // 移除通知
-        stopForeground(true);
 
         // 关闭唤醒
         if (wakeLock.isHeld()) {
