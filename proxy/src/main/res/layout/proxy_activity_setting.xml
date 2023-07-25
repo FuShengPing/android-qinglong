@@ -12,7 +12,6 @@
         android:padding="16dp">
 
         <ImageView
-            android:id="@+id/exit"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="16dp"
@@ -24,9 +23,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="代理配置"
+            android:text="设置"
             android:textColor="@color/text_color_19"
-            android:textSize="@dimen/activity_title_size"
+            android:textSize="@dimen/proxy_activity_title_size"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -37,82 +36,68 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="6dp">
-
+            android:orientation="vertical">
             <!--本地代理-->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/setting_module_title_padding_horizontal"
-                android:paddingVertical="@dimen/setting_module_title_padding_vertical"
+                android:layout_marginHorizontal="24dp"
+                android:paddingVertical="6dp"
                 android:text="本地代理"
-                android:textColor="@color/theme_color"
-                android:textSize="@dimen/setting_module_title_size" />
+                android:textColor="@color/proxy_theme_color" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/style_press_gray"
                 android:orientation="vertical"
-                android:paddingHorizontal="@dimen/setting_item_padding_horizontal"
-                android:paddingVertical="@dimen/setting_item_padding_vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/setting_item_title_margin_bottom"
-                    android:text="代理地址"
-                    android:textColor="@color/setting_item_disable"
-                    android:textSize="@dimen/setting_item_title_size" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="127.0.0.1"
-                    android:textColor="@color/setting_item_disable"
-                    android:textSize="@dimen/setting_item_value_size" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/style_press_gray"
-                android:orientation="vertical"
-                android:paddingHorizontal="@dimen/setting_item_padding_horizontal"
-                android:paddingVertical="@dimen/setting_item_padding_vertical">
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="12dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
-                    android:text="代理端口"
-                    android:textColor="@color/setting_item_disable"
-                    android:textSize="@dimen/setting_item_title_size" />
+                    android:text="保持唤醒" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="9100"
-                    android:textColor="@color/setting_item_disable"
-                    android:textSize="@dimen/setting_item_value_size" />
+                    android:text="开启" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/style_press_gray"
+                android:orientation="vertical"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="12dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:text="刷新间隔" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="180秒" />
+            </LinearLayout>
             <!--远程连接-->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/setting_module_title_padding_horizontal"
-                android:paddingVertical="@dimen/setting_module_title_padding_vertical"
+                android:layout_marginHorizontal="24dp"
+                android:paddingVertical="6dp"
                 android:text="远程连接"
-                android:textColor="@color/theme_color"
-                android:textSize="@dimen/setting_module_title_size" />
+                android:textColor="@color/proxy_theme_color" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/style_press_gray"
-                android:clickable="true"
                 android:orientation="vertical"
                 android:paddingHorizontal="24dp"
                 android:paddingVertical="12dp">
@@ -121,50 +106,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
-                    android:text="远程地址"
-                    android:textColor="@color/setting_item_enable"
-                    android:textSize="@dimen/setting_item_title_size" />
+                    android:text="远程地址" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="127.0.0.1"
-                    android:textColor="@color/setting_item_enable"
-                    android:textSize="@dimen/setting_item_value_size" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/config_remote_port"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/style_press_gray"
-                android:clickable="true"
-                android:orientation="vertical"
-                android:paddingHorizontal="@dimen/setting_item_padding_horizontal"
-                android:paddingVertical="@dimen/setting_item_padding_vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
-                    android:text="远程端口"
-                    android:textColor="@color/setting_item_enable"
-                    android:textSize="@dimen/setting_item_title_size" />
-
-                <TextView
-                    android:id="@+id/config_remote_port_value"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="22"
-                    android:textColor="@color/setting_item_enable"
-                    android:textSize="@dimen/setting_item_value_size" />
+                    android:text="127.0.0.1" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/style_press_gray"
-                android:clickable="true"
                 android:orientation="vertical"
                 android:paddingHorizontal="24dp"
                 android:paddingVertical="12dp">
@@ -172,88 +125,73 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="用户名"
-                    android:textColor="@color/setting_item_enable"
-                    android:textSize="@dimen/setting_item_title_size" />
+                    android:layout_marginBottom="6dp"
+                    android:text="远程端口" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
-                    android:text="root"
-                    android:textColor="@color/setting_item_enable"
-                    android:textSize="@dimen/setting_item_value_size" />
+                    android:text="22" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/style_press_gray"
-                android:clickable="true"
                 android:orientation="vertical"
-                android:paddingHorizontal="@dimen/setting_item_padding_horizontal"
-                android:paddingVertical="@dimen/setting_item_padding_vertical">
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="12dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="密码"
-                    android:textColor="@color/setting_item_enable" />
+                    android:text="用户名" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
-                    android:text="root"
-                    android:textColor="@color/setting_item_enable" />
+                    android:text="root" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/style_press_gray"
-                android:clickable="true"
                 android:orientation="vertical"
-                android:paddingHorizontal="@dimen/setting_item_padding_horizontal"
-                android:paddingVertical="@dimen/setting_item_padding_vertical">
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="12dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="密码" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
-                    android:text="转发地址"
-                    android:textColor="@color/setting_item_enable" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="127.0.0.1"
-                    android:textColor="@color/setting_item_enable" />
+                    android:text="root" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/style_press_gray"
-                android:clickable="true"
                 android:orientation="vertical"
-                android:paddingHorizontal="@dimen/setting_item_padding_horizontal"
-                android:paddingVertical="@dimen/setting_item_padding_vertical">
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="12dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
-                    android:text="转发端口"
-                    android:textColor="@color/setting_item_enable"
-                    android:textSize="@dimen/setting_item_title_size" />
+                    android:text="转发端口" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="9100"
-                    android:textColor="@color/setting_item_enable"
-                    android:textSize="@dimen/setting_item_value_size" />
+                    android:text="9100" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

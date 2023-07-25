@@ -22,7 +22,7 @@ public class ConfigActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_config);
+        setContentView(R.layout.proxy_activity_config);
 
         uiExit = findViewById(R.id.exit);
         uiRemotePort = findViewById(R.id.config_remote_port);
@@ -41,7 +41,7 @@ public class ConfigActivity extends BaseActivity {
 
     private void showPopInput() {
         PopupWindow popupWindow = new PopupWindow();
-        View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.pop_input, null, false);
+        View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.proxy_pop_input, null, false);
         popupWindow.setContentView(view);
         popupWindow.setWidth(WindowManager.LayoutParams.MATCH_PARENT);
         popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);

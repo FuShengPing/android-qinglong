@@ -2,12 +2,12 @@
 
     <style name="Theme.SSH" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/theme_color</item>
-        <item name="colorPrimaryVariant">@color/theme_color</item>
+        <item name="colorPrimary">@color/proxy_theme_color</item>
+        <item name="colorPrimaryVariant">@color/proxy_theme_color</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/theme_color</item>
-        <item name="colorSecondaryVariant">@color/theme_color</item>
+        <item name="colorSecondary">@color/proxy_theme_color</item>
+        <item name="colorSecondaryVariant">@color/proxy_theme_color</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/theme_white_shadow</item>

@@ -6,17 +6,21 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
-    <dimen name="activity_title_size">18sp</dimen>
+    <dimen name="proxy_activity_title_size">18sp</dimen>
 
-    <dimen name="pop_input_padding_horizontal">24dp</dimen>
-    <dimen name="pop_input_padding_vertical">24dp</dimen>
+    <dimen name="proxy_pop_input_margin_horizontal">28dp</dimen>
+    <dimen name="proxy_pop_input_margin_vertical">30dp</dimen>
+    <dimen name="proxy_pop_input_padding_horizontal">24dp</dimen>
+    <dimen name="proxy_pop_input_padding_vertical">24dp</dimen>
+    <dimen name="proxy_pop_input_title_size">14.5sp</dimen>
 
-    <dimen name="setting_module_title_padding_horizontal">24dp</dimen>
-    <dimen name="setting_module_title_padding_vertical">6dp</dimen>
-    <dimen name="setting_item_padding_horizontal">24dp</dimen>
-    <dimen name="setting_item_padding_vertical">12dp</dimen>
-    <dimen name="setting_item_title_margin_bottom">6dp</dimen>
-    <dimen name="setting_module_title_size">12sp</dimen>
-    <dimen name="setting_item_title_size">14.5sp</dimen>
-    <dimen name="setting_item_value_size">13sp</dimen>
+    <dimen name="proxy_setting_module_title_padding_horizontal">24dp</dimen>
+    <dimen name="proxy_setting_module_title_padding_vertical">6dp</dimen>
+    <dimen name="proxy_setting_item_padding_horizontal">24dp</dimen>
+    <dimen name="proxy_setting_item_padding_vertical">12dp</dimen>
+    <dimen name="proxy_setting_item_title_margin_bottom">6dp</dimen>
+    <dimen name="proxy_setting_module_title_size">12sp</dimen>
+    <dimen name="proxy_setting_item_title_size">14.5sp</dimen>
+    <dimen name="proxy_setting_item_value_size">13sp</dimen>
+
 </resources>

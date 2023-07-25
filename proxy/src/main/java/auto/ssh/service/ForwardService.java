@@ -138,7 +138,7 @@ public class ForwardService extends Service {
                 .setContentTitle("内网穿透")
                 .setContentText(String.format("%1$s@%2$s", username, hostname))
                 .setContentIntent(returnIntent)
-                .setSmallIcon(R.drawable.ic_logo_small)
+                .setSmallIcon(R.drawable.proxy_ic_logo_small)
                 .build();
 
         // 创建保活线程

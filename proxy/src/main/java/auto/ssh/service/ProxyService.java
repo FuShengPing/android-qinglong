@@ -102,7 +102,7 @@ public class ProxyService extends Service {
                 .setContentTitle("本地代理")
                 .setContentText(String.format("%1$s:%2$d", address, port))
                 .setContentIntent(returnIntent)
-                .setSmallIcon(R.drawable.ic_logo_small)
+                .setSmallIcon(R.drawable.proxy_ic_logo_small)
                 .build();
 
         // 创建线程

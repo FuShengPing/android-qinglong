@@ -24,7 +24,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/ic_logo_big" />
+                android:background="@drawable/proxy_ic_logo_big" />
 
             <TextView
                 android:layout_width="wrap_content"
