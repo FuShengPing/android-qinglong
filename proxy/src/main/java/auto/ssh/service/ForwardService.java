@@ -6,10 +6,8 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.IBinder;
 import android.os.PowerManager;
 
@@ -147,7 +145,7 @@ public class ForwardService extends Service {
         keepAliveThread = new Thread(() -> {
             while (isAlive()) {
                 try {
-                    Thread.sleep(120 * 1000);
+                    Thread.sleep(180 * 1000);
                     if (isAlive()) {
                         startForeground(NOTIFICATION_ID, notification);
                         Logger.debug("TIME_TICK", null);
