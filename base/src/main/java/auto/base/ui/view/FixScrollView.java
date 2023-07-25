@@ -1,4 +1,4 @@
-package auto.base.view;
+package auto.base.ui.view;
 
 import android.content.Context;
 import android.util.AttributeSet;

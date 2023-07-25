@@ -1,4 +1,4 @@
-package auto.base.view.popup;
+package auto.base.ui.popup;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -27,7 +27,7 @@ import java.util.Map;
 
 import auto.base.R;
 import auto.base.util.WindowUnit;
-import auto.base.view.FixScrollView;
+import auto.base.ui.view.FixScrollView;
 
 public class PopupWindowBuilder {
     public static final String TAG = "PopupWindowManager";

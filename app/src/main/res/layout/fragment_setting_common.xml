@@ -54,7 +54,7 @@
                     android:textColor="@color/text_color_49"
                     android:textSize="15sp" />
 
-                <auto.base.view.EditText
+                <auto.base.ui.view.EditText
                     android:id="@+id/setting_security_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
                     android:textColor="@color/text_color_49"
                     android:textSize="15sp" />
 
-                <auto.base.view.EditText
+                <auto.base.ui.view.EditText
                     android:id="@+id/setting_security_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -137,7 +137,7 @@
                     android:textColor="@color/text_color_49"
                     android:textSize="15sp" />
 
-                <auto.base.view.EditText
+                <auto.base.ui.view.EditText
                     android:id="@+id/setting_other_log"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -159,7 +159,7 @@
                     android:textColor="@color/text_color_49"
                     android:textSize="15sp" />
 
-                <auto.base.view.EditText
+                <auto.base.ui.view.EditText
                     android:id="@+id/setting_other_cron"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

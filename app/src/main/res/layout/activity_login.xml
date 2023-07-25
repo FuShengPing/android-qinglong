@@ -26,7 +26,7 @@
         android:paddingHorizontal="15dp"
         android:paddingVertical="20dp">
 
-        <auto.base.view.EditText
+        <auto.base.ui.view.EditText
             android:id="@+id/et_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
             android:textColor="@color/text_color_49"
             android:textSize="18sp" />
 
-        <auto.base.view.EditText
+        <auto.base.ui.view.EditText
             android:id="@+id/et_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
             android:textColor="@color/text_color_49"
             android:textSize="18sp" />
 
-        <auto.base.view.EditText
+        <auto.base.ui.view.EditText
             android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

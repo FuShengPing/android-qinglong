@@ -15,9 +15,9 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import auto.base.view.popup.PopMenuObject;
-import auto.base.view.popup.PopMenuWindow;
-import auto.base.view.popup.PopupWindowBuilder;
+import auto.base.ui.popup.PopMenuObject;
+import auto.base.ui.popup.PopMenuWindow;
+import auto.base.ui.popup.PopupWindowBuilder;
 import auto.panel.R;
 import auto.panel.ui.BaseFragment;
 

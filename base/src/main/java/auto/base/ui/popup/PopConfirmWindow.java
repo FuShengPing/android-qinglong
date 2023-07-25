@@ -1,4 +1,4 @@
-package auto.base.view.popup;
+package auto.base.ui.popup;
 
 
 public class PopConfirmWindow {

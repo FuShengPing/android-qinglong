@@ -1,4 +1,4 @@
-package auto.base.view.popup;
+package auto.base.ui.popup;
 
 import android.app.Activity;
 import android.view.Gravity;
