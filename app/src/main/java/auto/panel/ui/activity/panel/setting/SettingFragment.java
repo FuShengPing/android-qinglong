@@ -27,7 +27,7 @@ public class SettingFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_setting, null);
+        View view = inflater.inflate(R.layout.panel_fragment_setting, null);
 
         ui_menu = view.findViewById(R.id.action_nav_bar_menu);
         ui_tab = view.findViewById(R.id.page_tab);

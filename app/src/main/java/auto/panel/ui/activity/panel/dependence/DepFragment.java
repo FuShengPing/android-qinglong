@@ -41,7 +41,7 @@ public class DepFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_dep_pager, container, false);
+        View view = inflater.inflate(R.layout.panel_fragment_dep_pager, container, false);
 
         uiRefresh = view.findViewById(R.id.refresh_layout);
 

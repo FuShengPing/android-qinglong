@@ -42,7 +42,7 @@ public class DepPagerFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_dep, null);
+        View view = inflater.inflate(R.layout.panel_fragment_dep, null);
 
         uiNavBar = view.findViewById(R.id.dep_nav_bar);
 

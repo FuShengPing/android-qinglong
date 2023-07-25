@@ -45,7 +45,7 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.recycle_item_env, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.panel_recycle_item_env, parent, false);
         return new MyViewHolder(view);
     }
 

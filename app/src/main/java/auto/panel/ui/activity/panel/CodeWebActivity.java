@@ -70,7 +70,7 @@ public class CodeWebActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_code_web);
+        setContentView(R.layout.panel_activity_code_web);
 
         mTitle = getIntent().getStringExtra(EXTRA_TITLE);
         mType = getIntent().getStringExtra(EXTRA_TYPE);

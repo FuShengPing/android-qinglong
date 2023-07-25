@@ -29,7 +29,7 @@ public class LoginLogItemAdapter extends RecyclerView.Adapter<LoginLogItemAdapte
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.recycle_item_login_log, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.panel_recycle_item_login_log, parent, false);
         return new MyViewHolder(view);
     }
 

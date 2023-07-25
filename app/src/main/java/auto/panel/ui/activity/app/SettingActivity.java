@@ -33,7 +33,7 @@ public class SettingActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting);
+        setContentView(R.layout.panel_activity_setting);
 
         uiBack = findViewById(R.id.bar_back);
         uiNotifySwitch = findViewById(R.id.app_setting_notify_switch);

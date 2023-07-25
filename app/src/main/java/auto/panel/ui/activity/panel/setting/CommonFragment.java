@@ -28,7 +28,7 @@ public class CommonFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_setting_common, container, false);
+        View view = inflater.inflate(R.layout.panel_fragment_setting_common, container, false);
         uiSecurityUsername = view.findViewById(R.id.setting_security_username);
         uiSecurityPassword = view.findViewById(R.id.setting_security_password);
         uiSecuritySave = view.findViewById(R.id.setting_security_save);

@@ -23,7 +23,7 @@ public class AboutActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
+        setContentView(R.layout.panel_activity_about);
 
         uiVersionNew = findViewById(R.id.version_new);
         uiVersionNow = findViewById(R.id.version_now);

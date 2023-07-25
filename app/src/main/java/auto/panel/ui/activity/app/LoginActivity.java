@@ -38,7 +38,7 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.panel_activity_login);
 
         uiAddress = findViewById(R.id.et_address);
         uiUsername = findViewById(R.id.et_username);

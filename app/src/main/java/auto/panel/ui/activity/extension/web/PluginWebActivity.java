@@ -43,7 +43,7 @@ public class PluginWebActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_plugin_web);
+        setContentView(R.layout.panel_activity_plugin_web);
 
         ui_back = findViewById(R.id.action_bar_back);
         ui_options = findViewById(R.id.action_bar_options);

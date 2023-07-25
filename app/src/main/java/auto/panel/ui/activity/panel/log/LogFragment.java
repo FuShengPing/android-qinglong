@@ -48,7 +48,7 @@ public class LogFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_log, null);
+        View view = inflater.inflate(R.layout.panel_fragment_log, null);
 
         uiNav = view.findViewById(R.id.log_nav);
         uiRefresh = view.findViewById(R.id.refresh_layout);
