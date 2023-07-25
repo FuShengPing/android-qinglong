@@ -47,7 +47,7 @@
                 android:paddingHorizontal="@dimen/proxy_setting_module_title_padding_horizontal"
                 android:paddingVertical="@dimen/proxy_setting_module_title_padding_vertical"
                 android:text="本地代理"
-                android:textColor="@color/proxy_theme_color"
+                android:textColor="@color/proxy_theme"
                 android:textSize="@dimen/proxy_setting_module_title_size" />
 
             <LinearLayout
@@ -105,13 +105,14 @@
                 android:paddingHorizontal="@dimen/proxy_setting_module_title_padding_horizontal"
                 android:paddingVertical="@dimen/proxy_setting_module_title_padding_vertical"
                 android:text="远程连接"
-                android:textColor="@color/proxy_theme_color"
+                android:textColor="@color/proxy_theme"
                 android:textSize="@dimen/proxy_setting_module_title_size" />
 
             <LinearLayout
+                android:id="@+id/config_remote_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/style_press_gray"
+                android:background="@drawable/proxy_style_press"
                 android:clickable="true"
                 android:orientation="vertical"
                 android:paddingHorizontal="24dp"
@@ -126,6 +127,7 @@
                     android:textSize="@dimen/proxy_setting_item_title_size" />
 
                 <TextView
+                    android:id="@+id/config_remote_address_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="127.0.0.1"
@@ -137,7 +139,7 @@
                 android:id="@+id/config_remote_port"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/style_press_gray"
+                android:background="@drawable/proxy_style_press"
                 android:clickable="true"
                 android:orientation="vertical"
                 android:paddingHorizontal="@dimen/proxy_setting_item_padding_horizontal"
@@ -161,9 +163,10 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/config_remote_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/style_press_gray"
+                android:background="@drawable/proxy_style_press"
                 android:clickable="true"
                 android:orientation="vertical"
                 android:paddingHorizontal="24dp"
@@ -177,6 +180,7 @@
                     android:textSize="@dimen/proxy_setting_item_title_size" />
 
                 <TextView
+                    android:id="@+id/config_remote_username_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
@@ -186,9 +190,10 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/config_remote_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/style_press_gray"
+                android:background="@drawable/proxy_style_press"
                 android:clickable="true"
                 android:orientation="vertical"
                 android:paddingHorizontal="@dimen/proxy_setting_item_padding_horizontal"
@@ -201,6 +206,7 @@
                     android:textColor="@color/proxy_setting_item_enable" />
 
                 <TextView
+                    android:id="@+id/config_remote_password_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
@@ -209,9 +215,10 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/config_remote_forward_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/style_press_gray"
+                android:background="@drawable/proxy_style_press"
                 android:clickable="true"
                 android:orientation="vertical"
                 android:paddingHorizontal="@dimen/proxy_setting_item_padding_horizontal"
@@ -225,6 +232,7 @@
                     android:textColor="@color/proxy_setting_item_enable" />
 
                 <TextView
+                    android:id="@+id/config_remote_forward_address_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="127.0.0.1"
@@ -232,9 +240,10 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/config_remote_forward_port"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/style_press_gray"
+                android:background="@drawable/proxy_style_press"
                 android:clickable="true"
                 android:orientation="vertical"
                 android:paddingHorizontal="@dimen/proxy_setting_item_padding_horizontal"
@@ -249,6 +258,7 @@
                     android:textSize="@dimen/proxy_setting_item_title_size" />
 
                 <TextView
+                    android:id="@+id/config_remote_forward_port_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="9100"

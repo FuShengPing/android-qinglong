@@ -9,8 +9,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray_80">#808080</color>
 
-    <color name="proxy_theme_color">#1E4376</color>
-    <color name="proxy_theme_color_shadow">#1E437666</color>
+    <color name="proxy_theme">#1E4376</color>
+    <color name="proxy_theme_shadow">#1E437666</color>
+
+    <color name="proxy_activity_title">#191919</color>
 
     <color name="proxy_setting_item_enable">#101010</color>
     <color name="proxy_setting_item_disable">#808080</color>

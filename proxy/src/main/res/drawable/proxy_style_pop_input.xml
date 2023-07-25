@@ -3,5 +3,5 @@
     <corners android:radius="2dp" />
     <stroke
         android:width="2dp"
-        android:color="@color/proxy_theme_color" />
+        android:color="@color/proxy_theme" />
 </shape>

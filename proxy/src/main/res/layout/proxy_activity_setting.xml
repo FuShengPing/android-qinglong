@@ -12,6 +12,7 @@
         android:padding="16dp">
 
         <ImageView
+            android:id="@+id/exit"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="16dp"
@@ -24,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="设置"
-            android:textColor="@color/text_color_19"
+            android:textColor="@color/proxy_activity_title"
             android:textSize="@dimen/proxy_activity_title_size"
             android:textStyle="bold" />
     </LinearLayout>
@@ -44,7 +45,7 @@
                 android:layout_marginHorizontal="24dp"
                 android:paddingVertical="6dp"
                 android:text="本地代理"
-                android:textColor="@color/proxy_theme_color" />
+                android:textColor="@color/proxy_theme" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -92,7 +93,7 @@
                 android:layout_marginHorizontal="24dp"
                 android:paddingVertical="6dp"
                 android:text="远程连接"
-                android:textColor="@color/proxy_theme_color" />
+                android:textColor="@color/proxy_theme" />
 
             <LinearLayout
                 android:layout_width="match_parent"

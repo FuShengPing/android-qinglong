@@ -52,7 +52,7 @@
                 android:paddingHorizontal="@dimen/proxy_pop_input_button_padding_horizontal"
                 android:paddingVertical="@dimen/proxy_pop_input_button_padding_vertical"
                 android:text="取消"
-                android:textColor="@color/proxy_theme_color" />
+                android:textColor="@color/proxy_theme" />
 
             <TextView
                 android:id="@+id/pop_input_confirm"
@@ -63,7 +63,7 @@
                 android:paddingHorizontal="@dimen/proxy_pop_input_button_padding_horizontal"
                 android:paddingVertical="@dimen/proxy_pop_input_button_padding_vertical"
                 android:text="确定"
-                android:textColor="@color/proxy_theme_color" />
+                android:textColor="@color/proxy_theme" />
         </LinearLayout>
     </LinearLayout>
 
