@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:text="设置"
             android:textColor="@color/text_color_19"
-            android:textSize="20sp"
+            android:textSize="@dimen/activity_title_size"
             android:textStyle="bold" />
     </LinearLayout>
 

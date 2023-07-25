@@ -11,4 +11,7 @@
     <color name="blue_deep">#1E4376</color>
 
     <color name="txt_30">#303030</color>
+
+    <color name="setting_item_enable">#101010</color>
+    <color name="setting_item_disable">#808080</color>
 </resources>
