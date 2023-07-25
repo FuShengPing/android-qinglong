@@ -4,7 +4,7 @@ package auto.base.util;
  * @author wsfsp4
  * @version 2023.06.21
  */
-public class Logger {
+public class Logger extends LogFileUtil {
     private static final String PROJECT = "proxy";
     private static final int LEVEL = 0;
     private static final int LEVEL_DEBUG = 0;
@@ -19,9 +19,9 @@ public class Logger {
             return;
         }
         if (e == null) {
-            LogFileUtil.writeLogToFile(PROJECT, "[DEBUG]\t" + str);
+            writeLog(PROJECT, "[DEBUG]\t" + str);
         } else {
-            LogFileUtil.writeLogToFile(PROJECT, "[DEBUG]\t" + str + " " + e.getMessage());
+            writeLog(PROJECT, "[DEBUG]\t" + str + " " + e.getMessage());
         }
     }
 
@@ -30,9 +30,9 @@ public class Logger {
             return;
         }
         if (e == null) {
-            LogFileUtil.writeLogToFile(PROJECT, "[INFO]\t" + str);
+            writeLog(PROJECT, "[INFO]\t" + str);
         } else {
-            LogFileUtil.writeLogToFile(PROJECT, "[INFO]\t" + str + " " + e.getMessage());
+            writeLog(PROJECT, "[INFO]\t" + str + " " + e.getMessage());
         }
     }
 
@@ -41,9 +41,9 @@ public class Logger {
             return;
         }
         if (e == null) {
-            LogFileUtil.writeLogToFile(PROJECT, "[WARN]\t" + str);
+            writeLog(PROJECT, "[WARN]\t" + str);
         } else {
-            LogFileUtil.writeLogToFile(PROJECT, "[WARN]\t" + str + " " + e.getMessage());
+            writeLog(PROJECT, "[WARN]\t" + str + " " + e.getMessage());
         }
     }
 
@@ -52,9 +52,9 @@ public class Logger {
             return;
         }
         if (e == null) {
-            LogFileUtil.writeLogToFile(PROJECT, "[ERROR]\t" + str);
+            writeLog(PROJECT, "[ERROR]\t" + str);
         } else {
-            LogFileUtil.writeLogToFile(PROJECT, "[ERROR]\t" + str + " " + e.getMessage());
+            writeLog(PROJECT, "[ERROR]\t" + str + " " + e.getMessage());
         }
 
     }

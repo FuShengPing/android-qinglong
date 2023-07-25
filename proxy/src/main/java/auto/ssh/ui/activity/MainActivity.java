@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import auto.base.BaseApplication;
+import auto.base.util.LogFileUtil;
 import auto.base.util.LogUnit;
 import auto.base.util.Logger;
 import auto.base.util.NetUnit;
@@ -26,6 +28,7 @@ import auto.ssh.service.ForwardService;
 import auto.ssh.service.ProxyService;
 
 public class MainActivity extends BaseActivity {
+    private static final String PROJECT = "proxy";
     private CardView uiLocal;
     private ImageView uiLocalImg;
     private TextView uiLocalTip;
@@ -121,11 +124,14 @@ public class MainActivity extends BaseActivity {
         this.uiForwardTip.setText(R.string.proxy_forward_disconnect);
     }
 
-    private void onForwardServiceClose(boolean accident) {
+    private void onForwardServiceClose(boolean interrupted) {
         this.forwardState = ForwardService.STATE_CLOSE;
         this.uiForward.setCardBackgroundColor(getResources().getColor(R.color.gray_80, null));
         this.uiForwardImg.setBackgroundResource(auto.base.R.drawable.ic_check_circle_outline_white);
         this.uiForwardTip.setText(R.string.proxy_forward_connect);
+        if (interrupted) {
+            retryStartForward();
+        }
     }
 
     private void startProxyService() {
@@ -162,18 +168,21 @@ public class MainActivity extends BaseActivity {
         startService(intent);
     }
 
-    private void startForwardRetry() {
+    private void retryStartForward() {
         new Thread(() -> {
-            List<Integer> times = Arrays.asList(3, 3, 6, 6, 30, 30, 60, 60, 120, 120);
+            List<Integer> times = Arrays.asList(6, 6, 6, 12, 30, 30, 60, 60, 120);
+            int count = 0;
 
-            startForwardService();
+            while (proxyState == ProxyService.STATE_OPEN && forwardState == ForwardService.STATE_CLOSE) {
+                startForwardService();
 
-            for (int time : times) {
-                if (this.forwardState == ForwardService.STATE_OPEN) {
-                    break;
+                if (count < times.size() - 1) {
+                    count++;
                 }
+
                 try {
-                    Thread.sleep(time * 1000L);
+                    Logger.info("等待" + times.get(count) + "s再次尝试连接", null);
+                    Thread.sleep(times.get(count) * 1000L);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                     break;
@@ -191,6 +200,7 @@ public class MainActivity extends BaseActivity {
                 stopProxyService();
             }
         });
+
         // 远程连接
         uiForward.setOnClickListener(v -> {
             if (this.forwardState == ForwardService.STATE_CLOSE) {
@@ -199,22 +209,34 @@ public class MainActivity extends BaseActivity {
                 stopForwardService();
             }
         });
+
         // 代理配置
         uiConfig.setOnClickListener(v -> {
             Intent intent = new Intent(this, ConfigActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         });
+
         // 设置
         uiSetting.setOnClickListener(v -> {
             Intent intent = new Intent(this, SettingActivity.class);
             startActivity(intent);
         });
+
         // 日志
         uiLog.setOnClickListener(v -> {
-            Intent intent = new Intent(this, LogActivity.class);
-            startActivity(intent);
+            //日志目录路径
+            String path = LogFileUtil.getLogFileDir(PROJECT);
+
+            LogUnit.log(path);
+
+            // 创建一个Intent对象
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            Uri uri = Uri.parse(path);
+            intent.setDataAndType(uri, "*/*");
+            startActivity(Intent.createChooser(intent, "选择文件管理器"));
         });
+
         // 帮助
         uiHelp.setOnClickListener(v -> {
 
@@ -242,8 +264,8 @@ public class MainActivity extends BaseActivity {
             if (state == ForwardService.STATE_OPEN) {
                 onForwardServiceOpen();
             } else {
-                boolean accident = intent.getBooleanExtra(ForwardService.EXTRA_ACCIDENT, false);
-                onForwardServiceClose(accident);
+                boolean interrupted = intent.getBooleanExtra(ForwardService.EXTRA_INTERRUPTED, false);
+                onForwardServiceClose(interrupted);
             }
         }
     }
@@ -252,7 +274,6 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            LogUnit.log("NetBroadcastReceiver");
             Logger.debug("网络状态变化 " + NetUnit.isConnected(getApplicationContext()), null);
         }
     }

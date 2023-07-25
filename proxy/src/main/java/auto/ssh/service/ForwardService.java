@@ -54,8 +54,8 @@ public class ForwardService extends Service {
     public static final String EXTRA_LOCAL_PORT = "localPort";
     public static final String EXTRA_WAKEUP = "wakeup";
     public static final String EXTRA_STATE = "state";
+    public static final String EXTRA_INTERRUPTED = "accident";
     public static final String EXTRA_MSG = "msg";
-    public static final String EXTRA_ACCIDENT = "accident";
 
     public static final int ACTION_SERVICE_START = 0;
     public static final int ACTION_SERVICE_STOP = 1;
@@ -66,20 +66,17 @@ public class ForwardService extends Service {
     private static final int DEFAULT_KEEP_ALIVE_INTERVAL = 10;
 
     private volatile Thread forwardThread;
+    private volatile Thread keepAliveThread;
     private volatile boolean interrupted;
     private SSHClient sshClient;
     private PowerManager.WakeLock wakeLock;
     private PendingIntent returnIntent;
     private Notification notification;
-    private TimeBroadcastReceiver timeReceiver;
 
     @SuppressLint("UnspecifiedImmutableFlag")
     @Override
     public void onCreate() {
         super.onCreate();
-
-        //广播接收器
-        timeReceiver = new TimeBroadcastReceiver();
 
         //创建通知管道
         createNotificationChannel();
@@ -141,12 +138,27 @@ public class ForwardService extends Service {
         notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentTitle("内网穿透")
-                .setContentText(String.format("%1$s@%2$s\t%3$s", username, hostname, wakeup ? "lock" : "unlock"))
+                .setContentText(String.format("%1$s@%2$s", username, hostname))
                 .setContentIntent(returnIntent)
                 .setSmallIcon(R.drawable.ic_logo_small)
                 .build();
 
-        // 创建线程
+        // 创建保活线程
+        keepAliveThread = new Thread(() -> {
+            while (isAlive()) {
+                try {
+                    Thread.sleep(120 * 1000);
+                    if (isAlive()) {
+                        startForeground(NOTIFICATION_ID, notification);
+                        Logger.debug("TIME_TICK", null);
+                    }
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
+        });
+
+        // 创建转发线程
         forwardThread = new Thread(() -> {
             // 设置异常中断标志
             interrupted = true;
@@ -203,9 +215,6 @@ public class ForwardService extends Service {
                 return;
             }
 
-            // 开启定时广播接收
-            registerReceiver(timeReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
-
             // 开启前台通知
             startForeground(NOTIFICATION_ID, notification);
 
@@ -216,6 +225,9 @@ public class ForwardService extends Service {
             if (wakeup) {
                 wakeLock.acquire();
             }
+
+            // 开启保活线程
+            keepAliveThread.start();
 
             // 线程阻塞
             try {
@@ -232,9 +244,6 @@ public class ForwardService extends Service {
                     e.printStackTrace();
                 }
             }
-
-            //移除定时广播
-            unregisterReceiver(timeReceiver);
 
             // 发送关闭广播
             sendCloseBroadcast();
@@ -262,6 +271,9 @@ public class ForwardService extends Service {
         if (forwardThread != null && forwardThread.isAlive()) {
             forwardThread.interrupt();
         }
+        if (keepAliveThread != null && keepAliveThread.isAlive()) {
+            keepAliveThread.interrupt();
+        }
     }
 
     private void sendOpenBroadcast() {
@@ -273,7 +285,7 @@ public class ForwardService extends Service {
     private void sendCloseBroadcast() {
         Intent closeIntent = new Intent(BROADCAST_ACTION_STATE);
         closeIntent.putExtra(EXTRA_STATE, STATE_CLOSE);
-        closeIntent.putExtra(EXTRA_ACCIDENT, interrupted);
+        closeIntent.putExtra(EXTRA_INTERRUPTED, interrupted);
         LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(closeIntent);
     }
 
@@ -281,22 +293,5 @@ public class ForwardService extends Service {
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
         NotificationManager manager = getSystemService(NotificationManager.class);
         manager.createNotificationChannel(channel);
-    }
-
-    private class TimeBroadcastReceiver extends BroadcastReceiver {
-        private int count = 1;
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (isAlive()) {
-                if (count % 6 == 0) {
-                    startForeground(NOTIFICATION_ID, notification);
-                    Logger.debug("TIME_TICK", null);
-                    count = 1;
-                } else {
-                    count++;
-                }
-            }
-        }
     }
 }
