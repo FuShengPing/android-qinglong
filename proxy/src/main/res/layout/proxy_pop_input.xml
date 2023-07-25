@@ -32,8 +32,9 @@
             android:layout_marginVertical="16dp"
             android:background="@drawable/proxy_style_pop_input"
             android:maxLines="1"
-            android:padding="12dp"
-            android:textSize="13sp" />
+            android:paddingHorizontal="@dimen/proxy_pop_input_value_padding_horizontal"
+            android:paddingVertical="@dimen/proxy_pop_input_value_padding_vertical"
+            android:textSize="@dimen/proxy_pop_input_value_size" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,10 +46,11 @@
                 android:id="@+id/pop_input_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="30dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/proxy_style_press"
                 android:clickable="true"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="4dp"
+                android:paddingHorizontal="@dimen/proxy_pop_input_button_padding_horizontal"
+                android:paddingVertical="@dimen/proxy_pop_input_button_padding_vertical"
                 android:text="取消"
                 android:textColor="@color/proxy_theme_color" />
 
@@ -56,9 +58,10 @@
                 android:id="@+id/pop_input_confirm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/proxy_style_press"
                 android:clickable="true"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="4dp"
+                android:paddingHorizontal="@dimen/proxy_pop_input_button_padding_horizontal"
+                android:paddingVertical="@dimen/proxy_pop_input_button_padding_vertical"
                 android:text="确定"
                 android:textColor="@color/proxy_theme_color" />
         </LinearLayout>
