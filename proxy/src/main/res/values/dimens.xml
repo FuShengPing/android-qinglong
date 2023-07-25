@@ -8,6 +8,9 @@
 
     <dimen name="activity_title_size">18sp</dimen>
 
+    <dimen name="pop_input_padding_horizontal">24dp</dimen>
+    <dimen name="pop_input_padding_vertical">24dp</dimen>
+
     <dimen name="setting_module_title_padding_horizontal">24dp</dimen>
     <dimen name="setting_module_title_padding_vertical">6dp</dimen>
     <dimen name="setting_item_padding_horizontal">24dp</dimen>

@@ -101,7 +101,7 @@ public class MainActivity extends BaseActivity {
 
     private void onProxyServiceOpen() {
         this.proxyState = ProxyService.STATE_OPEN;
-        this.uiLocal.setCardBackgroundColor(getResources().getColor(R.color.blue_deep, null));
+        this.uiLocal.setCardBackgroundColor(getResources().getColor(R.color.theme_color, null));
         this.uiLocalImg.setBackgroundResource(auto.base.R.drawable.ic_remove_circle_outline_white);
         this.uiLocalTip.setText(R.string.proxy_local_close);
         this.uiForward.setVisibility(View.VISIBLE);
@@ -119,7 +119,7 @@ public class MainActivity extends BaseActivity {
 
     private void onForwardServiceOpen() {
         this.forwardState = ForwardService.STATE_OPEN;
-        this.uiForward.setCardBackgroundColor(getResources().getColor(R.color.blue_deep, null));
+        this.uiForward.setCardBackgroundColor(getResources().getColor(R.color.theme_color, null));
         this.uiForwardImg.setBackgroundResource(auto.base.R.drawable.ic_remove_circle_outline_white);
         this.uiForwardTip.setText(R.string.proxy_forward_disconnect);
     }

@@ -44,7 +44,7 @@
                 android:layout_marginHorizontal="24dp"
                 android:paddingVertical="6dp"
                 android:text="本地代理"
-                android:textColor="@color/blue_deep" />
+                android:textColor="@color/theme_color" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -92,7 +92,7 @@
                 android:layout_marginHorizontal="24dp"
                 android:paddingVertical="6dp"
                 android:text="远程连接"
-                android:textColor="@color/blue_deep" />
+                android:textColor="@color/theme_color" />
 
             <LinearLayout
                 android:layout_width="match_parent"
