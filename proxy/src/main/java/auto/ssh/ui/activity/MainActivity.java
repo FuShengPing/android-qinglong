@@ -23,6 +23,7 @@ import auto.base.util.LogUnit;
 import auto.base.util.Logger;
 import auto.base.util.NetUnit;
 import auto.ssh.R;
+import auto.ssh.bean.Config;
 import auto.ssh.data.ConfigPreference;
 import auto.ssh.service.ForwardService;
 import auto.ssh.service.ProxyService;
@@ -129,6 +130,7 @@ public class MainActivity extends BaseActivity {
         this.uiForward.setCardBackgroundColor(getResources().getColor(R.color.gray_80, null));
         this.uiForwardImg.setBackgroundResource(auto.base.R.drawable.ic_check_circle_outline_white);
         this.uiForwardTip.setText(R.string.proxy_forward_connect);
+        LogUnit.log(interrupted);
         if (interrupted) {
             retryStartForward();
         }
@@ -150,14 +152,16 @@ public class MainActivity extends BaseActivity {
 
     private void startForwardService() {
         Intent intent = new Intent(BaseApplication.getContext(), ForwardService.class);
+        Config config = ConfigPreference.getConfig();
         intent.putExtra(ForwardService.EXTRA_ACTION, ForwardService.ACTION_SERVICE_START);
-        intent.putExtra(ForwardService.EXTRA_HOSTNAME, "114.67.238.143");
-        intent.putExtra(ForwardService.EXTRA_USERNAME, "root");
-        intent.putExtra(ForwardService.EXTRA_PASSWORD, "jdy@123456fsp");
-        intent.putExtra(ForwardService.EXTRA_REMOTE_ADDRESS, "0.0.0.0");
-        intent.putExtra(ForwardService.EXTRA_REMOTE_PORT, 9100);
-        intent.putExtra(ForwardService.EXTRA_LOCAL_ADDRESS, "127.0.0.1");
-        intent.putExtra(ForwardService.EXTRA_LOCAL_PORT, 9100);
+        intent.putExtra(ForwardService.EXTRA_REMOTE_ADDRESS, config.getRemoteAddress());
+        intent.putExtra(ForwardService.EXTRA_REMOTE_PORT, config.getRemotePort());
+        intent.putExtra(ForwardService.EXTRA_REMOTE_USERNAME, config.getRemoteUsername());
+        intent.putExtra(ForwardService.EXTRA_REMOTE_PASSWORD, config.getRemotePassword());
+        intent.putExtra(ForwardService.EXTRA_REMOTE_FORWARD_ADDRESS, config.getRemoteForwardAddress());
+        intent.putExtra(ForwardService.EXTRA_REMOTE_FORWARD_PORT, config.getRemoteForwardPort());
+        intent.putExtra(ForwardService.EXTRA_LOCAL_ADDRESS, config.getLocalAddress());
+        intent.putExtra(ForwardService.EXTRA_LOCAL_PORT, config.getLocalPort());
         intent.putExtra(ForwardService.EXTRA_WAKEUP, true);
         startService(intent);
     }

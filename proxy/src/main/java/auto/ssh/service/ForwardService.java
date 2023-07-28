@@ -43,13 +43,14 @@ public class ForwardService extends Service {
     private static final String CHANNEL_NAME = "ForwardServiceChannel";
 
     public static final String EXTRA_ACTION = "action";
-    public static final String EXTRA_HOSTNAME = "hostname";
-    public static final String EXTRA_USERNAME = "username";
-    public static final String EXTRA_PASSWORD = "password";
-    public static final String EXTRA_REMOTE_ADDRESS = "remoteAddress";
-    public static final String EXTRA_REMOTE_PORT = "remotePort";
     public static final String EXTRA_LOCAL_ADDRESS = "localAddress";
     public static final String EXTRA_LOCAL_PORT = "localPort";
+    public static final String EXTRA_REMOTE_ADDRESS = "remoteAddress";
+    public static final String EXTRA_REMOTE_PORT = "remotePort";
+    public static final String EXTRA_REMOTE_USERNAME = "remoteUsername";
+    public static final String EXTRA_REMOTE_PASSWORD = "remotePassword";
+    public static final String EXTRA_REMOTE_FORWARD_ADDRESS = "remoteForwardAddress";
+    public static final String EXTRA_REMOTE_FORWARD_PORT = "remoteForwardPort";
     public static final String EXTRA_WAKEUP = "wakeup";
     public static final String EXTRA_STATE = "state";
     public static final String EXTRA_INTERRUPTED = "accident";
@@ -60,12 +61,15 @@ public class ForwardService extends Service {
     public static final int STATE_CLOSE = 0;
     public static final int STATE_OPEN = 1;
 
-    private static final int DEFAULT_PORT = 9100;
+    private static final int DEFAULT_LOCAL_PORT = 9100;
+    private static final int DEFAULT_REMOTE_PORT = 22;
+    private static final int DEFAULT_REMOTE_FORWARD_PORT = 9100;
     private static final int DEFAULT_KEEP_ALIVE_INTERVAL = 10;
 
     private volatile Thread forwardThread;
     private volatile Thread keepAliveThread;
     private volatile boolean interrupted;
+    private volatile boolean connecting;
     private SSHClient sshClient;
     private PowerManager.WakeLock wakeLock;
     private PendingIntent returnIntent;
@@ -122,21 +126,28 @@ public class ForwardService extends Service {
             return;
         }
 
+        if (connecting) {
+            return;
+        } else {
+            connecting = true;
+        }
+
         // 读取参数
-        String hostname = intent.getStringExtra(EXTRA_HOSTNAME);
-        String username = intent.getStringExtra(EXTRA_USERNAME);
-        String password = intent.getStringExtra(EXTRA_PASSWORD);
-        String remoteAddress = intent.getStringExtra(EXTRA_REMOTE_ADDRESS);
         String localAddress = intent.getStringExtra(EXTRA_LOCAL_ADDRESS);
-        int remotePort = intent.getIntExtra(EXTRA_REMOTE_PORT, DEFAULT_PORT);
-        int localPort = intent.getIntExtra(EXTRA_LOCAL_PORT, DEFAULT_PORT);
+        int localPort = intent.getIntExtra(EXTRA_LOCAL_PORT, DEFAULT_LOCAL_PORT);
+        String remoteAddress = intent.getStringExtra(EXTRA_REMOTE_ADDRESS);
+        int remotePort = intent.getIntExtra(EXTRA_REMOTE_PORT, DEFAULT_REMOTE_PORT);
+        String remoteUsername = intent.getStringExtra(EXTRA_REMOTE_USERNAME);
+        String remotePassword = intent.getStringExtra(EXTRA_REMOTE_PASSWORD);
+        String remoteForwardAddress = intent.getStringExtra(EXTRA_REMOTE_FORWARD_ADDRESS);
+        int remoteForwardPort = intent.getIntExtra(EXTRA_REMOTE_FORWARD_PORT, DEFAULT_REMOTE_FORWARD_PORT);
         boolean wakeup = intent.getBooleanExtra(EXTRA_WAKEUP, true);
 
         // 创建通知
         notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentTitle("内网穿透")
-                .setContentText(String.format("%1$s@%2$s", username, hostname))
+                .setContentText(String.format("%1$s@%2$s", remoteUsername, remoteAddress))
                 .setContentIntent(returnIntent)
                 .setSmallIcon(R.drawable.proxy_ic_logo_small)
                 .build();
@@ -166,30 +177,32 @@ public class ForwardService extends Service {
                 sshClient = new SSHClient();
                 sshClient.addHostKeyVerifier(new HostKeyVerifier());
                 sshClient.getConnection().getKeepAlive().setKeepAliveInterval(DEFAULT_KEEP_ALIVE_INTERVAL);
-                sshClient.connect(hostname, 22);
+                sshClient.connect(remoteAddress, remotePort);
             } catch (Exception e) {
                 Logger.error("SSH远程连接失败", e);
+                connecting = false;
                 return;
             }
 
             // 用户鉴权
             try {
-                sshClient.authPassword(username, password);
+                sshClient.authPassword(remoteUsername, remotePassword);
             } catch (UserAuthException | TransportException e) {
                 Logger.error("SSH远程登录失败", e);
+                connecting = false;
                 return;
             }
 
             //检查端口
             try {
                 Session session = sshClient.startSession();
-                Session.Command command = session.exec(Commands.checkPortCommand(remotePort));
+                Session.Command command = session.exec(Commands.checkPortCommand(remoteForwardPort));
                 command.join(5, TimeUnit.SECONDS);
                 String result = IOUtils.readFully(command.getInputStream()).toString();
                 command.close();
                 // 端口已被占用
                 if (!result.isEmpty()) {
-                    Logger.warn(String.format(Locale.CHINA, "远程端口%1$d已被占用", remotePort), null);
+                    Logger.warn(String.format(Locale.CHINA, "远程端口%1$d已被占用", remoteForwardPort), null);
                     Logger.info("尝试释放端口", null);
                     NetStat netStat = new NetStat(result);
                     session = sshClient.startSession();
@@ -199,17 +212,19 @@ public class ForwardService extends Service {
                 }
             } catch (IOException e) {
                 Logger.error("端口检查失败", e);
+                connecting = false;
                 return;
             }
 
             // 新建端口转发
             try {
-                RemotePortForwarder.Forward forward = new RemotePortForwarder.Forward(remoteAddress, remotePort);
+                RemotePortForwarder.Forward forward = new RemotePortForwarder.Forward(remoteForwardAddress, remoteForwardPort);
                 SocketForwardingConnectListener connectListener = new SocketForwardingConnectListener(new InetSocketAddress(localAddress, localPort));
                 sshClient.getRemotePortForwarder().bind(forward, connectListener);
                 Logger.info("远程转发已启动", null);
             } catch (Exception e) {
                 Logger.error("SSH远程转发启动失败", e);
+                connecting = false;
                 return;
             }
 
@@ -232,6 +247,7 @@ public class ForwardService extends Service {
                 sshClient.getTransport().join();
             } catch (Exception e) {
                 Logger.warn("远程转发断开", e);
+                connecting = false;
             }
 
             // 断开远程连接
@@ -243,13 +259,13 @@ public class ForwardService extends Service {
                 }
             }
 
-            // 发送关闭广播
-            sendCloseBroadcast();
-
             // 移除通知
             stopForeground(true);
 
-            // 关闭所有线程
+            // 发送关闭广播
+            sendCloseBroadcast();
+
+            // 销毁线程
             stopThread();
         });
 
@@ -272,6 +288,8 @@ public class ForwardService extends Service {
         if (keepAliveThread != null && keepAliveThread.isAlive()) {
             keepAliveThread.interrupt();
         }
+
+        connecting = false;
     }
 
     private void sendOpenBroadcast() {
