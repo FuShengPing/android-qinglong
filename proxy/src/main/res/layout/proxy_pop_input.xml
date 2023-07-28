@@ -9,9 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/proxy_pop_input_padding_horizontal"
-        android:layout_marginVertical="@dimen/proxy_pop_input_margin_vertical"
+        android:layout_marginVertical="@dimen/proxy_pop_margin_vertical"
         android:background="@drawable/proxy_style_white_radius"
-        android:elevation="6dp"
+        android:elevation="@dimen/proxy_pop_elevation"
         android:orientation="vertical"
         android:paddingHorizontal="@dimen/proxy_pop_input_padding_horizontal"
         android:paddingVertical="@dimen/proxy_pop_input_padding_vertical"
@@ -21,7 +21,7 @@
             android:id="@+id/proxy_pop_input_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="远程地址"
+            android:text="标题"
             android:textColor="@color/black"
             android:textSize="@dimen/proxy_pop_input_title_size" />
 
@@ -32,9 +32,9 @@
             android:layout_marginVertical="16dp"
             android:background="@drawable/proxy_style_pop_input"
             android:maxLines="1"
-            android:singleLine="true"
             android:paddingHorizontal="@dimen/proxy_pop_input_value_padding_horizontal"
             android:paddingVertical="@dimen/proxy_pop_input_value_padding_vertical"
+            android:singleLine="true"
             android:textSize="@dimen/proxy_pop_input_value_size" />
 
         <LinearLayout

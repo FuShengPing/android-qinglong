@@ -8,8 +8,10 @@
 
     <dimen name="proxy_activity_title_size">18sp</dimen>
 
-    <dimen name="proxy_pop_input_margin_horizontal">28dp</dimen>
-    <dimen name="proxy_pop_input_margin_vertical">30dp</dimen>
+    <dimen name="proxy_pop_margin_horizontal">28dp</dimen>
+    <dimen name="proxy_pop_margin_vertical">30dp</dimen>
+    <dimen name="proxy_pop_elevation">6dp</dimen>
+
     <dimen name="proxy_pop_input_padding_horizontal">24dp</dimen>
     <dimen name="proxy_pop_input_padding_vertical">24dp</dimen>
     <dimen name="proxy_pop_input_value_padding_vertical">12sp</dimen>
@@ -18,6 +20,12 @@
     <dimen name="proxy_pop_input_button_padding_horizontal">12dp</dimen>
     <dimen name="proxy_pop_input_title_size">15.5sp</dimen>
     <dimen name="proxy_pop_input_value_size">13sp</dimen>
+
+    <dimen name="proxy_pop_select_padding_horizontal">0dp</dimen>
+    <dimen name="proxy_pop_select_padding_vertical">16dp</dimen>
+    <dimen name="proxy_pop_select_item_padding_horizontal">24dp</dimen>
+    <dimen name="proxy_pop_select_item_padding_vertical">16dp</dimen>
+    <dimen name="proxy_pop_select_item_text_size">15.5sp</dimen>
 
     <dimen name="proxy_setting_module_title_padding_horizontal">24dp</dimen>
     <dimen name="proxy_setting_module_title_padding_vertical">6dp</dimen>
