@@ -13,6 +13,10 @@ import auto.ssh.ui.popup.InputPopup;
 
 public class ConfigActivity extends BaseActivity {
     private View uiExit;
+    private View uiLocalAddress;
+    private TextView uiLocalAddressValue;
+    private View uiLocalPort;
+    private TextView uiLocalPortValue;
     private View uiRemoteAddress;
     private TextView uiRemoteAddressValue;
     private View uiRemotePort;
@@ -33,6 +37,10 @@ public class ConfigActivity extends BaseActivity {
         setContentView(R.layout.proxy_activity_config);
 
         uiExit = findViewById(R.id.exit);
+        uiLocalAddress = findViewById(R.id.config_local_address);
+        uiLocalAddressValue = findViewById(R.id.config_local_address_value);
+        uiLocalPort = findViewById(R.id.config_local_port);
+        uiLocalPortValue = findViewById(R.id.config_local_port_value);
         uiRemoteAddress = findViewById(R.id.config_remote_address);
         uiRemoteAddressValue = findViewById(R.id.config_remote_address_value);
         uiRemotePort = findViewById(R.id.config_remote_port);
@@ -56,6 +64,8 @@ public class ConfigActivity extends BaseActivity {
         // 配置信息
         Config config = ConfigPreference.getConfig();
 
+        uiLocalAddressValue.setText(config.getLocalAddress());
+        uiLocalPortValue.setText(String.valueOf(config.getLocalPort()));
         uiRemoteAddressValue.setText(config.getRemoteAddress());
         uiRemotePortValue.setText(String.valueOf(config.getRemotePort()));
         uiRemoteUsernameValue.setText(config.getRemoteUsername());

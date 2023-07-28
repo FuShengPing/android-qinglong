@@ -51,6 +51,7 @@
                 android:textSize="@dimen/proxy_setting_module_title_size" />
 
             <LinearLayout
+                android:id="@+id/config_local_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/style_press_gray"
@@ -67,14 +68,15 @@
                     android:textSize="@dimen/proxy_setting_item_title_size" />
 
                 <TextView
+                    android:id="@+id/config_local_address_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="127.0.0.1"
                     android:textColor="@color/proxy_setting_item_disable"
                     android:textSize="@dimen/proxy_setting_item_value_size" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/config_local_port"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/style_press_gray"
@@ -91,9 +93,9 @@
                     android:textSize="@dimen/proxy_setting_item_title_size" />
 
                 <TextView
+                    android:id="@+id/config_local_port_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="9100"
                     android:textColor="@color/proxy_setting_item_disable"
                     android:textSize="@dimen/proxy_setting_item_value_size" />
             </LinearLayout>
@@ -130,7 +132,6 @@
                     android:id="@+id/config_remote_address_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="127.0.0.1"
                     android:textColor="@color/proxy_setting_item_enable"
                     android:textSize="@dimen/proxy_setting_item_value_size" />
             </LinearLayout>
@@ -157,7 +158,6 @@
                     android:id="@+id/config_remote_port_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="22"
                     android:textColor="@color/proxy_setting_item_enable"
                     android:textSize="@dimen/proxy_setting_item_value_size" />
             </LinearLayout>
@@ -184,7 +184,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
-                    android:text="root"
                     android:textColor="@color/proxy_setting_item_enable"
                     android:textSize="@dimen/proxy_setting_item_value_size" />
             </LinearLayout>
@@ -210,7 +209,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
-                    android:text="root"
                     android:textColor="@color/proxy_setting_item_enable" />
             </LinearLayout>
 
@@ -235,7 +233,6 @@
                     android:id="@+id/config_remote_forward_address_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="127.0.0.1"
                     android:textColor="@color/proxy_setting_item_enable" />
             </LinearLayout>
 
@@ -261,7 +258,6 @@
                     android:id="@+id/config_remote_forward_port_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="9100"
                     android:textColor="@color/proxy_setting_item_enable"
                     android:textSize="@dimen/proxy_setting_item_value_size" />
             </LinearLayout>
