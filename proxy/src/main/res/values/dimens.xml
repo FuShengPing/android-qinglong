@@ -22,9 +22,9 @@
     <dimen name="proxy_pop_input_value_size">13sp</dimen>
 
     <dimen name="proxy_pop_select_padding_horizontal">0dp</dimen>
-    <dimen name="proxy_pop_select_padding_vertical">16dp</dimen>
+    <dimen name="proxy_pop_select_padding_vertical">12dp</dimen>
     <dimen name="proxy_pop_select_item_padding_horizontal">24dp</dimen>
-    <dimen name="proxy_pop_select_item_padding_vertical">16dp</dimen>
+    <dimen name="proxy_pop_select_item_padding_vertical">12dp</dimen>
     <dimen name="proxy_pop_select_item_text_size">15.5sp</dimen>
 
     <dimen name="proxy_setting_module_title_padding_horizontal">24dp</dimen>

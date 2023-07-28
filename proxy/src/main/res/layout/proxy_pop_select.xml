@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/proxy_pop_select"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/proxy_pop_input_padding_horizontal"
@@ -18,25 +19,26 @@
         android:paddingVertical="@dimen/proxy_pop_select_padding_vertical"
         tools:ignore="UselessParent">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/proxy_theme"
-            android:paddingHorizontal="@dimen/proxy_pop_select_item_padding_horizontal"
-            android:paddingVertical="@dimen/proxy_pop_select_item_padding_vertical"
-            android:text="127.0.0.1"
-            android:textColor="@color/proxy_pop_select_text_selected"
-            android:textSize="@dimen/proxy_pop_select_item_text_size" />
+        <!--        <TextView-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:background="@color/proxy_theme"-->
+        <!--            android:paddingHorizontal="@dimen/proxy_pop_select_item_padding_horizontal"-->
+        <!--            android:paddingVertical="@dimen/proxy_pop_select_item_padding_vertical"-->
+        <!--            android:text="127.0.0.1"-->
+        <!--            android:textColor="@color/proxy_pop_select_text_selected"-->
+        <!--            android:textSize="@dimen/proxy_pop_select_item_text_size" />-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/proxy_style_press"
-            android:clickable="true"
-            android:paddingHorizontal="@dimen/proxy_pop_select_item_padding_horizontal"
-            android:paddingVertical="@dimen/proxy_pop_select_item_padding_vertical"
-            android:text="127.0.0.1"
-            android:textColor="@color/proxy_pop_select_text"
-            android:textSize="@dimen/proxy_pop_select_item_text_size" />
+        <!--        <TextView-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:background="@drawable/proxy_style_press"-->
+        <!--            android:clickable="true"-->
+        <!--            android:paddingHorizontal="@dimen/proxy_pop_select_item_padding_horizontal"-->
+        <!--            android:paddingVertical="@dimen/proxy_pop_select_item_padding_vertical"-->
+        <!--            android:text="127.0.0.1"-->
+        <!--            android:textColor="@color/proxy_pop_select_text"-->
+        <!--            android:textSize="@dimen/proxy_pop_select_item_text_size" />-->
+
     </LinearLayout>
 </LinearLayout>

@@ -10,6 +10,8 @@ import auto.ssh.bean.Config;
 import auto.ssh.data.ConfigPreference;
 import auto.ssh.ui.popup.Builder;
 import auto.ssh.ui.popup.InputPopup;
+import auto.ssh.ui.popup.SelectItem;
+import auto.ssh.ui.popup.SelectPopup;
 
 public class ConfigActivity extends BaseActivity {
     private View uiExit;
@@ -140,6 +142,31 @@ public class ConfigActivity extends BaseActivity {
             });
 
             Builder.buildInputWindow(self, inputPopup);
+        });
+
+        // 远程转发地址
+        uiRemoteForwardAddress.setOnClickListener(v -> {
+            SelectPopup selectPopup = new SelectPopup();
+            SelectItem item1 = new SelectItem("127.0.0.1", "127.0.0.1", false);
+            SelectItem item2 = new SelectItem("0.0.0.0", "0.0.0.0", false);
+
+            if (item1.getValue().equals(config.getRemoteForwardAddress())) {
+                item1.setSelected(true);
+            } else if (item2.getValue().equals(config.getRemoteForwardAddress())) {
+                item2.setSelected(true);
+            }
+
+            selectPopup.addItem(item1);
+            selectPopup.addItem(item2);
+
+            selectPopup.setSelectListener(value -> {
+                uiRemoteForwardAddressValue.setText((String) value);
+                config.setRemoteForwardAddress((String) value);
+                ConfigPreference.setRemoteForwardAddress((String) value);
+                return true;
+            });
+
+            Builder.buildSelectWindow(self, uiRemoteForwardAddress, selectPopup);
         });
 
         // 远程转发端口

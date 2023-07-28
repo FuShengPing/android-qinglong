@@ -17,6 +17,8 @@
     <color name="proxy_setting_item_enable">#101010</color>
     <color name="proxy_setting_item_disable">#808080</color>
 
-    <color name="proxy_pop_select_text_selected">@color/white</color>
+    <color name="proxy_pop_select_item">@color/transparent</color>
     <color name="proxy_pop_select_text">@color/black</color>
+    <color name="proxy_pop_select_text_selected">@color/white</color>
+    <color name="proxy_pop_select_item_selected">@color/proxy_theme</color>
 </resources>

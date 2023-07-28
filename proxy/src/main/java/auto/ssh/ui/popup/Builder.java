@@ -10,8 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
+import java.util.List;
 
 import auto.base.util.WindowUnit;
 import auto.ssh.R;
@@ -70,6 +73,45 @@ public class Builder {
 
         WindowUnit.setBackgroundAlpha(activity, 0.5f);
         popWindow.showAtLocation(activity.getWindow().getDecorView().getRootView(), Gravity.CENTER, 0, 0);
+    }
+
+    public static void buildSelectWindow(Activity activity, View target, SelectPopup selectPopup) {
+        View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.proxy_pop_select, null, false);
+        LinearLayout layout = view.findViewById(R.id.proxy_pop_select);
+        PopupWindow popWindow = build(activity.getBaseContext(), WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        popWindow.setContentView(view);
+
+        List<SelectItem> items = selectPopup.getItems();
+
+        for (SelectItem item : items) {
+            TextView itemView = (TextView) LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.proxy_pop_select_item, null, false);
+            itemView.setText(item.getTitle());
+            if (item.isSelected()) {
+                itemView.setBackgroundColor(activity.getResources().getColor(R.color.proxy_pop_select_item_selected, null));
+                itemView.setTextColor(activity.getResources().getColor(R.color.proxy_pop_select_text_selected, null));
+            } else {
+                itemView.setTextColor(activity.getResources().getColor(R.color.proxy_pop_select_text, null));
+            }
+
+            itemView.setOnClickListener(v -> {
+                boolean dismiss = selectPopup.getSelectListener().onSelect(item.getValue());
+                if (dismiss) {
+                    popWindow.dismiss();
+                }
+            });
+
+            layout.addView(itemView);
+        }
+
+        popWindow.setOnDismissListener(() -> {
+            if (selectPopup.getDismissListener() != null) {
+                selectPopup.getDismissListener().onDismiss();
+            }
+            selectPopup.setDismissListener(null);
+            popWindow.setOnDismissListener(null);
+        });
+
+        popWindow.showAtLocation(target, Gravity.BOTTOM, 0, 0);
     }
 
     private static PopupWindow build(Context context, int width, int height) {

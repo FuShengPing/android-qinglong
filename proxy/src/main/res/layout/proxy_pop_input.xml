@@ -6,6 +6,7 @@
     android:fitsSystemWindows="true">
 
     <LinearLayout
+        android:id="@+id/proxy_pop_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/proxy_pop_input_padding_horizontal"
