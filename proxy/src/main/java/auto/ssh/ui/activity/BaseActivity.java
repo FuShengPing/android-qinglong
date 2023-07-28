@@ -1,5 +1,6 @@
 package auto.ssh.ui.activity;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -12,10 +13,14 @@ import auto.base.util.WindowUnit;
  * @version 2023.06.22
  */
 public class BaseActivity extends AppCompatActivity {
+    protected Activity self;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        WindowUnit.setStatusBarTextColor(this,false);
+        self = this;
+
+        WindowUnit.setStatusBarTextColor(this, false);
     }
 }

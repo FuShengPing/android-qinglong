@@ -36,17 +36,17 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import auto.base.ui.popup.MenuPopupObject;
 import auto.base.util.TextUnit;
 import auto.base.util.TimeUnit;
 import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
 import auto.base.ui.popup.LocalFileAdapter;
-import auto.base.ui.popup.PopEditObject;
-import auto.base.ui.popup.PopEditWindow;
-import auto.base.ui.popup.PopListWindow;
-import auto.base.ui.popup.PopMenuObject;
-import auto.base.ui.popup.PopMenuWindow;
-import auto.base.ui.popup.PopProgressWindow;
+import auto.base.ui.popup.EditPopupObject;
+import auto.base.ui.popup.EditPopupWindow;
+import auto.base.ui.popup.ListPopupWindow;
+import auto.base.ui.popup.MenuPopupWindow;
+import auto.base.ui.popup.ProgressPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.panel.R;
 import auto.panel.bean.panel.Task;
@@ -90,8 +90,8 @@ public class TaskFragment extends BaseFragment {
     private RecyclerView uiRecycler;
     private SmartRefreshLayout uiRefresh;
 
-    private PopEditWindow uiPopEdit;
-    private PopProgressWindow uiPopProgress;
+    private EditPopupWindow uiPopEdit;
+    private ProgressPopupWindow uiPopProgress;
 
     @Nullable
     @Override
@@ -400,12 +400,12 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void showPopWindowMenu(View view) {
-        PopMenuWindow popMenuWindow = new PopMenuWindow(view, Gravity.END);
-        popMenuWindow.addItem(new PopMenuObject("add", "新建任务", R.drawable.ic_gray_add));
-        popMenuWindow.addItem(new PopMenuObject("localAdd", "本地导入", R.drawable.ic_gray_file));
-        popMenuWindow.addItem(new PopMenuObject("backup", "任务备份", R.drawable.ic_gray_download));
-        popMenuWindow.addItem(new PopMenuObject("deleteMul", "任务去重", R.drawable.ic_gray_delete));
-        popMenuWindow.addItem(new PopMenuObject("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
+        MenuPopupWindow popMenuWindow = new MenuPopupWindow(view, Gravity.END);
+        popMenuWindow.addItem(new MenuPopupObject("add", "新建任务", R.drawable.ic_gray_add));
+        popMenuWindow.addItem(new MenuPopupObject("localAdd", "本地导入", R.drawable.ic_gray_file));
+        popMenuWindow.addItem(new MenuPopupObject("backup", "任务备份", R.drawable.ic_gray_download));
+        popMenuWindow.addItem(new MenuPopupObject("deleteMul", "任务去重", R.drawable.ic_gray_delete));
+        popMenuWindow.addItem(new MenuPopupObject("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
         popMenuWindow.setOnActionListener(key -> {
             switch (key) {
                 case "add":
@@ -429,10 +429,10 @@ public class TaskFragment extends BaseFragment {
     }
 
     private void showPopWindowEdit(Task task) {
-        uiPopEdit = new PopEditWindow("新建任务", "取消", "确定");
-        PopEditObject itemName = new PopEditObject("name", null, "名称", "请输入任务名称");
-        PopEditObject itemCommand = new PopEditObject("command", null, "命令", "请输入要执行的命令");
-        PopEditObject itemSchedule = new PopEditObject("schedule", null, "定时规则", "秒(可选) 分 时 天 月 周");
+        uiPopEdit = new EditPopupWindow("新建任务", "取消", "确定");
+        EditPopupObject itemName = new EditPopupObject("name", null, "名称", "请输入任务名称");
+        EditPopupObject itemCommand = new EditPopupObject("command", null, "命令", "请输入要执行的命令");
+        EditPopupObject itemSchedule = new EditPopupObject("schedule", null, "定时规则", "秒(可选) 分 时 天 月 周");
         uiPopEdit.addItem(itemName);
         uiPopEdit.addItem(itemCommand);
         uiPopEdit.addItem(itemSchedule);
@@ -444,7 +444,7 @@ public class TaskFragment extends BaseFragment {
             itemSchedule.setValue(task.getSchedule());
         }
 
-        uiPopEdit.setActionListener(new PopEditWindow.OnActionListener() {
+        uiPopEdit.setActionListener(new EditPopupWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 String name = map.get("name");
@@ -496,12 +496,12 @@ public class TaskFragment extends BaseFragment {
             return;
         }
 
-        uiPopEdit = new PopEditWindow("任务备份", "取消", "确定");
-        PopEditObject itemName = new PopEditObject("fileName", null, "文件名", "选填");
+        uiPopEdit = new EditPopupWindow("任务备份", "取消", "确定");
+        EditPopupObject itemName = new EditPopupObject("fileName", null, "文件名", "选填");
 
         uiPopEdit.addItem(itemName);
 
-        uiPopEdit.setActionListener(new PopEditWindow.OnActionListener() {
+        uiPopEdit.setActionListener(new EditPopupWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 WindowUnit.hideKeyboard(uiPopEdit.getView());
@@ -532,7 +532,7 @@ public class TaskFragment extends BaseFragment {
             return;
         }
 
-        PopListWindow<LocalFileAdapter> listWindow = new PopListWindow<>("选择文件");
+        ListPopupWindow<LocalFileAdapter> listWindow = new ListPopupWindow<>("选择文件");
         LocalFileAdapter fileAdapter = new LocalFileAdapter(getContext());
         fileAdapter.setData(files);
         listWindow.setAdapter(fileAdapter);

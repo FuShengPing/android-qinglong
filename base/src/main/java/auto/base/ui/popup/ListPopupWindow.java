@@ -1,21 +1,21 @@
 package auto.base.ui.popup;
 
-public class PopListWindow<T> {
+public class ListPopupWindow<T> {
     private String title;
     private String cancelTip = "取消";
     private T adapter;
     private OnActionListener listener;
 
 
-    public PopListWindow() {
+    public ListPopupWindow() {
 
     }
 
-    public PopListWindow(String title) {
+    public ListPopupWindow(String title) {
         this.title = title;
     }
 
-    public PopListWindow(String title, T adapter) {
+    public ListPopupWindow(String title, T adapter) {
         this.title = title;
         this.adapter = adapter;
     }

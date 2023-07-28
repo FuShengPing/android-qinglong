@@ -19,7 +19,7 @@ import auto.base.util.LogUnit;
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
-import auto.base.ui.popup.PopConfirmWindow;
+import auto.base.ui.popup.ConfirmPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.panel.R;
 import auto.panel.bean.app.Version;
@@ -202,7 +202,7 @@ public class HomeActivity extends BaseActivity {
         content += "更新时间：" + version.getUpdateTime() + "\n\n";
         content += TextUnit.join(version.getUpdateDetail(), "\n\n");
 
-        PopConfirmWindow popConfirmWindow = new PopConfirmWindow("版本更新", content, "取消", "更新");
+        ConfirmPopupWindow popConfirmWindow = new ConfirmPopupWindow("版本更新", content, "取消", "更新");
         popConfirmWindow.setMaxHeight(WindowUnit.getWindowHeightPix(getBaseContext()) / 3);
         popConfirmWindow.setFocusable(false);
         popConfirmWindow.setOnActionListener(isConfirm -> {

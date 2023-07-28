@@ -5,29 +5,29 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PopMenuWindow {
-    private List<PopMenuObject> items = new ArrayList<>();
+public class MenuPopupWindow {
+    private List<MenuPopupObject> items = new ArrayList<>();
     private OnActionListener onActionListener;
     private View targetView;
     private int gravity;
 
-    public PopMenuWindow() {
+    public MenuPopupWindow() {
     }
 
-    public PopMenuWindow(View view, int gravity) {
+    public MenuPopupWindow(View view, int gravity) {
         this.targetView = view;
         this.gravity = gravity;
     }
 
-    public List<PopMenuObject> getItems() {
+    public List<MenuPopupObject> getItems() {
         return items;
     }
 
-    public void addItems(List<PopMenuObject> items) {
+    public void addItems(List<MenuPopupObject> items) {
         this.items = items;
     }
 
-    public void addItem(PopMenuObject item) {
+    public void addItem(MenuPopupObject item) {
         this.items.add(item);
     }
 

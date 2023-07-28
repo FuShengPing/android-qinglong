@@ -21,9 +21,9 @@ import android.widget.ImageView;
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
-import auto.base.ui.popup.PopConfirmWindow;
-import auto.base.ui.popup.PopMenuObject;
-import auto.base.ui.popup.PopMenuWindow;
+import auto.base.ui.popup.ConfirmPopupWindow;
+import auto.base.ui.popup.MenuPopupObject;
+import auto.base.ui.popup.MenuPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.panel.R;
 import auto.panel.net.web.WebViewBuilder;
@@ -117,7 +117,7 @@ public class PluginWebActivity extends BaseActivity {
 
     private void showPopWindowConfirm(String content) {
         //配置pop窗体信息
-        PopConfirmWindow popConfirmWindow = new PopConfirmWindow();
+        ConfirmPopupWindow popConfirmWindow = new ConfirmPopupWindow();
         popConfirmWindow.setMaxHeight(WindowUnit.getWindowHeightPix(getBaseContext()) / 3);//限制最大高度
         popConfirmWindow.setConfirmTip("拷贝");
         popConfirmWindow.setCancelTip("取消");
@@ -136,11 +136,11 @@ public class PluginWebActivity extends BaseActivity {
     }
 
     private void showPopMenu(View view) {
-        PopMenuWindow popMenuWindow = new PopMenuWindow(view, Gravity.END);
-        popMenuWindow.addItem(new PopMenuObject("read_normal", "ck提取", R.drawable.ic_gray_crop_free));
-//        popMenuWindow.addItem(new PopMenuObject("rule", "规则配置", R.drawable.ic_gray_mul_setting));
-//        popMenuWindow.addItem(new PopMenuObject("read_rule", "规则提取", R.drawable.ic_gray_rule));
-//        popMenuWindow.addItem(new PopMenuObject("import", "导入变量", R.drawable.ic_gray_upload));
+        MenuPopupWindow popMenuWindow = new MenuPopupWindow(view, Gravity.END);
+        popMenuWindow.addItem(new MenuPopupObject("read_normal", "ck提取", R.drawable.ic_gray_crop_free));
+//        popMenuWindow.addItem(new MenuPopupObject("rule", "规则配置", R.drawable.ic_gray_mul_setting));
+//        popMenuWindow.addItem(new MenuPopupObject("read_rule", "规则提取", R.drawable.ic_gray_rule));
+//        popMenuWindow.addItem(new MenuPopupObject("import", "导入变量", R.drawable.ic_gray_upload));
 
         popMenuWindow.setOnActionListener(key -> {
             if ("read_normal".equals(key)) {

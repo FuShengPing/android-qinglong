@@ -1,7 +1,7 @@
 package auto.base.ui.popup;
 
 
-public class PopConfirmWindow {
+public class ConfirmPopupWindow {
     private String title;
     private String content;
     private String cancelTip = "取消";
@@ -11,16 +11,16 @@ public class PopConfirmWindow {
 
     private OnActionListener onActionListener;
 
-    public PopConfirmWindow() {
+    public ConfirmPopupWindow() {
 
     }
 
-    public PopConfirmWindow(String title, String content) {
+    public ConfirmPopupWindow(String title, String content) {
         this.title = title;
         this.content = content;
     }
 
-    public PopConfirmWindow(String title, String content, String cancelTip, String confirmTip) {
+    public ConfirmPopupWindow(String title, String content, String cancelTip, String confirmTip) {
         this.title = title;
         this.content = content;
         this.cancelTip = cancelTip;

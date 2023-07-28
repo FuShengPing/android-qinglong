@@ -15,8 +15,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import auto.base.ui.popup.PopMenuObject;
-import auto.base.ui.popup.PopMenuWindow;
+import auto.base.ui.popup.MenuPopupObject;
+import auto.base.ui.popup.MenuPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.panel.R;
 import auto.panel.ui.BaseFragment;
@@ -138,9 +138,9 @@ public class DepPagerFragment extends BaseFragment {
     }
 
     private void showPopWindowMenu(View view) {
-        PopMenuWindow popMenuWindow = new PopMenuWindow(view, Gravity.END);
-        popMenuWindow.addItem(new PopMenuObject("add", "新建依赖", R.drawable.ic_gray_add));
-        popMenuWindow.addItem(new PopMenuObject("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
+        MenuPopupWindow popMenuWindow = new MenuPopupWindow(view, Gravity.END);
+        popMenuWindow.addItem(new MenuPopupObject("add", "新建依赖", R.drawable.ic_gray_add));
+        popMenuWindow.addItem(new MenuPopupObject("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
 
         popMenuWindow.setOnActionListener(key -> {
             if (key.equals("add")) {

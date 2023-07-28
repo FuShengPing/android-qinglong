@@ -11,7 +11,7 @@ import android.widget.EditText;
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
-import auto.base.ui.popup.PopProgressWindow;
+import auto.base.ui.popup.ProgressPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.panel.R;
 import auto.panel.bean.panel.Account;
@@ -32,7 +32,7 @@ public class LoginActivity extends BaseActivity {
     private Button uiLogin;
     private Button uiRegister;
 
-    private PopProgressWindow uiPopProgress;
+    private ProgressPopupWindow uiPopProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

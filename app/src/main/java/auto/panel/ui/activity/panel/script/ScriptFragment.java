@@ -25,8 +25,8 @@ import java.util.Objects;
 import java.util.Stack;
 
 import auto.base.util.ToastUnit;
-import auto.base.ui.popup.PopMenuObject;
-import auto.base.ui.popup.PopMenuWindow;
+import auto.base.ui.popup.MenuPopupObject;
+import auto.base.ui.popup.MenuPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.panel.R;
 import auto.panel.bean.panel.File;
@@ -155,10 +155,10 @@ public class ScriptFragment extends BaseFragment {
     }
 
     private void showPopItemMenu(View v, File file, int position) {
-        PopMenuWindow popMenuWindow = new PopMenuWindow(v, Gravity.CENTER);
-        popMenuWindow.addItem(new PopMenuObject("copy", "复制路径", R.drawable.ic_gray_crop_free));
+        MenuPopupWindow popMenuWindow = new MenuPopupWindow(v, Gravity.CENTER);
+        popMenuWindow.addItem(new MenuPopupObject("copy", "复制路径", R.drawable.ic_gray_crop_free));
         if (!file.isDir()) {
-            popMenuWindow.addItem(new PopMenuObject("delete", "删除脚本", R.drawable.ic_gray_delete));
+            popMenuWindow.addItem(new MenuPopupObject("delete", "删除脚本", R.drawable.ic_gray_delete));
         }
 
         popMenuWindow.setOnActionListener(key -> {
@@ -181,10 +181,10 @@ public class ScriptFragment extends BaseFragment {
     }
 
     private void showPopWindowMenu(View v) {
-        PopMenuWindow popMenuWindow = new PopMenuWindow(v, Gravity.END);
-        popMenuWindow.addItem(new PopMenuObject("add", "新建脚本", R.drawable.ic_gray_add));
-        popMenuWindow.addItem(new PopMenuObject("import", "本地导入", R.drawable.ic_gray_upload));
-        popMenuWindow.addItem(new PopMenuObject("backup", "脚本备份", R.drawable.ic_gray_download));
+        MenuPopupWindow popMenuWindow = new MenuPopupWindow(v, Gravity.END);
+        popMenuWindow.addItem(new MenuPopupObject("add", "新建脚本", R.drawable.ic_gray_add));
+        popMenuWindow.addItem(new MenuPopupObject("import", "本地导入", R.drawable.ic_gray_upload));
+        popMenuWindow.addItem(new MenuPopupObject("backup", "脚本备份", R.drawable.ic_gray_download));
 
         popMenuWindow.setOnActionListener(key -> true);
         PopupWindowBuilder.buildMenuWindow(requireActivity(), popMenuWindow);

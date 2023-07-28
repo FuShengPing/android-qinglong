@@ -33,14 +33,14 @@ public class PopupWindowBuilder {
     public static final String TAG = "PopupWindowManager";
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    public static void buildMenuWindow(Activity activity, PopMenuWindow popMenuWindow) {
+    public static void buildMenuWindow(Activity activity, MenuPopupWindow popMenuWindow) {
         View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_window_menu, null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), true);
         popWindow.setContentView(view);
 
         LinearLayout ui_ll_container = view.findViewById(R.id.pop_common_ll_container);
 
-        for (PopMenuObject item : popMenuWindow.getItems()) {
+        for (MenuPopupObject item : popMenuWindow.getItems()) {
             View itemView = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_menu_item, null, false);
             ImageView ui_icon = itemView.findViewById(R.id.pop_common_mini_more_icon);
             TextView ui_name = itemView.findViewById(R.id.pop_common_mini_more_name);
@@ -64,7 +64,7 @@ public class PopupWindowBuilder {
         popWindow.showAsDropDown(popMenuWindow.getTargetView(), popMenuWindow.getGravity(), 0, 0);
     }
 
-    public static void buildEditWindow(@NonNull Activity activity, PopEditWindow popEditWindow) {
+    public static void buildEditWindow(@NonNull Activity activity, EditPopupWindow popEditWindow) {
         View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_edit_window, null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), true);
         popWindow.setContentView(view);
@@ -84,8 +84,8 @@ public class PopupWindowBuilder {
 
         //添加item
         List<EditText> itemViews = new ArrayList<>();
-        List<PopEditObject> items = popEditWindow.getItems();
-        for (PopEditObject item : items) {
+        List<EditPopupObject> items = popEditWindow.getItems();
+        for (EditPopupObject item : items) {
             View itemView = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_edit_item, null, false);
             TextView ui_item_label = itemView.findViewById(R.id.pop_common_tv_label);
             EditText ui_item_value = itemView.findViewById(R.id.pop_common_et_value);
@@ -129,7 +129,7 @@ public class PopupWindowBuilder {
         popWindow.showAtLocation(activity.getWindow().getDecorView().getRootView(), Gravity.CENTER, 0, 0);
     }
 
-    public static PopupWindow buildListWindow(Activity activity, PopListWindow listWindow) {
+    public static PopupWindow buildListWindow(Activity activity, ListPopupWindow listWindow) {
         View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_window_list, null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), true);
         popWindow.setContentView(view);
@@ -162,7 +162,7 @@ public class PopupWindowBuilder {
         return popWindow;
     }
 
-    public static PopupWindow buildConfirmWindow(Activity activity, PopConfirmWindow popConfirmWindow) {
+    public static PopupWindow buildConfirmWindow(Activity activity, ConfirmPopupWindow popConfirmWindow) {
         View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_confirm_window, null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), popConfirmWindow.isFocusable());
         popWindow.setContentView(view);
@@ -204,14 +204,14 @@ public class PopupWindowBuilder {
         return popWindow;
     }
 
-    public static PopProgressWindow buildProgressWindow(Activity activity, PopupWindow.OnDismissListener dismissListener) {
+    public static ProgressPopupWindow buildProgressWindow(Activity activity, PopupWindow.OnDismissListener dismissListener) {
         View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.pop_loading_window, null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), false);
         popWindow.setContentView(view);
 
         TextView ui_tip = view.findViewById(R.id.pop_common_progress_tip);
 
-        PopProgressWindow progressPopWindow = new PopProgressWindow(activity, popWindow, ui_tip);
+        ProgressPopupWindow progressPopWindow = new ProgressPopupWindow(activity, popWindow, ui_tip);
 
         popWindow.setOnDismissListener(() -> {
             if (dismissListener != null) {
@@ -229,7 +229,7 @@ public class PopupWindowBuilder {
         PopupWindow popupWindow = new PopupWindow(context);
         popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
         popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-        popupWindow.setAnimationStyle(R.style.anim_pop_common);
+        popupWindow.setAnimationStyle(R.style.base_anim_pop_common);
         popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         popupWindow.setOutsideTouchable(false);
         popupWindow.setFocusable(isFocusable);

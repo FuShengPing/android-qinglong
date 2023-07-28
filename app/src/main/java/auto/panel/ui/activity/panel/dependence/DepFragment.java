@@ -20,8 +20,8 @@ import java.util.Objects;
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
-import auto.base.ui.popup.PopEditObject;
-import auto.base.ui.popup.PopEditWindow;
+import auto.base.ui.popup.EditPopupObject;
+import auto.base.ui.popup.EditPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.panel.R;
 import auto.panel.bean.panel.Dependence;
@@ -37,7 +37,7 @@ public class DepFragment extends BaseFragment {
     private DepItemAdapter itemAdapter;
 
     private SmartRefreshLayout uiRefresh;
-    private PopEditWindow uiPopEdit;
+    private EditPopupWindow uiPopEdit;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -82,12 +82,12 @@ public class DepFragment extends BaseFragment {
     }
 
     protected void onAddClick() {
-        uiPopEdit = new PopEditWindow("新建依赖", "取消", "确定");
+        uiPopEdit = new EditPopupWindow("新建依赖", "取消", "确定");
         uiPopEdit.setMaxHeight(WindowUnit.getWindowHeightPix(requireContext()) / 3);
-        uiPopEdit.addItem(new PopEditObject("type", this.type, "类型", null, false, false));
-        uiPopEdit.addItem(new PopEditObject("name", null, "名称", "请输入依赖名称"));
+        uiPopEdit.addItem(new EditPopupObject("type", this.type, "类型", null, false, false));
+        uiPopEdit.addItem(new EditPopupObject("name", null, "名称", "请输入依赖名称"));
 
-        uiPopEdit.setActionListener(new PopEditWindow.OnActionListener() {
+        uiPopEdit.setActionListener(new EditPopupWindow.OnActionListener() {
             @Override
             public boolean onConfirm(Map<String, String> map) {
                 String type = map.get("type");
