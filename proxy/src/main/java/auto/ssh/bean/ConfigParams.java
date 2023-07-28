@@ -4,7 +4,7 @@ package auto.ssh.bean;
  * @author wsfsp4
  * @version 2023.07.28
  */
-public class Config {
+public class ConfigParams {
     private String localAddress;
     private int localPort;
     private String remoteAddress;

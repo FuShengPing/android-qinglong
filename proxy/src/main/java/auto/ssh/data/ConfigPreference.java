@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import auto.ssh.MyApplication;
-import auto.ssh.bean.Config;
+import auto.ssh.bean.ConfigParams;
 
 /**
  * @author wsfsp4
@@ -37,8 +37,8 @@ public class ConfigPreference {
         sp = MyApplication.getContext().getSharedPreferences(NAME, Context.MODE_PRIVATE);
     }
 
-    public static Config getConfig() {
-        Config config = new Config();
+    public static ConfigParams getConfig() {
+        ConfigParams config = new ConfigParams();
         config.setLocalAddress(getLocalAddress());
         config.setLocalPort(getLocalPort());
         config.setRemoteAddress(getRemoteAddress());

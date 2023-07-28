@@ -38,33 +38,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <!--本地代理-->
+            <!--后台设置-->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:paddingVertical="6dp"
-                android:text="本地代理"
-                android:textColor="@color/proxy_theme" />
+                android:paddingHorizontal="@dimen/proxy_setting_module_title_padding_horizontal"
+                android:paddingVertical="@dimen/proxy_setting_module_title_padding_vertical"
+                android:text="后台"
+                android:textColor="@color/proxy_theme"
+                android:textSize="@dimen/proxy_setting_module_title_size" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/style_press_gray"
                 android:orientation="vertical"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="12dp">
+                android:paddingHorizontal="@dimen/proxy_setting_item_padding_horizontal"
+                android:paddingVertical="@dimen/proxy_setting_item_padding_vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
-                    android:text="保持唤醒" />
+                    android:text="保持唤醒"
+                    android:textColor="@color/proxy_setting_item_enable"
+                    android:textSize="@dimen/proxy_setting_item_title_size" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="开启" />
+                    android:textColor="@color/proxy_setting_item_enable"
+                    android:textSize="@dimen/proxy_setting_item_value_size" />
             </LinearLayout>
 
             <LinearLayout
@@ -72,128 +76,130 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/style_press_gray"
                 android:orientation="vertical"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="12dp">
+                android:paddingHorizontal="@dimen/proxy_setting_item_padding_horizontal"
+                android:paddingVertical="@dimen/proxy_setting_item_padding_vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
-                    android:text="刷新间隔" />
+                    android:text="刷新频率"
+                    android:textColor="@color/proxy_setting_item_enable"
+                    android:textSize="@dimen/proxy_setting_item_title_size" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="180秒" />
+                    android:textColor="@color/proxy_setting_item_enable"
+                    android:textSize="@dimen/proxy_setting_item_value_size" />
             </LinearLayout>
-            <!--远程连接-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/style_press_gray"
+                android:orientation="vertical"
+                android:paddingHorizontal="@dimen/proxy_setting_item_padding_horizontal"
+                android:paddingVertical="@dimen/proxy_setting_item_padding_vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:text="忽略电池优化"
+                    android:textColor="@color/proxy_setting_item_enable"
+                    android:textSize="@dimen/proxy_setting_item_title_size" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/proxy_setting_item_enable"
+                    android:textSize="@dimen/proxy_setting_item_value_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/style_press_gray"
+                android:orientation="vertical"
+                android:paddingHorizontal="@dimen/proxy_setting_item_padding_horizontal"
+                android:paddingVertical="@dimen/proxy_setting_item_padding_vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:text="后台白名单"
+                    android:textColor="@color/proxy_setting_item_enable"
+                    android:textSize="@dimen/proxy_setting_item_title_size" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/proxy_setting_item_enable"
+                    android:textSize="@dimen/proxy_setting_item_value_size" />
+            </LinearLayout>
+
+            <!--其他-->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:paddingVertical="6dp"
-                android:text="远程连接"
-                android:textColor="@color/proxy_theme" />
+                android:paddingHorizontal="@dimen/proxy_setting_module_title_padding_horizontal"
+                android:paddingVertical="@dimen/proxy_setting_module_title_padding_vertical"
+                android:text="其他"
+                android:textColor="@color/proxy_theme"
+                android:textSize="@dimen/proxy_setting_module_title_size" />
 
             <LinearLayout
+                android:id="@+id/proxy_setting_log_level"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/style_press_gray"
                 android:orientation="vertical"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="12dp">
+                android:paddingHorizontal="@dimen/proxy_setting_item_padding_horizontal"
+                android:paddingVertical="@dimen/proxy_setting_item_padding_vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
-                    android:text="远程地址" />
+                    android:text="日志等级"
+                    android:textColor="@color/proxy_setting_item_enable"
+                    android:textSize="@dimen/proxy_setting_item_title_size" />
 
                 <TextView
+                    android:id="@+id/proxy_setting_log_level_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="127.0.0.1" />
+                    android:textColor="@color/proxy_setting_item_enable"
+                    android:textSize="@dimen/proxy_setting_item_value_size" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/proxy_setting_log_delete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/style_press_gray"
                 android:orientation="vertical"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="12dp">
+                android:paddingHorizontal="@dimen/proxy_setting_item_padding_horizontal"
+                android:paddingVertical="@dimen/proxy_setting_item_padding_vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
-                    android:text="远程端口" />
+                    android:text="删除频率"
+                    android:textColor="@color/proxy_setting_item_enable"
+                    android:textSize="@dimen/proxy_setting_item_title_size" />
 
                 <TextView
+                    android:id="@+id/proxy_setting_log_delete_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="22" />
+                    android:textColor="@color/proxy_setting_item_enable"
+                    android:textSize="@dimen/proxy_setting_item_value_size" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/style_press_gray"
-                android:orientation="vertical"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="12dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="用户名" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
-                    android:text="root" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/style_press_gray"
-                android:orientation="vertical"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="12dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="密码" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
-                    android:text="root" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/style_press_gray"
-                android:orientation="vertical"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="12dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
-                    android:text="转发端口" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="9100" />
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

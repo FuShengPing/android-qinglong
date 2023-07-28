@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import auto.ssh.R;
-import auto.ssh.bean.Config;
+import auto.ssh.bean.ConfigParams;
 import auto.ssh.data.ConfigPreference;
 import auto.ssh.ui.popup.Builder;
 import auto.ssh.ui.popup.InputPopup;
@@ -64,30 +64,30 @@ public class ConfigActivity extends BaseActivity {
         uiExit.setOnClickListener(v -> finish());
 
         // 配置信息
-        Config config = ConfigPreference.getConfig();
+        ConfigParams params = ConfigPreference.getConfig();
 
-        uiLocalAddressValue.setText(config.getLocalAddress());
-        uiLocalPortValue.setText(String.valueOf(config.getLocalPort()));
-        uiRemoteAddressValue.setText(config.getRemoteAddress());
-        uiRemotePortValue.setText(String.valueOf(config.getRemotePort()));
-        uiRemoteUsernameValue.setText(config.getRemoteUsername());
-        if (config.getRemotePassword().isEmpty()) {
+        uiLocalAddressValue.setText(params.getLocalAddress());
+        uiLocalPortValue.setText(String.valueOf(params.getLocalPort()));
+        uiRemoteAddressValue.setText(params.getRemoteAddress());
+        uiRemotePortValue.setText(String.valueOf(params.getRemotePort()));
+        uiRemoteUsernameValue.setText(params.getRemoteUsername());
+        if (params.getRemotePassword().isEmpty()) {
             uiRemotePasswordValue.setText("未设置");
         } else {
-            uiRemotePasswordValue.setText(config.getRemotePassword());
+            uiRemotePasswordValue.setText(params.getRemotePassword());
         }
-        uiRemoteForwardAddressValue.setText(config.getRemoteForwardAddress());
-        uiRemoteForwardPortValue.setText(String.valueOf(config.getRemoteForwardPort()));
+        uiRemoteForwardAddressValue.setText(params.getRemoteForwardAddress());
+        uiRemoteForwardPortValue.setText(String.valueOf(params.getRemoteForwardPort()));
 
         // 远程地址
         uiRemoteAddress.setOnClickListener(v -> {
-            InputPopup inputPopup = new InputPopup("远程地址", null, config.getRemoteAddress());
+            InputPopup inputPopup = new InputPopup("远程地址", null, params.getRemoteAddress());
             inputPopup.setLength(15);
             inputPopup.setType(InputType.TYPE_CLASS_PHONE);
 
             inputPopup.setActionListener(value -> {
                 uiRemoteAddressValue.setText(value);
-                config.setRemoteAddress(value);
+                params.setRemoteAddress(value);
                 ConfigPreference.setRemoteAddress(value);
                 return true;
             });
@@ -97,14 +97,14 @@ public class ConfigActivity extends BaseActivity {
 
         // 远程端口
         uiRemotePort.setOnClickListener(v -> {
-            InputPopup inputPopup = new InputPopup("远程端口", null, String.valueOf(config.getRemotePort()));
+            InputPopup inputPopup = new InputPopup("远程端口", null, String.valueOf(params.getRemotePort()));
             inputPopup.setLength(5);
             inputPopup.setType(InputType.TYPE_CLASS_NUMBER);
 
             inputPopup.setActionListener(value -> {
                 int port = Integer.parseInt(value);
                 uiRemotePortValue.setText(value);
-                config.setRemotePort(port);
+                params.setRemotePort(port);
                 ConfigPreference.setRemotePort(port);
                 return true;
             });
@@ -114,13 +114,13 @@ public class ConfigActivity extends BaseActivity {
 
         // 远程用户名
         uiRemoteUsername.setOnClickListener(v -> {
-            InputPopup inputPopup = new InputPopup("用户名", null, config.getRemoteUsername());
+            InputPopup inputPopup = new InputPopup("用户名", null, params.getRemoteUsername());
             inputPopup.setLength(20);
             inputPopup.setType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 
             inputPopup.setActionListener(value -> {
                 uiRemoteUsernameValue.setText(value);
-                config.setRemoteUsername(value);
+                params.setRemoteUsername(value);
                 ConfigPreference.setRemoteUsername(value);
                 return true;
             });
@@ -130,13 +130,13 @@ public class ConfigActivity extends BaseActivity {
 
         // 远程密码
         uiRemotePassword.setOnClickListener(v -> {
-            InputPopup inputPopup = new InputPopup("密码", null, config.getRemotePassword());
+            InputPopup inputPopup = new InputPopup("密码", null, params.getRemotePassword());
             inputPopup.setLength(30);
             inputPopup.setType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 
             inputPopup.setActionListener(value -> {
                 uiRemotePasswordValue.setText(value);
-                config.setRemotePassword(value);
+                params.setRemotePassword(value);
                 ConfigPreference.setRemotePassword(value);
                 return true;
             });
@@ -150,9 +150,9 @@ public class ConfigActivity extends BaseActivity {
             SelectItem item1 = new SelectItem("127.0.0.1", "127.0.0.1", false);
             SelectItem item2 = new SelectItem("0.0.0.0", "0.0.0.0", false);
 
-            if (item1.getValue().equals(config.getRemoteForwardAddress())) {
+            if (item1.getValue().equals(params.getRemoteForwardAddress())) {
                 item1.setSelected(true);
-            } else if (item2.getValue().equals(config.getRemoteForwardAddress())) {
+            } else if (item2.getValue().equals(params.getRemoteForwardAddress())) {
                 item2.setSelected(true);
             }
 
@@ -161,7 +161,7 @@ public class ConfigActivity extends BaseActivity {
 
             selectPopup.setSelectListener(value -> {
                 uiRemoteForwardAddressValue.setText((String) value);
-                config.setRemoteForwardAddress((String) value);
+                params.setRemoteForwardAddress((String) value);
                 ConfigPreference.setRemoteForwardAddress((String) value);
                 return true;
             });
@@ -171,14 +171,14 @@ public class ConfigActivity extends BaseActivity {
 
         // 远程转发端口
         uiRemoteForwardPort.setOnClickListener(v -> {
-            InputPopup inputPopup = new InputPopup("转发端口", null, String.valueOf(config.getRemoteForwardPort()));
+            InputPopup inputPopup = new InputPopup("转发端口", null, String.valueOf(params.getRemoteForwardPort()));
             inputPopup.setLength(5);
             inputPopup.setType(InputType.TYPE_CLASS_NUMBER);
 
             inputPopup.setActionListener(value -> {
                 int port = Integer.parseInt(value);
                 uiRemoteForwardPortValue.setText(value);
-                config.setRemoteForwardPort(port);
+                params.setRemoteForwardPort(port);
                 ConfigPreference.setRemoteForwardPort(port);
                 return true;
             });

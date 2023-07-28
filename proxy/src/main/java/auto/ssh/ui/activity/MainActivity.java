@@ -23,7 +23,7 @@ import auto.base.util.LogUnit;
 import auto.base.util.Logger;
 import auto.base.util.NetUnit;
 import auto.ssh.R;
-import auto.ssh.bean.Config;
+import auto.ssh.bean.ConfigParams;
 import auto.ssh.data.ConfigPreference;
 import auto.ssh.service.ForwardService;
 import auto.ssh.service.ProxyService;
@@ -152,7 +152,7 @@ public class MainActivity extends BaseActivity {
 
     private void startForwardService() {
         Intent intent = new Intent(BaseApplication.getContext(), ForwardService.class);
-        Config config = ConfigPreference.getConfig();
+        ConfigParams config = ConfigPreference.getConfig();
         intent.putExtra(ForwardService.EXTRA_ACTION, ForwardService.ACTION_SERVICE_START);
         intent.putExtra(ForwardService.EXTRA_REMOTE_ADDRESS, config.getRemoteAddress());
         intent.putExtra(ForwardService.EXTRA_REMOTE_PORT, config.getRemotePort());
