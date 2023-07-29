@@ -67,21 +67,36 @@ public class Logger extends LogFileUtil {
 
     public static List<LogLevel> getLevels() {
         List<LogLevel> levels = new ArrayList<>();
-        levels.add(new LogLevel("关闭", Logger.LEVEL_NONE));
         levels.add(new LogLevel("调试", Logger.LEVEL_DEBUG));
         levels.add(new LogLevel("消息", Logger.LEVEL_INFO));
-        levels.add(new LogLevel("警告", Logger.LEVEL_INFO));
-        levels.add(new LogLevel("错误", Logger.LEVEL_INFO));
+        levels.add(new LogLevel("警告", Logger.LEVEL_WARN));
+        levels.add(new LogLevel("错误", Logger.LEVEL_ERROR));
+        levels.add(new LogLevel("关闭", Logger.LEVEL_NONE));
         return levels;
+    }
+
+    public static String getName(int level) {
+        switch (level) {
+            case LEVEL_DEBUG:
+                return "调试";
+            case LEVEL_INFO:
+                return "信息";
+            case LEVEL_WARN:
+                return "警告";
+            case LEVEL_ERROR:
+                return "错误";
+            default:
+                return "关闭";
+        }
     }
 
     public static class LogLevel {
         private String name;
-        private int level;
+        private int value;
 
         public LogLevel(String name, int level) {
             this.name = name;
-            this.level = level;
+            this.value = level;
         }
 
         public String getName() {
@@ -92,12 +107,12 @@ public class Logger extends LogFileUtil {
             this.name = name;
         }
 
-        public int getLevel() {
-            return level;
+        public int getValue() {
+            return value;
         }
 
-        public void setLevel(int level) {
-            this.level = level;
+        public void setValue(int value) {
+            this.value = value;
         }
     }
 }

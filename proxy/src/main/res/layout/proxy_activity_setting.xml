@@ -163,7 +163,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
-                    android:text="日志等级"
+                    android:text="日志级别"
                     android:textColor="@color/proxy_setting_item_enable"
                     android:textSize="@dimen/proxy_setting_item_title_size" />
 
