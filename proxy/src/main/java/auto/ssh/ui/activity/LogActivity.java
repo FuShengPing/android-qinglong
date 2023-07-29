@@ -1,8 +1,10 @@
 package auto.ssh.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
@@ -10,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import auto.base.util.LogUnit;
 import auto.base.util.Logger;
 import auto.ssh.R;
 import auto.ssh.ui.adapter.LogFileAdapter;
@@ -18,6 +19,7 @@ import auto.ssh.ui.adapter.LogFileAdapter;
 public class LogActivity extends BaseActivity {
     private View uiExit;
     private RecyclerView uiRecyclerView;
+
     private LogFileAdapter adapter;
 
     @Override
@@ -30,6 +32,7 @@ public class LogActivity extends BaseActivity {
 
         adapter = new LogFileAdapter(self);
         uiRecyclerView.setAdapter(adapter);
+        uiRecyclerView.setLayoutManager(new LinearLayoutManager(self, RecyclerView.VERTICAL, false));
         Objects.requireNonNull(uiRecyclerView.getItemAnimator()).setChangeDuration(0);
 
         init();
@@ -39,7 +42,14 @@ public class LogActivity extends BaseActivity {
         // 退出
         uiExit.setOnClickListener(v -> finish());
 
-        getFiles();
+        adapter.setData(getFiles());
+
+        adapter.setListener(file -> {
+            Intent intent = new Intent(self, LogDetailActivity.class);
+            intent.putExtra(LogDetailActivity.EXTRA_PATH, file.getPath());
+
+            startActivity(intent);
+        });
     }
 
     private List<auto.ssh.bean.File> getFiles() {
@@ -59,7 +69,7 @@ public class LogActivity extends BaseActivity {
         if (files != null) {
             for (File file : files) {
                 if (file.isFile() && file.getName().endsWith(".log")) {
-                    LogUnit.log(file.getName() + "\n" + file.getAbsolutePath());
+                    result.add(new auto.ssh.bean.File(file.getName(), file.getAbsolutePath()));
                 }
             }
         }

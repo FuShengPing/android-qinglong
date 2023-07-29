@@ -13,6 +13,7 @@
         <item name="android:statusBarColor">@color/theme_white_shadow</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/theme_white_shadow</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="Theme.SSH.NoActionBar">

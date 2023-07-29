@@ -13,12 +13,12 @@
 
         <ImageView
             android:id="@+id/exit"
-            android:layout_width="@dimen/proxy_activity_icon_size"
-            android:layout_height="@dimen/proxy_activity_icon_size"
-            android:layout_marginEnd="@dimen/proxy_activity_icon_margin_end"
+            android:layout_width="@dimen/proxy_activity_bar_icon_size"
+            android:layout_height="@dimen/proxy_activity_bar_icon_size"
+            android:layout_marginEnd="@dimen/proxy_activity_bar_icon_margin_end"
             android:background="@drawable/style_press_ripple"
             android:clickable="true"
-            android:padding="@dimen/proxy_activity_icon_padding"
+            android:padding="@dimen/proxy_activity_bar_icon_padding"
             android:src="@drawable/ic_arrow_back_black" />
 
         <TextView
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:text="设置"
             android:textColor="@color/proxy_activity_title"
-            android:textSize="@dimen/proxy_activity_title_size"
+            android:textSize="@dimen/proxy_activity_bar_title_size"
             android:textStyle="bold" />
     </LinearLayout>
 

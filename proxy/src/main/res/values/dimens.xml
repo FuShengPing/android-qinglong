@@ -6,10 +6,11 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
-    <dimen name="proxy_activity_title_size">18sp</dimen>
-    <dimen name="proxy_activity_icon_size">30dp</dimen>
-    <dimen name="proxy_activity_icon_padding">3dp</dimen>
-    <dimen name="proxy_activity_icon_margin_end">16dp</dimen>
+    <dimen name="proxy_activity_bar_padding">16dp</dimen>
+    <dimen name="proxy_activity_bar_title_size">18sp</dimen>
+    <dimen name="proxy_activity_bar_icon_size">30dp</dimen>
+    <dimen name="proxy_activity_bar_icon_padding">3dp</dimen>
+    <dimen name="proxy_activity_bar_icon_margin_end">16dp</dimen>
 
     <dimen name="proxy_pop_margin_horizontal">28dp</dimen>
     <dimen name="proxy_pop_margin_vertical">30dp</dimen>
