@@ -29,7 +29,6 @@ import auto.ssh.service.ForwardService;
 import auto.ssh.service.ProxyService;
 
 public class MainActivity extends BaseActivity {
-    private static final String PROJECT = "proxy";
     private CardView uiLocal;
     private ImageView uiLocalImg;
     private TextView uiLocalTip;

@@ -1,5 +1,6 @@
-package auto.panel.ui.activity.app;
+package auto.panel.ui.activity;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -15,27 +16,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import auto.base.ui.popup.ConfirmPopupWindow;
+import auto.base.ui.popup.PopupWindowBuilder;
 import auto.base.util.LogUnit;
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
-import auto.base.ui.popup.ConfirmPopupWindow;
-import auto.base.ui.popup.PopupWindowBuilder;
 import auto.panel.R;
 import auto.panel.bean.app.Version;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.database.sp.SettingPreference;
 import auto.panel.net.app.ApiController;
-import auto.panel.ui.activity.BaseActivity;
-import auto.panel.ui.activity.LoginActivity;
-import auto.panel.ui.fragment.BaseFragment;
-import auto.panel.ui.activity.CodeWebActivity;
 import auto.panel.ui.activity.panel.dependence.DependencePagerFragment;
 import auto.panel.ui.activity.panel.environment.EnvironmentFragment;
 import auto.panel.ui.activity.panel.log.LogFragment;
 import auto.panel.ui.activity.panel.script.ScriptFragment;
 import auto.panel.ui.activity.panel.setting.SettingFragment;
 import auto.panel.ui.activity.panel.task.TaskFragment;
+import auto.panel.ui.fragment.BaseFragment;
 import auto.panel.utils.EncryptUtil;
 import auto.panel.utils.PackageUtil;
 import auto.panel.utils.WebUnit;
@@ -159,7 +157,14 @@ public class HomeActivity extends BaseActivity {
         });
         //APP设置
         menu_app_setting.setOnClickListener(v -> {
-            Intent intent = new Intent(getBaseContext(), SettingActivity.class);
+
+            // Intent intent = new Intent(getBaseContext(), SettingActivity.class);
+//            Intent intent = new Intent(getBaseContext(), "auto.ssh.ui.activity.MainActivity");
+
+            Intent intent = new Intent();
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//可选
+            ComponentName comp = new ComponentName("auto.ssh","auto.ssh.ui.activity.MainActivity");
+            intent.setComponent(comp);
             startActivity(intent);
         });
     }

@@ -1,4 +1,4 @@
-package auto.panel.ui.activity.app;
+package auto.panel.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import auto.panel.bean.panel.SystemInfo;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.panel.ApiController;
 import auto.panel.ui.activity.BaseActivity;
+import auto.panel.ui.activity.HomeActivity;
 import auto.panel.ui.activity.LoginActivity;
 
 

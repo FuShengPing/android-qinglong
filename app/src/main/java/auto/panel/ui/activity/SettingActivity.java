@@ -1,4 +1,4 @@
-package auto.panel.ui.activity.app;
+package auto.panel.ui.activity;
 
 import android.content.Intent;
 import android.net.Uri;
