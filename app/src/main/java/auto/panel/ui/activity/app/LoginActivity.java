@@ -19,7 +19,7 @@ import auto.panel.bean.panel.SystemInfo;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
-import auto.panel.ui.BaseActivity;
+import auto.panel.ui.activity.BaseActivity;
 
 public class LoginActivity extends BaseActivity {
     public static final String TAG = "LoginActivity";

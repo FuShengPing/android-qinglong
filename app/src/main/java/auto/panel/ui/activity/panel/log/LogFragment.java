@@ -28,7 +28,7 @@ import auto.panel.bean.panel.File;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
-import auto.panel.ui.BaseFragment;
+import auto.panel.ui.fragment.BaseFragment;
 import auto.panel.ui.activity.panel.CodeWebActivity;
 
 @SuppressLint({"SetTextI18n", "InflateParams"})

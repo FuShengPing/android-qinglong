@@ -19,7 +19,7 @@ import auto.base.ui.popup.MenuPopupObject;
 import auto.base.ui.popup.MenuPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.panel.R;
-import auto.panel.ui.BaseFragment;
+import auto.panel.ui.fragment.BaseFragment;
 
 @SuppressLint("InflateParams")
 public class DepPagerFragment extends BaseFragment {

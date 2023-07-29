@@ -15,7 +15,7 @@ import auto.panel.bean.app.Config;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.database.sp.SettingPreference;
 import auto.panel.net.app.ApiController;
-import auto.panel.ui.BaseActivity;
+import auto.panel.ui.activity.BaseActivity;
 import auto.panel.utils.EncryptUtil;
 import auto.panel.utils.WebUnit;
 

@@ -52,7 +52,7 @@ import auto.panel.R;
 import auto.panel.bean.panel.Task;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.panel.ApiController;
-import auto.panel.ui.BaseFragment;
+import auto.panel.ui.fragment.BaseFragment;
 import auto.panel.ui.activity.panel.CodeWebActivity;
 import auto.panel.utils.CronUnit;
 import auto.panel.utils.FileUtil;

@@ -8,7 +8,7 @@ import android.widget.TextView;
 import auto.panel.R;
 import auto.panel.bean.app.Version;
 import auto.panel.database.sp.SettingPreference;
-import auto.panel.ui.BaseActivity;
+import auto.panel.ui.activity.BaseActivity;
 import auto.panel.utils.PackageUtil;
 import auto.panel.utils.WebUnit;
 

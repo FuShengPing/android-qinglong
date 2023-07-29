@@ -18,7 +18,7 @@ import auto.base.util.ToastUnit;
 import auto.panel.R;
 import auto.panel.bean.panel.LoginLog;
 import auto.panel.database.sp.PanelPreference;
-import auto.panel.ui.BaseFragment;
+import auto.panel.ui.fragment.BaseFragment;
 
 
 public class LoginLogFragment extends BaseFragment {

@@ -1,4 +1,4 @@
-package auto.panel.ui;
+package auto.panel.ui.fragment;
 
 import android.content.Context;
 

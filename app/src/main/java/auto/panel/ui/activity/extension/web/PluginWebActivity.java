@@ -27,7 +27,7 @@ import auto.base.ui.popup.MenuPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.panel.R;
 import auto.panel.net.web.WebViewBuilder;
-import auto.panel.ui.BaseActivity;
+import auto.panel.ui.activity.BaseActivity;
 
 public class PluginWebActivity extends BaseActivity {
     public static final String TAG = "PluginWebActivity";

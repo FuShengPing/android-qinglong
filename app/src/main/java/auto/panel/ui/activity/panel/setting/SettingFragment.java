@@ -12,7 +12,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import auto.panel.R;
-import auto.panel.ui.BaseFragment;
+import auto.panel.ui.fragment.BaseFragment;
 
 public class SettingFragment extends BaseFragment {
     public static String TAG = "SettingFragment";

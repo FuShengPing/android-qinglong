@@ -13,7 +13,7 @@ import auto.panel.bean.panel.Account;
 import auto.panel.bean.panel.SystemInfo;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.panel.ApiController;
-import auto.panel.ui.BaseActivity;
+import auto.panel.ui.activity.BaseActivity;
 
 
 @SuppressLint("CustomSplashScreen")

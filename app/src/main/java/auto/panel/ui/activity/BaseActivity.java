@@ -1,4 +1,4 @@
-package auto.panel.ui;
+package auto.panel.ui.activity;
 
 import android.app.Activity;
 import android.content.Context;
