@@ -49,6 +49,7 @@
                 android:textSize="@dimen/proxy_setting_module_title_size" />
 
             <LinearLayout
+                android:id="@+id/proxy_setting_wakeup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/style_press_gray"
@@ -61,17 +62,19 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
                     android:text="保持唤醒"
-                    android:textColor="@color/proxy_setting_item_enable"
+                    android:textColor="@color/proxy_setting_item_disable"
                     android:textSize="@dimen/proxy_setting_item_title_size" />
 
                 <TextView
+                    android:id="@+id/proxy_setting_wakeup_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/proxy_setting_item_enable"
+                    android:textColor="@color/proxy_setting_item_disable"
                     android:textSize="@dimen/proxy_setting_item_value_size" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/proxy_setting_refresh"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/style_press_gray"
@@ -84,17 +87,19 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
                     android:text="刷新频率"
-                    android:textColor="@color/proxy_setting_item_enable"
+                    android:textColor="@color/proxy_setting_item_disable"
                     android:textSize="@dimen/proxy_setting_item_title_size" />
 
                 <TextView
+                    android:id="@+id/proxy_setting_refresh_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/proxy_setting_item_enable"
+                    android:textColor="@color/proxy_setting_item_disable"
                     android:textSize="@dimen/proxy_setting_item_value_size" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/proxy_setting_battery"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/style_press_gray"
@@ -111,13 +116,16 @@
                     android:textSize="@dimen/proxy_setting_item_title_size" />
 
                 <TextView
+                    android:id="@+id/proxy_setting_battery_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/proxy_setting_item_enable"
+                    android:text=""
+                    android:textColor="@color/proxy_setting_item_disable"
                     android:textSize="@dimen/proxy_setting_item_value_size" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/proxy_setting_whitelist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/style_press_gray"
@@ -136,7 +144,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/proxy_setting_item_enable"
+                    android:text="在“手机管家”或“设置-应用管理”打开允许后台运行"
+                    android:textColor="@color/proxy_setting_item_disable"
                     android:textSize="@dimen/proxy_setting_item_value_size" />
             </LinearLayout>
 
