@@ -13,12 +13,12 @@
 
         <ImageView
             android:id="@+id/exit"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="16dp"
+            android:layout_width="@dimen/proxy_activity_icon_size"
+            android:layout_height="@dimen/proxy_activity_icon_size"
+            android:layout_marginEnd="@dimen/proxy_activity_icon_margin_end"
             android:background="@drawable/style_press_ripple"
             android:clickable="true"
-            android:padding="3dp"
+            android:padding="@dimen/proxy_activity_icon_padding"
             android:src="@drawable/ic_arrow_back_black" />
 
         <TextView
