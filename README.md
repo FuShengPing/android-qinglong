@@ -73,24 +73,28 @@ docker容器可视化操作，提供容器操作、运行查看等功能。
 <img src="https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/p4.jpg" alt="系统设置" width="22%">  
 
 ## 下载地址
-
 [最新版本](https://gitee.com/wsfsp4/QingLong/releases/tag/V2.0)
 
 [历史版本](https://gitee.com/wsfsp4/QingLong/releases)
 
 
-## 交流反馈
+## 相关教程
+* [低版本面板拉取私有仓库](https://blog.csdn.net/wsfsp_4/article/details/128055841)
+* [面板应用OpenApi](https://blog.csdn.net/wsfsp_4/article/details/128316982)
+* [代理设置](https://blog.csdn.net/wsfsp_4/article/details/128366173)
+* [搭建线报监控系统](https://blog.csdn.net/wsfsp_4/article/details/128317795)
 
+
+## 友情链接
+* [qinglong](https://github.com/whyour/qinglong)  
+* [NewAI](https://newai-1308943175.cos-website.ap-shenzhen-fsi.myqcloud.com/)  
+
+## 交流反馈
 如果你在使用过程中发现Bug或者有功能需求请创建Issue。  
 欢迎加入QQ交流群：**309836858**，可以获取到最新的软件资讯和最快的问题反馈！  
 <img src="https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/group.jpg" alt="QQ群" width="25%">
 
 ## 支持项目
-
 开发不易，如果APP对你有所帮助，可以考虑支持下项目开发，非常感谢!  
 <img src="https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/donate_wx.png" alt="微信打赏" width="25%">
-<img src="https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/donate_zfb.jpg" alt="支付宝打赏" width="25%">  
-
-## 友情链接
-* [qinglong](https://github.com/whyour/qinglong)  
-* [NewAI](https://newai-1308943175.cos-website.ap-shenzhen-fsi.myqcloud.com/)  
+<img src="https://gitee.com/wsfsp4/QingLong/raw/master/static/imgs/donate_zfb.jpg" alt="支付宝打赏" width="25%"> 
