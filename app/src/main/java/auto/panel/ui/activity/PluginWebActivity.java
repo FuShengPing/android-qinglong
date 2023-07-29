@@ -1,4 +1,4 @@
-package auto.panel.ui.activity.extension.web;
+package auto.panel.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.content.ClipData;

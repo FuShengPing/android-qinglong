@@ -41,7 +41,7 @@
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".ui.activity.extension.web.PluginWebActivity"
+            android:name=".ui.activity.PluginWebActivity"
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
