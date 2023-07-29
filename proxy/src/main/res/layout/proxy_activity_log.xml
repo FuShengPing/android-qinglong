@@ -12,6 +12,7 @@
         android:padding="16dp">
 
         <ImageView
+            android:id="@+id/exit"
             android:layout_width="@dimen/proxy_activity_icon_size"
             android:layout_height="@dimen/proxy_activity_icon_size"
             android:layout_marginEnd="@dimen/proxy_activity_icon_margin_end"
@@ -30,6 +31,7 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/proxy_log_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>
