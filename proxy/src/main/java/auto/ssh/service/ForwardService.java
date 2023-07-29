@@ -30,6 +30,8 @@ import java.util.concurrent.TimeUnit;
 import auto.base.util.Logger;
 import auto.ssh.R;
 import auto.ssh.bean.NetStat;
+import auto.ssh.data.ConfigPreference;
+import auto.ssh.data.SettingPrefence;
 import auto.ssh.ui.activity.MainActivity;
 
 @SuppressLint("WakelockTimeout")
@@ -52,6 +54,7 @@ public class ForwardService extends Service {
     public static final String EXTRA_REMOTE_FORWARD_ADDRESS = "remoteForwardAddress";
     public static final String EXTRA_REMOTE_FORWARD_PORT = "remoteForwardPort";
     public static final String EXTRA_WAKEUP = "wakeup";
+    public static final String EXTRA_REFRESH_INTERVAL = "refreshInterval";
     public static final String EXTRA_STATE = "state";
     public static final String EXTRA_INTERRUPTED = "accident";
     public static final String EXTRA_MSG = "msg";
@@ -61,9 +64,11 @@ public class ForwardService extends Service {
     public static final int STATE_CLOSE = 0;
     public static final int STATE_OPEN = 1;
 
-    private static final int DEFAULT_LOCAL_PORT = 9100;
-    private static final int DEFAULT_REMOTE_PORT = 22;
-    private static final int DEFAULT_REMOTE_FORWARD_PORT = 9100;
+    private static final int DEFAULT_LOCAL_PORT = ConfigPreference.DEFAULT_LOCAL_PORT;
+    private static final int DEFAULT_REMOTE_PORT = ConfigPreference.DEFAULT_REMOTE_PORT;
+    private static final int DEFAULT_REMOTE_FORWARD_PORT = ConfigPreference.DEFAULT_REMOTE_FORWARD_PORT;
+    private static final int DEFAULT_REFRESH_INTERVAL = SettingPrefence.DEFAULT_SERVICE_REFRESH_INTERVAL;
+    private static final boolean DEFAULT_WAKEUP = SettingPrefence.DEFAULT_SERVICE_WAKEUP;
     private static final int DEFAULT_KEEP_ALIVE_INTERVAL = 10;
 
     private volatile Thread forwardThread;
@@ -141,7 +146,8 @@ public class ForwardService extends Service {
         String remotePassword = intent.getStringExtra(EXTRA_REMOTE_PASSWORD);
         String remoteForwardAddress = intent.getStringExtra(EXTRA_REMOTE_FORWARD_ADDRESS);
         int remoteForwardPort = intent.getIntExtra(EXTRA_REMOTE_FORWARD_PORT, DEFAULT_REMOTE_FORWARD_PORT);
-        boolean wakeup = intent.getBooleanExtra(EXTRA_WAKEUP, true);
+        int refreshInterval = intent.getIntExtra(EXTRA_REFRESH_INTERVAL, DEFAULT_REFRESH_INTERVAL);
+        boolean wakeup = intent.getBooleanExtra(EXTRA_WAKEUP, DEFAULT_WAKEUP);
 
         // 创建通知
         notification = new NotificationCompat.Builder(this, CHANNEL_ID)
@@ -156,7 +162,7 @@ public class ForwardService extends Service {
         keepAliveThread = new Thread(() -> {
             while (isAlive()) {
                 try {
-                    Thread.sleep(180 * 1000);
+                    Thread.sleep(refreshInterval * 1000L);
                     if (isAlive()) {
                         startForeground(NOTIFICATION_ID, notification);
                         Logger.debug("TIME_TICK", null);

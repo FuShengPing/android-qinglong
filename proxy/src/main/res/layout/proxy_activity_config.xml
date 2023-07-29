@@ -226,7 +226,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
-                    android:text="转发地址"
+                    android:text="监听地址"
                     android:textColor="@color/proxy_setting_item_enable" />
 
                 <TextView
@@ -250,7 +250,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
-                    android:text="转发端口"
+                    android:text="监听端口"
                     android:textColor="@color/proxy_setting_item_enable"
                     android:textSize="@dimen/proxy_setting_item_title_size" />
 

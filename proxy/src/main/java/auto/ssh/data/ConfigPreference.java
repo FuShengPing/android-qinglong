@@ -23,13 +23,13 @@ public class ConfigPreference {
     public static final String KEY_REMOTE_FORWARD_ADDRESS = "remoteForwardAddress";
     public static final String KEY_REMOTE_FORWARD_PORT = "remoteForwardPort";
 
-    private static final String DEFAULT_LOCAL_ADDRESS = "127.0.0.1";
-    private static final int DEFAULT_LOCAL_PORT = 9100;
-    private static final String DEFAULT_REMOTE_ADDRESS = "127.0.0.1";
-    private static final int DEFAULT_REMOTE_PORT = 22;
-    private static final String DEFAULT_REMOTE_USERNAME = "root";
-    private static final String DEFAULT_REMOTE_FORWARD_ADDRESS = "127.0.0.1";
-    private static final int DEFAULT_REMOTE_FORWARD_PORT = 9100;
+    public static final String DEFAULT_LOCAL_ADDRESS = "127.0.0.1";
+    public static final int DEFAULT_LOCAL_PORT = 9100;
+    public static final String DEFAULT_REMOTE_ADDRESS = "127.0.0.1";
+    public static final int DEFAULT_REMOTE_PORT = 22;
+    public static final String DEFAULT_REMOTE_USERNAME = "root";
+    public static final String DEFAULT_REMOTE_FORWARD_ADDRESS = "127.0.0.1";
+    public static final int DEFAULT_REMOTE_FORWARD_PORT = 9100;
 
     private static final SharedPreferences sp;
 

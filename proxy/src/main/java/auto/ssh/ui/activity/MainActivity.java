@@ -22,7 +22,9 @@ import auto.base.util.Logger;
 import auto.base.util.NetUnit;
 import auto.ssh.R;
 import auto.ssh.bean.ConfigParams;
+import auto.ssh.bean.SettingParams;
 import auto.ssh.data.ConfigPreference;
+import auto.ssh.data.SettingPrefence;
 import auto.ssh.service.ForwardService;
 import auto.ssh.service.ProxyService;
 
@@ -151,6 +153,8 @@ public class MainActivity extends BaseActivity {
     private void startForwardService() {
         Intent intent = new Intent(BaseApplication.getContext(), ForwardService.class);
         ConfigParams config = ConfigPreference.getConfig();
+        SettingParams setting = SettingPrefence.getSettingParams();
+
         intent.putExtra(ForwardService.EXTRA_ACTION, ForwardService.ACTION_SERVICE_START);
         intent.putExtra(ForwardService.EXTRA_REMOTE_ADDRESS, config.getRemoteAddress());
         intent.putExtra(ForwardService.EXTRA_REMOTE_PORT, config.getRemotePort());
@@ -160,7 +164,8 @@ public class MainActivity extends BaseActivity {
         intent.putExtra(ForwardService.EXTRA_REMOTE_FORWARD_PORT, config.getRemoteForwardPort());
         intent.putExtra(ForwardService.EXTRA_LOCAL_ADDRESS, config.getLocalAddress());
         intent.putExtra(ForwardService.EXTRA_LOCAL_PORT, config.getLocalPort());
-        intent.putExtra(ForwardService.EXTRA_WAKEUP, true);
+        intent.putExtra(ForwardService.EXTRA_REFRESH_INTERVAL, setting.getServiceRefreshInterval());
+        intent.putExtra(ForwardService.EXTRA_WAKEUP, setting.isServiceWakeup());
         startService(intent);
     }
 

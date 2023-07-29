@@ -19,10 +19,10 @@ public class SettingPrefence {
     public static final String KEY_LOG_LEVEL = "logLevel";
     public static final String KEY_LOG_DELETE_FREQUENCY = "logDeleteFrequency";
 
-    private static final boolean DEFAULT_SERVICE_WAKEUP = true;
-    private static final int DEFAULT_SERVICE_REFRESH_INTERVAL = 120;
-    private static final int DEFAULT_LOG_LEVEL = Logger.LEVEL_INFO;
-    private static final int DEFAULT_LOG_DELETE_FREQUENCY = 7;
+    public static final boolean DEFAULT_SERVICE_WAKEUP = true;
+    public static final int DEFAULT_SERVICE_REFRESH_INTERVAL = 120;
+    public static final int DEFAULT_LOG_LEVEL = Logger.LEVEL_INFO;
+    public static final int DEFAULT_LOG_DELETE_FREQUENCY = 7;
 
     private static final SharedPreferences sp;
 
