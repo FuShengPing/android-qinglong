@@ -1,4 +1,4 @@
-package auto.panel.ui.activity.panel.script;
+package auto.panel.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -17,14 +17,14 @@ import java.util.List;
 import auto.panel.R;
 import auto.panel.bean.panel.File;
 
-public class ScriptAdapter extends RecyclerView.Adapter<ScriptAdapter.MyViewHolder> {
-    public static final String TAG = "ScriptAdapter";
+public class ScriptItemAdapter extends RecyclerView.Adapter<ScriptItemAdapter.MyViewHolder> {
+    public static final String TAG = "ScriptItemAdapter";
 
     private final Context context;
     private List<File> data;
     private ItemActionListener itemActionListener;
 
-    public ScriptAdapter(@NonNull Context context) {
+    public ScriptItemAdapter(@NonNull Context context) {
         this.context = context;
         data = new ArrayList<>();
     }

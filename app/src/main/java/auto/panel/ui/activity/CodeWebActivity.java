@@ -1,4 +1,4 @@
-package auto.panel.ui.activity.panel;
+package auto.panel.ui.activity;
 
 import android.os.Bundle;
 import android.view.View;

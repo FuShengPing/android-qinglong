@@ -1,4 +1,4 @@
-package auto.panel.ui.activity.panel.dependence;
+package auto.panel.ui.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -8,20 +8,21 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import java.util.HashMap;
 
 import auto.panel.bean.panel.Dependence;
+import auto.panel.ui.activity.panel.dependence.DependenceFragment;
 
-public class PagerAdapter extends FragmentStateAdapter {
-    public static final String TAG = "PagerAdapter";
+public class DependencePagerAdapter extends FragmentStateAdapter {
+    public static final String TAG = "DependencePagerAdapter";
 
-    private HashMap<Integer, DepFragment> fragmentList;
+    private HashMap<Integer, DependenceFragment> fragmentList;
 
-    public PagerAdapter(@NonNull FragmentActivity fragmentActivity) {
+    public DependencePagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        DepFragment depFragment = new DepFragment();
+        DependenceFragment depFragment = new DependenceFragment();
 
         if (position == 0) {
             depFragment.setType(Dependence.TYPE_NODEJS);
@@ -44,7 +45,7 @@ public class PagerAdapter extends FragmentStateAdapter {
         return 3;
     }
 
-    public DepFragment getCurrentFragment(int position) {
+    public DependenceFragment getCurrentFragment(int position) {
         return fragmentList.get(position);
     }
 }

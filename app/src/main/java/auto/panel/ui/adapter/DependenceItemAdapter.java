@@ -1,4 +1,4 @@
-package auto.panel.ui.activity.panel.dependence;
+package auto.panel.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -19,8 +19,8 @@ import java.util.List;
 import auto.panel.R;
 import auto.panel.bean.panel.Dependence;
 
-public class DepItemAdapter extends RecyclerView.Adapter<DepItemAdapter.MyViewHolder> {
-    public static String TAG = "DepItemAdapter";
+public class DependenceItemAdapter extends RecyclerView.Adapter<DependenceItemAdapter.MyViewHolder> {
+    public static String TAG = "DependenceItemAdapter";
 
     private final Context context;
     private ItemActionListener itemActionListener;
@@ -32,7 +32,7 @@ public class DepItemAdapter extends RecyclerView.Adapter<DepItemAdapter.MyViewHo
     private final int colorRed;
     private final int colorGray;
 
-    public DepItemAdapter(Context context) {
+    public DependenceItemAdapter(Context context) {
         this.context = context;
         this.data = new ArrayList<>();
         this.checkState = false;

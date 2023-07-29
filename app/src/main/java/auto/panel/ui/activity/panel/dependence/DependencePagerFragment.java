@@ -19,14 +19,15 @@ import auto.base.ui.popup.MenuPopupObject;
 import auto.base.ui.popup.MenuPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.panel.R;
+import auto.panel.ui.adapter.DependencePagerAdapter;
 import auto.panel.ui.fragment.BaseFragment;
 
 @SuppressLint("InflateParams")
-public class DepPagerFragment extends BaseFragment {
-    public static String TAG = "DepFragment";
+public class DependencePagerFragment extends BaseFragment {
+    public static String TAG = "DependenceFragment";
 
-    private DepFragment mCurrentFragment;
-    private PagerAdapter mPagerAdapter;
+    private DependenceFragment mCurrentFragment;
+    private DependencePagerAdapter mPagerAdapter;
     private MenuClickListener mMenuClickListener;
 
     private LinearLayout uiNavBar;
@@ -56,7 +57,7 @@ public class DepPagerFragment extends BaseFragment {
         uiMenu = view.findViewById(R.id.dep_nav_bar_menu);
         uiMore = view.findViewById(R.id.dep_nav_bar_more);
 
-        mPagerAdapter = new PagerAdapter(requireActivity());
+        mPagerAdapter = new DependencePagerAdapter(requireActivity());
         uiPage.setAdapter(mPagerAdapter);
         uiPage.setUserInputEnabled(false);//禁用用户左右滑动页面
 

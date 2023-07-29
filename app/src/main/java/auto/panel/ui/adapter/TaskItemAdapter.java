@@ -1,4 +1,4 @@
-package auto.panel.ui.activity.panel.task;
+package auto.panel.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -19,8 +19,8 @@ import java.util.List;
 import auto.panel.R;
 import auto.panel.bean.panel.Task;
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> {
-    public static final String TAG = "TaskAdapter";
+public class TaskItemAdapter extends RecyclerView.Adapter<TaskItemAdapter.MyViewHolder> {
+    public static final String TAG = "TaskItemAdapter";
 
     Context context;
     private ActionListener actionListener;
@@ -32,7 +32,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
     private final int colorRed;
     private final int colorGray;
 
-    public TaskAdapter(Context context) {
+    public TaskItemAdapter(Context context) {
         this.context = context;
         this.data = new ArrayList<>();
         this.onCheck = false;

@@ -1,4 +1,4 @@
-package auto.panel.ui.activity.panel.environment;
+package auto.panel.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -20,9 +20,10 @@ import java.util.List;
 import auto.panel.R;
 import auto.panel.bean.panel.Environment;
 import auto.panel.bean.panel.MoveInfo;
+import auto.panel.ui.activity.panel.environment.ItemMoveCallback;
 
-public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHolder> implements ItemMoveCallback {
-    public static final String TAG = "EnvItemAdapter";
+public class EnvironmentItemAdapter extends RecyclerView.Adapter<EnvironmentItemAdapter.MyViewHolder> implements ItemMoveCallback {
+    public static final String TAG = "EnvironmentItemAdapter";
 
     private final Context context;
     private List<Environment> data;
@@ -33,7 +34,7 @@ public class EnvItemAdapter extends RecyclerView.Adapter<EnvItemAdapter.MyViewHo
     private final int colorBlue;
     private final int colorRed;
 
-    public EnvItemAdapter(@NonNull Context context) {
+    public EnvironmentItemAdapter(@NonNull Context context) {
         this.context = context;
         this.data = new ArrayList<>();
         this.checkState = false;

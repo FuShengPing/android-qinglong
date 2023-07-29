@@ -27,10 +27,11 @@ import auto.panel.database.sp.PanelPreference;
 import auto.panel.database.sp.SettingPreference;
 import auto.panel.net.app.ApiController;
 import auto.panel.ui.activity.BaseActivity;
+import auto.panel.ui.activity.LoginActivity;
 import auto.panel.ui.fragment.BaseFragment;
-import auto.panel.ui.activity.panel.CodeWebActivity;
-import auto.panel.ui.activity.panel.dependence.DepPagerFragment;
-import auto.panel.ui.activity.panel.environment.EnvFragment;
+import auto.panel.ui.activity.CodeWebActivity;
+import auto.panel.ui.activity.panel.dependence.DependencePagerFragment;
+import auto.panel.ui.activity.panel.environment.EnvironmentFragment;
 import auto.panel.ui.activity.panel.log.LogFragment;
 import auto.panel.ui.activity.panel.script.ScriptFragment;
 import auto.panel.ui.activity.panel.setting.SettingFragment;
@@ -143,9 +144,9 @@ public class HomeActivity extends BaseActivity {
         //脚本管理
         menu_script.setOnClickListener(v -> showFragment(ScriptFragment.class));
         //依赖管理
-        menu_env.setOnClickListener(v -> showFragment(EnvFragment.class));
+        menu_env.setOnClickListener(v -> showFragment(EnvironmentFragment.class));
         //任务日志
-        menu_dep.setOnClickListener(v -> showFragment(DepPagerFragment.class));
+        menu_dep.setOnClickListener(v -> showFragment(DependencePagerFragment.class));
         //系统设置
         menu_setting.setOnClickListener(v -> showFragment(SettingFragment.class));
 

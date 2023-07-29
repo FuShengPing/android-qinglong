@@ -16,7 +16,7 @@ import auto.panel.bean.panel.Account;
 import auto.panel.bean.panel.SystemConfig;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.ui.fragment.BaseFragment;
-import auto.panel.ui.activity.app.LoginActivity;
+import auto.panel.ui.activity.LoginActivity;
 
 public class CommonFragment extends BaseFragment {
     private EditText uiSecurityUsername;

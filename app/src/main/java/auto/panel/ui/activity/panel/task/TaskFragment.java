@@ -52,8 +52,9 @@ import auto.panel.R;
 import auto.panel.bean.panel.Task;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.panel.ApiController;
+import auto.panel.ui.adapter.TaskItemAdapter;
 import auto.panel.ui.fragment.BaseFragment;
-import auto.panel.ui.activity.panel.CodeWebActivity;
+import auto.panel.ui.activity.CodeWebActivity;
 import auto.panel.utils.CronUnit;
 import auto.panel.utils.FileUtil;
 
@@ -62,7 +63,7 @@ public class TaskFragment extends BaseFragment {
 
     private String mCurrentSearchValue;
     private MenuClickListener mMenuClickListener;
-    private TaskAdapter mAdapter;
+    private TaskItemAdapter mAdapter;
 
     //主导航栏
     private LinearLayout uiBarNav;
@@ -123,7 +124,7 @@ public class TaskFragment extends BaseFragment {
         uiRefresh = view.findViewById(R.id.refresh_layout);
         uiRecycler = view.findViewById(R.id.recycler_view);
 
-        mAdapter = new TaskAdapter(requireContext());
+        mAdapter = new TaskItemAdapter(requireContext());
         uiRecycler.setAdapter(mAdapter);
         uiRecycler.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         //取消更新动画，避免刷新闪烁
@@ -204,7 +205,7 @@ public class TaskFragment extends BaseFragment {
         });
 
         //数据项操作监听
-        mAdapter.setActionListener(new TaskAdapter.ActionListener() {
+        mAdapter.setActionListener(new TaskItemAdapter.ActionListener() {
             @Override
             public void onStop(Task task) {
                 List<Object> keys = new ArrayList<>();

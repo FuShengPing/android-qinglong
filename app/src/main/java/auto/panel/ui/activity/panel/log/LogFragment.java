@@ -28,8 +28,9 @@ import auto.panel.bean.panel.File;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
+import auto.panel.ui.adapter.LogItemAdapter;
 import auto.panel.ui.fragment.BaseFragment;
-import auto.panel.ui.activity.panel.CodeWebActivity;
+import auto.panel.ui.activity.CodeWebActivity;
 
 @SuppressLint({"SetTextI18n", "InflateParams"})
 public class LogFragment extends BaseFragment {
@@ -37,7 +38,7 @@ public class LogFragment extends BaseFragment {
 
     private Stack<List<File>> fileStack;
     private MenuClickListener menuClickListener;
-    private LogAdapter adapter;
+    private LogItemAdapter adapter;
 
     private ImageView uiNav;
     private SmartRefreshLayout uiRefresh;
@@ -98,7 +99,7 @@ public class LogFragment extends BaseFragment {
 
     @Override
     public void init() {
-        adapter = new LogAdapter(requireContext());
+        adapter = new LogItemAdapter(requireContext());
         uiRecycler.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
         Objects.requireNonNull(uiRecycler.getItemAnimator()).setChangeDuration(0);
         uiRecycler.setAdapter(adapter);

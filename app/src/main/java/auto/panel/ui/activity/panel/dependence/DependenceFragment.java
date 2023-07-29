@@ -28,13 +28,14 @@ import auto.panel.bean.panel.Dependence;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
+import auto.panel.ui.adapter.DependenceItemAdapter;
 import auto.panel.ui.fragment.BaseFragment;
-import auto.panel.ui.activity.panel.CodeWebActivity;
+import auto.panel.ui.activity.CodeWebActivity;
 
-public class DepFragment extends BaseFragment {
+public class DependenceFragment extends BaseFragment {
     private String type;
 
-    private DepItemAdapter itemAdapter;
+    private DependenceItemAdapter itemAdapter;
 
     private SmartRefreshLayout uiRefresh;
     private EditPopupWindow uiPopEdit;
@@ -45,7 +46,7 @@ public class DepFragment extends BaseFragment {
 
         uiRefresh = view.findViewById(R.id.refresh_layout);
 
-        itemAdapter = new DepItemAdapter(requireContext());
+        itemAdapter = new DependenceItemAdapter(requireContext());
         RecyclerView uiRecycler = view.findViewById(R.id.recycler_view);
         uiRecycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
         uiRecycler.setAdapter(itemAdapter);
@@ -117,7 +118,7 @@ public class DepFragment extends BaseFragment {
 
     @Override
     protected void init() {
-        itemAdapter.setItemInterface(new DepItemAdapter.ItemActionListener() {
+        itemAdapter.setItemInterface(new DependenceItemAdapter.ItemActionListener() {
             @Override
             public void onDetail(Dependence dependence, int position) {
                 Intent intent = new Intent(getContext(), CodeWebActivity.class);

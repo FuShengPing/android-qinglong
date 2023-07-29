@@ -52,14 +52,15 @@ import auto.panel.bean.panel.QLEnvironment;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.v10.ApiController;
+import auto.panel.ui.adapter.EnvironmentItemAdapter;
 import auto.panel.ui.fragment.BaseFragment;
 import auto.panel.utils.FileUtil;
 
-public class EnvFragment extends BaseFragment {
-    public static String TAG = "EnvFragment";
+public class EnvironmentFragment extends BaseFragment {
+    public static String TAG = "EnvironmentFragment";
     private String mCurrentSearchValue;
     private MenuClickListener mMenuClickListener;
-    private EnvItemAdapter mAdapter;
+    private EnvironmentItemAdapter mAdapter;
 
     private LinearLayout uiBarNav;
     private ImageView uiNavMenu;
@@ -105,7 +106,7 @@ public class EnvFragment extends BaseFragment {
         uiRefresh = view.findViewById(R.id.refresh_layout);
         uiRecycler = view.findViewById(R.id.recycler_view);
 
-        mAdapter = new EnvItemAdapter(requireContext());
+        mAdapter = new EnvironmentItemAdapter(requireContext());
         uiRecycler.setAdapter(mAdapter);
         uiRecycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
         Objects.requireNonNull(uiRecycler.getItemAnimator()).setChangeDuration(0);
@@ -185,7 +186,7 @@ public class EnvFragment extends BaseFragment {
 //        new ItemTouchHelper(itemMoveHelper).attachToRecyclerView(uiRecycler);
 
         //列表操作接口
-        mAdapter.setItemInterface(new EnvItemAdapter.ItemActionListener() {
+        mAdapter.setItemInterface(new EnvironmentItemAdapter.ItemActionListener() {
             @Override
             public void onEdit(Environment environment) {
                 showPopWindowEdit(environment);

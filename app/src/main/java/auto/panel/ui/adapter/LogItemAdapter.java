@@ -1,4 +1,4 @@
-package auto.panel.ui.activity.panel.log;
+package auto.panel.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -18,12 +18,12 @@ import auto.panel.R;
 import auto.panel.bean.panel.File;
 
 @SuppressLint("SetTextI18n")
-public class LogAdapter extends RecyclerView.Adapter<LogAdapter.MyViewHolder> {
+public class LogItemAdapter extends RecyclerView.Adapter<LogItemAdapter.MyViewHolder> {
     private final Context context;
     private final List<File> data;
     private ItemActionListener itemActionListener;
 
-    public LogAdapter(@NonNull Context context) {
+    public LogItemAdapter(@NonNull Context context) {
         this.context = context;
         data = new ArrayList<>();
     }
