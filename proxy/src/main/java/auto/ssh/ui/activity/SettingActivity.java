@@ -74,7 +74,7 @@ public class SettingActivity extends BaseActivity {
             uiAliveBatteryValue.setText("未开启");
         }
         uiAliveRefreshValue.setText(params.getServiceRefreshInterval() + "秒");
-        uiLogLevelValue.setText(Logger.getName(params.getLogLevel()));
+        uiLogLevelValue.setText(Logger.getLevelName(params.getLogLevel()));
         uiLogDeleteValue.setText(params.getLogDeleteFrequency() + "天");
 
         // 忽略电池优化
@@ -103,7 +103,7 @@ public class SettingActivity extends BaseActivity {
             }
 
             selectPopup.setSelectListener(value -> {
-                uiLogLevelValue.setText(Logger.getName((Integer) value));
+                uiLogLevelValue.setText(Logger.getLevelName((Integer) value));
                 Logger.setLevel((Integer) value);
                 params.setLogLevel((Integer) value);
                 SettingPrefence.setLogLevel((Integer) value);
@@ -118,7 +118,7 @@ public class SettingActivity extends BaseActivity {
             InputPopup inputPopup = new InputPopup("删除频率", null, String.valueOf(params.getLogDeleteFrequency()));
             inputPopup.setType(InputType.TYPE_CLASS_NUMBER);
             inputPopup.setLength(2);
-            
+
             inputPopup.setActionListener(value -> {
                 int frequency = Integer.parseInt(value);
                 uiLogDeleteValue.setText(frequency + "天");

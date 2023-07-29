@@ -155,7 +155,7 @@
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="@dimen/proxy_setting_module_title_padding_horizontal"
                 android:paddingVertical="@dimen/proxy_setting_module_title_padding_vertical"
-                android:text="其他"
+                android:text="日志"
                 android:textColor="@color/proxy_theme"
                 android:textSize="@dimen/proxy_setting_module_title_size" />
 

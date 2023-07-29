@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,7 +17,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import auto.base.BaseApplication;
-import auto.base.util.LogFileUtil;
 import auto.base.util.LogUnit;
 import auto.base.util.Logger;
 import auto.base.util.NetUnit;
@@ -221,24 +219,16 @@ public class MainActivity extends BaseActivity {
             startActivity(intent);
         });
 
+        // 日志
+        uiLog.setOnClickListener(v -> {
+            Intent intent = new Intent(self, LogActivity.class);
+            startActivity(intent);
+        });
+
         // 设置
         uiSetting.setOnClickListener(v -> {
             Intent intent = new Intent(this, SettingActivity.class);
             startActivity(intent);
-        });
-
-        // 日志
-        uiLog.setOnClickListener(v -> {
-            //日志目录路径
-            String path = LogFileUtil.getLogFileDir(PROJECT);
-
-            LogUnit.log(path);
-
-            // 创建一个Intent对象
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            Uri uri = Uri.parse(path);
-            intent.setDataAndType(uri, "*/*");
-            startActivity(Intent.createChooser(intent, "选择文件管理器"));
         });
 
         // 帮助

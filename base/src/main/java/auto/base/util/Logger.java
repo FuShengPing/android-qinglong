@@ -8,13 +8,14 @@ import java.util.List;
  * @version 2023.06.21
  */
 public class Logger extends LogFileUtil {
-    private static final String PROJECT = "proxy";
-    private static int level = 0;
+
     public static final int LEVEL_DEBUG = 0;
     public static final int LEVEL_INFO = 1;
     public static final int LEVEL_WARN = 2;
     public static final int LEVEL_ERROR = 3;
     public static final int LEVEL_NONE = 4;
+
+    private static int level = 0;
 
     public static void setLevel(int level) {
         Logger.level = level;
@@ -25,9 +26,9 @@ public class Logger extends LogFileUtil {
             return;
         }
         if (e == null) {
-            writeLog(PROJECT, "[DEBUG]\t" + str);
+            writeLog("[DEBUG]\t" + str);
         } else {
-            writeLog(PROJECT, "[DEBUG]\t" + str + " " + e.getMessage());
+            writeLog("[DEBUG]\t" + str + " " + e.getMessage());
         }
     }
 
@@ -36,9 +37,9 @@ public class Logger extends LogFileUtil {
             return;
         }
         if (e == null) {
-            writeLog(PROJECT, "[INFO]\t" + str);
+            writeLog("[INFO]\t" + str);
         } else {
-            writeLog(PROJECT, "[INFO]\t" + str + " " + e.getMessage());
+            writeLog("[INFO]\t" + str + " " + e.getMessage());
         }
     }
 
@@ -47,9 +48,9 @@ public class Logger extends LogFileUtil {
             return;
         }
         if (e == null) {
-            writeLog(PROJECT, "[WARN]\t" + str);
+            writeLog("[WARN]\t" + str);
         } else {
-            writeLog(PROJECT, "[WARN]\t" + str + " " + e.getMessage());
+            writeLog("[WARN]\t" + str + " " + e.getMessage());
         }
     }
 
@@ -58,9 +59,9 @@ public class Logger extends LogFileUtil {
             return;
         }
         if (e == null) {
-            writeLog(PROJECT, "[ERROR]\t" + str);
+            writeLog("[ERROR]\t" + str);
         } else {
-            writeLog(PROJECT, "[ERROR]\t" + str + " " + e.getMessage());
+            writeLog("[ERROR]\t" + str + " " + e.getMessage());
         }
 
     }
@@ -75,7 +76,7 @@ public class Logger extends LogFileUtil {
         return levels;
     }
 
-    public static String getName(int level) {
+    public static String getLevelName(int level) {
         switch (level) {
             case LEVEL_DEBUG:
                 return "调试";

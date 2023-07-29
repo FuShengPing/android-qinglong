@@ -10,7 +10,7 @@ import auto.base.BaseApplication;
 public class LogFileUtil extends FileUtil {
     private static final String LOG_DIR_NAME = "logs";
 
-    public static synchronized void writeLog(String project, String content) {
+    public static synchronized void writeLog(String content) {
         if (!isExternalStorageWritable()) {
             return;
         }
@@ -18,7 +18,7 @@ public class LogFileUtil extends FileUtil {
         try {
             String currentDate = TimeUnit.formatDate();
             String currentTime = TimeUnit.formatTime();
-            String filePath = getLogFilePath(project, currentDate);
+            String filePath = getLogFilePath(currentDate);
 
             File logFile = createFile(filePath);
 
@@ -31,21 +31,19 @@ public class LogFileUtil extends FileUtil {
         }
     }
 
-    public static String getLogFilePath(String project, String fileName) {
+    public static String getLogFilePath(String fileName) {
         return BaseApplication.getContext().getExternalFilesDir(null)
                 + File.separator
                 + LOG_DIR_NAME
                 + File.separator
-                + (project != null ? project + File.separator : "")
                 + fileName
                 + ".log";
     }
 
-    public static String getLogFileDir(String project) {
+    public static String getLogFileDir() {
         return BaseApplication.getContext().getExternalFilesDir(null)
                 + File.separator
                 + LOG_DIR_NAME
-                + File.separator
-                + (project != null ? project + File.separator : "");
+                + File.separator;
     }
 }
