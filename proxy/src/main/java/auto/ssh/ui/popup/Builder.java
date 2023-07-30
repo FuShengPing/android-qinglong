@@ -117,7 +117,7 @@ public class Builder {
     public static PopupWindow buildConfirmWindow(Activity activity, ConfirmPopup confirmPopup) {
         View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.proxy_pop_confirm, null, false);
         PopupWindow popWindow = build(activity.getBaseContext(), WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        popWindow.setFocusable(false);
+        popWindow.setFocusable(confirmPopup.isFocusable());
         popWindow.setContentView(view);
 
         TextView uiTitle = view.findViewById(R.id.proxy_pop_confirm_title);

@@ -37,7 +37,6 @@ public class MainActivity extends BaseActivity {
     private static final String EXTRA_FROM = "from";
     private static final String EXTRA_TOKEN = "token";
 
-
     private CardView uiLocal;
     private ImageView uiLocalImg;
     private TextView uiLocalTip;
@@ -107,9 +106,9 @@ public class MainActivity extends BaseActivity {
 
         if (uiConfirmPopup == null) {
             if (from == null) {
-                showConfirmPopup("风险提示", "异常启动，请从正规渠道启动！");
+                showConfirmPopup("风险提示", "异常启动，请从正规渠道启动！", false);
             } else if (token == null) {
-                showConfirmPopup("鉴权失败", "身份信息无效或已过期，请重新启动！");
+                showConfirmPopup("鉴权失败", "身份信息无效或已过期，请重新启动！", false);
             }
         }
     }
@@ -252,12 +251,13 @@ public class MainActivity extends BaseActivity {
         }).start();
     }
 
-    private void showConfirmPopup(String title, String content) {
+    private void showConfirmPopup(String title, String content, boolean focusable) {
         ConfirmPopup confirmPopup = new ConfirmPopup();
         confirmPopup.setTitle(title);
         confirmPopup.setContent(content);
         confirmPopup.setCancel(false);
         confirmPopup.setConfirm(true);
+        confirmPopup.setFocusable(focusable);
         confirmPopup.setActionListener(new ConfirmPopup.OnActionListener() {
             @Override
             public boolean onConfirm() {

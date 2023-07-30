@@ -9,6 +9,7 @@ public class ConfirmPopup {
     private String content;
     private boolean cancel;
     private boolean confirm;
+    private boolean focusable;
     private OnActionListener actionListener;
     private OnDismissListener dismissListener;
 
@@ -42,6 +43,14 @@ public class ConfirmPopup {
 
     public void setConfirm(boolean confirm) {
         this.confirm = confirm;
+    }
+
+    public boolean isFocusable() {
+        return focusable;
+    }
+
+    public void setFocusable(boolean focusable) {
+        this.focusable = focusable;
     }
 
     public OnActionListener getActionListener() {
