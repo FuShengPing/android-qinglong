@@ -20,6 +20,7 @@ import auto.base.ui.popup.ConfirmPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.base.util.EncryptUtil;
 import auto.base.util.LogUnit;
+import auto.base.util.PackageUtil;
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
 import auto.base.util.WebUnit;
@@ -36,7 +37,6 @@ import auto.panel.ui.activity.panel.script.ScriptFragment;
 import auto.panel.ui.activity.panel.setting.SettingFragment;
 import auto.panel.ui.activity.panel.task.TaskFragment;
 import auto.panel.ui.fragment.BaseFragment;
-import auto.base.util.PackageUtil;
 
 public class HomeActivity extends BaseActivity {
     public static final String TAG = "HomeActivity";
@@ -162,9 +162,11 @@ public class HomeActivity extends BaseActivity {
             startActivity(intent);
         });
 
+        //拓展--代理
         menu_extension_proxy.setOnClickListener(v -> {
             Intent intent = new Intent();
-            intent.putExtra("token", "12345678");
+            intent.putExtra("from", "panel");
+            intent.putExtra("token", "qinglong");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             ComponentName comp = new ComponentName("auto.ssh", "auto.ssh.ui.activity.MainActivity");
             intent.setComponent(comp);

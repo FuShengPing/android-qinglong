@@ -34,7 +34,9 @@ import auto.ssh.ui.popup.Builder;
 import auto.ssh.ui.popup.ConfirmPopup;
 
 public class MainActivity extends BaseActivity {
+    private static final String EXTRA_FROM = "from";
     private static final String EXTRA_TOKEN = "token";
+
 
     private CardView uiLocal;
     private ImageView uiLocalImg;
@@ -50,6 +52,7 @@ public class MainActivity extends BaseActivity {
 
     private PopupWindow uiConfirmPopup;
 
+    private String from;
     private String token;
 
     private volatile int proxyState = ProxyService.STATE_CLOSE;
@@ -63,11 +66,17 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        LogUnit.log("onCreate");
+
         setContentView(R.layout.proxy_activity_main);
 
+        from = getIntent().getStringExtra(EXTRA_FROM);
         token = getIntent().getStringExtra(EXTRA_TOKEN);
 
+        LogUnit.log(from);
         LogUnit.log(token);
+
+        Logger.debug("from " + from + " token：" + token, null);
 
         uiLocal = findViewById(R.id.proxy_local);
         uiLocalImg = findViewById(R.id.proxy_local_img);
@@ -100,6 +109,12 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        // 关闭弹窗
+        if (uiConfirmPopup != null) {
+            uiConfirmPopup.dismiss();
+            uiConfirmPopup = null;
+        }
 
         // 关闭服务
         stopService(new Intent(this, ProxyService.class));
