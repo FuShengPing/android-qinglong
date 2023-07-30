@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
@@ -28,6 +30,8 @@ import auto.ssh.data.ConfigPreference;
 import auto.ssh.data.SettingPrefence;
 import auto.ssh.service.ForwardService;
 import auto.ssh.service.ProxyService;
+import auto.ssh.ui.popup.Builder;
+import auto.ssh.ui.popup.ConfirmPopup;
 
 public class MainActivity extends BaseActivity {
     private static final String EXTRA_TOKEN = "token";
@@ -42,6 +46,9 @@ public class MainActivity extends BaseActivity {
     private View uiSetting;
     private View uiLog;
     private View uiHelp;
+    private View uiAbout;
+
+    private PopupWindow uiConfirmPopup;
 
     private String token;
 
@@ -72,6 +79,7 @@ public class MainActivity extends BaseActivity {
         uiSetting = findViewById(R.id.proxy_setting);
         uiLog = findViewById(R.id.proxy_log);
         uiHelp = findViewById(R.id.proxy_help);
+        uiAbout = findViewById(R.id.proxy_about);
 
         init();
 
@@ -101,11 +109,26 @@ public class MainActivity extends BaseActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(proxyBroadcastReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(forwardBroadcastReceiver);
         unregisterReceiver(netBroadcastReceiver);
+
+        LogUnit.log("onDestroy");
     }
 
     @Override
     public void onBackPressed() {
-        moveTaskToBack(true);
+        if (uiConfirmPopup != null && uiConfirmPopup.isShowing()) {
+            finish();
+        } else {
+            moveTaskToBack(true);
+        }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        //pop存在阻止点击
+        if (uiConfirmPopup != null && uiConfirmPopup.isShowing()) {
+            return false;
+        }
+        return super.dispatchTouchEvent(ev);
     }
 
     private void onProxyServiceOpen() {
@@ -247,6 +270,29 @@ public class MainActivity extends BaseActivity {
         // 帮助
         uiHelp.setOnClickListener(v -> {
             WebUnit.open(self, "https://gitee.com/wsfsp4/android-lanproxy/blob/master/README.md");
+        });
+
+        // 关于
+        uiAbout.setOnClickListener(v -> {
+            ConfirmPopup confirmPopup = new ConfirmPopup();
+            confirmPopup.setTitle("风险提示");
+            confirmPopup.setContent("异常启动，请从正规渠道启动！");
+            confirmPopup.setCancel(false);
+            confirmPopup.setConfirm(true);
+            confirmPopup.setActionListener(new ConfirmPopup.OnActionListener() {
+                @Override
+                public boolean onConfirm() {
+                    finish();
+                    return false;
+                }
+
+                @Override
+                public boolean onCancel() {
+                    return false;
+                }
+            });
+
+            uiConfirmPopup = Builder.buildConfirmWindow(self, confirmPopup);
         });
     }
 

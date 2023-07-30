@@ -114,6 +114,66 @@ public class Builder {
         popWindow.showAtLocation(target, Gravity.BOTTOM, 0, 0);
     }
 
+    public static PopupWindow buildConfirmWindow(Activity activity, ConfirmPopup confirmPopup) {
+        View view = LayoutInflater.from(activity.getBaseContext()).inflate(R.layout.proxy_pop_confirm, null, false);
+        PopupWindow popWindow = build(activity.getBaseContext(), WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        popWindow.setFocusable(false);
+        popWindow.setContentView(view);
+
+        TextView uiTitle = view.findViewById(R.id.proxy_pop_confirm_title);
+        TextView uiValue = view.findViewById(R.id.proxy_pop_confirm_content);
+        TextView uiConfirm = view.findViewById(R.id.proxy_pop_confirm_confirm);
+        TextView uiCancel = view.findViewById(R.id.proxy_pop_confirm_cancel);
+
+        uiTitle.setText(confirmPopup.getTitle());
+        uiValue.setText(confirmPopup.getContent());
+
+        if (confirmPopup.isConfirm()) {
+            uiConfirm.setVisibility(View.VISIBLE);
+            uiConfirm.setOnClickListener(v -> {
+                if (confirmPopup.getActionListener() == null) {
+                    return;
+                }
+                boolean flag = confirmPopup.getActionListener().onConfirm();
+                if (flag) {
+                    popWindow.dismiss();
+                }
+            });
+        } else {
+            uiConfirm.setVisibility(View.GONE);
+        }
+
+        if (confirmPopup.isCancel()) {
+            uiCancel.setVisibility(View.VISIBLE);
+            uiCancel.setOnClickListener(v -> {
+                if (confirmPopup.getActionListener() == null) {
+                    return;
+                }
+                boolean flag = confirmPopup.getActionListener().onCancel();
+                if (flag) {
+                    popWindow.dismiss();
+                }
+            });
+        } else {
+            uiCancel.setVisibility(View.GONE);
+        }
+
+        popWindow.setOnDismissListener(() -> {
+            WindowUnit.setBackgroundAlpha(activity, 1f);
+            if (confirmPopup.getDismissListener() != null) {
+                confirmPopup.getDismissListener().onDismiss();
+            }
+            confirmPopup.setActionListener(null);
+            confirmPopup.setDismissListener(null);
+            popWindow.setOnDismissListener(null);
+        });
+
+        WindowUnit.setBackgroundAlpha(activity, 0.5f);
+        popWindow.showAtLocation(activity.getWindow().getDecorView().getRootView(), Gravity.CENTER, 0, 0);
+
+        return popWindow;
+    }
+
     private static PopupWindow build(Context context, int width, int height) {
         PopupWindow popupWindow = new PopupWindow(context);
         popupWindow.setWidth(width);

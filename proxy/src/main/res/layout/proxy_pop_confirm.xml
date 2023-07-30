@@ -27,12 +27,10 @@
             android:textSize="@dimen/proxy_pop_confirm_title_size" />
 
         <TextView
-            android:id="@+id/proxy_pop_confirm_value"
+            android:id="@+id/proxy_pop_confirm_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/proxy_pop_confirm_value_margin_vertical"
-            android:paddingHorizontal="@dimen/proxy_pop_input_value_padding_horizontal"
-            android:paddingVertical="@dimen/proxy_pop_input_value_padding_vertical"
+            android:layout_marginVertical="@dimen/proxy_pop_confirm_content_margin_vertical"
             android:textSize="@dimen/proxy_pop_confirm_value_size" />
 
         <LinearLayout

@@ -19,7 +19,7 @@
     <dimen name="proxy_pop_button_padding_horizontal">12dp</dimen>
     <dimen name="proxy_pop_button_margin_right">16dp</dimen>
 
-    <dimen name="proxy_pop_confirm_value_margin_vertical">16dp</dimen>
+    <dimen name="proxy_pop_confirm_content_margin_vertical">16dp</dimen>
     <dimen name="proxy_pop_confirm_title_size">16sp</dimen>
     <dimen name="proxy_pop_confirm_value_size">13sp</dimen>
 
