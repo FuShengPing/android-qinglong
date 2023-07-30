@@ -66,15 +66,10 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        LogUnit.log("onCreate");
-
         setContentView(R.layout.proxy_activity_main);
 
         from = getIntent().getStringExtra(EXTRA_FROM);
         token = getIntent().getStringExtra(EXTRA_TOKEN);
-
-        LogUnit.log(from);
-        LogUnit.log(token);
 
         Logger.debug("from " + from + " token：" + token, null);
 
@@ -104,6 +99,19 @@ public class MainActivity extends BaseActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(forwardBroadcastReceiver, forwardFilter);
         LocalBroadcastManager.getInstance(this).registerReceiver(proxyBroadcastReceiver, proxyFilter);
         registerReceiver(netBroadcastReceiver, netStateFilter);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        if (uiConfirmPopup == null) {
+            if (from == null) {
+                showConfirmPopup("风险提示", "异常启动，请从正规渠道启动！");
+            } else if (token == null) {
+                showConfirmPopup("鉴权失败", "身份信息无效或已过期，请重新启动！");
+            }
+        }
     }
 
     @Override
@@ -244,6 +252,28 @@ public class MainActivity extends BaseActivity {
         }).start();
     }
 
+    private void showConfirmPopup(String title, String content) {
+        ConfirmPopup confirmPopup = new ConfirmPopup();
+        confirmPopup.setTitle(title);
+        confirmPopup.setContent(content);
+        confirmPopup.setCancel(false);
+        confirmPopup.setConfirm(true);
+        confirmPopup.setActionListener(new ConfirmPopup.OnActionListener() {
+            @Override
+            public boolean onConfirm() {
+                finish();
+                return false;
+            }
+
+            @Override
+            public boolean onCancel() {
+                return false;
+            }
+        });
+
+        uiConfirmPopup = Builder.buildConfirmWindow(self, confirmPopup);
+    }
+
     private void init() {
         // 本地代理
         uiLocal.setOnClickListener(v -> {
@@ -289,25 +319,7 @@ public class MainActivity extends BaseActivity {
 
         // 关于
         uiAbout.setOnClickListener(v -> {
-            ConfirmPopup confirmPopup = new ConfirmPopup();
-            confirmPopup.setTitle("风险提示");
-            confirmPopup.setContent("异常启动，请从正规渠道启动！");
-            confirmPopup.setCancel(false);
-            confirmPopup.setConfirm(true);
-            confirmPopup.setActionListener(new ConfirmPopup.OnActionListener() {
-                @Override
-                public boolean onConfirm() {
-                    finish();
-                    return false;
-                }
 
-                @Override
-                public boolean onCancel() {
-                    return false;
-                }
-            });
-
-            uiConfirmPopup = Builder.buildConfirmWindow(self, confirmPopup);
         });
     }
 
