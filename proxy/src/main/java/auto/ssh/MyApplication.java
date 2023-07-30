@@ -23,5 +23,6 @@ public class MyApplication extends BaseApplication {
 
         // 日志
         Logger.setLevel(SettingPrefence.getLogLevel());
+        Logger.deleteFiles(SettingPrefence.getLogDeleteFrequency());
     }
 }

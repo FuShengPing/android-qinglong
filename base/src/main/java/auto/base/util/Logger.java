@@ -1,5 +1,6 @@
 package auto.base.util;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +65,22 @@ public class Logger extends LogFileUtil {
             writeLog("[ERROR]\t" + str + " " + e.getMessage());
         }
 
+    }
+
+    public static void deleteFiles(int day) {
+        File directory = new File(getLogFileDir());
+        if (directory.exists() && directory.isDirectory()) {
+            File[] files = directory.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    long t1 = System.currentTimeMillis() - day * 24 * 60 * 60 * 1000L;
+                    long t2 = file.lastModified();
+                    if (t2 <= t1) {
+                        file.delete();
+                    }
+                }
+            }
+        }
     }
 
     public static List<LogLevel> getLevels() {
