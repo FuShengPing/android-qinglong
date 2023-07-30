@@ -20,6 +20,7 @@ import auto.base.BaseApplication;
 import auto.base.util.LogUnit;
 import auto.base.util.Logger;
 import auto.base.util.NetUnit;
+import auto.base.util.WebUnit;
 import auto.ssh.R;
 import auto.ssh.bean.ConfigParams;
 import auto.ssh.bean.SettingParams;
@@ -29,6 +30,8 @@ import auto.ssh.service.ForwardService;
 import auto.ssh.service.ProxyService;
 
 public class MainActivity extends BaseActivity {
+    private static final String EXTRA_TOKEN = "token";
+
     private CardView uiLocal;
     private ImageView uiLocalImg;
     private TextView uiLocalTip;
@@ -39,6 +42,8 @@ public class MainActivity extends BaseActivity {
     private View uiSetting;
     private View uiLog;
     private View uiHelp;
+
+    private String token;
 
     private volatile int proxyState = ProxyService.STATE_CLOSE;
     private volatile int forwardState = ForwardService.STATE_CLOSE;
@@ -52,6 +57,10 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.proxy_activity_main);
+
+        token = getIntent().getStringExtra(EXTRA_TOKEN);
+
+        LogUnit.log(token);
 
         uiLocal = findViewById(R.id.proxy_local);
         uiLocalImg = findViewById(R.id.proxy_local_img);
@@ -237,7 +246,7 @@ public class MainActivity extends BaseActivity {
 
         // 帮助
         uiHelp.setOnClickListener(v -> {
-
+            WebUnit.open(self, "https://gitee.com/wsfsp4/android-lanproxy/blob/master/README.md");
         });
     }
 

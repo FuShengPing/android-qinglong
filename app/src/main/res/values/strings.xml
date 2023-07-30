@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">定时精灵</string>
-    <!-- 链接区 -->
-    <string name="url_project">https://gitee.com/wsfsp4/QingLong</string>
-    <string name="url_version">https://gitee.com/wsfsp4/QingLong/raw/master/version.json</string>
     <!-- 模块 -->
     <string name="module_task">定时任务</string>
     <string name="module_environment">环境变量</string>
@@ -12,6 +9,8 @@
     <string name="module_log">任务日志</string>
     <string name="module_setting">系统设置</string>
     <string name="module_extension_web">Web助手</string>
+    <string name="module_extension_docker">Docker助手</string>
+    <string name="module_extension_proxy">LanProxy</string>
     <string name="menu_account_exit">退出</string>
     <string name="menu_app_setting">设置</string>
 

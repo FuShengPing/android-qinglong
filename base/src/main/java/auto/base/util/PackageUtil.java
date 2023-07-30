@@ -1,10 +1,8 @@
-package auto.panel.utils;
+package auto.base.util;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-
-import auto.panel.bean.app.Version;
 
 /**
  * @author wsfsp4
@@ -22,5 +20,27 @@ public class PackageUtil {
             e.printStackTrace();
         }
         return version;
+    }
+
+     public static class Version {
+        private int versionCode;
+
+        private String versionName;
+
+        public int getVersionCode() {
+            return versionCode;
+        }
+
+        public void setVersionCode(int versionCode) {
+            this.versionCode = versionCode;
+        }
+
+        public String getVersionName() {
+            return versionName;
+        }
+
+        public void setVersionName(String versionName) {
+            this.versionName = versionName;
+        }
     }
 }

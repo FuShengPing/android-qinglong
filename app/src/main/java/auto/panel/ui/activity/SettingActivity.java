@@ -15,10 +15,8 @@ import auto.panel.bean.app.Config;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.database.sp.SettingPreference;
 import auto.panel.net.app.ApiController;
-import auto.panel.ui.activity.AboutActivity;
-import auto.panel.ui.activity.BaseActivity;
-import auto.panel.utils.EncryptUtil;
-import auto.panel.utils.WebUnit;
+import auto.base.util.EncryptUtil;
+import auto.base.util.WebUnit;
 
 public class SettingActivity extends BaseActivity {
     public static final String TAG = "SettingActivity";
@@ -82,8 +80,7 @@ public class SettingActivity extends BaseActivity {
     private void joinQQGroup(String key) {
         Intent intent = new Intent();
         intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26jump_from%3Dwebapi%26k%3D" + key));
-        // 此Flag可根据具体产品需要自定义，如设置，则在加群界面按返回，返回手Q主界面，不设置，按返回会返回到呼起产品界面
-        // intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         try {
             startActivity(intent);
         } catch (Exception e) {

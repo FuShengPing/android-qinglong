@@ -1,4 +1,4 @@
-package auto.panel.utils;
+package auto.base.util;
 
 import android.content.Context;
 import android.content.Intent;

@@ -18,9 +18,11 @@ import java.util.Objects;
 
 import auto.base.ui.popup.ConfirmPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
+import auto.base.util.EncryptUtil;
 import auto.base.util.LogUnit;
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
+import auto.base.util.WebUnit;
 import auto.base.util.WindowUnit;
 import auto.panel.R;
 import auto.panel.bean.app.Version;
@@ -34,9 +36,7 @@ import auto.panel.ui.activity.panel.script.ScriptFragment;
 import auto.panel.ui.activity.panel.setting.SettingFragment;
 import auto.panel.ui.activity.panel.task.TaskFragment;
 import auto.panel.ui.fragment.BaseFragment;
-import auto.panel.utils.EncryptUtil;
-import auto.panel.utils.PackageUtil;
-import auto.panel.utils.WebUnit;
+import auto.base.util.PackageUtil;
 
 public class HomeActivity extends BaseActivity {
     public static final String TAG = "HomeActivity";
@@ -117,15 +117,16 @@ public class HomeActivity extends BaseActivity {
         ui_version.setText(String.format(getString(R.string.format_tip_version), PanelPreference.getVersion()));
 
         //导航监听
-        LinearLayout menu_task = uiDrawerLeft.findViewById(R.id.menu_task);
-        LinearLayout menu_log = uiDrawerLeft.findViewById(R.id.menu_log);
-        LinearLayout menu_config = uiDrawerLeft.findViewById(R.id.menu_config);
-        LinearLayout menu_script = uiDrawerLeft.findViewById(R.id.menu_script);
-        LinearLayout menu_env = uiDrawerLeft.findViewById(R.id.menu_env);
-        LinearLayout menu_setting = uiDrawerLeft.findViewById(R.id.menu_setting);
-        LinearLayout menu_dep = uiDrawerLeft.findViewById(R.id.menu_dep);
-        LinearLayout menu_app_exit = uiDrawerLeft.findViewById(R.id.menu_exit);
-        LinearLayout menu_app_setting = uiDrawerLeft.findViewById(R.id.menu_app_setting);
+        LinearLayout menu_task = uiDrawerLeft.findViewById(R.id.panel_menu_task);
+        LinearLayout menu_log = uiDrawerLeft.findViewById(R.id.panel_menu_log);
+        LinearLayout menu_config = uiDrawerLeft.findViewById(R.id.panel_menu_config);
+        LinearLayout menu_script = uiDrawerLeft.findViewById(R.id.panel_menu_script);
+        LinearLayout menu_environment = uiDrawerLeft.findViewById(R.id.panel_menu_env);
+        LinearLayout menu_setting = uiDrawerLeft.findViewById(R.id.panel_menu_setting);
+        LinearLayout menu_dependence = uiDrawerLeft.findViewById(R.id.panel_menu_dep);
+        LinearLayout menu_extension_proxy = uiDrawerLeft.findViewById(R.id.panel_menu_extension_proxy);
+        LinearLayout menu_app_logout = uiDrawerLeft.findViewById(R.id.panel_menu_app_logout);
+        LinearLayout menu_app_setting = uiDrawerLeft.findViewById(R.id.panel_menu_app_setting);
 
         //定时任务
         menu_task.setOnClickListener(v -> showFragment(TaskFragment.class));
@@ -142,14 +143,14 @@ public class HomeActivity extends BaseActivity {
         //脚本管理
         menu_script.setOnClickListener(v -> showFragment(ScriptFragment.class));
         //依赖管理
-        menu_env.setOnClickListener(v -> showFragment(EnvironmentFragment.class));
+        menu_environment.setOnClickListener(v -> showFragment(EnvironmentFragment.class));
         //任务日志
-        menu_dep.setOnClickListener(v -> showFragment(DependencePagerFragment.class));
+        menu_dependence.setOnClickListener(v -> showFragment(DependencePagerFragment.class));
         //系统设置
         menu_setting.setOnClickListener(v -> showFragment(SettingFragment.class));
 
         //退出登录
-        menu_app_exit.setOnClickListener(v -> {
+        menu_app_logout.setOnClickListener(v -> {
             Intent intent = new Intent(getBaseContext(), LoginActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.activity_alpha_enter, R.anim.activity_alpha_out);
@@ -157,13 +158,15 @@ public class HomeActivity extends BaseActivity {
         });
         //APP设置
         menu_app_setting.setOnClickListener(v -> {
+            Intent intent = new Intent(getBaseContext(), SettingActivity.class);
+            startActivity(intent);
+        });
 
-            // Intent intent = new Intent(getBaseContext(), SettingActivity.class);
-//            Intent intent = new Intent(getBaseContext(), "auto.ssh.ui.activity.MainActivity");
-
+        menu_extension_proxy.setOnClickListener(v -> {
             Intent intent = new Intent();
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//可选
-            ComponentName comp = new ComponentName("auto.ssh","auto.ssh.ui.activity.MainActivity");
+            intent.putExtra("token", "12345678");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            ComponentName comp = new ComponentName("auto.ssh", "auto.ssh.ui.activity.MainActivity");
             intent.setComponent(comp);
             startActivity(intent);
         });
@@ -226,7 +229,7 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void checkVersion(Version version) {
-        Version versionNow = PackageUtil.getVersion(this);
+        PackageUtil.Version versionNow = PackageUtil.getVersion(this);
         //若版本强制更新 即使停用更新推送仍会要求更新
         if (version.getMinVersionCode() > versionNow.getVersionCode()) {
             showUpdateNotice(version, true);

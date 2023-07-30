@@ -73,7 +73,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/menu_task"
+                    android:id="@+id/panel_menu_task"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/style_press_gray"
@@ -101,7 +101,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/menu_env"
+                    android:id="@+id/panel_menu_env"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/style_press_gray"
@@ -126,7 +126,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/menu_config"
+                    android:id="@+id/panel_menu_config"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/style_press_gray"
@@ -151,7 +151,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/menu_dep"
+                    android:id="@+id/panel_menu_dep"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/style_press_gray"
@@ -176,7 +176,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/menu_script"
+                    android:id="@+id/panel_menu_script"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/style_press_gray"
@@ -201,7 +201,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/menu_log"
+                    android:id="@+id/panel_menu_log"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/style_press_gray"
@@ -226,7 +226,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/menu_setting"
+                    android:id="@+id/panel_menu_setting"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/style_press_gray"
@@ -255,7 +255,33 @@
                     android:layout_height="@dimen/divider_thickness"
                     android:layout_marginVertical="10dp"
                     android:background="@color/divider_heavy"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
+
+                <LinearLayout
+                    android:id="@+id/panel_menu_extension_proxy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/style_press_gray"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="15dp"
+                    android:paddingStart="15dp"
+                    tools:ignore="RtlSymmetry">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/ic_extension_proxy" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/module_extension_proxy"
+                        android:textColor="@color/text_color_49"
+                        android:textSize="14sp" />
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
 
@@ -272,7 +298,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/menu_exit"
+                android:id="@+id/panel_menu_app_logout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -297,7 +323,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/menu_app_setting"
+                android:id="@+id/panel_menu_app_setting"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

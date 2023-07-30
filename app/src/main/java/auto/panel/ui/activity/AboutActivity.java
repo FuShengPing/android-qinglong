@@ -6,15 +6,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import auto.panel.R;
-import auto.panel.bean.app.Version;
 import auto.panel.database.sp.SettingPreference;
-import auto.panel.ui.activity.BaseActivity;
-import auto.panel.utils.PackageUtil;
-import auto.panel.utils.WebUnit;
+import auto.base.util.PackageUtil;
+import auto.base.util.WebUnit;
 
 @SuppressLint("SetTextI18n")
 public class AboutActivity extends BaseActivity {
-
+    private View uiExit;
     private TextView uiLinkGitee;
     private TextView uiLinkGithub;
     private TextView uiVersionNow;
@@ -25,6 +23,7 @@ public class AboutActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.panel_activity_about);
 
+        uiExit = findViewById(R.id.exit);
         uiVersionNew = findViewById(R.id.version_new);
         uiVersionNow = findViewById(R.id.version_now);
         uiLinkGitee = findViewById(R.id.link_gitee);
@@ -34,11 +33,13 @@ public class AboutActivity extends BaseActivity {
     }
 
     protected void init() {
+        uiExit.setOnClickListener(v -> finish());
+
         uiLinkGitee.setOnClickListener(v -> WebUnit.open(getBaseContext(), SettingPreference.getGiteeUrl()));
 
         uiLinkGithub.setOnClickListener(v -> WebUnit.open(getBaseContext(), SettingPreference.getGithubUrl()));
 
-        Version version = PackageUtil.getVersion(this);
+        PackageUtil.Version version = PackageUtil.getVersion(this);
 
         uiVersionNow.setText("Version " + version.getVersionName());
 
