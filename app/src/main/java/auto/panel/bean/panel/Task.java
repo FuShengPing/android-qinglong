@@ -5,9 +5,9 @@ package auto.panel.bean.panel;
  * @version 2023.06.29
  */
 public class Task implements Comparable<Task> {
-    public static final int STATE_FREE = 0;
+    public static final int STATE_RUNNING = 0;
     public static final int STATE_WAITING = 1;
-    public static final int STATE_RUNNING = 2;
+    public static final int STATE_FREE = 2;
     public static final int STATE_LIMIT = 3;
 
     private Object key;
@@ -101,18 +101,16 @@ public class Task implements Comparable<Task> {
         isPinned = pinned;
     }
 
+    private int getLevel() {
+        if (this.isPinned) {
+            return -1;
+        } else {
+            return this.stateCode;
+        }
+    }
+
     @Override
     public int compareTo(Task o) {
-        if (this.stateCode == STATE_RUNNING && o.stateCode != STATE_RUNNING) {
-            return -1;
-        } else if (this.isPinned && !o.isPinned) {
-            return -1;
-        } else if (!this.isPinned && o.isPinned) {
-            return 1;
-        } else if (this.stateCode != STATE_LIMIT && o.stateCode == STATE_LIMIT) {
-            return -1;
-        }
-
-        return o.stateCode - this.stateCode;
+        return this.getLevel() - o.getLevel();
     }
 }

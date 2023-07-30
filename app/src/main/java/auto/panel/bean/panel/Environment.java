@@ -90,7 +90,7 @@ public class Environment implements Comparable<Environment> {
 
     @Override
     public int compareTo(Environment o) {
-        return 0;
+        return this.name.compareTo(o.getName());
     }
 
     public static List<Environment> parse(String str, String remarks) {
