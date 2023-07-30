@@ -15,14 +15,14 @@ import auto.panel.net.NetManager;
 
 public abstract class BaseActivity extends auto.base.BaseActivity {
     public static final String TAG = "BaseActivity";
-    protected Activity mSelf;
+    protected Activity self;
     protected Context mContext;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getBaseContext();
-        mSelf = this;
+        self = this;
     }
 
     @Override

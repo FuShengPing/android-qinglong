@@ -20,6 +20,8 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class com.hierynomus.**{*;}
--keep class org.littleshoot.**{*;}
--keep class org.bouncycastle.**{*;}
+-keep class com.hierynomus.** {*;}
+-keep class org.** {*;}
+-keep class sun.** {*;}
+-keep class javax.** {*;}
+-keep class io.netty.** {*;}

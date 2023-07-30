@@ -22,6 +22,16 @@ public class PackageUtil {
         return version;
     }
 
+    public static boolean isAppInstalled(Context context,String packageName){
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            packageManager.getPackageInfo(packageName,PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
      public static class Version {
         private int versionCode;
 

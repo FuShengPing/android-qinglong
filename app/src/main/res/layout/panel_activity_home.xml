@@ -258,6 +258,7 @@
                     android:visibility="visible" />
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/panel_menu_extension_proxy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -276,6 +277,7 @@
                         android:src="@drawable/ic_extension_proxy" />
 
                     <TextView
+                        android:id="@+id/panel_menu_extension_proxy_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/module_extension_proxy"

@@ -26,6 +26,8 @@ import auto.base.util.ToastUnit;
 import auto.base.util.WebUnit;
 import auto.base.util.WindowUnit;
 import auto.panel.R;
+import auto.panel.bean.app.Extension;
+import auto.panel.bean.app.Extensions;
 import auto.panel.bean.app.Version;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.database.sp.SettingPreference;
@@ -102,6 +104,8 @@ public class HomeActivity extends BaseActivity {
         showFragment(TaskFragment.class);
         //版本检查
         getVersion();
+        //获取拓展
+        getExtension();
     }
 
     private void initDrawerBar() {
@@ -124,7 +128,6 @@ public class HomeActivity extends BaseActivity {
         LinearLayout menu_environment = uiDrawerLeft.findViewById(R.id.panel_menu_env);
         LinearLayout menu_setting = uiDrawerLeft.findViewById(R.id.panel_menu_setting);
         LinearLayout menu_dependence = uiDrawerLeft.findViewById(R.id.panel_menu_dep);
-        LinearLayout menu_extension_proxy = uiDrawerLeft.findViewById(R.id.panel_menu_extension_proxy);
         LinearLayout menu_app_logout = uiDrawerLeft.findViewById(R.id.panel_menu_app_logout);
         LinearLayout menu_app_setting = uiDrawerLeft.findViewById(R.id.panel_menu_app_setting);
 
@@ -162,16 +165,42 @@ public class HomeActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        //拓展--代理
-        menu_extension_proxy.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.putExtra("from", "panel");
-            intent.putExtra("token", "qinglong");
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            ComponentName comp = new ComponentName("auto.ssh", "auto.ssh.ui.activity.MainActivity");
-            intent.setComponent(comp);
-            startActivity(intent);
-        });
+
+    }
+
+    private void initExtension(Extensions extensions) {
+        if (extensions.getProxy() != null) {            //拓展--代理
+            Extension proxy = extensions.getProxy();
+
+            LinearLayout uiExtensionProxy = uiDrawerLeft.findViewById(R.id.panel_menu_extension_proxy);
+            TextView uiExtensionProxyTitle = uiExtensionProxy.findViewById(R.id.panel_menu_extension_proxy_title);
+
+            uiExtensionProxy.setVisibility(View.VISIBLE);
+            uiExtensionProxyTitle.setText(proxy.getName());
+
+            uiExtensionProxy.setOnClickListener(v -> {
+                if (PackageUtil.isAppInstalled(self, proxy.getPackageName())) {
+                    Intent intent = new Intent();
+                    intent.putExtra("from", "panel");
+                    intent.putExtra("token", "qinglong");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    ComponentName comp = new ComponentName(proxy.getPackageName(), proxy.getActivityName());
+                    intent.setComponent(comp);
+                    startActivity(intent);
+                } else {
+                    ConfirmPopupWindow popConfirmWindow = new ConfirmPopupWindow("模块缺失", "\n模块未安装，是否下载安装\n", "取消", "下载");
+                    popConfirmWindow.setMaxHeight(WindowUnit.getWindowHeightPix(getBaseContext()) / 3);
+                    popConfirmWindow.setFocusable(true);
+                    popConfirmWindow.setOnActionListener(isConfirm -> {
+                        WebUnit.open(self, proxy.getUrl());
+                        return true;
+                    });
+                    PopupWindowBuilder.buildConfirmWindow(this, popConfirmWindow);
+                }
+
+            });
+
+        }
     }
 
     private void showFragment(Class<?> cls) {
@@ -255,5 +284,11 @@ public class HomeActivity extends BaseActivity {
                 LogUnit.log(msg);
             }
         });
+    }
+
+    private void getExtension() {
+        String uid = EncryptUtil.md5(PanelPreference.getAddress());
+
+        ApiController.getExtensions(uid, this::initExtension);
     }
 }
