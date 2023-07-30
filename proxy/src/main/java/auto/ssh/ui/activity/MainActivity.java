@@ -71,7 +71,7 @@ public class MainActivity extends BaseActivity {
         from = getIntent().getStringExtra(EXTRA_FROM);
         token = getIntent().getStringExtra(EXTRA_TOKEN);
 
-        Logger.debug("from " + from + " token：" + token, null);
+        Logger.debug("from：" + from + "\ttoken：" + token, null);
 
         uiLocal = findViewById(R.id.proxy_local);
         uiLocalImg = findViewById(R.id.proxy_local_img);
