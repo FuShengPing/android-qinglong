@@ -22,6 +22,7 @@ import auto.base.BaseApplication;
 import auto.base.util.LogUnit;
 import auto.base.util.Logger;
 import auto.base.util.NetUnit;
+import auto.base.util.PackageUtil;
 import auto.base.util.WebUnit;
 import auto.ssh.R;
 import auto.ssh.bean.ConfigParams;
@@ -319,7 +320,14 @@ public class MainActivity extends BaseActivity {
 
         // 关于
         uiAbout.setOnClickListener(v -> {
+            ConfirmPopup confirmPopup = new ConfirmPopup();
+            PackageUtil.Version version = PackageUtil.getVersion(self);
 
+            confirmPopup.setFocusable(true);
+            confirmPopup.setTitle("版本信息");
+            confirmPopup.setContent("Version " + version.getVersionName());
+
+            Builder.buildConfirmWindow(self, confirmPopup);
         });
     }
 
