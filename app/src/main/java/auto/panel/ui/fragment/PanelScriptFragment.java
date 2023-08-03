@@ -20,6 +20,7 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Stack;
 
@@ -208,6 +209,13 @@ public class PanelScriptFragment extends BaseFragment {
         editPopupWindow.addItem(itemName);
         editPopupWindow.addItem(itemDir);
 
+        editPopupWindow.setActionListener(new EditPopupWindow.OnActionListener() {
+            @Override
+            public boolean onConfirm(Map<String, String> map) {
+                return true;
+            }
+        });
+
         PopupWindowBuilder.buildEditWindow(requireActivity(), editPopupWindow);
     }
 
@@ -219,6 +227,13 @@ public class PanelScriptFragment extends BaseFragment {
 
         editPopupWindow.addItem(itemName);
         editPopupWindow.addItem(itemDir);
+
+        editPopupWindow.setActionListener(new EditPopupWindow.OnActionListener() {
+            @Override
+            public boolean onConfirm(Map<String, String> map) {
+                return true;
+            }
+        });
 
         PopupWindowBuilder.buildEditWindow(requireActivity(), editPopupWindow);
     }

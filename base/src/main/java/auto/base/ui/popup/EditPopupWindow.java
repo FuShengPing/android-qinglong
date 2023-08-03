@@ -105,6 +105,8 @@ public class EditPopupWindow {
     public interface OnActionListener {
         boolean onConfirm(Map<String, String> map);
 
-        boolean onCancel();
+        default boolean onCancel() {
+            return true;
+        }
     }
 }
