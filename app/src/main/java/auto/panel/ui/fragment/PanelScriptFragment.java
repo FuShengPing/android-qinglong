@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,17 +23,19 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
 
-import auto.base.util.ToastUnit;
-import auto.base.ui.popup.MenuPopupObject;
+import auto.base.ui.popup.EditItem;
+import auto.base.ui.popup.EditPopupWindow;
+import auto.base.ui.popup.MenuItem;
 import auto.base.ui.popup.MenuPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
+import auto.base.util.ToastUnit;
 import auto.panel.R;
 import auto.panel.bean.panel.File;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
-import auto.panel.ui.adapter.PanelScriptItemAdapter;
 import auto.panel.ui.activity.CodeWebActivity;
+import auto.panel.ui.adapter.PanelScriptItemAdapter;
 
 @SuppressLint("SetTextI18n")
 public class PanelScriptFragment extends BaseFragment {
@@ -157,10 +158,10 @@ public class PanelScriptFragment extends BaseFragment {
     private void showPopItemMenu(View v, File file, int position) {
         MenuPopupWindow popMenuWindow = new MenuPopupWindow(v);
 
-        popMenuWindow.addItem(new MenuPopupObject("copy", "复制路径", R.drawable.ic_gray_crop_free));
+        popMenuWindow.addItem(new MenuItem("copy", "复制路径", R.drawable.ic_gray_crop_free));
 
         if (!file.isDir()) {
-            popMenuWindow.addItem(new MenuPopupObject("delete", "删除脚本", R.drawable.ic_gray_delete));
+            popMenuWindow.addItem(new MenuItem("delete", "删除脚本", R.drawable.ic_gray_delete));
         }
 
         popMenuWindow.setOnActionListener(key -> {
@@ -184,12 +185,42 @@ public class PanelScriptFragment extends BaseFragment {
 
     private void showPopWindowMenu(View v) {
         MenuPopupWindow popMenuWindow = new MenuPopupWindow(v);
-        popMenuWindow.addItem(new MenuPopupObject("add", "新建脚本", R.drawable.ic_gray_add));
-        popMenuWindow.addItem(new MenuPopupObject("import", "本地导入", R.drawable.ic_gray_upload));
-        popMenuWindow.addItem(new MenuPopupObject("backup", "脚本备份", R.drawable.ic_gray_download));
+        popMenuWindow.addItem(new MenuItem("addDir", "新建目录", R.drawable.ic_gray_add));
+        popMenuWindow.addItem(new MenuItem("addFile", "新建脚本", R.drawable.ic_gray_file));
 
-        popMenuWindow.setOnActionListener(key -> true);
+        popMenuWindow.setOnActionListener(key -> {
+            if ("addDir".equals(key)) {
+                showPopDirEdit();
+            } else if ("addFile".equals(key)) {
+                showPopFileEdit();
+            }
+            return true;
+        });
         PopupWindowBuilder.buildMenuWindow(requireActivity(), popMenuWindow);
+    }
+
+    private void showPopDirEdit() {
+        EditPopupWindow editPopupWindow = new EditPopupWindow();
+        editPopupWindow.setTitle("新建目录");
+        EditItem itemName = new EditItem("name", null, "目录名", "请输入目录名");
+        EditItem itemDir = new EditItem("dir", fileDir, "父目录", "", false, false);
+
+        editPopupWindow.addItem(itemName);
+        editPopupWindow.addItem(itemDir);
+
+        PopupWindowBuilder.buildEditWindow(requireActivity(), editPopupWindow);
+    }
+
+    private void showPopFileEdit() {
+        EditPopupWindow editPopupWindow = new EditPopupWindow();
+        editPopupWindow.setTitle("新建文件");
+        EditItem itemName = new EditItem("name", null, "文件名", "请输入文件名");
+        EditItem itemDir = new EditItem("dir", fileDir, "父目录", "", false, false);
+
+        editPopupWindow.addItem(itemName);
+        editPopupWindow.addItem(itemDir);
+
+        PopupWindowBuilder.buildEditWindow(requireActivity(), editPopupWindow);
     }
 
     private void sortAndSetData(List<File> files, String dir) {

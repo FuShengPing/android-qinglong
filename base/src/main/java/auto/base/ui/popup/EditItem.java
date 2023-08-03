@@ -1,6 +1,6 @@
 package auto.base.ui.popup;
 
-public class EditPopupObject {
+public class EditItem {
     private String key;
     private String value;
     private String label;
@@ -8,18 +8,18 @@ public class EditPopupObject {
     private boolean focusable = true;
     private boolean editable = true;
 
-    public EditPopupObject() {
+    public EditItem() {
 
     }
 
-    public EditPopupObject(String key, String value, String label, String hint) {
+    public EditItem(String key, String value, String label, String hint) {
         this.key = key;
         this.value = value;
         this.label = label;
         this.hint = hint;
     }
 
-    public EditPopupObject(String key, String value, String label, String hint, boolean focusable, boolean editable) {
+    public EditItem(String key, String value, String label, String hint, boolean focusable, boolean editable) {
         this.key = key;
         this.value = value;
         this.label = label;

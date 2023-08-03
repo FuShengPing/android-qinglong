@@ -3,7 +3,6 @@ package auto.panel.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,11 +35,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import auto.base.ui.popup.EditPopupObject;
+import auto.base.ui.popup.EditItem;
 import auto.base.ui.popup.EditPopupWindow;
 import auto.base.ui.popup.ListPopupWindow;
 import auto.base.ui.popup.LocalFileAdapter;
-import auto.base.ui.popup.MenuPopupObject;
+import auto.base.ui.popup.MenuItem;
 import auto.base.ui.popup.MenuPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.base.ui.popup.ProgressPopupWindow;
@@ -401,11 +400,11 @@ public class PanelTaskFragment extends BaseFragment {
 
     private void showPopWindowMenu(View view) {
         MenuPopupWindow popMenuWindow = new MenuPopupWindow(view);
-        popMenuWindow.addItem(new MenuPopupObject("add", "新建任务", R.drawable.ic_gray_add));
-        popMenuWindow.addItem(new MenuPopupObject("localAdd", "本地导入", R.drawable.ic_gray_file));
-        popMenuWindow.addItem(new MenuPopupObject("backup", "任务备份", R.drawable.ic_gray_download));
-        popMenuWindow.addItem(new MenuPopupObject("deleteMul", "任务去重", R.drawable.ic_gray_delete));
-        popMenuWindow.addItem(new MenuPopupObject("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
+        popMenuWindow.addItem(new MenuItem("add", "新建任务", R.drawable.ic_gray_add));
+        popMenuWindow.addItem(new MenuItem("localAdd", "本地导入", R.drawable.ic_gray_file));
+        popMenuWindow.addItem(new MenuItem("backup", "任务备份", R.drawable.ic_gray_download));
+        popMenuWindow.addItem(new MenuItem("deleteMul", "任务去重", R.drawable.ic_gray_delete));
+        popMenuWindow.addItem(new MenuItem("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
         popMenuWindow.setOnActionListener(key -> {
             switch (key) {
                 case "add":
@@ -431,9 +430,10 @@ public class PanelTaskFragment extends BaseFragment {
 
     private void showPopWindowEdit(Task task) {
         uiPopEdit = new EditPopupWindow("新建任务", "取消", "确定");
-        EditPopupObject itemName = new EditPopupObject("name", null, "名称", "请输入任务名称");
-        EditPopupObject itemCommand = new EditPopupObject("command", null, "命令", "请输入要执行的命令");
-        EditPopupObject itemSchedule = new EditPopupObject("schedule", null, "定时规则", "秒(可选) 分 时 天 月 周");
+        EditItem itemName = new EditItem("name", null, "名称", "请输入任务名称");
+        EditItem itemCommand = new EditItem("command", null, "命令", "请输入要执行的命令");
+        EditItem itemSchedule = new EditItem("schedule", null, "定时规则", "秒(可选) 分 时 天 月 周");
+
         uiPopEdit.addItem(itemName);
         uiPopEdit.addItem(itemCommand);
         uiPopEdit.addItem(itemSchedule);
@@ -498,7 +498,7 @@ public class PanelTaskFragment extends BaseFragment {
         }
 
         uiPopEdit = new EditPopupWindow("任务备份", "取消", "确定");
-        EditPopupObject itemName = new EditPopupObject("fileName", null, "文件名", "选填");
+        EditItem itemName = new EditItem("fileName", null, "文件名", "选填");
 
         uiPopEdit.addItem(itemName);
 

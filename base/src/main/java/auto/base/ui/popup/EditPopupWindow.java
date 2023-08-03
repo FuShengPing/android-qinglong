@@ -14,7 +14,7 @@ public class EditPopupWindow {
     private int maxHeight = 0;
     private PopupWindow popupWindow;
     private View view;
-    private List<EditPopupObject> items;
+    private List<EditItem> items;
     private OnActionListener actionListener;
 
     public EditPopupWindow() {
@@ -28,7 +28,7 @@ public class EditPopupWindow {
         this.items = new ArrayList<>();
     }
 
-    public void setItems(List<EditPopupObject> items) {
+    public void setItems(List<EditItem> items) {
         this.items = items;
     }
 
@@ -40,11 +40,11 @@ public class EditPopupWindow {
         this.actionListener = actionListener;
     }
 
-    public void addItem(EditPopupObject item) {
+    public void addItem(EditItem item) {
         this.items.add(item);
     }
 
-    public List<EditPopupObject> getItems() {
+    public List<EditItem> getItems() {
         return items;
     }
 

@@ -20,7 +20,7 @@ import java.util.Objects;
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
-import auto.base.ui.popup.EditPopupObject;
+import auto.base.ui.popup.EditItem;
 import auto.base.ui.popup.EditPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.panel.R;
@@ -29,7 +29,6 @@ import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
 import auto.panel.ui.adapter.PanelDependenceItemAdapter;
-import auto.panel.ui.fragment.BaseFragment;
 import auto.panel.ui.activity.CodeWebActivity;
 
 public class PanelDependenceFragment extends BaseFragment {
@@ -85,8 +84,8 @@ public class PanelDependenceFragment extends BaseFragment {
     protected void onAddClick() {
         uiPopEdit = new EditPopupWindow("新建依赖", "取消", "确定");
         uiPopEdit.setMaxHeight(WindowUnit.getWindowHeightPix(requireContext()) / 3);
-        uiPopEdit.addItem(new EditPopupObject("type", this.type, "类型", null, false, false));
-        uiPopEdit.addItem(new EditPopupObject("name", null, "名称", "请输入依赖名称"));
+        uiPopEdit.addItem(new EditItem("type", this.type, "类型", null, false, false));
+        uiPopEdit.addItem(new EditItem("name", null, "名称", "请输入依赖名称"));
 
         uiPopEdit.setActionListener(new EditPopupWindow.OnActionListener() {
             @Override

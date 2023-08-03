@@ -2,7 +2,6 @@ package auto.panel.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import auto.base.ui.popup.MenuPopupObject;
+import auto.base.ui.popup.MenuItem;
 import auto.base.ui.popup.MenuPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.panel.R;
@@ -139,8 +138,8 @@ public class PanelDependencePagerFragment extends BaseFragment {
 
     private void showPopWindowMenu(View view) {
         MenuPopupWindow popMenuWindow = new MenuPopupWindow(view);
-        popMenuWindow.addItem(new MenuPopupObject("add", "新建依赖", R.drawable.ic_gray_add));
-        popMenuWindow.addItem(new MenuPopupObject("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
+        popMenuWindow.addItem(new MenuItem("add", "新建依赖", R.drawable.ic_gray_add));
+        popMenuWindow.addItem(new MenuItem("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
 
         popMenuWindow.setOnActionListener(key -> {
             if (key.equals("add")) {

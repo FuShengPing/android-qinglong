@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MenuPopupWindow {
-    private List<MenuPopupObject> items = new ArrayList<>();
+    private List<MenuItem> items = new ArrayList<>();
     private OnActionListener onActionListener;
     private View targetView;
 
@@ -17,15 +17,15 @@ public class MenuPopupWindow {
         this.targetView = view;
     }
 
-    public List<MenuPopupObject> getItems() {
+    public List<MenuItem> getItems() {
         return items;
     }
 
-    public void addItems(List<MenuPopupObject> items) {
+    public void addItems(List<MenuItem> items) {
         this.items = items;
     }
 
-    public void addItem(MenuPopupObject item) {
+    public void addItem(MenuItem item) {
         this.items.add(item);
     }
 

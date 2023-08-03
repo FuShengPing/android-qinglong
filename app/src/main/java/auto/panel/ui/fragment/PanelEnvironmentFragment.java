@@ -2,7 +2,6 @@ package auto.panel.ui.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,13 +32,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import auto.base.ui.popup.MenuPopupObject;
+import auto.base.ui.popup.MenuItem;
 import auto.base.util.TextUnit;
 import auto.base.util.TimeUnit;
 import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
 import auto.base.ui.popup.LocalFileAdapter;
-import auto.base.ui.popup.EditPopupObject;
+import auto.base.ui.popup.EditItem;
 import auto.base.ui.popup.EditPopupWindow;
 import auto.base.ui.popup.ListPopupWindow;
 import auto.base.ui.popup.MenuPopupWindow;
@@ -53,7 +52,6 @@ import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.v10.ApiController;
 import auto.panel.ui.adapter.PanelEnvironmentItemAdapter;
-import auto.panel.ui.fragment.BaseFragment;
 import auto.panel.utils.FileUtil;
 
 public class PanelEnvironmentFragment extends BaseFragment {
@@ -292,12 +290,12 @@ public class PanelEnvironmentFragment extends BaseFragment {
 
     private void showPopWindowMenu(View view) {
         MenuPopupWindow popMenuWindow = new MenuPopupWindow(view);
-        popMenuWindow.addItem(new MenuPopupObject("add", "新建变量", R.drawable.ic_gray_add));
-        popMenuWindow.addItem(new MenuPopupObject("quickAdd", "快捷导入", R.drawable.ic_gray_flash_on));
-        popMenuWindow.addItem(new MenuPopupObject("localAdd", "本地导入", R.drawable.ic_gray_file));
-        popMenuWindow.addItem(new MenuPopupObject("backup", "变量备份", R.drawable.ic_gray_download));
-        popMenuWindow.addItem(new MenuPopupObject("deleteMul", "变量去重", R.drawable.ic_gray_delete));
-        popMenuWindow.addItem(new MenuPopupObject("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
+        popMenuWindow.addItem(new MenuItem("add", "新建变量", R.drawable.ic_gray_add));
+        popMenuWindow.addItem(new MenuItem("quickAdd", "快捷导入", R.drawable.ic_gray_flash_on));
+        popMenuWindow.addItem(new MenuItem("localAdd", "本地导入", R.drawable.ic_gray_file));
+        popMenuWindow.addItem(new MenuItem("backup", "变量备份", R.drawable.ic_gray_download));
+        popMenuWindow.addItem(new MenuItem("deleteMul", "变量去重", R.drawable.ic_gray_delete));
+        popMenuWindow.addItem(new MenuItem("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
         popMenuWindow.setOnActionListener(key -> {
             switch (key) {
                 case "add":
@@ -328,9 +326,9 @@ public class PanelEnvironmentFragment extends BaseFragment {
 
     private void showPopWindowEdit(Environment environment) {
         uiPopEdit = new EditPopupWindow("新建变量", "取消", "确定");
-        EditPopupObject itemName = new EditPopupObject("name", null, "名称", "请输入变量名称");
-        EditPopupObject itemValue = new EditPopupObject("value", null, "值", "请输入变量值");
-        EditPopupObject itemRemark = new EditPopupObject("remark", null, "备注", "请输入备注(可选)");
+        EditItem itemName = new EditItem("name", null, "名称", "请输入变量名称");
+        EditItem itemValue = new EditItem("value", null, "值", "请输入变量值");
+        EditItem itemRemark = new EditItem("remark", null, "备注", "请输入备注(可选)");
 
         uiPopEdit.addItem(itemName);
         uiPopEdit.addItem(itemValue);
@@ -389,8 +387,8 @@ public class PanelEnvironmentFragment extends BaseFragment {
 
     private void showPopWindowQuickImport() {
         uiPopEdit = new EditPopupWindow("快捷导入", "取消", "确定");
-        EditPopupObject itemValue = new EditPopupObject("values", null, "文本", "请输入文本");
-        EditPopupObject itemRemark = new EditPopupObject("remark", null, "备注", "请输入备注(可选)");
+        EditItem itemValue = new EditItem("values", null, "文本", "请输入文本");
+        EditItem itemRemark = new EditItem("remark", null, "备注", "请输入备注(可选)");
 
         uiPopEdit.addItem(itemValue);
         uiPopEdit.addItem(itemRemark);
@@ -433,7 +431,7 @@ public class PanelEnvironmentFragment extends BaseFragment {
         }
 
         uiPopEdit = new EditPopupWindow("变量备份", "取消", "确定");
-        EditPopupObject itemName = new EditPopupObject("fileName", null, "文件名", "选填");
+        EditItem itemName = new EditItem("fileName", null, "文件名", "选填");
 
         uiPopEdit.addItem(itemName);
 

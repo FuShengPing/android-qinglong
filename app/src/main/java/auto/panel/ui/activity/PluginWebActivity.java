@@ -6,7 +6,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.net.http.SslError;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.webkit.CookieManager;
@@ -19,7 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import auto.base.ui.popup.ConfirmPopupWindow;
-import auto.base.ui.popup.MenuPopupObject;
+import auto.base.ui.popup.MenuItem;
 import auto.base.ui.popup.MenuPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.base.util.TextUnit;
@@ -135,10 +134,10 @@ public class PluginWebActivity extends BaseActivity {
 
     private void showPopMenu(View view) {
         MenuPopupWindow popMenuWindow = new MenuPopupWindow(view);
-        popMenuWindow.addItem(new MenuPopupObject("read_normal", "ck提取", R.drawable.ic_gray_crop_free));
-//        popMenuWindow.addItem(new MenuPopupObject("rule", "规则配置", R.drawable.ic_gray_mul_setting));
-//        popMenuWindow.addItem(new MenuPopupObject("read_rule", "规则提取", R.drawable.ic_gray_rule));
-//        popMenuWindow.addItem(new MenuPopupObject("import", "导入变量", R.drawable.ic_gray_upload));
+        popMenuWindow.addItem(new MenuItem("read_normal", "ck提取", R.drawable.ic_gray_crop_free));
+//        popMenuWindow.addItem(new MenuItem("rule", "规则配置", R.drawable.ic_gray_mul_setting));
+//        popMenuWindow.addItem(new MenuItem("read_rule", "规则提取", R.drawable.ic_gray_rule));
+//        popMenuWindow.addItem(new MenuItem("import", "导入变量", R.drawable.ic_gray_upload));
 
         popMenuWindow.setOnActionListener(key -> {
             if ("read_normal".equals(key)) {
