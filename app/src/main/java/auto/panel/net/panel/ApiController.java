@@ -724,6 +724,14 @@ public class ApiController {
         }
     }
 
+    public static void addScript(@NonNull String baseUrl, @NonNull String authorization, @NonNull File file, BaseCallBack callBack) {
+        if (PanelPreference.isLowVersion()) {
+            auto.panel.net.panel.v10.ApiController.addScript(baseUrl, authorization, file, callBack);
+        } else {
+            auto.panel.net.panel.v15.ApiController.addScript(baseUrl, authorization, file, callBack);
+        }
+    }
+
     public static void deleteScript(@NonNull String baseUrl, @NonNull String authorization, File file, BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("filename", file.getTitle());

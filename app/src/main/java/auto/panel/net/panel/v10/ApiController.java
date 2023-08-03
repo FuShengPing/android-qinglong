@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import java.util.List;
 
 import auto.base.util.TextUnit;
+import auto.panel.bean.panel.File;
 import auto.panel.bean.panel.SystemConfig;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
@@ -252,53 +253,8 @@ public class ApiController {
         });
     }
 
-    public static void createScript(@NonNull String requestId, @NonNull String fileName, @Nullable String path, @NonNull NetBaseCallback callback) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("filename", fileName);
-        jsonObject.addProperty("path", path == null ? "" : path);
-        jsonObject.addProperty("content", "");
+    public static void addScript(@NonNull String baseUrl, @NonNull String authorization, @NonNull File file, auto.panel.net.panel.ApiController.BaseCallBack callBack) {
 
-        String json = jsonObject.toString();
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(PanelPreference.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .createScript(PanelPreference.getAuthorization(), body);
-
-        call.enqueue(new Callback<BaseRes>() {
-            @Override
-            public void onResponse(@NonNull Call<BaseRes> call, @NonNull Response<BaseRes> response) {
-                NetManager.finishCall(requestId);
-                BaseRes res = response.body();
-                if (res == null) {
-                    if (response.code() == 401) {
-                        callback.onFailure(ERROR_INVALID_AUTH);
-                    } else {
-                        callback.onFailure(ERROR_NO_BODY);
-                    }
-                } else {
-                    if (res.getCode() == 200) {
-                        callback.onSuccess();
-                    } else {
-                        callback.onFailure(res.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<BaseRes> call, @NonNull Throwable t) {
-                NetManager.finishCall(requestId);
-                if (call.isCanceled()) {
-                    return;
-                }
-                callback.onFailure(t.getLocalizedMessage());
-            }
-        });
-
-        NetManager.addCall(call, requestId);
     }
 
     public static void getSystemConfig(@NonNull String baseUrl, @NonNull String authorization, auto.panel.net.panel.ApiController.SystemConfigCallBack callBack) {

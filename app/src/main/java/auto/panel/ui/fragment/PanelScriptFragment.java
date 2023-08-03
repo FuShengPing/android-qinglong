@@ -161,7 +161,9 @@ public class PanelScriptFragment extends BaseFragment {
 
         popMenuWindow.addItem(new MenuItem("copy", "复制路径", R.drawable.ic_gray_crop_free));
 
-        if (!file.isDir()) {
+        if (file.isDir()) {
+            popMenuWindow.addItem(new MenuItem("delete", "删除目录", R.drawable.ic_gray_delete));
+        } else {
             popMenuWindow.addItem(new MenuItem("delete", "删除脚本", R.drawable.ic_gray_delete));
         }
 
@@ -221,7 +223,9 @@ public class PanelScriptFragment extends BaseFragment {
             File file = new File();
             file.setTitle(name);
             file.setParent(dir);
-            file.setDir(false);
+            file.setDir(true);
+
+            addScript(file);
 
             return true;
         });
@@ -251,6 +255,8 @@ public class PanelScriptFragment extends BaseFragment {
             file.setTitle(name);
             file.setParent(dir);
             file.setDir(false);
+
+            addScript(file);
 
             return true;
         });
@@ -285,6 +291,21 @@ public class PanelScriptFragment extends BaseFragment {
                 if (uiRefresh.isRefreshing()) {
                     uiRefresh.finishRefresh(isSuccess);
                 }
+            }
+        });
+    }
+
+    private void addScript(File file) {
+        ApiController.addScript(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), file, new ApiController.BaseCallBack() {
+            @Override
+            public void onSuccess() {
+                ToastUnit.showShort("新建成功");
+                getScriptFiles();
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort("新建失败：" + msg);
             }
         });
     }

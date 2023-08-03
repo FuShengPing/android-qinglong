@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import java.util.List;
 
 import auto.base.util.TextUnit;
+import auto.panel.bean.panel.File;
 import auto.panel.bean.panel.SystemConfig;
 import auto.panel.net.panel.BaseRes;
 import auto.panel.net.panel.Handler;
@@ -172,6 +173,42 @@ public class ApiController {
 
             @Override
             public void onFailure(Call<ScriptFilesRes> call, Throwable t) {
+                Handler.handleRequestError(call, t, callBack);
+            }
+        });
+    }
+
+    public static void addScript(@NonNull String baseUrl, @NonNull String authorization, @NonNull File file, auto.panel.net.panel.ApiController.BaseCallBack callBack) {
+        JsonObject jsonObject = new JsonObject();
+        if (file.isDir()) {
+            jsonObject.addProperty("directory", file.getTitle());
+        } else {
+            jsonObject.addProperty("filename", file.getTitle());
+        }
+        jsonObject.addProperty("content", "");
+        jsonObject.addProperty("path", file.getParent());
+
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
+
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .addScript(authorization, body);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (Handler.handleResponse(response.code(), res, callBack)) {
+                    return;
+                }
+                callBack.onSuccess();
+            }
+
+            @Override
+            public void onFailure(Call<BaseRes> call, Throwable t) {
                 Handler.handleRequestError(call, t, callBack);
             }
         });

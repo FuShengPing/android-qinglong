@@ -7,6 +7,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.Header;
+import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
@@ -23,6 +24,9 @@ public interface Api {
 
     @GET("api/scripts")
     Call<ScriptFilesRes> getScriptFiles(@Header("Authorization") String authorization);
+
+    @POST("api/scripts")
+    Call<BaseRes> addScript(@Header("Authorization") String authorization, @Body RequestBody body);
 
     @GET("api/logs")
     Call<LogFilesRes> getLogFiles(@Header("Authorization") String authorization);
