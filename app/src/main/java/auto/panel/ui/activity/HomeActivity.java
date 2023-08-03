@@ -191,7 +191,7 @@ public class HomeActivity extends BaseActivity {
                     ConfirmPopupWindow popConfirmWindow = new ConfirmPopupWindow("模块缺失", "\n模块未安装，是否下载安装\n", "取消", "下载");
                     popConfirmWindow.setMaxHeight(WindowUnit.getWindowHeightPix(getBaseContext()) / 3);
                     popConfirmWindow.setFocusable(true);
-                    popConfirmWindow.setOnActionListener(isConfirm -> {
+                    popConfirmWindow.setOnActionListener(() -> {
                         WebUnit.open(self, proxy.getUrl());
                         return true;
                     });
@@ -245,11 +245,15 @@ public class HomeActivity extends BaseActivity {
         ConfirmPopupWindow popConfirmWindow = new ConfirmPopupWindow("版本更新", content, "取消", "更新");
         popConfirmWindow.setMaxHeight(WindowUnit.getWindowHeightPix(getBaseContext()) / 3);
         popConfirmWindow.setFocusable(false);
-        popConfirmWindow.setOnActionListener(isConfirm -> {
-            if (isConfirm) {
-                WebUnit.open(this, version.getDownloadUrl());
+        popConfirmWindow.setOnActionListener(new ConfirmPopupWindow.OnActionListener() {
+            @Override
+            public boolean onConfirm() {
+                WebUnit.open(self, version.getDownloadUrl());
                 return !force;
-            } else {
+            }
+
+            @Override
+            public boolean onCancel() {
                 if (force) {
                     finish();
                 }

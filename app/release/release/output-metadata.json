@@ -4,16 +4,16 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "auto.ssh",
+  "applicationId": "auto.panel",
   "variantName": "release",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 1,
-      "versionName": "1.0.0",
-      "outputFile": "proxy-release.apk"
+      "versionCode": 10,
+      "versionName": "2.0.1",
+      "outputFile": "app-release.apk"
     }
   ],
   "elementType": "File"

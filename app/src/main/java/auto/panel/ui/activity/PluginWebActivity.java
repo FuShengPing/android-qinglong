@@ -18,16 +18,15 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import auto.base.util.TextUnit;
-import auto.base.util.ToastUnit;
-import auto.base.util.WindowUnit;
 import auto.base.ui.popup.ConfirmPopupWindow;
 import auto.base.ui.popup.MenuPopupObject;
 import auto.base.ui.popup.MenuPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
+import auto.base.util.TextUnit;
+import auto.base.util.ToastUnit;
+import auto.base.util.WindowUnit;
 import auto.panel.R;
 import auto.panel.net.web.WebViewBuilder;
-import auto.panel.ui.activity.BaseActivity;
 
 public class PluginWebActivity extends BaseActivity {
     public static final String TAG = "PluginWebActivity";
@@ -123,14 +122,13 @@ public class PluginWebActivity extends BaseActivity {
         popConfirmWindow.setCancelTip("取消");
         popConfirmWindow.setTitle("Cookies");
         popConfirmWindow.setContent(content);
-        popConfirmWindow.setOnActionListener(isConfirm -> {
-            if (isConfirm) {
-                ClipboardManager clipboardManager = (ClipboardManager) getBaseContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                clipboardManager.setPrimaryClip(ClipData.newPlainText(null, content));
-                ToastUnit.showShort("已复制到剪切板");
-            }
+        popConfirmWindow.setOnActionListener(() -> {
+            ClipboardManager clipboardManager = (ClipboardManager) getBaseContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            clipboardManager.setPrimaryClip(ClipData.newPlainText(null, content));
+            ToastUnit.showShort("已复制到剪切板");
             return true;
         });
+
         //构建并显示pop窗体
         PopupWindowBuilder.buildConfirmWindow(this, popConfirmWindow);
     }

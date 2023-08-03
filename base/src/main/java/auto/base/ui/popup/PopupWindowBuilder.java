@@ -181,13 +181,13 @@ public class PopupWindowBuilder {
 
         if (popConfirmWindow.getOnActionListener() != null) {
             ui_bt_cancel.setOnClickListener(v -> {
-                if (popConfirmWindow.getOnActionListener().onConfirm(false)) {
+                if (popConfirmWindow.getOnActionListener().onCancel()) {
                     popWindow.dismiss();
                 }
             });
 
             ui_bt_confirm.setOnClickListener(v -> {
-                if (popConfirmWindow.getOnActionListener().onConfirm(true)) {
+                if (popConfirmWindow.getOnActionListener().onConfirm()) {
                     popWindow.dismiss();
                 }
             });

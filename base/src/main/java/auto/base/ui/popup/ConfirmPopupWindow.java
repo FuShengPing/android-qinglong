@@ -84,6 +84,10 @@ public class ConfirmPopupWindow {
     }
 
     public interface OnActionListener {
-        boolean onConfirm(boolean isConfirm);
+        boolean onConfirm();
+
+        default boolean onCancel() {
+            return true;
+        }
     }
 }
