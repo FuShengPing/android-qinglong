@@ -168,7 +168,7 @@ public class PanelScriptFragment extends BaseFragment {
         if (file.isDir()) {
             popMenuWindow.addItem(new MenuItem("delete", "删除目录", R.drawable.ic_gray_delete));
         } else {
-            popMenuWindow.addItem(new MenuItem("update", "更新脚本", R.drawable.ic_gray_delete));
+            popMenuWindow.addItem(new MenuItem("update", "更新脚本", R.drawable.ic_gray_upload));
             popMenuWindow.addItem(new MenuItem("delete", "删除脚本", R.drawable.ic_gray_delete));
         }
 
