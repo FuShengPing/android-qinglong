@@ -9,8 +9,9 @@ import java.util.List;
 public class File implements Comparable<File> {
     private boolean isDir;
     private String title;
-    private String path;
+    private String content;
     private String parent;
+    private String path;
     private String createTime;
     private List<File> children;
 
@@ -36,6 +37,14 @@ public class File implements Comparable<File> {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getParent() {

@@ -18,6 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -37,6 +40,7 @@ import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
 import auto.panel.ui.activity.CodeWebActivity;
 import auto.panel.ui.adapter.PanelScriptItemAdapter;
+import auto.panel.utils.FileUtil;
 
 @SuppressLint("SetTextI18n")
 public class PanelScriptFragment extends BaseFragment {
@@ -164,21 +168,19 @@ public class PanelScriptFragment extends BaseFragment {
         if (file.isDir()) {
             popMenuWindow.addItem(new MenuItem("delete", "删除目录", R.drawable.ic_gray_delete));
         } else {
+            popMenuWindow.addItem(new MenuItem("update", "更新脚本", R.drawable.ic_gray_delete));
             popMenuWindow.addItem(new MenuItem("delete", "删除脚本", R.drawable.ic_gray_delete));
         }
 
         popMenuWindow.setOnActionListener(key -> {
-            switch (key) {
-                case "copy":
-                    ClipboardManager clipboardManager = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                    clipboardManager.setPrimaryClip(ClipData.newPlainText(null, file.getPath()));
-                    ToastUnit.showShort("已复制");
-                    break;
-                case "backup":
-                    break;
-                case "delete":
-                    deleteScript(file, position);
-                    break;
+            if ("copy".equals(key)) {
+                ClipboardManager clipboardManager = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                clipboardManager.setPrimaryClip(ClipData.newPlainText(null, file.getPath()));
+                ToastUnit.showShort("已复制");
+            } else if ("delete".equals(key)) {
+                deleteScript(file, position);
+            } else if ("update".equals(key)) {
+
             }
             return true;
         });
@@ -193,16 +195,16 @@ public class PanelScriptFragment extends BaseFragment {
 
         popMenuWindow.setOnActionListener(key -> {
             if ("addDir".equals(key)) {
-                showPopDirEdit();
+                showPopAddDir();
             } else if ("addFile".equals(key)) {
-                showPopFileEdit();
+                showPopAddFile();
             }
             return true;
         });
         PopupWindowBuilder.buildMenuWindow(requireActivity(), popMenuWindow);
     }
 
-    private void showPopDirEdit() {
+    private void showPopAddDir() {
         EditPopupWindow editPopupWindow = new EditPopupWindow();
         editPopupWindow.setTitle("新建目录");
         EditItem itemName = new EditItem("name", null, "目录名", "请输入目录名");
@@ -233,17 +235,20 @@ public class PanelScriptFragment extends BaseFragment {
         PopupWindowBuilder.buildEditWindow(requireActivity(), editPopupWindow);
     }
 
-    private void showPopFileEdit() {
+    private void showPopAddFile() {
         EditPopupWindow editPopupWindow = new EditPopupWindow();
         editPopupWindow.setTitle("新建文件");
         EditItem itemName = new EditItem("name", null, "文件名", "请输入文件名");
+        EditItem itemFile = new EditItem("path", null, "本地文件", "请输入本地文件路径(可选)");
         EditItem itemDir = new EditItem("dir", fileDir, "父目录", "", false, false);
 
         editPopupWindow.addItem(itemName);
+        editPopupWindow.addItem(itemFile);
         editPopupWindow.addItem(itemDir);
 
         editPopupWindow.setActionListener(map -> {
             String name = map.get("name");
+            String path = map.get("path");
             String dir = map.get("dir");
 
             if (TextUnit.isEmpty(name)) {
@@ -255,6 +260,29 @@ public class PanelScriptFragment extends BaseFragment {
             file.setTitle(name);
             file.setParent(dir);
             file.setDir(false);
+
+            if (TextUnit.isFull(path)) {
+                if (!FileUtil.checkStoragePermission()) {
+                    ToastUnit.showShort("请授予读写权限");
+                    FileUtil.requestStoragePermission(requireActivity());
+                    return false;
+                } else {
+                    try {
+                        FileInputStream fileInputStream = new FileInputStream(path);
+                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
+                        StringBuilder stringBuilder = new StringBuilder();
+                        String line;
+                        while ((line = bufferedReader.readLine()) != null) {
+                            stringBuilder.append(line).append("\n");
+                        }
+                        file.setContent(stringBuilder.toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        ToastUnit.showShort("读取文件失败");
+                        return false;
+                    }
+                }
+            }
 
             addScript(file);
 
@@ -310,6 +338,10 @@ public class PanelScriptFragment extends BaseFragment {
         });
     }
 
+    private void update(File file, String content) {
+
+    }
+
     private void deleteScript(File file, int position) {
         ApiController.deleteScript(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), file, new ApiController.BaseCallBack() {
             @Override
@@ -324,5 +356,4 @@ public class PanelScriptFragment extends BaseFragment {
             }
         });
     }
-
 }

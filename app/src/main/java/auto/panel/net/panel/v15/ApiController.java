@@ -184,8 +184,8 @@ public class ApiController {
             jsonObject.addProperty("directory", file.getTitle());
         } else {
             jsonObject.addProperty("filename", file.getTitle());
+            jsonObject.addProperty("content", file.getContent());
         }
-        jsonObject.addProperty("content", "");
         jsonObject.addProperty("path", file.getParent());
 
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
