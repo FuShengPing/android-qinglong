@@ -1,4 +1,4 @@
-package auto.panel.ui.activity.panel.script;
+package auto.panel.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.ClipData;
@@ -33,18 +33,17 @@ import auto.panel.bean.panel.File;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
-import auto.panel.ui.adapter.ScriptItemAdapter;
-import auto.panel.ui.fragment.BaseFragment;
+import auto.panel.ui.adapter.PanelScriptItemAdapter;
 import auto.panel.ui.activity.CodeWebActivity;
 
 @SuppressLint("SetTextI18n")
-public class ScriptFragment extends BaseFragment {
-    public static String TAG = "ScriptFragment";
+public class PanelScriptFragment extends BaseFragment {
+    public static String TAG = "PanelScriptFragment";
 
     private Stack<List<File>> fileStack;
     private String fileDir;
     private MenuClickListener menuClickListener;
-    private ScriptItemAdapter adapter;
+    private PanelScriptItemAdapter adapter;
 
     private ImageView uiMenu;
     private ImageView uiMore;
@@ -65,7 +64,7 @@ public class ScriptFragment extends BaseFragment {
 
         fileStack = new Stack<>();
 
-        adapter = new ScriptItemAdapter(requireContext());
+        adapter = new PanelScriptItemAdapter(requireContext());
         uiRecycler.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
         uiRecycler.setAdapter(adapter);
         Objects.requireNonNull(uiRecycler.getItemAnimator()).setChangeDuration(0);
@@ -104,7 +103,7 @@ public class ScriptFragment extends BaseFragment {
 
     @Override
     public void init() {
-        adapter.setScriptInterface(new ScriptItemAdapter.ItemActionListener() {
+        adapter.setScriptInterface(new PanelScriptItemAdapter.ItemActionListener() {
             @Override
             public void onEdit(File file) {
                 if (file.isDir()) {

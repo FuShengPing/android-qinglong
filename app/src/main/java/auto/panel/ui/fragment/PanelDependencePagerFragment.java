@@ -1,4 +1,4 @@
-package auto.panel.ui.activity.panel.dependence;
+package auto.panel.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -19,15 +19,14 @@ import auto.base.ui.popup.MenuPopupObject;
 import auto.base.ui.popup.MenuPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.panel.R;
-import auto.panel.ui.adapter.DependencePagerAdapter;
-import auto.panel.ui.fragment.BaseFragment;
+import auto.panel.ui.adapter.PanelDependencePagerAdapter;
 
 @SuppressLint("InflateParams")
-public class DependencePagerFragment extends BaseFragment {
-    public static String TAG = "DependenceFragment";
+public class PanelDependencePagerFragment extends BaseFragment {
+    public static String TAG = "PanelDependenceFragment";
 
-    private DependenceFragment mCurrentFragment;
-    private DependencePagerAdapter mPagerAdapter;
+    private PanelDependenceFragment mCurrentFragment;
+    private PanelDependencePagerAdapter mPagerAdapter;
     private MenuClickListener mMenuClickListener;
 
     private LinearLayout uiNavBar;
@@ -57,7 +56,7 @@ public class DependencePagerFragment extends BaseFragment {
         uiMenu = view.findViewById(R.id.dep_nav_bar_menu);
         uiMore = view.findViewById(R.id.dep_nav_bar_more);
 
-        mPagerAdapter = new DependencePagerAdapter(requireActivity());
+        mPagerAdapter = new PanelDependencePagerAdapter(requireActivity());
         uiPage.setAdapter(mPagerAdapter);
         uiPage.setUserInputEnabled(false);//禁用用户左右滑动页面
 

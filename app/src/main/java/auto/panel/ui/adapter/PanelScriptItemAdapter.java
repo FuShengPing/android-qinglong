@@ -17,14 +17,14 @@ import java.util.List;
 import auto.panel.R;
 import auto.panel.bean.panel.File;
 
-public class ScriptItemAdapter extends RecyclerView.Adapter<ScriptItemAdapter.MyViewHolder> {
-    public static final String TAG = "ScriptItemAdapter";
+public class PanelScriptItemAdapter extends RecyclerView.Adapter<PanelScriptItemAdapter.MyViewHolder> {
+    public static final String TAG = "PanelScriptItemAdapter";
 
     private final Context context;
     private List<File> data;
     private ItemActionListener itemActionListener;
 
-    public ScriptItemAdapter(@NonNull Context context) {
+    public PanelScriptItemAdapter(@NonNull Context context) {
         this.context = context;
         data = new ArrayList<>();
     }

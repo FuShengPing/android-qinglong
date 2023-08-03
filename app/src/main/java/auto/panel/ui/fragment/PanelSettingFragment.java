@@ -1,4 +1,4 @@
-package auto.panel.ui.activity.panel.setting;
+package auto.panel.ui.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,13 +12,14 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import auto.panel.R;
+import auto.panel.ui.adapter.PanelSettingPagerAdapter;
 import auto.panel.ui.fragment.BaseFragment;
 
-public class SettingFragment extends BaseFragment {
-    public static String TAG = "SettingFragment";
+public class PanelSettingFragment extends BaseFragment {
+    public static String TAG = "PanelSettingFragment";
 
     private MenuClickListener menuClickListener;
-    private PagerAdapter mPagerAdapter;
+    private PanelSettingPagerAdapter mPagerAdapter;
 
     private ImageView ui_menu;
     private TabLayout ui_tab;
@@ -42,7 +43,7 @@ public class SettingFragment extends BaseFragment {
         ui_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
 
 
-        mPagerAdapter = new PagerAdapter(requireActivity());//界面适配器
+        mPagerAdapter = new PanelSettingPagerAdapter(requireActivity());//界面适配器
         ui_page.setAdapter(mPagerAdapter);
         ui_page.setUserInputEnabled(false);//禁用用户左右滑动页面
         ui_page.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {

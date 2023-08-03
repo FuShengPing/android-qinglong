@@ -1,4 +1,4 @@
-package auto.panel.ui.activity.panel.dependence;
+package auto.panel.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,14 +28,14 @@ import auto.panel.bean.panel.Dependence;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
-import auto.panel.ui.adapter.DependenceItemAdapter;
+import auto.panel.ui.adapter.PanelDependenceItemAdapter;
 import auto.panel.ui.fragment.BaseFragment;
 import auto.panel.ui.activity.CodeWebActivity;
 
-public class DependenceFragment extends BaseFragment {
+public class PanelDependenceFragment extends BaseFragment {
     private String type;
 
-    private DependenceItemAdapter itemAdapter;
+    private PanelDependenceItemAdapter itemAdapter;
 
     private SmartRefreshLayout uiRefresh;
     private EditPopupWindow uiPopEdit;
@@ -46,7 +46,7 @@ public class DependenceFragment extends BaseFragment {
 
         uiRefresh = view.findViewById(R.id.refresh_layout);
 
-        itemAdapter = new DependenceItemAdapter(requireContext());
+        itemAdapter = new PanelDependenceItemAdapter(requireContext());
         RecyclerView uiRecycler = view.findViewById(R.id.recycler_view);
         uiRecycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
         uiRecycler.setAdapter(itemAdapter);
@@ -118,7 +118,7 @@ public class DependenceFragment extends BaseFragment {
 
     @Override
     protected void init() {
-        itemAdapter.setItemInterface(new DependenceItemAdapter.ItemActionListener() {
+        itemAdapter.setItemInterface(new PanelDependenceItemAdapter.ItemActionListener() {
             @Override
             public void onDetail(Dependence dependence, int position) {
                 Intent intent = new Intent(getContext(), CodeWebActivity.class);

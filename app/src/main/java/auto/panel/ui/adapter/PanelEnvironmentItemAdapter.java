@@ -14,16 +14,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import auto.panel.R;
 import auto.panel.bean.panel.Environment;
 import auto.panel.bean.panel.MoveInfo;
-import auto.panel.ui.activity.panel.environment.ItemMoveCallback;
 
-public class EnvironmentItemAdapter extends RecyclerView.Adapter<EnvironmentItemAdapter.MyViewHolder> implements ItemMoveCallback {
-    public static final String TAG = "EnvironmentItemAdapter";
+public class PanelEnvironmentItemAdapter extends RecyclerView.Adapter<PanelEnvironmentItemAdapter.MyViewHolder>{
+    public static final String TAG = "PanelEnvironmentItemAdapter";
 
     private final Context context;
     private List<Environment> data;
@@ -34,7 +32,7 @@ public class EnvironmentItemAdapter extends RecyclerView.Adapter<EnvironmentItem
     private final int colorBlue;
     private final int colorRed;
 
-    public EnvironmentItemAdapter(@NonNull Context context) {
+    public PanelEnvironmentItemAdapter(@NonNull Context context) {
         this.context = context;
         this.data = new ArrayList<>();
         this.checkState = false;
@@ -103,25 +101,6 @@ public class EnvironmentItemAdapter extends RecyclerView.Adapter<EnvironmentItem
     @Override
     public int getItemCount() {
         return this.data == null ? 0 : this.data.size();
-    }
-
-    @Override
-    public void onItemMove(int from, int to) {
-        Collections.swap(data, from, to);
-        notifyItemMoved(from, to);
-    }
-
-    @Override
-    public void onItemMoveStart() {
-//        VibratorUtil.vibrate(context, VibratorUtil.VIBRATE_SHORT);
-    }
-
-    @Override
-    public void onItemMoveEnd(int start, int from, int to) {
-//        if (start != to) {
-//            MoveInfo moveInfo = new MoveInfo(data.get(to), from, data.get(from), to);
-//            itemActionListener.onMove(moveInfo);
-//        }
     }
 
     @SuppressLint("NotifyDataSetChanged")

@@ -1,4 +1,4 @@
-package auto.panel.ui.activity.panel.setting;
+package auto.panel.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +18,7 @@ import auto.panel.database.sp.PanelPreference;
 import auto.panel.ui.fragment.BaseFragment;
 import auto.panel.ui.activity.LoginActivity;
 
-public class CommonFragment extends BaseFragment {
+public class PanelSettingCommonFragment extends BaseFragment {
     private EditText uiSecurityUsername;
     private EditText uiSecurityPassword;
     private Button uiSecuritySave;

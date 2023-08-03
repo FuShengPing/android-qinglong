@@ -32,12 +32,12 @@ import auto.panel.bean.app.Version;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.database.sp.SettingPreference;
 import auto.panel.net.app.ApiController;
-import auto.panel.ui.activity.panel.dependence.DependencePagerFragment;
-import auto.panel.ui.activity.panel.environment.EnvironmentFragment;
-import auto.panel.ui.activity.panel.log.LogFragment;
-import auto.panel.ui.activity.panel.script.ScriptFragment;
-import auto.panel.ui.activity.panel.setting.SettingFragment;
-import auto.panel.ui.activity.panel.task.TaskFragment;
+import auto.panel.ui.fragment.PanelDependencePagerFragment;
+import auto.panel.ui.fragment.PanelEnvironmentFragment;
+import auto.panel.ui.fragment.PanelLogFragment;
+import auto.panel.ui.fragment.PanelScriptFragment;
+import auto.panel.ui.fragment.PanelSettingFragment;
+import auto.panel.ui.fragment.PanelTaskFragment;
 import auto.panel.ui.fragment.BaseFragment;
 
 public class HomeActivity extends BaseActivity {
@@ -101,7 +101,7 @@ public class HomeActivity extends BaseActivity {
         //导航栏初始化
         initDrawerBar();
         //初始化第一帧页面
-        showFragment(TaskFragment.class);
+        showFragment(PanelTaskFragment.class);
         //版本检查
         getVersion();
         //获取拓展
@@ -132,9 +132,9 @@ public class HomeActivity extends BaseActivity {
         LinearLayout menu_app_setting = uiDrawerLeft.findViewById(R.id.panel_menu_app_setting);
 
         //定时任务
-        menu_task.setOnClickListener(v -> showFragment(TaskFragment.class));
+        menu_task.setOnClickListener(v -> showFragment(PanelTaskFragment.class));
         //任务日志
-        menu_log.setOnClickListener(v -> showFragment(LogFragment.class));
+        menu_log.setOnClickListener(v -> showFragment(PanelLogFragment.class));
         //配置文件
         menu_config.setOnClickListener(v -> {
             Intent intent = new Intent(this, CodeWebActivity.class);
@@ -144,13 +144,13 @@ public class HomeActivity extends BaseActivity {
             startActivity(intent);
         });
         //脚本管理
-        menu_script.setOnClickListener(v -> showFragment(ScriptFragment.class));
+        menu_script.setOnClickListener(v -> showFragment(PanelScriptFragment.class));
         //依赖管理
-        menu_environment.setOnClickListener(v -> showFragment(EnvironmentFragment.class));
+        menu_environment.setOnClickListener(v -> showFragment(PanelEnvironmentFragment.class));
         //任务日志
-        menu_dependence.setOnClickListener(v -> showFragment(DependencePagerFragment.class));
+        menu_dependence.setOnClickListener(v -> showFragment(PanelDependencePagerFragment.class));
         //系统设置
-        menu_setting.setOnClickListener(v -> showFragment(SettingFragment.class));
+        menu_setting.setOnClickListener(v -> showFragment(PanelSettingFragment.class));
 
         //退出登录
         menu_app_logout.setOnClickListener(v -> {

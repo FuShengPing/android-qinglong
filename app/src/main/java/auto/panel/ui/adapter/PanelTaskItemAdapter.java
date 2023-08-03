@@ -19,8 +19,8 @@ import java.util.List;
 import auto.panel.R;
 import auto.panel.bean.panel.Task;
 
-public class TaskItemAdapter extends RecyclerView.Adapter<TaskItemAdapter.MyViewHolder> {
-    public static final String TAG = "TaskItemAdapter";
+public class PanelTaskItemAdapter extends RecyclerView.Adapter<PanelTaskItemAdapter.MyViewHolder> {
+    public static final String TAG = "PanelTaskItemAdapter";
 
     Context context;
     private ActionListener actionListener;
@@ -32,7 +32,7 @@ public class TaskItemAdapter extends RecyclerView.Adapter<TaskItemAdapter.MyView
     private final int colorRed;
     private final int colorGray;
 
-    public TaskItemAdapter(Context context) {
+    public PanelTaskItemAdapter(Context context) {
         this.context = context;
         this.data = new ArrayList<>();
         this.onCheck = false;

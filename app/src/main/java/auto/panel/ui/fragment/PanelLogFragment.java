@@ -1,4 +1,4 @@
-package auto.panel.ui.activity.panel.log;
+package auto.panel.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -28,17 +28,16 @@ import auto.panel.bean.panel.File;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
-import auto.panel.ui.adapter.LogItemAdapter;
-import auto.panel.ui.fragment.BaseFragment;
+import auto.panel.ui.adapter.PanelLogItemAdapter;
 import auto.panel.ui.activity.CodeWebActivity;
 
 @SuppressLint({"SetTextI18n", "InflateParams"})
-public class LogFragment extends BaseFragment {
-    public static String TAG = "LogFragment";
+public class PanelLogFragment extends BaseFragment {
+    public static String TAG = "PanelLogFragment";
 
     private Stack<List<File>> fileStack;
     private MenuClickListener menuClickListener;
-    private LogItemAdapter adapter;
+    private PanelLogItemAdapter adapter;
 
     private ImageView uiNav;
     private SmartRefreshLayout uiRefresh;
@@ -99,7 +98,7 @@ public class LogFragment extends BaseFragment {
 
     @Override
     public void init() {
-        adapter = new LogItemAdapter(requireContext());
+        adapter = new PanelLogItemAdapter(requireContext());
         uiRecycler.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
         Objects.requireNonNull(uiRecycler.getItemAnimator()).setChangeDuration(0);
         uiRecycler.setAdapter(adapter);

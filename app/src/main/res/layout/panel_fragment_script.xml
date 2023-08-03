@@ -33,7 +33,7 @@
             android:background="@drawable/style_press_ripple"
             android:clickable="true"
             android:src="@drawable/ic_white_more_options"
-            android:visibility="gone" />
+            android:visibility="visible" />
     </RelativeLayout>
 
     <TextView

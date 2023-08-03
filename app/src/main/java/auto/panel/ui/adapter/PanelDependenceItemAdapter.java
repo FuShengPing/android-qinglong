@@ -19,8 +19,8 @@ import java.util.List;
 import auto.panel.R;
 import auto.panel.bean.panel.Dependence;
 
-public class DependenceItemAdapter extends RecyclerView.Adapter<DependenceItemAdapter.MyViewHolder> {
-    public static String TAG = "DependenceItemAdapter";
+public class PanelDependenceItemAdapter extends RecyclerView.Adapter<PanelDependenceItemAdapter.MyViewHolder> {
+    public static String TAG = "PanelDependenceItemAdapter";
 
     private final Context context;
     private ItemActionListener itemActionListener;
@@ -32,7 +32,7 @@ public class DependenceItemAdapter extends RecyclerView.Adapter<DependenceItemAd
     private final int colorRed;
     private final int colorGray;
 
-    public DependenceItemAdapter(Context context) {
+    public PanelDependenceItemAdapter(Context context) {
         this.context = context;
         this.data = new ArrayList<>();
         this.checkState = false;

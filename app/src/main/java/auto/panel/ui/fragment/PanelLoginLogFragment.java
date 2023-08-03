@@ -1,4 +1,4 @@
-package auto.panel.ui.activity.panel.setting;
+package auto.panel.ui.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,11 +18,11 @@ import auto.base.util.ToastUnit;
 import auto.panel.R;
 import auto.panel.bean.panel.LoginLog;
 import auto.panel.database.sp.PanelPreference;
-import auto.panel.ui.fragment.BaseFragment;
+import auto.panel.ui.adapter.PanelLoginLogItemAdapter;
 
 
-public class LoginLogFragment extends BaseFragment {
-    private LoginLogItemAdapter itemAdapter;
+public class PanelLoginLogFragment extends BaseFragment {
+    private PanelLoginLogItemAdapter itemAdapter;
 
     private RecyclerView uiRecycler;
     private SmartRefreshLayout uiRefresh;
@@ -46,7 +46,7 @@ public class LoginLogFragment extends BaseFragment {
 
     @Override
     protected void init() {
-        itemAdapter = new LoginLogItemAdapter(getContext());
+        itemAdapter = new PanelLoginLogItemAdapter(getContext());
         uiRecycler.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         uiRecycler.setAdapter(itemAdapter);
         Objects.requireNonNull(uiRecycler.getItemAnimator()).setChangeDuration(0);

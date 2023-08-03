@@ -1,4 +1,4 @@
-package auto.panel.ui.activity.panel.setting;
+package auto.panel.ui.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,10 +11,10 @@ import auto.panel.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AppFragment#newInstance} factory method to
+ * Use the {@link PanelSettingAppFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AppFragment extends Fragment {
+public class PanelSettingAppFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -25,7 +25,7 @@ public class AppFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public AppFragment() {
+    public PanelSettingAppFragment() {
         // Required empty public constructor
     }
 
@@ -35,11 +35,11 @@ public class AppFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment AppFragment.
+     * @return A new instance of fragment PanelSettingAppFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AppFragment newInstance(String param1, String param2) {
-        AppFragment fragment = new AppFragment();
+    public static PanelSettingAppFragment newInstance(String param1, String param2) {
+        PanelSettingAppFragment fragment = new PanelSettingAppFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

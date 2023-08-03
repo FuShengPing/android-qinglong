@@ -8,21 +8,21 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import java.util.HashMap;
 
 import auto.panel.bean.panel.Dependence;
-import auto.panel.ui.activity.panel.dependence.DependenceFragment;
+import auto.panel.ui.fragment.PanelDependenceFragment;
 
-public class DependencePagerAdapter extends FragmentStateAdapter {
-    public static final String TAG = "DependencePagerAdapter";
+public class PanelDependencePagerAdapter extends FragmentStateAdapter {
+    public static final String TAG = "PanelDependencePagerAdapter";
 
-    private HashMap<Integer, DependenceFragment> fragmentList;
+    private HashMap<Integer, PanelDependenceFragment> fragmentList;
 
-    public DependencePagerAdapter(@NonNull FragmentActivity fragmentActivity) {
+    public PanelDependencePagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        DependenceFragment depFragment = new DependenceFragment();
+        PanelDependenceFragment depFragment = new PanelDependenceFragment();
 
         if (position == 0) {
             depFragment.setType(Dependence.TYPE_NODEJS);
@@ -45,7 +45,7 @@ public class DependencePagerAdapter extends FragmentStateAdapter {
         return 3;
     }
 
-    public DependenceFragment getCurrentFragment(int position) {
+    public PanelDependenceFragment getCurrentFragment(int position) {
         return fragmentList.get(position);
     }
 }

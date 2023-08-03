@@ -1,4 +1,4 @@
-package auto.panel.ui.activity.panel.environment;
+package auto.panel.ui.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -52,15 +52,15 @@ import auto.panel.bean.panel.QLEnvironment;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.v10.ApiController;
-import auto.panel.ui.adapter.EnvironmentItemAdapter;
+import auto.panel.ui.adapter.PanelEnvironmentItemAdapter;
 import auto.panel.ui.fragment.BaseFragment;
 import auto.panel.utils.FileUtil;
 
-public class EnvironmentFragment extends BaseFragment {
-    public static String TAG = "EnvironmentFragment";
+public class PanelEnvironmentFragment extends BaseFragment {
+    public static String TAG = "PanelEnvironmentFragment";
     private String mCurrentSearchValue;
     private MenuClickListener mMenuClickListener;
-    private EnvironmentItemAdapter mAdapter;
+    private PanelEnvironmentItemAdapter mAdapter;
 
     private LinearLayout uiBarNav;
     private ImageView uiNavMenu;
@@ -106,7 +106,7 @@ public class EnvironmentFragment extends BaseFragment {
         uiRefresh = view.findViewById(R.id.refresh_layout);
         uiRecycler = view.findViewById(R.id.recycler_view);
 
-        mAdapter = new EnvironmentItemAdapter(requireContext());
+        mAdapter = new PanelEnvironmentItemAdapter(requireContext());
         uiRecycler.setAdapter(mAdapter);
         uiRecycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
         Objects.requireNonNull(uiRecycler.getItemAnimator()).setChangeDuration(0);
@@ -181,12 +181,8 @@ public class EnvironmentFragment extends BaseFragment {
         //导航栏
         uiNavMenu.setOnClickListener(v -> mMenuClickListener.onMenuClick());
 
-        //列表项目移动
-//        ItemMoveHelper itemMoveHelper = new ItemMoveHelper(mAdapter);
-//        new ItemTouchHelper(itemMoveHelper).attachToRecyclerView(uiRecycler);
-
         //列表操作接口
-        mAdapter.setItemInterface(new EnvironmentItemAdapter.ItemActionListener() {
+        mAdapter.setItemInterface(new PanelEnvironmentItemAdapter.ItemActionListener() {
             @Override
             public void onEdit(Environment environment) {
                 showPopWindowEdit(environment);
@@ -718,7 +714,6 @@ public class EnvironmentFragment extends BaseFragment {
             @Override
             public void onFailure(String msg) {
                 ToastUnit.showShort(getString(R.string.tip_move_failure_header) + msg);
-                mAdapter.onItemMove(info.getToIndex(), info.getFromIndex());
             }
         });
     }

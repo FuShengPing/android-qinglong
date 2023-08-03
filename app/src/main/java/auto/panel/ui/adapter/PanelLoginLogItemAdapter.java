@@ -1,4 +1,4 @@
-package auto.panel.ui.activity.panel.setting;
+package auto.panel.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -16,12 +16,12 @@ import java.util.List;
 import auto.panel.R;
 import auto.panel.bean.panel.LoginLog;
 
-public class LoginLogItemAdapter extends RecyclerView.Adapter<LoginLogItemAdapter.MyViewHolder> {
+public class PanelLoginLogItemAdapter extends RecyclerView.Adapter<PanelLoginLogItemAdapter.MyViewHolder> {
     List<LoginLog> data;
 
     private final Context context;
 
-    public LoginLogItemAdapter(Context context) {
+    public PanelLoginLogItemAdapter(Context context) {
         this.context = context;
         this.data = new ArrayList<>();
     }

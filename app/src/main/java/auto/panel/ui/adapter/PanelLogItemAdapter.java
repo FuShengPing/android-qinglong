@@ -18,12 +18,12 @@ import auto.panel.R;
 import auto.panel.bean.panel.File;
 
 @SuppressLint("SetTextI18n")
-public class LogItemAdapter extends RecyclerView.Adapter<LogItemAdapter.MyViewHolder> {
+public class PanelLogItemAdapter extends RecyclerView.Adapter<PanelLogItemAdapter.MyViewHolder> {
     private final Context context;
     private final List<File> data;
     private ItemActionListener itemActionListener;
 
-    public LogItemAdapter(@NonNull Context context) {
+    public PanelLogItemAdapter(@NonNull Context context) {
         this.context = context;
         data = new ArrayList<>();
     }
