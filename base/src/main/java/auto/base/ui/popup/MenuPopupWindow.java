@@ -9,14 +9,12 @@ public class MenuPopupWindow {
     private List<MenuPopupObject> items = new ArrayList<>();
     private OnActionListener onActionListener;
     private View targetView;
-    private int gravity;
 
     public MenuPopupWindow() {
     }
 
-    public MenuPopupWindow(View view, int gravity) {
+    public MenuPopupWindow(View view) {
         this.targetView = view;
-        this.gravity = gravity;
     }
 
     public List<MenuPopupObject> getItems() {
@@ -45,14 +43,6 @@ public class MenuPopupWindow {
 
     public void setTargetView(View targetView) {
         this.targetView = targetView;
-    }
-
-    public int getGravity() {
-        return gravity;
-    }
-
-    public void setGravity(int gravity) {
-        this.gravity = gravity;
     }
 
     public interface OnActionListener {

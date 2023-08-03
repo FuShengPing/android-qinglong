@@ -36,24 +36,24 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import auto.base.ui.popup.EditPopupObject;
+import auto.base.ui.popup.EditPopupWindow;
+import auto.base.ui.popup.ListPopupWindow;
+import auto.base.ui.popup.LocalFileAdapter;
 import auto.base.ui.popup.MenuPopupObject;
+import auto.base.ui.popup.MenuPopupWindow;
+import auto.base.ui.popup.PopupWindowBuilder;
+import auto.base.ui.popup.ProgressPopupWindow;
 import auto.base.util.TextUnit;
 import auto.base.util.TimeUnit;
 import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
-import auto.base.ui.popup.LocalFileAdapter;
-import auto.base.ui.popup.EditPopupObject;
-import auto.base.ui.popup.EditPopupWindow;
-import auto.base.ui.popup.ListPopupWindow;
-import auto.base.ui.popup.MenuPopupWindow;
-import auto.base.ui.popup.ProgressPopupWindow;
-import auto.base.ui.popup.PopupWindowBuilder;
 import auto.panel.R;
 import auto.panel.bean.panel.Task;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.panel.ApiController;
-import auto.panel.ui.adapter.PanelTaskItemAdapter;
 import auto.panel.ui.activity.CodeWebActivity;
+import auto.panel.ui.adapter.PanelTaskItemAdapter;
 import auto.panel.utils.CronUnit;
 import auto.panel.utils.FileUtil;
 
@@ -400,7 +400,7 @@ public class PanelTaskFragment extends BaseFragment {
     }
 
     private void showPopWindowMenu(View view) {
-        MenuPopupWindow popMenuWindow = new MenuPopupWindow(view, Gravity.END);
+        MenuPopupWindow popMenuWindow = new MenuPopupWindow(view);
         popMenuWindow.addItem(new MenuPopupObject("add", "新建任务", R.drawable.ic_gray_add));
         popMenuWindow.addItem(new MenuPopupObject("localAdd", "本地导入", R.drawable.ic_gray_file));
         popMenuWindow.addItem(new MenuPopupObject("backup", "任务备份", R.drawable.ic_gray_download));
@@ -425,6 +425,7 @@ public class PanelTaskFragment extends BaseFragment {
             }
             return true;
         });
+
         PopupWindowBuilder.buildMenuWindow(requireActivity(), popMenuWindow);
     }
 

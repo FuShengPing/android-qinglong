@@ -155,8 +155,10 @@ public class PanelScriptFragment extends BaseFragment {
     }
 
     private void showPopItemMenu(View v, File file, int position) {
-        MenuPopupWindow popMenuWindow = new MenuPopupWindow(v, Gravity.CENTER);
+        MenuPopupWindow popMenuWindow = new MenuPopupWindow(v);
+
         popMenuWindow.addItem(new MenuPopupObject("copy", "复制路径", R.drawable.ic_gray_crop_free));
+
         if (!file.isDir()) {
             popMenuWindow.addItem(new MenuPopupObject("delete", "删除脚本", R.drawable.ic_gray_delete));
         }
@@ -181,7 +183,7 @@ public class PanelScriptFragment extends BaseFragment {
     }
 
     private void showPopWindowMenu(View v) {
-        MenuPopupWindow popMenuWindow = new MenuPopupWindow(v, Gravity.END);
+        MenuPopupWindow popMenuWindow = new MenuPopupWindow(v);
         popMenuWindow.addItem(new MenuPopupObject("add", "新建脚本", R.drawable.ic_gray_add));
         popMenuWindow.addItem(new MenuPopupObject("import", "本地导入", R.drawable.ic_gray_upload));
         popMenuWindow.addItem(new MenuPopupObject("backup", "脚本备份", R.drawable.ic_gray_download));

@@ -291,7 +291,7 @@ public class PanelEnvironmentFragment extends BaseFragment {
     }
 
     private void showPopWindowMenu(View view) {
-        MenuPopupWindow popMenuWindow = new MenuPopupWindow(view, Gravity.END);
+        MenuPopupWindow popMenuWindow = new MenuPopupWindow(view);
         popMenuWindow.addItem(new MenuPopupObject("add", "新建变量", R.drawable.ic_gray_add));
         popMenuWindow.addItem(new MenuPopupObject("quickAdd", "快捷导入", R.drawable.ic_gray_flash_on));
         popMenuWindow.addItem(new MenuPopupObject("localAdd", "本地导入", R.drawable.ic_gray_file));

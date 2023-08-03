@@ -134,7 +134,7 @@ public class PluginWebActivity extends BaseActivity {
     }
 
     private void showPopMenu(View view) {
-        MenuPopupWindow popMenuWindow = new MenuPopupWindow(view, Gravity.END);
+        MenuPopupWindow popMenuWindow = new MenuPopupWindow(view);
         popMenuWindow.addItem(new MenuPopupObject("read_normal", "ck提取", R.drawable.ic_gray_crop_free));
 //        popMenuWindow.addItem(new MenuPopupObject("rule", "规则配置", R.drawable.ic_gray_mul_setting));
 //        popMenuWindow.addItem(new MenuPopupObject("read_rule", "规则提取", R.drawable.ic_gray_rule));

@@ -138,7 +138,7 @@ public class PanelDependencePagerFragment extends BaseFragment {
     }
 
     private void showPopWindowMenu(View view) {
-        MenuPopupWindow popMenuWindow = new MenuPopupWindow(view, Gravity.END);
+        MenuPopupWindow popMenuWindow = new MenuPopupWindow(view);
         popMenuWindow.addItem(new MenuPopupObject("add", "新建依赖", R.drawable.ic_gray_add));
         popMenuWindow.addItem(new MenuPopupObject("mulAction", "批量操作", R.drawable.ic_gray_mul_setting));
 
