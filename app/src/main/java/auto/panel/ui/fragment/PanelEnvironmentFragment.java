@@ -343,7 +343,7 @@ public class PanelEnvironmentFragment extends BaseFragment {
 
         uiPopEdit.setActionListener(new EditPopupWindow.OnActionListener() {
             @Override
-            public boolean onConfirm(Map<String, String> map) {
+            public boolean onConfirm(@NonNull Map<String, String> map) {
                 String name = map.get("name");
                 String value = map.get("value");
                 String remarks = map.get("remark");
@@ -394,7 +394,7 @@ public class PanelEnvironmentFragment extends BaseFragment {
         uiPopEdit.addItem(itemRemark);
         uiPopEdit.setActionListener(new EditPopupWindow.OnActionListener() {
             @Override
-            public boolean onConfirm(Map<String, String> map) {
+            public boolean onConfirm(@NonNull Map<String, String> map) {
                 String values = map.get("values");
                 String remarks = map.get("remark");
 
@@ -437,7 +437,7 @@ public class PanelEnvironmentFragment extends BaseFragment {
 
         uiPopEdit.setActionListener(new EditPopupWindow.OnActionListener() {
             @Override
-            public boolean onConfirm(Map<String, String> map) {
+            public boolean onConfirm(@NonNull Map<String, String> map) {
                 String fileName = map.get("fileName");
                 WindowUnit.hideKeyboard(uiPopEdit.getView());
                 backupData(fileName);

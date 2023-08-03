@@ -3,6 +3,8 @@ package auto.base.ui.popup;
 import android.view.View;
 import android.widget.PopupWindow;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -103,7 +105,7 @@ public class EditPopupWindow {
     }
 
     public interface OnActionListener {
-        boolean onConfirm(Map<String, String> map);
+        boolean onConfirm(@NonNull Map<String, String> map);
 
         default boolean onCancel() {
             return true;

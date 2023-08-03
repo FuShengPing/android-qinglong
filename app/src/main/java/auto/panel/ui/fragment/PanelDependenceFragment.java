@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -89,7 +90,7 @@ public class PanelDependenceFragment extends BaseFragment {
 
         uiPopEdit.setActionListener(new EditPopupWindow.OnActionListener() {
             @Override
-            public boolean onConfirm(Map<String, String> map) {
+            public boolean onConfirm(@NonNull Map<String, String> map) {
                 String type = map.get("type");
                 String name = map.get("name");
 

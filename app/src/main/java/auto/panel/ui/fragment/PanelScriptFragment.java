@@ -20,7 +20,6 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Stack;
 
@@ -29,6 +28,7 @@ import auto.base.ui.popup.EditPopupWindow;
 import auto.base.ui.popup.MenuItem;
 import auto.base.ui.popup.MenuPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
+import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
 import auto.panel.R;
 import auto.panel.bean.panel.File;
@@ -209,11 +209,21 @@ public class PanelScriptFragment extends BaseFragment {
         editPopupWindow.addItem(itemName);
         editPopupWindow.addItem(itemDir);
 
-        editPopupWindow.setActionListener(new EditPopupWindow.OnActionListener() {
-            @Override
-            public boolean onConfirm(Map<String, String> map) {
-                return true;
+        editPopupWindow.setActionListener(map -> {
+            String name = map.get("name");
+            String dir = map.get("dir");
+
+            if (TextUnit.isEmpty(name)) {
+                ToastUnit.showShort("请输入目录名");
+                return false;
             }
+
+            File file = new File();
+            file.setTitle(name);
+            file.setParent(dir);
+            file.setDir(false);
+
+            return true;
         });
 
         PopupWindowBuilder.buildEditWindow(requireActivity(), editPopupWindow);
@@ -228,11 +238,21 @@ public class PanelScriptFragment extends BaseFragment {
         editPopupWindow.addItem(itemName);
         editPopupWindow.addItem(itemDir);
 
-        editPopupWindow.setActionListener(new EditPopupWindow.OnActionListener() {
-            @Override
-            public boolean onConfirm(Map<String, String> map) {
-                return true;
+        editPopupWindow.setActionListener(map -> {
+            String name = map.get("name");
+            String dir = map.get("dir");
+
+            if (TextUnit.isEmpty(name)) {
+                ToastUnit.showShort("请输入文件名");
+                return false;
             }
+
+            File file = new File();
+            file.setTitle(name);
+            file.setParent(dir);
+            file.setDir(false);
+
+            return true;
         });
 
         PopupWindowBuilder.buildEditWindow(requireActivity(), editPopupWindow);

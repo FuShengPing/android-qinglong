@@ -447,7 +447,7 @@ public class PanelTaskFragment extends BaseFragment {
 
         uiPopEdit.setActionListener(new EditPopupWindow.OnActionListener() {
             @Override
-            public boolean onConfirm(Map<String, String> map) {
+            public boolean onConfirm(@NonNull Map<String, String> map) {
                 String name = map.get("name");
                 String command = map.get("command");
                 String schedule = map.get("schedule");
@@ -504,7 +504,7 @@ public class PanelTaskFragment extends BaseFragment {
 
         uiPopEdit.setActionListener(new EditPopupWindow.OnActionListener() {
             @Override
-            public boolean onConfirm(Map<String, String> map) {
+            public boolean onConfirm(@NonNull Map<String, String> map) {
                 WindowUnit.hideKeyboard(uiPopEdit.getView());
                 String fileName = map.get("fileName");
                 backupData(fileName);
