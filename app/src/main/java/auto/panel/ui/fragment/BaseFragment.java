@@ -24,9 +24,8 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public String getNetRequestID() {
-        return getClass().getName() + this;
+        return getClass().getName() + hashCode();
     }
-
 
     /**
      * @return 是否需要拦截返回键

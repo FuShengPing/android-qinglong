@@ -54,10 +54,7 @@ dependencyResolutionManagement {
         }
     }
 }
+
 rootProject.name = "QingLong"
 include ':app'
-
-include ':web'
-include ':ui'
-include ':proxy'
 include ':base'

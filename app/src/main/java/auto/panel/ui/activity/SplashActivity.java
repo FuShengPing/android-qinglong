@@ -13,9 +13,6 @@ import auto.panel.bean.panel.Account;
 import auto.panel.bean.panel.SystemInfo;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.panel.ApiController;
-import auto.panel.ui.activity.BaseActivity;
-import auto.panel.ui.activity.HomeActivity;
-import auto.panel.ui.activity.LoginActivity;
 
 
 @SuppressLint("CustomSplashScreen")
@@ -31,7 +28,23 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        start();
+        check();
+    }
+
+    private void check() {
+        //网络状态
+        if (!NetUnit.isConnected(this)) {
+            ToastUnit.showShort("请检查设备网络状态");
+            enterActivity(false);
+            return;
+        }
+        //当前账号
+        Account account = PanelPreference.getCurrentAccount();
+        if (account != null) {
+            querySystemInfo(account);
+        } else {
+            enterActivity(false);
+        }
     }
 
     private void enterActivity(boolean isHome) {
@@ -46,22 +59,6 @@ public class SplashActivity extends BaseActivity {
             overridePendingTransition(R.anim.activity_alpha_enter, R.anim.activity_alpha_out);
             finish();
         }, 500);
-    }
-
-    private void start() {
-        //网络状态
-        if (!NetUnit.isConnected(this)) {
-            ToastUnit.showShort("请检查设备网络状态");
-            enterActivity(false);
-            return;
-        }
-        //当前账号
-        Account account = PanelPreference.getCurrentAccount();
-        if (account != null) {
-            querySystemInfo(account);
-        } else {
-            enterActivity(false);
-        }
     }
 
     private void checkAccountToken(Account account) {
