@@ -3,7 +3,6 @@ package auto.panel.database.sp;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import auto.base.BaseApplication;
 import auto.panel.MyApplication;
 import auto.panel.bean.app.Config;
 import auto.panel.bean.app.Version;
