@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import auto.base.BaseApplication;
+import auto.panel.MyApplication;
 import auto.panel.bean.app.Config;
 import auto.panel.bean.app.Version;
 
@@ -26,7 +27,7 @@ public class SettingPreference {
     private static final SharedPreferences sp;
 
     static {
-        sp = BaseApplication.getContext().getSharedPreferences(NAME, Context.MODE_PRIVATE);
+        sp = MyApplication.getInstance().getSharedPreferences(NAME, Context.MODE_PRIVATE);
     }
 
     public static void updateVersion(Version version) {

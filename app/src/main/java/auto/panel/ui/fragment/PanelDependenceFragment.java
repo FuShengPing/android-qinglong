@@ -18,19 +18,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import auto.base.util.TextUnit;
-import auto.base.util.ToastUnit;
-import auto.base.util.WindowUnit;
 import auto.base.ui.popup.EditItem;
 import auto.base.ui.popup.EditPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
+import auto.base.util.TextUnit;
+import auto.base.util.ToastUnit;
+import auto.base.util.WindowUnit;
 import auto.panel.R;
 import auto.panel.bean.panel.Dependence;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
-import auto.panel.ui.adapter.PanelDependenceItemAdapter;
 import auto.panel.ui.activity.CodeWebActivity;
+import auto.panel.ui.adapter.PanelDependenceItemAdapter;
 
 public class PanelDependenceFragment extends BaseFragment {
     private String type;

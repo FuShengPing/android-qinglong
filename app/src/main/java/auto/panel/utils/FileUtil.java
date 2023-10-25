@@ -37,8 +37,8 @@ public class FileUtil {
     public static final String externalStorage;
 
     static {
-        externalStorage = BaseApplication.getContext().getExternalFilesDir(null).getAbsolutePath();
-        internalStorage = BaseApplication.getContext().getFilesDir().getAbsolutePath();
+        externalStorage = MyApplication.getInstance().getExternalFilesDir(null).getAbsolutePath();
+        internalStorage = MyApplication.getInstance().getFilesDir().getAbsolutePath();
     }
 
     /**
@@ -116,7 +116,7 @@ public class FileUtil {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             return Environment.isExternalStorageManager();
         } else {
-            return ContextCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+            return ContextCompat.checkSelfPermission(MyApplication.getInstance(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         }
     }
 

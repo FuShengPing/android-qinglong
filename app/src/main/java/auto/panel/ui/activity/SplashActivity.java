@@ -17,7 +17,7 @@ import auto.panel.net.panel.ApiController;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends BaseActivity {
-    public static final String TAG = "SplashActivity";
+    private static final String TAG = "SplashActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,23 +31,7 @@ public class SplashActivity extends BaseActivity {
         check();
     }
 
-    private void check() {
-        //网络状态
-        if (!NetUnit.isConnected(this)) {
-            ToastUnit.showShort("请检查设备网络状态");
-            enterActivity(false);
-            return;
-        }
-        //当前账号
-        Account account = PanelPreference.getCurrentAccount();
-        if (account != null) {
-            querySystemInfo(account);
-        } else {
-            enterActivity(false);
-        }
-    }
-
-    private void enterActivity(boolean isHome) {
+    private void onEnter(boolean isHome) {
         Intent intent;
         if (isHome) {
             intent = new Intent(getBaseContext(), HomeActivity.class);
@@ -61,34 +45,50 @@ public class SplashActivity extends BaseActivity {
         }, 500);
     }
 
-    private void checkAccountToken(Account account) {
-        auto.panel.net.panel.ApiController.checkAccountToken(account.getBaseUrl(), account.getAuthorization(), new auto.panel.net.panel.ApiController.BaseCallBack() {
-            @Override
-            public void onSuccess() {
-                LogUnit.log("querySystemInfo");
-                enterActivity(true);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                LogUnit.log(msg);
-                enterActivity(false);
-            }
-        });
+    private void check() {
+        //网络状态
+        if (!NetUnit.isConnected(this)) {
+            ToastUnit.showShort("请检查设备网络状态");
+            onEnter(false);
+            return;
+        }
+        //当前账号
+        Account account = PanelPreference.getCurrentAccount();
+        if (account != null) {
+            netQuerySystemInfo(account);
+        } else {
+            onEnter(false);
+        }
     }
 
-    protected void querySystemInfo(Account account) {
+    protected void netQuerySystemInfo(Account account) {
         auto.panel.net.panel.ApiController.getSystemInfo(account.getBaseUrl(), new ApiController.SystemInfoCallBack() {
             @Override
             public void onSuccess(SystemInfo system) {
                 LogUnit.log("querySystemInfo");
                 PanelPreference.setVersion(system.getVersion());
-                checkAccountToken(account);
+                netCheckAccountToken(account);
             }
 
             @Override
             public void onFailure(String msg) {
-                enterActivity(false);
+                onEnter(false);
+            }
+        });
+    }
+
+    private void netCheckAccountToken(Account account) {
+        auto.panel.net.panel.ApiController.checkAccountToken(account.getBaseUrl(), account.getAuthorization(), new auto.panel.net.panel.ApiController.BaseCallBack() {
+            @Override
+            public void onSuccess() {
+                LogUnit.log("querySystemInfo");
+                onEnter(true);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                LogUnit.log(msg);
+                onEnter(false);
             }
         });
     }

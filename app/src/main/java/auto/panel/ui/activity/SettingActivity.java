@@ -9,14 +9,14 @@ import android.widget.LinearLayout;
 import androidx.appcompat.widget.SwitchCompat;
 
 import auto.base.util.DeviceUnit;
+import auto.base.util.EncryptUtil;
 import auto.base.util.ToastUnit;
+import auto.base.util.WebUnit;
 import auto.panel.R;
 import auto.panel.bean.app.Config;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.database.sp.SettingPreference;
 import auto.panel.net.app.ApiController;
-import auto.base.util.EncryptUtil;
-import auto.base.util.WebUnit;
 
 public class SettingActivity extends BaseActivity {
     public static final String TAG = "SettingActivity";

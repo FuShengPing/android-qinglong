@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import auto.base.BaseApplication;
+import auto.panel.MyApplication;
 import auto.panel.bean.panel.Account;
 
 public class PanelPreference {
@@ -21,7 +22,7 @@ public class PanelPreference {
     private static final SharedPreferences sp;
 
     static {
-        sp = BaseApplication.getContext().getSharedPreferences(NAME, Context.MODE_PRIVATE);
+        sp = MyApplication.getInstance().getSharedPreferences(NAME, Context.MODE_PRIVATE);
     }
 
     /**
@@ -73,13 +74,23 @@ public class PanelPreference {
     }
 
     /**
-     * Gets base url.
+     * Gets retrofit baseurl.
      *
-     * @return http://ip:port/
+     * @return retrofit baseurl
      */
     public static String getBaseUrl() {
         if (mBaseUrl == null) {
-            mBaseUrl = "http://" + sp.getString(KEY_ADDRESS, DEFAULT_EMPTY) + "/";
+            String address = sp.getString(KEY_ADDRESS, DEFAULT_EMPTY);
+            // BaseUrl
+            StringBuilder sb = new StringBuilder();
+            if (!address.startsWith("http")) {
+                sb.append("http://");
+            }
+            sb.append(address);
+            if (!address.endsWith("/")) {
+                sb.append("/");
+            }
+            mBaseUrl = sb.toString();
         }
         return mBaseUrl;
     }

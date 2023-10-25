@@ -20,6 +20,7 @@ import auto.base.ui.popup.ConfirmPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.base.util.EncryptUtil;
 import auto.base.util.LogUnit;
+import auto.base.util.NetUnit;
 import auto.base.util.PackageUtil;
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
@@ -32,21 +33,22 @@ import auto.panel.bean.app.Version;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.database.sp.SettingPreference;
 import auto.panel.net.app.ApiController;
+import auto.panel.ui.fragment.BaseFragment;
 import auto.panel.ui.fragment.PanelDependencePagerFragment;
 import auto.panel.ui.fragment.PanelEnvironmentFragment;
 import auto.panel.ui.fragment.PanelLogFragment;
 import auto.panel.ui.fragment.PanelScriptFragment;
 import auto.panel.ui.fragment.PanelSettingFragment;
 import auto.panel.ui.fragment.PanelTaskFragment;
-import auto.panel.ui.fragment.BaseFragment;
 
 public class HomeActivity extends BaseActivity {
     public static final String TAG = "HomeActivity";
 
-    private long mLastBackPressedTime = 0;//上次按下返回键时间
-    private BaseFragment.MenuClickListener mMenuClickListener;
+    private boolean initCheckVersion = false;
+    private long lastBackPressedTime = 0;//上次按下返回键时间
+    private BaseFragment.MenuClickListener menuClickListener;
     private Map<String, BaseFragment> fragmentMap;
-    private BaseFragment mCurrentFragment;//当前Fragment
+    private BaseFragment currentFragment;//当前Fragment
 
     private DrawerLayout uiDrawer;
     private LinearLayout uiDrawerLeft;
@@ -69,13 +71,22 @@ public class HomeActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (!initCheckVersion) {
+            //版本检查
+            netGetVersion();
+        }
+    }
+
+    @Override
     public void onBackPressed() {
-        if (!mCurrentFragment.onDispatchBackKey()) {
+        if (!currentFragment.onDispatchBackKey()) {
             long current = System.currentTimeMillis();
-            if (current - mLastBackPressedTime < 2000) {
+            if (current - lastBackPressedTime < 2000) {
                 finish();
             } else {
-                mLastBackPressedTime = current;
+                lastBackPressedTime = current;
                 ToastUnit.showShort(getString(R.string.tip_exit_app));
             }
         }
@@ -88,7 +99,7 @@ public class HomeActivity extends BaseActivity {
             return false;
         }
         //询问当前帧是否阻止点击
-        if (mCurrentFragment != null && mCurrentFragment.onDispatchTouchEvent()) {
+        if (currentFragment != null && currentFragment.onDispatchTouchEvent()) {
             return false;
         }
         return super.dispatchTouchEvent(ev);
@@ -97,46 +108,45 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void init() {
         //变量初始化
-        mMenuClickListener = () -> uiDrawer.openDrawer(uiDrawerLeft);
+        menuClickListener = () -> uiDrawer.openDrawer(uiDrawerLeft);
         //导航栏初始化
         initDrawerBar();
         //初始化第一帧页面
         showFragment(PanelTaskFragment.class);
-        //版本检查
-        getVersion();
         //获取拓展
-        getExtension();
+        //getExtension();
     }
 
     private void initDrawerBar() {
         uiDrawerLeft.setVisibility(View.INVISIBLE);
         //用户名
-        TextView ui_username = uiDrawerLeft.findViewById(R.id.menu_top_info_username);
-        ui_username.setText(Objects.requireNonNull(PanelPreference.getCurrentAccount()).getUsername());
+        TextView uiUsername = uiDrawerLeft.findViewById(R.id.menu_top_info_username);
+        uiUsername.setText(Objects.requireNonNull(PanelPreference.getCurrentAccount()).getUsername());
         //面板地址
-        TextView ui_address = uiDrawerLeft.findViewById(R.id.menu_top_info_address);
-        ui_address.setText(PanelPreference.getCurrentAccount().getAddress());
+        TextView uiAddress = uiDrawerLeft.findViewById(R.id.menu_top_info_address);
+        String address = PanelPreference.getCurrentAccount().getAddress();
+        uiAddress.setText(NetUnit.getHost(address));
         //面板版本
-        TextView ui_version = uiDrawerLeft.findViewById(R.id.menu_top_info_version);
-        ui_version.setText(String.format(getString(R.string.format_tip_version), PanelPreference.getVersion()));
+        TextView uiVersion = uiDrawerLeft.findViewById(R.id.menu_top_info_version);
+        uiVersion.setText(String.format(getString(R.string.format_tip_version), PanelPreference.getVersion()));
 
         //导航监听
-        LinearLayout menu_task = uiDrawerLeft.findViewById(R.id.panel_menu_task);
-        LinearLayout menu_log = uiDrawerLeft.findViewById(R.id.panel_menu_log);
-        LinearLayout menu_config = uiDrawerLeft.findViewById(R.id.panel_menu_config);
-        LinearLayout menu_script = uiDrawerLeft.findViewById(R.id.panel_menu_script);
-        LinearLayout menu_environment = uiDrawerLeft.findViewById(R.id.panel_menu_env);
-        LinearLayout menu_setting = uiDrawerLeft.findViewById(R.id.panel_menu_setting);
-        LinearLayout menu_dependence = uiDrawerLeft.findViewById(R.id.panel_menu_dep);
-        LinearLayout menu_app_logout = uiDrawerLeft.findViewById(R.id.panel_menu_app_logout);
-        LinearLayout menu_app_setting = uiDrawerLeft.findViewById(R.id.panel_menu_app_setting);
+        LinearLayout menuTask = uiDrawerLeft.findViewById(R.id.panel_menu_task);
+        LinearLayout menuLog = uiDrawerLeft.findViewById(R.id.panel_menu_log);
+        LinearLayout menuConfig = uiDrawerLeft.findViewById(R.id.panel_menu_config);
+        LinearLayout menuScript = uiDrawerLeft.findViewById(R.id.panel_menu_script);
+        LinearLayout menuEnvironment = uiDrawerLeft.findViewById(R.id.panel_menu_env);
+        LinearLayout menuSetting = uiDrawerLeft.findViewById(R.id.panel_menu_setting);
+        LinearLayout menuDependence = uiDrawerLeft.findViewById(R.id.panel_menu_dep);
+        LinearLayout menuAppLogout = uiDrawerLeft.findViewById(R.id.panel_menu_app_logout);
+        LinearLayout menuAppSetting = uiDrawerLeft.findViewById(R.id.panel_menu_app_setting);
 
         //定时任务
-        menu_task.setOnClickListener(v -> showFragment(PanelTaskFragment.class));
+        menuTask.setOnClickListener(v -> showFragment(PanelTaskFragment.class));
         //任务日志
-        menu_log.setOnClickListener(v -> showFragment(PanelLogFragment.class));
+        menuLog.setOnClickListener(v -> showFragment(PanelLogFragment.class));
         //配置文件
-        menu_config.setOnClickListener(v -> {
+        menuConfig.setOnClickListener(v -> {
             Intent intent = new Intent(this, CodeWebActivity.class);
             intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_CONFIG);
             intent.putExtra(CodeWebActivity.EXTRA_TITLE, "config.sh");
@@ -144,28 +154,26 @@ public class HomeActivity extends BaseActivity {
             startActivity(intent);
         });
         //脚本管理
-        menu_script.setOnClickListener(v -> showFragment(PanelScriptFragment.class));
+        menuScript.setOnClickListener(v -> showFragment(PanelScriptFragment.class));
         //依赖管理
-        menu_environment.setOnClickListener(v -> showFragment(PanelEnvironmentFragment.class));
+        menuEnvironment.setOnClickListener(v -> showFragment(PanelEnvironmentFragment.class));
         //任务日志
-        menu_dependence.setOnClickListener(v -> showFragment(PanelDependencePagerFragment.class));
+        menuDependence.setOnClickListener(v -> showFragment(PanelDependencePagerFragment.class));
         //系统设置
-        menu_setting.setOnClickListener(v -> showFragment(PanelSettingFragment.class));
+        menuSetting.setOnClickListener(v -> showFragment(PanelSettingFragment.class));
 
         //退出登录
-        menu_app_logout.setOnClickListener(v -> {
+        menuAppLogout.setOnClickListener(v -> {
             Intent intent = new Intent(getBaseContext(), LoginActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.activity_alpha_enter, R.anim.activity_alpha_out);
             finish();
         });
         //APP设置
-        menu_app_setting.setOnClickListener(v -> {
+        menuAppSetting.setOnClickListener(v -> {
             Intent intent = new Intent(getBaseContext(), SettingActivity.class);
             startActivity(intent);
         });
-
-
     }
 
     private void initExtension(Extensions extensions) {
@@ -179,7 +187,7 @@ public class HomeActivity extends BaseActivity {
             uiExtensionProxyTitle.setText(proxy.getName());
 
             uiExtensionProxy.setOnClickListener(v -> {
-                if (PackageUtil.isAppInstalled(self, proxy.getPackageName())) {
+                if (PackageUtil.isAppInstalled(mActivity, proxy.getPackageName())) {
                     Intent intent = new Intent();
                     intent.putExtra("from", "panel");
                     intent.putExtra("token", "qinglong");
@@ -192,7 +200,7 @@ public class HomeActivity extends BaseActivity {
                     popConfirmWindow.setMaxHeight(WindowUnit.getWindowHeightPix(getBaseContext()) / 3);
                     popConfirmWindow.setFocusable(true);
                     popConfirmWindow.setOnActionListener(() -> {
-                        WebUnit.open(self, proxy.getUrl());
+                        WebUnit.open(mActivity, proxy.getUrl());
                         return true;
                     });
                     PopupWindowBuilder.buildConfirmWindow(this, popConfirmWindow);
@@ -208,14 +216,14 @@ public class HomeActivity extends BaseActivity {
         //获取指定帧
         BaseFragment targetFragment = fragmentMap.get(name);
         //相同帧则返回
-        if (mCurrentFragment != null && mCurrentFragment.equals(targetFragment)) {
+        if (currentFragment != null && currentFragment.equals(targetFragment)) {
             return;
         }
         //不存在则创建
         if (targetFragment == null) {
             try {
                 targetFragment = (BaseFragment) cls.newInstance();
-                targetFragment.setMenuClickListener(mMenuClickListener);
+                targetFragment.setMenuClickListener(menuClickListener);
                 getSupportFragmentManager().beginTransaction().add(R.id.frame_layout, targetFragment, name).commit();
                 fragmentMap.put(name, targetFragment);
             } catch (IllegalAccessException | InstantiationException e) {
@@ -224,13 +232,13 @@ public class HomeActivity extends BaseActivity {
             }
         }
         //隐藏旧页面
-        if (mCurrentFragment != null) {
-            getSupportFragmentManager().beginTransaction().hide(mCurrentFragment).commit();
+        if (currentFragment != null) {
+            getSupportFragmentManager().beginTransaction().hide(currentFragment).commit();
         }
         //替换
-        mCurrentFragment = targetFragment;
+        currentFragment = targetFragment;
         //显示新页面
-        getSupportFragmentManager().beginTransaction().show(mCurrentFragment).commit();
+        getSupportFragmentManager().beginTransaction().show(currentFragment).commit();
         //关闭导航栏
         if (uiDrawer.isDrawerOpen(uiDrawerLeft)) {
             uiDrawer.closeDrawer(uiDrawerLeft);
@@ -248,7 +256,7 @@ public class HomeActivity extends BaseActivity {
         popConfirmWindow.setOnActionListener(new ConfirmPopupWindow.OnActionListener() {
             @Override
             public boolean onConfirm() {
-                WebUnit.open(self, version.getDownloadUrl());
+                WebUnit.open(mActivity, version.getDownloadUrl());
                 return !force;
             }
 
@@ -260,11 +268,14 @@ public class HomeActivity extends BaseActivity {
                 return true;
             }
         });
-        uiPopNotice = PopupWindowBuilder.buildConfirmWindow(this, popConfirmWindow);
+        uiPopNotice = PopupWindowBuilder.buildConfirmWindow(mActivity, popConfirmWindow);
     }
 
     private void checkVersion(Version version) {
-        PackageUtil.Version versionNow = PackageUtil.getVersion(this);
+        //更新检查标志
+        initCheckVersion = true;
+        //获取当前版本对象
+        PackageUtil.Version versionNow = PackageUtil.getVersion(mContext);
         //若版本强制更新 即使停用更新推送仍会要求更新
         if (version.getMinVersionCode() > versionNow.getVersionCode()) {
             showUpdateNotice(version, true);
@@ -273,7 +284,7 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-    private void getVersion() {
+    private void netGetVersion() {
         String uid = EncryptUtil.md5(PanelPreference.getAddress());
 
         ApiController.getVersion(uid, new ApiController.VersionCallBack() {
@@ -290,7 +301,7 @@ public class HomeActivity extends BaseActivity {
         });
     }
 
-    private void getExtension() {
+    private void netGetExtension() {
         String uid = EncryptUtil.md5(PanelPreference.getAddress());
 
         ApiController.getExtensions(uid, this::initExtension);

@@ -8,11 +8,11 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 
+import auto.base.ui.popup.PopupWindowBuilder;
+import auto.base.ui.popup.ProgressPopupWindow;
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
-import auto.base.ui.popup.ProgressPopupWindow;
-import auto.base.ui.popup.PopupWindowBuilder;
 import auto.panel.R;
 import auto.panel.bean.panel.Account;
 import auto.panel.bean.panel.SystemInfo;
@@ -101,7 +101,7 @@ public class LoginActivity extends BaseActivity {
             //账号存在本地则尝试旧token 避免重复登录
             account.setToken(PanelPreference.getAuthorization(account.getAddress(), account.getUsername(), account.getPassword()));
             //检测系统是否初始化和版本信息(延迟500ms)
-            new Handler().postDelayed(() -> querySystemInfo(account, ACTION_LOGIN), 500);
+            new Handler().postDelayed(() -> netQuerySystemInfo(account, ACTION_LOGIN), 500);
         });
 
         uiRegister.setOnClickListener(v -> {
@@ -118,7 +118,7 @@ public class LoginActivity extends BaseActivity {
             uiPopProgress.setTextAndShow("初始化中...");
 
             //检测系统是否初始化和版本信息(延迟500ms)
-            new Handler().postDelayed(() -> querySystemInfo(account, ACTION_REGISTER), 500);
+            new Handler().postDelayed(() -> netQuerySystemInfo(account, ACTION_REGISTER), 500);
         });
 
         //显示之前账号
@@ -127,18 +127,6 @@ public class LoginActivity extends BaseActivity {
             uiAddress.setText(account.getAddress());
             uiUsername.setText(account.getUsername());
             uiPassword.setText(account.getPassword());
-        }
-    }
-
-    private void buildPopWindowProgress() {
-        if (uiPopProgress == null) {
-            uiPopProgress = PopupWindowBuilder.buildProgressWindow(this, () -> NetManager.cancelAllCall(getNetRequestID()));
-        }
-    }
-
-    private void dismissProgress() {
-        if (uiPopProgress != null && uiPopProgress.isShowing()) {
-            uiPopProgress.dismiss();
         }
     }
 
@@ -167,6 +155,18 @@ public class LoginActivity extends BaseActivity {
         return new Account(username, password, address, null);
     }
 
+    private void buildPopWindowProgress() {
+        if (uiPopProgress == null) {
+            uiPopProgress = PopupWindowBuilder.buildProgressWindow(this, () -> NetManager.cancelAllCall(getNetRequestID()));
+        }
+    }
+
+    private void dismissProgress() {
+        if (uiPopProgress != null && uiPopProgress.isShowing()) {
+            uiPopProgress.dismiss();
+        }
+    }
+
     /**
      * 进入主界面
      */
@@ -176,7 +176,7 @@ public class LoginActivity extends BaseActivity {
         finish();
     }
 
-    protected void querySystemInfo(Account account, int action) {
+    protected void netQuerySystemInfo(Account account, int action) {
         auto.panel.net.panel.ApiController.getSystemInfo(account.getBaseUrl(), new ApiController.SystemInfoCallBack() {
             @Override
             public void onSuccess(SystemInfo system) {
@@ -187,16 +187,16 @@ public class LoginActivity extends BaseActivity {
                         dismissProgress();
                         ToastUnit.showShort("系统未初始化，无法登录");
                     } else if (TextUnit.isFull(account.getToken())) {
-                        checkAccountToken(account);
+                        netCheckAccountToken(account);
                     } else {
-                        login(account);
+                        netLogin(account);
                     }
                 } else {
                     if (system.isInitialized()) {
                         dismissProgress();
                         ToastUnit.showShort("系统已初始化，无法注册");
                     } else {
-                        register(account);
+                        netRegister(account);
                     }
                 }
             }
@@ -209,7 +209,7 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    protected void checkAccountToken(Account account) {
+    protected void netCheckAccountToken(Account account) {
         auto.panel.net.panel.ApiController.checkAccountToken(account.getBaseUrl(), account.getAuthorization(), new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
@@ -218,16 +218,16 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                login(account);
+                netLogin(account);
             }
         });
     }
 
-    protected void register(Account account) {
+    protected void netRegister(Account account) {
         ApiController.initAccount(account.getBaseUrl(), account, new ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
-                login(account);
+                netLogin(account);
             }
 
             @Override
@@ -238,7 +238,7 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    protected void login(Account account) {
+    protected void netLogin(Account account) {
         auto.panel.net.panel.ApiController.login(account.getBaseUrl(), account, new auto.panel.net.panel.ApiController.LoginCallBack() {
             @Override
             public void onSuccess(String token) {

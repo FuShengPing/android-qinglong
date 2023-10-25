@@ -1,7 +1,6 @@
 package auto.panel.net.panel.v10;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.google.gson.JsonObject;
 

@@ -3,8 +3,8 @@ package auto.panel.bean.panel;
 public class Account {
     private String username;
     private String password;
-    private String address;
     private String token;
+    private String address;
     private int state;
     //是否为当前账号
     private boolean isCurrent;
@@ -55,19 +55,25 @@ public class Account {
         return "Bearer " + token;
     }
 
-    /**
-     * @return 当前账号的URL HOST
-     */
-    public String getBaseUrl() {
-        return (address.startsWith("http") ? "" : "http://") + address + "/";
-    }
-
     public int getState() {
         return state;
     }
 
     public void setState(int state) {
         this.state = state;
+    }
+
+    public String getBaseUrl() {
+        // BaseUrl
+        StringBuilder sb = new StringBuilder();
+        if (!address.startsWith("http")) {
+            sb.append("http://");
+        }
+        sb.append(address);
+        if (!address.endsWith("/")) {
+            sb.append("/");
+        }
+        return  sb.toString();
     }
 
     public boolean isCurrent() {

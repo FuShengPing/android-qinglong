@@ -1,5 +1,6 @@
 package auto.panel.net.panel;
 
+import auto.base.util.LogUnit;
 import retrofit2.Call;
 
 /**
@@ -27,6 +28,7 @@ public class Handler {
 
     public static void handleRequestError(Call<?> call, Throwable t, ApiController.BaseCallBack callBack) {
         if (!call.isCanceled()) {
+            LogUnit.log(call.request().url().toString());
             callBack.onFailure(t.getLocalizedMessage());
         }
     }

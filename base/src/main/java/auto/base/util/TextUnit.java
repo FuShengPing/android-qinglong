@@ -7,15 +7,14 @@ public class TextUnit {
     public static final String TAG = "TextUnit";
 
     public static String join(List<String> list, String split) {
-        String result = null;
+        StringBuilder sb = new StringBuilder();
         for (String str : list) {
-            if (result != null) {
-                result += split + str;
-            } else {
-                result = str;
+            if (sb.length() != 0) {
+                sb.append(split);
             }
+            sb.append(str);
         }
-        return result;
+        return sb.toString();
     }
 
     public static String joinMap(Map<String, String> map, String split) {

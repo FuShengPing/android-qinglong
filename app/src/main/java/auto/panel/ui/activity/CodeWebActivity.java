@@ -22,7 +22,6 @@ import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.panel.ApiController;
 import auto.panel.net.web.PanelWebJsManager;
 import auto.panel.net.web.WebViewBuilder;
-import auto.panel.ui.activity.BaseActivity;
 
 public class CodeWebActivity extends BaseActivity {
     public static final String TAG = "CodeWebActivity";

@@ -11,18 +11,20 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 
 import auto.base.util.ToastUnit;
+import auto.panel.MyApplication;
 import auto.panel.net.NetManager;
 
 public abstract class BaseActivity extends auto.base.BaseActivity {
     public static final String TAG = "BaseActivity";
-    protected Activity self;
+    protected Activity mActivity;
     protected Context mContext;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Thread.setDefaultUncaughtExceptionHandler(MyApplication.getInstance());
         mContext = getBaseContext();
-        self = this;
+        mActivity = this;
     }
 
     @Override

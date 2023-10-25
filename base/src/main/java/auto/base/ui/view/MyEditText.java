@@ -68,7 +68,7 @@ public class MyEditText extends LinearLayout {
         mTextView = new TextView(getContext());
         mEditText = new EditText(getContext());
 
-        mTextView.setText("远程地址");
+        mTextView.setText("");
         mTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         mTextView.setTextColor(getResources().getColor(R.color.text_color_49, null));
         mTextView.setPadding(0, 0, 0, WindowUnit.dip2px(context, 10));

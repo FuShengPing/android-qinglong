@@ -13,7 +13,6 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 import auto.panel.R;
 import auto.panel.ui.adapter.PanelSettingPagerAdapter;
-import auto.panel.ui.fragment.BaseFragment;
 
 public class PanelSettingFragment extends BaseFragment {
     public static String TAG = "PanelSettingFragment";

@@ -12,7 +12,7 @@ import retrofit2.http.Url;
 
 /**
  * @author wsfsp4
- * @version 2023.07.02
+ * @date 2023.07.02
  */
 public interface Api {
     @GET("api/system")

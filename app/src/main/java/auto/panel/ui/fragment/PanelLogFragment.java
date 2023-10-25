@@ -28,8 +28,8 @@ import auto.panel.bean.panel.File;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
-import auto.panel.ui.adapter.PanelLogItemAdapter;
 import auto.panel.ui.activity.CodeWebActivity;
+import auto.panel.ui.adapter.PanelLogItemAdapter;
 
 @SuppressLint({"SetTextI18n", "InflateParams"})
 public class PanelLogFragment extends BaseFragment {
