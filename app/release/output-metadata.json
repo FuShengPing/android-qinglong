@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "auto.panel",
+  "variantName": "release",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 10,
+      "versionName": "2.0.1",
+      "outputFile": "app-release.apk"
+    }
+  ],
+  "elementType": "File"
+}
