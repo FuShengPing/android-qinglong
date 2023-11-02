@@ -11,14 +11,11 @@ import retrofit2.http.Header;
  * 应用接口.
  */
 public interface Api {
-    String URL_BASE_TENCENT = "https://service-m1nufffu-1306746806.gz.apigw.tencentcs.com";
+    String URL_BASE_TENCENT = "https://gitee.com/wsfsp4/public-static-file/raw/master/qinglong/";
 
-    @GET("panel/version")
+    @GET("version.json")
     Call<Version> getVersion(@Header("uid") String uid);
 
-    @GET("panel/config")
+    @GET("config.json")
     Call<Config> getConfig(@Header("uid") String uid);
-
-    @GET("panel/extensions")
-    Call<Extensions> getExtensions(@Header("uid") String uid);
 }

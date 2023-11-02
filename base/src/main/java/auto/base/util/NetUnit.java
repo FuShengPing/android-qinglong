@@ -13,6 +13,14 @@ public class NetUnit {
     private static final String TAG = "NetUnit";
 
     public static String getHost(String str) {
+        if (str == null || str.isEmpty()) {
+            return "";
+        }
+
+        if (!str.startsWith("http://") && !str.startsWith("https://")) {
+            str = "http://" + str;
+        }
+
         try {
             URL url = new URL(str);
             return url.getHost() + ":" + url.getPort();

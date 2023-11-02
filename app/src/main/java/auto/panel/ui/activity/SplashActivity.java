@@ -65,7 +65,6 @@ public class SplashActivity extends BaseActivity {
         auto.panel.net.panel.ApiController.getSystemInfo(account.getBaseUrl(), new ApiController.SystemInfoCallBack() {
             @Override
             public void onSuccess(SystemInfo system) {
-                LogUnit.log("querySystemInfo");
                 PanelPreference.setVersion(system.getVersion());
                 netCheckAccountToken(account);
             }
@@ -81,7 +80,6 @@ public class SplashActivity extends BaseActivity {
         auto.panel.net.panel.ApiController.checkAccountToken(account.getBaseUrl(), account.getAuthorization(), new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
-                LogUnit.log("querySystemInfo");
                 onEnter(true);
             }
 

@@ -256,34 +256,6 @@
                     android:layout_marginVertical="10dp"
                     android:background="@color/divider_heavy"
                     android:visibility="gone" />
-
-                <LinearLayout
-                    android:id="@+id/panel_menu_extension_proxy"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/style_press_gray"
-                    android:clickable="true"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingVertical="15dp"
-                    android:paddingStart="15dp"
-                    android:visibility="gone"
-                    tools:ignore="RtlSymmetry">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginEnd="10dp"
-                        android:src="@drawable/ic_extension_proxy" />
-
-                    <TextView
-                        android:id="@+id/panel_menu_extension_proxy_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/module_extension_proxy"
-                        android:textColor="@color/text_color_49"
-                        android:textSize="14sp" />
-                </LinearLayout>
             </LinearLayout>
         </ScrollView>
 

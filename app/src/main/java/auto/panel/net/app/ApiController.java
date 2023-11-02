@@ -73,35 +73,6 @@ public class ApiController {
         });
     }
 
-    public static void getExtensions(@Nullable String uid, @NonNull ExtensionsCallBack callBack) {
-        Call<Extensions> call = new Retrofit.Builder()
-                .baseUrl(Api.URL_BASE_TENCENT)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .getExtensions(uid);
-
-        call.enqueue(new Callback<Extensions>() {
-            @Override
-            public void onResponse(@NonNull Call<Extensions> call, @NonNull Response<Extensions> response) {
-                Extensions res = response.body();
-                if (res != null) {
-                    callBack.onSuccess(res);
-                } else {
-                    callBack.onFailure(ERROR_NO_BODY);
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Extensions> call, @NonNull Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-                callBack.onFailure(t.getLocalizedMessage());
-            }
-        });
-    }
-
     public interface BaseCallBack {
         default void onSuccess() {
         }
@@ -116,9 +87,5 @@ public class ApiController {
 
     public interface ConfigCallBack extends BaseCallBack {
         void onSuccess(Config config);
-    }
-
-    public interface ExtensionsCallBack extends BaseCallBack {
-        void onSuccess(Extensions res);
     }
 }

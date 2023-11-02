@@ -113,8 +113,6 @@ public class HomeActivity extends BaseActivity {
         initDrawerBar();
         //初始化第一帧页面
         showFragment(PanelTaskFragment.class);
-        //获取拓展
-        //getExtension();
     }
 
     private void initDrawerBar() {
@@ -174,41 +172,6 @@ public class HomeActivity extends BaseActivity {
             Intent intent = new Intent(getBaseContext(), SettingActivity.class);
             startActivity(intent);
         });
-    }
-
-    private void initExtension(Extensions extensions) {
-        if (extensions.getProxy() != null) {            //拓展--代理
-            Extension proxy = extensions.getProxy();
-
-            LinearLayout uiExtensionProxy = uiDrawerLeft.findViewById(R.id.panel_menu_extension_proxy);
-            TextView uiExtensionProxyTitle = uiExtensionProxy.findViewById(R.id.panel_menu_extension_proxy_title);
-
-            uiExtensionProxy.setVisibility(View.VISIBLE);
-            uiExtensionProxyTitle.setText(proxy.getName());
-
-            uiExtensionProxy.setOnClickListener(v -> {
-                if (PackageUtil.isAppInstalled(mActivity, proxy.getPackageName())) {
-                    Intent intent = new Intent();
-                    intent.putExtra("from", "panel");
-                    intent.putExtra("token", "qinglong");
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    ComponentName comp = new ComponentName(proxy.getPackageName(), proxy.getActivityName());
-                    intent.setComponent(comp);
-                    startActivity(intent);
-                } else {
-                    ConfirmPopupWindow popConfirmWindow = new ConfirmPopupWindow("模块缺失", "\n模块未安装，是否下载安装\n", "取消", "下载");
-                    popConfirmWindow.setMaxHeight(WindowUnit.getWindowHeightPix(getBaseContext()) / 3);
-                    popConfirmWindow.setFocusable(true);
-                    popConfirmWindow.setOnActionListener(() -> {
-                        WebUnit.open(mActivity, proxy.getUrl());
-                        return true;
-                    });
-                    PopupWindowBuilder.buildConfirmWindow(this, popConfirmWindow);
-                }
-
-            });
-
-        }
     }
 
     private void showFragment(Class<?> cls) {
@@ -299,11 +262,5 @@ public class HomeActivity extends BaseActivity {
                 LogUnit.log(msg);
             }
         });
-    }
-
-    private void netGetExtension() {
-        String uid = EncryptUtil.md5(PanelPreference.getAddress());
-
-        ApiController.getExtensions(uid, this::initExtension);
     }
 }
