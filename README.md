@@ -86,10 +86,8 @@ docker容器可视化操作，提供容器操作、运行查看等功能。
 
 
 ## 友情链接
-* [qinglong](https://github.com/whyour/qinglong)  
-* [NewAI](https://newai-1308943175.cos-website.ap-shenzhen-fsi.myqcloud.com/)  
+* [qinglong](https://github.com/whyour/qinglong) 
 
 ## 交流反馈
 如果你在使用过程中发现Bug或者有功能需求请创建Issue。  
-欢迎加入QQ交流群：**309836858**，可以获取到最新的软件资讯和最快的问题反馈！  
-<img src="https://gitee.com/wsfsp4/public-static-file/raw/master/qinglong/group.jpg" alt="QQ群" width="25%">
+欢迎加入QQ交流群：**309836858**，可以获取到最新的软件资讯和最快的问题反馈！
