@@ -34,11 +34,11 @@ import auto.base.ui.popup.PopupWindowBuilder;
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
 import auto.panel.R;
-import auto.panel.bean.panel.File;
+import auto.panel.bean.panel.PanelFile;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
-import auto.panel.ui.activity.CodeWebActivity;
+import auto.panel.ui.activity.CodeViewActivity;
 import auto.panel.ui.adapter.PanelScriptItemAdapter;
 import auto.panel.utils.FileUtil;
 
@@ -46,9 +46,9 @@ import auto.panel.utils.FileUtil;
 public class PanelScriptFragment extends BaseFragment {
     public static String TAG = "PanelScriptFragment";
 
-    private Stack<List<File>> fileStack;
-    private String fileDir;
-    private MenuClickListener menuClickListener;
+    private Stack<List<PanelFile>> fileStack; // 文件栈
+    private String fileDir; // 当前目录
+    private MenuClickListener menuClickListener; // 菜单点击监听
     private PanelScriptItemAdapter adapter;
 
     private ImageView uiMenu;
@@ -100,9 +100,10 @@ public class PanelScriptFragment extends BaseFragment {
             fileStack.clear();
             return false;
         } else {
+            // 弹出当前目录
             fileStack.pop();
             adapter.setData(fileStack.peek());
-            updateDir(fileStack.peek().get(0).getParent());
+            updateCurrentDir(fileStack.peek().get(0).getParentPath());
             return true;
         }
     }
@@ -111,27 +112,27 @@ public class PanelScriptFragment extends BaseFragment {
     public void init() {
         adapter.setScriptInterface(new PanelScriptItemAdapter.ItemActionListener() {
             @Override
-            public void onEdit(File file) {
+            public void onEdit(PanelFile file) {
                 if (file.isDir()) {
                     sortAndSetData(file.getChildren(), file.getPath());
                 } else {
-                    Intent intent = new Intent(getContext(), CodeWebActivity.class);
-                    intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_SCRIPT);
-                    intent.putExtra(CodeWebActivity.EXTRA_TITLE, file.getTitle());
-                    intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_NAME, file.getTitle());
-                    intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_DIR, file.getParent());
-                    intent.putExtra(CodeWebActivity.EXTRA_CAN_EDIT, true);
+                    Intent intent = new Intent(getContext(), CodeViewActivity.class);
+                    intent.putExtra(CodeViewActivity.EXTRA_TYPE, CodeViewActivity.TYPE_SCRIPT);
+                    intent.putExtra(CodeViewActivity.EXTRA_TITLE, file.getTitle());
+                    intent.putExtra(CodeViewActivity.EXTRA_SCRIPT_NAME, file.getTitle());
+                    intent.putExtra(CodeViewActivity.EXTRA_SCRIPT_DIR, file.getParentPath());
+                    intent.putExtra(CodeViewActivity.EXTRA_CAN_EDIT, true);
                     startActivity(intent);
                 }
             }
 
             @Override
-            public void onMenu(View view, File file, int position) {
+            public void onMenu(View view, PanelFile file, int position) {
                 showPopItemMenu(view, file, position);
             }
         });
 
-        uiRefresh.setOnRefreshListener(refreshLayout -> getScriptFiles());
+        uiRefresh.setOnRefreshListener(refreshLayout -> netGetScriptFiles());
 
         uiMenu.setOnClickListener(v -> menuClickListener.onMenuClick());
 
@@ -145,12 +146,12 @@ public class PanelScriptFragment extends BaseFragment {
         uiRefresh.autoRefreshAnimationOnly();
         new Handler().postDelayed(() -> {
             if (isVisible()) {
-                getScriptFiles();
+                netGetScriptFiles();
             }
         }, 1000);
     }
 
-    private void updateDir(String dir) {
+    private void updateCurrentDir(String dir) {
         fileDir = dir;
         uiDirTip.setText("/" + dir);
     }
@@ -160,7 +161,7 @@ public class PanelScriptFragment extends BaseFragment {
         this.menuClickListener = mMenuClickListener;
     }
 
-    private void showPopItemMenu(View v, File file, int position) {
+    private void showPopItemMenu(View v, PanelFile file, int position) {
         MenuPopupWindow popMenuWindow = new MenuPopupWindow(v);
 
         popMenuWindow.addItem(new MenuItem("copy", "复制路径", R.drawable.ic_gray_crop_free));
@@ -178,7 +179,7 @@ public class PanelScriptFragment extends BaseFragment {
                 clipboardManager.setPrimaryClip(ClipData.newPlainText(null, file.getPath()));
                 ToastUnit.showShort("已复制");
             } else if ("delete".equals(key)) {
-                deleteScript(file, position);
+                netDeleteScript(file, position);
             } else if ("update".equals(key)) {
 
             }
@@ -222,12 +223,12 @@ public class PanelScriptFragment extends BaseFragment {
                 return false;
             }
 
-            File file = new File();
+            PanelFile file = new PanelFile();
             file.setTitle(name);
-            file.setParent(dir);
+            file.setParentPath(dir);
             file.setDir(true);
 
-            addScript(file);
+            netAddScript(file);
 
             return true;
         });
@@ -256,9 +257,9 @@ public class PanelScriptFragment extends BaseFragment {
                 return false;
             }
 
-            File file = new File();
+            PanelFile file = new PanelFile();
             file.setTitle(name);
-            file.setParent(dir);
+            file.setParentPath(dir);
             file.setDir(false);
 
             if (TextUnit.isFull(path)) {
@@ -284,7 +285,7 @@ public class PanelScriptFragment extends BaseFragment {
                 }
             }
 
-            addScript(file);
+            netAddScript(file);
 
             return true;
         });
@@ -292,17 +293,17 @@ public class PanelScriptFragment extends BaseFragment {
         PopupWindowBuilder.buildEditWindow(requireActivity(), editPopupWindow);
     }
 
-    private void sortAndSetData(List<File> files, String dir) {
+    private void sortAndSetData(List<PanelFile> files, String dir) {
         Collections.sort(files);
         fileStack.add(files);
         adapter.setData(files);
-        updateDir(dir);
+        updateCurrentDir(dir);
     }
 
-    private void getScriptFiles() {
-        auto.panel.net.panel.ApiController.getScripts(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.panel.net.panel.ApiController.FileListCallBack() {
+    private void netGetScriptFiles() {
+        ApiController.getScripts(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.panel.net.panel.ApiController.FileListCallBack() {
             @Override
-            public void onSuccess(List<File> files) {
+            public void onSuccess(List<PanelFile> files) {
                 fileStack.clear();
                 sortAndSetData(files, "");
                 init = true;
@@ -323,12 +324,12 @@ public class PanelScriptFragment extends BaseFragment {
         });
     }
 
-    private void addScript(File file) {
+    private void netAddScript(PanelFile file) {
         ApiController.addScript(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), file, new ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("新建成功");
-                getScriptFiles();
+                netGetScriptFiles();
             }
 
             @Override
@@ -338,11 +339,11 @@ public class PanelScriptFragment extends BaseFragment {
         });
     }
 
-    private void update(File file, String content) {
+    private void netUpdateScript(PanelFile file, String content) {
 
     }
 
-    private void deleteScript(File file, int position) {
+    private void netDeleteScript(PanelFile file, int position) {
         ApiController.deleteScript(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), file, new ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {

@@ -7,8 +7,8 @@ import com.google.gson.JsonObject;
 import java.util.List;
 
 import auto.base.util.TextUnit;
-import auto.panel.bean.panel.File;
-import auto.panel.bean.panel.SystemConfig;
+import auto.panel.bean.panel.PanelFile;
+import auto.panel.bean.panel.PanelSystemConfig;
 import auto.panel.net.panel.BaseRes;
 import auto.panel.net.panel.Handler;
 import okhttp3.MediaType;
@@ -24,7 +24,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * @version 2023.07.06
  */
 public class ApiController {
-
     public static void checkAccountToken(@NonNull String baseUrl, @NonNull String authorization, auto.panel.net.panel.ApiController.BaseCallBack callBack) {
         Call<SystemConfigRes> call = new Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -178,7 +177,7 @@ public class ApiController {
         });
     }
 
-    public static void addScript(@NonNull String baseUrl, @NonNull String authorization, @NonNull File file, auto.panel.net.panel.ApiController.BaseCallBack callBack) {
+    public static void addScript(@NonNull String baseUrl, @NonNull String authorization, @NonNull PanelFile file, auto.panel.net.panel.ApiController.BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         if (file.isDir()) {
             jsonObject.addProperty("directory", file.getTitle());
@@ -186,7 +185,7 @@ public class ApiController {
             jsonObject.addProperty("filename", file.getTitle());
             jsonObject.addProperty("content", file.getContent());
         }
-        jsonObject.addProperty("path", file.getParent());
+        jsonObject.addProperty("path", file.getParentPath());
 
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
 
@@ -264,7 +263,7 @@ public class ApiController {
         });
     }
 
-    public static void updateSystemConfig(@NonNull String baseUrl, @NonNull String authorization, SystemConfig config, @NonNull auto.panel.net.panel.ApiController.BaseCallBack callBack) {
+    public static void updateSystemConfig(@NonNull String baseUrl, @NonNull String authorization, PanelSystemConfig config, @NonNull auto.panel.net.panel.ApiController.BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("cronConcurrency", config.getCronConcurrency());
         jsonObject.addProperty("logRemoveFrequency", config.getLogRemoveFrequency());

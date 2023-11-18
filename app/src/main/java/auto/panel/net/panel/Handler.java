@@ -1,6 +1,7 @@
 package auto.panel.net.panel;
 
-import auto.base.util.LogUnit;
+import auto.panel.utils.thread.AppLogTask;
+import auto.panel.utils.thread.ThreadPoolUtil;
 import retrofit2.Call;
 
 /**
@@ -21,14 +22,15 @@ public class Handler {
         } else if (res == null) {
             callBack.onFailure(ERROR_NO_BODY + statusCode);
         } else {
+            ThreadPoolUtil.executeIO(new AppLogTask(res.getMessage()));
             callBack.onFailure(res.getMessage());
         }
         return true;
     }
 
     public static void handleRequestError(Call<?> call, Throwable t, ApiController.BaseCallBack callBack) {
+        ThreadPoolUtil.executeIO(new AppLogTask(t.getMessage()));
         if (!call.isCanceled()) {
-            LogUnit.log(call.request().url().toString());
             callBack.onFailure(t.getLocalizedMessage());
         }
     }

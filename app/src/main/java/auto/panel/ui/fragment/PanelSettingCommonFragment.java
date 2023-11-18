@@ -12,8 +12,8 @@ import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
 import auto.panel.R;
-import auto.panel.bean.panel.Account;
-import auto.panel.bean.panel.SystemConfig;
+import auto.panel.bean.panel.PanelAccount;
+import auto.panel.bean.panel.PanelSystemConfig;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.ui.activity.LoginActivity;
 
@@ -49,7 +49,7 @@ public class PanelSettingCommonFragment extends BaseFragment {
                 return;
             }
             WindowUnit.hideKeyboard(uiLogRemoveFrequency);
-            SystemConfig config = new SystemConfig();
+            PanelSystemConfig config = new PanelSystemConfig();
             config.setLogRemoveFrequency(Integer.parseInt(logValue));
             config.setCronConcurrency(Integer.parseInt(cronValue));
             updateSystemConfig(config);
@@ -69,7 +69,7 @@ public class PanelSettingCommonFragment extends BaseFragment {
             }
 
             WindowUnit.hideKeyboard(uiSecurityUsername);
-            Account account = new Account(username, password, PanelPreference.getAddress(), null);
+            PanelAccount account = new PanelAccount(username, password, PanelPreference.getAddress(), null);
             updateAccount(account);
         });
 
@@ -79,7 +79,7 @@ public class PanelSettingCommonFragment extends BaseFragment {
     private void getSystemConfig() {
         auto.panel.net.panel.ApiController.getSystemConfig(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.panel.net.panel.ApiController.SystemConfigCallBack() {
             @Override
-            public void onSuccess(SystemConfig config) {
+            public void onSuccess(PanelSystemConfig config) {
                 uiLogRemoveFrequency.setText(String.valueOf(config.getLogRemoveFrequency()));
                 uiCronConcurrency.setText(String.valueOf(config.getCronConcurrency()));
             }
@@ -91,7 +91,7 @@ public class PanelSettingCommonFragment extends BaseFragment {
         });
     }
 
-    private void updateSystemConfig(SystemConfig config) {
+    private void updateSystemConfig(PanelSystemConfig config) {
         auto.panel.net.panel.ApiController.updateSystemConfig(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), config, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
@@ -107,7 +107,7 @@ public class PanelSettingCommonFragment extends BaseFragment {
         });
     }
 
-    private void updateAccount(Account account) {
+    private void updateAccount(PanelAccount account) {
         auto.panel.net.panel.ApiController.updateAccount(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), account, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
@@ -122,7 +122,7 @@ public class PanelSettingCommonFragment extends BaseFragment {
         });
     }
 
-    protected void login(Account account) {
+    protected void login(PanelAccount account) {
         auto.panel.net.panel.ApiController.login(account.getBaseUrl(), account, new auto.panel.net.panel.ApiController.LoginCallBack() {
             @Override
             public void onSuccess(String token) {

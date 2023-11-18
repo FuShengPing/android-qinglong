@@ -4,7 +4,7 @@ package auto.panel.bean.panel;
  * @author wsfsp4
  * @version 2023.07.03
  */
-public class SystemConfig {
+public class PanelSystemConfig {
     private int logRemoveFrequency;
     private int cronConcurrency;
 

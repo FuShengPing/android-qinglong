@@ -24,18 +24,18 @@ import java.util.Stack;
 
 import auto.base.util.ToastUnit;
 import auto.panel.R;
-import auto.panel.bean.panel.File;
+import auto.panel.bean.panel.PanelFile;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
-import auto.panel.ui.activity.CodeWebActivity;
+import auto.panel.ui.activity.CodeViewActivity;
 import auto.panel.ui.adapter.PanelLogItemAdapter;
 
 @SuppressLint({"SetTextI18n", "InflateParams"})
 public class PanelLogFragment extends BaseFragment {
     public static String TAG = "PanelLogFragment";
 
-    private Stack<List<File>> fileStack;
+    private Stack<List<PanelFile>> fileStack;
     private MenuClickListener menuClickListener;
     private PanelLogItemAdapter adapter;
 
@@ -83,10 +83,10 @@ public class PanelLogFragment extends BaseFragment {
         } else {
             fileStack.pop();
             adapter.setData(fileStack.peek());
-            if (fileStack.peek().isEmpty() || fileStack.peek().get(0).getParent().isEmpty()) {
+            if (fileStack.peek().isEmpty() || fileStack.peek().get(0).getParentPath().isEmpty()) {
                 uiDir.setText("/");
             } else {
-                uiDir.setText("/" + fileStack.peek().get(0).getParent());
+                uiDir.setText("/" + fileStack.peek().get(0).getParentPath());
             }
             return true;
         }
@@ -107,11 +107,11 @@ public class PanelLogFragment extends BaseFragment {
             if (file.isDir()) {
                 sortAndSetData(file.getChildren(), file.getTitle());
             } else {
-                Intent intent = new Intent(getContext(), CodeWebActivity.class);
-                intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_LOG);
-                intent.putExtra(CodeWebActivity.EXTRA_TITLE, file.getTitle());
-                intent.putExtra(CodeWebActivity.EXTRA_LOG_NAME, file.getTitle());
-                intent.putExtra(CodeWebActivity.EXTRA_LOG_DIR, file.getParent());
+                Intent intent = new Intent(getContext(), CodeViewActivity.class);
+                intent.putExtra(CodeViewActivity.EXTRA_TYPE, CodeViewActivity.TYPE_LOG);
+                intent.putExtra(CodeViewActivity.EXTRA_TITLE, file.getTitle());
+                intent.putExtra(CodeViewActivity.EXTRA_LOG_NAME, file.getTitle());
+                intent.putExtra(CodeViewActivity.EXTRA_LOG_DIR, file.getParentPath());
                 startActivity(intent);
             }
         });
@@ -137,7 +137,7 @@ public class PanelLogFragment extends BaseFragment {
         }, 1000);
     }
 
-    private void sortAndSetData(List<File> files, String dir) {
+    private void sortAndSetData(List<PanelFile> files, String dir) {
         Collections.sort(files);
         fileStack.add(files);
         adapter.setData(files);
@@ -147,7 +147,7 @@ public class PanelLogFragment extends BaseFragment {
     private void getLogFiles() {
         auto.panel.net.panel.ApiController.getLogs(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new ApiController.FileListCallBack() {
             @Override
-            public void onSuccess(List<File> files) {
+            public void onSuccess(List<PanelFile> files) {
                 sortAndSetData(files, "");
                 init = true;
                 this.onEnd(true);

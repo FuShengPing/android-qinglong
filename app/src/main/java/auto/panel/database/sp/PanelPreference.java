@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import auto.panel.MyApplication;
-import auto.panel.bean.panel.Account;
+import auto.panel.bean.panel.PanelAccount;
 
 public class PanelPreference {
     private static final String NAME = "PanelPreference";
@@ -29,7 +29,7 @@ public class PanelPreference {
      *
      * @return 当前账号
      */
-    public static Account getCurrentAccount() {
+    public static PanelAccount getCurrentAccount() {
         String address = sp.getString(KEY_ADDRESS, DEFAULT_EMPTY);
         if (address.isEmpty()) {
             return null;
@@ -37,7 +37,7 @@ public class PanelPreference {
         String username = sp.getString(KEY_USERNAME, DEFAULT_EMPTY);
         String password = sp.getString(KEY_PASSWORD, DEFAULT_EMPTY);
         String token = sp.getString(KEY_TOKEN, DEFAULT_EMPTY);
-        Account account = new Account(username, password, address, token);
+        PanelAccount account = new PanelAccount(username, password, address, token);
         account.setCurrent(true);
         return account;
     }
@@ -103,7 +103,7 @@ public class PanelPreference {
      * 改密场景：只更新用户名和密码,同时清除token
      * 登录场景：更新全部字段
      */
-    public static void updateCurrentAccount(Account account) {
+    public static void updateCurrentAccount(PanelAccount account) {
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(KEY_USERNAME, account.getUsername());
         editor.putString(KEY_PASSWORD, account.getPassword());

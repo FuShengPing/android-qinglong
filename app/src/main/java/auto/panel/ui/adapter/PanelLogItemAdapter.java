@@ -15,12 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import auto.panel.R;
-import auto.panel.bean.panel.File;
+import auto.panel.bean.panel.PanelFile;
 
 @SuppressLint("SetTextI18n")
 public class PanelLogItemAdapter extends RecyclerView.Adapter<PanelLogItemAdapter.MyViewHolder> {
     private final Context context;
-    private final List<File> data;
+    private final List<PanelFile> data;
     private ItemActionListener itemActionListener;
 
     public PanelLogItemAdapter(@NonNull Context context) {
@@ -37,7 +37,7 @@ public class PanelLogItemAdapter extends RecyclerView.Adapter<PanelLogItemAdapte
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        File file = data.get(position);
+        PanelFile file = data.get(position);
 
         holder.uiTitle.setText(file.getTitle());
 
@@ -64,7 +64,7 @@ public class PanelLogItemAdapter extends RecyclerView.Adapter<PanelLogItemAdapte
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<File> data) {
+    public void setData(List<PanelFile> data) {
         this.data.clear();
         this.data.addAll(data);
         notifyDataSetChanged();
@@ -76,7 +76,7 @@ public class PanelLogItemAdapter extends RecyclerView.Adapter<PanelLogItemAdapte
     }
 
     public interface ItemActionListener {
-        void onClick(File file);
+        void onClick(PanelFile file);
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {

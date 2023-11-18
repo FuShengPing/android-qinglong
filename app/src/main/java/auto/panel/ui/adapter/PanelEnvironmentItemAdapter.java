@@ -17,14 +17,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import auto.panel.R;
-import auto.panel.bean.panel.Environment;
-import auto.panel.bean.panel.MoveInfo;
+import auto.panel.bean.panel.PanelEnvironment;
 
 public class PanelEnvironmentItemAdapter extends RecyclerView.Adapter<PanelEnvironmentItemAdapter.MyViewHolder>{
     public static final String TAG = "PanelEnvironmentItemAdapter";
 
     private final Context context;
-    private List<Environment> data;
+    private List<PanelEnvironment> data;
     private ItemActionListener itemActionListener;
     private boolean checkState;
     private Boolean[] dataCheckState;
@@ -51,7 +50,7 @@ public class PanelEnvironmentItemAdapter extends RecyclerView.Adapter<PanelEnvir
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Environment environment = this.data.get(position);
+        PanelEnvironment environment = this.data.get(position);
         holder.uiName.setText(environment.getName());
         holder.uiValue.setText(environment.getValue());
         holder.uiTime.setText(environment.getTime());
@@ -64,7 +63,7 @@ public class PanelEnvironmentItemAdapter extends RecyclerView.Adapter<PanelEnvir
 
         holder.uiStatus.setText(environment.getStatus());
 
-        if (environment.getStatusCode() == Environment.STATUS_ENABLE) {
+        if (environment.getStatusCode() == PanelEnvironment.STATUS_ENABLE) {
             holder.uiStatus.setTextColor(colorBlue);
         } else {
             holder.uiStatus.setTextColor(colorRed);
@@ -104,7 +103,7 @@ public class PanelEnvironmentItemAdapter extends RecyclerView.Adapter<PanelEnvir
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<Environment> data) {
+    public void setData(List<PanelEnvironment> data) {
         this.data = data;
         if (data != null && data.size() > 0) {
             this.dataCheckState = new Boolean[this.data.size()];
@@ -113,7 +112,7 @@ public class PanelEnvironmentItemAdapter extends RecyclerView.Adapter<PanelEnvir
         notifyDataSetChanged();
     }
 
-    public List<Environment> getData() {
+    public List<PanelEnvironment> getData() {
         return this.data;
     }
 
@@ -130,8 +129,8 @@ public class PanelEnvironmentItemAdapter extends RecyclerView.Adapter<PanelEnvir
         }
     }
 
-    public List<Environment> getSelectedItems() {
-        List<Environment> environments = new ArrayList<>();
+    public List<PanelEnvironment> getSelectedItems() {
+        List<PanelEnvironment> environments = new ArrayList<>();
         for (int k = 0; k < this.dataCheckState.length; k++) {
             if (this.dataCheckState[k]) {
                 environments.add(this.data.get(k));
@@ -145,9 +144,7 @@ public class PanelEnvironmentItemAdapter extends RecyclerView.Adapter<PanelEnvir
     }
 
     public interface ItemActionListener {
-        void onEdit(Environment environment);
-
-        void onMove(MoveInfo info);
+        void onEdit(PanelEnvironment environment);
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {

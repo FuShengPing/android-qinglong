@@ -1,6 +1,6 @@
 package auto.panel.bean.panel;
 
-public class Account {
+public class PanelAccount {
     private String username;
     private String password;
     private String token;
@@ -9,7 +9,7 @@ public class Account {
     //是否为当前账号
     private boolean isCurrent;
 
-    public Account(String username, String password, String address, String token) {
+    public PanelAccount(String username, String password, String address, String token) {
         this.username = username;
         this.password = password;
         this.address = address;

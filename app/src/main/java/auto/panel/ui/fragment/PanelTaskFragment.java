@@ -48,10 +48,10 @@ import auto.base.util.TimeUnit;
 import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
 import auto.panel.R;
-import auto.panel.bean.panel.Task;
+import auto.panel.bean.panel.PanelTask;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.panel.ApiController;
-import auto.panel.ui.activity.CodeWebActivity;
+import auto.panel.ui.activity.CodeViewActivity;
 import auto.panel.ui.adapter.PanelTaskItemAdapter;
 import auto.panel.utils.CronUnit;
 import auto.panel.utils.FileUtil;
@@ -205,35 +205,35 @@ public class PanelTaskFragment extends BaseFragment {
         //数据项操作监听
         mAdapter.setActionListener(new PanelTaskItemAdapter.ActionListener() {
             @Override
-            public void onStop(Task task) {
+            public void onStop(PanelTask task) {
                 List<Object> keys = new ArrayList<>();
                 keys.add(task.getKey());
                 stopTasks(keys);
             }
 
             @Override
-            public void onRun(Task task) {
+            public void onRun(PanelTask task) {
                 List<Object> keys = new ArrayList<>();
                 keys.add(task.getKey());
                 runTasks(keys);
             }
 
             @Override
-            public void onEdit(Task task) {
+            public void onEdit(PanelTask task) {
                 showPopWindowEdit(task);
             }
 
             @Override
-            public void onLog(Task task) {
-                Intent intent = new Intent(getContext(), CodeWebActivity.class);
-                intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_LOG);
-                intent.putExtra(CodeWebActivity.EXTRA_TITLE, task.getName());
-                intent.putExtra(CodeWebActivity.EXTRA_LOG_ID, String.valueOf(task.getKey()));
+            public void onLog(PanelTask task) {
+                Intent intent = new Intent(getContext(), CodeViewActivity.class);
+                intent.putExtra(CodeViewActivity.EXTRA_TYPE, CodeViewActivity.TYPE_LOG);
+                intent.putExtra(CodeViewActivity.EXTRA_TITLE, task.getName());
+                intent.putExtra(CodeViewActivity.EXTRA_LOG_ID, String.valueOf(task.getKey()));
                 startActivity(intent);
             }
 
             @Override
-            public void onScript(Task task) {
+            public void onScript(PanelTask task) {
                 if (!task.getCommand().matches("^task .*\\.((sh)|(py)|(js)|(ts))$")) {
                     return;
                 }
@@ -248,12 +248,12 @@ public class PanelTaskFragment extends BaseFragment {
                 } else {
                     return;
                 }
-                Intent intent = new Intent(getContext(), CodeWebActivity.class);
-                intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_NAME, fileName);
-                intent.putExtra(CodeWebActivity.EXTRA_SCRIPT_DIR, dir);
-                intent.putExtra(CodeWebActivity.EXTRA_TITLE, fileName);
-                intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_SCRIPT);
-                intent.putExtra(CodeWebActivity.EXTRA_CAN_EDIT, true);
+                Intent intent = new Intent(getContext(), CodeViewActivity.class);
+                intent.putExtra(CodeViewActivity.EXTRA_SCRIPT_NAME, fileName);
+                intent.putExtra(CodeViewActivity.EXTRA_SCRIPT_DIR, dir);
+                intent.putExtra(CodeViewActivity.EXTRA_TITLE, fileName);
+                intent.putExtra(CodeViewActivity.EXTRA_TYPE, CodeViewActivity.TYPE_SCRIPT);
+                intent.putExtra(CodeViewActivity.EXTRA_CAN_EDIT, true);
                 startActivity(intent);
             }
         });
@@ -284,13 +284,13 @@ public class PanelTaskFragment extends BaseFragment {
 
         //操作-执行
         uiActionsRun.setOnClickListener(v -> {
-            List<Task> tasks = mAdapter.getCheckedItems();
+            List<PanelTask> tasks = mAdapter.getCheckedItems();
             if (tasks.size() == 0) {
                 return;
             }
             List<Object> keys = new ArrayList<>();
 
-            for (Task task : tasks) {
+            for (PanelTask task : tasks) {
                 keys.add(task.getKey());
             }
             runTasks(keys);
@@ -298,13 +298,13 @@ public class PanelTaskFragment extends BaseFragment {
 
         //操作-停止
         uiActionsStop.setOnClickListener(v -> {
-            List<Task> tasks = mAdapter.getCheckedItems();
+            List<PanelTask> tasks = mAdapter.getCheckedItems();
             if (tasks.size() == 0) {
                 return;
             }
             List<Object> keys = new ArrayList<>();
 
-            for (Task task : tasks) {
+            for (PanelTask task : tasks) {
                 keys.add(task.getKey());
             }
             stopTasks(keys);
@@ -312,13 +312,13 @@ public class PanelTaskFragment extends BaseFragment {
 
         //操作-顶置
         uiActionsPin.setOnClickListener(v -> {
-            List<Task> tasks = mAdapter.getCheckedItems();
+            List<PanelTask> tasks = mAdapter.getCheckedItems();
             if (tasks.size() == 0) {
                 return;
             }
             List<Object> keys = new ArrayList<>();
 
-            for (Task task : tasks) {
+            for (PanelTask task : tasks) {
                 keys.add(task.getKey());
             }
             pinTasks(keys);
@@ -326,13 +326,13 @@ public class PanelTaskFragment extends BaseFragment {
 
         //操作-取消顶置
         uiActionsUnpin.setOnClickListener(v -> {
-            List<Task> tasks = mAdapter.getCheckedItems();
+            List<PanelTask> tasks = mAdapter.getCheckedItems();
             if (tasks.size() == 0) {
                 return;
             }
             List<Object> keys = new ArrayList<>();
 
-            for (Task task : tasks) {
+            for (PanelTask task : tasks) {
                 keys.add(task.getKey());
             }
             unpinTasks(keys);
@@ -340,13 +340,13 @@ public class PanelTaskFragment extends BaseFragment {
 
         //操作-启用
         uiActionsEnable.setOnClickListener(v -> {
-            List<Task> tasks = mAdapter.getCheckedItems();
+            List<PanelTask> tasks = mAdapter.getCheckedItems();
             if (tasks.size() == 0) {
                 return;
             }
             List<Object> keys = new ArrayList<>();
 
-            for (Task task : tasks) {
+            for (PanelTask task : tasks) {
                 keys.add(task.getKey());
             }
             enableTasks(keys);
@@ -354,13 +354,13 @@ public class PanelTaskFragment extends BaseFragment {
 
         //操作-禁用
         uiActionsDisable.setOnClickListener(v -> {
-            List<Task> tasks = mAdapter.getCheckedItems();
+            List<PanelTask> tasks = mAdapter.getCheckedItems();
             if (tasks.size() == 0) {
                 return;
             }
             List<Object> keys = new ArrayList<>();
 
-            for (Task task : tasks) {
+            for (PanelTask task : tasks) {
                 keys.add(task.getKey());
             }
             disableTasks(keys);
@@ -368,13 +368,13 @@ public class PanelTaskFragment extends BaseFragment {
 
         //操作-删除
         uiActionsDelete.setOnClickListener(v -> {
-            List<Task> tasks = mAdapter.getCheckedItems();
+            List<PanelTask> tasks = mAdapter.getCheckedItems();
             if (tasks.size() == 0) {
                 return;
             }
             List<Object> keys = new ArrayList<>();
 
-            for (Task task : tasks) {
+            for (PanelTask task : tasks) {
                 keys.add(task.getKey());
             }
             deleteTasks(keys);
@@ -428,7 +428,7 @@ public class PanelTaskFragment extends BaseFragment {
         PopupWindowBuilder.buildMenuWindow(requireActivity(), popMenuWindow);
     }
 
-    private void showPopWindowEdit(Task task) {
+    private void showPopWindowEdit(PanelTask task) {
         uiPopEdit = new EditPopupWindow("新建任务", "取消", "确定");
         EditItem itemName = new EditItem("name", null, "名称", "请输入任务名称");
         EditItem itemCommand = new EditItem("command", null, "命令", "请输入要执行的命令");
@@ -467,7 +467,7 @@ public class PanelTaskFragment extends BaseFragment {
 
                 WindowUnit.hideKeyboard(uiPopEdit.getView());
 
-                Task newTask = new Task();
+                PanelTask newTask = new PanelTask();
                 newTask.setName(name);
                 newTask.setCommand(command);
                 newTask.setSchedule(schedule);
@@ -559,14 +559,14 @@ public class PanelTaskFragment extends BaseFragment {
     }
 
     private void backupData(String fileName) {
-        List<Task> tasks = mAdapter.getData();
+        List<PanelTask> tasks = mAdapter.getData();
         if (tasks == null || tasks.size() == 0) {
             ToastUnit.showShort("数据为空,无需备份");
             return;
         }
 
         JsonArray jsonArray = new JsonArray();
-        for (Task task : tasks) {
+        for (PanelTask task : tasks) {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("name", task.getName());
             jsonObject.addProperty("command", task.getCommand());
@@ -609,7 +609,7 @@ public class PanelTaskFragment extends BaseFragment {
             }
 
             uiPopProgress.setTextAndShow("解析文件中...");
-            Task[] tasks = new Gson().fromJson(stringBuilder.toString(), Task[].class);
+            PanelTask[] tasks = new Gson().fromJson(stringBuilder.toString(), PanelTask[].class);
 
             new Thread(() -> {
                 uiPopProgress.setTextAndShow("导入中...");
@@ -617,7 +617,7 @@ public class PanelTaskFragment extends BaseFragment {
                 int success = 0;
                 int total = tasks.length;
 
-                for (Task task : tasks) {
+                for (PanelTask task : tasks) {
                     boolean result = ApiController.addTaskSync(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), task);
                     uiPopProgress.setTextAndShow("导入中... " + index + "/" + total);
                     index++;
@@ -639,8 +639,8 @@ public class PanelTaskFragment extends BaseFragment {
     private void deduplicationData() {
         List<Object> ids = new ArrayList<>();
         Set<Object> set = new HashSet<>();
-        List<Task> tasks = this.mAdapter.getData();
-        for (Task task : tasks) {
+        List<PanelTask> tasks = this.mAdapter.getData();
+        for (PanelTask task : tasks) {
             String key = task.getCommand().trim();
             if (set.contains(key)) {
                 ids.add(task.getKey());
@@ -658,7 +658,7 @@ public class PanelTaskFragment extends BaseFragment {
     private void getTasks(String searchValue) {
         auto.panel.net.panel.ApiController.getTasks(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), searchValue, new ApiController.TaskListCallBack() {
             @Override
-            public void onSuccess(List<Task> tasks) {
+            public void onSuccess(List<PanelTask> tasks) {
                 Collections.sort(tasks);
                 mAdapter.setData(tasks);
                 uiRefresh.finishRefresh(true);
@@ -778,7 +778,7 @@ public class PanelTaskFragment extends BaseFragment {
         });
     }
 
-    private void updateTask(Task task) {
+    private void updateTask(PanelTask task) {
         auto.panel.net.panel.ApiController.updateTask(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), task, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
@@ -794,7 +794,7 @@ public class PanelTaskFragment extends BaseFragment {
         });
     }
 
-    private void addTask(Task task) {
+    private void addTask(PanelTask task) {
         auto.panel.net.panel.ApiController.addTask(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), task, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {

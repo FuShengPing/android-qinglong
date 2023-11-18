@@ -7,8 +7,8 @@ import com.google.gson.JsonObject;
 import java.util.List;
 
 import auto.base.util.TextUnit;
-import auto.panel.bean.panel.File;
-import auto.panel.bean.panel.SystemConfig;
+import auto.panel.bean.panel.PanelFile;
+import auto.panel.bean.panel.PanelSystemConfig;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.BaseRes;
@@ -252,7 +252,7 @@ public class ApiController {
         });
     }
 
-    public static void addScript(@NonNull String baseUrl, @NonNull String authorization, @NonNull File file, auto.panel.net.panel.ApiController.BaseCallBack callBack) {
+    public static void addScript(@NonNull String baseUrl, @NonNull String authorization, @NonNull PanelFile file, auto.panel.net.panel.ApiController.BaseCallBack callBack) {
 
     }
 
@@ -281,7 +281,7 @@ public class ApiController {
         });
     }
 
-    public static void updateSystemConfig(@NonNull String baseUrl, @NonNull String authorization, SystemConfig config, @NonNull auto.panel.net.panel.ApiController.BaseCallBack callBack) {
+    public static void updateSystemConfig(@NonNull String baseUrl, @NonNull String authorization, PanelSystemConfig config, @NonNull auto.panel.net.panel.ApiController.BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("frequency", config.getLogRemoveFrequency());
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());

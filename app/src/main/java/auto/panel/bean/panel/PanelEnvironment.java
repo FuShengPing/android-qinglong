@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  * @author wsfsp4
  * @version 2023.07.11
  */
-public class Environment implements Comparable<Environment> {
+public class PanelEnvironment implements Comparable<PanelEnvironment> {
     public static final int STATUS_ENABLE = 0;
     public static final int STATUS_DISABLE = 1;
 
@@ -89,16 +89,16 @@ public class Environment implements Comparable<Environment> {
     }
 
     @Override
-    public int compareTo(Environment o) {
+    public int compareTo(PanelEnvironment o) {
         return this.name.compareTo(o.getName());
     }
 
-    public static List<Environment> parse(String str, String remarks) {
-        List<Environment> environments = new ArrayList<>();
+    public static List<PanelEnvironment> parse(String str, String remarks) {
+        List<PanelEnvironment> environments = new ArrayList<>();
         Pattern pattern = Pattern.compile("export \\w+=\"[^\"]+\"");
         Matcher matcher = pattern.matcher(str);
         while (matcher.find()) {
-            Environment environment = new Environment();
+            PanelEnvironment environment = new PanelEnvironment();
             String[] ss = matcher.group().split("=", 2);
             String name = ss[0].split(" ", 2)[1];
             String value = ss[1].replace("\"", "");

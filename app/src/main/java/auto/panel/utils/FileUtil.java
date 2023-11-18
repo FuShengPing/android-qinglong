@@ -28,12 +28,14 @@ import auto.panel.MyApplication;
  */
 public class FileUtil {
     public static final String TAG = "FileUtil";
-    private static final String SCRIPT_PATH = "/scripts";
-    private static final String ENVIRONMENT_PATH = "/environments";
-    private static final String TASK_PATH = "/tasks";
+    private static final String PATH_SCRIPT = "scripts";
+    private static final String PATH_ENVIRONMENT = "environments";
+    private static final String PATH_TASK = "tasks";
 
-    public static final String internalStorage;
-    public static final String externalStorage;
+    private static final String PATH_APP_LOG = "logs";
+
+    public static final String internalStorage; // data/user/0/auto.panel/files
+    public static final String externalStorage; // storage/emulated/0/Android/data/auto.panel/files
 
     static {
         externalStorage = MyApplication.getInstance().getExternalFilesDir(null).getAbsolutePath();
@@ -43,19 +45,23 @@ public class FileUtil {
     /**
      * 保存文件.
      *
-     * @param dirPath  the dir path
+     * @param filePath the dir path
      * @param fileName the file name
      * @param content  the content
      * @return the boolean
      * @throws Exception the exception
      */
-    public static boolean save(String dirPath, String fileName, String content) throws Exception {
-        File file = new File(dirPath, fileName);
-        File dir = new File(dirPath);
+    public static boolean save(String filePath, String fileName, String content) throws Exception {
+        return save(filePath, fileName, content, false);
+    }
+
+    public static boolean save(String filePath, String fileName, String content, boolean append) throws Exception {
+        File file = new File(filePath, fileName);
+        File dir = new File(filePath);
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        FileOutputStream fileOutputStream = new FileOutputStream(file, append);
         fileOutputStream.write(content.getBytes(StandardCharsets.UTF_8));
         fileOutputStream.close();
         return true;
@@ -82,28 +88,37 @@ public class FileUtil {
     /**
      * 获取环境变量文件路径.
      *
-     * @return the env path
+     * @return the env path, e.g. /storage/emulated/0/Android/data/auto.panel/files/environments
      */
     public static String getEnvironmentPath() {
-        return externalStorage + ENVIRONMENT_PATH;
+        return externalStorage + File.separator + PATH_ENVIRONMENT;
     }
 
     /**
      * 获取定时任务文件路径.
      *
-     * @return the task path
+     * @return the task path, e.g. /storage/emulated/0/Android/data/auto.panel/files/tasks
      */
     public static String getTaskPath() {
-        return externalStorage + TASK_PATH;
+        return externalStorage + File.separator + PATH_TASK;
     }
 
     /**
      * 获取脚本文件路径.
      *
-     * @return the script path
+     * @return the script path, e.g. /storage/emulated/0/Android/data/auto.panel/files/scripts
      */
     public static String getScriptPath() {
-        return externalStorage + SCRIPT_PATH;
+        return externalStorage + File.separator + PATH_SCRIPT;
+    }
+
+    /**
+     * 获取应用日志文件路径.
+     *
+     * @return the log path, e.g. /storage/emulated/0/Android/data/auto.panel/files/logs
+     */
+    public static String getAppLogPath() {
+        return externalStorage + File.separator + PATH_APP_LOG;
     }
 
     /**

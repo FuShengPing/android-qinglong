@@ -1,6 +1,5 @@
 package auto.panel.ui.activity;
 
-import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -27,8 +26,6 @@ import auto.base.util.ToastUnit;
 import auto.base.util.WebUnit;
 import auto.base.util.WindowUnit;
 import auto.panel.R;
-import auto.panel.bean.app.Extension;
-import auto.panel.bean.app.Extensions;
 import auto.panel.bean.app.Version;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.database.sp.SettingPreference;
@@ -145,10 +142,10 @@ public class HomeActivity extends BaseActivity {
         menuLog.setOnClickListener(v -> showFragment(PanelLogFragment.class));
         //配置文件
         menuConfig.setOnClickListener(v -> {
-            Intent intent = new Intent(this, CodeWebActivity.class);
-            intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_CONFIG);
-            intent.putExtra(CodeWebActivity.EXTRA_TITLE, "config.sh");
-            intent.putExtra(CodeWebActivity.EXTRA_CAN_EDIT, true);
+            Intent intent = new Intent(this, CodeViewActivity.class);
+            intent.putExtra(CodeViewActivity.EXTRA_TYPE, CodeViewActivity.TYPE_CONFIG);
+            intent.putExtra(CodeViewActivity.EXTRA_TITLE, "config.sh");
+            intent.putExtra(CodeViewActivity.EXTRA_CAN_EDIT, true);
             startActivity(intent);
         });
         //脚本管理

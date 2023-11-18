@@ -9,8 +9,8 @@ import auto.base.util.LogUnit;
 import auto.base.util.NetUnit;
 import auto.base.util.ToastUnit;
 import auto.panel.R;
-import auto.panel.bean.panel.Account;
-import auto.panel.bean.panel.SystemInfo;
+import auto.panel.bean.panel.PanelAccount;
+import auto.panel.bean.panel.PanelSystemInfo;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.panel.ApiController;
 
@@ -53,7 +53,7 @@ public class SplashActivity extends BaseActivity {
             return;
         }
         //当前账号
-        Account account = PanelPreference.getCurrentAccount();
+        PanelAccount account = PanelPreference.getCurrentAccount();
         if (account != null) {
             netQuerySystemInfo(account);
         } else {
@@ -61,10 +61,10 @@ public class SplashActivity extends BaseActivity {
         }
     }
 
-    protected void netQuerySystemInfo(Account account) {
+    protected void netQuerySystemInfo(PanelAccount account) {
         auto.panel.net.panel.ApiController.getSystemInfo(account.getBaseUrl(), new ApiController.SystemInfoCallBack() {
             @Override
-            public void onSuccess(SystemInfo system) {
+            public void onSuccess(PanelSystemInfo system) {
                 PanelPreference.setVersion(system.getVersion());
                 netCheckAccountToken(account);
             }
@@ -76,7 +76,7 @@ public class SplashActivity extends BaseActivity {
         });
     }
 
-    private void netCheckAccountToken(Account account) {
+    private void netCheckAccountToken(PanelAccount account) {
         auto.panel.net.panel.ApiController.checkAccountToken(account.getBaseUrl(), account.getAuthorization(), new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {

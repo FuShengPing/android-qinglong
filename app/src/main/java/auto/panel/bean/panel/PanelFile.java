@@ -6,14 +6,14 @@ import java.util.List;
  * @author wsfsp4
  * @version 2023.07.03
  */
-public class File implements Comparable<File> {
+public class PanelFile implements Comparable<PanelFile> {
     private boolean isDir;
     private String title;
-    private String content;
-    private String parent;
-    private String path;
     private String createTime;
-    private List<File> children;
+    private String content;
+    private String parentPath;
+    private String path;
+    private List<PanelFile> children;
 
     public boolean isDir() {
         return isDir;
@@ -21,14 +21,6 @@ public class File implements Comparable<File> {
 
     public void setDir(boolean dir) {
         isDir = dir;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     public String getTitle() {
@@ -47,20 +39,20 @@ public class File implements Comparable<File> {
         this.content = content;
     }
 
-    public String getParent() {
-        return parent;
+    public String getPath() {
+        return path;
     }
 
-    public void setParent(String parent) {
-        this.parent = parent;
+    public void setPath(String path) {
+        this.path = path;
     }
 
-    public List<File> getChildren() {
-        return children;
+    public String getParentPath() {
+        return parentPath;
     }
 
-    public void setChildren(List<File> children) {
-        this.children = children;
+    public void setParentPath(String parentPath) {
+        this.parentPath = parentPath;
     }
 
     public String getCreateTime() {
@@ -71,8 +63,16 @@ public class File implements Comparable<File> {
         this.createTime = createTime;
     }
 
+    public List<PanelFile> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<PanelFile> children) {
+        this.children = children;
+    }
+
     @Override
-    public int compareTo(File o) {
+    public int compareTo(PanelFile o) {
         if (this.isDir && o.isDir()) {
             return this.title.toLowerCase().compareTo(o.title.toLowerCase());
         } else if (this.isDir && !o.isDir()) {

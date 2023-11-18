@@ -17,14 +17,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import auto.panel.R;
-import auto.panel.bean.panel.Dependence;
+import auto.panel.bean.panel.PanelDependence;
 
 public class PanelDependenceItemAdapter extends RecyclerView.Adapter<PanelDependenceItemAdapter.MyViewHolder> {
     public static String TAG = "PanelDependenceItemAdapter";
 
     private final Context context;
     private ItemActionListener itemActionListener;
-    private final List<Dependence> data;
+    private final List<PanelDependence> data;
     private boolean checkState;
     private Boolean[] dataCheckState;
 
@@ -51,21 +51,21 @@ public class PanelDependenceItemAdapter extends RecyclerView.Adapter<PanelDepend
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Dependence dependence = data.get(position);
+        PanelDependence dependence = data.get(position);
 
         holder.uiTitle.setText(dependence.getTitle());
         holder.uiTime.setText(dependence.getCreateTime());
         holder.uiStatus.setText(dependence.getStatus());
 
-        if (dependence.getStatusCode() == Dependence.STATUS_INSTALLING) {
+        if (dependence.getStatusCode() == PanelDependence.STATUS_INSTALLING) {
             holder.uiStatus.setTextColor(colorBlue);
-        } else if (dependence.getStatusCode() == Dependence.STATUS_INSTALLED) {
+        } else if (dependence.getStatusCode() == PanelDependence.STATUS_INSTALLED) {
             holder.uiStatus.setTextColor(colorBlue);
-        } else if (dependence.getStatusCode() == Dependence.STATUS_INSTALL_FAILURE) {
+        } else if (dependence.getStatusCode() == PanelDependence.STATUS_INSTALL_FAILURE) {
             holder.uiStatus.setTextColor(colorRed);
-        } else if (dependence.getStatusCode() == Dependence.STATUS_UNINSTALLING) {
+        } else if (dependence.getStatusCode() == PanelDependence.STATUS_UNINSTALLING) {
             holder.uiStatus.setTextColor(colorRed);
-        } else if (dependence.getStatusCode() == Dependence.STATUS_UNINSTALL_FAILURE) {
+        } else if (dependence.getStatusCode() == PanelDependence.STATUS_UNINSTALL_FAILURE) {
             holder.uiStatus.setTextColor(colorRed);
         } else {
             holder.uiStatus.setTextColor(colorGray);
@@ -110,7 +110,7 @@ public class PanelDependenceItemAdapter extends RecyclerView.Adapter<PanelDepend
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<Dependence> data) {
+    public void setData(List<PanelDependence> data) {
         this.data.clear();
         this.data.addAll(data);
         this.dataCheckState = new Boolean[this.data.size()];
@@ -148,8 +148,8 @@ public class PanelDependenceItemAdapter extends RecyclerView.Adapter<PanelDepend
     /**
      * 获取被选中的item
      */
-    public List<Dependence> getCheckedItems() {
-        List<Dependence> dependencies = new ArrayList<>();
+    public List<PanelDependence> getCheckedItems() {
+        List<PanelDependence> dependencies = new ArrayList<>();
         if (this.dataCheckState != null) {
             for (int k = 0; k < this.dataCheckState.length; k++) {
                 if (this.dataCheckState[k]) {
@@ -161,9 +161,9 @@ public class PanelDependenceItemAdapter extends RecyclerView.Adapter<PanelDepend
     }
 
     public interface ItemActionListener {
-        void onDetail(Dependence dependence, int position);
+        void onDetail(PanelDependence dependence, int position);
 
-        void onReinstall(Dependence dependence, int position);
+        void onReinstall(PanelDependence dependence, int position);
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {

@@ -4,7 +4,7 @@ package auto.panel.bean.panel;
  * @author wsfsp4
  * @version 2023.07.10
  */
-public class LoginLog {
+public class PanelLoginLog {
     public final static int STATUS_SUCCESS = 0;
     public final static int STATUS_FAILURE = 1;
 

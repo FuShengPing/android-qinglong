@@ -4,7 +4,7 @@ package auto.panel.bean.panel;
  * @author wsfsp4
  * @version 2023.07.08
  */
-public class Dependence {
+public class PanelDependence {
     public static final String TYPE_NODEJS = "nodejs";
     public static final String TYPE_PYTHON = "python3";
     public static final String TYPE_LINUX = "linux";
@@ -51,15 +51,15 @@ public class Dependence {
     public void setStatusCode(int statusCode) {
         this.statusCode = statusCode;
 
-        if (statusCode == Dependence.STATUS_INSTALLING) {
+        if (statusCode == PanelDependence.STATUS_INSTALLING) {
             this.status = "安装中";
-        } else if (statusCode == Dependence.STATUS_INSTALLED) {
+        } else if (statusCode == PanelDependence.STATUS_INSTALLED) {
             this.status = "已安装";
-        } else if (statusCode == Dependence.STATUS_INSTALL_FAILURE) {
+        } else if (statusCode == PanelDependence.STATUS_INSTALL_FAILURE) {
             this.status = "安装失败";
-        } else if (statusCode == Dependence.STATUS_UNINSTALLING) {
+        } else if (statusCode == PanelDependence.STATUS_UNINSTALLING) {
             this.status = "卸载中";
-        } else if (statusCode == Dependence.STATUS_UNINSTALL_FAILURE) {
+        } else if (statusCode == PanelDependence.STATUS_UNINSTALL_FAILURE) {
             this.status = "卸载失败";
         } else {
             this.status = "未知";

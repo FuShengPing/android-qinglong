@@ -14,10 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import auto.panel.R;
-import auto.panel.bean.panel.LoginLog;
+import auto.panel.bean.panel.PanelLoginLog;
 
 public class PanelLoginLogItemAdapter extends RecyclerView.Adapter<PanelLoginLogItemAdapter.MyViewHolder> {
-    List<LoginLog> data;
+    List<PanelLoginLog> data;
 
     private final Context context;
 
@@ -36,7 +36,7 @@ public class PanelLoginLogItemAdapter extends RecyclerView.Adapter<PanelLoginLog
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        LoginLog loginLog = data.get(position);
+        PanelLoginLog loginLog = data.get(position);
 
         holder.uiTitle.setText("[" + (position + 1) + "]");
         holder.uiTime.setText(loginLog.getTime());
@@ -44,7 +44,7 @@ public class PanelLoginLogItemAdapter extends RecyclerView.Adapter<PanelLoginLog
         holder.uiIp.setText(loginLog.getIp());
         holder.uiPlatform.setText(loginLog.getPlatform());
         holder.uiStatus.setText(loginLog.getStatus());
-        if (loginLog.getStatusCode() == LoginLog.STATUS_SUCCESS) {
+        if (loginLog.getStatusCode() == PanelLoginLog.STATUS_SUCCESS) {
             holder.uiStatus.setTextColor(context.getColor(R.color.theme_blue_shadow));
         } else {
             holder.uiStatus.setTextColor(context.getColor(R.color.text_color_red));
@@ -57,7 +57,7 @@ public class PanelLoginLogItemAdapter extends RecyclerView.Adapter<PanelLoginLog
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<LoginLog> data) {
+    public void setData(List<PanelLoginLog> data) {
         this.data.clear();
         this.data.addAll(data);
         notifyDataSetChanged();

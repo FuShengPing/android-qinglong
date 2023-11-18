@@ -4,7 +4,7 @@ package auto.panel.bean.panel;
  * @author wsfsp4
  * @version 2023.07.02
  */
-public class SystemInfo {
+public class PanelSystemInfo {
     private boolean isInitialized;
     private String version;
 

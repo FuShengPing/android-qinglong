@@ -26,8 +26,8 @@ public class WebViewBuilder {
         webSettings.setMinimumLogicalFontSize(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         //不加载缓存
         webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
-
         webView.setWebViewClient(webViewClient);
+        //添加js接口
         if (jsInterface != null) {
             webView.addJavascriptInterface(jsInterface, "Android");
         }
@@ -37,11 +37,11 @@ public class WebViewBuilder {
 
     public static void destroy(WebView webView) {
         if (webView != null) {
-            ((ViewGroup) webView.getParent()).removeView(webView);
             webView.stopLoading();
             webView.pauseTimers();
             webView.clearCache(true);
             webView.destroy();
+            ((ViewGroup) webView.getParent()).removeView(webView);
         }
     }
 }

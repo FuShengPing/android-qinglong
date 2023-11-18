@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.Locale;
 
 import auto.base.util.TimeUnit;
-import auto.panel.bean.panel.Dependence;
-import auto.panel.bean.panel.Environment;
-import auto.panel.bean.panel.File;
-import auto.panel.bean.panel.SystemConfig;
-import auto.panel.bean.panel.Task;
+import auto.panel.bean.panel.PanelDependence;
+import auto.panel.bean.panel.PanelEnvironment;
+import auto.panel.bean.panel.PanelFile;
+import auto.panel.bean.panel.PanelSystemConfig;
+import auto.panel.bean.panel.PanelTask;
 import auto.panel.utils.CronUnit;
 
 /**
@@ -17,15 +17,15 @@ import auto.panel.utils.CronUnit;
  * @version 2023.06.29
  */
 public class Converter {
-    public static List<Task> convertTasks(List<TasksRes.TaskObject> objects) {
-        List<Task> result = new ArrayList<>();
+    public static List<PanelTask> convertTasks(List<TasksRes.TaskObject> objects) {
+        List<PanelTask> result = new ArrayList<>();
         if (objects == null || objects.isEmpty()) {
             return result;
         }
 
         try {
             for (TasksRes.TaskObject object : objects) {
-                Task task = new Task();
+                PanelTask task = new PanelTask();
                 task.setKey(object.getId());
                 task.setName(object.getName());
                 task.setPinned(object.getIsPinned() == 1);
@@ -50,16 +50,16 @@ public class Converter {
                 // 任务状态
                 if (object.getStatus() == 0) {
                     task.setState("运行中");
-                    task.setStateCode(Task.STATE_RUNNING);
+                    task.setStateCode(PanelTask.STATE_RUNNING);
                 } else if (object.getStatus() == 3) {
                     task.setState("等待中");
-                    task.setStateCode(Task.STATE_WAITING);
+                    task.setStateCode(PanelTask.STATE_WAITING);
                 } else if (object.getIsDisabled() == 1) {
                     task.setState("已禁止");
-                    task.setStateCode(Task.STATE_LIMIT);
+                    task.setStateCode(PanelTask.STATE_LIMIT);
                 } else {
                     task.setState("空闲中");
-                    task.setStateCode(Task.STATE_FREE);
+                    task.setStateCode(PanelTask.STATE_FREE);
                 }
                 result.add(task);
             }
@@ -70,15 +70,15 @@ public class Converter {
         return result;
     }
 
-    public static List<Environment> convertEnvironments(List<EnvironmentsRes.EnvironmentObject> objects) {
-        List<Environment> result = new ArrayList<>();
+    public static List<PanelEnvironment> convertEnvironments(List<EnvironmentsRes.EnvironmentObject> objects) {
+        List<PanelEnvironment> result = new ArrayList<>();
         if (objects == null || objects.isEmpty()) {
             return result;
         }
 
         try {
             for (EnvironmentsRes.EnvironmentObject object : objects) {
-                Environment environment = new Environment();
+                PanelEnvironment environment = new PanelEnvironment();
                 environment.setKey(object.getId());
                 environment.setName(object.getName());
                 environment.setValue(object.getValue());
@@ -95,27 +95,27 @@ public class Converter {
         return result;
     }
 
-    public static List<File> convertLogFiles(List<LogFilesRes.FileObject> objects) {
-        List<File> result = new ArrayList<>();
+    public static List<PanelFile> convertLogFiles(List<LogFilesRes.FileObject> objects) {
+        List<PanelFile> result = new ArrayList<>();
         if (objects == null || objects.isEmpty()) {
             return result;
         }
 
         try {
             for (LogFilesRes.FileObject object : objects) {
-                File logFile = new File();
+                PanelFile logFile = new PanelFile();
                 logFile.setTitle(object.getName());
                 logFile.setDir(object.isDir());
-                logFile.setParent("");
+                logFile.setParentPath("");
                 logFile.setPath(object.getName());
 
                 if (object.isDir()) {
-                    List<File> children = new ArrayList<>();
+                    List<PanelFile> children = new ArrayList<>();
                     for (String name : object.getFiles()) {
-                        File child = new File();
+                        PanelFile child = new PanelFile();
                         child.setDir(false);
                         child.setTitle(name);
-                        child.setParent(object.getName());
+                        child.setParentPath(object.getName());
                         child.setPath(object.getName() + "/" + name);
                         children.add(child);
                     }
@@ -130,15 +130,15 @@ public class Converter {
         return result;
     }
 
-    public static List<Dependence> convertDependencies(List<DependenciesRes.DependenceObject> objects) {
-        List<Dependence> result = new ArrayList<>();
+    public static List<PanelDependence> convertDependencies(List<DependenciesRes.DependenceObject> objects) {
+        List<PanelDependence> result = new ArrayList<>();
         if (objects == null || objects.isEmpty()) {
             return result;
         }
 
         try {
             for (DependenciesRes.DependenceObject object : objects) {
-                Dependence dependence = new Dependence();
+                PanelDependence dependence = new PanelDependence();
                 dependence.setKey(object.getId());
                 dependence.setTitle(object.getName());
                 dependence.setCreateTime(TimeUnit.formatDatetimeA(object.getCreated()));
@@ -152,18 +152,18 @@ public class Converter {
         return result;
     }
 
-    public static List<File> convertScriptFiles(List<ScriptFilesRes.FileObject> objects) {
-        List<File> result = new ArrayList<>();
+    public static List<PanelFile> convertScriptFiles(List<ScriptFilesRes.FileObject> objects) {
+        List<PanelFile> result = new ArrayList<>();
         if (objects == null || objects.isEmpty()) {
             return result;
         }
 
         try {
             for (ScriptFilesRes.FileObject object : objects) {
-                File file = new File();
+                PanelFile file = new PanelFile();
                 file.setTitle(object.getTitle());
                 file.setDir(object.isDir());
-                file.setParent("");
+                file.setParentPath("");
                 file.setCreateTime(TimeUnit.formatDatetimeA((long) object.getMtime()));
                 file.setPath(object.getTitle());
 
@@ -180,8 +180,8 @@ public class Converter {
         return result;
     }
 
-    public static SystemConfig convertSystemConfig(SystemConfigRes.SystemConfigObject object) {
-        SystemConfig config = new SystemConfig();
+    public static PanelSystemConfig convertSystemConfig(SystemConfigRes.SystemConfigObject object) {
+        PanelSystemConfig config = new PanelSystemConfig();
 
         try {
             config.setLogRemoveFrequency(object.getFrequency());
@@ -192,17 +192,17 @@ public class Converter {
         return config;
     }
 
-    private static List<File> buildChildren(String parent, List<ScriptFilesRes.FileObject> objects) {
-        List<File> children = new ArrayList<>();
+    private static List<PanelFile> buildChildren(String parent, List<ScriptFilesRes.FileObject> objects) {
+        List<PanelFile> children = new ArrayList<>();
         if (objects == null || objects.isEmpty()) {
             return children;
         }
 
         try {
             for (ScriptFilesRes.FileObject object : objects) {
-                File file = new File();
+                PanelFile file = new PanelFile();
                 file.setTitle(object.getTitle());
-                file.setParent(parent);
+                file.setParentPath(parent);
                 file.setDir(object.isDir());
                 file.setCreateTime(TimeUnit.formatDatetimeA((long) object.getMtime()));
                 file.setPath(parent + "/" + object.getTitle());

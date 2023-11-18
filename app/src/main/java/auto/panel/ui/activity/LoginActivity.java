@@ -14,8 +14,8 @@ import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
 import auto.panel.R;
-import auto.panel.bean.panel.Account;
-import auto.panel.bean.panel.SystemInfo;
+import auto.panel.bean.panel.PanelAccount;
+import auto.panel.bean.panel.PanelSystemInfo;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
@@ -86,7 +86,7 @@ public class LoginActivity extends BaseActivity {
         });
 
         uiLogin.setOnClickListener(v -> {
-            Account account = checkInput();
+            PanelAccount account = checkInput();
 
             if (account == null) {
                 return;
@@ -105,7 +105,7 @@ public class LoginActivity extends BaseActivity {
         });
 
         uiRegister.setOnClickListener(v -> {
-            Account account = checkInput();
+            PanelAccount account = checkInput();
 
             if (account == null) {
                 return;
@@ -122,7 +122,7 @@ public class LoginActivity extends BaseActivity {
         });
 
         //显示之前账号
-        Account account = PanelPreference.getCurrentAccount();
+        PanelAccount account = PanelPreference.getCurrentAccount();
         if (account != null) {
             uiAddress.setText(account.getAddress());
             uiUsername.setText(account.getUsername());
@@ -130,7 +130,7 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    private Account checkInput() {
+    private PanelAccount checkInput() {
         if (uiPopProgress != null && uiPopProgress.isShowing()) {
             return null;
         }
@@ -152,7 +152,7 @@ public class LoginActivity extends BaseActivity {
 
         WindowUnit.hideKeyboard(uiPassword);
 
-        return new Account(username, password, address, null);
+        return new PanelAccount(username, password, address, null);
     }
 
     private void buildPopWindowProgress() {
@@ -176,10 +176,10 @@ public class LoginActivity extends BaseActivity {
         finish();
     }
 
-    protected void netQuerySystemInfo(Account account, int action) {
+    protected void netQuerySystemInfo(PanelAccount account, int action) {
         auto.panel.net.panel.ApiController.getSystemInfo(account.getBaseUrl(), new ApiController.SystemInfoCallBack() {
             @Override
-            public void onSuccess(SystemInfo system) {
+            public void onSuccess(PanelSystemInfo system) {
                 PanelPreference.setVersion(system.getVersion());
 
                 if (action == ACTION_LOGIN) {
@@ -209,7 +209,7 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    protected void netCheckAccountToken(Account account) {
+    protected void netCheckAccountToken(PanelAccount account) {
         auto.panel.net.panel.ApiController.checkAccountToken(account.getBaseUrl(), account.getAuthorization(), new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
@@ -223,7 +223,7 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    protected void netRegister(Account account) {
+    protected void netRegister(PanelAccount account) {
         ApiController.initAccount(account.getBaseUrl(), account, new ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
@@ -238,7 +238,7 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    protected void netLogin(Account account) {
+    protected void netLogin(PanelAccount account) {
         auto.panel.net.panel.ApiController.login(account.getBaseUrl(), account, new auto.panel.net.panel.ApiController.LoginCallBack() {
             @Override
             public void onSuccess(String token) {

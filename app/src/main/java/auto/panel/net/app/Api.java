@@ -1,7 +1,6 @@
 package auto.panel.net.app;
 
 import auto.panel.bean.app.Config;
-import auto.panel.bean.app.Extensions;
 import auto.panel.bean.app.Version;
 import retrofit2.Call;
 import retrofit2.http.GET;

@@ -11,7 +11,9 @@
     <string name="module_extension_web">Web助手</string>
     <string name="module_extension_docker">Docker助手</string>
     <string name="module_extension_proxy">LanProxy</string>
-    <string name="menu_account_exit">退出</string>
+
+    <string name="menu_app_exit">退出</string>
+    <string name="menu_app_account">切换</string>
     <string name="menu_app_setting">设置</string>
 
     <string name="action_title_plugin_web">Web助手</string>

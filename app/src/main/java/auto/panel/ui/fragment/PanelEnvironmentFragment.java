@@ -17,9 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.io.BufferedReader;
@@ -45,14 +42,13 @@ import auto.base.util.TimeUnit;
 import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
 import auto.panel.R;
-import auto.panel.bean.panel.Environment;
-import auto.panel.bean.panel.MoveInfo;
-import auto.panel.bean.panel.QLEnvironment;
+import auto.panel.bean.panel.PanelEnvironment;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
-import auto.panel.net.panel.v10.ApiController;
 import auto.panel.ui.adapter.PanelEnvironmentItemAdapter;
 import auto.panel.utils.FileUtil;
+import auto.panel.utils.thread.BackupEnvironmentTask;
+import auto.panel.utils.thread.ThreadPoolUtil;
 
 public class PanelEnvironmentFragment extends BaseFragment {
     public static String TAG = "PanelEnvironmentFragment";
@@ -176,21 +172,11 @@ public class PanelEnvironmentFragment extends BaseFragment {
 
     @Override
     public void init() {
+        //列表操作接口
+        mAdapter.setItemInterface(environment -> showPopWindowEdit(environment));
+
         //导航栏
         uiNavMenu.setOnClickListener(v -> mMenuClickListener.onMenuClick());
-
-        //列表操作接口
-        mAdapter.setItemInterface(new PanelEnvironmentItemAdapter.ItemActionListener() {
-            @Override
-            public void onEdit(Environment environment) {
-                showPopWindowEdit(environment);
-            }
-
-            @Override
-            public void onMove(MoveInfo info) {
-                moveEnvironment(info);
-            }
-        });
 
         //刷新
         uiRefresh.setOnRefreshListener(refreshLayout -> {
@@ -224,14 +210,14 @@ public class PanelEnvironmentFragment extends BaseFragment {
 
         //删除
         uiActionsDelete.setOnClickListener(v -> {
-            List<Environment> environments = mAdapter.getSelectedItems();
+            List<PanelEnvironment> environments = mAdapter.getSelectedItems();
             if (environments.size() == 0) {
                 ToastUnit.showShort(getString(R.string.tip_empty_select));
                 return;
             }
 
             List<Object> ids = new ArrayList<>();
-            for (Environment environment : environments) {
+            for (PanelEnvironment environment : environments) {
                 ids.add(environment.getKey());
             }
             deleteEnvironments(ids);
@@ -242,14 +228,14 @@ public class PanelEnvironmentFragment extends BaseFragment {
             if (NetManager.isRequesting(getNetRequestID())) {
                 return;
             }
-            List<Environment> environments = mAdapter.getSelectedItems();
+            List<PanelEnvironment> environments = mAdapter.getSelectedItems();
             if (environments.size() == 0) {
                 ToastUnit.showShort(getString(R.string.tip_empty_select));
                 return;
             }
 
             List<Object> ids = new ArrayList<>();
-            for (Environment environment : environments) {
+            for (PanelEnvironment environment : environments) {
                 ids.add(environment.getKey());
             }
             enableEnvironments(ids);
@@ -257,14 +243,14 @@ public class PanelEnvironmentFragment extends BaseFragment {
 
         //禁用
         uiActionsDisable.setOnClickListener(v -> {
-            List<Environment> environments = mAdapter.getSelectedItems();
+            List<PanelEnvironment> environments = mAdapter.getSelectedItems();
             if (environments.size() == 0) {
                 ToastUnit.showShort(getString(R.string.tip_empty_select));
                 return;
             }
 
             List<Object> ids = new ArrayList<>();
-            for (Environment environment : environments) {
+            for (PanelEnvironment environment : environments) {
                 ids.add(environment.getKey());
             }
             disableEnvironments(ids);
@@ -324,7 +310,7 @@ public class PanelEnvironmentFragment extends BaseFragment {
         PopupWindowBuilder.buildMenuWindow(requireActivity(), popMenuWindow);
     }
 
-    private void showPopWindowEdit(Environment environment) {
+    private void showPopWindowEdit(PanelEnvironment environment) {
         uiPopEdit = new EditPopupWindow("新建变量", "取消", "确定");
         EditItem itemName = new EditItem("name", null, "名称", "请输入变量名称");
         EditItem itemValue = new EditItem("value", null, "值", "请输入变量值");
@@ -359,8 +345,8 @@ public class PanelEnvironmentFragment extends BaseFragment {
 
                 WindowUnit.hideKeyboard(uiPopEdit.getView());
 
-                List<Environment> environments = new ArrayList<>();
-                Environment newEnv = new Environment();
+                List<PanelEnvironment> environments = new ArrayList<>();
+                PanelEnvironment newEnv = new PanelEnvironment();
                 newEnv.setName(name);
                 newEnv.setValue(value);
                 newEnv.setRemark(remarks);
@@ -405,7 +391,7 @@ public class PanelEnvironmentFragment extends BaseFragment {
 
                 WindowUnit.hideKeyboard(uiPopEdit.getView());
 
-                List<Environment> environments = Environment.parse(values, remarks);
+                List<PanelEnvironment> environments = PanelEnvironment.parse(values, remarks);
                 if (environments.size() == 0) {
                     ToastUnit.showShort("提取变量失败");
                 } else {
@@ -492,67 +478,60 @@ public class PanelEnvironmentFragment extends BaseFragment {
     }
 
     private void backupData(String fileName) {
-        List<Environment> environments = mAdapter.getData();
+        List<PanelEnvironment> environments = mAdapter.getData();
         if (environments == null || environments.size() == 0) {
             ToastUnit.showShort("数据为空,无需备份");
             return;
         }
 
-        JsonArray jsonArray = new JsonArray();
-        for (Environment environment : environments) {
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("name", environment.getName());
-            jsonObject.addProperty("value", environment.getValue());
-            jsonObject.addProperty("remark", environment.getRemark());
-            jsonArray.add(jsonObject);
-        }
-
+        // 生成文件名
         if (TextUnit.isFull(fileName)) {
-            fileName += ".json";
+            fileName = fileName + ".json";
         } else {
             fileName = TimeUnit.formatDatetimeC() + ".json";
         }
 
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String content = gson.toJson(jsonArray);
-
-        try {
-            boolean result = FileUtil.save(FileUtil.getEnvironmentPath(), fileName, content);
-            if (result) {
-                ToastUnit.showShort("备份成功：" + fileName);
-            } else {
-                ToastUnit.showShort("备份失败");
+        final String finalFileName = fileName;
+        ThreadPoolUtil.executeIO(new BackupEnvironmentTask(environments, FileUtil.getEnvironmentPath(), fileName, new BackupEnvironmentTask.BackupResultListener() {
+            @Override
+            public void onSuccess() {
+                ToastUnit.showShort("备份成功：" + finalFileName);
             }
-        } catch (Exception e) {
-            ToastUnit.showShort("备份失败：" + e.getMessage());
-        }
 
+            @Override
+            public void onFail(String msg) {
+                ToastUnit.showShort("备份失败：" + msg);
+            }
+        }));
     }
 
     private void importData(File file) {
-        try {
-            if (uiPopProgress == null) {
-                uiPopProgress = PopupWindowBuilder.buildProgressWindow(requireActivity(), null);
-            }
+        if (uiPopProgress == null) {
+            uiPopProgress = PopupWindowBuilder.buildProgressWindow(requireActivity(), null);
+        }
 
-            uiPopProgress.setTextAndShow("加载文件中...");
-            BufferedReader bufferedInputStream = new BufferedReader(new FileReader(file));
-            StringBuilder stringBuilder = new StringBuilder();
-            String line;
-            while ((line = bufferedInputStream.readLine()) != null) {
-                stringBuilder.append(line);
-            }
+        ThreadPoolUtil.executeIO(() -> {
+            try {
+                // 加载文件
+                uiPopProgress.setTextAndShow("加载文件中...");
+                BufferedReader bufferedInputStream = new BufferedReader(new FileReader(file));
+                StringBuilder stringBuilder = new StringBuilder();
+                String line;
+                while ((line = bufferedInputStream.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
 
-            uiPopProgress.setTextAndShow("解析文件中...");
-            Environment[] environments = new Gson().fromJson(stringBuilder.toString(), Environment[].class);
+                // 解析文件
+                uiPopProgress.setTextAndShow("解析文件中...");
+                PanelEnvironment[] environments = new Gson().fromJson(stringBuilder.toString(), PanelEnvironment[].class);
 
-            new Thread(() -> {
+                // 导入文件
                 uiPopProgress.setTextAndShow("导入中...");
                 int index = 0;
                 int success = 0;
                 int total = environments.length;
 
-                for (Environment environment : environments) {
+                for (PanelEnvironment environment : environments) {
                     boolean result = auto.panel.net.panel.ApiController.addEnvironmentSync(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), environment);
                     uiPopProgress.setTextAndShow("导入中... " + index + "/" + total);
                     index++;
@@ -564,18 +543,18 @@ public class PanelEnvironmentFragment extends BaseFragment {
                 dismissPopWindowProgress();
                 ToastUnit.showShort("导入完成 " + success + "/" + total);
                 getEnvironments(mCurrentSearchValue);
-            }).start();
-        } catch (Exception e) {
-            dismissPopWindowProgress();
-            ToastUnit.showShort("导入失败：" + e.getLocalizedMessage());
-        }
+            } catch (Exception e) {
+                dismissPopWindowProgress();
+                ToastUnit.showShort("导入失败：" + e.getLocalizedMessage());
+            }
+        });
     }
 
     private void deduplicationData() {
         List<Object> ids = new ArrayList<>();
         Set<Object> set = new HashSet<>();
-        List<Environment> environments = this.mAdapter.getData();
-        for (Environment environment : environments) {
+        List<PanelEnvironment> environments = this.mAdapter.getData();
+        for (PanelEnvironment environment : environments) {
             String key = environment.getName() + environment.getValue();
             if (set.contains(key)) {
                 ids.add(environment.getKey());
@@ -593,7 +572,7 @@ public class PanelEnvironmentFragment extends BaseFragment {
     private void getEnvironments(String searchValue) {
         auto.panel.net.panel.ApiController.getEnvironments(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), searchValue, new auto.panel.net.panel.ApiController.EnvironmentListCallBack() {
             @Override
-            public void onSuccess(List<Environment> environments) {
+            public void onSuccess(List<PanelEnvironment> environments) {
                 init = true;
                 mAdapter.setData(environments);
                 uiRefresh.finishRefresh(true);
@@ -639,7 +618,7 @@ public class PanelEnvironmentFragment extends BaseFragment {
         });
     }
 
-    private void addEnvironments(List<Environment> environments) {
+    private void addEnvironments(List<PanelEnvironment> environments) {
         auto.panel.net.panel.ApiController.addEnvironments(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), environments, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
@@ -655,7 +634,7 @@ public class PanelEnvironmentFragment extends BaseFragment {
         });
     }
 
-    private void updateEnvironment(Environment environment) {
+    private void updateEnvironment(PanelEnvironment environment) {
         auto.panel.net.panel.ApiController.updateEnvironment(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), environment, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
@@ -683,35 +662,6 @@ public class PanelEnvironmentFragment extends BaseFragment {
             @Override
             public void onFailure(String msg) {
                 ToastUnit.showShort("删除失败：" + msg);
-            }
-        });
-    }
-
-    private void moveEnvironment(MoveInfo info) {
-        QLEnvironment fromObject = info.getFromObject();
-        QLEnvironment toObject = info.getToObject();
-        int realFrom = info.getFromObject().getRealIndex();
-        int realTo = info.getToObject().getRealIndex();
-        ApiController.moveEnvironment(getNetRequestID(), info.getFromObject().getId(), realFrom, realTo, new ApiController.NetBaseCallback() {
-            @Override
-            public void onSuccess() {
-                ToastUnit.showShort(getString(R.string.tip_move_success));
-                //交换真实序号
-                fromObject.setRealIndex(realTo);
-                toObject.setRealIndex(realFrom);
-                //同名变量交换同名序号 注：调用notifyItemChanged更新会显示异常
-                if (fromObject.getName().equals(toObject.getName())) {
-                    int index = fromObject.getIndex();
-                    fromObject.setIndex(toObject.getIndex());
-                    fromObject.resetFormatName();
-                    toObject.setIndex(index);
-                    toObject.resetFormatName();
-                }
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                ToastUnit.showShort(getString(R.string.tip_move_failure_header) + msg);
             }
         });
     }

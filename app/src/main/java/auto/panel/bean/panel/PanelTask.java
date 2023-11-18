@@ -4,7 +4,7 @@ package auto.panel.bean.panel;
  * @author wsfsp4
  * @version 2023.06.29
  */
-public class Task implements Comparable<Task> {
+public class PanelTask implements Comparable<PanelTask> {
     public static final int STATE_RUNNING = 0;
     public static final int STATE_WAITING = 1;
     public static final int STATE_FREE = 2;
@@ -110,7 +110,7 @@ public class Task implements Comparable<Task> {
     }
 
     @Override
-    public int compareTo(Task o) {
+    public int compareTo(PanelTask o) {
         return this.getLevel() - o.getLevel();
     }
 }

@@ -17,14 +17,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import auto.panel.R;
-import auto.panel.bean.panel.Task;
+import auto.panel.bean.panel.PanelTask;
 
 public class PanelTaskItemAdapter extends RecyclerView.Adapter<PanelTaskItemAdapter.MyViewHolder> {
     public static final String TAG = "PanelTaskItemAdapter";
 
     Context context;
     private ActionListener actionListener;
-    private List<Task> data;
+    private List<PanelTask> data;
     private boolean onCheck;
     private boolean[] dataCheckState;
 
@@ -50,7 +50,7 @@ public class PanelTaskItemAdapter extends RecyclerView.Adapter<PanelTaskItemAdap
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Task task = data.get(position);
+        PanelTask task = data.get(position);
         holder.uiTitle.setText(task.getName());
         holder.uiCommand.setText(task.getCommand());
         holder.uiSchedule.setText(task.getSchedule());
@@ -59,13 +59,13 @@ public class PanelTaskItemAdapter extends RecyclerView.Adapter<PanelTaskItemAdap
         holder.uiNextExecutionTime.setText(task.getNextExecuteTime());
         holder.uiState.setText(task.getState());
 
-        if (task.getStateCode() == Task.STATE_RUNNING) {
+        if (task.getStateCode() == PanelTask.STATE_RUNNING) {
             holder.uiState.setTextColor(colorBlue);
             holder.uiAction.setImageResource(R.drawable.ic_blue_pause);
-        } else if (task.getStateCode() == Task.STATE_WAITING) {
+        } else if (task.getStateCode() == PanelTask.STATE_WAITING) {
             holder.uiState.setTextColor(colorBlue);
             holder.uiAction.setImageResource(R.drawable.ic_blue_pause);
-        } else if (task.getStateCode() == Task.STATE_LIMIT) {
+        } else if (task.getStateCode() == PanelTask.STATE_LIMIT) {
             holder.uiState.setTextColor(colorRed);
             holder.uiAction.setImageResource(R.drawable.ic_blue_start);
         } else {
@@ -112,7 +112,7 @@ public class PanelTaskItemAdapter extends RecyclerView.Adapter<PanelTaskItemAdap
         holder.uiAction.setOnClickListener(v -> {
             if (this.onCheck) {
                 holder.uiCheck.setChecked(!holder.uiCheck.isChecked());
-            } else if (task.getStateCode() == Task.STATE_LIMIT || task.getStateCode() == Task.STATE_FREE) {
+            } else if (task.getStateCode() == PanelTask.STATE_LIMIT || task.getStateCode() == PanelTask.STATE_FREE) {
                 actionListener.onRun(task);
             } else {
                 actionListener.onStop(task);
@@ -140,14 +140,14 @@ public class PanelTaskItemAdapter extends RecyclerView.Adapter<PanelTaskItemAdap
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<Task> data) {
+    public void setData(List<PanelTask> data) {
         this.data.clear();
         this.data = data;
         this.dataCheckState = new boolean[data.size()];
         notifyDataSetChanged();
     }
 
-    public List<Task> getData() {
+    public List<PanelTask> getData() {
         return this.data;
     }
 
@@ -168,8 +168,8 @@ public class PanelTaskItemAdapter extends RecyclerView.Adapter<PanelTaskItemAdap
         }
     }
 
-    public List<Task> getCheckedItems() {
-        List<Task> tasks = new ArrayList<>();
+    public List<PanelTask> getCheckedItems() {
+        List<PanelTask> tasks = new ArrayList<>();
         if (dataCheckState != null) {
             for (int k = 0; k < dataCheckState.length; k++) {
                 if (dataCheckState[k]) {
@@ -181,15 +181,15 @@ public class PanelTaskItemAdapter extends RecyclerView.Adapter<PanelTaskItemAdap
     }
 
     public interface ActionListener {
-        void onRun(Task task);
+        void onRun(PanelTask task);
 
-        void onStop(Task task);
+        void onStop(PanelTask task);
 
-        void onEdit(Task task);
+        void onEdit(PanelTask task);
 
-        void onLog(Task task);
+        void onLog(PanelTask task);
 
-        void onScript(Task task);
+        void onScript(PanelTask task);
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {

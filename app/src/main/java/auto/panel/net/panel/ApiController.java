@@ -9,14 +9,14 @@ import java.io.IOException;
 import java.util.List;
 
 import auto.base.util.TextUnit;
-import auto.panel.bean.panel.Account;
-import auto.panel.bean.panel.Dependence;
-import auto.panel.bean.panel.Environment;
-import auto.panel.bean.panel.File;
-import auto.panel.bean.panel.LoginLog;
-import auto.panel.bean.panel.SystemConfig;
-import auto.panel.bean.panel.SystemInfo;
-import auto.panel.bean.panel.Task;
+import auto.panel.bean.panel.PanelAccount;
+import auto.panel.bean.panel.PanelDependence;
+import auto.panel.bean.panel.PanelEnvironment;
+import auto.panel.bean.panel.PanelFile;
+import auto.panel.bean.panel.PanelLoginLog;
+import auto.panel.bean.panel.PanelSystemConfig;
+import auto.panel.bean.panel.PanelSystemInfo;
+import auto.panel.bean.panel.PanelTask;
 import auto.panel.database.sp.PanelPreference;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -47,7 +47,7 @@ public class ApiController {
                 if (Handler.handleResponse(response.code(), res, callBack)) {
                     return;
                 }
-                SystemInfo system = new SystemInfo();
+                PanelSystemInfo system = new PanelSystemInfo();
                 system.setInitialized(res.getData().isInitialized());
                 system.setVersion(res.getData().getVersion());
                 callBack.onSuccess(system);
@@ -60,7 +60,7 @@ public class ApiController {
         });
     }
 
-    public static void login(@NonNull String baseUrl, @NonNull Account account, LoginCallBack callBack) {
+    public static void login(@NonNull String baseUrl, @NonNull PanelAccount account, LoginCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("username", account.getUsername());
         jsonObject.addProperty("password", account.getPassword());
@@ -268,7 +268,7 @@ public class ApiController {
         });
     }
 
-    public static void addTask(@NonNull String baseUrl, @NonNull String authorization, Task task, BaseCallBack callBack) {
+    public static void addTask(@NonNull String baseUrl, @NonNull String authorization, PanelTask task, BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("name", task.getName());
         jsonObject.addProperty("command", task.getCommand());
@@ -299,7 +299,7 @@ public class ApiController {
         });
     }
 
-    public static boolean addTaskSync(@NonNull String baseUrl, @NonNull String authorization, Task task) {
+    public static boolean addTaskSync(@NonNull String baseUrl, @NonNull String authorization, PanelTask task) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("name", task.getName());
         jsonObject.addProperty("command", task.getCommand());
@@ -321,7 +321,7 @@ public class ApiController {
         }
     }
 
-    public static void updateTask(@NonNull String baseUrl, @NonNull String authorization, Task task, BaseCallBack callBack) {
+    public static void updateTask(@NonNull String baseUrl, @NonNull String authorization, PanelTask task, BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         if (task.getKey() instanceof String) {
             jsonObject.addProperty("_id", (String) task.getKey());
@@ -447,10 +447,10 @@ public class ApiController {
         });
     }
 
-    public static void addEnvironments(@NonNull String baseUrl, @NonNull String authorization, List<Environment> environments, BaseCallBack callBack) {
+    public static void addEnvironments(@NonNull String baseUrl, @NonNull String authorization, List<PanelEnvironment> environments, BaseCallBack callBack) {
         JsonArray jsonArray = new JsonArray();
         JsonObject jsonObject;
-        for (Environment environment : environments) {
+        for (PanelEnvironment environment : environments) {
             jsonObject = new JsonObject();
             jsonObject.addProperty("name", environment.getName());
             jsonObject.addProperty("remarks", environment.getRemark());
@@ -483,7 +483,7 @@ public class ApiController {
         });
     }
 
-    public static boolean addEnvironmentSync(@NonNull String baseUrl, @NonNull String authorization, Environment environment) {
+    public static boolean addEnvironmentSync(@NonNull String baseUrl, @NonNull String authorization, PanelEnvironment environment) {
         JsonArray jsonArray = new JsonArray();
         JsonObject jsonObject;
         jsonObject = new JsonObject();
@@ -508,7 +508,7 @@ public class ApiController {
         }
     }
 
-    public static void updateEnvironment(@NonNull String baseUrl, @NonNull String authorization, Environment environment, BaseCallBack callBack) {
+    public static void updateEnvironment(@NonNull String baseUrl, @NonNull String authorization, PanelEnvironment environment, BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         if (environment.getKey() instanceof Integer) {
             jsonObject.addProperty("id", (Integer) environment.getKey());
@@ -616,9 +616,9 @@ public class ApiController {
         }
     }
 
-    public static void addDependencies(@NonNull String baseUrl, @NonNull String authorization, List<Dependence> dependencies, BaseCallBack callBack) {
+    public static void addDependencies(@NonNull String baseUrl, @NonNull String authorization, List<PanelDependence> dependencies, BaseCallBack callBack) {
         JsonArray jsonArray = new JsonArray();
-        for (auto.panel.bean.panel.Dependence dependence : dependencies) {
+        for (PanelDependence dependence : dependencies) {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("name", dependence.getTitle());
             jsonObject.addProperty("type", dependence.getTypeCode());
@@ -724,7 +724,7 @@ public class ApiController {
         }
     }
 
-    public static void addScript(@NonNull String baseUrl, @NonNull String authorization, @NonNull File file, BaseCallBack callBack) {
+    public static void addScript(@NonNull String baseUrl, @NonNull String authorization, @NonNull PanelFile file, BaseCallBack callBack) {
         if (PanelPreference.isLowVersion()) {
             auto.panel.net.panel.v10.ApiController.addScript(baseUrl, authorization, file, callBack);
         } else {
@@ -732,10 +732,10 @@ public class ApiController {
         }
     }
 
-    public static void deleteScript(@NonNull String baseUrl, @NonNull String authorization, File file, BaseCallBack callBack) {
+    public static void deleteScript(@NonNull String baseUrl, @NonNull String authorization, PanelFile file, BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("filename", file.getTitle());
-        jsonObject.addProperty("path", file.getParent());
+        jsonObject.addProperty("path", file.getParentPath());
         if (!PanelPreference.isLowVersion()) {
             if (file.isDir()) {
                 jsonObject.addProperty("type", "directory");
@@ -860,7 +860,7 @@ public class ApiController {
         }
     }
 
-    public static void updateSystemConfig(@NonNull String baseUrl, @NonNull String authorization, SystemConfig config, BaseCallBack callBack) {
+    public static void updateSystemConfig(@NonNull String baseUrl, @NonNull String authorization, PanelSystemConfig config, BaseCallBack callBack) {
         if (PanelPreference.isLowVersion()) {
             auto.panel.net.panel.v10.ApiController.updateSystemConfig(baseUrl, authorization, config, callBack);
         } else {
@@ -868,7 +868,7 @@ public class ApiController {
         }
     }
 
-    public static void updateAccount(@NonNull String baseUrl, @NonNull String authorization, Account account, BaseCallBack callBack) {
+    public static void updateAccount(@NonNull String baseUrl, @NonNull String authorization, PanelAccount account, BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("username", account.getUsername());
         jsonObject.addProperty("password", account.getPassword());
@@ -898,7 +898,7 @@ public class ApiController {
         });
     }
 
-    public static void initAccount(@NonNull String baseUrl, Account account, BaseCallBack callBack) {
+    public static void initAccount(@NonNull String baseUrl, PanelAccount account, BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("username", account.getUsername());
         jsonObject.addProperty("password", account.getPassword());
@@ -974,7 +974,7 @@ public class ApiController {
     }
 
     public interface SystemInfoCallBack extends BaseCallBack {
-        void onSuccess(SystemInfo system);
+        void onSuccess(PanelSystemInfo system);
     }
 
     public interface LoginCallBack extends BaseCallBack {
@@ -982,23 +982,23 @@ public class ApiController {
     }
 
     public interface TaskListCallBack extends BaseCallBack {
-        void onSuccess(List<Task> tasks);
+        void onSuccess(List<PanelTask> tasks);
     }
 
     public interface EnvironmentListCallBack extends BaseCallBack {
-        void onSuccess(List<Environment> environments);
+        void onSuccess(List<PanelEnvironment> environments);
     }
 
     public interface DependenceListCallBack extends BaseCallBack {
-        void onSuccess(List<Dependence> dependencies);
+        void onSuccess(List<PanelDependence> dependencies);
     }
 
     public interface FileListCallBack extends BaseCallBack {
-        void onSuccess(List<File> files);
+        void onSuccess(List<PanelFile> files);
     }
 
     public interface LoginLogListCallBack extends BaseCallBack {
-        void onSuccess(List<LoginLog> loginLogs);
+        void onSuccess(List<PanelLoginLog> loginLogs);
     }
 
     public interface ContentCallBack extends BaseCallBack {
@@ -1006,7 +1006,7 @@ public class ApiController {
     }
 
     public interface SystemConfigCallBack extends BaseCallBack {
-        void onSuccess(SystemConfig config);
+        void onSuccess(PanelSystemConfig config);
     }
 }
 

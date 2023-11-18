@@ -15,13 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import auto.panel.R;
-import auto.panel.bean.panel.File;
+import auto.panel.bean.panel.PanelFile;
 
 public class PanelScriptItemAdapter extends RecyclerView.Adapter<PanelScriptItemAdapter.MyViewHolder> {
     public static final String TAG = "PanelScriptItemAdapter";
 
     private final Context context;
-    private List<File> data;
+    private List<PanelFile> data;
     private ItemActionListener itemActionListener;
 
     public PanelScriptItemAdapter(@NonNull Context context) {
@@ -39,7 +39,7 @@ public class PanelScriptItemAdapter extends RecyclerView.Adapter<PanelScriptItem
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        File file = data.get(position);
+        PanelFile file = data.get(position);
 
         holder.ui_title.setText(file.getTitle());
 
@@ -77,7 +77,7 @@ public class PanelScriptItemAdapter extends RecyclerView.Adapter<PanelScriptItem
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<File> data) {
+    public void setData(List<PanelFile> data) {
         this.data = data;
         notifyDataSetChanged();
     }
@@ -92,9 +92,9 @@ public class PanelScriptItemAdapter extends RecyclerView.Adapter<PanelScriptItem
     }
 
     public interface ItemActionListener {
-        void onEdit(File file);
+        void onEdit(PanelFile file);
 
-        void onMenu(View view, File file, int position);
+        void onMenu(View view, PanelFile file, int position);
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {

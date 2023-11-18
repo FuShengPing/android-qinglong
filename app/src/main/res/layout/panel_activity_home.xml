@@ -240,7 +240,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_gray_menu_setting" />
+                        android:src="@drawable/ic_gray_menu_settings" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -291,7 +291,32 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/menu_account_exit"
+                    android:text="@string/menu_app_exit"
+                    android:textColor="@color/text_color_49"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/panel_menu_app_account"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/style_press_gray"
+                android:clickable="true"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingVertical="10dp">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginBottom="5dp"
+                    android:src="@drawable/ic_gray_account" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/menu_app_account"
                     android:textColor="@color/text_color_49"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -311,7 +336,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_marginBottom="5dp"
-                    android:src="@drawable/ic_gray_menu_setting" />
+                    android:src="@drawable/ic_gray_menu_settings" />
 
                 <TextView
                     android:layout_width="wrap_content"

@@ -23,8 +23,10 @@ import auto.panel.net.panel.ApiController;
 import auto.panel.net.web.PanelWebJsManager;
 import auto.panel.net.web.WebViewBuilder;
 
-public class CodeWebActivity extends BaseActivity {
-    public static final String TAG = "CodeWebActivity";
+public class CodeViewActivity extends BaseActivity {
+    public static final String TAG = "CodeViewActivity";
+
+    private static final String STATIC_FILE_PATH = "file:///android_asset/web/editor.html";
 
     public static final String EXTRA_TITLE = "title";
     public static final String EXTRA_TYPE = "type";
@@ -55,16 +57,16 @@ public class CodeWebActivity extends BaseActivity {
     private String mLogFileDir;
     private String mDependenceId;
 
-    private LinearLayout ui_nav_bar;
-    private ImageView ui_back;
-    private TextView ui_tip;
-    private ImageView ui_edit;
-    private ImageView ui_refresh;
-    private LinearLayout ui_edit_bar;
-    private ImageView ui_edit_back;
-    private ImageView ui_edit_save;
-    private FrameLayout ui_web_container;
-    private WebView ui_webView;
+    private LinearLayout uiNavBar;
+    private ImageView uiBack;
+    private TextView uiTip;
+    private ImageView uiEdit;
+    private ImageView uiRefresh;
+    private LinearLayout uiEditBar;
+    private ImageView uiEditBack;
+    private ImageView uiEditSave;
+    private FrameLayout uiWebContainer;
+    private WebView uiWebView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,15 +84,15 @@ public class CodeWebActivity extends BaseActivity {
         mLogFileDir = getIntent().getStringExtra(EXTRA_LOG_DIR);
         mDependenceId = getIntent().getStringExtra(EXTRA_DEPENDENCE_ID);
 
-        ui_nav_bar = findViewById(R.id.script_bar);
-        ui_back = findViewById(R.id.script_back);
-        ui_tip = findViewById(R.id.script_name);
-        ui_edit = findViewById(R.id.script_edit);
-        ui_refresh = findViewById(R.id.script_refresh);
-        ui_edit_bar = findViewById(R.id.code_bar_edit);
-        ui_edit_back = findViewById(R.id.code_bar_edit_back);
-        ui_edit_save = findViewById(R.id.code_bar_edit_save);
-        ui_web_container = findViewById(R.id.web_container);
+        uiNavBar = findViewById(R.id.code_bar_nav);
+        uiBack = findViewById(R.id.code_bar_nav_back);
+        uiTip = findViewById(R.id.code_bar_nav_title);
+        uiEdit = findViewById(R.id.code_bar_nav_edit);
+        uiRefresh = findViewById(R.id.code_bar_nav_refresh);
+        uiEditBar = findViewById(R.id.code_bar_edit);
+        uiEditBack = findViewById(R.id.code_bar_edit_back);
+        uiEditSave = findViewById(R.id.code_bar_edit_save);
+        uiWebContainer = findViewById(R.id.web_container);
 
         init();
     }
@@ -105,8 +107,8 @@ public class CodeWebActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        WebViewBuilder.destroy(ui_webView);
-        ui_webView = null;
+        WebViewBuilder.destroy(uiWebView);
+        uiWebView = null;
         super.onDestroy();
     }
 
@@ -117,9 +119,9 @@ public class CodeWebActivity extends BaseActivity {
      */
     private void onSave(String content) {
         if (Objects.equals(mType, TYPE_CONFIG)) {
-            saveConfigContent(content);
+            netSaveConfigContent(content);
         } else if (Objects.equals(mType, TYPE_SCRIPT)) {
-            saveScriptContent(content);
+            netSaveScriptContent(content);
         }
     }
 
@@ -127,24 +129,24 @@ public class CodeWebActivity extends BaseActivity {
      * 网络加载结束 关闭刷新动画
      */
     private void onLoadFinish() {
-        if (ui_refresh.getAnimation() != null) {
-            ui_refresh.getAnimation().cancel();
+        if (uiRefresh.getAnimation() != null) {
+            uiRefresh.getAnimation().cancel();
         }
     }
 
     @Override
     protected void init() {
         //设置标题
-        ui_tip.setText(mTitle);
+        uiTip.setText(mTitle);
 
         //返回监听
-        ui_back.setOnClickListener(v -> finish());
+        uiBack.setOnClickListener(v -> finish());
 
         //刷新监听
         if (mCanRefresh) {
-            ui_refresh.setOnClickListener(v -> {
+            uiRefresh.setOnClickListener(v -> {
                 //禁用点击
-                ui_refresh.setEnabled(false);
+                uiRefresh.setEnabled(false);
                 //开启动画
                 Animation animation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
                 animation.setAnimationListener(new Animation.AnimationListener() {
@@ -155,7 +157,7 @@ public class CodeWebActivity extends BaseActivity {
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        ui_refresh.setEnabled(true);
+                        uiRefresh.setEnabled(true);
                     }
 
                     @Override
@@ -165,36 +167,37 @@ public class CodeWebActivity extends BaseActivity {
                 });
                 animation.setRepeatCount(-1);
                 animation.setDuration(1000);
-                ui_refresh.startAnimation(animation);
+                uiRefresh.startAnimation(animation);
                 load(mType);
             });
         }
 
         //编辑
         if (mCanEdit) {
-            ui_edit.setOnClickListener(v -> {
-                ui_nav_bar.setVisibility(View.INVISIBLE);
-                ui_edit_bar.setVisibility(View.VISIBLE);
-                ui_webView.setFocusable(true);
-                ui_webView.setFocusableInTouchMode(true);
-                PanelWebJsManager.setEditable(ui_webView, true);
+            uiEdit.setOnClickListener(v -> {
+                uiNavBar.setVisibility(View.INVISIBLE);
+                uiEditBar.setVisibility(View.VISIBLE);
+                PanelWebJsManager.setEditable(uiWebView, true);
+                uiWebView.setFocusable(true);
+                uiWebView.setFocusableInTouchMode(true);
+                uiWebView.requestFocus();
             });
 
-            ui_edit_back.setOnClickListener(v -> {
-                ui_edit_bar.setVisibility(View.INVISIBLE);
-                ui_nav_bar.setVisibility(View.VISIBLE);
-                WindowUnit.hideKeyboard(ui_webView);
-                ui_webView.clearFocus();
-                ui_webView.setFocusable(false);
-                ui_webView.setFocusableInTouchMode(false);
-                PanelWebJsManager.setEditable(ui_webView, false);
-                PanelWebJsManager.setContent(ui_webView, mContent);
+            uiEditBack.setOnClickListener(v -> {
+                uiEditBar.setVisibility(View.INVISIBLE);
+                uiNavBar.setVisibility(View.VISIBLE);
+                WindowUnit.hideKeyboard(uiWebView);
+                uiWebView.clearFocus();
+                uiWebView.setFocusable(false);
+                uiWebView.setFocusableInTouchMode(false);
+                PanelWebJsManager.setEditable(uiWebView, false);
+                PanelWebJsManager.setContent(uiWebView, mContent);
             });
 
-            ui_edit_save.setOnClickListener(v -> PanelWebJsManager.getContent(ui_webView, value -> {
+            uiEditSave.setOnClickListener(v -> PanelWebJsManager.getContent(uiWebView, value -> {
                 try {
-                    ui_webView.clearFocus();
-                    WindowUnit.hideKeyboard(ui_webView);
+                    uiWebView.clearFocus();
+                    WindowUnit.hideKeyboard(uiWebView);
                     StringBuilder stringBuilder = new StringBuilder(URLDecoder.decode(value, "UTF-8"));
                     if (stringBuilder.length() >= 2) {
                         stringBuilder.deleteCharAt(0);
@@ -210,18 +213,18 @@ public class CodeWebActivity extends BaseActivity {
 
     private void initWebView() {
         if (mCanRefresh) {
-            ui_refresh.setVisibility(View.VISIBLE);
+            uiRefresh.setVisibility(View.VISIBLE);
         }
 
-        ui_webView = WebViewBuilder.build(getBaseContext(), ui_web_container, new WebViewClient() {
+        uiWebView = WebViewBuilder.build(getBaseContext(), uiWebContainer, new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
                 load(mType);
             }
         }, null);
 
-        ui_webView.setFocusable(false);
-        ui_webView.loadUrl("file:///android_asset/web/editor.html");
+        uiWebView.setFocusable(false);
+        uiWebView.loadUrl(STATIC_FILE_PATH);
 
         init = true;
     }
@@ -234,21 +237,118 @@ public class CodeWebActivity extends BaseActivity {
     private void load(String type) {
         switch (type) {
             case TYPE_SCRIPT:
-                getScriptContent(mScriptName, mScriptParent);
+                netGetScriptContent(mScriptName, mScriptParent);
                 break;
             case TYPE_LOG:
-                getLogFileContent(mLogId, mLogFileName, mLogFileDir);
+                netGetLogFileContent(mLogId, mLogFileName, mLogFileDir);
                 break;
             case TYPE_DEPENDENCE:
-                getDependenceLogContent(mDependenceId);
+                netGetDependenceLogContent(mDependenceId);
                 break;
             case TYPE_CONFIG:
-                getConfigContent();
+                netGetConfigContent();
                 break;
+            default:
+                ToastUnit.showShort("参数异常");
         }
     }
 
-    private void saveConfigContent(String content) {
+    private void netGetConfigContent() {
+        ApiController.getConfigContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.panel.net.panel.ApiController.ContentCallBack() {
+            @Override
+            public void onSuccess(String content) {
+                mContent = content;
+                uiEdit.setVisibility(View.VISIBLE);
+                PanelWebJsManager.setContent(uiWebView, content);
+                onLoadFinish();
+                ToastUnit.showShort(getString(R.string.tip_load_success));
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                uiEdit.setVisibility(View.INVISIBLE);
+                onLoadFinish();
+                ToastUnit.showShort(msg);
+            }
+        });
+    }
+
+    private void netGetScriptContent(String fileName, String fileParent) {
+        ApiController.getScriptContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), fileName, fileParent, new auto.panel.net.panel.ApiController.ContentCallBack() {
+            @Override
+            public void onSuccess(String content) {
+                //防止内容过大导致崩溃
+                if (content.length() > 1024 * 1024) {
+                    ToastUnit.showShort(getString(R.string.tip_text_too_long));
+                    uiRefresh.setVisibility(View.GONE);
+                    return;
+                }
+                mContent = content;
+                uiEdit.setVisibility(View.VISIBLE);
+                PanelWebJsManager.setContent(uiWebView, content);
+                onLoadFinish();
+                ToastUnit.showShort(getString(R.string.tip_load_success));
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                uiEdit.setVisibility(View.INVISIBLE);
+                onLoadFinish();
+                ToastUnit.showShort(msg);
+            }
+        });
+    }
+
+    private void netGetLogFileContent(String scriptKey, String fileName, String fileParent) {
+        ApiController.getLogContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), scriptKey, fileName, fileParent, new auto.panel.net.panel.ApiController.ContentCallBack() {
+            @Override
+            public void onSuccess(String content) {
+                PanelWebJsManager.setContent(uiWebView, content);
+                onLoadFinish();
+                ToastUnit.showShort(getString(R.string.tip_load_success));
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                onLoadFinish();
+                ToastUnit.showShort(msg);
+            }
+        });
+    }
+
+    private void netGetDependenceLogContent(String key) {
+        ApiController.getDependenceLogContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), key, new auto.panel.net.panel.ApiController.ContentCallBack() {
+            @Override
+            public void onSuccess(String content) {
+                PanelWebJsManager.setContent(uiWebView, content);
+                onLoadFinish();
+                ToastUnit.showShort(getString(R.string.tip_load_success));
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                onLoadFinish();
+                ToastUnit.showShort(msg);
+            }
+        });
+    }
+
+    private void netSaveScriptContent(String content) {
+        ApiController.saveScriptContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), mScriptName, mScriptParent, content, new auto.panel.net.panel.ApiController.BaseCallBack() {
+            @Override
+            public void onSuccess() {
+                mContent = content;
+                ToastUnit.showShort("保存成功");
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUnit.showShort(msg);
+            }
+        });
+    }
+
+    private void netSaveConfigContent(String content) {
         ApiController.saveConfigFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), content, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
@@ -258,101 +358,6 @@ public class CodeWebActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                ToastUnit.showShort(msg);
-            }
-        });
-    }
-
-    private void saveScriptContent(String content) {
-       ApiController.saveScriptContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), mScriptName, mScriptParent, content, new auto.panel.net.panel.ApiController.BaseCallBack() {
-            @Override
-            public void onSuccess() {
-                mContent = content;
-                ToastUnit.showShort("保存成功");
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                ToastUnit.showShort(msg);
-            }
-        });
-    }
-
-    private void getConfigContent() {
-       ApiController.getConfigContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.panel.net.panel.ApiController.ContentCallBack() {
-            @Override
-            public void onSuccess(String content) {
-                mContent = content;
-                ui_edit.setVisibility(View.VISIBLE);
-                PanelWebJsManager.setContent(ui_webView, content);
-                onLoadFinish();
-                ToastUnit.showShort(getString(R.string.tip_load_success));
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                ui_edit.setVisibility(View.INVISIBLE);
-                onLoadFinish();
-                ToastUnit.showShort(msg);
-            }
-        });
-    }
-
-    private void getScriptContent(String fileName, String fileParent) {
-        ApiController.getScriptContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), fileName, fileParent, new auto.panel.net.panel.ApiController.ContentCallBack() {
-            @Override
-            public void onSuccess(String content) {
-                //防止内容过大导致崩溃
-                if (content.length() > 1024 * 1024) {
-                    ToastUnit.showShort(getString(R.string.tip_text_too_long));
-                    ui_refresh.setVisibility(View.GONE);
-                    return;
-                }
-                mContent = content;
-                ui_edit.setVisibility(View.VISIBLE);
-                PanelWebJsManager.setContent(ui_webView, content);
-                onLoadFinish();
-                ToastUnit.showShort(getString(R.string.tip_load_success));
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                ui_edit.setVisibility(View.INVISIBLE);
-                onLoadFinish();
-                ToastUnit.showShort(msg);
-            }
-        });
-    }
-
-    private void getLogFileContent(String scriptKey, String fileName, String fileParent) {
-        ApiController.getLogContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), scriptKey, fileName, fileParent, new auto.panel.net.panel.ApiController.ContentCallBack() {
-            @Override
-            public void onSuccess(String content) {
-                PanelWebJsManager.setContent(ui_webView, content);
-                onLoadFinish();
-                ToastUnit.showShort(getString(R.string.tip_load_success));
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                onLoadFinish();
-                ToastUnit.showShort(msg);
-            }
-        });
-    }
-
-    private void getDependenceLogContent(String key) {
-        ApiController.getDependenceLogContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), key, new auto.panel.net.panel.ApiController.ContentCallBack() {
-            @Override
-            public void onSuccess(String content) {
-                PanelWebJsManager.setContent(ui_webView, content);
-                onLoadFinish();
-                ToastUnit.showShort(getString(R.string.tip_load_success));
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                onLoadFinish();
                 ToastUnit.showShort(msg);
             }
         });

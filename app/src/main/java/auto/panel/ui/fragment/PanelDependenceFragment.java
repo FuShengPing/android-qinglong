@@ -25,11 +25,11 @@ import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
 import auto.panel.R;
-import auto.panel.bean.panel.Dependence;
+import auto.panel.bean.panel.PanelDependence;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
-import auto.panel.ui.activity.CodeWebActivity;
+import auto.panel.ui.activity.CodeViewActivity;
 import auto.panel.ui.adapter.PanelDependenceItemAdapter;
 
 public class PanelDependenceFragment extends BaseFragment {
@@ -99,8 +99,8 @@ public class PanelDependenceFragment extends BaseFragment {
                     return false;
                 }
 
-                List<Dependence> dependencies = new ArrayList<>();
-                Dependence dependence = new Dependence();
+                List<PanelDependence> dependencies = new ArrayList<>();
+                PanelDependence dependence = new PanelDependence();
                 dependence.setTitle(name);
                 dependence.setType(type);
                 dependencies.add(dependence);
@@ -120,16 +120,16 @@ public class PanelDependenceFragment extends BaseFragment {
     protected void init() {
         itemAdapter.setItemInterface(new PanelDependenceItemAdapter.ItemActionListener() {
             @Override
-            public void onDetail(Dependence dependence, int position) {
-                Intent intent = new Intent(getContext(), CodeWebActivity.class);
-                intent.putExtra(CodeWebActivity.EXTRA_TYPE, CodeWebActivity.TYPE_DEPENDENCE);
-                intent.putExtra(CodeWebActivity.EXTRA_TITLE, dependence.getTitle());
-                intent.putExtra(CodeWebActivity.EXTRA_DEPENDENCE_ID, String.valueOf(dependence.getKey()));
+            public void onDetail(PanelDependence dependence, int position) {
+                Intent intent = new Intent(getContext(), CodeViewActivity.class);
+                intent.putExtra(CodeViewActivity.EXTRA_TYPE, CodeViewActivity.TYPE_DEPENDENCE);
+                intent.putExtra(CodeViewActivity.EXTRA_TITLE, dependence.getTitle());
+                intent.putExtra(CodeViewActivity.EXTRA_DEPENDENCE_ID, String.valueOf(dependence.getKey()));
                 startActivity(intent);
             }
 
             @Override
-            public void onReinstall(Dependence dependence, int position) {
+            public void onReinstall(PanelDependence dependence, int position) {
                 List<Object> ids = new ArrayList<>();
                 ids.add(dependence.getKey());
                 reinstallDependencies(ids);
@@ -157,7 +157,7 @@ public class PanelDependenceFragment extends BaseFragment {
 
     private List<Object> getSelectedItemIds() {
         List<Object> ids = new ArrayList<>();
-        for (Dependence dependence : itemAdapter.getCheckedItems()) {
+        for (PanelDependence dependence : itemAdapter.getCheckedItems()) {
             ids.add(dependence.getKey());
         }
         return ids;
@@ -166,7 +166,7 @@ public class PanelDependenceFragment extends BaseFragment {
     private void getDependencies() {
         auto.panel.net.panel.ApiController.getDependencies(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), "", this.type, new auto.panel.net.panel.ApiController.DependenceListCallBack() {
             @Override
-            public void onSuccess(List<Dependence> dependencies) {
+            public void onSuccess(List<PanelDependence> dependencies) {
                 itemAdapter.setData(dependencies);
                 init = true;
                 this.onEnd(true);
@@ -186,7 +186,7 @@ public class PanelDependenceFragment extends BaseFragment {
         });
     }
 
-    private void addDependencies(List<Dependence> dependencies) {
+    private void addDependencies(List<PanelDependence> dependencies) {
         ApiController.addDependencies(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), dependencies, new ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
