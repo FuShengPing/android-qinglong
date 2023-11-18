@@ -9,7 +9,8 @@
     <dimen name="action_bar_title_size">18sp</dimen>
     <dimen name="action_bar_title_margin_horizontal">16dp</dimen>
 
-    <dimen name="app_setting_text_size">16sp</dimen>
+    <dimen name="app_setting_text_title_size">16sp</dimen>
+    <dimen name="app_setting_text_hint_size">14sp</dimen>
     <dimen name="app_setting_text_margin_vertical">14dp</dimen>
 
     <dimen name="common_item_padding_horizontal">7dp</dimen>

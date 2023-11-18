@@ -1,7 +1,9 @@
-package auto.base.util;
+package auto.panel.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.Settings;
@@ -33,5 +35,17 @@ public class DeviceUnit {
         shareIntent.putExtra(Intent.EXTRA_TEXT, text);
         shareIntent.setType("text/plain");
         context.startActivity(Intent.createChooser(shareIntent, "Share text using"));
+    }
+
+    /**
+     * 复制文本到剪贴板
+     *
+     * @param context
+     * @param text
+     */
+
+    public static void copyText(Context context, String text) {
+        ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        clipboardManager.setPrimaryClip(ClipData.newPlainText(null, text));
     }
 }

@@ -15,9 +15,7 @@ public class NetUnit {
     public static String getHost(String str) {
         if (str == null || str.isEmpty()) {
             return "";
-        }
-
-        if (!str.startsWith("http://") && !str.startsWith("https://")) {
+        } else if (!str.startsWith("http://") && !str.startsWith("https://")) {
             str = "http://" + str;
         }
 

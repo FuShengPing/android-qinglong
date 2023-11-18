@@ -23,6 +23,8 @@
     <string name="app_setting_notify">更新推送</string>
     <string name="app_setting_vibrate">震动反馈</string>
     <string name="app_setting_document">功能介绍</string>
+    <string name="app_setting_storage">存储路径</string>
+    <string name="app_setting_permission">读写权限</string>
     <string name="app_setting_issue">加入Q群</string>
     <string name="app_setting_donate">支持应用</string>
     <string name="app_setting_share">分享应用</string>

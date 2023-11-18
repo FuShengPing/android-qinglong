@@ -22,17 +22,17 @@ public class PackageUtil {
         return version;
     }
 
-    public static boolean isAppInstalled(Context context,String packageName){
-        PackageManager packageManager = context.getPackageManager();
+    public static boolean isAppInstalled(Context context, String packageName) {
         try {
-            packageManager.getPackageInfo(packageName,PackageManager.GET_ACTIVITIES);
+            PackageManager packageManager = context.getPackageManager();
+            packageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
             return true;
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
     }
 
-     public static class Version {
+    public static class Version {
         private int versionCode;
 
         private String versionName;

@@ -1,9 +1,6 @@
 package auto.panel.ui.fragment;
 
 import android.annotation.SuppressLint;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,7 +37,10 @@ import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
 import auto.panel.ui.activity.CodeViewActivity;
 import auto.panel.ui.adapter.PanelScriptItemAdapter;
+import auto.panel.utils.DeviceUnit;
 import auto.panel.utils.FileUtil;
+import auto.panel.utils.thread.AppLogTask;
+import auto.panel.utils.thread.ThreadPoolUtil;
 
 @SuppressLint("SetTextI18n")
 public class PanelScriptFragment extends BaseFragment {
@@ -175,13 +175,12 @@ public class PanelScriptFragment extends BaseFragment {
 
         popMenuWindow.setOnActionListener(key -> {
             if ("copy".equals(key)) {
-                ClipboardManager clipboardManager = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                clipboardManager.setPrimaryClip(ClipData.newPlainText(null, file.getPath()));
+                DeviceUnit.copyText(requireContext(), file.getPath());
                 ToastUnit.showShort("已复制");
             } else if ("delete".equals(key)) {
                 netDeleteScript(file, position);
             } else if ("update".equals(key)) {
-
+                // TODO
             }
             return true;
         });
@@ -278,7 +277,7 @@ public class PanelScriptFragment extends BaseFragment {
                         }
                         file.setContent(stringBuilder.toString());
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        ThreadPoolUtil.executeIO(new AppLogTask(e.getMessage()));
                         ToastUnit.showShort("读取文件失败");
                         return false;
                     }

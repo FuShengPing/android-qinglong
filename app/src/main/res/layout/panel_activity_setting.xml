@@ -85,7 +85,7 @@
                                 android:layout_marginVertical="@dimen/app_setting_text_margin_vertical"
                                 android:text="@string/app_setting_notify"
                                 android:textColor="@color/text_color_19"
-                                android:textSize="@dimen/app_setting_text_size" />
+                                android:textSize="@dimen/app_setting_text_title_size" />
 
                             <View
                                 android:layout_width="0dp"
@@ -107,47 +107,85 @@
                             android:visibility="gone" />
                     </LinearLayout>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/divider" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/divider" />
+
                     <LinearLayout
-                        android:id="@+id/app_setting_vibrate"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/app_setting_storage"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
+                        android:background="@drawable/style_press_gray"
+                        android:clickable="true"
                         android:orientation="vertical"
-                        android:paddingHorizontal="@dimen/action_bar_padding_horizontal"
-                        android:visibility="gone">
+                        android:paddingHorizontal="@dimen/action_bar_padding_horizontal">
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
+                        <TextView
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
+                            android:layout_marginTop="@dimen/app_setting_text_margin_vertical"
+                            android:text="@string/app_setting_storage"
+                            android:textColor="@color/text_color_19"
+                            android:textSize="@dimen/app_setting_text_title_size" />
 
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginVertical="@dimen/app_setting_text_margin_vertical"
-                                android:text="@string/app_setting_vibrate"
-                                android:textColor="@color/text_color_19"
-                                android:textSize="@dimen/app_setting_text_size" />
-
-                            <View
-                                android:layout_width="0dp"
-                                android:layout_height="0px"
-                                android:layout_weight="1"
-                                android:visibility="invisible" />
-
-                            <androidx.appcompat.widget.SwitchCompat
-                                android:id="@+id/app_setting_vibrate_switch"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:checked="true" />
-                        </LinearLayout>
+                        <TextView
+                            android:id="@+id/app_setting_storage_value"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/app_setting_text_margin_vertical"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:text="@string/app_setting_storage"
+                            android:textColor="@color/text_color_80"
+                            android:textSize="@dimen/app_setting_text_hint_size" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1px"
-                            android:background="@color/divider"
-                            android:visibility="gone" />
+                            android:background="@color/divider" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/app_setting_permission"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/style_press_gray"
+                        android:clickable="true"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="@dimen/action_bar_padding_horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/app_setting_text_margin_vertical"
+                            android:text="@string/app_setting_permission"
+                            android:textColor="@color/text_color_19"
+                            android:textSize="@dimen/app_setting_text_title_size" />
+
+                        <TextView
+                            android:id="@+id/app_setting_permission_value"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/app_setting_text_margin_vertical"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:text="@string/app_setting_permission"
+                            android:textColor="@color/text_color_80"
+                            android:textSize="@dimen/app_setting_text_hint_size" />
                     </LinearLayout>
 
                     <View
@@ -183,7 +221,7 @@
                             android:layout_marginVertical="@dimen/app_setting_text_margin_vertical"
                             android:text="@string/app_setting_document"
                             android:textColor="@color/text_color_19"
-                            android:textSize="@dimen/app_setting_text_size" />
+                            android:textSize="@dimen/app_setting_text_title_size" />
 
                         <View
                             android:layout_width="match_parent"
@@ -192,7 +230,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/app_setting_issue"
+                        android:id="@+id/app_setting_group"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/style_press_gray"
@@ -206,7 +244,7 @@
                             android:layout_marginVertical="@dimen/app_setting_text_margin_vertical"
                             android:text="@string/app_setting_issue"
                             android:textColor="@color/text_color_19"
-                            android:textSize="@dimen/app_setting_text_size" />
+                            android:textSize="@dimen/app_setting_text_title_size" />
                     </LinearLayout>
 
                     <View
@@ -242,7 +280,7 @@
                             android:layout_marginVertical="@dimen/app_setting_text_margin_vertical"
                             android:text="@string/app_setting_share"
                             android:textColor="@color/text_color_19"
-                            android:textSize="@dimen/app_setting_text_size" />
+                            android:textSize="@dimen/app_setting_text_title_size" />
 
                         <View
                             android:layout_width="match_parent"
@@ -265,7 +303,7 @@
                             android:layout_marginVertical="@dimen/app_setting_text_margin_vertical"
                             android:text="@string/app_setting_about"
                             android:textColor="@color/text_color_19"
-                            android:textSize="@dimen/app_setting_text_size" />
+                            android:textSize="@dimen/app_setting_text_title_size" />
 
                         <View
                             android:layout_width="match_parent"

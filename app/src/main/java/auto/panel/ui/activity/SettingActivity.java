@@ -3,12 +3,11 @@ package auto.panel.ui.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.widget.SwitchCompat;
 
-import auto.base.util.DeviceUnit;
 import auto.base.util.EncryptUtil;
 import auto.base.util.ToastUnit;
 import auto.base.util.WebUnit;
@@ -17,17 +16,25 @@ import auto.panel.bean.app.Config;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.database.sp.SettingPreference;
 import auto.panel.net.app.ApiController;
+import auto.panel.utils.DeviceUnit;
+import auto.panel.utils.FileUtil;
+import auto.panel.utils.thread.AppLogTask;
+import auto.panel.utils.thread.ThreadPoolUtil;
 
 public class SettingActivity extends BaseActivity {
     public static final String TAG = "SettingActivity";
 
-    private ImageView uiBack;
+    private View uiBack;
     private SwitchCompat uiNotifySwitch;
-    private SwitchCompat uiVibrateSwitch;
-    private LinearLayout uiDocument;
-    private LinearLayout uiIssue;
-    private LinearLayout uiShare;
-    private LinearLayout uiAbout;
+
+    private View uiStorage;
+    private TextView uiStorageValue;
+    private View uiPermission;
+    private TextView uiPermissionValue;
+    private View uiDocument;
+    private View uiGroup;
+    private View uiShare;
+    private View uiAbout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +43,12 @@ public class SettingActivity extends BaseActivity {
 
         uiBack = findViewById(R.id.bar_back);
         uiNotifySwitch = findViewById(R.id.app_setting_notify_switch);
-        uiVibrateSwitch = findViewById(R.id.app_setting_vibrate_switch);
+        uiStorage = findViewById(R.id.app_setting_storage);
+        uiStorageValue = findViewById(R.id.app_setting_storage_value);
+        uiPermission = findViewById(R.id.app_setting_permission);
+        uiPermissionValue = findViewById(R.id.app_setting_permission_value);
         uiDocument = findViewById(R.id.app_setting_document);
-        uiIssue = findViewById(R.id.app_setting_issue);
+        uiGroup = findViewById(R.id.app_setting_group);
         uiShare = findViewById(R.id.app_setting_share);
         uiAbout = findViewById(R.id.app_setting_about);
 
@@ -48,7 +58,7 @@ public class SettingActivity extends BaseActivity {
     private void onUpdateConfig(Config config) {
         uiDocument.setOnClickListener(v -> WebUnit.open(this, config.getDocumentUrl()));
 
-        uiIssue.setOnClickListener(v -> joinQQGroup(config.getGroupKey()));
+        uiGroup.setOnClickListener(v -> joinQQGroup(config.getGroupKey()));
 
         uiShare.setOnClickListener(v -> DeviceUnit.shareText(this, config.getShareText()));
     }
@@ -60,12 +70,23 @@ public class SettingActivity extends BaseActivity {
         uiNotifySwitch.setChecked(SettingPreference.isNotify());
         uiNotifySwitch.setOnCheckedChangeListener((buttonView, isChecked) -> SettingPreference.setBoolean(SettingPreference.FIELD_NOTIFY, isChecked));
 
-        uiVibrateSwitch.setChecked(SettingPreference.isVibrate());
-        uiVibrateSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> SettingPreference.setBoolean(SettingPreference.FIELD_VIBRATE, isChecked));
+        uiStorage.setOnClickListener(v -> {
+            // 复制到剪切板
+            DeviceUnit.copyText(SettingActivity.this, FileUtil.externalStorage);
+            ToastUnit.showShort("已复制");
+        });
+        uiStorageValue.setText(FileUtil.externalStorage);
+
+        if (FileUtil.checkStoragePermission()) {
+            uiPermissionValue.setText("已授权");
+        } else {
+            uiPermissionValue.setText("未授权");
+            uiPermission.setOnClickListener(v -> FileUtil.requestStoragePermission(mActivity));
+        }
 
         uiDocument.setOnClickListener(v -> WebUnit.open(this, SettingPreference.getDocumentUrl()));
 
-        uiIssue.setOnClickListener(v -> joinQQGroup(SettingPreference.getGroupKey()));
+        uiGroup.setOnClickListener(v -> joinQQGroup(SettingPreference.getGroupKey()));
 
         uiShare.setOnClickListener(v -> DeviceUnit.shareText(this, SettingPreference.getShareText()));
 
@@ -74,7 +95,7 @@ public class SettingActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        getConfig();
+        netGetConfig();
     }
 
     private void joinQQGroup(String key) {
@@ -84,11 +105,12 @@ public class SettingActivity extends BaseActivity {
         try {
             startActivity(intent);
         } catch (Exception e) {
+            ThreadPoolUtil.executeIO(new AppLogTask(e.getMessage()));
             ToastUnit.showShort("未安装手Q或安装的版本不支持");
         }
     }
 
-    private void getConfig() {
+    private void netGetConfig() {
         String uid = EncryptUtil.md5(PanelPreference.getAddress());
 
         ApiController.getConfig(uid, config -> {
