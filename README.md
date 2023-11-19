@@ -66,7 +66,7 @@
 <img src="https://gitee.com/wsfsp4/public-static-file/raw/master/qinglong/p4.jpg" alt="系统设置" width="22%">  
 
 ## 下载地址
-[最新版本](https://gitee.com/wsfsp4/QingLong/releases/tag/v2.0.3)
+[最新版本](https://gitee.com/wsfsp4/QingLong/releases/tag/v2.0.4)
 
 [历史版本](https://gitee.com/wsfsp4/QingLong/releases)
 
