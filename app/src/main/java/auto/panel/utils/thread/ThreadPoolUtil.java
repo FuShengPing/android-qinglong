@@ -11,15 +11,11 @@ import java.util.concurrent.TimeUnit;
  * @description: 线程池工具类
  */
 public class ThreadPoolUtil {
-    // IO密集型线程池
-    private static final ExecutorService instanceIO = new ThreadPoolExecutor(1, Integer.MAX_VALUE, 1, TimeUnit.MINUTES, new SynchronousQueue<>());
+    private static final ExecutorService instance = new ThreadPoolExecutor(1, Integer.MAX_VALUE, 1, TimeUnit.MINUTES, new SynchronousQueue<>());
 
-    // CPU密集型线程池
-    private static final ExecutorService cpuInstance = null;
-
-    public static void executeIO(Runnable runnable) {
+    public static void execute(Runnable runnable) {
         try {
-            instanceIO.execute(runnable);
+            instance.execute(runnable);
         } catch (Exception e) {
             e.printStackTrace();
         }

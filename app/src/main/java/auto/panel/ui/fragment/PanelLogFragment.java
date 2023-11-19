@@ -77,23 +77,23 @@ public class PanelLogFragment extends BaseFragment {
 
     @Override
     public boolean onDispatchBackKey() {
-        if (fileStack.size() == 1) {
+        if (fileStack.size() <= 1) {
             fileStack.clear();
             return false;
         } else {
             fileStack.pop();
             adapter.setData(fileStack.peek());
-            if (fileStack.peek().isEmpty() || fileStack.peek().get(0).getParentPath().isEmpty()) {
-                uiDir.setText("/");
-            } else {
-                uiDir.setText("/" + fileStack.peek().get(0).getParentPath());
-            }
+            updateCurrentDir(fileStack.peek().get(0).getParentPath());
             return true;
         }
     }
 
     public void setMenuClickListener(MenuClickListener mMenuClickListener) {
         this.menuClickListener = mMenuClickListener;
+    }
+
+    private void updateCurrentDir(String dir) {
+        uiDir.setText("/" + dir);
     }
 
     @Override
@@ -141,7 +141,7 @@ public class PanelLogFragment extends BaseFragment {
         Collections.sort(files);
         fileStack.add(files);
         adapter.setData(files);
-        uiDir.setText("/" + dir);
+        updateCurrentDir(dir);
     }
 
     private void getLogFiles() {

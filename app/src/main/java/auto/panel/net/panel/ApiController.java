@@ -502,7 +502,7 @@ public class ApiController {
 
         try {
             Response<BaseRes> res = call.execute();
-            return res.body() != null && res.body().getCode() == 200;
+            return res.code() == 200 && res.body() != null && res.body().getCode() == 200;
         } catch (IOException e) {
             return false;
         }
@@ -571,12 +571,12 @@ public class ApiController {
         });
     }
 
-    public static void getConfigContent(@NonNull String baseUrl, @NonNull String authorization, ContentCallBack callBack) {
+    public static void getConfigFileContent(@NonNull String baseUrl, @NonNull String authorization, ContentCallBack callBack) {
         String path = "api/configs/config.sh";
         getFileContent(baseUrl, authorization, path, callBack);
     }
 
-    public static void saveConfigFileContent(@NonNull String baseUrl, @NonNull String authorization, String content, BaseCallBack callBack) {
+    public static void updateConfigFileContent(@NonNull String baseUrl, @NonNull String authorization, String content, BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("content", content);
         jsonObject.addProperty("name", "config.sh");
@@ -776,7 +776,29 @@ public class ApiController {
         getFileContent(baseUrl, authorization, path, callBack);
     }
 
-    public static void saveScriptContent(@NonNull String baseUrl, @NonNull String authorization, String fileName, String fileParent, String content, BaseCallBack callBack) {
+    public static String getScriptContentSync(@NonNull String baseUrl, @NonNull String authorization, String fileName, String fileParent) {
+        String path = "api/scripts/" + fileName + "?path=" + (TextUnit.isFull(fileParent) ? fileParent : "");
+
+        Call<FileContentRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .getFileContent(path, authorization);
+
+        try {
+            Response<FileContentRes> res = call.execute();
+            if (res.code() == 200 && res.body() != null && res.body().getCode() == 200) {
+                return res.body().getData();
+            } else {
+                return null;
+            }
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    public static void updateScriptContent(@NonNull String baseUrl, @NonNull String authorization, String fileName, String fileParent, String content, BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("content", content);
         jsonObject.addProperty("filename", fileName);

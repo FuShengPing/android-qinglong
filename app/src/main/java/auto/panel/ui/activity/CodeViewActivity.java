@@ -254,7 +254,7 @@ public class CodeViewActivity extends BaseActivity {
     }
 
     private void netGetConfigContent() {
-        ApiController.getConfigContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.panel.net.panel.ApiController.ContentCallBack() {
+        ApiController.getConfigFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.panel.net.panel.ApiController.ContentCallBack() {
             @Override
             public void onSuccess(String content) {
                 mContent = content;
@@ -334,7 +334,7 @@ public class CodeViewActivity extends BaseActivity {
     }
 
     private void netSaveScriptContent(String content) {
-        ApiController.saveScriptContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), mScriptName, mScriptParent, content, new auto.panel.net.panel.ApiController.BaseCallBack() {
+        ApiController.updateScriptContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), mScriptName, mScriptParent, content, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 mContent = content;
@@ -349,7 +349,7 @@ public class CodeViewActivity extends BaseActivity {
     }
 
     private void netSaveConfigContent(String content) {
-        ApiController.saveConfigFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), content, new auto.panel.net.panel.ApiController.BaseCallBack() {
+        ApiController.updateConfigFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), content, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 mContent = content;

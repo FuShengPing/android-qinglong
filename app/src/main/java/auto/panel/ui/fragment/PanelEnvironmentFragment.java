@@ -446,7 +446,7 @@ public class PanelEnvironmentFragment extends BaseFragment {
             return;
         }
 
-        List<File> files = FileUtil.getFiles(FileUtil.getEnvironmentPath(), (dir, name) -> name.endsWith(".json"));
+        List<File> files = FileUtil.getFiles(FileUtil.getPathOfEnvironment(), (dir, name) -> name.endsWith(".json"));
         if (files.size() == 0) {
             ToastUnit.showShort("无本地备份数据");
             return;
@@ -492,7 +492,7 @@ public class PanelEnvironmentFragment extends BaseFragment {
         }
 
         final String finalFileName = fileName;
-        ThreadPoolUtil.executeIO(new BackupEnvironmentTask(environments, FileUtil.getEnvironmentPath(), fileName, new BackupEnvironmentTask.BackupResultListener() {
+        ThreadPoolUtil.execute(new BackupEnvironmentTask(environments, FileUtil.getPathOfEnvironment(), fileName, new BackupEnvironmentTask.BackupResultListener() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("备份成功：" + finalFileName);
@@ -510,7 +510,7 @@ public class PanelEnvironmentFragment extends BaseFragment {
             uiPopProgress = PopupWindowBuilder.buildProgressWindow(requireActivity(), null);
         }
 
-        ThreadPoolUtil.executeIO(() -> {
+        ThreadPoolUtil.execute(() -> {
             try {
                 // 加载文件
                 uiPopProgress.setTextAndShow("加载文件中...");

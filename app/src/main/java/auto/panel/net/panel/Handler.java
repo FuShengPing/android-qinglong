@@ -22,14 +22,14 @@ public class Handler {
         } else if (res == null) {
             callBack.onFailure(ERROR_NO_BODY + statusCode);
         } else {
-            ThreadPoolUtil.executeIO(new AppLogTask(res.getMessage()));
+            ThreadPoolUtil.execute(new AppLogTask(res.getMessage()));
             callBack.onFailure(res.getMessage());
         }
         return true;
     }
 
     public static void handleRequestError(Call<?> call, Throwable t, ApiController.BaseCallBack callBack) {
-        ThreadPoolUtil.executeIO(new AppLogTask(t.getMessage()));
+        ThreadPoolUtil.execute(new AppLogTask(t.getMessage()));
         if (!call.isCanceled()) {
             callBack.onFailure(t.getLocalizedMessage());
         }

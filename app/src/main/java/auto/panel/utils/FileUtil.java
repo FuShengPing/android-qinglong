@@ -22,6 +22,8 @@ import java.util.List;
 
 import auto.base.util.LogUnit;
 import auto.panel.MyApplication;
+import auto.panel.utils.thread.AppLogTask;
+import auto.panel.utils.thread.ThreadPoolUtil;
 
 /**
  * 文件操作工具类，注意权限问题
@@ -34,8 +36,14 @@ public class FileUtil {
 
     private static final String PATH_APP_LOG = "logs";
 
-    public static final String internalStorage; // data/user/0/auto.panel/files
-    public static final String externalStorage; // storage/emulated/0/Android/data/auto.panel/files
+    /**
+     * e.g. data/user/0/auto.panel/files
+     */
+    public static final String internalStorage;
+    /**
+     * e.g. storage/emulated/0/Android/data/auto.panel/files
+     */
+    public static final String externalStorage;
 
     static {
         externalStorage = MyApplication.getInstance().getExternalFilesDir(null).getAbsolutePath();
@@ -90,7 +98,7 @@ public class FileUtil {
      *
      * @return the env path, e.g. /storage/emulated/0/Android/data/auto.panel/files/environments
      */
-    public static String getEnvironmentPath() {
+    public static String getPathOfEnvironment() {
         return externalStorage + File.separator + PATH_ENVIRONMENT;
     }
 
@@ -99,7 +107,7 @@ public class FileUtil {
      *
      * @return the task path, e.g. /storage/emulated/0/Android/data/auto.panel/files/tasks
      */
-    public static String getTaskPath() {
+    public static String getPathOfTask() {
         return externalStorage + File.separator + PATH_TASK;
     }
 
@@ -108,7 +116,7 @@ public class FileUtil {
      *
      * @return the script path, e.g. /storage/emulated/0/Android/data/auto.panel/files/scripts
      */
-    public static String getScriptPath() {
+    public static String getPathOfScript() {
         return externalStorage + File.separator + PATH_SCRIPT;
     }
 
@@ -117,12 +125,12 @@ public class FileUtil {
      *
      * @return the log path, e.g. /storage/emulated/0/Android/data/auto.panel/files/logs
      */
-    public static String getAppLogPath() {
+    public static String getPathOfLog() {
         return externalStorage + File.separator + PATH_APP_LOG;
     }
 
     /**
-     * Is need request permission boolean.
+     * 是否已获取到存储权限
      *
      * @return the boolean true is ok
      */
@@ -149,6 +157,7 @@ public class FileUtil {
             if (!ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
             } else {
+                ThreadPoolUtil.execute(new AppLogTask("shouldShowRequestPermissionRationale"));
                 LogUnit.log(TAG, "shouldShowRequestPermissionRationale");
             }
         }

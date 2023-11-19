@@ -31,7 +31,7 @@ public class MyApplication extends BaseApplication implements Thread.UncaughtExc
     public void uncaughtException(@NonNull Thread thread, @NonNull Throwable throwable) {
         try {
             String fileName = String.format("app-%s.log", TimeUnit.formatDate());
-            String filePath = FileUtil.getAppLogPath();
+            String filePath = FileUtil.getPathOfLog();
 
             FileUtil.save(filePath, fileName, AppLogTask.buildContentOfStack(throwable), true);
         } catch (Throwable t) {

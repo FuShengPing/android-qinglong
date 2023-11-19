@@ -105,7 +105,7 @@ public class SettingActivity extends BaseActivity {
         try {
             startActivity(intent);
         } catch (Exception e) {
-            ThreadPoolUtil.executeIO(new AppLogTask(e.getMessage()));
+            ThreadPoolUtil.execute(new AppLogTask(e.getMessage()));
             ToastUnit.showShort("未安装手Q或安装的版本不支持");
         }
     }

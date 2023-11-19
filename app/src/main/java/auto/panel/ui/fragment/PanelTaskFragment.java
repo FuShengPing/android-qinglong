@@ -527,7 +527,7 @@ public class PanelTaskFragment extends BaseFragment {
             return;
         }
 
-        List<File> files = FileUtil.getFiles(FileUtil.getTaskPath(), (dir, name) -> name.endsWith(".json"));
+        List<File> files = FileUtil.getFiles(FileUtil.getPathOfTask(), (dir, name) -> name.endsWith(".json"));
         if (files.size() == 0) {
             ToastUnit.showShort("无本地备份数据");
             return;
@@ -583,7 +583,7 @@ public class PanelTaskFragment extends BaseFragment {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String content = gson.toJson(jsonArray);
         try {
-            boolean result = FileUtil.save(FileUtil.getTaskPath(), fileName, content);
+            boolean result = FileUtil.save(FileUtil.getPathOfTask(), fileName, content);
             if (result) {
                 ToastUnit.showShort("备份成功：" + fileName);
             } else {

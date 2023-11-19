@@ -34,7 +34,7 @@ public class AppLogTask implements Runnable {
             }
 
             String fileName = String.format("app-%s.log", TimeUnit.formatDate());
-            String filePath = FileUtil.getAppLogPath();
+            String filePath = FileUtil.getPathOfLog();
 
             if (this.throwable != null) {
                 FileUtil.save(filePath, fileName, buildContentOfStack(throwable), true);

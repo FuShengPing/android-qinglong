@@ -305,7 +305,8 @@
                 android:clickable="true"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:paddingVertical="10dp">
+                android:paddingVertical="10dp"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="25dp"
