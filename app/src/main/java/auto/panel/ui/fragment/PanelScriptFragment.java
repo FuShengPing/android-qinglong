@@ -19,6 +19,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.baidu.mobstat.StatService;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.io.BufferedReader;
@@ -53,6 +54,7 @@ import auto.panel.utils.thread.ThreadPoolUtil;
 @SuppressLint("SetTextI18n")
 public class PanelScriptFragment extends BaseFragment {
     public static String TAG = "PanelScriptFragment";
+    public static String NAME = "脚本管理";
 
     private Stack<List<PanelFile>> fileStack; // 文件栈
     private String fileDir; // 当前目录
@@ -90,13 +92,17 @@ public class PanelScriptFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        StatService.onPageStart(requireContext(), NAME);
         initData();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden) {
+        if (hidden) {
+            StatService.onPageEnd(requireContext(), NAME);
+        } else {
+            StatService.onPageStart(requireContext(), NAME);
             initData();
         }
     }

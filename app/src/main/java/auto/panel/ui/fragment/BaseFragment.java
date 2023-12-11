@@ -5,6 +5,8 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.baidu.mobstat.StatService;
+
 import auto.panel.net.NetManager;
 
 public abstract class BaseFragment extends Fragment {
@@ -13,18 +15,9 @@ public abstract class BaseFragment extends Fragment {
     protected boolean init = false;
 
     @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
         NetManager.cancelAllCall(getClass().getName());
-    }
-
-    public String getNetRequestID() {
-        return getClass().getName() + hashCode();
     }
 
     /**
@@ -45,6 +38,10 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public void setMenuClickListener(MenuClickListener mMenuClickListener) {
+    }
+
+    public String getNetRequestID() {
+        return getClass().getName() + hashCode();
     }
 
     public interface MenuClickListener {

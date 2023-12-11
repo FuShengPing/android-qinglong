@@ -10,9 +10,12 @@ import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 
+import com.baidu.mobstat.StatService;
+
 import auto.base.util.ToastUnit;
 import auto.panel.MyApplication;
 import auto.panel.net.NetManager;
+import auto.panel.utils.ActivityUtils;
 
 public abstract class BaseActivity extends auto.base.BaseActivity {
     public static final String TAG = "BaseActivity";
@@ -25,16 +28,25 @@ public abstract class BaseActivity extends auto.base.BaseActivity {
         Thread.setDefaultUncaughtExceptionHandler(MyApplication.getInstance());
         mContext = getBaseContext();
         mActivity = this;
+        ActivityUtils.addActivity(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        StatService.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        StatService.onPause(this);
         ToastUnit.cancel();
     }
 
     @Override
     protected void onDestroy() {
+        ActivityUtils.removeActivity(this);
         NetManager.cancelAllCall(getClass().getName());
         super.onDestroy();
     }

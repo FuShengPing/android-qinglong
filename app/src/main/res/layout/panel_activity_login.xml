@@ -73,6 +73,24 @@
             android:textColor="@color/text_color_49"
             android:textSize="18sp" />
 
+        <auto.base.ui.view.EditText
+            android:id="@+id/et_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:fontFamily="sans-serif-light"
+            android:hint="@string/str_code"
+            android:imeOptions="actionDone"
+            android:inputType="textVisiblePassword"
+            android:lines="1"
+            android:maxLength="6"
+            android:visibility="gone"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="7dp"
+            android:singleLine="true"
+            android:textColor="@color/text_color_49"
+            android:textSize="18sp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

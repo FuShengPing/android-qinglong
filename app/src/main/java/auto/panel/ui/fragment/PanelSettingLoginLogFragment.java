@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.baidu.mobstat.StatService;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.List;
@@ -21,7 +22,10 @@ import auto.panel.database.sp.PanelPreference;
 import auto.panel.ui.adapter.PanelLoginLogItemAdapter;
 
 
-public class PanelLoginLogFragment extends BaseFragment {
+public class PanelSettingLoginLogFragment extends BaseFragment {
+    public static String TAG = "PanelLoginLogFragment";
+    public static String NAME = "系统设置-登录日志";
+
     private PanelLoginLogItemAdapter itemAdapter;
 
     private RecyclerView uiRecycler;
@@ -41,7 +45,19 @@ public class PanelLoginLogFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        StatService.onPageStart(requireContext(), NAME);
         initData();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) {
+            StatService.onPageEnd(requireContext(), NAME);
+        } else {
+            StatService.onPageStart(requireContext(), NAME);
+            initData();
+        }
     }
 
     @Override

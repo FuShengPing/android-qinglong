@@ -64,14 +64,28 @@ public class ApiController {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("username", account.getUsername());
         jsonObject.addProperty("password", account.getPassword());
+        if (account.getCode() != null) {
+            jsonObject.addProperty("code", account.getCode());
+        }
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
 
-        Call<LoginRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .login(requestBody);
+        Call<LoginRes> call;
+
+        if (account.getCode() != null) {
+            call = new Retrofit.Builder()
+                    .baseUrl(baseUrl)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+                    .create(Api.class)
+                    .twoFactorLogin(requestBody);
+        } else {
+            call = new Retrofit.Builder()
+                    .baseUrl(baseUrl)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+                    .create(Api.class)
+                    .login(requestBody);
+        }
 
         call.enqueue(new Callback<LoginRes>() {
             @Override

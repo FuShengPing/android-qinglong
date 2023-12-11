@@ -21,6 +21,9 @@ public interface Api {
     @POST("api/user/login")
     Call<LoginRes> login(@Body RequestBody body);
 
+    @PUT("api/user/two-factor/login")
+    Call<LoginRes> twoFactorLogin(@Body RequestBody body);
+
     @PUT("api/crons/run")
     Call<BaseRes> runTasks(@Header("Authorization") String authorization, @Body RequestBody body);
 

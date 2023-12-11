@@ -4,6 +4,7 @@ public class PanelAccount {
     private String username;
     private String password;
     private String token;
+    private String code;
     private String address;
     private int state;
     //是否为当前账号
@@ -48,6 +49,14 @@ public class PanelAccount {
         this.token = token;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     /**
      * @return 当前账号请求授权头
      */
@@ -73,7 +82,7 @@ public class PanelAccount {
         if (!address.endsWith("/")) {
             sb.append("/");
         }
-        return  sb.toString();
+        return sb.toString();
     }
 
     public boolean isCurrent() {

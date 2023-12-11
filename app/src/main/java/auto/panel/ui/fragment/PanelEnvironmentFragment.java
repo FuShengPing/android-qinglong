@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.baidu.mobstat.StatService;
 import com.google.gson.Gson;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
@@ -37,6 +38,7 @@ import auto.base.ui.popup.MenuItem;
 import auto.base.ui.popup.MenuPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.base.ui.popup.ProgressPopupWindow;
+import auto.base.util.LogUnit;
 import auto.base.util.TextUnit;
 import auto.base.util.TimeUnit;
 import auto.base.util.ToastUnit;
@@ -52,6 +54,8 @@ import auto.panel.utils.thread.ThreadPoolUtil;
 
 public class PanelEnvironmentFragment extends BaseFragment {
     public static String TAG = "PanelEnvironmentFragment";
+    public static String NAME = "变量管理";
+
     private String mCurrentSearchValue;
     private MenuClickListener mMenuClickListener;
     private PanelEnvironmentItemAdapter mAdapter;
@@ -113,13 +117,18 @@ public class PanelEnvironmentFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        StatService.onPageStart(requireContext(), NAME);
         initData();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
+        LogUnit.log(TAG, "onHiddenChanged: " + hidden);
         super.onHiddenChanged(hidden);
-        if (!hidden) {
+        if (hidden) {
+            StatService.onPageEnd(requireContext(), NAME);
+        } else {
+            StatService.onPageStart(requireContext(), NAME);
             initData();
         }
     }

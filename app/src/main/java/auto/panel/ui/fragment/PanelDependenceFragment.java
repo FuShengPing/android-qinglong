@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.baidu.mobstat.StatService;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import java.util.Objects;
 import auto.base.ui.popup.EditItem;
 import auto.base.ui.popup.EditPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
+import auto.base.util.LogUnit;
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
@@ -62,6 +64,7 @@ public class PanelDependenceFragment extends BaseFragment {
         super.onResume();
         initData();
     }
+
 
     protected void onCheckStateChange(boolean checkState) {
         itemAdapter.setCheckState(checkState);

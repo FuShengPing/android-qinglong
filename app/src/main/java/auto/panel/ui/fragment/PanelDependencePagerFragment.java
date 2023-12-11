@@ -11,18 +11,21 @@ import android.widget.LinearLayout;
 
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.baidu.mobstat.StatService;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import auto.base.ui.popup.MenuItem;
 import auto.base.ui.popup.MenuPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
+import auto.base.util.LogUnit;
 import auto.panel.R;
 import auto.panel.ui.adapter.PanelDependencePagerAdapter;
 
 @SuppressLint("InflateParams")
 public class PanelDependencePagerFragment extends BaseFragment {
     public static String TAG = "PanelDependenceFragment";
+    public static String NAME = "依赖管理";
 
     private PanelDependenceFragment mCurrentFragment;
     private PanelDependencePagerAdapter mPagerAdapter;
@@ -62,6 +65,22 @@ public class PanelDependencePagerFragment extends BaseFragment {
         init();
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        StatService.onPageStart(requireContext(), NAME);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) {
+            StatService.onPageEnd(requireContext(), NAME);
+        } else {
+            StatService.onPageStart(requireContext(), NAME);
+        }
     }
 
     @Override

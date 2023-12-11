@@ -16,6 +16,7 @@ import auto.panel.ui.adapter.PanelSettingPagerAdapter;
 
 public class PanelSettingFragment extends BaseFragment {
     public static String TAG = "PanelSettingFragment";
+    public static String NAME = "系统设置";
 
     private MenuClickListener menuClickListener;
     private PanelSettingPagerAdapter mPagerAdapter;
@@ -40,7 +41,6 @@ public class PanelSettingFragment extends BaseFragment {
     @Override
     public void init() {
         ui_menu.setOnClickListener(v -> menuClickListener.onMenuClick());
-
 
         mPagerAdapter = new PanelSettingPagerAdapter(requireActivity());//界面适配器
         ui_page.setAdapter(mPagerAdapter);

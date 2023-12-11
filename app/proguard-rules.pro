@@ -33,3 +33,7 @@
 # Gson
 -keep class auto.panel.bean.**{*;} # 自定义数据模型的bean目录
 -keep class auto.panel.net.**{*;} # 自定义数据模型的bean目录
+
+# Baidu
+-keep class com.baidu.mobstat.** { *; }
+-keep class com.baidu.bottom.** { *; }

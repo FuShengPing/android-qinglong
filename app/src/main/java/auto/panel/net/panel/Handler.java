@@ -1,5 +1,10 @@
 package auto.panel.net.panel;
 
+import com.baidu.mobstat.StatService;
+
+import auto.panel.MyApplication;
+import auto.panel.ui.activity.LoginActivity;
+import auto.panel.utils.ActivityUtils;
 import auto.panel.utils.thread.AppLogTask;
 import auto.panel.utils.thread.ThreadPoolUtil;
 import retrofit2.Call;
@@ -30,6 +35,7 @@ public class Handler {
 
     public static void handleRequestError(Call<?> call, Throwable t, ApiController.BaseCallBack callBack) {
         ThreadPoolUtil.execute(new AppLogTask(t.getMessage()));
+        StatService.recordException(MyApplication.getInstance(), t);
         if (!call.isCanceled()) {
             callBack.onFailure(t.getLocalizedMessage());
         }

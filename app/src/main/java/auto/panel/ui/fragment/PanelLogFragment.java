@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.baidu.mobstat.StatService;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.Collections;
@@ -34,6 +35,7 @@ import auto.panel.ui.adapter.PanelLogItemAdapter;
 @SuppressLint({"SetTextI18n", "InflateParams"})
 public class PanelLogFragment extends BaseFragment {
     public static String TAG = "PanelLogFragment";
+    public static String NAME = "日志管理";
 
     private Stack<List<PanelFile>> fileStack;
     private MenuClickListener menuClickListener;
@@ -64,13 +66,17 @@ public class PanelLogFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        StatService.onPageStart(requireContext(), NAME);
         initData();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden) {
+        if (hidden) {
+            StatService.onPageEnd(requireContext(), NAME);
+        } else {
+            StatService.onPageStart(requireContext(), NAME);
             initData();
         }
     }

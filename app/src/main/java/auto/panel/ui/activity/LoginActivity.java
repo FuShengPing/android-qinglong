@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,6 +29,7 @@ public class LoginActivity extends BaseActivity {
     private EditText uiAddress;
     private EditText uiUsername;
     private EditText uiPassword;
+    private EditText uiCode;
     private Button uiLogin;
     private Button uiRegister;
 
@@ -42,6 +44,7 @@ public class LoginActivity extends BaseActivity {
         uiAddress = findViewById(R.id.et_address);
         uiUsername = findViewById(R.id.et_username);
         uiPassword = findViewById(R.id.et_password);
+        uiCode = findViewById(R.id.et_code);
         uiLogin = findViewById(R.id.bt_login);
         uiRegister = findViewById(R.id.bt_register);
 
@@ -152,7 +155,16 @@ public class LoginActivity extends BaseActivity {
 
         WindowUnit.hideKeyboard(uiPassword);
 
-        return new PanelAccount(username, password, address, null);
+        PanelAccount account = new PanelAccount(username, password, address, null);
+
+        if (uiCode.getVisibility() == View.VISIBLE) {
+            String code = uiCode.getText().toString().trim();
+            if (!code.isEmpty()) {
+                account.setCode(code);
+            }
+        }
+
+        return account;
     }
 
     private void buildPopWindowProgress() {
@@ -250,6 +262,9 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onFailure(String msg) {
                 dismissProgress();
+                if (msg.endsWith("验证token")) {
+                    uiCode.setVisibility(View.VISIBLE);
+                }
                 ToastUnit.showShort(msg);
             }
         });

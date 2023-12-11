@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.baidu.mobstat.StatService;
+
 import auto.base.util.TextUnit;
 import auto.base.util.ToastUnit;
 import auto.base.util.WindowUnit;
@@ -16,8 +18,12 @@ import auto.panel.bean.panel.PanelAccount;
 import auto.panel.bean.panel.PanelSystemConfig;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.ui.activity.LoginActivity;
+import auto.panel.utils.ActivityUtils;
 
 public class PanelSettingCommonFragment extends BaseFragment {
+    public static String TAG = "PanelSettingCommonFragment";
+    public static String NAME = "系统设置-常规设置";
+
     private EditText uiSecurityUsername;
     private EditText uiSecurityPassword;
     private Button uiSecuritySave;
@@ -37,6 +43,22 @@ public class PanelSettingCommonFragment extends BaseFragment {
 
         init();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        StatService.onPageStart(requireContext(), NAME);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) {
+            StatService.onPageEnd(requireContext(), NAME);
+        } else {
+            StatService.onPageStart(requireContext(), NAME);
+        }
     }
 
     @Override
@@ -135,9 +157,7 @@ public class PanelSettingCommonFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                Intent intent = new Intent(requireActivity(), LoginActivity.class);
-                requireActivity().startActivity(intent);
-                requireActivity().finish();
+                ActivityUtils.clearAndStartActivity(requireActivity(), LoginActivity.class);
                 ToastUnit.showShort(msg);
             }
         });
