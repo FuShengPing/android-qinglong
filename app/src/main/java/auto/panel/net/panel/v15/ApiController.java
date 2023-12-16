@@ -6,11 +6,11 @@ import com.google.gson.JsonObject;
 
 import java.util.List;
 
-import auto.base.util.TextUnit;
+import auto.panel.utils.TextUnit;
 import auto.panel.bean.panel.PanelFile;
 import auto.panel.bean.panel.PanelSystemConfig;
 import auto.panel.net.panel.BaseRes;
-import auto.panel.net.panel.Handler;
+import auto.panel.net.panel.NetHandler;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -36,7 +36,7 @@ public class ApiController {
             @Override
             public void onResponse(Call<SystemConfigRes> call, Response<SystemConfigRes> response) {
                 SystemConfigRes res = response.body();
-                if (Handler.handleResponse(response.code(), res, callBack)) {
+                if (NetHandler.handleResponse(response.code(), res, callBack)) {
                     return;
                 }
                 callBack.onSuccess();
@@ -44,7 +44,7 @@ public class ApiController {
 
             @Override
             public void onFailure(Call<SystemConfigRes> call, Throwable t) {
-                Handler.handleRequestError(call, t, callBack);
+                NetHandler.handleRequestError(call, t, callBack);
             }
         });
 
@@ -62,7 +62,7 @@ public class ApiController {
             @Override
             public void onResponse(@NonNull Call<TasksRes> call, @NonNull Response<TasksRes> response) {
                 TasksRes res = response.body();
-                if (Handler.handleResponse(response.code(), res, callBack)) {
+                if (NetHandler.handleResponse(response.code(), res, callBack)) {
                     return;
                 }
                 callBack.onSuccess(Converter.convertTasks(res.getData().getData()));
@@ -70,7 +70,7 @@ public class ApiController {
 
             @Override
             public void onFailure(@NonNull Call<TasksRes> call, @NonNull Throwable t) {
-                Handler.handleRequestError(call, t, callBack);
+                NetHandler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -87,7 +87,7 @@ public class ApiController {
             @Override
             public void onResponse(Call<EnvironmentsRes> call, Response<EnvironmentsRes> response) {
                 EnvironmentsRes res = response.body();
-                if (Handler.handleResponse(response.code(), res, callBack)) {
+                if (NetHandler.handleResponse(response.code(), res, callBack)) {
                     return;
                 }
                 callBack.onSuccess(Converter.convertEnvironments(res.getData()));
@@ -95,7 +95,7 @@ public class ApiController {
 
             @Override
             public void onFailure(Call<EnvironmentsRes> call, Throwable t) {
-                Handler.handleRequestError(call, t, callBack);
+                NetHandler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -112,7 +112,7 @@ public class ApiController {
             @Override
             public void onResponse(Call<DependenciesRes> call, Response<DependenciesRes> response) {
                 DependenciesRes res = response.body();
-                if (Handler.handleResponse(response.code(), res, callBack)) {
+                if (NetHandler.handleResponse(response.code(), res, callBack)) {
                     return;
                 }
                 callBack.onSuccess(Converter.convertDependencies(res.getData()));
@@ -120,7 +120,7 @@ public class ApiController {
 
             @Override
             public void onFailure(Call<DependenciesRes> call, Throwable t) {
-                Handler.handleRequestError(call, t, callBack);
+                NetHandler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -139,7 +139,7 @@ public class ApiController {
             @Override
             public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (Handler.handleResponse(response.code(), res, callBack)) {
+                if (NetHandler.handleResponse(response.code(), res, callBack)) {
                     return;
                 }
                 callBack.onSuccess();
@@ -147,7 +147,7 @@ public class ApiController {
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
-                Handler.handleRequestError(call, t, callBack);
+                NetHandler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -164,7 +164,7 @@ public class ApiController {
             @Override
             public void onResponse(Call<ScriptFilesRes> call, Response<ScriptFilesRes> response) {
                 ScriptFilesRes res = response.body();
-                if (Handler.handleResponse(response.code(), res, callBack)) {
+                if (NetHandler.handleResponse(response.code(), res, callBack)) {
                     return;
                 }
                 callBack.onSuccess(Converter.convertScriptFiles(res.getData()));
@@ -172,7 +172,7 @@ public class ApiController {
 
             @Override
             public void onFailure(Call<ScriptFilesRes> call, Throwable t) {
-                Handler.handleRequestError(call, t, callBack);
+                NetHandler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -200,7 +200,7 @@ public class ApiController {
             @Override
             public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (Handler.handleResponse(response.code(), res, callBack)) {
+                if (NetHandler.handleResponse(response.code(), res, callBack)) {
                     return;
                 }
                 callBack.onSuccess();
@@ -208,7 +208,7 @@ public class ApiController {
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
-                Handler.handleRequestError(call, t, callBack);
+                NetHandler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -225,7 +225,7 @@ public class ApiController {
             @Override
             public void onResponse(Call<LogFilesRes> call, Response<LogFilesRes> response) {
                 LogFilesRes res = response.body();
-                if (Handler.handleResponse(response.code(), res, callBack)) {
+                if (NetHandler.handleResponse(response.code(), res, callBack)) {
                     return;
                 }
                 callBack.onSuccess(Converter.convertLogFiles(res.getData()));
@@ -233,7 +233,7 @@ public class ApiController {
 
             @Override
             public void onFailure(Call<LogFilesRes> call, Throwable t) {
-                Handler.handleRequestError(call, t, callBack);
+                NetHandler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -250,7 +250,7 @@ public class ApiController {
             @Override
             public void onResponse(Call<SystemConfigRes> call, Response<SystemConfigRes> response) {
                 SystemConfigRes res = response.body();
-                if (Handler.handleResponse(response.code(), res, callBack)) {
+                if (NetHandler.handleResponse(response.code(), res, callBack)) {
                     return;
                 }
                 callBack.onSuccess(Converter.convertSystemConfig(res.getData().getInfo()));
@@ -258,7 +258,7 @@ public class ApiController {
 
             @Override
             public void onFailure(Call<SystemConfigRes> call, Throwable t) {
-                Handler.handleRequestError(call, t, callBack);
+                NetHandler.handleRequestError(call, t, callBack);
             }
         });
     }
@@ -280,7 +280,7 @@ public class ApiController {
             @Override
             public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
                 BaseRes res = response.body();
-                if (Handler.handleResponse(response.code(), res, callBack)) {
+                if (NetHandler.handleResponse(response.code(), res, callBack)) {
                     return;
                 }
                 callBack.onSuccess();
@@ -288,7 +288,7 @@ public class ApiController {
 
             @Override
             public void onFailure(Call<BaseRes> call, Throwable t) {
-                Handler.handleRequestError(call, t, callBack);
+                NetHandler.handleRequestError(call, t, callBack);
             }
         });
     }

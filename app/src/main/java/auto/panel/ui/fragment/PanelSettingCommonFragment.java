@@ -1,6 +1,5 @@
 package auto.panel.ui.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +9,8 @@ import android.widget.EditText;
 
 import com.baidu.mobstat.StatService;
 
-import auto.base.util.TextUnit;
-import auto.base.util.ToastUnit;
+import auto.panel.utils.TextUnit;
+import auto.panel.utils.ToastUnit;
 import auto.base.util.WindowUnit;
 import auto.panel.R;
 import auto.panel.bean.panel.PanelAccount;

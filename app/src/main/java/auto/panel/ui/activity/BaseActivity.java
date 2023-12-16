@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 
 import com.baidu.mobstat.StatService;
 
-import auto.base.util.ToastUnit;
+import auto.panel.utils.ToastUnit;
 import auto.panel.MyApplication;
 import auto.panel.net.NetManager;
 import auto.panel.utils.ActivityUtils;

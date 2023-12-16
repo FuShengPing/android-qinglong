@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import auto.base.util.PackageUtil;
-import auto.base.util.WebUnit;
+import auto.panel.utils.PackageUtil;
+import auto.panel.utils.WebUnit;
 import auto.panel.R;
 import auto.panel.database.sp.SettingPreference;
 

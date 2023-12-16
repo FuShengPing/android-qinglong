@@ -11,8 +11,8 @@ import android.widget.EditText;
 
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.base.ui.popup.ProgressPopupWindow;
-import auto.base.util.TextUnit;
-import auto.base.util.ToastUnit;
+import auto.panel.utils.TextUnit;
+import auto.panel.utils.ToastUnit;
 import auto.base.util.WindowUnit;
 import auto.panel.R;
 import auto.panel.bean.panel.PanelAccount;

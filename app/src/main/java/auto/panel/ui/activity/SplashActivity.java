@@ -7,9 +7,9 @@ import android.os.Handler;
 
 import com.baidu.mobstat.StatService;
 
-import auto.base.util.LogUnit;
-import auto.base.util.NetUnit;
-import auto.base.util.ToastUnit;
+import auto.panel.utils.LogUnit;
+import auto.panel.utils.NetUnit;
+import auto.panel.utils.ToastUnit;
 import auto.panel.R;
 import auto.panel.bean.panel.PanelAccount;
 import auto.panel.bean.panel.PanelSystemInfo;

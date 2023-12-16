@@ -1,4 +1,4 @@
-package auto.base.util;
+package auto.panel.utils;
 
 import android.util.Log;
 

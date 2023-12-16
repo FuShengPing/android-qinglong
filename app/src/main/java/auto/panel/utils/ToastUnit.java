@@ -1,4 +1,4 @@
-package auto.base.util;
+package auto.panel.utils;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -12,7 +12,7 @@ public class ToastUnit {
     private static final Handler mHandler;
 
     static {
-        mHandler = new Handler(Looper.myLooper());
+        mHandler = new Handler(Looper.getMainLooper());
     }
 
     public static void showShort(String content) {

@@ -3,7 +3,7 @@ package auto.panel.net.panel;
 import java.util.ArrayList;
 import java.util.List;
 
-import auto.base.util.TimeUnit;
+import auto.panel.utils.TimeUnit;
 import auto.panel.bean.panel.PanelLoginLog;
 
 /**

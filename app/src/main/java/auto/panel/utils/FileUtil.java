@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import auto.base.util.LogUnit;
 import auto.panel.MyApplication;
 import auto.panel.utils.thread.AppLogTask;
 import auto.panel.utils.thread.ThreadPoolUtil;

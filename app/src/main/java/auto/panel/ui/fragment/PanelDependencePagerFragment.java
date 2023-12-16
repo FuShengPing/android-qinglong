@@ -18,7 +18,6 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import auto.base.ui.popup.MenuItem;
 import auto.base.ui.popup.MenuPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
-import auto.base.util.LogUnit;
 import auto.panel.R;
 import auto.panel.ui.adapter.PanelDependencePagerAdapter;
 

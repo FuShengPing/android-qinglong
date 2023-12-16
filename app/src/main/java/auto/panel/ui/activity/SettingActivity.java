@@ -8,9 +8,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.SwitchCompat;
 
-import auto.base.util.EncryptUtil;
-import auto.base.util.ToastUnit;
-import auto.base.util.WebUnit;
+import auto.panel.utils.EncryptUtil;
+import auto.panel.utils.ToastUnit;
+import auto.panel.utils.WebUnit;
 import auto.panel.R;
 import auto.panel.bean.app.Config;
 import auto.panel.database.sp.PanelPreference;

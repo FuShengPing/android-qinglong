@@ -3,9 +3,13 @@ package auto.panel.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import auto.panel.net.panel.NetHandler;
 
 /**
  * @author: ASman
@@ -37,14 +41,28 @@ public class ActivityUtils {
     }
 
     public static void clearAndStartActivity(Context context, Class<?> cls) {
-        closeAllActivities();
-        Intent intent = new Intent(context, cls);
-        context.startActivity(intent);
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(() -> {
+            closeAllActivities();
+            Intent intent = new Intent(context, cls);
+            context.startActivity(intent);
+        });
     }
 
     public static void clearAndStartActivity(Context context, Intent intent) {
-        closeAllActivities();
-        context.startActivity(intent);
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(() -> {
+            closeAllActivities();
+            context.startActivity(intent);
+        });
+    }
+
+    public static Activity getTopActivity() {
+        if (activityList.isEmpty()) {
+            return null;
+        } else {
+            return activityList.get(activityList.size() - 1);
+        }
     }
 }
 

@@ -3,8 +3,6 @@ package auto.panel.net.panel;
 import com.baidu.mobstat.StatService;
 
 import auto.panel.MyApplication;
-import auto.panel.ui.activity.LoginActivity;
-import auto.panel.utils.ActivityUtils;
 import auto.panel.utils.thread.AppLogTask;
 import auto.panel.utils.thread.ThreadPoolUtil;
 import retrofit2.Call;
@@ -13,7 +11,7 @@ import retrofit2.Call;
  * @author wsfsp4
  * @version 2023.07.11
  */
-public class Handler {
+public class NetHandler {
     private static final String ERROR_NO_BODY = "响应异常";
     private static final String ERROR_INVALID_AUTH = "登录信息失效";
 

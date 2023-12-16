@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.baidu.mobstat.StatService;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
@@ -22,9 +21,8 @@ import java.util.Objects;
 import auto.base.ui.popup.EditItem;
 import auto.base.ui.popup.EditPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
-import auto.base.util.LogUnit;
-import auto.base.util.TextUnit;
-import auto.base.util.ToastUnit;
+import auto.panel.utils.TextUnit;
+import auto.panel.utils.ToastUnit;
 import auto.base.util.WindowUnit;
 import auto.panel.R;
 import auto.panel.bean.panel.PanelDependence;

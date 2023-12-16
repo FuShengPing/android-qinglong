@@ -2,8 +2,8 @@ package auto.panel.net.web;
 
 import android.webkit.JavascriptInterface;
 
-import auto.base.util.LogUnit;
-import auto.base.util.ToastUnit;
+import auto.panel.utils.LogUnit;
+import auto.panel.utils.ToastUnit;
 
 public class CommonJSInterface {
     public final static String TAG = "CommonJSInterface";

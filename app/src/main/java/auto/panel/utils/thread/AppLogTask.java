@@ -1,6 +1,6 @@
 package auto.panel.utils.thread;
 
-import auto.base.util.TimeUnit;
+import auto.panel.utils.TimeUnit;
 import auto.panel.utils.FileUtil;
 
 /**

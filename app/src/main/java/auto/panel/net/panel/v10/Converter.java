@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import auto.base.util.TimeUnit;
+import auto.panel.utils.TimeUnit;
 import auto.panel.bean.panel.PanelDependence;
 import auto.panel.bean.panel.PanelEnvironment;
 import auto.panel.bean.panel.PanelFile;
