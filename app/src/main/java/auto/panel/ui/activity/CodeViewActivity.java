@@ -25,9 +25,7 @@ import auto.panel.net.web.WebViewBuilder;
 
 public class CodeViewActivity extends BaseActivity {
     public static final String TAG = "CodeViewActivity";
-
-    private static final String STATIC_FILE_PATH = "file:///android_asset/web/editor.html";
-
+    private static final String STATIC_FILE_PATH = "file:///android_asset/web/editor/index.html";
     public static final String EXTRA_TITLE = "title";
     public static final String EXTRA_TYPE = "type";
     public static final String EXTRA_LOG_ID = "logId";
@@ -38,7 +36,6 @@ public class CodeViewActivity extends BaseActivity {
     public static final String EXTRA_DEPENDENCE_ID = "dependenceId";
     public static final String EXTRA_CAN_REFRESH = "canRefresh";
     public static final String EXTRA_CAN_EDIT = "canEdit";
-
     public static final String TYPE_LOG = "log";
     public static final String TYPE_SCRIPT = "script";
     public static final String TYPE_DEPENDENCE = "dependence";
