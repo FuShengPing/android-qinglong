@@ -37,7 +37,6 @@ import auto.base.ui.popup.MenuPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.panel.R;
 import auto.panel.bean.panel.PanelFile;
-import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
 import auto.panel.ui.activity.CodeViewActivity;
@@ -429,7 +428,7 @@ public class PanelScriptFragment extends BaseFragment {
     }
 
     private void netGetScriptFiles() {
-        ApiController.getScripts( new auto.panel.net.panel.ApiController.FileListCallBack() {
+        ApiController.getScripts(new auto.panel.net.panel.ApiController.FileListCallBack() {
             @Override
             public void onSuccess(List<PanelFile> files) {
                 fileStack.clear();
@@ -453,7 +452,7 @@ public class PanelScriptFragment extends BaseFragment {
     }
 
     private void netAddScript(PanelFile file) {
-        ApiController.addScript( file, new ApiController.BaseCallBack() {
+        ApiController.addScript(file, new ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("新建成功");
@@ -468,7 +467,7 @@ public class PanelScriptFragment extends BaseFragment {
     }
 
     private void netUpdateScript(PanelFile file) {
-        ApiController.updateScriptContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), file.getTitle(), file.getParentPath(), file.getContent(), new ApiController.BaseCallBack() {
+        ApiController.updateScriptContent(file.getTitle(), file.getParentPath(), file.getContent(), new ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("更新成功");
@@ -482,7 +481,7 @@ public class PanelScriptFragment extends BaseFragment {
     }
 
     private void netDeleteScript(PanelFile file, int position) {
-        ApiController.deleteScript(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), file, new ApiController.BaseCallBack() {
+        ApiController.deleteScript(file, new ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort(getString(R.string.tip_delete_success));

@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Stack;
 
 import auto.panel.bean.panel.PanelFile;
-import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.panel.ApiController;
 import auto.panel.utils.FileUtil;
 
@@ -52,7 +51,7 @@ public class DownloadScriptTask implements Runnable {
         int success = 0;
         for (int index = 0; index < tasks.size(); index++) {
             PanelFile panelFile = tasks.get(index);
-            String content = ApiController.getScriptContentSync(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), panelFile.getTitle(), panelFile.getParentPath());
+            String content = ApiController.getScriptContentSync(panelFile.getTitle(), panelFile.getParentPath());
             if (content != null) {
                 String filePath = FileUtil.getPathOfScript() + File.separator + panelFile.getParentPath();
                 // 保存文件

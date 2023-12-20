@@ -129,7 +129,7 @@ public class PanelSettingCommonFragment extends BaseFragment {
     }
 
     private void updateAccount(PanelAccount account) {
-        auto.panel.net.panel.ApiController.updateAccount(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), account, new auto.panel.net.panel.ApiController.BaseCallBack() {
+        auto.panel.net.panel.ApiController.updateAccount(account, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 PanelPreference.updateCurrentAccount(account);

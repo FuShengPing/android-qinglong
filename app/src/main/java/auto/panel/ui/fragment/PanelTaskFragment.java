@@ -47,7 +47,6 @@ import auto.base.ui.popup.ProgressPopupWindow;
 import auto.base.util.WindowUnit;
 import auto.panel.R;
 import auto.panel.bean.panel.PanelTask;
-import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.panel.ApiController;
 import auto.panel.ui.activity.CodeViewActivity;
 import auto.panel.ui.adapter.PanelTaskItemAdapter;
@@ -624,7 +623,7 @@ public class PanelTaskFragment extends BaseFragment {
                 int total = tasks.length;
 
                 for (PanelTask task : tasks) {
-                    boolean result = ApiController.addTaskSync(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), task);
+                    boolean result = ApiController.addTaskSync(task);
                     uiPopProgress.setTextAndShow("导入中... " + index + "/" + total);
                     index++;
                     if (result) {
@@ -662,7 +661,7 @@ public class PanelTaskFragment extends BaseFragment {
     }
 
     private void getTasks(String searchValue) {
-        auto.panel.net.panel.ApiController.getTasks( searchValue, new ApiController.TaskListCallBack() {
+        auto.panel.net.panel.ApiController.getTasks(searchValue, new ApiController.TaskListCallBack() {
             @Override
             public void onSuccess(List<PanelTask> tasks) {
                 Collections.sort(tasks);
@@ -680,7 +679,7 @@ public class PanelTaskFragment extends BaseFragment {
     }
 
     private void runTasks(List<Object> keys) {
-        auto.panel.net.panel.ApiController.runTasks(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), keys, new auto.panel.net.panel.ApiController.BaseCallBack() {
+        auto.panel.net.panel.ApiController.runTasks(keys, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("执行成功");
@@ -695,7 +694,7 @@ public class PanelTaskFragment extends BaseFragment {
     }
 
     private void stopTasks(List<Object> keys) {
-        auto.panel.net.panel.ApiController.stopTasks(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), keys, new auto.panel.net.panel.ApiController.BaseCallBack() {
+        auto.panel.net.panel.ApiController.stopTasks(keys, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("终止成功");
@@ -710,7 +709,7 @@ public class PanelTaskFragment extends BaseFragment {
     }
 
     private void enableTasks(List<Object> keys) {
-        auto.panel.net.panel.ApiController.enableTasks(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), keys, new auto.panel.net.panel.ApiController.BaseCallBack() {
+        auto.panel.net.panel.ApiController.enableTasks(keys, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("启用成功");
@@ -725,7 +724,7 @@ public class PanelTaskFragment extends BaseFragment {
     }
 
     private void disableTasks(List<Object> keys) {
-        auto.panel.net.panel.ApiController.disableTasks(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), keys, new auto.panel.net.panel.ApiController.BaseCallBack() {
+        auto.panel.net.panel.ApiController.disableTasks(keys, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("禁用成功");
@@ -740,7 +739,7 @@ public class PanelTaskFragment extends BaseFragment {
     }
 
     private void pinTasks(List<Object> keys) {
-        auto.panel.net.panel.ApiController.pinTasks(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), keys, new auto.panel.net.panel.ApiController.BaseCallBack() {
+        auto.panel.net.panel.ApiController.pinTasks(keys, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("顶置成功");
@@ -755,7 +754,7 @@ public class PanelTaskFragment extends BaseFragment {
     }
 
     private void unpinTasks(List<Object> keys) {
-        ApiController.unpinTasks(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), keys, new auto.panel.net.panel.ApiController.BaseCallBack() {
+        ApiController.unpinTasks(keys, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("取消顶置成功");
@@ -770,7 +769,7 @@ public class PanelTaskFragment extends BaseFragment {
     }
 
     private void deleteTasks(List<Object> keys) {
-        auto.panel.net.panel.ApiController.deleteTasks(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), keys, new auto.panel.net.panel.ApiController.BaseCallBack() {
+        auto.panel.net.panel.ApiController.deleteTasks(keys, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("删除成功");
@@ -785,7 +784,7 @@ public class PanelTaskFragment extends BaseFragment {
     }
 
     private void updateTask(PanelTask task) {
-        auto.panel.net.panel.ApiController.updateTask(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), task, new auto.panel.net.panel.ApiController.BaseCallBack() {
+        auto.panel.net.panel.ApiController.updateTask(task, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 dismissPopWindowEdit();
@@ -801,7 +800,7 @@ public class PanelTaskFragment extends BaseFragment {
     }
 
     private void addTask(PanelTask task) {
-        auto.panel.net.panel.ApiController.addTask(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), task, new auto.panel.net.panel.ApiController.BaseCallBack() {
+        auto.panel.net.panel.ApiController.addTask(task, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 dismissPopWindowEdit();

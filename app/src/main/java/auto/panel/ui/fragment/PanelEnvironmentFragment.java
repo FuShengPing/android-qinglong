@@ -41,7 +41,6 @@ import auto.base.ui.popup.ProgressPopupWindow;
 import auto.base.util.WindowUnit;
 import auto.panel.R;
 import auto.panel.bean.panel.PanelEnvironment;
-import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.ui.adapter.PanelEnvironmentItemAdapter;
 import auto.panel.utils.FileUtil;
@@ -541,7 +540,7 @@ public class PanelEnvironmentFragment extends BaseFragment {
                 int total = environments.length;
 
                 for (PanelEnvironment environment : environments) {
-                    boolean result = auto.panel.net.panel.ApiController.addEnvironmentSync(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), environment);
+                    boolean result = auto.panel.net.panel.ApiController.addEnvironmentSync(environment);
                     uiPopProgress.setTextAndShow("导入中... " + index + "/" + total);
                     index++;
                     if (result) {
@@ -579,7 +578,7 @@ public class PanelEnvironmentFragment extends BaseFragment {
     }
 
     private void getEnvironments(String searchValue) {
-        auto.panel.net.panel.ApiController.getEnvironments( searchValue, new auto.panel.net.panel.ApiController.EnvironmentListCallBack() {
+        auto.panel.net.panel.ApiController.getEnvironments(searchValue, new auto.panel.net.panel.ApiController.EnvironmentListCallBack() {
             @Override
             public void onSuccess(List<PanelEnvironment> environments) {
                 init = true;
@@ -596,7 +595,7 @@ public class PanelEnvironmentFragment extends BaseFragment {
     }
 
     private void enableEnvironments(List<Object> ids) {
-        auto.panel.net.panel.ApiController.enableEnvironments(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), ids, new auto.panel.net.panel.ApiController.BaseCallBack() {
+        auto.panel.net.panel.ApiController.enableEnvironments(ids, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 uiActionBack.performClick();
@@ -612,7 +611,7 @@ public class PanelEnvironmentFragment extends BaseFragment {
     }
 
     private void disableEnvironments(List<Object> ids) {
-        auto.panel.net.panel.ApiController.disableEnvironments(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), ids, new auto.panel.net.panel.ApiController.BaseCallBack() {
+        auto.panel.net.panel.ApiController.disableEnvironments(ids, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 uiActionBack.performClick();
@@ -628,7 +627,7 @@ public class PanelEnvironmentFragment extends BaseFragment {
     }
 
     private void addEnvironments(List<PanelEnvironment> environments) {
-        auto.panel.net.panel.ApiController.addEnvironments(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), environments, new auto.panel.net.panel.ApiController.BaseCallBack() {
+        auto.panel.net.panel.ApiController.addEnvironments(environments, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 dismissPopWindowEdit();
@@ -644,7 +643,7 @@ public class PanelEnvironmentFragment extends BaseFragment {
     }
 
     private void updateEnvironment(PanelEnvironment environment) {
-        auto.panel.net.panel.ApiController.updateEnvironment(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), environment, new auto.panel.net.panel.ApiController.BaseCallBack() {
+        auto.panel.net.panel.ApiController.updateEnvironment(environment, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 uiPopEdit.dismiss();
@@ -660,7 +659,7 @@ public class PanelEnvironmentFragment extends BaseFragment {
     }
 
     private void deleteEnvironments(List<Object> ids) {
-        auto.panel.net.panel.ApiController.deleteEnvironments(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), ids, new auto.panel.net.panel.ApiController.BaseCallBack() {
+        auto.panel.net.panel.ApiController.deleteEnvironments(ids, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 uiActionBack.performClick();

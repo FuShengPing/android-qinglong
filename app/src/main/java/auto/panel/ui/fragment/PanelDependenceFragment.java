@@ -24,7 +24,6 @@ import auto.base.ui.popup.PopupWindowBuilder;
 import auto.base.util.WindowUnit;
 import auto.panel.R;
 import auto.panel.bean.panel.PanelDependence;
-import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
 import auto.panel.ui.activity.CodeViewActivity;
@@ -165,7 +164,7 @@ public class PanelDependenceFragment extends BaseFragment {
     }
 
     private void getDependencies() {
-        auto.panel.net.panel.ApiController.getDependencies( "", this.type, new auto.panel.net.panel.ApiController.DependenceListCallBack() {
+        auto.panel.net.panel.ApiController.getDependencies("", this.type, new auto.panel.net.panel.ApiController.DependenceListCallBack() {
             @Override
             public void onSuccess(List<PanelDependence> dependencies) {
                 itemAdapter.setData(dependencies);
@@ -188,7 +187,7 @@ public class PanelDependenceFragment extends BaseFragment {
     }
 
     private void addDependencies(List<PanelDependence> dependencies) {
-        ApiController.addDependencies(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), dependencies, new ApiController.BaseCallBack() {
+        ApiController.addDependencies(dependencies, new ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 uiPopEdit.dismiss();
@@ -204,7 +203,7 @@ public class PanelDependenceFragment extends BaseFragment {
     }
 
     private void reinstallDependencies(List<Object> keys) {
-        ApiController.reinstallDependencies(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), keys, new ApiController.BaseCallBack() {
+        ApiController.reinstallDependencies(keys, new ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("执行成功");
@@ -220,7 +219,7 @@ public class PanelDependenceFragment extends BaseFragment {
     }
 
     private void deleteDependence(List<Object> keys) {
-        auto.panel.net.panel.ApiController.deleteDependencies( keys, new auto.panel.net.panel.ApiController.BaseCallBack() {
+        auto.panel.net.panel.ApiController.deleteDependencies(keys, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("执行成功");

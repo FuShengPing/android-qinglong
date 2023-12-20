@@ -17,6 +17,7 @@ import auto.panel.bean.panel.PanelSystemConfig;
 import auto.panel.bean.panel.PanelSystemInfo;
 import auto.panel.bean.panel.PanelTask;
 import auto.panel.database.sp.PanelPreference;
+import auto.panel.net.RetrofitFactory;
 import auto.panel.utils.TextUnit;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -55,6 +56,36 @@ public class ApiController {
 
             @Override
             public void onFailure(@NonNull Call<SystemInfoRes> call, @NonNull Throwable t) {
+                NetHandler.handleRequestError(call, t, callBack);
+            }
+        });
+    }
+
+    public static void initAccount(@NonNull String baseUrl, PanelAccount account, BaseCallBack callBack) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("username", account.getUsername());
+        jsonObject.addProperty("password", account.getPassword());
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
+
+        Call<BaseRes> call = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(Api.class)
+                .initAccount(requestBody);
+
+        call.enqueue(new Callback<BaseRes>() {
+            @Override
+            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
+                BaseRes res = response.body();
+                if (NetHandler.handleResponse(response.code(), res, callBack)) {
+                    return;
+                }
+                callBack.onSuccess();
+            }
+
+            @Override
+            public void onFailure(Call<BaseRes> call, Throwable t) {
                 NetHandler.handleRequestError(call, t, callBack);
             }
         });
@@ -120,15 +151,10 @@ public class ApiController {
         }
     }
 
-    public static void runTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
+    public static void runTasks(List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
 
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .runTasks(authorization, body);
+        Call<BaseRes> call = RetrofitFactory.build(Api.class).runTasks(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -147,15 +173,10 @@ public class ApiController {
         });
     }
 
-    public static void stopTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
+    public static void stopTasks(List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
 
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .stopTasks(authorization, body);
+        Call<BaseRes> call = RetrofitFactory.build(Api.class).stopTasks(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -174,15 +195,10 @@ public class ApiController {
         });
     }
 
-    public static void enableTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
+    public static void enableTasks(List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
 
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .enableTasks(authorization, body);
+        Call<BaseRes> call = RetrofitFactory.build(Api.class).enableTasks(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -201,15 +217,10 @@ public class ApiController {
         });
     }
 
-    public static void disableTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
+    public static void disableTasks(List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
 
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .disableTasks(authorization, body);
+        Call<BaseRes> call = RetrofitFactory.build(Api.class).disableTasks(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -228,15 +239,10 @@ public class ApiController {
         });
     }
 
-    public static void pinTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
+    public static void pinTasks(List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
 
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .pinTasks(authorization, body);
+        Call<BaseRes> call = RetrofitFactory.build(Api.class).pinTasks(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -255,15 +261,10 @@ public class ApiController {
         });
     }
 
-    public static void unpinTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
+    public static void unpinTasks(List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
 
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .unpinTasks(authorization, body);
+        Call<BaseRes> call = RetrofitFactory.build(Api.class).unpinTasks(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -282,19 +283,14 @@ public class ApiController {
         });
     }
 
-    public static void addTask(@NonNull String baseUrl, @NonNull String authorization, PanelTask task, BaseCallBack callBack) {
+    public static void addTask(PanelTask task, BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("name", task.getName());
         jsonObject.addProperty("command", task.getCommand());
         jsonObject.addProperty("schedule", task.getSchedule());
 
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .addTask(authorization, body);
+        Call<BaseRes> call = RetrofitFactory.build(Api.class).addTask(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -313,19 +309,14 @@ public class ApiController {
         });
     }
 
-    public static boolean addTaskSync(@NonNull String baseUrl, @NonNull String authorization, PanelTask task) {
+    public static boolean addTaskSync(PanelTask task) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("name", task.getName());
         jsonObject.addProperty("command", task.getCommand());
         jsonObject.addProperty("schedule", task.getSchedule());
 
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .addTask(authorization, body);
+        Call<BaseRes> call = RetrofitFactory.build(Api.class).addTask(body);
 
         try {
             Response<BaseRes> res = call.execute();
@@ -335,7 +326,7 @@ public class ApiController {
         }
     }
 
-    public static void updateTask(@NonNull String baseUrl, @NonNull String authorization, PanelTask task, BaseCallBack callBack) {
+    public static void updateTask(PanelTask task, BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         if (task.getKey() instanceof String) {
             jsonObject.addProperty("_id", (String) task.getKey());
@@ -348,12 +339,7 @@ public class ApiController {
         jsonObject.addProperty("schedule", task.getSchedule());
 
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .updateTask(authorization, body);
+        Call<BaseRes> call = RetrofitFactory.build(Api.class).updateTask(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -372,15 +358,10 @@ public class ApiController {
         });
     }
 
-    public static void deleteTasks(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
+    public static void deleteTasks(List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
 
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .deleteTasks(authorization, body);
+        Call<BaseRes> call = RetrofitFactory.build(Api.class).deleteTasks(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -407,15 +388,10 @@ public class ApiController {
         }
     }
 
-    public static void enableEnvironments(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
+    public static void enableEnvironments(List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
 
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .enableEnvironments(authorization, body);
+        Call<BaseRes> call = RetrofitFactory.build(Api.class).enableEnvironments(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -434,15 +410,10 @@ public class ApiController {
         });
     }
 
-    public static void disableEnvironments(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
+    public static void disableEnvironments(List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
 
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .disableEnvironments(authorization, body);
+        Call<BaseRes> call = RetrofitFactory.build(Api.class).disableEnvironments(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -461,7 +432,7 @@ public class ApiController {
         });
     }
 
-    public static void addEnvironments(@NonNull String baseUrl, @NonNull String authorization, List<PanelEnvironment> environments, BaseCallBack callBack) {
+    public static void addEnvironments(List<PanelEnvironment> environments, BaseCallBack callBack) {
         JsonArray jsonArray = new JsonArray();
         JsonObject jsonObject;
         for (PanelEnvironment environment : environments) {
@@ -473,12 +444,7 @@ public class ApiController {
         }
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
 
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .addEnvironments(authorization, body);
+        Call<BaseRes> call = RetrofitFactory.build(Api.class).addEnvironments(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -497,7 +463,7 @@ public class ApiController {
         });
     }
 
-    public static boolean addEnvironmentSync(@NonNull String baseUrl, @NonNull String authorization, PanelEnvironment environment) {
+    public static boolean addEnvironmentSync(PanelEnvironment environment) {
         JsonArray jsonArray = new JsonArray();
         JsonObject jsonObject;
         jsonObject = new JsonObject();
@@ -507,12 +473,7 @@ public class ApiController {
         jsonArray.add(jsonObject);
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
 
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .addEnvironments(authorization, body);
+        Call<BaseRes> call = RetrofitFactory.build(Api.class).addEnvironments(body);
 
         try {
             Response<BaseRes> res = call.execute();
@@ -522,7 +483,7 @@ public class ApiController {
         }
     }
 
-    public static void updateEnvironment(@NonNull String baseUrl, @NonNull String authorization, PanelEnvironment environment, BaseCallBack callBack) {
+    public static void updateEnvironment(PanelEnvironment environment, BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         if (environment.getKey() instanceof Integer) {
             jsonObject.addProperty("id", (Integer) environment.getKey());
@@ -534,12 +495,7 @@ public class ApiController {
         jsonObject.addProperty("value", environment.getValue());
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
 
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .updateEnvironment(authorization, body);
+        Call<BaseRes> call = RetrofitFactory.build(Api.class).updateEnvironment(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -558,15 +514,10 @@ public class ApiController {
         });
     }
 
-    public static void deleteEnvironments(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
+    public static void deleteEnvironments(List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
 
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .deleteEnvironments(authorization, body);
+        Call<BaseRes> call = RetrofitFactory.build(Api.class).deleteEnvironments(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -585,12 +536,12 @@ public class ApiController {
         });
     }
 
-    public static void getConfigFileContent(@NonNull String baseUrl, @NonNull String authorization, ContentCallBack callBack) {
+    public static void getConfigFileContent(ContentCallBack callBack) {
         String path = "api/configs/config.sh";
-        getFileContent(baseUrl, authorization, path, callBack);
+        getFileContent(path, callBack);
     }
 
-    public static void updateConfigFileContent(@NonNull String baseUrl, @NonNull String authorization, String content, BaseCallBack callBack) {
+    public static void updateConfigFileContent(String content, BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("content", content);
         jsonObject.addProperty("name", "config.sh");
@@ -598,12 +549,7 @@ public class ApiController {
         String json = jsonObject.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
 
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .updateConfigContent(authorization, body);
+        Call<BaseRes> call = RetrofitFactory.build(Api.class).updateConfigContent(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -630,7 +576,7 @@ public class ApiController {
         }
     }
 
-    public static void addDependencies(@NonNull String baseUrl, @NonNull String authorization, List<PanelDependence> dependencies, BaseCallBack callBack) {
+    public static void addDependencies(List<PanelDependence> dependencies, BaseCallBack callBack) {
         JsonArray jsonArray = new JsonArray();
         for (PanelDependence dependence : dependencies) {
             JsonObject jsonObject = new JsonObject();
@@ -640,12 +586,7 @@ public class ApiController {
         }
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
 
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .addDependencies(authorization, body);
+        Call<BaseRes> call = RetrofitFactory.build(Api.class).addDependencies(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -664,15 +605,10 @@ public class ApiController {
         });
     }
 
-    public static void reinstallDependencies(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
+    public static void reinstallDependencies(List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
 
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .reinstallDependencies(authorization, body);
+        Call<BaseRes> call = RetrofitFactory.build(Api.class).reinstallDependencies(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -699,15 +635,10 @@ public class ApiController {
         }
     }
 
-    public static void getDependenceLogContent(@NonNull String baseUrl, @NonNull String authorization, Object key, ContentCallBack callBack) {
+    public static void getDependenceLogContent(Object key, ContentCallBack callBack) {
         String path = "api/dependencies/" + key;
 
-        Call<DependenceLogRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .getDependenceLog(path, authorization);
+        Call<DependenceLogRes> call = RetrofitFactory.build(Api.class).getDependenceLog(path);
 
         call.enqueue(new Callback<DependenceLogRes>() {
             @Override
@@ -746,7 +677,7 @@ public class ApiController {
         }
     }
 
-    public static void deleteScript(@NonNull String baseUrl, @NonNull String authorization, PanelFile file, BaseCallBack callBack) {
+    public static void deleteScript(PanelFile file, BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("filename", file.getTitle());
         jsonObject.addProperty("path", file.getParentPath());
@@ -761,12 +692,7 @@ public class ApiController {
         String json = jsonObject.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
 
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .deleteScript(authorization, body);
+        Call<BaseRes> call = RetrofitFactory.build(Api.class).deleteScript(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -785,20 +711,15 @@ public class ApiController {
         });
     }
 
-    public static void getScriptContent(@NonNull String baseUrl, @NonNull String authorization, String fileName, String fileParent, ContentCallBack callBack) {
+    public static void getScriptContent(String fileName, String fileParent, ContentCallBack callBack) {
         String path = "api/scripts/" + fileName + "?path=" + (TextUnit.isFull(fileParent) ? fileParent : "");
-        getFileContent(baseUrl, authorization, path, callBack);
+        getFileContent(path, callBack);
     }
 
-    public static String getScriptContentSync(@NonNull String baseUrl, @NonNull String authorization, String fileName, String fileParent) {
+    public static String getScriptContentSync(String fileName, String fileParent) {
         String path = "api/scripts/" + fileName + "?path=" + (TextUnit.isFull(fileParent) ? fileParent : "");
 
-        Call<FileContentRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .getFileContent(path, authorization);
+        Call<FileContentRes> call = RetrofitFactory.build(Api.class).getFileContent(path);
 
         try {
             Response<FileContentRes> res = call.execute();
@@ -812,7 +733,7 @@ public class ApiController {
         }
     }
 
-    public static void updateScriptContent(@NonNull String baseUrl, @NonNull String authorization, String fileName, String fileParent, String content, BaseCallBack callBack) {
+    public static void updateScriptContent(String fileName, String fileParent, String content, BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("content", content);
         jsonObject.addProperty("filename", fileName);
@@ -821,12 +742,7 @@ public class ApiController {
         String json = jsonObject.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
 
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .updateScript(authorization, body);
+        Call<BaseRes> call = RetrofitFactory.build(Api.class).updateScript(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -853,23 +769,18 @@ public class ApiController {
         }
     }
 
-    public static void getLogContent(@NonNull String baseUrl, @NonNull String authorization, String scriptKey, String fileName, String fileParent, ContentCallBack callBack) {
+    public static void getLogContent(String scriptKey, String fileName, String fileParent, ContentCallBack callBack) {
         String path;
         if (PanelPreference.isLowVersion()) {
             path = auto.panel.net.panel.v10.ApiController.getLogFilePath(scriptKey, fileName, fileParent);
         } else {
             path = auto.panel.net.panel.v15.ApiController.getLogFilePath(scriptKey, fileName, fileParent);
         }
-        getFileContent(baseUrl, authorization, path, callBack);
+        getFileContent(path, callBack);
     }
 
-    public static void getLoginLogs(@NonNull String baseUrl, @NonNull String authorization, LoginLogListCallBack callBack) {
-        Call<LoginLogsRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .getLoginLogs(authorization);
+    public static void getLoginLogs(LoginLogListCallBack callBack) {
+        Call<LoginLogsRes> call = RetrofitFactory.build(Api.class).getLoginLogs();
 
         call.enqueue(new Callback<LoginLogsRes>() {
             @Override
@@ -904,18 +815,13 @@ public class ApiController {
         }
     }
 
-    public static void updateAccount(@NonNull String baseUrl, @NonNull String authorization, PanelAccount account, BaseCallBack callBack) {
+    public static void updateAccount(PanelAccount account, BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("username", account.getUsername());
         jsonObject.addProperty("password", account.getPassword());
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
 
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .updateAccount(authorization, requestBody);
+        Call<BaseRes> call = RetrofitFactory.build(Api.class).updateAccount(requestBody);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -934,43 +840,8 @@ public class ApiController {
         });
     }
 
-    public static void initAccount(@NonNull String baseUrl, PanelAccount account, BaseCallBack callBack) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("username", account.getUsername());
-        jsonObject.addProperty("password", account.getPassword());
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
-
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .initAccount(requestBody);
-
-        call.enqueue(new Callback<BaseRes>() {
-            @Override
-            public void onResponse(Call<BaseRes> call, Response<BaseRes> response) {
-                BaseRes res = response.body();
-                if (NetHandler.handleResponse(response.code(), res, callBack)) {
-                    return;
-                }
-                callBack.onSuccess();
-            }
-
-            @Override
-            public void onFailure(Call<BaseRes> call, Throwable t) {
-                NetHandler.handleRequestError(call, t, callBack);
-            }
-        });
-    }
-
-    private static void getFileContent(@NonNull String baseUrl, @NonNull String authorization, String path, ContentCallBack callBack) {
-        Call<FileContentRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .getFileContent(path, authorization);
+    private static void getFileContent(String path, ContentCallBack callBack) {
+        Call<FileContentRes> call = RetrofitFactory.build(Api.class).getFileContent(path);
 
         call.enqueue(new Callback<FileContentRes>() {
             @Override

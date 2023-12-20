@@ -44,10 +44,12 @@ public class BackupEnvironmentTask implements Runnable {
 
         try {
             boolean result = FileUtil.save(filePath, fileName, content);
-            if (result && listener != null) {
-                listener.onSuccess();
-            } else {
-                listener.onFail("");
+            if (listener != null) {
+                if (result) {
+                    listener.onSuccess();
+                } else {
+                    listener.onFail("");
+                }
             }
         } catch (Exception e) {
             if (listener != null) {

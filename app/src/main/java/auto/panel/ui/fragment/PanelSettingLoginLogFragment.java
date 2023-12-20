@@ -17,7 +17,6 @@ import java.util.Objects;
 
 import auto.panel.R;
 import auto.panel.bean.panel.PanelLoginLog;
-import auto.panel.database.sp.PanelPreference;
 import auto.panel.ui.adapter.PanelLoginLogItemAdapter;
 import auto.panel.utils.ToastUnit;
 
@@ -83,7 +82,7 @@ public class PanelSettingLoginLogFragment extends BaseFragment {
     }
 
     private void getLoginLogs() {
-        auto.panel.net.panel.ApiController.getLoginLogs(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.panel.net.panel.ApiController.LoginLogListCallBack() {
+        auto.panel.net.panel.ApiController.getLoginLogs(new auto.panel.net.panel.ApiController.LoginLogListCallBack() {
             @Override
             public void onSuccess(List<PanelLoginLog> loginLogs) {
                 itemAdapter.setData(loginLogs);

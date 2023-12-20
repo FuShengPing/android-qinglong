@@ -17,7 +17,6 @@ import java.util.Objects;
 
 import auto.base.util.WindowUnit;
 import auto.panel.R;
-import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.panel.ApiController;
 import auto.panel.net.web.PanelWebJsManager;
 import auto.panel.net.web.WebViewBuilder;
@@ -251,7 +250,7 @@ public class CodeViewActivity extends BaseActivity {
     }
 
     private void netGetConfigContent() {
-        ApiController.getConfigFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.panel.net.panel.ApiController.ContentCallBack() {
+        ApiController.getConfigFileContent(new auto.panel.net.panel.ApiController.ContentCallBack() {
             @Override
             public void onSuccess(String content) {
                 mContent = content;
@@ -271,7 +270,7 @@ public class CodeViewActivity extends BaseActivity {
     }
 
     private void netGetScriptContent(String fileName, String fileParent) {
-        ApiController.getScriptContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), fileName, fileParent, new auto.panel.net.panel.ApiController.ContentCallBack() {
+        ApiController.getScriptContent(fileName, fileParent, new auto.panel.net.panel.ApiController.ContentCallBack() {
             @Override
             public void onSuccess(String content) {
                 //防止内容过大导致崩溃
@@ -297,7 +296,7 @@ public class CodeViewActivity extends BaseActivity {
     }
 
     private void netGetLogFileContent(String scriptKey, String fileName, String fileParent) {
-        ApiController.getLogContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), scriptKey, fileName, fileParent, new auto.panel.net.panel.ApiController.ContentCallBack() {
+        ApiController.getLogContent(scriptKey, fileName, fileParent, new auto.panel.net.panel.ApiController.ContentCallBack() {
             @Override
             public void onSuccess(String content) {
                 PanelWebJsManager.setContent(uiWebView, content);
@@ -314,7 +313,7 @@ public class CodeViewActivity extends BaseActivity {
     }
 
     private void netGetDependenceLogContent(String key) {
-        ApiController.getDependenceLogContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), key, new auto.panel.net.panel.ApiController.ContentCallBack() {
+        ApiController.getDependenceLogContent(key, new auto.panel.net.panel.ApiController.ContentCallBack() {
             @Override
             public void onSuccess(String content) {
                 PanelWebJsManager.setContent(uiWebView, content);
@@ -331,7 +330,7 @@ public class CodeViewActivity extends BaseActivity {
     }
 
     private void netSaveScriptContent(String content) {
-        ApiController.updateScriptContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), mScriptName, mScriptParent, content, new auto.panel.net.panel.ApiController.BaseCallBack() {
+        ApiController.updateScriptContent(mScriptName, mScriptParent, content, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 mContent = content;
@@ -346,7 +345,7 @@ public class CodeViewActivity extends BaseActivity {
     }
 
     private void netSaveConfigContent(String content) {
-        ApiController.updateConfigFileContent(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), content, new auto.panel.net.panel.ApiController.BaseCallBack() {
+        ApiController.updateConfigFileContent(content, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 mContent = content;
