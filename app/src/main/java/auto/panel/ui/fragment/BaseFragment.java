@@ -1,11 +1,6 @@
 package auto.panel.ui.fragment;
 
-import android.content.Context;
-
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
-import com.baidu.mobstat.StatService;
 
 import auto.panel.net.NetManager;
 

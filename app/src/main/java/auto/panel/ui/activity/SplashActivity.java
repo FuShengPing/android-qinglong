@@ -7,14 +7,13 @@ import android.os.Handler;
 
 import com.baidu.mobstat.StatService;
 
-import auto.panel.utils.LogUnit;
-import auto.panel.utils.NetUnit;
-import auto.panel.utils.ToastUnit;
 import auto.panel.R;
 import auto.panel.bean.panel.PanelAccount;
 import auto.panel.bean.panel.PanelSystemInfo;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.panel.ApiController;
+import auto.panel.utils.NetUnit;
+import auto.panel.utils.ToastUnit;
 
 
 @SuppressLint("CustomSplashScreen")
@@ -75,7 +74,7 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onSuccess(PanelSystemInfo system) {
                 PanelPreference.setVersion(system.getVersion());
-                netCheckAccountToken(account);
+                netCheckAccountToken();
             }
 
             @Override
@@ -85,8 +84,8 @@ public class SplashActivity extends BaseActivity {
         });
     }
 
-    private void netCheckAccountToken(PanelAccount account) {
-        auto.panel.net.panel.ApiController.checkAccountToken(account.getBaseUrl(), account.getAuthorization(), new auto.panel.net.panel.ApiController.BaseCallBack() {
+    private void netCheckAccountToken() {
+        auto.panel.net.panel.ApiController.checkAccountToken(new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 onEnter(true);
@@ -94,7 +93,6 @@ public class SplashActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                LogUnit.log(msg);
                 onEnter(false);
             }
         });

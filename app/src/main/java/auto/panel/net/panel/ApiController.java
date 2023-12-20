@@ -8,7 +8,6 @@ import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.util.List;
 
-import auto.panel.utils.TextUnit;
 import auto.panel.bean.panel.PanelAccount;
 import auto.panel.bean.panel.PanelDependence;
 import auto.panel.bean.panel.PanelEnvironment;
@@ -18,6 +17,7 @@ import auto.panel.bean.panel.PanelSystemConfig;
 import auto.panel.bean.panel.PanelSystemInfo;
 import auto.panel.bean.panel.PanelTask;
 import auto.panel.database.sp.PanelPreference;
+import auto.panel.utils.TextUnit;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -71,20 +71,20 @@ public class ApiController {
 
         Call<LoginRes> call;
 
-        if (account.getCode() != null) {
-            call = new Retrofit.Builder()
-                    .baseUrl(baseUrl)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
-                    .create(Api.class)
-                    .twoFactorLogin(requestBody);
-        } else {
+        if (account.getCode() == null) {
             call = new Retrofit.Builder()
                     .baseUrl(baseUrl)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
                     .create(Api.class)
                     .login(requestBody);
+        } else {
+            call = new Retrofit.Builder()
+                    .baseUrl(baseUrl)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+                    .create(Api.class)
+                    .twoFactorLogin(requestBody);
         }
 
         call.enqueue(new Callback<LoginRes>() {
@@ -104,19 +104,19 @@ public class ApiController {
         });
     }
 
-    public static void checkAccountToken(@NonNull String baseUrl, @NonNull String authorization, BaseCallBack callBack) {
+    public static void checkAccountToken(BaseCallBack callBack) {
         if (PanelPreference.isLowVersion()) {
-            auto.panel.net.panel.v10.ApiController.checkAccountToken(baseUrl, authorization, callBack);
+            auto.panel.net.panel.v10.ApiController.checkAccountToken(callBack);
         } else {
-            auto.panel.net.panel.v15.ApiController.checkAccountToken(baseUrl, authorization, callBack);
+            auto.panel.net.panel.v15.ApiController.checkAccountToken(callBack);
         }
     }
 
-    public static void getTasks(@NonNull String baseUrl, @NonNull String authorization, String searchValue, TaskListCallBack callback) {
+    public static void getTasks(String searchValue, TaskListCallBack callback) {
         if (PanelPreference.isLowVersion()) {
-            auto.panel.net.panel.v10.ApiController.getTasks(baseUrl, authorization, searchValue, callback);
+            auto.panel.net.panel.v10.ApiController.getTasks(searchValue, callback);
         } else {
-            auto.panel.net.panel.v15.ApiController.getTasks(baseUrl, authorization, searchValue, callback);
+            auto.panel.net.panel.v15.ApiController.getTasks(searchValue, callback);
         }
     }
 
@@ -399,11 +399,11 @@ public class ApiController {
         });
     }
 
-    public static void getEnvironments(@NonNull String baseUrl, @NonNull String authorization, @NonNull String searchValue, EnvironmentListCallBack callBack) {
+    public static void getEnvironments(@NonNull String searchValue, EnvironmentListCallBack callBack) {
         if (PanelPreference.isLowVersion()) {
-            auto.panel.net.panel.v10.ApiController.getEnvironments(baseUrl, authorization, searchValue, callBack);
+            auto.panel.net.panel.v10.ApiController.getEnvironments(searchValue, callBack);
         } else {
-            auto.panel.net.panel.v15.ApiController.getEnvironments(baseUrl, authorization, searchValue, callBack);
+            auto.panel.net.panel.v15.ApiController.getEnvironments(searchValue, callBack);
         }
     }
 
@@ -622,11 +622,11 @@ public class ApiController {
         });
     }
 
-    public static void getDependencies(@NonNull String baseUrl, @NonNull String authorization, String searchValue, String type, DependenceListCallBack callBack) {
+    public static void getDependencies(String searchValue, String type, DependenceListCallBack callBack) {
         if (PanelPreference.isLowVersion()) {
-            auto.panel.net.panel.v10.ApiController.getDependencies(baseUrl, authorization, searchValue, type, callBack);
+            auto.panel.net.panel.v10.ApiController.getDependencies(searchValue, type, callBack);
         } else {
-            auto.panel.net.panel.v15.ApiController.getDependencies(baseUrl, authorization, searchValue, type, callBack);
+            auto.panel.net.panel.v15.ApiController.getDependencies(searchValue, type, callBack);
         }
     }
 
@@ -691,11 +691,11 @@ public class ApiController {
         });
     }
 
-    public static void deleteDependencies(@NonNull String baseUrl, @NonNull String authorization, List<Object> keys, BaseCallBack callBack) {
+    public static void deleteDependencies(List<Object> keys, BaseCallBack callBack) {
         if (PanelPreference.isLowVersion()) {
-            auto.panel.net.panel.v10.ApiController.deleteDependencies(baseUrl, authorization, keys, callBack);
+            auto.panel.net.panel.v10.ApiController.deleteDependencies(keys, callBack);
         } else {
-            auto.panel.net.panel.v15.ApiController.deleteDependencies(baseUrl, authorization, keys, callBack);
+            auto.panel.net.panel.v15.ApiController.deleteDependencies(keys, callBack);
         }
     }
 
@@ -730,19 +730,19 @@ public class ApiController {
         });
     }
 
-    public static void getScripts(@NonNull String baseUrl, @NonNull String authorization, FileListCallBack callBack) {
+    public static void getScripts(FileListCallBack callBack) {
         if (PanelPreference.isLowVersion()) {
-            auto.panel.net.panel.v10.ApiController.getScriptFiles(baseUrl, authorization, callBack);
+            auto.panel.net.panel.v10.ApiController.getScriptFiles(callBack);
         } else {
-            auto.panel.net.panel.v15.ApiController.getScripts(baseUrl, authorization, callBack);
+            auto.panel.net.panel.v15.ApiController.getScripts(callBack);
         }
     }
 
-    public static void addScript(@NonNull String baseUrl, @NonNull String authorization, @NonNull PanelFile file, BaseCallBack callBack) {
+    public static void addScript(@NonNull PanelFile file, BaseCallBack callBack) {
         if (PanelPreference.isLowVersion()) {
-            auto.panel.net.panel.v10.ApiController.addScript(baseUrl, authorization, file, callBack);
+            auto.panel.net.panel.v10.ApiController.addScript(file, callBack);
         } else {
-            auto.panel.net.panel.v15.ApiController.addScript(baseUrl, authorization, file, callBack);
+            auto.panel.net.panel.v15.ApiController.addScript(file, callBack);
         }
     }
 
@@ -845,11 +845,11 @@ public class ApiController {
         });
     }
 
-    public static void getLogs(@NonNull String baseUrl, @NonNull String authorization, FileListCallBack callBack) {
+    public static void getLogs(FileListCallBack callBack) {
         if (PanelPreference.isLowVersion()) {
-            auto.panel.net.panel.v10.ApiController.getLogFiles(baseUrl, authorization, callBack);
+            auto.panel.net.panel.v10.ApiController.getLogFiles(callBack);
         } else {
-            auto.panel.net.panel.v15.ApiController.getLogs(baseUrl, authorization, callBack);
+            auto.panel.net.panel.v15.ApiController.getLogs(callBack);
         }
     }
 
@@ -888,19 +888,19 @@ public class ApiController {
         });
     }
 
-    public static void getSystemConfig(@NonNull String baseUrl, @NonNull String authorization, SystemConfigCallBack callBack) {
+    public static void getSystemConfig(SystemConfigCallBack callBack) {
         if (PanelPreference.isLowVersion()) {
-            auto.panel.net.panel.v10.ApiController.getSystemConfig(baseUrl, authorization, callBack);
+            auto.panel.net.panel.v10.ApiController.getSystemConfig(callBack);
         } else {
-            auto.panel.net.panel.v15.ApiController.getSystemConfig(baseUrl, authorization, callBack);
+            auto.panel.net.panel.v15.ApiController.getSystemConfig(callBack);
         }
     }
 
-    public static void updateSystemConfig(@NonNull String baseUrl, @NonNull String authorization, PanelSystemConfig config, BaseCallBack callBack) {
+    public static void updateSystemConfig(PanelSystemConfig config, BaseCallBack callBack) {
         if (PanelPreference.isLowVersion()) {
-            auto.panel.net.panel.v10.ApiController.updateSystemConfig(baseUrl, authorization, config, callBack);
+            auto.panel.net.panel.v10.ApiController.updateSystemConfig(config, callBack);
         } else {
-            auto.panel.net.panel.v15.ApiController.updateSystemConfig(baseUrl, authorization, config, callBack);
+            auto.panel.net.panel.v15.ApiController.updateSystemConfig(config, callBack);
         }
     }
 

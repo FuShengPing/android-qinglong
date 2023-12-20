@@ -11,8 +11,6 @@ import android.widget.EditText;
 
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.base.ui.popup.ProgressPopupWindow;
-import auto.panel.utils.TextUnit;
-import auto.panel.utils.ToastUnit;
 import auto.base.util.WindowUnit;
 import auto.panel.R;
 import auto.panel.bean.panel.PanelAccount;
@@ -20,6 +18,8 @@ import auto.panel.bean.panel.PanelSystemInfo;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
+import auto.panel.utils.TextUnit;
+import auto.panel.utils.ToastUnit;
 
 public class LoginActivity extends BaseActivity {
     public static final String TAG = "LoginActivity";
@@ -101,7 +101,7 @@ public class LoginActivity extends BaseActivity {
             buildPopWindowProgress();
             uiPopProgress.setTextAndShow("登录中...");
 
-            //账号存在本地则尝试旧token 避免重复登录
+            //为当前存在账号则尝试旧token 避免重复登录
             account.setToken(PanelPreference.getAuthorization(account.getAddress(), account.getUsername(), account.getPassword()));
             //检测系统是否初始化和版本信息(延迟500ms)
             new Handler().postDelayed(() -> netQuerySystemInfo(account, ACTION_LOGIN), 500);
@@ -222,7 +222,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     protected void netCheckAccountToken(PanelAccount account) {
-        auto.panel.net.panel.ApiController.checkAccountToken(account.getBaseUrl(), account.getAuthorization(), new auto.panel.net.panel.ApiController.BaseCallBack() {
+        auto.panel.net.panel.ApiController.checkAccountToken(new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 enterHome();

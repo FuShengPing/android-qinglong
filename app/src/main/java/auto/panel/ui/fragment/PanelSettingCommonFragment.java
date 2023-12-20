@@ -9,8 +9,6 @@ import android.widget.EditText;
 
 import com.baidu.mobstat.StatService;
 
-import auto.panel.utils.TextUnit;
-import auto.panel.utils.ToastUnit;
 import auto.base.util.WindowUnit;
 import auto.panel.R;
 import auto.panel.bean.panel.PanelAccount;
@@ -18,6 +16,8 @@ import auto.panel.bean.panel.PanelSystemConfig;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.ui.activity.LoginActivity;
 import auto.panel.utils.ActivityUtils;
+import auto.panel.utils.TextUnit;
+import auto.panel.utils.ToastUnit;
 
 public class PanelSettingCommonFragment extends BaseFragment {
     public static String TAG = "PanelSettingCommonFragment";
@@ -98,7 +98,7 @@ public class PanelSettingCommonFragment extends BaseFragment {
     }
 
     private void getSystemConfig() {
-        auto.panel.net.panel.ApiController.getSystemConfig(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.panel.net.panel.ApiController.SystemConfigCallBack() {
+        auto.panel.net.panel.ApiController.getSystemConfig(new auto.panel.net.panel.ApiController.SystemConfigCallBack() {
             @Override
             public void onSuccess(PanelSystemConfig config) {
                 uiLogRemoveFrequency.setText(String.valueOf(config.getLogRemoveFrequency()));
@@ -113,7 +113,7 @@ public class PanelSettingCommonFragment extends BaseFragment {
     }
 
     private void updateSystemConfig(PanelSystemConfig config) {
-        auto.panel.net.panel.ApiController.updateSystemConfig(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), config, new auto.panel.net.panel.ApiController.BaseCallBack() {
+        auto.panel.net.panel.ApiController.updateSystemConfig( config, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 uiLogRemoveFrequency.clearFocus();

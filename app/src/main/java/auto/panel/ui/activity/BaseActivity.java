@@ -12,10 +12,10 @@ import androidx.annotation.Nullable;
 
 import com.baidu.mobstat.StatService;
 
-import auto.panel.utils.ToastUnit;
 import auto.panel.MyApplication;
 import auto.panel.net.NetManager;
 import auto.panel.utils.ActivityUtils;
+import auto.panel.utils.ToastUnit;
 
 public abstract class BaseActivity extends auto.base.BaseActivity {
     public static final String TAG = "BaseActivity";

@@ -21,8 +21,6 @@ import java.util.Objects;
 import auto.base.ui.popup.EditItem;
 import auto.base.ui.popup.EditPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
-import auto.panel.utils.TextUnit;
-import auto.panel.utils.ToastUnit;
 import auto.base.util.WindowUnit;
 import auto.panel.R;
 import auto.panel.bean.panel.PanelDependence;
@@ -31,6 +29,8 @@ import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
 import auto.panel.ui.activity.CodeViewActivity;
 import auto.panel.ui.adapter.PanelDependenceItemAdapter;
+import auto.panel.utils.TextUnit;
+import auto.panel.utils.ToastUnit;
 
 public class PanelDependenceFragment extends BaseFragment {
     private String type;
@@ -165,7 +165,7 @@ public class PanelDependenceFragment extends BaseFragment {
     }
 
     private void getDependencies() {
-        auto.panel.net.panel.ApiController.getDependencies(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), "", this.type, new auto.panel.net.panel.ApiController.DependenceListCallBack() {
+        auto.panel.net.panel.ApiController.getDependencies( "", this.type, new auto.panel.net.panel.ApiController.DependenceListCallBack() {
             @Override
             public void onSuccess(List<PanelDependence> dependencies) {
                 itemAdapter.setData(dependencies);
@@ -220,7 +220,7 @@ public class PanelDependenceFragment extends BaseFragment {
     }
 
     private void deleteDependence(List<Object> keys) {
-        auto.panel.net.panel.ApiController.deleteDependencies(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), keys, new auto.panel.net.panel.ApiController.BaseCallBack() {
+        auto.panel.net.panel.ApiController.deleteDependencies( keys, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("执行成功");

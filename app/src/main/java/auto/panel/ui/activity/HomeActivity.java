@@ -17,13 +17,6 @@ import java.util.Objects;
 
 import auto.base.ui.popup.ConfirmPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
-import auto.panel.utils.EncryptUtil;
-import auto.panel.utils.LogUnit;
-import auto.panel.utils.NetUnit;
-import auto.panel.utils.PackageUtil;
-import auto.panel.utils.TextUnit;
-import auto.panel.utils.ToastUnit;
-import auto.panel.utils.WebUnit;
 import auto.base.util.WindowUnit;
 import auto.panel.R;
 import auto.panel.bean.app.Version;
@@ -37,6 +30,13 @@ import auto.panel.ui.fragment.PanelLogFragment;
 import auto.panel.ui.fragment.PanelScriptFragment;
 import auto.panel.ui.fragment.PanelSettingFragment;
 import auto.panel.ui.fragment.PanelTaskFragment;
+import auto.panel.utils.EncryptUtil;
+import auto.panel.utils.LogUnit;
+import auto.panel.utils.NetUnit;
+import auto.panel.utils.PackageUtil;
+import auto.panel.utils.TextUnit;
+import auto.panel.utils.ToastUnit;
+import auto.panel.utils.WebUnit;
 
 public class HomeActivity extends BaseActivity {
     public static final String TAG = "HomeActivity";

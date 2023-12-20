@@ -38,10 +38,6 @@ import auto.base.ui.popup.MenuItem;
 import auto.base.ui.popup.MenuPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.base.ui.popup.ProgressPopupWindow;
-import auto.panel.utils.LogUnit;
-import auto.panel.utils.TextUnit;
-import auto.panel.utils.TimeUnit;
-import auto.panel.utils.ToastUnit;
 import auto.base.util.WindowUnit;
 import auto.panel.R;
 import auto.panel.bean.panel.PanelEnvironment;
@@ -49,6 +45,10 @@ import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.ui.adapter.PanelEnvironmentItemAdapter;
 import auto.panel.utils.FileUtil;
+import auto.panel.utils.LogUnit;
+import auto.panel.utils.TextUnit;
+import auto.panel.utils.TimeUnit;
+import auto.panel.utils.ToastUnit;
 import auto.panel.utils.thread.BackupEnvironmentTask;
 import auto.panel.utils.thread.ThreadPoolUtil;
 
@@ -579,7 +579,7 @@ public class PanelEnvironmentFragment extends BaseFragment {
     }
 
     private void getEnvironments(String searchValue) {
-        auto.panel.net.panel.ApiController.getEnvironments(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), searchValue, new auto.panel.net.panel.ApiController.EnvironmentListCallBack() {
+        auto.panel.net.panel.ApiController.getEnvironments( searchValue, new auto.panel.net.panel.ApiController.EnvironmentListCallBack() {
             @Override
             public void onSuccess(List<PanelEnvironment> environments) {
                 init = true;

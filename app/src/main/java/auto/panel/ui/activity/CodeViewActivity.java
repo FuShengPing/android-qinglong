@@ -15,13 +15,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Objects;
 
-import auto.panel.utils.ToastUnit;
 import auto.base.util.WindowUnit;
 import auto.panel.R;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.panel.ApiController;
 import auto.panel.net.web.PanelWebJsManager;
 import auto.panel.net.web.WebViewBuilder;
+import auto.panel.utils.ToastUnit;
 
 public class CodeViewActivity extends BaseActivity {
     public static final String TAG = "CodeViewActivity";

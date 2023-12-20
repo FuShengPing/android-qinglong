@@ -8,16 +8,16 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.SwitchCompat;
 
-import auto.panel.utils.EncryptUtil;
-import auto.panel.utils.ToastUnit;
-import auto.panel.utils.WebUnit;
 import auto.panel.R;
 import auto.panel.bean.app.Config;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.database.sp.SettingPreference;
 import auto.panel.net.app.ApiController;
 import auto.panel.utils.DeviceUnit;
+import auto.panel.utils.EncryptUtil;
 import auto.panel.utils.FileUtil;
+import auto.panel.utils.ToastUnit;
+import auto.panel.utils.WebUnit;
 import auto.panel.utils.thread.AppLogTask;
 import auto.panel.utils.thread.ThreadPoolUtil;
 

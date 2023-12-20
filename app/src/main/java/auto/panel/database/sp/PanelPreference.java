@@ -64,6 +64,9 @@ public class PanelPreference {
         String curAddress = sp.getString(KEY_ADDRESS, DEFAULT_EMPTY);
         String curUsername = sp.getString(KEY_USERNAME, DEFAULT_EMPTY);
         String curPassword = sp.getString(KEY_PASSWORD, DEFAULT_EMPTY);
+        assert curAddress != null;
+        assert curUsername != null;
+        assert curPassword != null;
         boolean flag = curAddress.equals(address) && curPassword.equals(password) && curUsername.equals(username);
         if (flag) {
             return sp.getString(KEY_TOKEN, DEFAULT_EMPTY);

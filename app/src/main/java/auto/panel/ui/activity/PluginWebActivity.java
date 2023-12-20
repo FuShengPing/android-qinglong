@@ -21,11 +21,11 @@ import auto.base.ui.popup.ConfirmPopupWindow;
 import auto.base.ui.popup.MenuItem;
 import auto.base.ui.popup.MenuPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
-import auto.panel.utils.TextUnit;
-import auto.panel.utils.ToastUnit;
 import auto.base.util.WindowUnit;
 import auto.panel.R;
 import auto.panel.net.web.WebViewBuilder;
+import auto.panel.utils.TextUnit;
+import auto.panel.utils.ToastUnit;
 
 public class PluginWebActivity extends BaseActivity {
     public static final String TAG = "PluginWebActivity";

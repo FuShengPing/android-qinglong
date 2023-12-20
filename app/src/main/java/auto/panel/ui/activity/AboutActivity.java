@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import auto.panel.utils.PackageUtil;
-import auto.panel.utils.WebUnit;
 import auto.panel.R;
 import auto.panel.database.sp.SettingPreference;
+import auto.panel.utils.PackageUtil;
+import auto.panel.utils.WebUnit;
 
 @SuppressLint("SetTextI18n")
 public class AboutActivity extends BaseActivity {

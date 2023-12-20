@@ -6,7 +6,6 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
-import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
@@ -17,29 +16,29 @@ import retrofit2.http.Query;
  */
 public interface Api {
     @GET("api/crons")
-    Call<TasksRes> getTasks(@Header("Authorization") String authorization, @Query("searchValue") String searchValue, @Query("page") int page, @Query("pageSize") int size);
+    Call<TasksRes> getTasks(@Query("searchValue") String searchValue, @Query("page") int page, @Query("pageSize") int size);
 
     @GET("api/envs")
-    Call<EnvironmentsRes> getEnvironments(@Header("Authorization") String authorization, @Query("searchValue") String searchValue);
+    Call<EnvironmentsRes> getEnvironments(@Query("searchValue") String searchValue);
 
     @GET("api/scripts")
-    Call<ScriptFilesRes> getScriptFiles(@Header("Authorization") String authorization);
+    Call<ScriptFilesRes> getScriptFiles();
 
     @POST("api/scripts")
-    Call<BaseRes> addScript(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<BaseRes> addScript( @Body RequestBody body);
 
     @GET("api/logs")
-    Call<LogFilesRes> getLogFiles(@Header("Authorization") String authorization);
+    Call<LogFilesRes> getLogFiles();
 
     @GET("api/dependencies")
-    Call<DependenciesRes> getDependencies(@Header("Authorization") String authorization, @Query("searchValue") String searchValue, @Query("type") String type);
+    Call<DependenciesRes> getDependencies(@Query("searchValue") String searchValue, @Query("type") String type);
 
     @HTTP(method = "DELETE", path = "api/dependencies/force", hasBody = true)
-    Call<BaseRes> deleteDependencies(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<BaseRes> deleteDependencies(@Body RequestBody body);
 
     @GET("api/system/config")
-    Call<SystemConfigRes> getSystemConfig(@Header("Authorization") String authorization);
+    Call<SystemConfigRes> getSystemConfig();
 
     @PUT("api/system/config")
-    Call<BaseRes> updateSystemConfig(@Header("Authorization") String authorization, @Body RequestBody body);
+    Call<BaseRes> updateSystemConfig(@Body RequestBody body);
 }

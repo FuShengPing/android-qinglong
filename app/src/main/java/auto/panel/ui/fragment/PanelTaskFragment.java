@@ -44,9 +44,6 @@ import auto.base.ui.popup.MenuItem;
 import auto.base.ui.popup.MenuPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.base.ui.popup.ProgressPopupWindow;
-import auto.panel.utils.TextUnit;
-import auto.panel.utils.TimeUnit;
-import auto.panel.utils.ToastUnit;
 import auto.base.util.WindowUnit;
 import auto.panel.R;
 import auto.panel.bean.panel.PanelTask;
@@ -56,6 +53,9 @@ import auto.panel.ui.activity.CodeViewActivity;
 import auto.panel.ui.adapter.PanelTaskItemAdapter;
 import auto.panel.utils.CronUnit;
 import auto.panel.utils.FileUtil;
+import auto.panel.utils.TextUnit;
+import auto.panel.utils.TimeUnit;
+import auto.panel.utils.ToastUnit;
 
 public class PanelTaskFragment extends BaseFragment {
     public static String TAG = "PanelTaskFragment";
@@ -662,7 +662,7 @@ public class PanelTaskFragment extends BaseFragment {
     }
 
     private void getTasks(String searchValue) {
-        auto.panel.net.panel.ApiController.getTasks(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), searchValue, new ApiController.TaskListCallBack() {
+        auto.panel.net.panel.ApiController.getTasks( searchValue, new ApiController.TaskListCallBack() {
             @Override
             public void onSuccess(List<PanelTask> tasks) {
                 Collections.sort(tasks);

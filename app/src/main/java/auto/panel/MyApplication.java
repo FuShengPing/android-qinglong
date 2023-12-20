@@ -5,8 +5,8 @@ import androidx.annotation.NonNull;
 import com.baidu.mobstat.StatService;
 
 import auto.base.BaseApplication;
-import auto.panel.utils.TimeUnit;
 import auto.panel.utils.FileUtil;
+import auto.panel.utils.TimeUnit;
 import auto.panel.utils.thread.AppLogTask;
 
 /**

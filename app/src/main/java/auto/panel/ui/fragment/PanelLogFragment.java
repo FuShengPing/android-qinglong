@@ -23,14 +23,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
 
-import auto.panel.utils.ToastUnit;
 import auto.panel.R;
 import auto.panel.bean.panel.PanelFile;
-import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
 import auto.panel.ui.activity.CodeViewActivity;
 import auto.panel.ui.adapter.PanelLogItemAdapter;
+import auto.panel.utils.ToastUnit;
 
 @SuppressLint({"SetTextI18n", "InflateParams"})
 public class PanelLogFragment extends BaseFragment {
@@ -151,7 +150,7 @@ public class PanelLogFragment extends BaseFragment {
     }
 
     private void getLogFiles() {
-        auto.panel.net.panel.ApiController.getLogs(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new ApiController.FileListCallBack() {
+        auto.panel.net.panel.ApiController.getLogs( new ApiController.FileListCallBack() {
             @Override
             public void onSuccess(List<PanelFile> files) {
                 sortAndSetData(files, "");

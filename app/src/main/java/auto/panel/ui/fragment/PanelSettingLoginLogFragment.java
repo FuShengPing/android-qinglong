@@ -15,11 +15,11 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import java.util.List;
 import java.util.Objects;
 
-import auto.panel.utils.ToastUnit;
 import auto.panel.R;
 import auto.panel.bean.panel.PanelLoginLog;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.ui.adapter.PanelLoginLogItemAdapter;
+import auto.panel.utils.ToastUnit;
 
 
 public class PanelSettingLoginLogFragment extends BaseFragment {

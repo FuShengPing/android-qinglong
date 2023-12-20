@@ -35,8 +35,6 @@ import auto.base.ui.popup.EditPopupWindow;
 import auto.base.ui.popup.MenuItem;
 import auto.base.ui.popup.MenuPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
-import auto.panel.utils.TextUnit;
-import auto.panel.utils.ToastUnit;
 import auto.panel.R;
 import auto.panel.bean.panel.PanelFile;
 import auto.panel.database.sp.PanelPreference;
@@ -47,6 +45,8 @@ import auto.panel.ui.activity.HomeActivity;
 import auto.panel.ui.adapter.PanelScriptItemAdapter;
 import auto.panel.utils.DeviceUnit;
 import auto.panel.utils.FileUtil;
+import auto.panel.utils.TextUnit;
+import auto.panel.utils.ToastUnit;
 import auto.panel.utils.thread.AppLogTask;
 import auto.panel.utils.thread.DownloadScriptTask;
 import auto.panel.utils.thread.ThreadPoolUtil;
@@ -429,7 +429,7 @@ public class PanelScriptFragment extends BaseFragment {
     }
 
     private void netGetScriptFiles() {
-        ApiController.getScripts(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), new auto.panel.net.panel.ApiController.FileListCallBack() {
+        ApiController.getScripts( new auto.panel.net.panel.ApiController.FileListCallBack() {
             @Override
             public void onSuccess(List<PanelFile> files) {
                 fileStack.clear();
@@ -453,7 +453,7 @@ public class PanelScriptFragment extends BaseFragment {
     }
 
     private void netAddScript(PanelFile file) {
-        ApiController.addScript(PanelPreference.getBaseUrl(), PanelPreference.getAuthorization(), file, new ApiController.BaseCallBack() {
+        ApiController.addScript( file, new ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("新建成功");
