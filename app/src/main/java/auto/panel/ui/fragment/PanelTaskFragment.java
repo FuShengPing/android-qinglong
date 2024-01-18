@@ -48,7 +48,7 @@ import auto.base.util.WindowUnit;
 import auto.panel.R;
 import auto.panel.bean.panel.PanelTask;
 import auto.panel.net.panel.ApiController;
-import auto.panel.ui.activity.CodeViewActivity;
+import auto.panel.ui.activity.TextEditorActivity;
 import auto.panel.ui.adapter.PanelTaskItemAdapter;
 import auto.panel.utils.CronUnit;
 import auto.panel.utils.FileUtil;
@@ -230,10 +230,10 @@ public class PanelTaskFragment extends BaseFragment {
 
             @Override
             public void onLog(PanelTask task) {
-                Intent intent = new Intent(getContext(), CodeViewActivity.class);
-                intent.putExtra(CodeViewActivity.EXTRA_TYPE, CodeViewActivity.TYPE_LOG);
-                intent.putExtra(CodeViewActivity.EXTRA_TITLE, task.getName());
-                intent.putExtra(CodeViewActivity.EXTRA_LOG_ID, String.valueOf(task.getKey()));
+                Intent intent = new Intent(getContext(), TextEditorActivity.class);
+                intent.putExtra(TextEditorActivity.EXTRA_TYPE, TextEditorActivity.TYPE_LOG);
+                intent.putExtra(TextEditorActivity.EXTRA_TITLE, task.getName());
+                intent.putExtra(TextEditorActivity.EXTRA_LOG_ID, String.valueOf(task.getKey()));
                 startActivity(intent);
             }
 
@@ -253,12 +253,12 @@ public class PanelTaskFragment extends BaseFragment {
                 } else {
                     return;
                 }
-                Intent intent = new Intent(getContext(), CodeViewActivity.class);
-                intent.putExtra(CodeViewActivity.EXTRA_SCRIPT_NAME, fileName);
-                intent.putExtra(CodeViewActivity.EXTRA_SCRIPT_DIR, dir);
-                intent.putExtra(CodeViewActivity.EXTRA_TITLE, fileName);
-                intent.putExtra(CodeViewActivity.EXTRA_TYPE, CodeViewActivity.TYPE_SCRIPT);
-                intent.putExtra(CodeViewActivity.EXTRA_CAN_EDIT, true);
+                Intent intent = new Intent(getContext(), TextEditorActivity.class);
+                intent.putExtra(TextEditorActivity.EXTRA_SCRIPT_NAME, fileName);
+                intent.putExtra(TextEditorActivity.EXTRA_SCRIPT_DIR, dir);
+                intent.putExtra(TextEditorActivity.EXTRA_TITLE, fileName);
+                intent.putExtra(TextEditorActivity.EXTRA_TYPE, TextEditorActivity.TYPE_SCRIPT);
+                intent.putExtra(TextEditorActivity.EXTRA_CAN_EDIT, true);
                 startActivity(intent);
             }
         });

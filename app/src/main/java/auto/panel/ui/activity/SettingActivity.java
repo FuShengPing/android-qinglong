@@ -56,7 +56,7 @@ public class SettingActivity extends BaseActivity {
     }
 
     private void onUpdateConfig(Config config) {
-        uiDocument.setOnClickListener(v -> WebUnit.open(this, config.getDocumentUrl()));
+//        uiDocument.setOnClickListener(v -> WebUnit.open(this, config.getDocumentUrl()));
 
         uiGroup.setOnClickListener(v -> joinQQGroup(config.getGroupKey()));
 
@@ -84,7 +84,11 @@ public class SettingActivity extends BaseActivity {
             uiPermission.setOnClickListener(v -> FileUtil.requestStoragePermission(mActivity));
         }
 
-        uiDocument.setOnClickListener(v -> WebUnit.open(this, SettingPreference.getDocumentUrl()));
+        uiDocument.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MarkdownActivity.class);
+            startActivity(intent);
+//            WebUnit.open(this, SettingPreference.getDocumentUrl());
+        });
 
         uiGroup.setOnClickListener(v -> joinQQGroup(SettingPreference.getGroupKey()));
 

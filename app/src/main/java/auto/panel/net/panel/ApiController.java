@@ -154,7 +154,7 @@ public class ApiController {
     public static void runTasks(List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
 
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).runTasks(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).runTasks(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -176,7 +176,7 @@ public class ApiController {
     public static void stopTasks(List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
 
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).stopTasks(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).stopTasks(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -198,7 +198,7 @@ public class ApiController {
     public static void enableTasks(List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
 
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).enableTasks(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).enableTasks(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -220,7 +220,7 @@ public class ApiController {
     public static void disableTasks(List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
 
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).disableTasks(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).disableTasks(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -242,7 +242,7 @@ public class ApiController {
     public static void pinTasks(List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
 
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).pinTasks(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).pinTasks(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -264,7 +264,7 @@ public class ApiController {
     public static void unpinTasks(List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
 
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).unpinTasks(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).unpinTasks(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -290,7 +290,7 @@ public class ApiController {
         jsonObject.addProperty("schedule", task.getSchedule());
 
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).addTask(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).addTask(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -316,7 +316,7 @@ public class ApiController {
         jsonObject.addProperty("schedule", task.getSchedule());
 
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).addTask(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).addTask(body);
 
         try {
             Response<BaseRes> res = call.execute();
@@ -339,7 +339,7 @@ public class ApiController {
         jsonObject.addProperty("schedule", task.getSchedule());
 
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).updateTask(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).updateTask(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -361,7 +361,7 @@ public class ApiController {
     public static void deleteTasks(List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
 
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).deleteTasks(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).deleteTasks(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -391,7 +391,7 @@ public class ApiController {
     public static void enableEnvironments(List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
 
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).enableEnvironments(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).enableEnvironments(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -413,7 +413,7 @@ public class ApiController {
     public static void disableEnvironments(List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
 
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).disableEnvironments(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).disableEnvironments(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -444,7 +444,7 @@ public class ApiController {
         }
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
 
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).addEnvironments(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).addEnvironments(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -473,7 +473,7 @@ public class ApiController {
         jsonArray.add(jsonObject);
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
 
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).addEnvironments(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).addEnvironments(body);
 
         try {
             Response<BaseRes> res = call.execute();
@@ -495,7 +495,7 @@ public class ApiController {
         jsonObject.addProperty("value", environment.getValue());
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
 
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).updateEnvironment(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).updateEnvironment(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -517,7 +517,7 @@ public class ApiController {
     public static void deleteEnvironments(List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
 
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).deleteEnvironments(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).deleteEnvironments(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -549,7 +549,7 @@ public class ApiController {
         String json = jsonObject.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
 
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).updateConfigContent(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).updateConfigContent(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -586,7 +586,7 @@ public class ApiController {
         }
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonArray.toString());
 
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).addDependencies(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).addDependencies(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -608,7 +608,7 @@ public class ApiController {
     public static void reinstallDependencies(List<Object> keys, BaseCallBack callBack) {
         RequestBody body = buildArrayJson(keys);
 
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).reinstallDependencies(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).reinstallDependencies(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -638,7 +638,7 @@ public class ApiController {
     public static void getDependenceLogContent(Object key, ContentCallBack callBack) {
         String path = "api/dependencies/" + key;
 
-        Call<DependenceLogRes> call = RetrofitFactory.build(Api.class).getDependenceLog(path);
+        Call<DependenceLogRes> call = RetrofitFactory.buildWithAuthorization(Api.class).getDependenceLog(path);
 
         call.enqueue(new Callback<DependenceLogRes>() {
             @Override
@@ -692,7 +692,7 @@ public class ApiController {
         String json = jsonObject.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
 
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).deleteScript(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).deleteScript(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -719,7 +719,7 @@ public class ApiController {
     public static String getScriptContentSync(String fileName, String fileParent) {
         String path = "api/scripts/" + fileName + "?path=" + (TextUnit.isFull(fileParent) ? fileParent : "");
 
-        Call<FileContentRes> call = RetrofitFactory.build(Api.class).getFileContent(path);
+        Call<FileContentRes> call = RetrofitFactory.buildWithAuthorization(Api.class).getFileContent(path);
 
         try {
             Response<FileContentRes> res = call.execute();
@@ -742,7 +742,7 @@ public class ApiController {
         String json = jsonObject.toString();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
 
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).updateScript(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).updateScript(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -780,7 +780,7 @@ public class ApiController {
     }
 
     public static void getLoginLogs(LoginLogListCallBack callBack) {
-        Call<LoginLogsRes> call = RetrofitFactory.build(Api.class).getLoginLogs();
+        Call<LoginLogsRes> call = RetrofitFactory.buildWithAuthorization(Api.class).getLoginLogs();
 
         call.enqueue(new Callback<LoginLogsRes>() {
             @Override
@@ -821,7 +821,7 @@ public class ApiController {
         jsonObject.addProperty("password", account.getPassword());
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
 
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).updateAccount(requestBody);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).updateAccount(requestBody);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -841,7 +841,7 @@ public class ApiController {
     }
 
     private static void getFileContent(String path, ContentCallBack callBack) {
-        Call<FileContentRes> call = RetrofitFactory.build(Api.class).getFileContent(path);
+        Call<FileContentRes> call = RetrofitFactory.buildWithAuthorization(Api.class).getFileContent(path);
 
         call.enqueue(new Callback<FileContentRes>() {
             @Override

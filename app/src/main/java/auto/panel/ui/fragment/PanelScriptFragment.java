@@ -39,7 +39,7 @@ import auto.panel.R;
 import auto.panel.bean.panel.PanelFile;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
-import auto.panel.ui.activity.CodeViewActivity;
+import auto.panel.ui.activity.TextEditorActivity;
 import auto.panel.ui.activity.HomeActivity;
 import auto.panel.ui.adapter.PanelScriptItemAdapter;
 import auto.panel.utils.DeviceUnit;
@@ -129,12 +129,12 @@ public class PanelScriptFragment extends BaseFragment {
                 if (file.isDir()) {
                     sortAndSetData(file.getChildren(), file.getPath());
                 } else {
-                    Intent intent = new Intent(getContext(), CodeViewActivity.class);
-                    intent.putExtra(CodeViewActivity.EXTRA_TYPE, CodeViewActivity.TYPE_SCRIPT);
-                    intent.putExtra(CodeViewActivity.EXTRA_TITLE, file.getTitle());
-                    intent.putExtra(CodeViewActivity.EXTRA_SCRIPT_NAME, file.getTitle());
-                    intent.putExtra(CodeViewActivity.EXTRA_SCRIPT_DIR, file.getParentPath());
-                    intent.putExtra(CodeViewActivity.EXTRA_CAN_EDIT, true);
+                    Intent intent = new Intent(getContext(), TextEditorActivity.class);
+                    intent.putExtra(TextEditorActivity.EXTRA_TYPE, TextEditorActivity.TYPE_SCRIPT);
+                    intent.putExtra(TextEditorActivity.EXTRA_TITLE, file.getTitle());
+                    intent.putExtra(TextEditorActivity.EXTRA_SCRIPT_NAME, file.getTitle());
+                    intent.putExtra(TextEditorActivity.EXTRA_SCRIPT_DIR, file.getParentPath());
+                    intent.putExtra(TextEditorActivity.EXTRA_CAN_EDIT, true);
                     startActivity(intent);
                 }
             }

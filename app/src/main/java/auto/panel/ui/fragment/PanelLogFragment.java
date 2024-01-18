@@ -27,7 +27,7 @@ import auto.panel.R;
 import auto.panel.bean.panel.PanelFile;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
-import auto.panel.ui.activity.CodeViewActivity;
+import auto.panel.ui.activity.TextEditorActivity;
 import auto.panel.ui.adapter.PanelLogItemAdapter;
 import auto.panel.utils.ToastUnit;
 
@@ -112,11 +112,11 @@ public class PanelLogFragment extends BaseFragment {
             if (file.isDir()) {
                 sortAndSetData(file.getChildren(), file.getTitle());
             } else {
-                Intent intent = new Intent(getContext(), CodeViewActivity.class);
-                intent.putExtra(CodeViewActivity.EXTRA_TYPE, CodeViewActivity.TYPE_LOG);
-                intent.putExtra(CodeViewActivity.EXTRA_TITLE, file.getTitle());
-                intent.putExtra(CodeViewActivity.EXTRA_LOG_NAME, file.getTitle());
-                intent.putExtra(CodeViewActivity.EXTRA_LOG_DIR, file.getParentPath());
+                Intent intent = new Intent(getContext(), TextEditorActivity.class);
+                intent.putExtra(TextEditorActivity.EXTRA_TYPE, TextEditorActivity.TYPE_LOG);
+                intent.putExtra(TextEditorActivity.EXTRA_TITLE, file.getTitle());
+                intent.putExtra(TextEditorActivity.EXTRA_LOG_NAME, file.getTitle());
+                intent.putExtra(TextEditorActivity.EXTRA_LOG_DIR, file.getParentPath());
                 startActivity(intent);
             }
         });

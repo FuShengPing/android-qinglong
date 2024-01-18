@@ -24,7 +24,7 @@ import retrofit2.Response;
  */
 public class ApiController {
     public static void checkAccountToken(auto.panel.net.panel.ApiController.BaseCallBack callBack) {
-        Call<SystemConfigRes> call = RetrofitFactory.build(Api.class).getSystemConfig();
+        Call<SystemConfigRes> call = RetrofitFactory.buildWithAuthorization(Api.class).getSystemConfig();
 
         call.enqueue(new Callback<SystemConfigRes>() {
             @Override
@@ -45,7 +45,7 @@ public class ApiController {
     }
 
     public static void getTasks(String searchValue, auto.panel.net.panel.ApiController.TaskListCallBack callBack) {
-        Call<TasksRes> call = RetrofitFactory.build(Api.class).getTasks(searchValue, 1, 300);
+        Call<TasksRes> call = RetrofitFactory.buildWithAuthorization(Api.class).getTasks(searchValue, 1, 300);
 
         call.enqueue(new Callback<TasksRes>() {
             @Override
@@ -65,7 +65,7 @@ public class ApiController {
     }
 
     public static void getEnvironments(@NonNull String searchValue, auto.panel.net.panel.ApiController.EnvironmentListCallBack callBack) {
-        Call<EnvironmentsRes> call = RetrofitFactory.build(Api.class).getEnvironments(searchValue);
+        Call<EnvironmentsRes> call = RetrofitFactory.buildWithAuthorization(Api.class).getEnvironments(searchValue);
 
         call.enqueue(new Callback<EnvironmentsRes>() {
             @Override
@@ -85,7 +85,7 @@ public class ApiController {
     }
 
     public static void getDependencies( String searchValue, String type, auto.panel.net.panel.ApiController.DependenceListCallBack callBack) {
-        Call<DependenciesRes> call = RetrofitFactory.build(Api.class).getDependencies(searchValue, type);
+        Call<DependenciesRes> call = RetrofitFactory.buildWithAuthorization(Api.class).getDependencies(searchValue, type);
 
         call.enqueue(new Callback<DependenciesRes>() {
             @Override
@@ -107,7 +107,7 @@ public class ApiController {
     public static void deleteDependencies( List<Object> keys, auto.panel.net.panel.ApiController.BaseCallBack callBack) {
         RequestBody body = auto.panel.net.panel.ApiController.buildArrayJson(keys);
 
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).deleteDependencies(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).deleteDependencies(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -127,7 +127,7 @@ public class ApiController {
     }
 
     public static void getScripts( auto.panel.net.panel.ApiController.FileListCallBack callBack) {
-        Call<ScriptFilesRes> call = RetrofitFactory.build(Api.class).getScriptFiles();
+        Call<ScriptFilesRes> call = RetrofitFactory.buildWithAuthorization(Api.class).getScriptFiles();
 
         call.enqueue(new Callback<ScriptFilesRes>() {
             @Override
@@ -157,7 +157,7 @@ public class ApiController {
         jsonObject.addProperty("path", file.getParentPath());
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
 
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).addScript(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).addScript(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -177,7 +177,7 @@ public class ApiController {
     }
 
     public static void getLogs( auto.panel.net.panel.ApiController.FileListCallBack callBack) {
-        Call<LogFilesRes> call = RetrofitFactory.build(Api.class).getLogFiles();
+        Call<LogFilesRes> call = RetrofitFactory.buildWithAuthorization(Api.class).getLogFiles();
 
         call.enqueue(new Callback<LogFilesRes>() {
             @Override
@@ -197,7 +197,7 @@ public class ApiController {
     }
 
     public static void getSystemConfig( auto.panel.net.panel.ApiController.SystemConfigCallBack callBack) {
-        Call<SystemConfigRes> call = RetrofitFactory.build(Api.class).getSystemConfig();
+        Call<SystemConfigRes> call = RetrofitFactory.buildWithAuthorization(Api.class).getSystemConfig();
 
         call.enqueue(new Callback<SystemConfigRes>() {
             @Override
@@ -222,7 +222,7 @@ public class ApiController {
         jsonObject.addProperty("logRemoveFrequency", config.getLogRemoveFrequency());
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
 
-        Call<BaseRes> call = RetrofitFactory.build(Api.class).updateSystemConfig(body);
+        Call<BaseRes> call = RetrofitFactory.buildWithAuthorization(Api.class).updateSystemConfig(body);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override

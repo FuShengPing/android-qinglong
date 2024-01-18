@@ -22,7 +22,7 @@ import auto.panel.net.web.PanelWebJsManager;
 import auto.panel.net.web.WebViewBuilder;
 import auto.panel.utils.ToastUnit;
 
-public class CodeViewActivity extends BaseActivity {
+public class TextEditorActivity extends BaseActivity {
     public static final String TAG = "CodeViewActivity";
     private static final String STATIC_FILE_PATH = "file:///android_asset/web/editor/index.html";
     public static final String EXTRA_TITLE = "title";

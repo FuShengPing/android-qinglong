@@ -142,10 +142,10 @@ public class HomeActivity extends BaseActivity {
         menuLog.setOnClickListener(v -> showFragment(PanelLogFragment.class));
         //配置文件
         menuConfig.setOnClickListener(v -> {
-            Intent intent = new Intent(this, CodeViewActivity.class);
-            intent.putExtra(CodeViewActivity.EXTRA_TYPE, CodeViewActivity.TYPE_CONFIG);
-            intent.putExtra(CodeViewActivity.EXTRA_TITLE, "config.sh");
-            intent.putExtra(CodeViewActivity.EXTRA_CAN_EDIT, true);
+            Intent intent = new Intent(this, TextEditorActivity.class);
+            intent.putExtra(TextEditorActivity.EXTRA_TYPE, TextEditorActivity.TYPE_CONFIG);
+            intent.putExtra(TextEditorActivity.EXTRA_TITLE, "config.sh");
+            intent.putExtra(TextEditorActivity.EXTRA_CAN_EDIT, true);
             startActivity(intent);
         });
         //脚本管理

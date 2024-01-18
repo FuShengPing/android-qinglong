@@ -26,7 +26,7 @@ import auto.panel.R;
 import auto.panel.bean.panel.PanelDependence;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
-import auto.panel.ui.activity.CodeViewActivity;
+import auto.panel.ui.activity.TextEditorActivity;
 import auto.panel.ui.adapter.PanelDependenceItemAdapter;
 import auto.panel.utils.TextUnit;
 import auto.panel.utils.ToastUnit;
@@ -121,10 +121,10 @@ public class PanelDependenceFragment extends BaseFragment {
         itemAdapter.setItemInterface(new PanelDependenceItemAdapter.ItemActionListener() {
             @Override
             public void onDetail(PanelDependence dependence, int position) {
-                Intent intent = new Intent(getContext(), CodeViewActivity.class);
-                intent.putExtra(CodeViewActivity.EXTRA_TYPE, CodeViewActivity.TYPE_DEPENDENCE);
-                intent.putExtra(CodeViewActivity.EXTRA_TITLE, dependence.getTitle());
-                intent.putExtra(CodeViewActivity.EXTRA_DEPENDENCE_ID, String.valueOf(dependence.getKey()));
+                Intent intent = new Intent(getContext(), TextEditorActivity.class);
+                intent.putExtra(TextEditorActivity.EXTRA_TYPE, TextEditorActivity.TYPE_DEPENDENCE);
+                intent.putExtra(TextEditorActivity.EXTRA_TITLE, dependence.getTitle());
+                intent.putExtra(TextEditorActivity.EXTRA_DEPENDENCE_ID, String.valueOf(dependence.getKey()));
                 startActivity(intent);
             }
 

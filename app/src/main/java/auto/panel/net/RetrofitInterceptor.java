@@ -29,7 +29,7 @@ public class RetrofitInterceptor implements Interceptor {
         Response response = chain.proceed(modifiedRequest);
 
         LogUnit.log("RetrofitInterceptor");
-        LogUnit.log("originalRequest:" + originalRequest.url().toString());
+        LogUnit.log("originalRequest:" + originalRequest.url());
         return response;
     }
 
