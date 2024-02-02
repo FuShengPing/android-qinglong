@@ -1,6 +1,6 @@
 var editor = null
 
-function initEditor() {
+function init() {
     editor = CodeMirror.fromTextArea(document.getElementById("code"), {
         mode: "python",//采用python语法高亮
         theme: "solarized",//主题风格

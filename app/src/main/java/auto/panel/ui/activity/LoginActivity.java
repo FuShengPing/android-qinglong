@@ -18,11 +18,13 @@ import auto.panel.bean.panel.PanelSystemInfo;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
+import auto.panel.utils.NetUnit;
 import auto.panel.utils.TextUnit;
 import auto.panel.utils.ToastUnit;
 
 public class LoginActivity extends BaseActivity {
     public static final String TAG = "LoginActivity";
+    public static final String MIN_VERSION = "2.15.0";
     private static final int ACTION_LOGIN = 0;
     private static final int ACTION_REGISTER = 1;
 
@@ -32,7 +34,6 @@ public class LoginActivity extends BaseActivity {
     private EditText uiCode;
     private Button uiLogin;
     private Button uiRegister;
-
     private ProgressPopupWindow uiPopProgress;
 
     @Override
@@ -141,8 +142,9 @@ public class LoginActivity extends BaseActivity {
         String address = uiAddress.getText().toString();
         String username = uiUsername.getText().toString().trim();
         String password = uiPassword.getText().toString().trim();
+        String code = uiCode.getText().toString().trim();
 
-        if (!address.matches("[0-9a-zA-Z.:/_-]+")) {
+        if (!NetUnit.checkUrlValid(address)) {
             ToastUnit.showShort("地址格式错误");
             return null;
         } else if (username.isEmpty()) {
@@ -157,11 +159,8 @@ public class LoginActivity extends BaseActivity {
 
         PanelAccount account = new PanelAccount(username, password, address, null);
 
-        if (uiCode.getVisibility() == View.VISIBLE) {
-            String code = uiCode.getText().toString().trim();
-            if (!code.isEmpty()) {
-                account.setCode(code);
-            }
+        if (uiCode.getVisibility() == View.VISIBLE && !code.isEmpty()) {
+            account.setCode(code);
         }
 
         return account;
@@ -193,9 +192,11 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onSuccess(PanelSystemInfo system) {
                 PanelPreference.setVersion(system.getVersion());
-
                 if (action == ACTION_LOGIN) {
-                    if (!system.isInitialized()) {
+                    if (system.getVersion().compareTo(MIN_VERSION) < 0) {
+                        dismissProgress();
+                        ToastUnit.showShort("仅支持" + MIN_VERSION + "及以上版本");
+                    } else if (!system.isInitialized()) {
                         dismissProgress();
                         ToastUnit.showShort("系统未初始化，无法登录");
                     } else if (TextUnit.isFull(account.getToken())) {
@@ -203,13 +204,16 @@ public class LoginActivity extends BaseActivity {
                     } else {
                         netLogin(account);
                     }
-                } else {
+                } else if (action == ACTION_REGISTER) {
                     if (system.isInitialized()) {
                         dismissProgress();
                         ToastUnit.showShort("系统已初始化，无法注册");
                     } else {
                         netRegister(account);
                     }
+                } else {
+                    dismissProgress();
+                    ToastUnit.showShort("未知操作");
                 }
             }
 
@@ -217,20 +221,6 @@ public class LoginActivity extends BaseActivity {
             public void onFailure(String msg) {
                 dismissProgress();
                 ToastUnit.showShort(msg);
-            }
-        });
-    }
-
-    protected void netCheckAccountToken(PanelAccount account) {
-        auto.panel.net.panel.ApiController.checkAccountToken(new auto.panel.net.panel.ApiController.BaseCallBack() {
-            @Override
-            public void onSuccess() {
-                enterHome();
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                netLogin(account);
             }
         });
     }
@@ -266,6 +256,20 @@ public class LoginActivity extends BaseActivity {
                     uiCode.setVisibility(View.VISIBLE);
                 }
                 ToastUnit.showShort(msg);
+            }
+        });
+    }
+
+    protected void netCheckAccountToken(PanelAccount account) {
+        auto.panel.net.panel.ApiController.checkAccountToken(new auto.panel.net.panel.ApiController.BaseCallBack() {
+            @Override
+            public void onSuccess() {
+                enterHome();
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                netLogin(account);
             }
         });
     }

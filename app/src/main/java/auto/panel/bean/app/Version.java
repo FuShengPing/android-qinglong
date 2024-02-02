@@ -7,12 +7,21 @@ import java.util.List;
  * The type Version.
  */
 public class Version {
+    private String updateTime;
     private int versionCode;
     private String versionName;
     private int minVersionCode;
-    private String updateTime;
+    private String minPanelVersion;
     private String downloadUrl;
     private List<String> updateDetail;
+
+    public String getMinPanelVersion() {
+        return minPanelVersion;
+    }
+
+    public void setMinPanelVersion(String minPanelVersion) {
+        this.minPanelVersion = minPanelVersion;
+    }
 
     /**
      * Gets version code.

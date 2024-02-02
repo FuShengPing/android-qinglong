@@ -9,6 +9,7 @@ public class PanelTask implements Comparable<PanelTask> {
     public static final int STATE_WAITING = 1;
     public static final int STATE_FREE = 2;
     public static final int STATE_LIMIT = 3;
+    public static final int STATE_UNKOWN = 4;
 
     private Object key;
     private String name;

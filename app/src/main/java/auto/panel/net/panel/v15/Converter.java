@@ -51,12 +51,12 @@ public class Converter {
                 if (object.getStatus() == 0) {
                     task.setState("运行中");
                     task.setStateCode(PanelTask.STATE_RUNNING);
-                } else if (object.getStatus() == 3) {
-                    task.setState("等待中");
-                    task.setStateCode(PanelTask.STATE_WAITING);
                 } else if (object.getIsDisabled() == 1) {
                     task.setState("已禁止");
                     task.setStateCode(PanelTask.STATE_LIMIT);
+                } else if (object.getStatus() == 3) {
+                    task.setState("等待中");
+                    task.setStateCode(PanelTask.STATE_WAITING);
                 } else {
                     task.setState("空闲中");
                     task.setStateCode(PanelTask.STATE_FREE);
@@ -109,7 +109,7 @@ public class Converter {
                 logFile.setDir(object.isDir());
                 logFile.setParentPath("");
                 logFile.setPath(object.getTitle());
-                logFile.setCreateTime(TimeUnit.formatDatetimeA(object.getMtime()));
+                logFile.setTime(TimeUnit.formatDatetimeA(object.getMtime()));
 
                 if (object.isDir()) {
                     List<PanelFile> children = new ArrayList<>();
@@ -119,7 +119,7 @@ public class Converter {
                         childFile.setTitle(childObject.getTitle());
                         childFile.setParentPath(object.getTitle());
                         childFile.setPath(object.getTitle() + "/" + childObject.getTitle());
-                        childFile.setCreateTime(TimeUnit.formatDatetimeA(childObject.getMtime()));
+                        childFile.setTime(TimeUnit.formatDatetimeA(childObject.getMtime()));
                         children.add(childFile);
                     }
                     logFile.setChildren(children);
@@ -168,7 +168,7 @@ public class Converter {
                 file.setTitle(object.getTitle());
                 file.setParentPath("");
                 file.setDir(object.isDir());
-                file.setCreateTime(TimeUnit.formatDatetimeA((long) object.getMtime()));
+                file.setTime(TimeUnit.formatDatetimeA((long) object.getMtime()));
                 file.setPath(object.getTitle());
 
                 if (object.isDir()) {
@@ -209,7 +209,7 @@ public class Converter {
                 childFile.setTitle(object.getTitle());
                 childFile.setParentPath(parent);
                 childFile.setDir(object.isDir());
-                childFile.setCreateTime(TimeUnit.formatDatetimeA((long) object.getMtime()));
+                childFile.setTime(TimeUnit.formatDatetimeA((long) object.getMtime()));
                 childFile.setPath(parent + "/" + object.getTitle());
 
                 if (object.isDir()) {

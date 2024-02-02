@@ -83,16 +83,14 @@ public class PanelPreference {
     public static String getBaseUrl() {
         if (mBaseUrl == null) {
             String address = sp.getString(KEY_ADDRESS, DEFAULT_EMPTY);
-            // BaseUrl
-            StringBuilder sb = new StringBuilder();
-            if (!address.startsWith("http")) {
-                sb.append("http://");
+            assert address != null;
+            if (!address.startsWith("http://") && !address.startsWith("https://")) {
+                address = "http://" + address; // 默认http
             }
-            sb.append(address);
             if (!address.endsWith("/")) {
-                sb.append("/");
+                address = address + "/";
             }
-            mBaseUrl = sb.toString();
+            mBaseUrl = address;
         }
         return mBaseUrl;
     }
@@ -132,7 +130,4 @@ public class PanelPreference {
         editor.apply();
     }
 
-    public static boolean isLowVersion() {
-        return sp.getString(KEY_VERSION, DEFAULT_EMPTY).startsWith("2.10");
-    }
 }

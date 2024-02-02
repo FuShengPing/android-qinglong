@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.baidu.mobstat.StatService;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.List;
@@ -44,17 +42,13 @@ public class PanelSettingLoginLogFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        StatService.onPageStart(requireContext(), NAME);
         initData();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (hidden) {
-            StatService.onPageEnd(requireContext(), NAME);
-        } else {
-            StatService.onPageStart(requireContext(), NAME);
+        if(!hidden) {
             initData();
         }
     }

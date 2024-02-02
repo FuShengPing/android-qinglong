@@ -18,8 +18,6 @@ import android.widget.TextView;
 import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.baidu.mobstat.StatService;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.io.BufferedReader;
@@ -39,8 +37,8 @@ import auto.panel.R;
 import auto.panel.bean.panel.PanelFile;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
-import auto.panel.ui.activity.TextEditorActivity;
 import auto.panel.ui.activity.HomeActivity;
+import auto.panel.ui.activity.TextEditorActivity;
 import auto.panel.ui.adapter.PanelScriptItemAdapter;
 import auto.panel.utils.DeviceUnit;
 import auto.panel.utils.FileUtil;
@@ -91,17 +89,13 @@ public class PanelScriptFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        StatService.onPageStart(requireContext(), NAME);
         initData();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (hidden) {
-            StatService.onPageEnd(requireContext(), NAME);
-        } else {
-            StatService.onPageStart(requireContext(), NAME);
+        if(!hidden){
             initData();
         }
     }

@@ -10,8 +10,6 @@ import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 
-import com.baidu.mobstat.StatService;
-
 import auto.panel.MyApplication;
 import auto.panel.net.NetManager;
 import auto.panel.utils.ActivityUtils;
@@ -34,13 +32,11 @@ public abstract class BaseActivity extends auto.base.BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        StatService.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        StatService.onPause(this);
         ToastUnit.cancel();
     }
 

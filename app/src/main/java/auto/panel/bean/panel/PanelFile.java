@@ -9,7 +9,8 @@ import java.util.List;
 public class PanelFile implements Comparable<PanelFile> {
     private boolean isDir;
     private String title;
-    private String createTime;
+    private int size = -1;
+    private String time;
     private String content;
     private String parentPath;
     private String path;
@@ -55,16 +56,24 @@ public class PanelFile implements Comparable<PanelFile> {
         this.parentPath = parentPath;
     }
 
-    public String getCreateTime() {
-        return createTime;
+    public String getTime() {
+        return time;
     }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public List<PanelFile> getChildren() {
         return children;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 
     public void setChildren(List<PanelFile> children) {

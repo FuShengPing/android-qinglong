@@ -53,7 +53,7 @@ public class PanelLogItemAdapter extends RecyclerView.Adapter<PanelLogItemAdapte
             holder.uiImage.setImageResource(R.mipmap.ic_file_txt);
         }
 
-        holder.uiTime.setText(file.getCreateTime());
+        holder.uiTime.setText(file.getTime());
 
         holder.itemView.setOnClickListener(v -> itemActionListener.onClick(file));
     }

@@ -18,7 +18,6 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.baidu.mobstat.StatService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -136,17 +135,13 @@ public class PanelTaskFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        StatService.onPageStart(requireContext(), NAME);
         initData();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (hidden) {
-            StatService.onPageEnd(requireContext(), NAME);
-        } else {
-            StatService.onPageStart(requireContext(), NAME);
+        if (!hidden) {
             initData();
         }
     }

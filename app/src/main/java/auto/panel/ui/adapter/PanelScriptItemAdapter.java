@@ -61,7 +61,7 @@ public class PanelScriptItemAdapter extends RecyclerView.Adapter<PanelScriptItem
             holder.ui_image.setImageResource(R.mipmap.ic_file_unknow);
         }
 
-        holder.ui_mtime.setText(file.getCreateTime());
+        holder.ui_mtime.setText(file.getTime());
 
         holder.itemView.setOnClickListener(v -> itemActionListener.onEdit(file));
 

@@ -17,21 +17,20 @@ import auto.panel.utils.DeviceUnit;
 import auto.panel.utils.EncryptUtil;
 import auto.panel.utils.FileUtil;
 import auto.panel.utils.ToastUnit;
-import auto.panel.utils.WebUnit;
 import auto.panel.utils.thread.AppLogTask;
 import auto.panel.utils.thread.ThreadPoolUtil;
 
 public class SettingActivity extends BaseActivity {
     public static final String TAG = "SettingActivity";
 
-    private View uiBack;
+    private View uiNavBack;
     private SwitchCompat uiNotifySwitch;
-
     private View uiStorage;
     private TextView uiStorageValue;
     private View uiPermission;
     private TextView uiPermissionValue;
     private View uiDocument;
+    private View uiVersion;
     private View uiGroup;
     private View uiShare;
     private View uiAbout;
@@ -41,13 +40,14 @@ public class SettingActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.panel_activity_setting);
 
-        uiBack = findViewById(R.id.bar_back);
+        uiNavBack = findViewById(R.id.bar_back);
         uiNotifySwitch = findViewById(R.id.app_setting_notify_switch);
         uiStorage = findViewById(R.id.app_setting_storage);
         uiStorageValue = findViewById(R.id.app_setting_storage_value);
         uiPermission = findViewById(R.id.app_setting_permission);
         uiPermissionValue = findViewById(R.id.app_setting_permission_value);
         uiDocument = findViewById(R.id.app_setting_document);
+        uiVersion = findViewById(R.id.app_setting_version);
         uiGroup = findViewById(R.id.app_setting_group);
         uiShare = findViewById(R.id.app_setting_share);
         uiAbout = findViewById(R.id.app_setting_about);
@@ -56,8 +56,6 @@ public class SettingActivity extends BaseActivity {
     }
 
     private void onUpdateConfig(Config config) {
-//        uiDocument.setOnClickListener(v -> WebUnit.open(this, config.getDocumentUrl()));
-
         uiGroup.setOnClickListener(v -> joinQQGroup(config.getGroupKey()));
 
         uiShare.setOnClickListener(v -> DeviceUnit.shareText(this, config.getShareText()));
@@ -65,7 +63,7 @@ public class SettingActivity extends BaseActivity {
 
     @Override
     protected void init() {
-        uiBack.setOnClickListener(v -> finish());
+        uiNavBack.setOnClickListener(v -> finish());
 
         uiNotifySwitch.setChecked(SettingPreference.isNotify());
         uiNotifySwitch.setOnCheckedChangeListener((buttonView, isChecked) -> SettingPreference.setBoolean(SettingPreference.FIELD_NOTIFY, isChecked));
@@ -86,8 +84,16 @@ public class SettingActivity extends BaseActivity {
 
         uiDocument.setOnClickListener(v -> {
             Intent intent = new Intent(this, MarkdownActivity.class);
+            intent.putExtra(MarkdownActivity.EXTRA_TITLE, "功能介绍");
+            intent.putExtra(MarkdownActivity.EXTRA_PATH, MarkdownActivity.STATIC_FILE_DOCUMENT_PATH);
             startActivity(intent);
-//            WebUnit.open(this, SettingPreference.getDocumentUrl());
+        });
+
+        uiVersion.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MarkdownActivity.class);
+            intent.putExtra(MarkdownActivity.EXTRA_TITLE, "版本日志");
+            intent.putExtra(MarkdownActivity.EXTRA_PATH, MarkdownActivity.STATIC_FILE_VERSION_PATH);
+            startActivity(intent);
         });
 
         uiGroup.setOnClickListener(v -> joinQQGroup(SettingPreference.getGroupKey()));
@@ -119,7 +125,7 @@ public class SettingActivity extends BaseActivity {
 
         ApiController.getConfig(uid, config -> {
             onUpdateConfig(config);
-            SettingPreference.updateConfig(config);
+            SettingPreference.updateNewConfig(config);
         });
     }
 }

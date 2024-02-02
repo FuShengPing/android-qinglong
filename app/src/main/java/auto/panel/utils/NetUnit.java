@@ -10,7 +10,22 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class NetUnit {
-    private static final String TAG = "NetUnit";
+    public static final String TAG = "NetUnit";
+
+    public static boolean checkUrlValid(String str) {
+        if (str == null || str.isEmpty()) {
+            return false;
+        }
+        try {
+            if (!str.startsWith("http://") && !str.startsWith("https://")) {
+                str = "http://" + str;
+            }
+            URL url = new URL(str);
+            return url.getPort() >= -1 && url.getPort() <= 65535;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
     public static String getHost(String str) {
         if (str == null || str.isEmpty()) {
@@ -21,7 +36,11 @@ public class NetUnit {
 
         try {
             URL url = new URL(str);
-            return url.getHost() + ":" + url.getPort();
+            if (url.getPort() > -1) {
+                return url.getHost() + ":" + url.getPort();
+            } else {
+                return url.getHost();
+            }
         } catch (MalformedURLException e) {
             return "";
         }

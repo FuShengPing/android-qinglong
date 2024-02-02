@@ -250,7 +250,7 @@ public class HomeActivity extends BaseActivity {
         ApiController.getVersion(uid, new ApiController.VersionCallBack() {
             @Override
             public void onSuccess(Version version) {
-                SettingPreference.updateVersion(version);
+                SettingPreference.updateNewVersion(version);
                 checkVersion(version);
             }
 

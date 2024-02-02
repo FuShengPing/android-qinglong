@@ -30,7 +30,7 @@ public class PanelWebJsManager {
     }
 
     public static void setContent(WebView webView, String content) {
-        if (webView == null) {
+        if (webView == null || content == null) {
             return;
         }
         try {

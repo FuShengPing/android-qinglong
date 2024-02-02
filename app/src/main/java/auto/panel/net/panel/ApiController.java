@@ -16,7 +16,6 @@ import auto.panel.bean.panel.PanelLoginLog;
 import auto.panel.bean.panel.PanelSystemConfig;
 import auto.panel.bean.panel.PanelSystemInfo;
 import auto.panel.bean.panel.PanelTask;
-import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.RetrofitFactory;
 import auto.panel.utils.TextUnit;
 import okhttp3.MediaType;
@@ -24,8 +23,6 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * @author wsfsp4
@@ -34,12 +31,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiController {
 
     public static void getSystemInfo(@NonNull String baseUrl, @NonNull SystemInfoCallBack callBack) {
-        Call<SystemInfoRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .getSystemInfo();
+        Call<SystemInfoRes> call = RetrofitFactory.build(Api.class, baseUrl).getSystemInfo();
 
         call.enqueue(new Callback<SystemInfoRes>() {
             @Override
@@ -67,12 +59,7 @@ public class ApiController {
         jsonObject.addProperty("password", account.getPassword());
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
 
-        Call<BaseRes> call = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(Api.class)
-                .initAccount(requestBody);
+        Call<BaseRes> call = RetrofitFactory.build(Api.class, baseUrl).initAccount(requestBody);
 
         call.enqueue(new Callback<BaseRes>() {
             @Override
@@ -103,19 +90,9 @@ public class ApiController {
         Call<LoginRes> call;
 
         if (account.getCode() == null) {
-            call = new Retrofit.Builder()
-                    .baseUrl(baseUrl)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
-                    .create(Api.class)
-                    .login(requestBody);
+            call = RetrofitFactory.build(Api.class, baseUrl).login(requestBody);
         } else {
-            call = new Retrofit.Builder()
-                    .baseUrl(baseUrl)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
-                    .create(Api.class)
-                    .twoFactorLogin(requestBody);
+            call = RetrofitFactory.build(Api.class, baseUrl).twoFactorLogin(requestBody);
         }
 
         call.enqueue(new Callback<LoginRes>() {
@@ -136,19 +113,11 @@ public class ApiController {
     }
 
     public static void checkAccountToken(BaseCallBack callBack) {
-        if (PanelPreference.isLowVersion()) {
-            auto.panel.net.panel.v10.ApiController.checkAccountToken(callBack);
-        } else {
-            auto.panel.net.panel.v15.ApiController.checkAccountToken(callBack);
-        }
+        auto.panel.net.panel.v15.ApiController.checkAccountToken(callBack);
     }
 
     public static void getTasks(String searchValue, TaskListCallBack callback) {
-        if (PanelPreference.isLowVersion()) {
-            auto.panel.net.panel.v10.ApiController.getTasks(searchValue, callback);
-        } else {
-            auto.panel.net.panel.v15.ApiController.getTasks(searchValue, callback);
-        }
+        auto.panel.net.panel.v15.ApiController.getTasks(searchValue, callback);
     }
 
     public static void runTasks(List<Object> keys, BaseCallBack callBack) {
@@ -381,11 +350,7 @@ public class ApiController {
     }
 
     public static void getEnvironments(@NonNull String searchValue, EnvironmentListCallBack callBack) {
-        if (PanelPreference.isLowVersion()) {
-            auto.panel.net.panel.v10.ApiController.getEnvironments(searchValue, callBack);
-        } else {
-            auto.panel.net.panel.v15.ApiController.getEnvironments(searchValue, callBack);
-        }
+        auto.panel.net.panel.v15.ApiController.getEnvironments(searchValue, callBack);
     }
 
     public static void enableEnvironments(List<Object> keys, BaseCallBack callBack) {
@@ -569,11 +534,7 @@ public class ApiController {
     }
 
     public static void getDependencies(String searchValue, String type, DependenceListCallBack callBack) {
-        if (PanelPreference.isLowVersion()) {
-            auto.panel.net.panel.v10.ApiController.getDependencies(searchValue, type, callBack);
-        } else {
-            auto.panel.net.panel.v15.ApiController.getDependencies(searchValue, type, callBack);
-        }
+        auto.panel.net.panel.v15.ApiController.getDependencies(searchValue, type, callBack);
     }
 
     public static void addDependencies(List<PanelDependence> dependencies, BaseCallBack callBack) {
@@ -628,11 +589,7 @@ public class ApiController {
     }
 
     public static void deleteDependencies(List<Object> keys, BaseCallBack callBack) {
-        if (PanelPreference.isLowVersion()) {
-            auto.panel.net.panel.v10.ApiController.deleteDependencies(keys, callBack);
-        } else {
-            auto.panel.net.panel.v15.ApiController.deleteDependencies(keys, callBack);
-        }
+        auto.panel.net.panel.v15.ApiController.deleteDependencies(keys, callBack);
     }
 
     public static void getDependenceLogContent(Object key, ContentCallBack callBack) {
@@ -662,31 +619,21 @@ public class ApiController {
     }
 
     public static void getScripts(FileListCallBack callBack) {
-        if (PanelPreference.isLowVersion()) {
-            auto.panel.net.panel.v10.ApiController.getScriptFiles(callBack);
-        } else {
-            auto.panel.net.panel.v15.ApiController.getScripts(callBack);
-        }
+        auto.panel.net.panel.v15.ApiController.getScripts(callBack);
     }
 
     public static void addScript(@NonNull PanelFile file, BaseCallBack callBack) {
-        if (PanelPreference.isLowVersion()) {
-            auto.panel.net.panel.v10.ApiController.addScript(file, callBack);
-        } else {
-            auto.panel.net.panel.v15.ApiController.addScript(file, callBack);
-        }
+        auto.panel.net.panel.v15.ApiController.addScript(file, callBack);
     }
 
     public static void deleteScript(PanelFile file, BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("filename", file.getTitle());
         jsonObject.addProperty("path", file.getParentPath());
-        if (!PanelPreference.isLowVersion()) {
-            if (file.isDir()) {
-                jsonObject.addProperty("type", "directory");
-            } else {
-                jsonObject.addProperty("type", "file");
-            }
+        if (file.isDir()) {
+            jsonObject.addProperty("type", "directory");
+        } else {
+            jsonObject.addProperty("type", "file");
         }
 
         String json = jsonObject.toString();
@@ -762,20 +709,12 @@ public class ApiController {
     }
 
     public static void getLogs(FileListCallBack callBack) {
-        if (PanelPreference.isLowVersion()) {
-            auto.panel.net.panel.v10.ApiController.getLogFiles(callBack);
-        } else {
-            auto.panel.net.panel.v15.ApiController.getLogs(callBack);
-        }
+        auto.panel.net.panel.v15.ApiController.getLogs(callBack);
     }
 
     public static void getLogContent(String scriptKey, String fileName, String fileParent, ContentCallBack callBack) {
         String path;
-        if (PanelPreference.isLowVersion()) {
-            path = auto.panel.net.panel.v10.ApiController.getLogFilePath(scriptKey, fileName, fileParent);
-        } else {
-            path = auto.panel.net.panel.v15.ApiController.getLogFilePath(scriptKey, fileName, fileParent);
-        }
+        path = auto.panel.net.panel.v15.ApiController.getLogFilePath(scriptKey, fileName, fileParent);
         getFileContent(path, callBack);
     }
 
@@ -800,19 +739,11 @@ public class ApiController {
     }
 
     public static void getSystemConfig(SystemConfigCallBack callBack) {
-        if (PanelPreference.isLowVersion()) {
-            auto.panel.net.panel.v10.ApiController.getSystemConfig(callBack);
-        } else {
-            auto.panel.net.panel.v15.ApiController.getSystemConfig(callBack);
-        }
+        auto.panel.net.panel.v15.ApiController.getSystemConfig(callBack);
     }
 
     public static void updateSystemConfig(PanelSystemConfig config, BaseCallBack callBack) {
-        if (PanelPreference.isLowVersion()) {
-            auto.panel.net.panel.v10.ApiController.updateSystemConfig(config, callBack);
-        } else {
-            auto.panel.net.panel.v15.ApiController.updateSystemConfig(config, callBack);
-        }
+        auto.panel.net.panel.v15.ApiController.updateSystemConfig(config, callBack);
     }
 
     public static void updateAccount(PanelAccount account, BaseCallBack callBack) {

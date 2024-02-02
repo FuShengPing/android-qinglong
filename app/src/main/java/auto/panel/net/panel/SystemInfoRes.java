@@ -23,16 +23,8 @@ public class SystemInfoRes extends BaseRes {
             return isInitialized;
         }
 
-        public void setInitialized(boolean initialized) {
-            isInitialized = initialized;
-        }
-
         public String getVersion() {
             return version;
-        }
-
-        public void setVersion(String version) {
-            this.version = version;
         }
     }
 }

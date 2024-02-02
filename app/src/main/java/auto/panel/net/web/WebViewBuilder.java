@@ -27,6 +27,8 @@ public class WebViewBuilder {
         //不加载缓存
         webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         webView.setWebViewClient(webViewClient);
+        //允许调试
+        WebView.setWebContentsDebuggingEnabled(true);
         //添加js接口
         if (jsInterface != null) {
             webView.addJavascriptInterface(jsInterface, "Android");

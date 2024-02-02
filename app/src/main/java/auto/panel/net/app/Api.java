@@ -10,7 +10,7 @@ import retrofit2.http.Header;
  * 应用接口.
  */
 public interface Api {
-    String URL_BASE_TENCENT = "https://gitee.com/wsfsp4/public-static-file/raw/master/qinglong/";
+    String URL_BASE = "https://gitee.com/wsfsp4/public-static-file/raw/master/qinglong/";
 
     @GET("version.json")
     Call<Version> getVersion(@Header("uid") String uid);

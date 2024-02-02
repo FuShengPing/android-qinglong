@@ -29,11 +29,6 @@ public class LogFilesRes extends BaseRes {
             return mtime;
         }
 
-        public void setMtime(long mtime) {
-            this.mtime = mtime;
-        }
-
-
         public boolean isDir() {
             return !isLeaf;
         }
@@ -48,10 +43,6 @@ public class LogFilesRes extends BaseRes {
 
         public List<FileObject> getChildren() {
             return children;
-        }
-
-        public void setChildren(List<FileObject> children) {
-            this.children = children;
         }
     }
 }

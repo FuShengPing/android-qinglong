@@ -72,16 +72,9 @@ public class EnvironmentsRes extends BaseRes {
             return remarks;
         }
 
-        public void setRemarks(String remarks) {
-            this.remarks = remarks;
-        }
-
         public String getUpdatedAt() {
             return updatedAt;
         }
 
-        public void setUpdatedAt(String updatedAt) {
-            this.updatedAt = updatedAt;
-        }
     }
 }

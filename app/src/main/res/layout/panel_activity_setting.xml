@@ -230,6 +230,29 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/app_setting_version"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/style_press_gray"
+                        android:clickable="true"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="@dimen/action_bar_padding_horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="@dimen/app_setting_text_margin_vertical"
+                            android:text="@string/app_setting_version"
+                            android:textColor="@color/text_color_19"
+                            android:textSize="@dimen/app_setting_text_title_size" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:background="@color/divider" />
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:id="@+id/app_setting_group"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

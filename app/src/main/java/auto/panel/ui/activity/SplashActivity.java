@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.baidu.mobstat.StatService;
-
 import auto.panel.R;
 import auto.panel.bean.panel.PanelAccount;
 import auto.panel.bean.panel.PanelSystemInfo;
@@ -24,13 +22,6 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.panel_activity_splash);
-
-        // setSendLogStrategy已经@deprecated，建议使用新的start接口
-        // 如果没有页面和自定义事件统计埋点，此代码一定要设置，否则无法完成统计
-        // 进程第一次执行此代码，会导致发送上次缓存的统计数据；若无上次缓存数据，则发送空启动日志
-        // 由于多进程等可能造成Application多次执行，建议此代码不要埋点在Application中，否则可能造成启动次数偏高
-        // 建议此代码埋点在统计路径触发的第一个页面中，若可能存在多个则建议都埋点
-        StatService.start(this);
     }
 
     @Override
@@ -73,8 +64,12 @@ public class SplashActivity extends BaseActivity {
         auto.panel.net.panel.ApiController.getSystemInfo(account.getBaseUrl(), new ApiController.SystemInfoCallBack() {
             @Override
             public void onSuccess(PanelSystemInfo system) {
-                PanelPreference.setVersion(system.getVersion());
-                netCheckAccountToken();
+                if (system.getVersion().compareTo(LoginActivity.MIN_VERSION) < 0) {
+                    onEnter(false);
+                } else {
+                    PanelPreference.setVersion(system.getVersion());
+                    netCheckAccountToken();
+                }
             }
 
             @Override

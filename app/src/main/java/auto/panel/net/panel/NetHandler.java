@@ -1,7 +1,5 @@
 package auto.panel.net.panel;
 
-import com.baidu.mobstat.StatService;
-
 import auto.panel.MyApplication;
 import auto.panel.utils.thread.AppLogTask;
 import auto.panel.utils.thread.ThreadPoolUtil;
@@ -33,7 +31,6 @@ public class NetHandler {
 
     public static void handleRequestError(Call<?> call, Throwable t, ApiController.BaseCallBack callBack) {
         ThreadPoolUtil.execute(new AppLogTask(t.getMessage()));
-        StatService.recordException(MyApplication.getInstance(), t);
         if (!call.isCanceled()) {
             callBack.onFailure(t.getLocalizedMessage());
         }

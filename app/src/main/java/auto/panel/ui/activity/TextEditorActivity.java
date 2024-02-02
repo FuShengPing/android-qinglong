@@ -24,21 +24,21 @@ import auto.panel.utils.ToastUnit;
 
 public class TextEditorActivity extends BaseActivity {
     public static final String TAG = "CodeViewActivity";
-    private static final String STATIC_FILE_PATH = "file:///android_asset/web/editor/index.html";
-    public static final String EXTRA_TITLE = "title";
-    public static final String EXTRA_TYPE = "type";
-    public static final String EXTRA_LOG_ID = "logId";
-    public static final String EXTRA_LOG_NAME = "logFileName";
-    public static final String EXTRA_LOG_DIR = "logFileDir";
-    public static final String EXTRA_SCRIPT_NAME = "scriptName";
-    public static final String EXTRA_SCRIPT_DIR = "scriptDir";
-    public static final String EXTRA_DEPENDENCE_ID = "dependenceId";
-    public static final String EXTRA_CAN_REFRESH = "canRefresh";
-    public static final String EXTRA_CAN_EDIT = "canEdit";
-    public static final String TYPE_LOG = "log";
-    public static final String TYPE_SCRIPT = "script";
-    public static final String TYPE_DEPENDENCE = "dependence";
-    public static final String TYPE_CONFIG = "config";
+    private static final String STATIC_FILE_HTML_PATH = "file:///android_asset/web/editor/index.html";
+    public static final String EXTRA_TITLE = "EXTRA_TITLE";
+    public static final String EXTRA_TYPE = "EXTRA_TYPE";
+    public static final String EXTRA_LOG_ID = "EXTRA_LOG_ID";
+    public static final String EXTRA_LOG_NAME = "EXTRA_LOG_NAME";
+    public static final String EXTRA_LOG_DIR = "EXTRA_LOG_DIR";
+    public static final String EXTRA_SCRIPT_NAME = "EXTRA_SCRIPT_NAME";
+    public static final String EXTRA_SCRIPT_DIR = "EXTRA_SCRIPT_DIR";
+    public static final String EXTRA_DEPENDENCE_ID = "EXTRA_DEPENDENCE_ID";
+    public static final String EXTRA_CAN_REFRESH = "EXTRA_CAN_REFRESH";
+    public static final String EXTRA_CAN_EDIT = "EXTRA_CAN_EDIT";
+    public static final String TYPE_LOG = "TYPE_LOG";
+    public static final String TYPE_SCRIPT = "TYPE_SCRIPT";
+    public static final String TYPE_DEPENDENCE = "TYPE_DEPENDENCE";
+    public static final String TYPE_CONFIG = "TYPE_CONFIG";
 
     private boolean init = false;
     private String mContent;
@@ -55,7 +55,7 @@ public class TextEditorActivity extends BaseActivity {
 
     private LinearLayout uiNavBar;
     private ImageView uiBack;
-    private TextView uiTip;
+    private TextView uiTitle;
     private ImageView uiEdit;
     private ImageView uiRefresh;
     private LinearLayout uiEditBar;
@@ -82,7 +82,7 @@ public class TextEditorActivity extends BaseActivity {
 
         uiNavBar = findViewById(R.id.code_bar_nav);
         uiBack = findViewById(R.id.code_bar_nav_back);
-        uiTip = findViewById(R.id.code_bar_nav_title);
+        uiTitle = findViewById(R.id.code_bar_nav_title);
         uiEdit = findViewById(R.id.code_bar_nav_edit);
         uiRefresh = findViewById(R.id.code_bar_nav_refresh);
         uiEditBar = findViewById(R.id.code_bar_edit);
@@ -133,7 +133,7 @@ public class TextEditorActivity extends BaseActivity {
     @Override
     protected void init() {
         //设置标题
-        uiTip.setText(mTitle);
+        uiTitle.setText(mTitle);
 
         //返回监听
         uiBack.setOnClickListener(v -> finish());
@@ -164,7 +164,7 @@ public class TextEditorActivity extends BaseActivity {
                 animation.setRepeatCount(-1);
                 animation.setDuration(1000);
                 uiRefresh.startAnimation(animation);
-                load(mType);
+                loadContent();
             });
         }
 
@@ -212,26 +212,23 @@ public class TextEditorActivity extends BaseActivity {
             uiRefresh.setVisibility(View.VISIBLE);
         }
 
-        uiWebView = WebViewBuilder.build(getBaseContext(), uiWebContainer, new WebViewClient() {
+        WebViewClient client = new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
-                load(mType);
+                loadContent();
             }
-        }, null);
-
+        };
+        uiWebView = WebViewBuilder.build(getBaseContext(), uiWebContainer, client, null);
         uiWebView.setFocusable(false);
-        uiWebView.loadUrl(STATIC_FILE_PATH);
-
+        uiWebView.loadUrl(STATIC_FILE_HTML_PATH);
         init = true;
     }
 
     /**
      * 加载对应类型内容
-     *
-     * @param type 类型
      */
-    private void load(String type) {
-        switch (type) {
+    private void loadContent() {
+        switch (mType) {
             case TYPE_SCRIPT:
                 netGetScriptContent(mScriptName, mScriptParent);
                 break;

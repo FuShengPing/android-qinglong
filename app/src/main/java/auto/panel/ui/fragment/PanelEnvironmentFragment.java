@@ -15,8 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.baidu.mobstat.StatService;
 import com.google.gson.Gson;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
@@ -116,7 +114,6 @@ public class PanelEnvironmentFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        StatService.onPageStart(requireContext(), NAME);
         initData();
     }
 
@@ -124,12 +121,6 @@ public class PanelEnvironmentFragment extends BaseFragment {
     public void onHiddenChanged(boolean hidden) {
         LogUnit.log(TAG, "onHiddenChanged: " + hidden);
         super.onHiddenChanged(hidden);
-        if (hidden) {
-            StatService.onPageEnd(requireContext(), NAME);
-        } else {
-            StatService.onPageStart(requireContext(), NAME);
-            initData();
-        }
     }
 
     @Override

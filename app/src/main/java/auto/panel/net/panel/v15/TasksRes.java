@@ -62,48 +62,24 @@ public class TasksRes extends BaseRes {
             return id;
         }
 
-        public void setId(int id) {
-            this.id = id;
-        }
-
         public String getName() {
             return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
         }
 
         public String getCommand() {
             return command;
         }
 
-        public void setCommand(String command) {
-            this.command = command;
-        }
-
         public String getSchedule() {
             return schedule;
-        }
-
-        public void setSchedule(String schedule) {
-            this.schedule = schedule;
         }
 
         public String getSaved() {
             return saved;
         }
 
-        public void setSaved(String saved) {
-            this.saved = saved;
-        }
-
         public String getTimestamp() {
             return timestamp;
-        }
-
-        public void setTimestamp(String timestamp) {
-            this.timestamp = timestamp;
         }
 
         public int getStatus() {
@@ -118,72 +94,36 @@ public class TasksRes extends BaseRes {
             return isSystem;
         }
 
-        public void setIsSystem(int isSystem) {
-            this.isSystem = isSystem;
-        }
-
         public String getPid() {
             return pid;
-        }
-
-        public void setPid(String pid) {
-            this.pid = pid;
         }
 
         public int getIsDisabled() {
             return isDisabled;
         }
 
-        public void setIsDisabled(int isDisabled) {
-            this.isDisabled = isDisabled;
-        }
-
         public int getIsPinned() {
             return isPinned;
-        }
-
-        public void setIsPinned(int isPinned) {
-            this.isPinned = isPinned;
         }
 
         public String getLogPath() {
             return log_path;
         }
 
-        public void setLogPath(String log_path) {
-            this.log_path = log_path;
-        }
-
         public long getLast_running_time() {
             return last_running_time;
-        }
-
-        public void setLastRunningTime(int last_running_time) {
-            this.last_running_time = last_running_time;
         }
 
         public long getLastExecutionTime() {
             return last_execution_time;
         }
 
-        public void setLastExecutionTime(long last_execution_time) {
-            this.last_execution_time = last_execution_time;
-        }
-
         public String getCreatedAt() {
             return createdAt;
         }
 
-        public void setCreatedAt(String createdAt) {
-            this.createdAt = createdAt;
-        }
-
         public String getUpdatedAt() {
             return updatedAt;
-        }
-
-        public void setUpdatedAt(String updatedAt) {
-            this.updatedAt = updatedAt;
         }
     }
 }

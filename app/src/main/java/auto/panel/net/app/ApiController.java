@@ -16,7 +16,7 @@ public class ApiController {
 
     public static void getVersion(@Nullable String uid, @NonNull VersionCallBack callBack) {
         Call<Version> call = new Retrofit.Builder()
-                .baseUrl(Api.URL_BASE_TENCENT)
+                .baseUrl(Api.URL_BASE)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
@@ -45,7 +45,7 @@ public class ApiController {
 
     public static void getConfig(@Nullable String uid, @NonNull ConfigCallBack callBack) {
         Call<Config> call = new Retrofit.Builder()
-                .baseUrl(Api.URL_BASE_TENCENT)
+                .baseUrl(Api.URL_BASE)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)

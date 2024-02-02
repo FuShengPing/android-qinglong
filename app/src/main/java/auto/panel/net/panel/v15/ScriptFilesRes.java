@@ -21,6 +21,7 @@ public class ScriptFilesRes extends BaseRes {
 
     public static class FileObject {
         private double mtime;
+        private int size = -1;
         private String title;
         private boolean isLeaf;
         private List<FileObject> children;
@@ -41,16 +42,12 @@ public class ScriptFilesRes extends BaseRes {
             return children;
         }
 
-        public void setChildren(List<FileObject> children) {
-            this.children = children;
-        }
-
         public double getMtime() {
             return mtime;
         }
 
-        public void setMtime(double mtime) {
-            this.mtime = mtime;
+        public int getSize() {
+            return size;
         }
     }
 }

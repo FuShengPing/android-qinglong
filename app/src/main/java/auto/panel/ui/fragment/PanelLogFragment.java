@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.baidu.mobstat.StatService;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.Collections;
@@ -65,17 +64,13 @@ public class PanelLogFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        StatService.onPageStart(requireContext(), NAME);
         initData();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (hidden) {
-            StatService.onPageEnd(requireContext(), NAME);
-        } else {
-            StatService.onPageStart(requireContext(), NAME);
+        if(!hidden){
             initData();
         }
     }
@@ -150,7 +145,7 @@ public class PanelLogFragment extends BaseFragment {
     }
 
     private void getLogFiles() {
-        auto.panel.net.panel.ApiController.getLogs( new ApiController.FileListCallBack() {
+        auto.panel.net.panel.ApiController.getLogs(new ApiController.FileListCallBack() {
             @Override
             public void onSuccess(List<PanelFile> files) {
                 sortAndSetData(files, "");
