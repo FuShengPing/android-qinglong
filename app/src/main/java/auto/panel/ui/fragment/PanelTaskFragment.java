@@ -62,6 +62,9 @@ public class PanelTaskFragment extends BaseFragment {
     private String mCurrentSearchValue;
     private MenuClickListener mMenuClickListener;
     private PanelTaskItemAdapter mAdapter;
+    private boolean mHasMore = false;
+    private int mPageNo = 1;
+    private int mPageSize = 50;
 
     //主导航栏
     private LinearLayout uiBarNav;
@@ -199,7 +202,16 @@ public class PanelTaskFragment extends BaseFragment {
             if (uiBarSearch.getVisibility() != View.VISIBLE) {
                 mCurrentSearchValue = null;
             }
-            getTasks(mCurrentSearchValue);
+            getTasks(mCurrentSearchValue, 1);
+        });
+
+        //列表上拉加载
+        uiRefresh.setOnLoadMoreListener(refreshLayout -> {
+            if (mHasMore) {
+                getTasks(mCurrentSearchValue, mPageNo + 1);
+            } else {
+                uiRefresh.finishLoadMore(true);
+            }
         });
 
         //数据项操作监听
@@ -268,7 +280,7 @@ public class PanelTaskFragment extends BaseFragment {
         uiSearchConfirm.setOnClickListener(v -> {
             mCurrentSearchValue = uiSearchValue.getText().toString().trim();
             WindowUnit.hideKeyboard(uiSearchValue);
-            getTasks(mCurrentSearchValue);
+            getTasks(mCurrentSearchValue, 1);
         });
 
         //搜索栏返回
@@ -388,7 +400,7 @@ public class PanelTaskFragment extends BaseFragment {
         uiRefresh.autoRefreshAnimationOnly();
         new Handler().postDelayed(() -> {
             if (isVisible()) {
-                getTasks(mCurrentSearchValue);
+                getTasks(mCurrentSearchValue, 1);
             }
         }, 1000);
     }
@@ -628,7 +640,7 @@ public class PanelTaskFragment extends BaseFragment {
 
                 dismissPopWindowProgress();
                 ToastUnit.showShort("导入完成 " + success + "/" + total);
-                getTasks(mCurrentSearchValue);
+                getTasks(mCurrentSearchValue, 1);
             }).start();
         } catch (Exception e) {
             dismissPopWindowProgress();
@@ -655,19 +667,28 @@ public class PanelTaskFragment extends BaseFragment {
         }
     }
 
-    private void getTasks(String searchValue) {
-        auto.panel.net.panel.ApiController.getTasks(searchValue, new ApiController.TaskListCallBack() {
+    private void getTasks(String searchValue, int pageNo) {
+        auto.panel.net.panel.ApiController.getTasks(searchValue, pageNo, mPageSize, new ApiController.TaskListCallBack() {
             @Override
             public void onSuccess(List<PanelTask> tasks) {
                 Collections.sort(tasks);
-                mAdapter.setData(tasks);
-                uiRefresh.finishRefresh(true);
+                if (pageNo == 1) {
+                    mAdapter.setData(tasks);
+                    uiRefresh.finishRefresh(true);
+                } else {
+                    mAdapter.extendData(tasks);
+                    uiRefresh.finishLoadMore(true);
+                }
+                mPageNo = pageNo;
+                mHasMore = tasks.size() >= mPageSize;
+                uiRefresh.setEnableLoadMore(mHasMore);
                 init = true;
             }
 
             @Override
             public void onFailure(String msg) {
                 uiRefresh.finishRefresh(false);
+                uiRefresh.finishLoadMore(false);
                 ToastUnit.showShort(msg);
             }
         });
@@ -678,7 +699,7 @@ public class PanelTaskFragment extends BaseFragment {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("执行成功");
-                getTasks(mCurrentSearchValue);
+                getTasks(mCurrentSearchValue, 1);
             }
 
             @Override
@@ -693,7 +714,7 @@ public class PanelTaskFragment extends BaseFragment {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("终止成功");
-                getTasks(mCurrentSearchValue);
+                getTasks(mCurrentSearchValue, 1);
             }
 
             @Override
@@ -708,7 +729,7 @@ public class PanelTaskFragment extends BaseFragment {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("启用成功");
-                getTasks(mCurrentSearchValue);
+                getTasks(mCurrentSearchValue, 1);
             }
 
             @Override
@@ -723,7 +744,7 @@ public class PanelTaskFragment extends BaseFragment {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("禁用成功");
-                getTasks(mCurrentSearchValue);
+                getTasks(mCurrentSearchValue, 1);
             }
 
             @Override
@@ -738,7 +759,7 @@ public class PanelTaskFragment extends BaseFragment {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("顶置成功");
-                getTasks(mCurrentSearchValue);
+                getTasks(mCurrentSearchValue, 1);
             }
 
             @Override
@@ -753,7 +774,7 @@ public class PanelTaskFragment extends BaseFragment {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("取消顶置成功");
-                getTasks(mCurrentSearchValue);
+                getTasks(mCurrentSearchValue, 1);
             }
 
             @Override
@@ -768,7 +789,7 @@ public class PanelTaskFragment extends BaseFragment {
             @Override
             public void onSuccess() {
                 ToastUnit.showShort("删除成功");
-                getTasks(mCurrentSearchValue);
+                getTasks(mCurrentSearchValue, 1);
             }
 
             @Override
@@ -784,7 +805,7 @@ public class PanelTaskFragment extends BaseFragment {
             public void onSuccess() {
                 dismissPopWindowEdit();
                 ToastUnit.showShort("编辑成功");
-                getTasks(null);
+                getTasks(null, 1);
             }
 
             @Override
@@ -800,7 +821,7 @@ public class PanelTaskFragment extends BaseFragment {
             public void onSuccess() {
                 dismissPopWindowEdit();
                 ToastUnit.showShort("新建任务成功");
-                getTasks(null);
+                getTasks(null, 1);
             }
 
             @Override

@@ -13,7 +13,7 @@
     <string name="module_extension_proxy">LanProxy</string>
 
     <string name="menu_app_exit">退出</string>
-    <string name="menu_app_account">切换</string>
+    <string name="menu_app_account">账号</string>
     <string name="menu_app_setting">设置</string>
 
     <string name="action_title_plugin_web">Web助手</string>
@@ -25,7 +25,7 @@
 
     <string name="app_setting_storage">存储路径</string>
     <string name="app_setting_permission">读写权限</string>
-    <string name="app_setting_document">功能介绍</string>
+    <string name="app_setting_document">使用文档</string>
     <string name="app_setting_version">版本日志</string>
     <string name="app_setting_issue">交流反馈</string>
     <string name="app_setting_donate">支持应用</string>

@@ -34,6 +34,8 @@ public class LoginActivity extends BaseActivity {
     private EditText uiCode;
     private Button uiLogin;
     private Button uiRegister;
+    private View uiActionAccount;
+    private View uiActionSetting;
     private ProgressPopupWindow uiPopProgress;
 
     @Override
@@ -48,6 +50,8 @@ public class LoginActivity extends BaseActivity {
         uiCode = findViewById(R.id.et_code);
         uiLogin = findViewById(R.id.bt_login);
         uiRegister = findViewById(R.id.bt_register);
+        uiActionAccount = findViewById(R.id.action_account);
+        uiActionSetting = findViewById(R.id.action_setting);
 
         init();
     }
@@ -123,6 +127,16 @@ public class LoginActivity extends BaseActivity {
 
             //检测系统是否初始化和版本信息(延迟500ms)
             new Handler().postDelayed(() -> netQuerySystemInfo(account, ACTION_REGISTER), 500);
+        });
+
+        uiActionAccount.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, AccountActivity.class);
+            startActivity(intent);
+        });
+
+        uiActionSetting.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, SettingActivity.class);
+            startActivity(intent);
         });
 
         //显示之前账号

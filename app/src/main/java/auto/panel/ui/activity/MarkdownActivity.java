@@ -104,8 +104,16 @@ public class MarkdownActivity extends BaseActivity {
     }
 
     private void loadContent() {
-        String content = readAssert(STATIC_FILE_VERSION_PATH);
-        setContent(content);
+        if (mPath == null || mPath.isEmpty()) {
+            ToastUnit.showShort("文件不存在");
+            return;
+        }
+        if (mPath.startsWith("http://") || mPath.startsWith("https://")) {
+            uiWebView.loadUrl(mPath);
+        } else {
+            String content = readAssert(mPath);
+            setContent(content);
+        }
     }
 
     private void setContent(String content) {
@@ -122,6 +130,10 @@ public class MarkdownActivity extends BaseActivity {
     }
 
     private String readAssert(String path) {
+        if (path == null || path.isEmpty()) {
+            return null;
+        }
+
         // 获取AssetManager
         AssetManager assetManager = this.getAssets();
 

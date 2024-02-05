@@ -18,6 +18,7 @@
         android:scaleType="centerCrop" />
 
     <LinearLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/img_logo"
@@ -84,12 +85,12 @@
             android:inputType="textVisiblePassword"
             android:lines="1"
             android:maxLength="6"
-            android:visibility="gone"
             android:paddingHorizontal="6dp"
             android:paddingVertical="7dp"
             android:singleLine="true"
             android:textColor="@color/text_color_49"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -124,5 +125,41 @@
                 android:textSize="18sp" />
         </LinearLayout>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="30dp"
+        android:gravity="center">
+
+        <RelativeLayout
+            android:id="@+id/action_account"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/style_border_circle_gray"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_gray_account" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/action_setting"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/style_border_circle_gray"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_gray_menu_settings" />
+        </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>

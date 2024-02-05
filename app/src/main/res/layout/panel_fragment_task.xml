@@ -326,6 +326,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:srlAccentColor="@color/text_color_80"
+        app:srlDisableContentWhenLoading="true"
+        app:srlDisableContentWhenRefresh="true"
+        app:srlEnableOverScrollBounce="true"
         app:srlEnableOverScrollDrag="true"
         app:srlPrimaryColor="@color/white">
 
@@ -344,5 +347,14 @@
             android:layout_height="match_parent"
             android:overScrollMode="never"
             android:scrollbars="none" />
+
+        <com.scwang.smart.refresh.footer.ClassicsFooter
+            android:id="@+id/refresh_footer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srlDrawableMarginRight="10dp"
+            app:srlDrawableSize="15dp"
+            app:srlEnableLastTime="false"
+            app:srlTextSizeTitle="13sp" />
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 </LinearLayout>

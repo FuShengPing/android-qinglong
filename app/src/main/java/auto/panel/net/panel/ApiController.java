@@ -116,8 +116,8 @@ public class ApiController {
         auto.panel.net.panel.v15.ApiController.checkAccountToken(callBack);
     }
 
-    public static void getTasks(String searchValue, TaskListCallBack callback) {
-        auto.panel.net.panel.v15.ApiController.getTasks(searchValue, callback);
+    public static void getTasks(String searchValue,int pageNo,int pageSize, TaskListCallBack callback) {
+        auto.panel.net.panel.v15.ApiController.getTasks(searchValue,pageNo,pageSize, callback);
     }
 
     public static void runTasks(List<Object> keys, BaseCallBack callBack) {

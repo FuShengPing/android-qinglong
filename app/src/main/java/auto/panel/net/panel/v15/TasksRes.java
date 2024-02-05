@@ -47,7 +47,7 @@ public class TasksRes extends BaseRes {
         private String schedule;
         private String saved;
         private String timestamp;
-        private int status;
+        private float status;
         private int isSystem;
         private String pid;
         private int isDisabled;
@@ -82,7 +82,7 @@ public class TasksRes extends BaseRes {
             return timestamp;
         }
 
-        public int getStatus() {
+        public float getStatus() {
             return status;
         }
 

@@ -1,6 +1,5 @@
 package auto.panel.net.panel;
 
-import auto.panel.MyApplication;
 import auto.panel.utils.thread.AppLogTask;
 import auto.panel.utils.thread.ThreadPoolUtil;
 import retrofit2.Call;

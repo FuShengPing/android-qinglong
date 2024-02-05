@@ -32,9 +32,11 @@
         tools:ignore="DataExtractionRules"
         tools:replace="android:theme">
         <activity
+            android:name=".ui.activity.AccountActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.MarkdownActivity"
             android:exported="false" />
-
         <activity
             android:name=".ui.activity.AboutActivity"
             android:exported="false"

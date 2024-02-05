@@ -147,6 +147,14 @@ public class PanelTaskItemAdapter extends RecyclerView.Adapter<PanelTaskItemAdap
         notifyDataSetChanged();
     }
 
+    public void extendData(List<PanelTask> data) {
+        this.data.addAll(data);
+        boolean[] temp = new boolean[this.data.size()];
+        System.arraycopy(this.dataCheckState, 0, temp, 0, this.dataCheckState.length);
+        this.dataCheckState = temp;
+        notifyItemRangeInserted(this.data.size() - data.size(), data.size());
+    }
+
     public List<PanelTask> getData() {
         return this.data;
     }

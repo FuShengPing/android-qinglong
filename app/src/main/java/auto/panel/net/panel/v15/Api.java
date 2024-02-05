@@ -16,7 +16,7 @@ import retrofit2.http.Query;
  */
 public interface Api {
     @GET("api/crons")
-    Call<TasksRes> getTasks(@Query("searchValue") String searchValue, @Query("page") int page, @Query("pageSize") int size);
+    Call<TasksRes> getTasks(@Query("searchValue") String searchValue, @Query("page") int page, @Query("size") int size);
 
     @GET("api/envs")
     Call<EnvironmentsRes> getEnvironments(@Query("searchValue") String searchValue);

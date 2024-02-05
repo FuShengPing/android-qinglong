@@ -54,8 +54,8 @@ public class Converter {
                 } else if (object.getIsDisabled() == 1) {
                     task.setState("已禁止");
                     task.setStateCode(PanelTask.STATE_LIMIT);
-                } else if (object.getStatus() == 3) {
-                    task.setState("等待中");
+                } else if (object.getStatus() == 0.5f || object.getStatus() == 3) {
+                    task.setState("队列中");
                     task.setStateCode(PanelTask.STATE_WAITING);
                 } else {
                     task.setState("空闲中");

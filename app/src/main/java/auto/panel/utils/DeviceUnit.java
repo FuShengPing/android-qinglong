@@ -26,15 +26,16 @@ public class DeviceUnit {
     /**
      * 调用系统选择，分享文本
      *
-     * @param context
+     * @param activity
      * @param text
      */
-    public static void shareText(Context context, String text) {
+    public static void shareText(Activity activity, String text) {
         Intent shareIntent = new Intent();
+        shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_TEXT, text);
         shareIntent.setType("text/plain");
-        context.startActivity(Intent.createChooser(shareIntent, "Share text using"));
+        activity.startActivity(Intent.createChooser(shareIntent, "分享"));
     }
 
     /**

@@ -134,6 +134,7 @@ public class HomeActivity extends BaseActivity {
         LinearLayout menuSetting = uiDrawerLeft.findViewById(R.id.panel_menu_setting);
         LinearLayout menuDependence = uiDrawerLeft.findViewById(R.id.panel_menu_dep);
         LinearLayout menuAppLogout = uiDrawerLeft.findViewById(R.id.panel_menu_app_logout);
+        LinearLayout menuAppAccount = uiDrawerLeft.findViewById(R.id.panel_menu_app_account);
         LinearLayout menuAppSetting = uiDrawerLeft.findViewById(R.id.panel_menu_app_setting);
 
         //定时任务
@@ -159,14 +160,19 @@ public class HomeActivity extends BaseActivity {
 
         //退出登录
         menuAppLogout.setOnClickListener(v -> {
-            Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+            Intent intent = new Intent(mActivity, LoginActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.activity_alpha_enter, R.anim.activity_alpha_out);
             finish();
         });
+        //账号管理
+        menuAppAccount.setOnClickListener(v -> {
+            Intent intent = new Intent(mActivity, AccountActivity.class);
+            startActivity(intent);
+        });
         //APP设置
         menuAppSetting.setOnClickListener(v -> {
-            Intent intent = new Intent(getBaseContext(), SettingActivity.class);
+            Intent intent = new Intent(mActivity, SettingActivity.class);
             startActivity(intent);
         });
     }

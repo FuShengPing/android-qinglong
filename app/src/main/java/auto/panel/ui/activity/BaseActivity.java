@@ -24,7 +24,7 @@ public abstract class BaseActivity extends auto.base.BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Thread.setDefaultUncaughtExceptionHandler(MyApplication.getInstance());
-        mContext = getBaseContext();
+        mContext = this;
         mActivity = this;
         ActivityUtils.addActivity(this);
     }

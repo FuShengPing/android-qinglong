@@ -58,7 +58,7 @@ public class SettingActivity extends BaseActivity {
     private void onUpdateConfig(Config config) {
         uiGroup.setOnClickListener(v -> joinQQGroup(config.getGroupKey()));
 
-        uiShare.setOnClickListener(v -> DeviceUnit.shareText(this, config.getShareText()));
+        uiShare.setOnClickListener(v -> DeviceUnit.shareText(mActivity, config.getShareText()));
     }
 
     @Override
@@ -70,7 +70,7 @@ public class SettingActivity extends BaseActivity {
 
         uiStorage.setOnClickListener(v -> {
             // 复制到剪切板
-            DeviceUnit.copyText(SettingActivity.this, FileUtil.externalStorage);
+            DeviceUnit.copyText(mContext, FileUtil.externalStorage);
             ToastUnit.showShort("已复制");
         });
         uiStorageValue.setText(FileUtil.externalStorage);
@@ -83,14 +83,14 @@ public class SettingActivity extends BaseActivity {
         }
 
         uiDocument.setOnClickListener(v -> {
-            Intent intent = new Intent(this, MarkdownActivity.class);
-            intent.putExtra(MarkdownActivity.EXTRA_TITLE, "功能介绍");
+            Intent intent = new Intent(mContext, MarkdownActivity.class);
+            intent.putExtra(MarkdownActivity.EXTRA_TITLE, "使用文档");
             intent.putExtra(MarkdownActivity.EXTRA_PATH, MarkdownActivity.STATIC_FILE_DOCUMENT_PATH);
             startActivity(intent);
         });
 
         uiVersion.setOnClickListener(v -> {
-            Intent intent = new Intent(this, MarkdownActivity.class);
+            Intent intent = new Intent(mContext, MarkdownActivity.class);
             intent.putExtra(MarkdownActivity.EXTRA_TITLE, "版本日志");
             intent.putExtra(MarkdownActivity.EXTRA_PATH, MarkdownActivity.STATIC_FILE_VERSION_PATH);
             startActivity(intent);
@@ -98,10 +98,10 @@ public class SettingActivity extends BaseActivity {
 
         uiGroup.setOnClickListener(v -> joinQQGroup(SettingPreference.getGroupKey()));
 
-        uiShare.setOnClickListener(v -> DeviceUnit.shareText(this, SettingPreference.getShareText()));
+        uiShare.setOnClickListener(v -> DeviceUnit.shareText(mActivity, SettingPreference.getShareText()));
 
         uiAbout.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AboutActivity.class);
+            Intent intent = new Intent(mContext, AboutActivity.class);
             startActivity(intent);
         });
 

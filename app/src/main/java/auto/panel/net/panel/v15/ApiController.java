@@ -44,8 +44,8 @@ public class ApiController {
 
     }
 
-    public static void getTasks(String searchValue, auto.panel.net.panel.ApiController.TaskListCallBack callBack) {
-        Call<TasksRes> call = RetrofitFactory.buildWithAuthorization(Api.class).getTasks(searchValue, 1, 300);
+    public static void getTasks(String searchValue,int pageNo,int pageSize, auto.panel.net.panel.ApiController.TaskListCallBack callBack) {
+        Call<TasksRes> call = RetrofitFactory.buildWithAuthorization(Api.class).getTasks(searchValue, pageNo, pageSize);
 
         call.enqueue(new Callback<TasksRes>() {
             @Override

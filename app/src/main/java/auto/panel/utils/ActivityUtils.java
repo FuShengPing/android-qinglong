@@ -1,7 +1,6 @@
 package auto.panel.utils;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
@@ -21,15 +20,15 @@ public class ActivityUtils {
     private static List<Activity> activityList = new ArrayList<>();
 
 
-    public static void addActivity(Activity activity) {
+    public static synchronized void addActivity(Activity activity) {
         activityList.add(activity);
     }
 
-    public static void removeActivity(Activity activity) {
+    public static synchronized void removeActivity(Activity activity) {
         activityList.remove(activity);
     }
 
-    private static void closeAllActivities() {
+    private static synchronized void closeAllActivities() {
         for (Activity activity : activityList) {
             if (activity != null && !activity.isFinishing()) {
                 activity.finish();
@@ -38,7 +37,7 @@ public class ActivityUtils {
         activityList.clear();
     }
 
-    public static void clearAndStartActivity(Context context, Class<?> cls) {
+    public static synchronized void clearAndStartActivity(Activity context, Class<?> cls) {
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(() -> {
             closeAllActivities();
@@ -47,7 +46,7 @@ public class ActivityUtils {
         });
     }
 
-    public static void clearAndStartActivity(Context context, Intent intent) {
+    public static synchronized void clearAndStartActivity(Activity context, Intent intent) {
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(() -> {
             closeAllActivities();
@@ -55,7 +54,7 @@ public class ActivityUtils {
         });
     }
 
-    public static Activity getTopActivity() {
+    public static synchronized Activity getTopActivity() {
         if (activityList.isEmpty()) {
             return null;
         } else {
