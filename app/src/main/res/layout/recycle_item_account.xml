@@ -16,19 +16,22 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/item_account_username"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="njustcs"
-            android:textColor="@color/black"
+            android:text="example"
+            android:textColor="@color/text_color_19"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/item_account_delete"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
+            android:layout_marginLeft="8dp"
             android:background="@drawable/style_border_circle_red"
             android:gravity="center"
             android:paddingHorizontal="10dp"
@@ -38,12 +41,31 @@
             android:textSize="11sp" />
     </LinearLayout>
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="4dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:text="https://114.67.238.143:10011"
-        android:textSize="12sp" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/item_account_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:minWidth="50dp"
+            android:text="v2.15.17"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/item_account_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="127.0.0.1:5700"
+            android:textSize="12sp" />
+    </LinearLayout>
+
 </LinearLayout>

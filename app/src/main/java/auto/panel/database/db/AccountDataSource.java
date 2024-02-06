@@ -1,7 +1,9 @@
 package auto.panel.database.db;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
@@ -27,11 +29,20 @@ public class AccountDataSource {
 
     public void close() {
         dbHelper.close();
+        database.close();
     }
 
-    public long insertAccount(String url, String name, String password, String token, int version) {
+    public void insertOrUpdateAccount(String address, String name, String password, String token, String version) {
+        if (isAccountExist(address)) {
+            updateAccount(address, name, password, token, version);
+        } else {
+            insertAccount(address, name, password, token, version);
+        }
+    }
+
+    public long insertAccount(String address, String name, String password, String token, String version) {
         ContentValues values = new ContentValues();
-        values.put(AccountContract.AccountEntry.COLUMN_URL, url);
+        values.put(AccountContract.AccountEntry.COLUMN_ADDRESS, address);
         values.put(AccountContract.AccountEntry.COLUMN_NAME, name);
         values.put(AccountContract.AccountEntry.COLUMN_PASSWORD, password);
         values.put(AccountContract.AccountEntry.COLUMN_TOKEN, token);
@@ -39,16 +50,55 @@ public class AccountDataSource {
         return database.insert(AccountContract.AccountEntry.TABLE_NAME, null, values);
     }
 
+    public int updateAccount(String address, String name, String password, String token, String version) {
+        ContentValues values = new ContentValues();
+        values.put(AccountContract.AccountEntry.COLUMN_NAME, name);
+        values.put(AccountContract.AccountEntry.COLUMN_PASSWORD, password);
+        values.put(AccountContract.AccountEntry.COLUMN_TOKEN, token);
+        values.put(AccountContract.AccountEntry.COLUMN_VERSION, version);
+        String selection = AccountContract.AccountEntry.COLUMN_ADDRESS + " = ?";
+        String[] selectionArgs = {address};
+        return database.update(AccountContract.AccountEntry.TABLE_NAME, values, selection, selectionArgs);
+    }
+
+    public void deleteAccount(String address) {
+        String selection = AccountContract.AccountEntry.COLUMN_ADDRESS + " = ?";
+        String[] selectionArgs = {address};
+        database.delete(AccountContract.AccountEntry.TABLE_NAME, selection, selectionArgs);
+    }
+
+    public boolean isAccountExist(String address) {
+        String[] columns = {
+                AccountContract.AccountEntry.COLUMN_ADDRESS
+        };
+        String selection = AccountContract.AccountEntry.COLUMN_ADDRESS + " = ?";
+        String[] selectionArgs = {address};
+        Cursor cursor = database.query(
+                AccountContract.AccountEntry.TABLE_NAME,
+                columns,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+        int count = cursor.getCount();
+        cursor.close();
+        return count > 0;
+    }
+
+    @SuppressLint("Range")
     public List<Account> getAllAccounts() {
         List<Account> accounts = new ArrayList<>();
         String[] columns = {
-                AccountContract.AccountEntry.COLUMN_URL,
+                AccountContract.AccountEntry.COLUMN_ADDRESS,
                 AccountContract.AccountEntry.COLUMN_NAME,
                 AccountContract.AccountEntry.COLUMN_PASSWORD,
                 AccountContract.AccountEntry.COLUMN_TOKEN,
                 AccountContract.AccountEntry.COLUMN_VERSION
         };
-        database.query(
+
+        Cursor cursor = database.query(
                 AccountContract.AccountEntry.TABLE_NAME,
                 columns,
                 null,
@@ -57,8 +107,20 @@ public class AccountDataSource {
                 null,
                 null
         );
+
+        while (cursor.moveToNext()) {
+            Account account = new Account();
+            account.setAddress(cursor.getString(cursor.getColumnIndex(AccountContract.AccountEntry.COLUMN_ADDRESS)));
+            account.setName(cursor.getString(cursor.getColumnIndex(AccountContract.AccountEntry.COLUMN_NAME)));
+            account.setPassword(cursor.getString(cursor.getColumnIndex(AccountContract.AccountEntry.COLUMN_PASSWORD)));
+            account.setToken(cursor.getString(cursor.getColumnIndex(AccountContract.AccountEntry.COLUMN_TOKEN)));
+            account.setVersion(cursor.getString(cursor.getColumnIndex(AccountContract.AccountEntry.COLUMN_VERSION)));
+            accounts.add(account);
+        }
+
+        cursor.close();
+
         return accounts;
     }
-    // 其他数据库操作方法可以根据需要添加
 }
 

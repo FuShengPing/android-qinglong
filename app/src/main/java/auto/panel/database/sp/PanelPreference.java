@@ -37,9 +37,7 @@ public class PanelPreference {
         String username = sp.getString(KEY_USERNAME, DEFAULT_EMPTY);
         String password = sp.getString(KEY_PASSWORD, DEFAULT_EMPTY);
         String token = sp.getString(KEY_TOKEN, DEFAULT_EMPTY);
-        PanelAccount account = new PanelAccount(username, password, address, token);
-        account.setCurrent(true);
-        return account;
+        return new PanelAccount(username, password, address, token);
     }
 
     /**

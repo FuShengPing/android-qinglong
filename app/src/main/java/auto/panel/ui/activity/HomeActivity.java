@@ -133,7 +133,6 @@ public class HomeActivity extends BaseActivity {
         LinearLayout menuEnvironment = uiDrawerLeft.findViewById(R.id.panel_menu_env);
         LinearLayout menuSetting = uiDrawerLeft.findViewById(R.id.panel_menu_setting);
         LinearLayout menuDependence = uiDrawerLeft.findViewById(R.id.panel_menu_dep);
-        LinearLayout menuAppLogout = uiDrawerLeft.findViewById(R.id.panel_menu_app_logout);
         LinearLayout menuAppAccount = uiDrawerLeft.findViewById(R.id.panel_menu_app_account);
         LinearLayout menuAppSetting = uiDrawerLeft.findViewById(R.id.panel_menu_app_setting);
 
@@ -158,23 +157,17 @@ public class HomeActivity extends BaseActivity {
         //系统设置
         menuSetting.setOnClickListener(v -> showFragment(PanelSettingFragment.class));
 
-        //退出登录
-        menuAppLogout.setOnClickListener(v -> {
-            Intent intent = new Intent(mActivity, LoginActivity.class);
+        //APP设置
+        menuAppSetting.setOnClickListener(v -> {
+            Intent intent = new Intent(mActivity, SettingActivity.class);
             startActivity(intent);
-            overridePendingTransition(R.anim.activity_alpha_enter, R.anim.activity_alpha_out);
-            finish();
         });
         //账号管理
         menuAppAccount.setOnClickListener(v -> {
             Intent intent = new Intent(mActivity, AccountActivity.class);
             startActivity(intent);
         });
-        //APP设置
-        menuAppSetting.setOnClickListener(v -> {
-            Intent intent = new Intent(mActivity, SettingActivity.class);
-            startActivity(intent);
-        });
+
     }
 
     private void showFragment(Class<?> cls) {

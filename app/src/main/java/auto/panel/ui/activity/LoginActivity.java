@@ -15,6 +15,7 @@ import auto.base.util.WindowUnit;
 import auto.panel.R;
 import auto.panel.bean.panel.PanelAccount;
 import auto.panel.bean.panel.PanelSystemInfo;
+import auto.panel.database.db.AccountDataSource;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
@@ -206,7 +207,8 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onSuccess(PanelSystemInfo system) {
                 PanelPreference.setVersion(system.getVersion());
-                if (action == ACTION_LOGIN) {
+                account.setVersion(system.getVersion());
+                if (action == ACTION_LOGIN) { //登录
                     if (system.getVersion().compareTo(MIN_VERSION) < 0) {
                         dismissProgress();
                         ToastUnit.showShort("仅支持" + MIN_VERSION + "及以上版本");
@@ -218,14 +220,14 @@ public class LoginActivity extends BaseActivity {
                     } else {
                         netLogin(account);
                     }
-                } else if (action == ACTION_REGISTER) {
+                } else if (action == ACTION_REGISTER) { //注册
                     if (system.isInitialized()) {
                         dismissProgress();
                         ToastUnit.showShort("系统已初始化，无法注册");
                     } else {
                         netRegister(account);
                     }
-                } else {
+                } else { //未知操作
                     dismissProgress();
                     ToastUnit.showShort("未知操作");
                 }
@@ -260,6 +262,9 @@ public class LoginActivity extends BaseActivity {
             public void onSuccess(String token) {
                 account.setToken(token);
                 PanelPreference.updateCurrentAccount(account);
+                AccountDataSource source = new AccountDataSource(mContext);
+                source.insertOrUpdateAccount(account.getAddress(), account.getUsername(), account.getPassword(), token, account.getVersion());
+                source.close();
                 enterHome();
             }
 

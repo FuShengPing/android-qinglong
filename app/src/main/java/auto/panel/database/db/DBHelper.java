@@ -18,7 +18,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String SQL_CREATE_ACCOUNT_TABLE = "CREATE TABLE " + AccountContract.AccountEntry.TABLE_NAME + " ("
-                + AccountContract.AccountEntry.COLUMN_URL + " TEXT NOT NULL PRIMARY KEY, "
+                + AccountContract.AccountEntry.COLUMN_ADDRESS + " TEXT NOT NULL PRIMARY KEY, "
                 + AccountContract.AccountEntry.COLUMN_NAME + " TEXT NOT NULL, "
                 + AccountContract.AccountEntry.COLUMN_PASSWORD + " TEXT NOT NULL, "
                 + AccountContract.AccountEntry.COLUMN_TOKEN + " TEXT NOT NULL, "

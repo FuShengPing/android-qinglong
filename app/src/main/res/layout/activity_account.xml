@@ -18,6 +18,7 @@
             android:id="@+id/bar_back"
             android:layout_width="@dimen/action_bar_icon_size"
             android:layout_height="@dimen/action_bar_icon_size"
+            android:layout_alignParentStart="true"
             android:background="@drawable/style_press_ripple"
             android:clickable="true"
             android:src="@drawable/ic_white_arrow_back" />
@@ -29,6 +30,15 @@
             android:text="账号管理"
             android:textColor="@color/white"
             android:textSize="@dimen/action_bar_title_size" />
+
+        <ImageView
+            android:id="@+id/bar_add"
+            android:layout_width="@dimen/action_bar_icon_size"
+            android:layout_height="@dimen/action_bar_icon_size"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/style_press_ripple"
+            android:clickable="true"
+            android:src="@drawable/ic_white_add" />
     </RelativeLayout>
 
     <com.scwang.smart.refresh.layout.SmartRefreshLayout

@@ -1,14 +1,13 @@
 package auto.panel.bean.panel;
 
 public class PanelAccount {
+    private String address;
     private String username;
     private String password;
     private String token;
     private String code;
-    private String address;
-    private int state;
-    //是否为当前账号
-    private boolean isCurrent;
+
+    private String version;
 
     public PanelAccount(String username, String password, String address, String token) {
         this.username = username;
@@ -21,24 +20,12 @@ public class PanelAccount {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getAddress() {
         return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public String getToken() {
@@ -57,21 +44,6 @@ public class PanelAccount {
         this.code = code;
     }
 
-    /**
-     * @return 当前账号请求授权头
-     */
-    public String getAuthorization() {
-        return "Bearer " + token;
-    }
-
-    public int getState() {
-        return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
-    }
-
     public String getBaseUrl() {
         // BaseUrl
         StringBuilder sb = new StringBuilder();
@@ -85,11 +57,11 @@ public class PanelAccount {
         return sb.toString();
     }
 
-    public boolean isCurrent() {
-        return isCurrent;
+    public String getVersion() {
+        return version;
     }
 
-    public void setCurrent(boolean current) {
-        isCurrent = current;
+    public void setVersion(String version) {
+        this.version = version;
     }
 }

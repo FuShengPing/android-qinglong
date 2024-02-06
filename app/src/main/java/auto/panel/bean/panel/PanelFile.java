@@ -80,6 +80,12 @@ public class PanelFile implements Comparable<PanelFile> {
         this.children = children;
     }
 
+    /**
+     * 文件夹优先，文件夹按字母排序，文件按字母倒序排序
+     *
+     * @param o the object to be compared.
+     * @return
+     */
     @Override
     public int compareTo(PanelFile o) {
         if (this.isDir && o.isDir()) {
@@ -89,7 +95,7 @@ public class PanelFile implements Comparable<PanelFile> {
         } else if (!this.isDir && o.isDir()) {
             return 1;
         } else {
-            return this.title.toLowerCase().compareTo(o.title.toLowerCase());
+            return -this.title.toLowerCase().compareTo(o.title.toLowerCase());
         }
     }
 }

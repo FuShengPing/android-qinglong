@@ -12,7 +12,7 @@ public final class AccountContract {
 
     public static class AccountEntry implements BaseColumns {
         public static final String TABLE_NAME = "account";
-        public static final String COLUMN_URL = "url";
+        public static final String COLUMN_ADDRESS = "address";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_PASSWORD = "password";
         public static final String COLUMN_TOKEN = "token";
