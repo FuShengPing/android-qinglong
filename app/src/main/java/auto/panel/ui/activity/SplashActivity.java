@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import auto.panel.R;
+import auto.panel.bean.app.Account;
 import auto.panel.bean.panel.PanelAccount;
 import auto.panel.bean.panel.PanelSystemInfo;
+import auto.panel.database.db.AccountDataSource;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.panel.ApiController;
 import auto.panel.utils.NetUnit;
@@ -16,7 +18,7 @@ import auto.panel.utils.ToastUnit;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends BaseActivity {
-    private static final String TAG = "SplashActivity";
+    public static final String TAG = "SplashActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +32,15 @@ public class SplashActivity extends BaseActivity {
         check();
     }
 
-    private void onEnter(boolean isHome) {
-        Intent intent;
-        if (isHome) {
-            intent = new Intent(getBaseContext(), HomeActivity.class);
-        } else {
-            intent = new Intent(getBaseContext(), LoginActivity.class);
-        }
+    private void enterLogin(PanelAccount account) {
+        Intent intent = new Intent(mActivity, LoginActivity.class);
+        intent.putExtra(LoginActivity.EXTRA_ADDRESS, account.getAddress());
+        intent.putExtra(LoginActivity.EXTRA_USERNAME, account.getUsername());
+        intent.putExtra(LoginActivity.EXTRA_PASSWORD, account.getPassword());
+        enter(intent);
+    }
+
+    private void enter(Intent intent) {
         new Handler().postDelayed(() -> {
             startActivity(intent);
             overridePendingTransition(R.anim.activity_alpha_enter, R.anim.activity_alpha_out);
@@ -45,18 +49,23 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void check() {
-        //网络状态
-        if (!NetUnit.isConnected(this)) {
-            ToastUnit.showShort("请检查设备网络状态");
-            onEnter(false);
-            return;
-        }
         //当前账号
-        PanelAccount account = PanelPreference.getCurrentAccount();
+        String address = PanelPreference.getAddress();
+        AccountDataSource source = new AccountDataSource(this);
+        Account account = source.getAccount(address);
+        source.close();
+
         if (account != null) {
-            netQuerySystemInfo(account);
+            PanelAccount panelAccount = new PanelAccount(address, account.getUsername(), account.getPassword());
+            //网络状态
+            if (!NetUnit.isConnected(this)) {
+                ToastUnit.showShort("请检查设备网络状态");
+                enterLogin(panelAccount);
+            } else {
+                netQuerySystemInfo(panelAccount);
+            }
         } else {
-            onEnter(false);
+            enter(new Intent(getBaseContext(), LoginActivity.class));
         }
     }
 
@@ -65,30 +74,29 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onSuccess(PanelSystemInfo system) {
                 if (system.getVersion().compareTo(LoginActivity.MIN_VERSION) < 0) {
-                    onEnter(false);
+                    enterLogin(account);
                 } else {
-                    PanelPreference.setVersion(system.getVersion());
-                    netCheckAccountToken();
+                    netCheckAccountToken(account);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                onEnter(false);
+                enterLogin(account);
             }
         });
     }
 
-    private void netCheckAccountToken() {
+    private void netCheckAccountToken(PanelAccount account) {
         auto.panel.net.panel.ApiController.checkAccountToken(new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
-                onEnter(true);
+                enter(new Intent(getBaseContext(), HomeActivity.class));
             }
 
             @Override
             public void onFailure(String msg) {
-                onEnter(false);
+                enterLogin(account);
             }
         });
     }

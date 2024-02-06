@@ -41,7 +41,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Account account = data.get(position);
 
-        holder.uiUsername.setText(account.getName());
+        holder.uiUsername.setText(account.getUsername());
         holder.uiAddress.setText(NetUnit.getHost(account.getAddress()));
         holder.uiVersion.setText(account.getVersion());
         holder.uiDelete.setOnClickListener(v -> {

@@ -20,14 +20,21 @@ import auto.panel.database.sp.PanelPreference;
 import auto.panel.net.NetManager;
 import auto.panel.net.panel.ApiController;
 import auto.panel.utils.NetUnit;
-import auto.panel.utils.TextUnit;
 import auto.panel.utils.ToastUnit;
 
 public class LoginActivity extends BaseActivity {
     public static final String TAG = "LoginActivity";
     public static final String MIN_VERSION = "2.15.0";
+    public static final String EXTRA_ADDRESS = "address";
+    public static final String EXTRA_USERNAME = "username";
+    public static final String EXTRA_PASSWORD = "password";
     private static final int ACTION_LOGIN = 0;
     private static final int ACTION_REGISTER = 1;
+
+
+    private String extraAddress;
+    private String extraUsername;
+    private String extraPassword;
 
     private EditText uiAddress;
     private EditText uiUsername;
@@ -42,8 +49,11 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.panel_activity_login);
+
+        extraAddress = getIntent().getStringExtra(EXTRA_ADDRESS);
+        extraUsername = getIntent().getStringExtra(EXTRA_USERNAME);
+        extraPassword = getIntent().getStringExtra(EXTRA_PASSWORD);
 
         uiAddress = findViewById(R.id.et_address);
         uiUsername = findViewById(R.id.et_username);
@@ -107,8 +117,6 @@ public class LoginActivity extends BaseActivity {
             buildPopWindowProgress();
             uiPopProgress.setTextAndShow("登录中...");
 
-            //为当前存在账号则尝试旧token 避免重复登录
-            account.setToken(PanelPreference.getAuthorization(account.getAddress(), account.getUsername(), account.getPassword()));
             //检测系统是否初始化和版本信息(延迟500ms)
             new Handler().postDelayed(() -> netQuerySystemInfo(account, ACTION_LOGIN), 500);
         });
@@ -140,13 +148,17 @@ public class LoginActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        //显示之前账号
-        PanelAccount account = PanelPreference.getCurrentAccount();
-        if (account != null) {
-            uiAddress.setText(account.getAddress());
-            uiUsername.setText(account.getUsername());
-            uiPassword.setText(account.getPassword());
+        //显示预设信息
+        if (extraAddress != null) {
+            uiAddress.setText(extraAddress);
         }
+        if (extraUsername != null) {
+            uiUsername.setText(extraUsername);
+        }
+        if (extraPassword != null) {
+            uiPassword.setText(extraPassword);
+        }
+
     }
 
     private PanelAccount checkInput() {
@@ -172,7 +184,7 @@ public class LoginActivity extends BaseActivity {
 
         WindowUnit.hideKeyboard(uiPassword);
 
-        PanelAccount account = new PanelAccount(username, password, address, null);
+        PanelAccount account = new PanelAccount(address,username, password);
 
         if (uiCode.getVisibility() == View.VISIBLE && !code.isEmpty()) {
             account.setCode(code);
@@ -206,7 +218,6 @@ public class LoginActivity extends BaseActivity {
         auto.panel.net.panel.ApiController.getSystemInfo(account.getBaseUrl(), new ApiController.SystemInfoCallBack() {
             @Override
             public void onSuccess(PanelSystemInfo system) {
-                PanelPreference.setVersion(system.getVersion());
                 account.setVersion(system.getVersion());
                 if (action == ACTION_LOGIN) { //登录
                     if (system.getVersion().compareTo(MIN_VERSION) < 0) {
@@ -215,9 +226,7 @@ public class LoginActivity extends BaseActivity {
                     } else if (!system.isInitialized()) {
                         dismissProgress();
                         ToastUnit.showShort("系统未初始化，无法登录");
-                    } else if (TextUnit.isFull(account.getToken())) {
-                        netCheckAccountToken(account);
-                    } else {
+                    }else {
                         netLogin(account);
                     }
                 } else if (action == ACTION_REGISTER) { //注册
@@ -256,14 +265,14 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    protected void netLogin(PanelAccount account) {
-        auto.panel.net.panel.ApiController.login(account.getBaseUrl(), account, new auto.panel.net.panel.ApiController.LoginCallBack() {
+    protected void netLogin(PanelAccount panelAccount) {
+        auto.panel.net.panel.ApiController.login(panelAccount.getBaseUrl(), panelAccount, new auto.panel.net.panel.ApiController.LoginCallBack() {
             @Override
             public void onSuccess(String token) {
-                account.setToken(token);
-                PanelPreference.updateCurrentAccount(account);
+                PanelPreference.setAddress(panelAccount.getAddress());
+                PanelPreference.setAuthorization(token);
                 AccountDataSource source = new AccountDataSource(mContext);
-                source.insertOrUpdateAccount(account.getAddress(), account.getUsername(), account.getPassword(), token, account.getVersion());
+                source.insertOrUpdateAccount(panelAccount.getAddress(), panelAccount.getUsername(), panelAccount.getPassword(), token, panelAccount.getVersion());
                 source.close();
                 enterHome();
             }

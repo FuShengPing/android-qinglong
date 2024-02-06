@@ -4,16 +4,14 @@ public class PanelAccount {
     private String address;
     private String username;
     private String password;
-    private String token;
     private String code;
 
     private String version;
 
-    public PanelAccount(String username, String password, String address, String token) {
+    public PanelAccount(String address, String username, String password) {
+        this.address = address;
         this.username = username;
         this.password = password;
-        this.address = address;
-        this.token = token;
     }
 
     public String getUsername() {
@@ -26,14 +24,6 @@ public class PanelAccount {
 
     public String getAddress() {
         return address;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     public String getCode() {

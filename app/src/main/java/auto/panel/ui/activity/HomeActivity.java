@@ -13,13 +13,14 @@ import androidx.fragment.app.FragmentManager;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import auto.base.ui.popup.ConfirmPopupWindow;
 import auto.base.ui.popup.PopupWindowBuilder;
 import auto.base.util.WindowUnit;
 import auto.panel.R;
+import auto.panel.bean.app.Account;
 import auto.panel.bean.app.Version;
+import auto.panel.database.db.AccountDataSource;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.database.sp.SettingPreference;
 import auto.panel.net.app.ApiController;
@@ -30,7 +31,6 @@ import auto.panel.ui.fragment.PanelLogFragment;
 import auto.panel.ui.fragment.PanelScriptFragment;
 import auto.panel.ui.fragment.PanelSettingFragment;
 import auto.panel.ui.fragment.PanelTaskFragment;
-import auto.panel.utils.EncryptUtil;
 import auto.panel.utils.LogUnit;
 import auto.panel.utils.NetUnit;
 import auto.panel.utils.PackageUtil;
@@ -114,16 +114,21 @@ public class HomeActivity extends BaseActivity {
 
     private void initDrawerBar() {
         uiDrawerLeft.setVisibility(View.INVISIBLE);
+
+        //用户信息
+        String address = PanelPreference.getAddress();
+        AccountDataSource source = new AccountDataSource(mContext);
+        Account account = source.getAccount(address);
+        source.close();
         //用户名
         TextView uiUsername = uiDrawerLeft.findViewById(R.id.menu_top_info_username);
-        uiUsername.setText(Objects.requireNonNull(PanelPreference.getCurrentAccount()).getUsername());
+        uiUsername.setText(account.getUsername());
         //面板地址
         TextView uiAddress = uiDrawerLeft.findViewById(R.id.menu_top_info_address);
-        String address = PanelPreference.getCurrentAccount().getAddress();
-        uiAddress.setText(NetUnit.getHost(address));
+        uiAddress.setText(NetUnit.getHost(account.getAddress()));
         //面板版本
         TextView uiVersion = uiDrawerLeft.findViewById(R.id.menu_top_info_version);
-        uiVersion.setText(String.format(getString(R.string.format_tip_version), PanelPreference.getVersion()));
+        uiVersion.setText(String.format(getString(R.string.format_tip_version), account.getVersion()));
 
         //导航监听
         LinearLayout menuTask = uiDrawerLeft.findViewById(R.id.panel_menu_task);
@@ -244,9 +249,7 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void netGetVersion() {
-        String uid = EncryptUtil.md5(PanelPreference.getAddress());
-
-        ApiController.getVersion(uid, new ApiController.VersionCallBack() {
+        ApiController.getVersion(new ApiController.VersionCallBack() {
             @Override
             public void onSuccess(Version version) {
                 SettingPreference.updateNewVersion(version);

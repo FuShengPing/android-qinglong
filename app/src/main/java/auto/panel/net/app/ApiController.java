@@ -1,7 +1,6 @@
 package auto.panel.net.app;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import auto.panel.bean.app.Config;
 import auto.panel.bean.app.Version;
@@ -14,13 +13,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiController {
     private static final String ERROR_NO_BODY = "响应异常";
 
-    public static void getVersion(@Nullable String uid, @NonNull VersionCallBack callBack) {
+    public static void getVersion( @NonNull VersionCallBack callBack) {
         Call<Version> call = new Retrofit.Builder()
                 .baseUrl(Api.URL_BASE)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .getVersion(uid);
+                .getVersion();
 
         call.enqueue(new Callback<Version>() {
             @Override
@@ -43,13 +42,13 @@ public class ApiController {
         });
     }
 
-    public static void getConfig(@Nullable String uid, @NonNull ConfigCallBack callBack) {
+    public static void getConfig( @NonNull ConfigCallBack callBack) {
         Call<Config> call = new Retrofit.Builder()
                 .baseUrl(Api.URL_BASE)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(Api.class)
-                .getConfig(uid);
+                .getConfig();
 
         call.enqueue(new Callback<Config>() {
             @Override

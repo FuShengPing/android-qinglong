@@ -10,11 +10,9 @@ import androidx.appcompat.widget.SwitchCompat;
 
 import auto.panel.R;
 import auto.panel.bean.app.Config;
-import auto.panel.database.sp.PanelPreference;
 import auto.panel.database.sp.SettingPreference;
 import auto.panel.net.app.ApiController;
 import auto.panel.utils.DeviceUnit;
-import auto.panel.utils.EncryptUtil;
 import auto.panel.utils.FileUtil;
 import auto.panel.utils.ToastUnit;
 import auto.panel.utils.thread.AppLogTask;
@@ -121,9 +119,7 @@ public class SettingActivity extends BaseActivity {
     }
 
     private void netGetConfig() {
-        String uid = EncryptUtil.md5(PanelPreference.getAddress());
-
-        ApiController.getConfig(uid, config -> {
+        ApiController.getConfig(config -> {
             onUpdateConfig(config);
             SettingPreference.updateNewConfig(config);
         });

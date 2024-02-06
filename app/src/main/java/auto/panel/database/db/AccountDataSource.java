@@ -61,6 +61,25 @@ public class AccountDataSource {
         return database.update(AccountContract.AccountEntry.TABLE_NAME, values, selection, selectionArgs);
     }
 
+    public int updateAccount(Account account){
+        ContentValues values = new ContentValues();
+        if(account.getUsername() != null){
+            values.put(AccountContract.AccountEntry.COLUMN_NAME, account.getUsername());
+        }
+        if(account.getPassword() != null){
+            values.put(AccountContract.AccountEntry.COLUMN_PASSWORD, account.getPassword());
+        }
+        if(account.getToken() != null){
+            values.put(AccountContract.AccountEntry.COLUMN_TOKEN, account.getToken());
+        }
+        if(account.getVersion() != null){
+            values.put(AccountContract.AccountEntry.COLUMN_VERSION, account.getVersion());
+        }
+        String selection = AccountContract.AccountEntry.COLUMN_ADDRESS + " = ?";
+        String[] selectionArgs = {account.getAddress()};
+        return database.update(AccountContract.AccountEntry.TABLE_NAME, values, selection, selectionArgs);
+    }
+
     public void deleteAccount(String address) {
         String selection = AccountContract.AccountEntry.COLUMN_ADDRESS + " = ?";
         String[] selectionArgs = {address};
@@ -111,7 +130,7 @@ public class AccountDataSource {
         while (cursor.moveToNext()) {
             Account account = new Account();
             account.setAddress(cursor.getString(cursor.getColumnIndex(AccountContract.AccountEntry.COLUMN_ADDRESS)));
-            account.setName(cursor.getString(cursor.getColumnIndex(AccountContract.AccountEntry.COLUMN_NAME)));
+            account.setUsername(cursor.getString(cursor.getColumnIndex(AccountContract.AccountEntry.COLUMN_NAME)));
             account.setPassword(cursor.getString(cursor.getColumnIndex(AccountContract.AccountEntry.COLUMN_PASSWORD)));
             account.setToken(cursor.getString(cursor.getColumnIndex(AccountContract.AccountEntry.COLUMN_TOKEN)));
             account.setVersion(cursor.getString(cursor.getColumnIndex(AccountContract.AccountEntry.COLUMN_VERSION)));
@@ -121,6 +140,40 @@ public class AccountDataSource {
         cursor.close();
 
         return accounts;
+    }
+
+    @SuppressLint("Range")
+    public Account getAccount(String address) {
+        String[] columns = {
+                AccountContract.AccountEntry.COLUMN_ADDRESS,
+                AccountContract.AccountEntry.COLUMN_NAME,
+                AccountContract.AccountEntry.COLUMN_PASSWORD,
+                AccountContract.AccountEntry.COLUMN_TOKEN,
+                AccountContract.AccountEntry.COLUMN_VERSION
+        };
+        String selection = AccountContract.AccountEntry.COLUMN_ADDRESS + " = ?";
+        String[] selectionArgs = {address};
+        Cursor cursor = database.query(
+                AccountContract.AccountEntry.TABLE_NAME,
+                columns,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        Account account = null;
+        if (cursor.moveToFirst()) {
+            account = new Account();
+            account.setAddress(cursor.getString(cursor.getColumnIndex(AccountContract.AccountEntry.COLUMN_ADDRESS)));
+            account.setUsername(cursor.getString(cursor.getColumnIndex(AccountContract.AccountEntry.COLUMN_NAME)));
+            account.setPassword(cursor.getString(cursor.getColumnIndex(AccountContract.AccountEntry.COLUMN_PASSWORD)));
+            account.setToken(cursor.getString(cursor.getColumnIndex(AccountContract.AccountEntry.COLUMN_TOKEN)));
+            account.setVersion(cursor.getString(cursor.getColumnIndex(AccountContract.AccountEntry.COLUMN_VERSION)));
+        }
+        cursor.close();
+        return account;
     }
 }
 

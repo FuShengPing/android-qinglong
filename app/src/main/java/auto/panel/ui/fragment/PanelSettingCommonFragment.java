@@ -9,8 +9,10 @@ import android.widget.EditText;
 
 import auto.base.util.WindowUnit;
 import auto.panel.R;
+import auto.panel.bean.app.Account;
 import auto.panel.bean.panel.PanelAccount;
 import auto.panel.bean.panel.PanelSystemConfig;
+import auto.panel.database.db.AccountDataSource;
 import auto.panel.database.sp.PanelPreference;
 import auto.panel.ui.activity.LoginActivity;
 import auto.panel.utils.ActivityUtils;
@@ -82,7 +84,7 @@ public class PanelSettingCommonFragment extends BaseFragment {
             }
 
             WindowUnit.hideKeyboard(uiSecurityUsername);
-            PanelAccount account = new PanelAccount(username, password, PanelPreference.getAddress(), null);
+            PanelAccount account = new PanelAccount(PanelPreference.getAddress(),username, password);
             updateAccount(account);
         });
 
@@ -105,7 +107,7 @@ public class PanelSettingCommonFragment extends BaseFragment {
     }
 
     private void updateSystemConfig(PanelSystemConfig config) {
-        auto.panel.net.panel.ApiController.updateSystemConfig( config, new auto.panel.net.panel.ApiController.BaseCallBack() {
+        auto.panel.net.panel.ApiController.updateSystemConfig(config, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
                 uiLogRemoveFrequency.clearFocus();
@@ -120,12 +122,15 @@ public class PanelSettingCommonFragment extends BaseFragment {
         });
     }
 
-    private void updateAccount(PanelAccount account) {
-        auto.panel.net.panel.ApiController.updateAccount(account, new auto.panel.net.panel.ApiController.BaseCallBack() {
+    private void updateAccount(PanelAccount panelAccount) {
+        auto.panel.net.panel.ApiController.updateAccount(panelAccount, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
-                PanelPreference.updateCurrentAccount(account);
-                login(account);
+                AccountDataSource source = new AccountDataSource(requireContext());
+                source.updateAccount(new Account(panelAccount.getAddress(), panelAccount.getUsername(), panelAccount.getPassword()));
+                source.close();
+                ToastUnit.showShort("更新成功");
+                login(panelAccount);
             }
 
             @Override
@@ -135,15 +140,18 @@ public class PanelSettingCommonFragment extends BaseFragment {
         });
     }
 
-    protected void login(PanelAccount account) {
-        auto.panel.net.panel.ApiController.login(account.getBaseUrl(), account, new auto.panel.net.panel.ApiController.LoginCallBack() {
+    protected void login(PanelAccount panelAccount) {
+        auto.panel.net.panel.ApiController.login(panelAccount.getBaseUrl(), panelAccount, new auto.panel.net.panel.ApiController.LoginCallBack() {
             @Override
             public void onSuccess(String token) {
                 uiSecurityUsername.setText(null);
                 uiSecurityPassword.setText(null);
-                account.setToken(token);
-                PanelPreference.updateCurrentAccount(account);
-                ToastUnit.showShort("更新成功");
+
+                PanelPreference.setAddress(panelAccount.getAddress());
+                PanelPreference.setAuthorization(token);
+                AccountDataSource source = new AccountDataSource(requireContext());
+                source.updateAccount(new Account(panelAccount.getAddress(), panelAccount.getUsername(), panelAccount.getPassword(), token));
+                source.close();
             }
 
             @Override
