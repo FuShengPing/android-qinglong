@@ -40,17 +40,17 @@ public class ActivityUtils {
     public static synchronized void clearAndStartActivity(Activity context, Class<?> cls) {
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(() -> {
-            closeAllActivities();
             Intent intent = new Intent(context, cls);
             context.startActivity(intent);
+            closeAllActivities();
         });
     }
 
     public static synchronized void clearAndStartActivity(Activity context, Intent intent) {
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(() -> {
-            closeAllActivities();
             context.startActivity(intent);
+            closeAllActivities();
         });
     }
 

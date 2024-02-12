@@ -66,9 +66,13 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyViewHo
         notifyDataSetChanged();
     }
 
-    public void remove(int position) {
+    public void removeItem(int position) {
         data.remove(position);
         notifyItemRemoved(position);
+    }
+
+    public void setListener(ActionListener listener) {
+        this.listener = listener;
     }
 
     public interface ActionListener {

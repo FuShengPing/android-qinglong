@@ -114,7 +114,7 @@ public class LoginActivity extends BaseActivity {
             uiLogin.setEnabled(false);
             uiLogin.postDelayed(() -> uiLogin.setEnabled(true), 300);
 
-            buildPopWindowProgress();
+            buildProgressWindow();
             uiPopProgress.setTextAndShow("登录中...");
 
             //检测系统是否初始化和版本信息(延迟500ms)
@@ -131,7 +131,7 @@ public class LoginActivity extends BaseActivity {
             uiRegister.setEnabled(false);
             uiRegister.postDelayed(() -> uiRegister.setEnabled(true), 300);
 
-            buildPopWindowProgress();
+            buildProgressWindow();
             uiPopProgress.setTextAndShow("初始化中...");
 
             //检测系统是否初始化和版本信息(延迟500ms)
@@ -140,6 +140,7 @@ public class LoginActivity extends BaseActivity {
 
         uiActionAccount.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, AccountActivity.class);
+            intent.putExtra(AccountActivity.EXTRA_HIDE_ACTION_ADD, true);
             startActivity(intent);
         });
 
@@ -184,7 +185,7 @@ public class LoginActivity extends BaseActivity {
 
         WindowUnit.hideKeyboard(uiPassword);
 
-        PanelAccount account = new PanelAccount(address,username, password);
+        PanelAccount account = new PanelAccount(address, username, password);
 
         if (uiCode.getVisibility() == View.VISIBLE && !code.isEmpty()) {
             account.setCode(code);
@@ -193,13 +194,13 @@ public class LoginActivity extends BaseActivity {
         return account;
     }
 
-    private void buildPopWindowProgress() {
+    private void buildProgressWindow() {
         if (uiPopProgress == null) {
             uiPopProgress = PopupWindowBuilder.buildProgressWindow(this, () -> NetManager.cancelAllCall(getNetRequestID()));
         }
     }
 
-    private void dismissProgress() {
+    private void dismissProgressWindow() {
         if (uiPopProgress != null && uiPopProgress.isShowing()) {
             uiPopProgress.dismiss();
         }
@@ -208,7 +209,7 @@ public class LoginActivity extends BaseActivity {
     /**
      * 进入主界面
      */
-    private void enterHome() {
+    private void toHomeActivity() {
         Intent intent = new Intent(mContext, HomeActivity.class);
         startActivity(intent);
         finish();
@@ -221,30 +222,30 @@ public class LoginActivity extends BaseActivity {
                 account.setVersion(system.getVersion());
                 if (action == ACTION_LOGIN) { //登录
                     if (system.getVersion().compareTo(MIN_VERSION) < 0) {
-                        dismissProgress();
+                        dismissProgressWindow();
                         ToastUnit.showShort("仅支持" + MIN_VERSION + "及以上版本");
                     } else if (!system.isInitialized()) {
-                        dismissProgress();
+                        dismissProgressWindow();
                         ToastUnit.showShort("系统未初始化，无法登录");
-                    }else {
+                    } else {
                         netLogin(account);
                     }
                 } else if (action == ACTION_REGISTER) { //注册
                     if (system.isInitialized()) {
-                        dismissProgress();
+                        dismissProgressWindow();
                         ToastUnit.showShort("系统已初始化，无法注册");
                     } else {
                         netRegister(account);
                     }
                 } else { //未知操作
-                    dismissProgress();
+                    dismissProgressWindow();
                     ToastUnit.showShort("未知操作");
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                dismissProgress();
+                dismissProgressWindow();
                 ToastUnit.showShort(msg);
             }
         });
@@ -259,7 +260,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                dismissProgress();
+                dismissProgressWindow();
                 ToastUnit.showShort("初始化失败：" + msg);
             }
         });
@@ -274,30 +275,16 @@ public class LoginActivity extends BaseActivity {
                 AccountDataSource source = new AccountDataSource(mContext);
                 source.insertOrUpdateAccount(panelAccount.getAddress(), panelAccount.getUsername(), panelAccount.getPassword(), token, panelAccount.getVersion());
                 source.close();
-                enterHome();
+                toHomeActivity();
             }
 
             @Override
             public void onFailure(String msg) {
-                dismissProgress();
+                dismissProgressWindow();
                 if (msg.endsWith("验证token")) {
                     uiCode.setVisibility(View.VISIBLE);
                 }
                 ToastUnit.showShort(msg);
-            }
-        });
-    }
-
-    protected void netCheckAccountToken(PanelAccount account) {
-        auto.panel.net.panel.ApiController.checkAccountToken(new auto.panel.net.panel.ApiController.BaseCallBack() {
-            @Override
-            public void onSuccess() {
-                enterHome();
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                netLogin(account);
             }
         });
     }

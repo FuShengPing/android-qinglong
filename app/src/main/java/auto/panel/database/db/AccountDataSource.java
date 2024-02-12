@@ -47,6 +47,7 @@ public class AccountDataSource {
         values.put(AccountContract.AccountEntry.COLUMN_PASSWORD, password);
         values.put(AccountContract.AccountEntry.COLUMN_TOKEN, token);
         values.put(AccountContract.AccountEntry.COLUMN_VERSION, version);
+        values.put(AccountContract.AccountEntry.COLUMN_TIME, System.currentTimeMillis() / 1000);
         return database.insert(AccountContract.AccountEntry.TABLE_NAME, null, values);
     }
 
@@ -56,25 +57,27 @@ public class AccountDataSource {
         values.put(AccountContract.AccountEntry.COLUMN_PASSWORD, password);
         values.put(AccountContract.AccountEntry.COLUMN_TOKEN, token);
         values.put(AccountContract.AccountEntry.COLUMN_VERSION, version);
+        values.put(AccountContract.AccountEntry.COLUMN_TIME, System.currentTimeMillis() / 1000);
         String selection = AccountContract.AccountEntry.COLUMN_ADDRESS + " = ?";
         String[] selectionArgs = {address};
         return database.update(AccountContract.AccountEntry.TABLE_NAME, values, selection, selectionArgs);
     }
 
-    public int updateAccount(Account account){
+    public int updateAccount(Account account) {
         ContentValues values = new ContentValues();
-        if(account.getUsername() != null){
+        if (account.getUsername() != null) {
             values.put(AccountContract.AccountEntry.COLUMN_NAME, account.getUsername());
         }
-        if(account.getPassword() != null){
+        if (account.getPassword() != null) {
             values.put(AccountContract.AccountEntry.COLUMN_PASSWORD, account.getPassword());
         }
-        if(account.getToken() != null){
+        if (account.getToken() != null) {
             values.put(AccountContract.AccountEntry.COLUMN_TOKEN, account.getToken());
         }
-        if(account.getVersion() != null){
+        if (account.getVersion() != null && !account.getVersion().isEmpty()) {
             values.put(AccountContract.AccountEntry.COLUMN_VERSION, account.getVersion());
         }
+        values.put(AccountContract.AccountEntry.COLUMN_TIME, System.currentTimeMillis() / 1000);
         String selection = AccountContract.AccountEntry.COLUMN_ADDRESS + " = ?";
         String[] selectionArgs = {account.getAddress()};
         return database.update(AccountContract.AccountEntry.TABLE_NAME, values, selection, selectionArgs);
@@ -116,6 +119,7 @@ public class AccountDataSource {
                 AccountContract.AccountEntry.COLUMN_TOKEN,
                 AccountContract.AccountEntry.COLUMN_VERSION
         };
+        String orderBy = AccountContract.AccountEntry.COLUMN_TIME + " DESC";
 
         Cursor cursor = database.query(
                 AccountContract.AccountEntry.TABLE_NAME,
@@ -124,7 +128,7 @@ public class AccountDataSource {
                 null,
                 null,
                 null,
-                null
+                orderBy
         );
 
         while (cursor.moveToNext()) {

@@ -1,10 +1,12 @@
 package auto.panel.net.panel;
 
+import auto.panel.net.panel.v15.SystemConfigRes;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Url;
@@ -95,5 +97,9 @@ public interface Api {
     @PUT("api/user")
     Call<BaseRes> updateAccount(@Body RequestBody body);
 
+    @GET("api/system/config")
+    Call<SystemConfigRes> getSystemConfig();
 
+    @GET("api/system/config")
+    Call<SystemConfigRes> checkToken(@Header("Authorization") String token);
 }

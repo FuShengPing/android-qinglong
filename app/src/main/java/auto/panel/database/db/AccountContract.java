@@ -17,5 +17,6 @@ public final class AccountContract {
         public static final String COLUMN_PASSWORD = "password";
         public static final String COLUMN_TOKEN = "token";
         public static final String COLUMN_VERSION = "version";
+        public static final String COLUMN_TIME = "time";
     }
 }

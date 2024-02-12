@@ -5,7 +5,6 @@ public class PanelAccount {
     private String username;
     private String password;
     private String code;
-
     private String version;
 
     public PanelAccount(String address, String username, String password) {

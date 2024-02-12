@@ -29,18 +29,18 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        check();
+        checkAccount();
     }
 
-    private void enterLogin(PanelAccount account) {
+    private void toLoginActivity(PanelAccount account) {
         Intent intent = new Intent(mActivity, LoginActivity.class);
         intent.putExtra(LoginActivity.EXTRA_ADDRESS, account.getAddress());
         intent.putExtra(LoginActivity.EXTRA_USERNAME, account.getUsername());
         intent.putExtra(LoginActivity.EXTRA_PASSWORD, account.getPassword());
-        enter(intent);
+        toActivity(intent);
     }
 
-    private void enter(Intent intent) {
+    private void toActivity(Intent intent) {
         new Handler().postDelayed(() -> {
             startActivity(intent);
             overridePendingTransition(R.anim.activity_alpha_enter, R.anim.activity_alpha_out);
@@ -48,7 +48,7 @@ public class SplashActivity extends BaseActivity {
         }, 500);
     }
 
-    private void check() {
+    private void checkAccount() {
         //当前账号
         String address = PanelPreference.getAddress();
         AccountDataSource source = new AccountDataSource(this);
@@ -60,43 +60,43 @@ public class SplashActivity extends BaseActivity {
             //网络状态
             if (!NetUnit.isConnected(this)) {
                 ToastUnit.showShort("请检查设备网络状态");
-                enterLogin(panelAccount);
+                toLoginActivity(panelAccount);
             } else {
-                netQuerySystemInfo(panelAccount);
+                netQuerySystemInfo(panelAccount, account.getToken());
             }
         } else {
-            enter(new Intent(getBaseContext(), LoginActivity.class));
+            toActivity(new Intent(getBaseContext(), LoginActivity.class));
         }
     }
 
-    protected void netQuerySystemInfo(PanelAccount account) {
+    protected void netQuerySystemInfo(PanelAccount account, String token) {
         auto.panel.net.panel.ApiController.getSystemInfo(account.getBaseUrl(), new ApiController.SystemInfoCallBack() {
             @Override
             public void onSuccess(PanelSystemInfo system) {
                 if (system.getVersion().compareTo(LoginActivity.MIN_VERSION) < 0) {
-                    enterLogin(account);
+                    toLoginActivity(account);
                 } else {
-                    netCheckAccountToken(account);
+                    netCheckAccountToken(account, token);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                enterLogin(account);
+                toLoginActivity(account);
             }
         });
     }
 
-    private void netCheckAccountToken(PanelAccount account) {
-        auto.panel.net.panel.ApiController.checkAccountToken(new auto.panel.net.panel.ApiController.BaseCallBack() {
+    private void netCheckAccountToken(PanelAccount account, String token) {
+        auto.panel.net.panel.ApiController.checkAccountToken(account.getBaseUrl(), token, new auto.panel.net.panel.ApiController.BaseCallBack() {
             @Override
             public void onSuccess() {
-                enter(new Intent(getBaseContext(), HomeActivity.class));
+                toActivity(new Intent(getBaseContext(), HomeActivity.class));
             }
 
             @Override
             public void onFailure(String msg) {
-                enterLogin(account);
+                toLoginActivity(account);
             }
         });
     }

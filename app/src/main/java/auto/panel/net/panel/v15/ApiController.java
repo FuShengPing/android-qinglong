@@ -23,26 +23,6 @@ import retrofit2.Response;
  * @version 2023.07.06
  */
 public class ApiController {
-    public static void checkAccountToken(auto.panel.net.panel.ApiController.BaseCallBack callBack) {
-        Call<SystemConfigRes> call = RetrofitFactory.buildWithAuthorization(Api.class).getSystemConfig();
-
-        call.enqueue(new Callback<SystemConfigRes>() {
-            @Override
-            public void onResponse(Call<SystemConfigRes> call, Response<SystemConfigRes> response) {
-                SystemConfigRes res = response.body();
-                if (NetHandler.handleResponse(response.code(), res, callBack)) {
-                    return;
-                }
-                callBack.onSuccess();
-            }
-
-            @Override
-            public void onFailure(Call<SystemConfigRes> call, Throwable t) {
-                NetHandler.handleRequestError(call, t, callBack);
-            }
-        });
-
-    }
 
     public static void getTasks(String searchValue,int pageNo,int pageSize, auto.panel.net.panel.ApiController.TaskListCallBack callBack) {
         Call<TasksRes> call = RetrofitFactory.buildWithAuthorization(Api.class).getTasks(searchValue, pageNo, pageSize);
@@ -197,23 +177,7 @@ public class ApiController {
     }
 
     public static void getSystemConfig( auto.panel.net.panel.ApiController.SystemConfigCallBack callBack) {
-        Call<SystemConfigRes> call = RetrofitFactory.buildWithAuthorization(Api.class).getSystemConfig();
 
-        call.enqueue(new Callback<SystemConfigRes>() {
-            @Override
-            public void onResponse(Call<SystemConfigRes> call, Response<SystemConfigRes> response) {
-                SystemConfigRes res = response.body();
-                if (NetHandler.handleResponse(response.code(), res, callBack)) {
-                    return;
-                }
-                callBack.onSuccess(Converter.convertSystemConfig(res.getData().getInfo()));
-            }
-
-            @Override
-            public void onFailure(Call<SystemConfigRes> call, Throwable t) {
-                NetHandler.handleRequestError(call, t, callBack);
-            }
-        });
     }
 
     public static void updateSystemConfig( PanelSystemConfig config, @NonNull auto.panel.net.panel.ApiController.BaseCallBack callBack) {

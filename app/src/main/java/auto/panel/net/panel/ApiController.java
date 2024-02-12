@@ -17,6 +17,7 @@ import auto.panel.bean.panel.PanelSystemConfig;
 import auto.panel.bean.panel.PanelSystemInfo;
 import auto.panel.bean.panel.PanelTask;
 import auto.panel.net.RetrofitFactory;
+import auto.panel.net.panel.v15.SystemConfigRes;
 import auto.panel.utils.TextUnit;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -53,7 +54,7 @@ public class ApiController {
         });
     }
 
-    public static void initAccount(@NonNull String baseUrl, PanelAccount account, BaseCallBack callBack) {
+    public static void initAccount(@NonNull String baseUrl, @NonNull PanelAccount account, @NonNull BaseCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("username", account.getUsername());
         jsonObject.addProperty("password", account.getPassword());
@@ -78,7 +79,7 @@ public class ApiController {
         });
     }
 
-    public static void login(@NonNull String baseUrl, @NonNull PanelAccount account, LoginCallBack callBack) {
+    public static void login(@NonNull String baseUrl, @NonNull PanelAccount account, @NonNull LoginCallBack callBack) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("username", account.getUsername());
         jsonObject.addProperty("password", account.getPassword());
@@ -112,12 +113,51 @@ public class ApiController {
         });
     }
 
-    public static void checkAccountToken(BaseCallBack callBack) {
-        auto.panel.net.panel.v15.ApiController.checkAccountToken(callBack);
+    public static void checkAccountToken(@NonNull String baseUrl, @NonNull String token, @NonNull BaseCallBack callBack) {
+        Call<SystemConfigRes> call = RetrofitFactory.build(Api.class, baseUrl).checkToken(token);
+
+        call.enqueue(new Callback<SystemConfigRes>() {
+            @Override
+            public void onResponse(Call<SystemConfigRes> call, Response<SystemConfigRes> response) {
+                SystemConfigRes res = response.body();
+                if (NetHandler.handleResponse(response.code(), res, callBack)) {
+                    return;
+                }
+                callBack.onSuccess();
+            }
+
+            @Override
+            public void onFailure(Call<SystemConfigRes> call, Throwable t) {
+                NetHandler.handleRequestError(call, t, callBack);
+            }
+        });
     }
 
-    public static void getTasks(String searchValue,int pageNo,int pageSize, TaskListCallBack callback) {
-        auto.panel.net.panel.v15.ApiController.getTasks(searchValue,pageNo,pageSize, callback);
+    public static void asyncLogin(@NonNull PanelAccount account, @NonNull AsyncLoginCallback callBack) {
+        try {
+            boolean flag = false;
+            //系统信息
+            Call<SystemInfoRes> call = RetrofitFactory.build(Api.class, account.getBaseUrl()).getSystemInfo();
+            Response<SystemInfoRes> r1 = call.execute();
+            PanelSystemInfo system = new PanelSystemInfo();
+            system.setInitialized(r1.body().getData().isInitialized());
+            system.setVersion(r1.body().getData().getVersion());
+            flag = callBack.onSystemInfo(system);
+            if (!flag) {
+                return;
+            }
+
+            //登录
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            callBack.onFailure(e.toString());
+        }
+    }
+
+    public static void getTasks(String searchValue, int pageNo, int pageSize, TaskListCallBack callback) {
+        auto.panel.net.panel.v15.ApiController.getTasks(searchValue, pageNo, pageSize, callback);
     }
 
     public static void runTasks(List<Object> keys, BaseCallBack callBack) {
@@ -739,7 +779,24 @@ public class ApiController {
     }
 
     public static void getSystemConfig(SystemConfigCallBack callBack) {
-        auto.panel.net.panel.v15.ApiController.getSystemConfig(callBack);
+
+        Call<SystemConfigRes> call = RetrofitFactory.buildWithAuthorization(Api.class).getSystemConfig();
+
+        call.enqueue(new Callback<SystemConfigRes>() {
+            @Override
+            public void onResponse(Call<SystemConfigRes> call, Response<SystemConfigRes> response) {
+                SystemConfigRes res = response.body();
+                if (NetHandler.handleResponse(response.code(), res, callBack)) {
+                    return;
+                }
+                callBack.onSuccess(auto.panel.net.panel.v15.Converter.convertSystemConfig(res.getData().getInfo()));
+            }
+
+            @Override
+            public void onFailure(Call<SystemConfigRes> call, Throwable t) {
+                NetHandler.handleRequestError(call, t, callBack);
+            }
+        });
     }
 
     public static void updateSystemConfig(PanelSystemConfig config, BaseCallBack callBack) {
@@ -817,6 +874,12 @@ public class ApiController {
 
     public interface LoginCallBack extends BaseCallBack {
         void onSuccess(String token);
+    }
+
+    public interface AsyncLoginCallback extends BaseCallBack {
+        boolean onSystemInfo(PanelSystemInfo system);
+
+        boolean onLogin(String token);
     }
 
     public interface TaskListCallBack extends BaseCallBack {

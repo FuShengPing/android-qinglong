@@ -22,7 +22,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 + AccountContract.AccountEntry.COLUMN_NAME + " TEXT NOT NULL, "
                 + AccountContract.AccountEntry.COLUMN_PASSWORD + " TEXT NOT NULL, "
                 + AccountContract.AccountEntry.COLUMN_TOKEN + " TEXT NOT NULL, "
-                + AccountContract.AccountEntry.COLUMN_VERSION + " TEXT NOT NULL);";
+                + AccountContract.AccountEntry.COLUMN_VERSION + " TEXT NOT NULL,"
+                + AccountContract.AccountEntry.COLUMN_TIME + " INT NOT NULL);";
 
         db.execSQL(SQL_CREATE_ACCOUNT_TABLE);
     }

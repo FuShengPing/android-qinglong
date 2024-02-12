@@ -46,6 +46,18 @@ public class NetUnit {
         }
     }
 
+    public static String getRetrofitBaseUrl(String str) {
+        StringBuilder sb = new StringBuilder();
+        if (!str.startsWith("http")) {
+            sb.append("http://");
+        }
+        sb.append(str);
+        if (!str.endsWith("/")) {
+            sb.append("/");
+        }
+        return sb.toString();
+    }
+
     public static boolean isConnected(@NonNull Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
