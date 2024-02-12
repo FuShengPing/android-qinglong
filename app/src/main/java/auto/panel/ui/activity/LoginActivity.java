@@ -49,7 +49,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.panel_activity_login);
+        setContentView(R.layout.activity_login);
 
         extraAddress = getIntent().getStringExtra(EXTRA_ADDRESS);
         extraUsername = getIntent().getStringExtra(EXTRA_USERNAME);
@@ -270,6 +270,9 @@ public class LoginActivity extends BaseActivity {
         auto.panel.net.panel.ApiController.login(panelAccount.getBaseUrl(), panelAccount, new auto.panel.net.panel.ApiController.LoginCallBack() {
             @Override
             public void onSuccess(String token) {
+                if(!token.startsWith("Bearer ")){
+                    token = "Bearer " + token;
+                }
                 PanelPreference.setAddress(panelAccount.getAddress());
                 PanelPreference.setAuthorization(token);
                 AccountDataSource source = new AccountDataSource(mContext);

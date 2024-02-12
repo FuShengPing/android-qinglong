@@ -32,7 +32,7 @@ public class PanelPreference {
      */
     public static String getAuthorization() {
         if (mAuthorization == null) {
-            mAuthorization = "Bearer " + sp.getString(KEY_TOKEN, DEFAULT_EMPTY);
+            mAuthorization = sp.getString(KEY_TOKEN, DEFAULT_EMPTY);
         }
         return mAuthorization;
     }

@@ -54,7 +54,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.panel_activity_home);
+        setContentView(R.layout.activity_home);
 
         uiDrawer = findViewById(R.id.drawer_layout);
         uiDrawerLeft = findViewById(R.id.drawer_left);
