@@ -45,7 +45,6 @@
 | 任务日志 | 查看内容 |          |          |
 
 - 变量快捷导入将从输入文本中提取'***export xx="xxxx"***'格式内容作为一个变量,支持同时提取多个变量；
-- 变量去重将删除相同名称和值的变量，任务去重将删除相同命令的任务；
 - 本地导入搜索对应模块备份路径下的json文件，将外部文件复制到该模块路径下即可使用；
 - 任务备份路径：Android/data/auto.panel/files/tasks；
 - 变量备份路径：Android/data/auto.panel/files/environments；
@@ -61,6 +60,4 @@
 * [qinglong](https://github.com/whyour/qinglong)
 
 ## 反馈交流
-使用过程出现异常报错，可前往**设置-运行日志**查看详细信息。
-
 出现Bug或者有功能需求请创建Issue，欢迎加入QQ交流群：**309836858**，可以获取到最新的软件资讯和最快的问题反馈！
