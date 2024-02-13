@@ -70,7 +70,7 @@
 
 ## 下载地址
 
-[最新版本](https://gitee.com/wsfsp4/QingLong/releases/tag/v2.0.4)
+[最新版本](https://gitee.com/wsfsp4/QingLong/releases/tag/v2.1.0)
 
 [历史版本](https://gitee.com/wsfsp4/QingLong/releases)
 

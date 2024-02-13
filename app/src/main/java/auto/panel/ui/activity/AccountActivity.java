@@ -165,6 +165,7 @@ public class AccountActivity extends BaseActivity {
             @Override
             public void onSuccess() {
                 Account account = new Account(panelAccount.getAddress(), panelAccount.getUsername(), panelAccount.getPassword(), token);
+                account.setVersion(panelAccount.getVersion());
                 updateAccount(account);
                 ActivityUtils.clearAndStartActivity(mActivity, HomeActivity.class);
             }
@@ -180,7 +181,11 @@ public class AccountActivity extends BaseActivity {
         auto.panel.net.panel.ApiController.login(panelAccount.getBaseUrl(), panelAccount, new auto.panel.net.panel.ApiController.LoginCallBack() {
             @Override
             public void onSuccess(String token) {
+                if(!token.startsWith("Bearer ")){
+                    token = "Bearer " + token;
+                }
                 Account account = new Account(panelAccount.getAddress(), panelAccount.getUsername(), panelAccount.getPassword(), token);
+                account.setVersion(panelAccount.getVersion());
                 updateAccount(account);
                 ActivityUtils.clearAndStartActivity(mActivity, HomeActivity.class);
             }

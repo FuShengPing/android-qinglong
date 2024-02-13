@@ -259,7 +259,8 @@
                         android:background="@drawable/style_press_gray"
                         android:clickable="true"
                         android:orientation="vertical"
-                        android:paddingHorizontal="@dimen/action_bar_padding_horizontal">
+                        android:paddingHorizontal="@dimen/action_bar_padding_horizontal"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="match_parent"

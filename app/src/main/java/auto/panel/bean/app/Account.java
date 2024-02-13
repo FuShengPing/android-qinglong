@@ -29,6 +29,14 @@ public class Account {
         this.token = token;
     }
 
+    public Account(String address, String username, String password,String token,String version) {
+        this.username = username;
+        this.password = password;
+        this.address = address;
+        this.token = token;
+        this.version = version;
+    }
+
     public String getAddress() {
         return address;
     }

@@ -10,8 +10,8 @@ android {
         applicationId "auto.panel"
         minSdk 26
         targetSdk 32
-        versionCode 14
-        versionName "2.0.5"
+        versionCode 15
+        versionName "2.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -20,13 +20,13 @@ android {
         release {
             minifyEnabled true
             shrinkResources true
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
         debug {
             minifyEnabled false
             shrinkResources false
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {

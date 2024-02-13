@@ -16,6 +16,10 @@ public class ToastUnit {
     }
 
     public static void showShort(String content) {
+        if (content == null || content.isEmpty()) {
+            return;
+        }
+        LogUnit.log(TAG, "showShort: " + content);
         mHandler.post(() -> {
             cancel();
             mToast = Toast.makeText(BaseApplication.getContext(), content, Toast.LENGTH_SHORT);
@@ -24,6 +28,10 @@ public class ToastUnit {
     }
 
     public static void showShort(Object content) {
+        if (content == null) {
+            return;
+        }
+        LogUnit.log(TAG, "showShort: " + content);
         mHandler.post(() -> {
             cancel();
             mToast = Toast.makeText(BaseApplication.getContext(), String.valueOf(content), Toast.LENGTH_SHORT);

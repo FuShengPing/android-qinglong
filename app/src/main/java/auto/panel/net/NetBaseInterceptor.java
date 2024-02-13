@@ -20,10 +20,11 @@ public class NetBaseInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request originalRequest = chain.request();
-        LogUnit.log("RetrofitInterceptor");
         LogUnit.log("originalRequest:" + originalRequest.url());
 
         Response response = chain.proceed(originalRequest);
+
+        LogUnit.log("response:" + response.code());
 
         return response;
     }
