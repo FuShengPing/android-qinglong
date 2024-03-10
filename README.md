@@ -7,13 +7,8 @@
 ## 使用环境
 
 * 安卓版本：8.0+
-* 面板版本：参考下表，选择合适软件版本
+* 面板版本：参考[APP版本](https://gitee.com/wsfsp4/public-static-file/blob/master/qinglong/version.md)，选择合适软件版本
 
-| 软件版本  | 开发API           | 面板版本          | 备注              |
-|-------|-----------------|---------------|-----------------|
-| 1.x.x | 2.10.13         | 2.10.x        | 仅支持2.10.x       |
-| 2.0.x | 2.10.13、2.15.17 | 全部，建议2.15.17+ | 部分版本可能出现部分功能不可用 |
-| 2.1.0 | 2.15.17         | 2.15.0+       | 停止支持2.10.x版本    |
 
 ## 功能介绍
 
@@ -50,7 +45,6 @@
 | 任务日志 | 查看内容 |      |      |
 
 - 变量快捷导入将从输入文本中提取'***export xx="xxxx"***'格式内容作为一个变量,支持同时提取多个变量；
-- 变量去重将删除相同名称和值的变量，任务去重将删除相同命令的任务；
 - 本地导入搜索对应模块备份路径下的json文件，将外部文件复制到该模块路径下即可使用；
 - 任务备份路径：Android/data/auto.panel/files/tasks；
 - 变量备份路径：Android/data/auto.panel/files/environments；
@@ -70,7 +64,7 @@
 
 ## 下载地址
 
-[最新版本](https://gitee.com/wsfsp4/QingLong/releases/tag/v2.1.0)
+[最新版本](https://gitee.com/wsfsp4/QingLong/releases/tag/v2.1.1)
 
 [历史版本](https://gitee.com/wsfsp4/QingLong/releases)
 
