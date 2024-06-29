@@ -9,6 +9,9 @@
 * 安卓版本：8.0+
 * 面板版本：参考[APP版本](https://gitee.com/wsfsp4/public-static-file/blob/master/qinglong/version.md)，选择合适软件版本
 
+## 代码说明
+
+本仓库代码截止*2.0.5*版本，后续版本代码将不再同步更新至仓库，只进行apk包发布。
 
 ## 功能介绍
 
@@ -64,16 +67,7 @@
 
 ## 下载地址
 
-[最新版本](https://gitee.com/wsfsp4/QingLong/releases/tag/v2.1.1)
-
 [历史版本](https://gitee.com/wsfsp4/QingLong/releases)
-
-## 相关教程
-
-* [代理设置](https://blog.csdn.net/wsfsp_4/article/details/128366173)
-* [面板应用OpenApi](https://blog.csdn.net/wsfsp_4/article/details/128316982)
-* [搭建线报监控系统](https://blog.csdn.net/wsfsp_4/article/details/128317795)
-* [低版本面板拉取私有仓库](https://blog.csdn.net/wsfsp_4/article/details/128055841)
 
 ## 相关项目
 
